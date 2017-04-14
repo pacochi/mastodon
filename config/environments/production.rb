@@ -88,10 +88,7 @@ Rails.application.configure do
   config.lograge.enabled = true
   config.lograge.keep_original_rails_log = false
   config.lograge.formatter = Lograge::Formatters::Json.new
-  config.lograge.logger = ActiveSupport::Logger.new(
-    Rails.root.join('log', 'lograge_production.log'),
-    'daily'
-  )
+  config.lograge.logger = ActiveSupport::Logger.new(Rails.root.join('log', 'lograge_production.log'))
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
