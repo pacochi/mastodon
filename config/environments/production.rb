@@ -46,7 +46,7 @@ Rails.application.configure do
   config.log_tags = [:request_id]
 
   # Use a different logger for distributed setups.
-  config.logger = ActiveSupport::Logger.new(Rails.root.join('log', 'production.log'))
+  # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
   # Parse and split the REDIS_URL if passed (used with hosting platforms such as Heroku).
   # Set ENV variables because they are used elsewhere.
@@ -86,9 +86,6 @@ Rails.application.configure do
 
   # Better log formatting
   config.lograge.enabled = true
-  config.lograge.keep_original_rails_log = false
-  config.lograge.formatter = Lograge::Formatters::Json.new
-  config.lograge.logger = ActiveSupport::Logger.new(Rails.root.join('log', 'lograge_production.log'))
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
