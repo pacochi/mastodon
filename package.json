@@ -3,7 +3,13 @@
   "scripts": {
     "test": "mocha --require ./spec/javascript/setup.js --compilers js:babel-register ./spec/javascript/components/*.test.jsx",
     "storybook": "start-storybook -p 9001 -c storybook",
-    "start": "babel-node ./streaming/index.js --presets es2015,stage-2"
+    "start": "pm2 kill && pm2 start streaming/index.js --interpreter babel-node"
+  },
+  "babel": {
+    "presets": [
+      "es2015",
+      "stage-2"
+    ]
   },
   "dependencies": {
     "@kadira/storybook": "^2.35.3",
@@ -38,6 +44,7 @@
     "node-sass": "^4.5.0",
     "npmlog": "^4.0.2",
     "pg": "^6.1.2",
+    "pm2": "^2.4.4",
     "react": "^15.4.2",
     "react-addons-perf": "^15.4.2",
     "react-addons-pure-render-mixin": "^15.4.2",
