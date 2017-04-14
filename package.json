@@ -4,7 +4,7 @@
     "test": "mocha --require ./spec/javascript/setup.js --compilers js:babel-register ./spec/javascript/components/*.test.jsx",
     "storybook": "start-storybook -p 9001 -c storybook",
     "build": "rm -rf ./streaming/build.js && babel ./streaming/index.js > ./streaming/build.js",
-    "start": "npm run build && pm2 kill && pm2 start streaming/build.js --instances 4"
+    "start": "npm run build && node streaming/build.js"
   },
   "babel": {
     "presets": [
@@ -45,7 +45,6 @@
     "node-sass": "^4.5.0",
     "npmlog": "^4.0.2",
     "pg": "^6.1.2",
-    "pm2": "^2.4.4",
     "react": "^15.4.2",
     "react-addons-perf": "^15.4.2",
     "react-addons-pure-render-mixin": "^15.4.2",
