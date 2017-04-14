@@ -13,7 +13,7 @@ const ja = {
   "status.show_more": "もっと見る",
   "status.load_more": "もっと見る",
   "status.show_less": "隠す",
-  "status.open": "Expand this status",
+  "status.open": "開く",
   "status.report": "@{name} さんを通報",
   "status.media_hidden": "非表示のメデイア",
   "video_player.toggle_sound": "音の切り替え",
