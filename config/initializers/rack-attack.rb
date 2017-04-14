@@ -1,6 +1,6 @@
 class Rack::Attack
-  # Rate limits for the API
-  throttle('api', limit: 300, period: 5.minutes) do |req|
+  LIMIT =  # 一旦制限をなくす
+  throttle('api', limit: 1_000_000_000_000, period: 5.minutes) do |req|
     req.ip if req.path.match(/\A\/api\/v/)
   end
 
@@ -17,3 +17,9 @@ class Rack::Attack
     [429, headers, [{ error: 'Throttled' }.to_json]]
   end
 end
+
+# 必要になりそうだから置いておく
+# Rack::Attack.blocklist('block fucking boy') do |req|
+#   black_list = [].freeze
+#   black_list.include?(req.ip)
+# end
