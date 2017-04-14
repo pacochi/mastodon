@@ -8,7 +8,9 @@ import url from 'url'
 import WebSocket from 'ws'
 import uuid from 'uuid'
 
-const env = process.env.NODE_ENV || 'development'
+const env = 'production';
+// process.env.NODE_ENV || 'development'
+//console.log(env);
 
 dotenv.config({
   path: env === 'production' ? '.env.production' : '.env'
