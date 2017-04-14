@@ -13,8 +13,8 @@ ja:
     labels:
       defaults:
         avatar: アイコン
-        confirm_new_password: 新しいパスワード（確認用）
-        confirm_password: 新しいパスワード
+        confirm_new_password: 新しいパスワードを再入力
+        confirm_password: パスワードを再入力
         current_password: 現在のパスワード
         data: データ
         display_name: 表示名
@@ -22,7 +22,7 @@ ja:
         header: ヘッダー
         locale: 言語
         locked: アカウントを非公開にする
-        new_password: パスワード
+        new_password: 新しいパスワード
         note: プロフィール
         otp_attempt: 二段階認証コード
         password: パスワード
