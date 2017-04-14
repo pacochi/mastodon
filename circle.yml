@@ -1,0 +1,30 @@
+machine:
+  cache_directories:
+    - "vendor/bundle"
+  environment:
+    LOCAL_DOMAIN: cb6e6126.ngrok.io
+    LOCAL_HTTPS: false
+    RAILS_ENV: test
+  hosts:
+    cb6e6126.ngrok.io: 127.0.0.1
+  services:
+    - redis
+
+dependencies:
+  override:
+    - nvm install
+    - nvm alias default $(cat .nvmrc)
+    - npm install -g npm@3
+    - npm install -g yarn
+    - bundle install --without development production --retry=3 --jobs=3 --path=vendor/bundle
+    - yarn install
+
+database:
+  override:
+    - echo skip # CircleCIが勝手にconfig/database.ymlを作るのを抑制
+
+test:
+  override:
+    - bundle exec rails db:create db:migrate
+    - bundle exec rspec
+    - npm test
