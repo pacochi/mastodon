@@ -71,6 +71,22 @@
           = fa_icon('li check-square')
           = t 'about.features.api'
 
+  %h3= t('about.about_pawoo')
+  %p= t('about.about_pawoo_body').html_safe
+
+  %h3= t('about.about_pawoo_rule')
+  %p= t('about.about_pawoo_rule_body').html_safe
+
+  %h3= t('about.contact')
+  %p
+    = t('about.contact_body_mastodon').html_safe
+    = ' → '
+    = link_to '@pixiv', '/@pixiv'
+    %br
+    = t('about.contact_body_twitter').html_safe
+    = ' → '
+    = link_to '@pixiv', 'https://twitter.com/pixiv'
+
   - unless @instance_presenter.site_description.blank?
     %h3= t('about.description_headline', domain: Rails.configuration.x.local_domain)
     %p= @instance_presenter.site_description.html_safe

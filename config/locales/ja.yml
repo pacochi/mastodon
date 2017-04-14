@@ -2,11 +2,17 @@
 ja:
   about:
     about_mastodon: Mastodon は<em>自由でオープンソース</em>なソーシャルネットワークです。商用プラットフォームの代替となる<em>分散型</em>を採用し、あなたのやりとりが一つの会社によって独占されるのを防ぎます。信頼できるインスタンスを選択してください &mdash; どのインスタンスを選んでも、誰とでもやりとりすることができます。 だれでも自分の Mastodon インスタンスを作ることができ、シームレスに<em>ソーシャルネットワーク</em>に参加できます。
+    about_pawoo: Pawoo（pawoo.net）とは？
+    about_pawoo_body: Pawooはpixivが運営するMastodonのインスタンス（サーバー）です。ひとまず安定運用を目指しています！
+    about_pawoo_rule: ルール
+    about_pawoo_rule_body: 公序良俗に反する投稿はおやめください。
     about_this: このインスタンスについて
     apps: アプリ
     business_email: 'ビジネスメールアドレス:'
     closed_registrations: 現在このインスタンスでの新規登録は受け付けていません。
-    contact: 連絡先
+    contact: お問い合わせ先
+    contact_body_mastodon: Pawoo内からはこちら
+    contact_body_twitter: Twitter内からはこちら
     description_headline: "%{domain} とは？"
     domain_count_after: 個のインスタンス
     domain_count_before: 接続中
