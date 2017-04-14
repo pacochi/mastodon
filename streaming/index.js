@@ -42,7 +42,7 @@ if (cluster.isMaster) {
       database: process.env.DB_NAME || 'mastodon_production',
       host:     process.env.DB_HOST || 'localhost',
       port:     process.env.DB_PORT || 5432,
-      max:      200
+      max:      50
     }
   }
 
