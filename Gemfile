@@ -57,6 +57,7 @@ gem 'tzinfo-data'
 gem 'react-rails'
 gem 'browserify-rails'
 gem 'autoprefixer-rails'
+gem 'exception_notification'
 
 group :development, :test do
   gem 'rspec-rails'
