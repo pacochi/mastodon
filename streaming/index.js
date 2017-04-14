@@ -9,7 +9,7 @@ import url from 'url'
 import WebSocket from 'ws'
 import uuid from 'uuid'
 
-cluster.schedulingPolicy = cluster.SCHED_RR;
+// cluster.schedulingPolicy = cluster.SCHED_RR;
 
 if (cluster.isMaster) {
   const fork = () => {
