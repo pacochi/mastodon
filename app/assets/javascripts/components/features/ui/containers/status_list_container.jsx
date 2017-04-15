@@ -27,7 +27,8 @@ const makeGetStatusIds = () => createSelector([
       if (showStatus) {
         const regex = new RegExp(columnSettings.getIn(['regex', 'body']).trim(), 'i');
         const content = statusForId.get('reblog') ? statuses.getIn([statusForId.get('reblog'), 'content']) : statusForId.get('content');
-        const contentText = content.replace(/<br>/g, "\n").replace(/<.+?>/g, '').replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', '&');
+        const doc = new DOMParser().parseFromString(content.replace(/<br \/>/g, '\n').replace(/<\/p><p>/g, '\n\n'), 'text/html');
+        const contentText = doc.documentElement.textContent;
         showStatus = !regex.test(contentText);
       }
     } catch(e) {
