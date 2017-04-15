@@ -31,12 +31,10 @@ RSpec.describe Api::SalmonController, type: :controller do
     end
 
     it 'creates status' do
-      pending "pixivのCircleCIではなぜか通らない"
       expect(Status.find_by(uri: 'tag:quitter.no,2016-03-20:noticeId=1276923:objectType=note')).to_not be_nil
     end
 
     it 'creates mention for target account' do
-      pending "pixivのCircleCIではなぜか通らない"
       expect(account.mentions.count).to eq 1
     end
   end

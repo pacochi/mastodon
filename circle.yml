@@ -3,7 +3,7 @@ machine:
     - "vendor/bundle"
   environment:
     LOCAL_DOMAIN: cb6e6126.ngrok.io
-    LOCAL_HTTPS: false
+    LOCAL_HTTPS: true
     RAILS_ENV: test
   hosts:
     cb6e6126.ngrok.io: 127.0.0.1
