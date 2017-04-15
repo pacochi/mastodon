@@ -6,7 +6,7 @@ environment ENV.fetch('RAILS_ENV') { 'development' }
 workers     ENV.fetch('WEB_CONCURRENCY') { 2 }
 
 app_root = File.expand_path('../../', __FILE__)
-stdout_redirect "#{app_root}/log/puma_stdout", "#{app_root}/log/puma_stderr", true
+stdout_redirect(nil, "#{app_root}/log/puma_stderr", true)
 
 preload_app!
 
