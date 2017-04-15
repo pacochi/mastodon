@@ -74,6 +74,7 @@
   background: transparent;
   cursor: pointer;
   transition: all 100ms ease-in;
+  vertical-align: middle;
 
   &:hover, &:active, &:focus {
     color: lighten($color1, 33%);
