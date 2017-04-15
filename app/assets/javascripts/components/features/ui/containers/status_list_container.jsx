@@ -27,7 +27,8 @@ const makeGetStatusIds = () => createSelector([
       if (showStatus) {
         const regex = new RegExp(columnSettings.getIn(['regex', 'body']).trim(), 'i');
         const content = statusForId.get('reblog') ? statuses.getIn([statusForId.get('reblog'), 'content']) : statusForId.get('content');
-        showStatus = !regex.test(content.replace(/<br \/>|<\/p>/g, '\n').replace(/<[^>]+>/g, ''));
+        const contentText = content.replace(/<br>/g, "\n").replace(/<.+?>/g, '').replace('&lt;', '<').replace('&gt;', '>').replace('&amp;', '&');
+        showStatus = !regex.test(contentText);
       }
     } catch(e) {
       // Bad regex, don't affect filters
