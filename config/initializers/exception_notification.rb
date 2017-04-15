@@ -5,6 +5,7 @@ ExceptionNotification.configure do |config|
     ActionController::InvalidAuthenticityToken
     ActionController::BadRequest
     ActionController::UnknownFormat
+    ActiveRecord::RecordNotUnique
   )
 
   config.ignore_if do |_exception, _options|
