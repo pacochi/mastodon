@@ -98,7 +98,7 @@ const StatusActionBar = React.createClass({
         <div style={{ display: 'inline-block', marginRight: '18px'}}><IconButton disabled={status.get('visibility') === 'private' || status.get('visibility') === 'direct'} active={status.get('reblogged')} title={intl.formatMessage(messages.reblog)} icon={status.get('visibility') === 'direct' ? 'envelope' : (status.get('visibility') === 'private' ? 'lock' : 'retweet')} onClick={this.handleReblogClick} /></div>
         <div style={{ display: 'inline-block', marginRight: '18px'}}><IconButton animate={true} active={status.get('favourited')} title={intl.formatMessage(messages.favourite)} icon='star' onClick={this.handleFavouriteClick} activeStyle={{ color: '#ca8f04' }} /></div>
 
-        <div style={{ width: '18px', height: '18px', float: 'left' }}>
+        <div style={{ display: 'inline-block', width: '18px', height: '18px' }}>
           <DropdownMenu items={menu} icon='ellipsis-h' size={18} direction="right" />
         </div>
       </div>
