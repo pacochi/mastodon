@@ -1,3 +1,4 @@
+# https://github.com/tootsuite/mastodon/blob/master/.travis.yml
 machine:
   cache_directories:
     - "vendor/bundle"
