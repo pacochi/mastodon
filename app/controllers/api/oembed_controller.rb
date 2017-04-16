@@ -4,7 +4,6 @@ class Api::OEmbedController < ApiController
   respond_to :json
 
   def show
-    binding.pry;
     @stream_entry = stream_entry_from_url(params[:url])
     @width        = params[:maxwidth].present?  ? params[:maxwidth].to_i  : 400
     @height       = params[:maxheight].present? ? params[:maxheight].to_i : 600
