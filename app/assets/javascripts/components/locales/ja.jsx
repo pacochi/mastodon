@@ -51,6 +51,7 @@ const ja = {
   "compose_form.placeholder": "今なにしてる？",
   "compose_form.publish": "トゥート",
   "compose_form.sensitive": "メディアを不適切なコンテンツとしてマークする",
+  "compose_form.sensitive_message": "投稿する画像がエッチなコンテンツの場合、必ずNSFWマークをつけてください",
   "compose_form.spoiler": "テキストを隠す",
   "compose_form.spoiler_placeholder": "内容注意メッセージ",
   "compose_form.private": "非公開にする",
