@@ -120,6 +120,8 @@
   @media screen and (max-width: 600px) {
     display: block;
     overflow-y: auto;
+    overflow-x: hidden;
+    max-width: 100%;
     -webkit-overflow-scrolling: touch;
 
     .sidebar-wrapper, .content-wrapper {
