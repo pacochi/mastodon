@@ -20,10 +20,9 @@ dependencies:
 
 database:
   override:
-    - echo skip # CircleCIが勝手にconfig/database.ymlを作るのを抑制
+    - bundle exec rails db:create db:migrate
 
 test:
   override:
-    - bundle exec rails db:create db:migrate
     - bundle exec rspec
     - npm test
