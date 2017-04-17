@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class FetchLinkCardService < BaseService
-  USER_AGENT = "#{HTTP.REQUEST.USER_AGENT} (Mastodon/1.1.2; +http://pawoo.net/)".freeze
+  USER_AGENT = "#{HTTP::Request::USER_AGENT} (Mastodon/1.1.2; +http://pawoo.net/)".freeze
 
   def call(status)
     # Get first http/https URL that isn't local
