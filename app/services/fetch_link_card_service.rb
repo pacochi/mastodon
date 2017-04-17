@@ -28,7 +28,7 @@ class FetchLinkCardService < BaseService
   private
 
   def http_client
-    HTTP.headers(:user_agent => USER_AGENT).timeout(:per_operation, write: 10, connect: 10, read: 10).follow
+    HTTP.headers(user_agent: USER_AGENT).timeout(:per_operation, write: 10, connect: 10, read: 10).follow
   end
 
   def meta_property(html, property)
