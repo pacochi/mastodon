@@ -173,6 +173,7 @@ const Mastodon = React.createClass({
               <Route path='accounts/:accountId' component={AccountTimeline} />
               <Route path='accounts/:accountId/followers' component={Followers} />
               <Route path='accounts/:accountId/following' component={Following} />
+              <Route path='accounts/:accountId/media' component={AccountTimeline} />
 
               <Route path='follow_requests' component={FollowRequests} />
               <Route path='blocks' component={Blocks} />

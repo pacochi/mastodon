@@ -95,6 +95,11 @@ const ActionBar = React.createClass({
             <span><FormattedMessage id='account.followers' defaultMessage='Followers' /></span>
             <strong><FormattedNumber value={account.get('followers_count')} /> {extraInfo}</strong>
           </Link>
+
+          <Link className='account__action-bar__tab' to={`/accounts/${account.get('id')}/media`}>
+            <span><FormattedMessage id='account.media' defaultMessage='Media' /></span>
+            <strong>&nbsp;</strong>
+          </Link>
         </div>
       </div>
     );
