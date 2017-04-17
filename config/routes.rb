@@ -50,6 +50,7 @@ Rails.application.routes.draw do
     member do
       get :followers
       get :following
+      get :media
 
       post :follow
       post :unfollow

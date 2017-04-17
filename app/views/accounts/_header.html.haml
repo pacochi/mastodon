@@ -41,3 +41,7 @@
         = link_to followers_account_url(account) do
           %span.counter-label= t('accounts.followers')
           %span.counter-number= number_with_delimiter account.followers_count
+      .counter{ class: active_nav_class(media_account_url(@account)) }
+        = link_to media_account_url(@account) do
+          %span.counter-label= t('accounts.media')
+          %span.counter-number &nbsp;

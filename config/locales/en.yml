@@ -49,6 +49,7 @@ en:
       feed_url: Feed URL
       followers: Followers
       follows: Follows
+      media: Media
       location:
         all: All
         local: Local

@@ -42,6 +42,11 @@ class AccountsController < ApplicationController
     @following = @account.following.order('follows.created_at desc').page(params[:page]).per(12)
   end
 
+  def media
+    @statuses = @account.statuses.permitted_for(@account, current_account).order('id desc').joins(:media_attachments).paginate_by_max_id(20, params[:max_id], params[:since_id])
+    @statuses = cache_collection(@statuses, Status)
+  end
+
   private
 
   def set_account

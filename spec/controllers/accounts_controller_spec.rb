@@ -58,4 +58,11 @@ RSpec.describe AccountsController, type: :controller do
       expect(response).to have_http_status(:success)
     end
   end
+
+  describe 'GET #media' do
+    it 'returns http success' do
+      get :media, params: { username: alice.username }
+      expect(response).to have_http_status(:success)
+    end
+  end
 end
