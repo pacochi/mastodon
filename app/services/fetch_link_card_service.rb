@@ -1,13 +1,15 @@
 # frozen_string_literal: true
 
 class FetchLinkCardService < BaseService
+  USER_AGENT = "#{HTTP.REQUEST.USER_AGENT} (Mastodon/1.1.2; +http://pawoo.net/)".freeze
+
   def call(status)
     # Get first http/https URL that isn't local
     url = URI.extract(status.text).reject { |uri| (uri =~ /\Ahttps?:\/\//).nil? || TagManager.instance.local_url?(uri) }.first
 
     return if url.nil?
 
-    response = http_client.get(url)
+    response = http_client.get(url, user_agent: USER_AGENT)
 
     return if response.code != 200 || response.mime_type != 'text/html'
 
