@@ -204,6 +204,11 @@ class Account < ApplicationRecord
     username
   end
 
+  def note=(*)
+    super
+    super(note.tr("\b\v\f", '')) if note
+  end
+
   class << self
     def find_local!(username)
       find_remote!(username, nil)
