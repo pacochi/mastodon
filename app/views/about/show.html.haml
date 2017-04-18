@@ -9,18 +9,20 @@
   %meta{ property: 'og:type', content: 'website' }/
   %meta{ property: 'og:title', content: Rails.configuration.x.local_domain }/
   %meta{ property: 'og:description', content: strip_tags(@instance_presenter.site_description.blank? ? t('about.about_mastodon') : @instance_presenter.site_description) }/
-  %meta{ property: 'og:image', content: asset_url('mastodon_small.jpg') }/
+  %meta{ property: 'og:image', content: asset_url('mastodon_small.png') }/
   %meta{ property: 'og:image:width', content: '400' }/
   %meta{ property: 'og:image:height', content: '400' }/
   %meta{ property: 'twitter:card', content: 'summary' }/
-  %meta{ property: 'twitter:image', content: asset_url('mastodon_small.jpg') }/
+  %meta{ property: 'twitter:image', content: asset_url('mastodon_small.png') }/
 
 .wrapper
-  %h1
-    = image_tag 'logo.png'
-    = Setting.site_title
+  = image_tag 'logo_pawoo.png', width: 450, style: 'display:block;margin:0 auto 40px;max-width:100%;'
 
-  %p= t('about.about_mastodon').html_safe
+  %p
+    Pawoo（パウー）はピクシブが運営するMastodonのインスタンス（サーバー）です。 
+    「創作活動や自由なコミュニケーションを楽しめる場」として、どなたにも幅広く使っていただけます。
+    -# 世界中のイラストや漫画、小説好きが集まり、共通の趣味をもっている人に出会って好きなものを共有したり、情報交換や交流をしたりすることができます。
+
 
   .screenshot-with-signup
     .mascot= image_tag 'fluffy-elephant-friend.png'
@@ -39,6 +41,13 @@
           = link_to t('about.other_instances'), 'https://github.com/tootsuite/documentation/blob/master/Using-Mastodon/List-of-Mastodon-instances.md'
           ·
           = link_to t('about.about_this'), about_more_path
+
+  %h3 Mastodon（マストドン）とは
+
+  %p
+    Mastodonは自由でオープンソースな分散型のSNSです。ユーザーは運営元やインスタンス（サーバー）を自由に選択して参加することができます。
+    同じインスタンス内での濃いコミュニケーションを楽しめたり、外部のインスタンスのユーザーをフォローできるなど、今までのSNSとは違う特色を持っています。
+    また、インスタンスは誰でも立ち上げることができるので、独自のMastodonを運用することも可能です。
 
   %h3= t('about.features_headline')
 
@@ -72,13 +81,8 @@
           = fa_icon('li check-square')
           = t 'about.features.api'
 
-  = image_tag 'logo_pawoo.png', width: 450, style: 'display:block;margin:40px auto;max-width:100%;'
-
-  %h3= t('about.about_pawoo')
-  %p= t('about.about_pawoo_body').html_safe
-
-  %h3= t('about.about_pawoo_rule')
-  %p= t('about.about_pawoo_rule_body').html_safe
+  %h3 ルール
+  %p 公序良俗に反する投稿はおやめください。
 
   %h3= t('about.contact')
   %p

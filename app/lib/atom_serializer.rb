@@ -9,7 +9,7 @@ class AtomSerializer
     def render(element)
       document = Ox::Document.new(version: '1.0')
       document << element
-      ('<?xml version="1.0"?>' + Ox.dump(element)).force_encoding('UTF-8')
+      ('<?xml version="1.0"?>' + Ox.dump(element, effort: :tolerant)).force_encoding('UTF-8')
     end
   end
 
