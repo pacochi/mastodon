@@ -49,6 +49,14 @@ export const FOLLOWING_FETCH_REQUEST = 'FOLLOWING_FETCH_REQUEST';
 export const FOLLOWING_FETCH_SUCCESS = 'FOLLOWING_FETCH_SUCCESS';
 export const FOLLOWING_FETCH_FAIL    = 'FOLLOWING_FETCH_FAIL';
 
+export const MEDIA_TIMELINE_EXPAND_REQUEST = 'MEDIA_TIMELINE_EXPAND_REQUEST';
+export const MEDIA_TIMELINE_EXPAND_SUCCESS = 'MEDIA_TIMELINE_EXPAND_SUCCESS';
+export const MEDIA_TIMELINE_EXPAND_FAIL    = 'MEDIA_TIMELINE_EXPAND_FAIL';
+
+export const MEDIA_TIMELINE_FETCH_REQUEST = 'MEDIA_TIMELINE_FETCH_REQUEST';
+export const MEDIA_TIMELINE_FETCH_SUCCESS = 'MEDIA_TIMELINE_FETCH_SUCCESS';
+export const MEDIA_TIMELINE_FETCH_FAIL    = 'MEDIA_TIMELINE_FETCH_FAIL';
+
 export const FOLLOWING_EXPAND_REQUEST = 'FOLLOWING_EXPAND_REQUEST';
 export const FOLLOWING_EXPAND_SUCCESS = 'FOLLOWING_EXPAND_SUCCESS';
 export const FOLLOWING_EXPAND_FAIL    = 'FOLLOWING_EXPAND_FAIL';
@@ -531,6 +539,100 @@ export function fetchFollowingFail(id, error) {
     type: FOLLOWING_FETCH_FAIL,
     id,
     error
+  };
+};
+
+export function expandMediaTimeline(id) {
+  return (dispatch, getState) => {
+    const lastId = getState().getIn(['timelines', 'media_timelines', id, 'items'], Immutable.List()).last();
+
+    dispatch(expandMediaTimelineRequest(id));
+
+    api(getState).get(`/api/v1/accounts/${id}/statuses`, {
+      params: {
+        only_media: 1,
+        limit: 10,
+        max_id: lastId
+      }
+    }).then(response => {
+      dispatch(expandMediaTimelineSuccess(id, response.data));
+    }).catch(error => {
+      dispatch(expandMediaTimelineFail(id, error));
+    });
+  };
+};
+
+export function expandMediaTimelineRequest(id) {
+  return {
+    type: MEDIA_TIMELINE_EXPAND_REQUEST,
+    id
+  };
+};
+
+export function expandMediaTimelineSuccess(id, statuses) {
+  return {
+    type: MEDIA_TIMELINE_EXPAND_SUCCESS,
+    id,
+    statuses
+  };
+};
+
+export function expandMediaTimelineFail(id, error) {
+  return {
+    type: MEDIA_TIMELINE_EXPAND_FAIL,
+    id,
+    error
+  };
+};
+
+export function fetchMediaTimeline(id, replace = false) {
+  return (dispatch, getState) => {
+    const ids      = getState().getIn(['timelines', 'media_timelines', id, 'items'], Immutable.List());
+    const newestId = ids.size > 0 ? ids.first() : null;
+
+    let params = { only_media: 1 };
+    let skipLoading = false;
+
+    if (newestId !== null && !replace) {
+      params['since_id'] = newestId;
+      skipLoading = true;
+    }
+
+    dispatch(fetchMediaTimelineRequest(id, skipLoading));
+
+    api(getState).get(`/api/v1/accounts/${id}/statuses`, { params }).then(response => {
+      dispatch(fetchMediaTimelineSuccess(id, response.data, replace, skipLoading));
+    }).catch(error => {
+      dispatch(fetchMediaTimelineFail(id, error, skipLoading));
+    });
+  };
+};
+
+export function fetchMediaTimelineRequest(id, skipLoading) {
+  return {
+    type: MEDIA_TIMELINE_FETCH_REQUEST,
+    id,
+    skipLoading
+  };
+};
+
+export function fetchMediaTimelineSuccess(id, statuses, replace, skipLoading) {
+  return {
+    type: MEDIA_TIMELINE_FETCH_SUCCESS,
+    id,
+    statuses,
+    replace,
+    skipLoading
+  };
+};
+
+export function fetchMediaTimelineFail(id, error, skipLoading) {
+  return {
+    type: MEDIA_TIMELINE_FETCH_FAIL,
+    id,
+    error,
+    skipLoading,
+    skipAlert: error.response.status === 404
   };
 };
 

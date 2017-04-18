@@ -30,6 +30,7 @@ import HomeTimeline from '../features/home_timeline';
 import Compose from '../features/compose';
 import Followers from '../features/followers';
 import Following from '../features/following';
+import MediaTimeline from '../features/media_timeline';
 import Reblogs from '../features/reblogs';
 import Favourites from '../features/favourites';
 import HashtagTimeline from '../features/hashtag_timeline';
@@ -173,7 +174,7 @@ const Mastodon = React.createClass({
               <Route path='accounts/:accountId' component={AccountTimeline} />
               <Route path='accounts/:accountId/followers' component={Followers} />
               <Route path='accounts/:accountId/following' component={Following} />
-              <Route path='accounts/:accountId/media' component={AccountTimeline} />
+              <Route path='accounts/:accountId/media' component={MediaTimeline} />
 
               <Route path='follow_requests' component={FollowRequests} />
               <Route path='blocks' component={Blocks} />
