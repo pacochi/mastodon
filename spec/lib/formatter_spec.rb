@@ -57,6 +57,22 @@ RSpec.describe Formatter do
 
     context 'matches a URL without single quote' do
       let(:local_text) { "http://www.google.com'" }
+
+      it 'has valid url' do
+        expect(subject).to include('href="http://www.google.com"')
+      end
+    end
+
+    context 'matches a URL without angle brackets' do
+      let(:local_text) { 'http://www.google.com>' }
+      it 'has valid url' do
+        expect(subject).to include('href="http://www.google.com"')
+      end
+    end
+
+    context 'matches a URL without single quote' do
+      let(:local_text) { "http://www.google.com'" }
+
       it 'has valid url' do
         expect(subject).to include('href="http://www.google.com"')
       end
