@@ -130,7 +130,7 @@ class Account < ApplicationRecord
   end
 
   def media_statuses_count(other_account)
-    statuses.permitted_for(self, other_account).select { |status| status.media_attachments.present? }.size
+    statuses.permitted_for(self, other_account).joins(:media_attachments).distinct.count
   end
 
   def subscribed?

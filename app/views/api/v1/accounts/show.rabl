@@ -8,7 +8,7 @@ node(:avatar)                   { |account| full_asset_url(account.avatar_origin
 node(:avatar_static)            { |account| full_asset_url(account.avatar_static_url) }
 node(:header)                   { |account| full_asset_url(account.header_original_url) }
 node(:header_static)            { |account| full_asset_url(account.header_static_url) }
-node(:media_statuses_count)     { |account| account.statuses.permitted_for(@account, @current_account).select { |status| status.media_attachments.present? }.size }
+node(:media_statuses_count)     { |account| account.statuses.permitted_for(account, current_account).joins(:media_attachments).distinct.count }
 
 attributes :followers_count, :following_count, :statuses_count
 
