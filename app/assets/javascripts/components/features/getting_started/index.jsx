@@ -34,8 +34,7 @@ const GettingStarted = ({ intl, me }) => {
     <Column icon='asterisk' heading={intl.formatMessage(messages.heading)}>
       <div style={{ position: 'relative' }}>
         <ColumnLink icon='users' text={intl.formatMessage(messages.community_timeline)} to='/timelines/public/local' />
-        {/*TODO: あとでiconを変える*/}
-        <ColumnLink icon='users' text={intl.formatMessage(messages.media_timeline)} to='/timelines/public/media' />
+        <ColumnLink icon='image' text={intl.formatMessage(messages.media_timeline)} to='/timelines/public/media' />
         <ColumnLink icon='globe' text={intl.formatMessage(messages.public_timeline)} to='/timelines/public' />
         <ColumnLink icon='cog' text={intl.formatMessage(messages.preferences)} href='/settings/preferences' />
         <ColumnLink icon='star' text={intl.formatMessage(messages.favourites)} to='/favourites' />
