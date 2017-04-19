@@ -86,6 +86,11 @@ const ActionBar = React.createClass({
             <strong><FormattedNumber value={account.get('statuses_count')} /> {extraInfo}</strong>
           </Link>
 
+          <Link className='account__action-bar__tab' to={`/accounts/${account.get('id')}/media`}>
+            <span><FormattedMessage id='account.media' defaultMessage='Media' /></span>
+            <strong><FormattedNumber value={account.get('media_statuses_count')} /></strong>
+          </Link>
+
           <Link className='account__action-bar__tab' to={`/accounts/${account.get('id')}/following`}>
             <span><FormattedMessage id='account.follows' defaultMessage='Follows' /></span>
             <strong><FormattedNumber value={account.get('following_count')} /> {extraInfo}</strong>
@@ -94,11 +99,6 @@ const ActionBar = React.createClass({
           <Link className='account__action-bar__tab' to={`/accounts/${account.get('id')}/followers`}>
             <span><FormattedMessage id='account.followers' defaultMessage='Followers' /></span>
             <strong><FormattedNumber value={account.get('followers_count')} /> {extraInfo}</strong>
-          </Link>
-
-          <Link className='account__action-bar__tab' to={`/accounts/${account.get('id')}/media`}>
-            <span><FormattedMessage id='account.media' defaultMessage='Media' /></span>
-            <strong>&nbsp;</strong>
           </Link>
         </div>
       </div>
