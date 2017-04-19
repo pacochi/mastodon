@@ -119,14 +119,14 @@ class Status < ApplicationRecord
       where(account: [account] + account.following)
     end
 
-    def as_public_timeline(account = nil, local_only = false)
+    def as_public_timeline(account = nil, local_only = false, media = false)
       query = joins('LEFT OUTER JOIN accounts ON statuses.account_id = accounts.id')
-              .where(visibility: :public)
+      query = query.joins('INNER JOIN media_attachments ON media_attachments.status_id = statuses.id') if media
+      query = query.where(visibility: :public)
               .without_replies
               .without_reblogs
 
       query = query.where('accounts.domain IS NULL') if local_only
-
       account.nil? ? filter_timeline_default(query) : filter_timeline_default(filter_timeline(query, account))
     end
 
