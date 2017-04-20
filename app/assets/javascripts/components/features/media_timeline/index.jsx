@@ -64,7 +64,7 @@ const MediaTimeline = React.createClass({
                 switch(data.event) {
                     case 'update':
 
-                        var status = JSON.parse(data.payload);
+                        const status = JSON.parse(data.payload);
                         if (0 < status.media_attachments.length) {
                             dispatch(updateTimeline('media', status));
                         }

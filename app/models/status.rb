@@ -121,7 +121,7 @@ class Status < ApplicationRecord
 
     def as_public_timeline(account = nil, local_only = false, media = false)
       query = joins('LEFT OUTER JOIN accounts ON statuses.account_id = accounts.id')
-      query = query.joins('INNER JOIN media_attachments ON media_attachments.status_id = statuses.id') if media
+      query = query.joins(:media_attachments) if media
       query = query.where(visibility: :public)
               .without_replies
               .without_reblogs
