@@ -9,7 +9,7 @@ RSpec.describe OauthRegistrationsController, type: :controller do
       Redis.current.set(cache_key, auth.to_json)
 
       stub_request(:get, auth['info']['avatar'])
-        .with(headers: { 'Referer' => Rails.configuration.x.local_domain })
+        .with(headers: { 'Referer' => "https://#{Rails.configuration.x.local_domain}" })
         .to_return(status: 200, body: File.read('spec/fixtures/files/attachment.jpg'))
     end
   end
@@ -22,7 +22,7 @@ RSpec.describe OauthRegistrationsController, type: :controller do
     context 'found cache of pixiv oauth' do
       before do
         stub_request(:get, auth['info']['avatar'])
-          .with(headers: { 'Referer' => Rails.configuration.x.local_domain})
+          .with(headers: { 'Referer' => "https://#{Rails.configuration.x.local_domain}" })
           .to_return(status: 200, body: File.read('spec/fixtures/files/attachment.jpg'))
       end
 
