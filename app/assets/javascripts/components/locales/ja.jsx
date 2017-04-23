@@ -58,7 +58,7 @@ const ja = {
   "missing_indicator.label": "見つかりません",
   "navigation_bar.blocks": "ブロックしたユーザー",
   "navigation_bar.community_timeline": "ローカルタイムライン",
-  "navigation_bar.media_timeline": "メディアタイムライン",
+  "navigation_bar.media_timeline": "メディアタイムライン(実験中)",
   "navigation_bar.edit_profile": "プロフィールを編集",
   "navigation_bar.favourites": "お気に入り",
   "navigation_bar.follow_requests": "フォローリクエスト",
