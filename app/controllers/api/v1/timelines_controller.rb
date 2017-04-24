@@ -33,8 +33,8 @@ class Api::V1::TimelinesController < ApiController
 
     set_maps(@statuses)
 
-    next_path = api_v1_public_timeline_url(pagination_params(max_id: @statuses.last.id))    unless @statuses.empty?
-    prev_path = api_v1_public_timeline_url(pagination_params(since_id: @statuses.first.id)) unless @statuses.empty?
+    next_path = api_v1_public_timeline_url(pagination_params(max_id: @statuses.last.id, media: params[:media]))    unless @statuses.empty?
+    prev_path = api_v1_public_timeline_url(pagination_params(since_id: @statuses.first.id, media: params[:media])) unless @statuses.empty?
 
     set_pagination_headers(next_path, prev_path)
 
