@@ -95,49 +95,55 @@ const Mastodon = React.createClass({
     locale: React.PropTypes.string.isRequired
   },
 
-  componentDidMount() {
-    const { locale }  = this.props;
-    const streamingAPIBaseURL = store.getState().getIn(['meta', 'streaming_api_base_url']);
-    const accessToken = store.getState().getIn(['meta', 'access_token']);
+  componentWillMount () {
+    this.intent = store.getState().getIn(['meta', 'intent']);
+  },
 
-    this.subscription = createStream(streamingAPIBaseURL, accessToken, 'user', {
+  componentDidMount () {
+    if (!this.intent) {
+      const { locale }  = this.props;
+      const streamingAPIBaseURL = store.getState().getIn(['meta', 'streaming_api_base_url']);
+      const accessToken = store.getState().getIn(['meta', 'access_token']);
 
-      connected () {
-        store.dispatch(connectTimeline('home'));
-      },
+      this.subscription = createStream(streamingAPIBaseURL, accessToken, 'user', {
 
-      disconnected () {
-        store.dispatch(disconnectTimeline('home'));
-      },
+        connected () {
+          store.dispatch(connectTimeline('home'));
+        },
 
-      received (data) {
-        switch(data.event) {
-        case 'update':
-          store.dispatch(updateTimeline('home', JSON.parse(data.payload)));
-          break;
-        case 'delete':
-          store.dispatch(deleteFromTimelines(data.payload));
-          break;
-        case 'notification':
-          store.dispatch(updateNotifications(JSON.parse(data.payload), getMessagesForLocale(locale), locale));
-          break;
+        disconnected () {
+          store.dispatch(disconnectTimeline('home'));
+        },
+
+        received (data) {
+          switch(data.event) {
+          case 'update':
+            store.dispatch(updateTimeline('home', JSON.parse(data.payload)));
+            break;
+          case 'delete':
+            store.dispatch(deleteFromTimelines(data.payload));
+            break;
+          case 'notification':
+            store.dispatch(updateNotifications(JSON.parse(data.payload), getMessagesForLocale(locale), locale));
+            break;
+          }
+        },
+
+        reconnected () {
+          store.dispatch(connectTimeline('home'));
+          store.dispatch(refreshTimeline('home'));
+          store.dispatch(refreshNotifications());
         }
-      },
 
-      reconnected () {
-        store.dispatch(connectTimeline('home'));
-        store.dispatch(refreshTimeline('home'));
-        store.dispatch(refreshNotifications());
+      });
+
+      // Desktop notifications
+      if (typeof window.Notification !== 'undefined' && Notification.permission === 'default') {
+        Notification.requestPermission();
       }
 
-    });
-
-    // Desktop notifications
-    if (typeof window.Notification !== 'undefined' && Notification.permission === 'default') {
-      Notification.requestPermission();
+      store.dispatch(showOnboardingOnce());
     }
-
-    store.dispatch(showOnboardingOnce());
   },
 
   componentWillUnmount () {
@@ -150,8 +156,7 @@ const Mastodon = React.createClass({
   render () {
     const { locale } = this.props;
 
-    // FIXME
-    if (/^\/web\/getting-started/.test(location.pathname)) {
+    if (this.intent) {
       return (
         <IntlProvider locale={locale} messages={getMessagesForLocale(locale)}>
           <Provider store={store}>
