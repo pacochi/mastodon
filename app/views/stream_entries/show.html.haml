@@ -14,5 +14,7 @@
 - if show_landing_strip?
   = render partial: 'shared/landing_strip', locals: { account: @stream_entry.account }
 
+= render 'accounts/service_logo'
+
 .activity-stream.activity-stream-headless.h-entry
   = render partial: "stream_entries/#{@type}", locals: { @type.to_sym => @stream_entry.activity, include_threads: true }
