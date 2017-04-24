@@ -121,11 +121,11 @@ class Status < ApplicationRecord
 
     def as_public_timeline(account = nil, local_only = false, media = false)
       query = joins('LEFT OUTER JOIN accounts ON statuses.account_id = accounts.id')
-      query = query.joins(:media_attachments) if media
-      query = query.where(visibility: :public)
+              .where(visibility: :public)
               .without_replies
               .without_reblogs
 
+      query = query.joins(:media_attachments) if media
       query = query.where('accounts.domain IS NULL') if local_only
       account.nil? ? filter_timeline_default(query) : filter_timeline_default(filter_timeline(query, account))
     end
