@@ -28,7 +28,7 @@ class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         if user.otp_required_for_login?
           session[:otp_user_id] = user.id
           self.resource = user
-          render 'auth/sessions/two_factor'
+          render 'auth/sessions/two_factor', layout: 'auth'
         else
           sign_in(oauth_authentication.user)
           redirect_to root_path
