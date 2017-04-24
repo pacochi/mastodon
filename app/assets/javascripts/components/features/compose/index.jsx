@@ -48,6 +48,7 @@ const Compose = React.createClass({
       return (
         <div className='compose-form__intent'>
           <div style={{ maxWidth: 400, width: '100%' }}>
+            <NavigationContainer />
             <ComposeFormContainer />
           </div>
         </div>
