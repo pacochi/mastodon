@@ -129,10 +129,6 @@ class Account < ApplicationRecord
     "acct:#{local_username_and_domain}"
   end
 
-  def media_statuses_count(other_account)
-    statuses.permitted_for(self, other_account).joins(:media_attachments).distinct.count
-  end
-
   def subscribed?
     !subscription_expires_at.blank?
   end

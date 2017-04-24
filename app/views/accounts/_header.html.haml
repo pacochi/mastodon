@@ -36,7 +36,7 @@
       .counter{ class: active_nav_class(media_account_url(@account)) }
         = link_to media_account_url(@account) do
           %span.counter-label= t('accounts.media')
-          %span.counter-number= number_with_delimiter account.media_statuses_count(@current_account)
+          %span.counter-number &nbsp;
       .counter{ class: active_nav_class(following_account_url(account)) }
         = link_to following_account_url(account) do
           %span.counter-label= t('accounts.following')
