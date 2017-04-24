@@ -104,7 +104,7 @@ RSpec.describe Auth::OmniauthCallbacksController, type: :controller do
 
         context 'enable two factor auth' do
           before do
-            oauth_authentication.user.update(otp_required_for_login: true)
+            oauth_authentication.user.update!(otp_required_for_login: true)
           end
 
           it do
