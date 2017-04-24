@@ -74,7 +74,7 @@ const Report = React.createClass({
     if (!this.props.account) {
       this.context.router.replace('/');
     }
-    // FIXME: intl
+
     this.options = Immutable.fromJS([
       { id: 'donotlike', value: '好みではない' },
       { id: 'incorrectage', value: '年齢設定が不適切' },
