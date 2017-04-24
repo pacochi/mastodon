@@ -31,7 +31,7 @@ class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
           render 'auth/sessions/two_factor', layout: 'auth'
         else
           sign_in(oauth_authentication.user)
-          redirect_to root_path
+          redirect_to after_sign_in_path_for(oauth_authentication.user)
         end
       else
         store_omniauth_auth
