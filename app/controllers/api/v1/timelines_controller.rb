@@ -21,9 +21,8 @@ class Api::V1::TimelinesController < ApiController
   end
 
   def public
-
     @statuses = Status.as_public_timeline(current_account, params[:local], params[:media])
-                  .group(:id)
+                  .distinct(:id)
                   .paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
     @statuses = cache_collection(@statuses)
 
