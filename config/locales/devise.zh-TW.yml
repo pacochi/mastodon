@@ -17,13 +17,13 @@ zh-TW:
       unconfirmed: 您必須先完成信箱驗證，以繼續使用。
     mailer:
       confirmation_instructions:
-        subject: 'Mastodon: 信箱驗證'
+        subject: 'Pawoo: 信箱驗證'
       password_change:
-        subject: 'Mastodon: 更改密碼'
+        subject: 'Pawoo: 更改密碼'
       reset_password_instructions:
-        subject: 'Mastodon: 重設密碼'
+        subject: 'Pawoo: 重設密碼'
       unlock_instructions:
-        subject: 'Mastodon: 帳號解鎖'
+        subject: 'Pawoo: 帳號解鎖'
     omniauth_callbacks:
       failure: 無法以 %{kind} 登入您的帳號，原因是︰「%{reason}」。
       success: 成功以 %{kind} 登入您的帳號。

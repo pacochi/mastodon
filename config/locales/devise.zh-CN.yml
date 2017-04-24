@@ -17,13 +17,13 @@ zh-CN:
       unconfirmed: 请先通过邮件激活。
     mailer:
       confirmation_instructions:
-        subject: 'Mastodon: 激活指引'
+        subject: 'Pawoo: 激活指引'
       password_change:
-        subject: 'Mastodon: 密码变更'
+        subject: 'Pawoo: 密码变更'
       reset_password_instructions:
-        subject: 'Mastodon: 密码重置指引'
+        subject: 'Pawoo: 密码重置指引'
       unlock_instructions:
-        subject: 'Mastodon: 账号解锁指引'
+        subject: 'Pawoo: 账号解锁指引'
     omniauth_callbacks:
       failure: 从 %{kind} 授权失败："%{reason}" 。
       success: 成功从 %{kind} 授权。

@@ -1,4 +1,10 @@
 = simple_form_for(new_user, url: user_registration_path) do |f|
+  .omniauth
+    .block-button.omniauth-pixiv
+      = t('simple_form.labels.omniauth_pixiv.register')
+
+  .separate= t('simple_form.labels.omniauth.or')
+
   = f.simple_fields_for :account do |account_fields|
     = account_fields.input :username,
       autofocus: true,

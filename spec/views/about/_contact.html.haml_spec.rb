@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe 'about/_contact.html.haml' do
+xdescribe 'about/_contact.html.haml' do
   describe 'the contact account' do
     it 'shows info when account is present' do
       account = Account.new(username: 'admin')

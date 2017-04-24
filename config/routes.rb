@@ -2,6 +2,7 @@
 # frozen_string_literal: true
 
 require 'sidekiq/web'
+require 'sidekiq-statistic'
 
 Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: 'letter_opener' if Rails.env.development?
@@ -9,6 +10,7 @@ Rails.application.routes.draw do
   authenticate :user, lambda { |u| u.admin? } do
     mount Sidekiq::Web, at: 'sidekiq', as: :sidekiq
     mount PgHero::Engine, at: 'pghero', as: :pghero
+    mount AdminScript::Engine, at: 'admin_scripts', as: :admin_scripts
   end
 
   use_doorkeeper do
@@ -23,7 +25,15 @@ Rails.application.routes.draw do
     registrations:      'auth/registrations',
     passwords:          'auth/passwords',
     confirmations:      'auth/confirmations',
+    omniauth_callbacks: 'auth/omniauth_callbacks',
   }
+
+  devise_scope :user do
+    with_devise_exclusive_scope('/auth', :user, {}) do
+      resource :oauth_registration, only: [:new, :create],
+        path: 'oauth/oauth_registrations'
+    end
+  end
 
   get '/users/:username', to: redirect('/@%{username}'), constraints: { format: :html }
 
@@ -50,6 +60,7 @@ Rails.application.routes.draw do
   get '/@:account_username/:id', to: 'statuses#show', as: :short_account_status
 
   namespace :settings do
+    resources :oauth_authentications, only: [:index, :destroy]
     resource :profile, only: [:show, :update]
     resource :preferences, only: [:show, :update]
     resource :import, only: [:show, :create]
@@ -186,6 +197,7 @@ Rails.application.routes.draw do
   get '/about',      to: 'about#show'
   get '/about/more', to: 'about#more'
   get '/terms',      to: 'about#terms'
+  get '/app_terms',  to: 'about#app_terms'
 
   root 'home#index'
 

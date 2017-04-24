@@ -10,6 +10,8 @@ class AboutController < ApplicationController
 
   def terms; end
 
+  def app_terms; end
+
   private
 
   def new_user

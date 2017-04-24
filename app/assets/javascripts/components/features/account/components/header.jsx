@@ -1,4 +1,5 @@
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import emojify from '../../../emoji';
 import escapeTextContentForBrowser from 'escape-html';
@@ -123,6 +124,21 @@ const Header = React.createClass({
 
           <span style={{ display: 'inline-block', fontSize: '20px', lineHeight: '27px', fontWeight: '500' }} className='account__header__display-name' dangerouslySetInnerHTML={displayNameHTML} />
           <span className='account__header__username' style={{ fontSize: '14px', fontWeight: '400', display: 'block', marginBottom: '10px' }}>@{account.get('acct')} {lockedIcon}</span>
+          <div className='account__header__oauth-authentications oauth-authentications'>
+            {account.getIn(['oauth_authentications'], new Immutable.List()).map(oauth_authentication => {
+              const provider = oauth_authentication.get('provider');
+
+              if (provider === 'pixiv') {
+                return (
+                  <a key={provider} href={`https://www.pixiv.net/member.php?id=${oauth_authentication.get('uid')}`} target='_blank' rel='noopener'>
+                    <div className='account__header__oauth-authentication oauth-authentication pixiv' />
+                  </a>
+                );
+              }
+
+              return <div key={provider} />;
+            })}
+          </div>
           <div style={{ fontSize: '14px' }} className='account__header__content' dangerouslySetInnerHTML={content} />
 
           {info}

@@ -24,8 +24,9 @@
           %strong= number_with_delimiter @instance_presenter.domain_count
           %span= t 'about.domain_count_after'
 
-      - unless @instance_presenter.site_extended_description.blank?
-        .panel= @instance_presenter.site_extended_description.html_safe
+      = render 'header'
+      = render 'notice'
+      = render 'contact'
 
     .sidebar
       = render partial: 'contact', object: @instance_presenter

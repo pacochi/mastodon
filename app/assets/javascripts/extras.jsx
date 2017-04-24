@@ -37,4 +37,12 @@ $(() => {
       $(e.target).parent().attr('style', null);
     }
   });
+
+  $('.omniauth-pixiv').on('click', e => {
+    e.preventDefault();
+
+    window.pixivSignupSDK.start('index', 'pawoo', () => {
+      location.href = '/auth/oauth/pixiv';
+    });
+  });
 });

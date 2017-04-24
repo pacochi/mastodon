@@ -17,13 +17,13 @@ pl:
       unconfirmed: Zweryfikuj adres e-mail aby kontynuować.
     mailer:
       confirmation_instructions:
-        subject: 'Mastodon: Instrukcje weryfikacji adresu e-mail'
+        subject: 'Pawoo: Instrukcje weryfikacji adresu e-mail'
       password_change:
-        subject: 'Mastodon: Hasło zmienione'
+        subject: 'Pawoo: Hasło zmienione'
       reset_password_instructions:
-        subject: 'Mastodon: Instrukcje ustawienia nowego hasła'
+        subject: 'Pawoo: Instrukcje ustawienia nowego hasła'
       unlock_instructions:
-        subject: 'Mastodon: Instrukcje odblokowania konta'
+        subject: 'Pawoo: Instrukcje odblokowania konta'
     omniauth_callbacks:
       failure: 'Uwierzytelnienie przez %{kind} nie powiodło się, ponieważ: "%{reason}".'
       success: Uwierzytelnienie przez %{kind} powiodło się.

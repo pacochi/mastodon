@@ -40,7 +40,7 @@ class Status < ApplicationRecord
   scope :without_replies, -> { where('statuses.reply = FALSE OR statuses.in_reply_to_account_id = statuses.account_id') }
   scope :without_reblogs, -> { where('statuses.reblog_of_id IS NULL') }
 
-  cache_associated :account, :application, :media_attachments, :tags, :stream_entry, mentions: :account, reblog: [:account, :application, :stream_entry, :tags, :media_attachments, mentions: :account], thread: :account
+  cache_associated :application, :media_attachments, :tags, :stream_entry, mentions: { account: :oauth_authentications }, reblog: [{ account: :oauth_authentications }, :application, :stream_entry, :tags, :media_attachments, mentions: { account: :oauth_authentications }], thread: { account: :oauth_authentications }, account: :oauth_authentications
 
   def reply?
     super || !in_reply_to_id.nil?

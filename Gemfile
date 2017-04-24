@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+gem 'omniauth-pixiv-public', require: 'omniauth-pixiv'
+
 source 'https://rubygems.org'
 ruby '>= 2.3.0', '< 2.5.0'
 
@@ -50,6 +52,7 @@ gem 'rqrcode'
 gem 'ruby-oembed', require: 'oembed'
 gem 'sidekiq'
 gem 'sidekiq-unique-jobs'
+gem 'sidekiq-statistic'
 gem 'simple-navigation'
 gem 'simple_form'
 gem 'sprockets-rails', :require => 'sprockets/railtie'
@@ -63,6 +66,8 @@ gem 'browserify-rails'
 gem 'autoprefixer-rails'
 gem 'exception_notification'
 gem 'slack-notifier'
+gem 'admin_script'
+gem 'redis-namespace'
 
 group :development, :test do
   gem 'rspec-rails'

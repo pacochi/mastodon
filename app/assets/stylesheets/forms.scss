@@ -14,6 +14,16 @@ code {
     margin-bottom: 15px;
   }
 
+  .omniauth {
+    .label {
+      display: inline-block;
+      margin-top: 10px;
+    }
+    .label, label {
+      opacity: 0.7;
+    }
+  }
+
   span.hint {
     display: block;
     color: $color3;
@@ -129,6 +139,10 @@ code {
       border-bottom-color: $color4;
       background: rgba($color8, 0.1);
     }
+
+    &:disabled {
+      opacity: 0.5;
+    }
   }
 
   .input.field_with_errors {
@@ -190,6 +204,42 @@ code {
       &:active, &:focus {
         background-color: darken($color6, 5%);
       }
+    }
+
+    &.omniauth-pixiv {
+      margin-top: 20px;
+      height: 60px;
+      line-height: 40px;
+      text-transform: none;
+    }
+  }
+
+  .separate {
+    position: relative;
+    margin: 40px 0;
+    font-size: 20px;
+    text-align: center;
+
+    &:before {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 50%;
+      left: 0;
+      width: 40%;
+      height: 1px;
+      background-color: white;
+    }
+
+    &:after {
+      content: '';
+      display: block;
+      position: absolute;
+      top: 50%;
+      right: 0;
+      width: 40%;
+      height: 1px;
+      background-color: white;
     }
   }
 
@@ -268,4 +318,8 @@ code {
     display: block;
     font-size: 14px;
   }
+}
+
+.hint a {
+  color: $color4;
 }

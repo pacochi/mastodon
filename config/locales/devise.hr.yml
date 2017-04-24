@@ -16,13 +16,13 @@ hr:
       unconfirmed: Moraš potvrditi svoju email adresu prije no što nastaviš.
     mailer:
       confirmation_instructions:
-        subject: 'Mastodon: Upute za potvrđivanje'
+        subject: 'Pawoo: Upute za potvrđivanje'
       password_change:
-        subject: 'Mastodon: Lozinka je promijenjena'
+        subject: 'Pawoo: Lozinka je promijenjena'
       reset_password_instructions:
-        subject: 'Mastodon: Upute za resetiranje lozinke'
+        subject: 'Pawoo: Upute za resetiranje lozinke'
       unlock_instructions:
-        subject: 'Mastodon: Upute za otključavanje'
+        subject: 'Pawoo: Upute za otključavanje'
     omniauth_callbacks:
       failure: Ne možemo te autentificirati sa %{kind} zbog "%{reason}".
       success: Uspješno autentificiran sa %{kind} računa.

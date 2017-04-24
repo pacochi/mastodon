@@ -17,13 +17,13 @@ pt:
       unconfirmed: Você tem de confirmar o seu endereço de email antes de continuar.
     mailer:
       confirmation_instructions:
-        subject: 'Mastodon: Instruções de confirmação'
+        subject: 'Pawoo: Instruções de confirmação'
       password_change:
-        subject: 'Mastodon: Password nova'
+        subject: 'Pawoo: Password nova'
       reset_password_instructions:
-        subject: 'Mastodon: Instruções para editar a password'
+        subject: 'Pawoo: Instruções para editar a password'
       unlock_instructions:
-        subject: 'Mastodon: Instruções para desproteger a sua conta'
+        subject: 'Pawoo: Instruções para desproteger a sua conta'
     omniauth_callbacks:
       failure: Could not authenticate you from %{kind} because "%{reason}".
       success: Successfully authenticated from %{kind} account.

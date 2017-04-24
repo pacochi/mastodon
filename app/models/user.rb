@@ -6,10 +6,13 @@ class User < ApplicationRecord
   devise :registerable, :recoverable,
          :rememberable, :trackable, :validatable, :confirmable,
          :two_factor_authenticatable, :two_factor_backupable,
+         :omniauthable,
          otp_secret_encryption_key: ENV['OTP_SECRET'],
          otp_number_of_backup_codes: 10
 
   belongs_to :account, inverse_of: :user
+  has_many :oauth_authentications, dependent: :destroy
+  has_one :initial_password_usage, dependent: :destroy
   accepts_nested_attributes_for :account
 
   validates :account, presence: true
@@ -21,6 +24,8 @@ class User < ApplicationRecord
   scope :admins,    -> { where(admin: true) }
   scope :confirmed, -> { where.not(confirmed_at: nil) }
 
+  after_update :delete_initial_password_usage, if: :encrypted_password_changed?
+
   def send_devise_notification(notification, *args)
     devise_mailer.send(notification, self, *args).deliver_later
   end
@@ -31,5 +36,11 @@ class User < ApplicationRecord
 
   def setting_boost_modal
     settings.boost_modal
+  end
+
+  private
+
+  def delete_initial_password_usage
+    initial_password_usage&.destroy!
   end
 end

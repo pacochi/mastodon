@@ -17,13 +17,13 @@
       unconfirmed: Du må bekrefte e-postadressen din før du kan fortsette.
     mailer:
       confirmation_instructions:
-        subject: 'Mastodon: Instruksjoner for å bekrefte e-postadresse'
+        subject: 'Pawoo: Instruksjoner for å bekrefte e-postadresse'
       password_change:
-        subject: 'Mastodon: Passord endret'
+        subject: 'Pawoo: Passord endret'
       reset_password_instructions:
-        subject: 'Mastodon: Hvordan nullstille passord'
+        subject: 'Pawoo: Hvordan nullstille passord'
       unlock_instructions:
-        subject: 'Mastodon: Instruksjoner for å gjenåpne konto'
+        subject: 'Pawoo: Instruksjoner for å gjenåpne konto'
     omniauth_callbacks:
       failure: Kunne ikke autentisere deg fra %{kind} fordi "%{reason}".
       success: Vellykket autentisering fra %{kind}.

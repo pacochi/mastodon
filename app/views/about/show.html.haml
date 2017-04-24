@@ -16,13 +16,7 @@
   %meta{ property: 'twitter:image', content: asset_url('mastodon_small.png') }/
 
 .wrapper
-  = image_tag 'logo_pawoo.png', width: 450, style: 'display:block;margin:0 auto 40px;max-width:100%;'
-
-  %p
-    Pawoo（パウー）はピクシブが運営するMastodonのインスタンス（サーバー）です。 
-    「創作活動や自由なコミュニケーションを楽しめる場」として、どなたにも幅広く使っていただけます。
-    -# 世界中のイラストや漫画、小説好きが集まり、共通の趣味をもっている人に出会って好きなものを共有したり、情報交換や交流をしたりすることができます。
-
+  = render 'header'
 
   .screenshot-with-signup
     .mascot= image_tag 'fluffy-elephant-friend.png'
@@ -43,6 +37,7 @@
           = link_to t('about.about_this'), about_more_path
 
   %h3 Mastodon（マストドン）とは
+  = image_tag 'about/demo.png', width: '100%'
 
   %p
     Mastodonは自由でオープンソースな分散型のSNSです。ユーザーは運営元やインスタンス（サーバー）を自由に選択して参加することができます。
@@ -81,18 +76,10 @@
           = fa_icon('li check-square')
           = t 'about.features.api'
 
-  %h3 ルール
-  %p 公序良俗に反する投稿はおやめください。
+  %p まずはローカルタイムラインを眺めて、気になるユーザーをフォローしてみましょう！
 
-  %h3= t('about.contact')
-  %p
-    = t('about.contact_body_mastodon').html_safe
-    = ' → '
-    = link_to '@pixiv', '/@pixiv'
-    %br
-    = t('about.contact_body_twitter').html_safe
-    = ' → '
-    = link_to '@pixiv', 'https://twitter.com/pixiv'
+  = render 'notice'
+  = render 'contact'
 
   - unless @instance_presenter.site_description.blank?
     %h3= t('about.description_headline', domain: Rails.configuration.x.local_domain)

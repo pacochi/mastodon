@@ -79,14 +79,14 @@ const Status = React.createClass({
       if (status.getIn(['media_attachments', 0, 'type']) === 'video') {
         media = <VideoPlayer media={status.getIn(['media_attachments', 0])} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
       } else {
-        media = <MediaGallery media={status.get('media_attachments')} sensitive={status.get('sensitive')} height={110} onOpenMedia={this.props.onOpenMedia} />;
+        media = <MediaGallery media={status.get('media_attachments')} sensitive={status.get('sensitive')} height={132} onOpenMedia={this.props.onOpenMedia} />;
       }
     }
 
     return (
       <div className={this.props.muted ? 'status muted' : 'status'}>
         <div style={{ fontSize: '15px' }}>
-          <div style={{ float: 'right', fontSize: '14px' }}>
+          <div style={{ float: 'right', fontSize: '13px' }}>
             <a href={status.get('url')} className='status__relative-time' target='_blank' rel='noopener'><RelativeTimestamp timestamp={status.get('created_at')} /></a>
           </div>
 

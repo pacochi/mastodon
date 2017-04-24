@@ -1,5 +1,5 @@
 ようこそ<%= @resource.email %>さん
 
-以下のリンクをクリックしてMastodonアカウントのメールアドレスを確認してください
+以下のリンクをクリックして<%= Setting.site_title %>アカウントのメールアドレスを確認してください
 
 <%= confirmation_url(@resource, confirmation_token: @token) %>

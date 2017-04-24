@@ -1,0 +1,14 @@
+ja:
+  activerecord:
+    attributes:
+      oauth_authentication:
+        provider: プロバイダー
+        uid: pixiv ID
+    errors:
+      models:
+        oauth_authentication:
+          attributes:
+            base:
+              enabled_two_factor_authentication: 二段階認証が有効な場合は、pixivアカウントと連携できません。
+            uid:
+              taken: はすでに他のユーザーと連携済みです

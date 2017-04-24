@@ -17,13 +17,13 @@ fi:
       unconfirmed: Sinun tarvitsee varmentaa sähköpostisi jatkaaksesi.
     mailer:
       confirmation_instructions:
-        subject: 'Mastodon: Varmistus ohjeet'
+        subject: 'Pawoo: Varmistus ohjeet'
       password_change:
-        subject: 'Mastodon: Salasana vaihdettu'
+        subject: 'Pawoo: Salasana vaihdettu'
       reset_password_instructions:
-        subject: 'Mastodon: Salasanan vaihto ohjeet'
+        subject: 'Pawoo: Salasanan vaihto ohjeet'
       unlock_instructions:
-        subject: 'Mastodon: Avauksen ohjeet'
+        subject: 'Pawoo: Avauksen ohjeet'
     omniauth_callbacks:
       failure: Varmennus %{kind} epäonnistui koska "%{reason}".
       success: Onnistuneesti varmennettu %{kind} tilillä.

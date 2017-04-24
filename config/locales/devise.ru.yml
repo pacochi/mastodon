@@ -17,13 +17,13 @@ ru:
       unconfirmed: Вам необходимо подтвердить ваш адрес e-mail для продолжения.
     mailer:
       confirmation_instructions:
-        subject: 'Mastodon: Инструкция по подтверждению'
+        subject: 'Pawoo: Инструкция по подтверждению'
       password_change:
-        subject: 'Mastodon: Пароль изменен'
+        subject: 'Pawoo: Пароль изменен'
       reset_password_instructions:
-        subject: 'Mastodon: Инструкция по сбросу пароля'
+        subject: 'Pawoo: Инструкция по сбросу пароля'
       unlock_instructions:
-        subject: 'Mastodon: Инструкция по разблокировке'
+        subject: 'Pawoo: Инструкция по разблокировке'
     omniauth_callbacks:
       failure: Не получилось аутентифицировать Вас с помощью %{kind} по следующей причине - "%{reason}".
       success: Аутентификация с помощью аккаунта %{kind} прошла успешно.

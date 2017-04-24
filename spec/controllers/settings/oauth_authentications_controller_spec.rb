@@ -1,0 +1,41 @@
+require 'rails_helper'
+
+RSpec.describe Settings::OauthAuthenticationsController, type: :controller do
+  before do
+    sign_in(user, scope: :user)
+  end
+
+  let(:user) { Fabricate(:user) }
+
+  describe 'GET #index' do
+    before do
+      get :index
+    end
+
+    it { expect(response).to have_http_status(:success) }
+
+    context 'signed in via pixiv' do
+      prepend_before do
+        Fabricate(:oauth_authentication, user: user, provider: 'pixiv')
+      end
+
+      it { expect(response).to have_http_status(:success) }
+    end
+  end
+
+  describe 'DELETE #destroy' do
+    subject do
+      -> { delete :destroy, params: { id: oauth_authentication.id } }
+    end
+
+    let(:oauth_authentication) do
+      Fabricate(:oauth_authentication, user: user, provider: 'pixiv')
+    end
+
+    it 'deletes oauth_authentication' do
+      is_expected.to change {
+        OauthAuthentication.where(id: oauth_authentication.id).exists?
+      }.from(true).to(false)
+    end
+  end
+end

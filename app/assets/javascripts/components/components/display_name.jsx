@@ -16,8 +16,8 @@ const DisplayName = React.createClass({
     const displayNameHTML = { __html: emojify(escapeTextContentForBrowser(displayName)) };
 
     return (
-      <span style={{ display: 'block', maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis' }} className='display-name'>
-        <strong style={{ fontWeight: '500' }} dangerouslySetInnerHTML={displayNameHTML} /> <span style={{ fontSize: '14px' }}>@{this.props.account.get('acct')}</span>
+      <span style={{ display: 'block', maxWidth: '100%', overflow: 'hidden', whiteSpace: 'nowrap', textOverflow: 'ellipsis', fontSize: '13.5px'}} className='display-name'>
+        <strong style={{ fontWeight: '500' }} dangerouslySetInnerHTML={displayNameHTML} /> <span>@{this.props.account.get('acct')}</span>
       </span>
     );
   }
