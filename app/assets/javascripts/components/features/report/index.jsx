@@ -77,7 +77,7 @@ const Report = React.createClass({
 
     this.options = Immutable.fromJS([
       { id: 'donotlike', value: '好みではない' },
-      { id: 'incorrectage', value: '年齢設定が不適切' },
+      { id: 'incorrectage', value: 'CW・NSFW設定の不足' },
       { id: 'spam', value: 'スパム・迷惑行為' },
       { id: 'reproduction', value: '無断転載' },
       { id: 'prohibited', value: '禁止行為に該当' }

@@ -111,7 +111,7 @@ const ja = {
   "report.placeholder": "その他の理由",
   "report.select.title": "通報の理由を選択してください",
   "report.select.donotlike": "好みではない",
-  "report.select.incorrectage": "年齢設定が不適切",
+  "report.select.incorrectage": "CW・NSFW設定の不足",
   "report.select.spam": "スパム・迷惑行為",
   "report.select.reproduction": "無断転載",
   "report.select.prohibited": "禁止行為に該当",
