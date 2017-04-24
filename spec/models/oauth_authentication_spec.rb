@@ -19,15 +19,6 @@ RSpec.describe OauthAuthentication, type: :model do
       subject.provider = nil
       is_expected.to model_have_error_on_field(:provider)
     end
-
-    context 'two factor authentication is enabled' do
-      it 'is invalid' do
-        is_expected.to be_valid
-        subject.user.update!(otp_secret: User.generate_otp_secret(32), otp_required_for_login: true)
-        is_expected.to be_invalid
-        expect(subject.errors).to be_added(:base, :enabled_two_factor_authentication)
-      end
-    end
   end
 
   describe 'callbacks' do
