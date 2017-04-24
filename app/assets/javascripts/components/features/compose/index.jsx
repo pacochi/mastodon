@@ -44,9 +44,8 @@ const Compose = React.createClass({
   componentDidUpdate (prevProps) {
     if (this.props.intent && prevProps.submitting && !this.props.submitting) {
       window.close();
-      setTimeout(() => {
-        location.href = '/';
-      }, 500);
+      // Cannot close window unless it opened by JavaScript.
+      setTimeout(() => (location.href = '/'), 240);
     }
   },
 
