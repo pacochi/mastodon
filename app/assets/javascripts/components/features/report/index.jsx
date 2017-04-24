@@ -19,7 +19,7 @@ const messages = defineMessages({
   reportTitle: { id: 'report.select.title', defaultMessage: 'Please select the reason for reporting' },
   reportOptions: {
     donotlike: { id: 'report.select.donotlike', defaultMessage: 'I do not like it' },
-    incorrectage: { id: 'report.select.incorrectage', defaultMessage: 'Incorrect age setting' },
+    incorrectage: { id: 'report.select.incorrectage', defaultMessage: 'Incorrect CW・NSFW setting' },
     spam: { id: 'report.select.spam', defaultMessage: 'Spam' },
     reproduction: { id: 'report.select.reproduction', defaultMessage: 'Unauthorized reproduction' },
     prohibited: { id: 'report.select.prohibited', defaultMessage: 'Prohibited act' },
