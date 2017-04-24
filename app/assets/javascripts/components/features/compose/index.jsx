@@ -20,7 +20,8 @@ const messages = defineMessages({
 });
 
 const mapStateToProps = state => ({
-  showSearch: state.getIn(['search', 'submitted']) && !state.getIn(['search', 'hidden'])
+  showSearch: state.getIn(['search', 'submitted']) && !state.getIn(['search', 'hidden']),
+  submitting: state.getIn(['compose', 'is_submitting'])
 });
 
 const Compose = React.createClass({
@@ -30,6 +31,7 @@ const Compose = React.createClass({
     dispatch: React.PropTypes.func.isRequired,
     withHeader: React.PropTypes.bool,
     showSearch: React.PropTypes.bool,
+    submitting: React.PropTypes.bool,
     intl: React.PropTypes.object.isRequired
   },
 
@@ -37,6 +39,15 @@ const Compose = React.createClass({
 
   componentDidMount () {
     this.props.dispatch(mountCompose());
+  },
+
+  componentDidUpdate (prevProps) {
+    if (this.props.intent && prevProps.submitting && !this.props.submitting) {
+      window.close();
+      setTimeout(() => {
+        location.href = '/';
+      }, 500);
+    }
   },
 
   componentWillUnmount () {
