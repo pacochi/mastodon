@@ -143,7 +143,7 @@ const Report = React.createClass({
             {this.state.option &&
               <div className='report__select'>
                 <div>
-                  <div className='report__select__title'>通報の理由を選択してください</div>
+                  <div className='report__select__title'>{intl.formatMessage(messages.reportTitle)}</div>
                   {this.options.map(option =>
                     <div key={option.get('id')} style={{ display: 'flex' }}>
                       <div style={{ flex: '1 1 auto', padding: '10px' }}>
