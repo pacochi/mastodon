@@ -1,3 +1,4 @@
+import qs from 'querystring';
 import CharacterCounter from './character_counter';
 import Button from '../../../components/button';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
@@ -51,6 +52,15 @@ const ComposeForm = React.createClass({
   },
 
   mixins: [PureRenderMixin],
+
+  componentDidMount () {
+    const rawQuery = location.search.replace(/^\?/, '');
+    if (rawQuery.length > 0) {
+      window.history.replaceState(window.history.state, null, location.pathname);
+      const query = qs.parse(rawQuery);
+      this.props.onChange(query.text);
+    }
+  },
 
   handleChange (e) {
     this.props.onChange(e.target.value);

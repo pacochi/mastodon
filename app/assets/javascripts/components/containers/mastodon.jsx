@@ -150,6 +150,19 @@ const Mastodon = React.createClass({
   render () {
     const { locale } = this.props;
 
+    // FIXME
+    if (/^\/web\/getting-started/.test(location.pathname)) {
+      return (
+        <IntlProvider locale={locale} messages={getMessagesForLocale(locale)}>
+          <Provider store={store}>
+            <UI intent>
+              <Compose intent />
+            </UI>
+          </Provider>
+        </IntlProvider>
+      );
+    }
+
     return (
       <IntlProvider locale={locale} messages={getMessagesForLocale(locale)}>
         <Provider store={store}>

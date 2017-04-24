@@ -191,6 +191,17 @@
   color: $color1;
 }
 
+.compose-form__intent {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+
+  & > div {
+    margin: 0 auto;
+    padding: 20px;
+  }
+}
+
 .compose-form__warning {
   color: $color2;
   margin-bottom: 15px;

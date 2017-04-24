@@ -26,6 +26,7 @@ const mapStateToProps = state => ({
 const Compose = React.createClass({
 
   propTypes: {
+    intent: React.PropTypes.bool,
     dispatch: React.PropTypes.func.isRequired,
     withHeader: React.PropTypes.bool,
     showSearch: React.PropTypes.bool,
@@ -43,6 +44,16 @@ const Compose = React.createClass({
   },
 
   render () {
+    if (this.props.intent) {
+      return (
+        <div className='compose-form__intent'>
+          <div style={{ maxWidth: 400, width: '100%' }}>
+            <ComposeFormContainer />
+          </div>
+        </div>
+      );
+    }
+
     const { withHeader, showSearch, intl } = this.props;
 
     let header = '';
