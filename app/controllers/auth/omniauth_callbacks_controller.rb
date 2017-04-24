@@ -25,7 +25,7 @@ class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
 
       if oauth_authentication
         sign_in(oauth_authentication.user)
-        redirect_to root_path
+        redirect_to after_sign_in_path_for(oauth_authentication.user)
       else
         store_omniauth_auth
         redirect_to new_user_oauth_registration_path
