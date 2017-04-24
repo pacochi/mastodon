@@ -1461,7 +1461,7 @@ button.icon-button.active i.fa-retweet {
   border-radius: 2px 2px 0 0;
   padding: 7px 4px;
   font-size: 14px;
-  color: $color5;
+  color: $color1;
   display: block;
   width: 100%;
   outline: 0;
@@ -1472,6 +1472,40 @@ button.icon-button.active i.fa-retweet {
     border-bottom-color: $color4;
     background: rgba($color8, 0.1);
   }
+
+  &.fill {
+    color: $color3;
+  }
+}
+
+.report__select {
+  z-index: 9999;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba($color8, 0.7);
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+
+  & > div {
+    margin: 0 auto;
+    padding: 20px;
+    width: 100%;
+    max-width: 320px;
+    color: $color1;
+    background-color: $color5;
+    border-radius: 4px;
+  }
+}
+
+.report__select__title {
+  margin-bottom: 10px;
+  color: $color4;
+  font-size: 15px;
+  text-align: center;
 }
 
 .empty-column-indicator {

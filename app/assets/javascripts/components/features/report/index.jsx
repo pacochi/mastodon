@@ -9,6 +9,7 @@ import { makeGetAccount } from '../../selectors';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
 import StatusCheckBox from './containers/status_check_box_container';
 import Immutable from 'immutable';
+import Toggle from 'react-toggle';
 import ColumnBackButtonSlim from '../../components/column_back_button_slim';
 
 const messages = defineMessages({
@@ -53,12 +54,26 @@ const Report = React.createClass({
     intl: React.PropTypes.object.isRequired
   },
 
+  getInitialState () {
+    return {
+      option: false
+    };
+  },
+
   mixins: [PureRenderMixin],
 
   componentWillMount () {
     if (!this.props.account) {
       this.context.router.replace('/');
     }
+    // FIXME: intl
+    this.options = Immutable.fromJS([
+      '好みではない',
+      '年齢設定が不適切',
+      'スパム・迷惑行為',
+      '無断転載',
+      '禁止行為に該当'
+    ]);
   },
 
   componentDidMount () {
@@ -84,6 +99,14 @@ const Report = React.createClass({
     this.context.router.replace('/');
   },
 
+  handlePreSubmit () {
+    this.setState({ option: true });
+  },
+
+  onToggle (e) {
+    this.props.dispatch(changeReportComment(e.target.getAttribute('name')));
+  },
+
   render () {
     const { account, comment, intl, statusIds, isSubmitting } = this.props;
 
@@ -107,18 +130,45 @@ const Report = React.createClass({
             </div>
           </div>
 
-          <div style={{ flex: '0 0 100px', padding: '10px' }}>
-            <textarea
-              className='report__textarea'
-              placeholder={intl.formatMessage(messages.placeholder)}
-              value={comment}
-              onChange={this.handleCommentChange}
-              style={textareaStyle}
-              disabled={isSubmitting}
-            />
-
-            <div style={{ marginTop: '10px', overflow: 'hidden' }}>
-              <div style={{ float: 'right' }}><Button disabled={isSubmitting} text={intl.formatMessage(messages.submit)} onClick={this.handleSubmit} /></div>
+          <div style={{ padding: '10px' }}>
+            {/*
+              <textarea
+                className='report__textarea'
+                placeholder={intl.formatMessage(messages.placeholder)}
+                value={comment}
+                onChange={this.handleCommentChange}
+                style={textareaStyle}
+                disabled={isSubmitting}
+              />
+            */}
+            {this.state.option &&
+              <div className='report__select'>
+                <div>
+                  <div className='report__select__title'>通報の理由を選択してください</div>
+                  {this.options.map(option =>
+                    <div key={option} style={{ display: 'flex' }}>
+                      <div style={{ flex: '1 1 auto', padding: '10px' }}>
+                        {option}
+                      </div>
+                      <div style={{ flex: '0 0 auto', padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+                        <Toggle name={option} checked={this.props.comment === option} onChange={this.onToggle} disabled={isSubmitting} />
+                      </div>
+                    </div>
+                  )}
+                  <textarea
+                    className='report__textarea'
+                    placeholder='その他の理由'
+                    value={this.options.indexOf(comment) > -1 ? '' : comment}
+                    onChange={this.handleCommentChange}
+                    style={textareaStyle}
+                    disabled={isSubmitting}
+                  />
+                  <Button disabled={isSubmitting} text={intl.formatMessage(messages.submit)} onClick={this.handleSubmit} block />
+                </div>
+              </div>
+            }
+            <div style={{ overflow: 'hidden' }}>
+              <Button disabled={isSubmitting} text={intl.formatMessage(messages.submit)} onClick={this.handlePreSubmit} block />
             </div>
           </div>
         </div>
