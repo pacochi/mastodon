@@ -4,7 +4,12 @@ Paperclip.options[:read_timeout] = 60
 
 Paperclip.interpolates :filename do |attachment, style|
   return attachment.original_filename if style == :original
-  [basename(attachment, style), extension(attachment, style)].delete_if(&:empty?).join('.')
+
+  # HOTFIX
+  # extension    - v1.2.2: Detect extension from filename
+  # content_type - v1.0.0: Detect extension from content_type. This behavior is deprecated
+  extname = extension(attachment, style).presence || content_type_extension(attachment, style)
+  [basename(attachment, style), extname].delete_if(&:empty?).join('.')
 end
 
 if ENV['S3_ENABLED'] == 'true'
