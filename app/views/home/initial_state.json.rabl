@@ -9,7 +9,7 @@ node(:meta) do
     me: current_account.id,
     admin: @admin.try(:id),
     boost_modal: current_account.user.setting_boost_modal,
-    intent: false,
+    intent: @intent
   }
 end
 
