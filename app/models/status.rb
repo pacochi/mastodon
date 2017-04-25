@@ -10,7 +10,7 @@ class Status < ApplicationRecord
 
   belongs_to :application, class_name: 'Doorkeeper::Application'
 
-  belongs_to :account, inverse_of: :statuses, counter_cache: true
+  belongs_to :account, inverse_of: :statuses, counter_cache: true, required: true
   belongs_to :in_reply_to_account, foreign_key: 'in_reply_to_account_id', class_name: 'Account'
 
   belongs_to :thread, foreign_key: 'in_reply_to_id', class_name: 'Status', inverse_of: :replies
@@ -26,11 +26,10 @@ class Status < ApplicationRecord
   has_one :notification, as: :activity, dependent: :destroy
   has_one :preview_card, dependent: :destroy
 
-  validates :account, presence: true
   validates :uri, uniqueness: true, unless: 'local?'
   validates :text, presence: true, unless: 'reblog?'
   validates_with StatusLengthValidator
-  validates :reblog, uniqueness: { scope: :account, message: 'of status already exists' }, if: 'reblog?'
+  validates :reblog, uniqueness: { scope: :account }, if: 'reblog?'
 
   default_scope { order('id desc') }
 
@@ -43,7 +42,7 @@ class Status < ApplicationRecord
   cache_associated :application, :media_attachments, :tags, :stream_entry, mentions: { account: :oauth_authentications }, reblog: [{ account: :oauth_authentications }, :application, :stream_entry, :tags, :media_attachments, mentions: { account: :oauth_authentications }], thread: { account: :oauth_authentications }, account: :oauth_authentications
 
   def reply?
-    super || !in_reply_to_id.nil?
+    !in_reply_to_id.nil? || super
   end
 
   def local?
@@ -183,9 +182,7 @@ class Status < ApplicationRecord
     private
 
     def filter_timeline(query, account)
-      blocked = Rails.cache.fetch("blocked_account_ids:#{account.id}") do
-        Block.where(account: account).pluck(:target_account_id) + Block.where(target_account: account).pluck(:account_id) + Mute.where(account: account).pluck(:target_account_id)
-      end
+      blocked = Rails.cache.fetch("exclude_account_ids_for:#{account.id}") { Block.where(account: account).pluck(:target_account_id) + Block.where(target_account: account).pluck(:account_id) + Mute.where(account: account).pluck(:target_account_id) }
       query   = query.where('statuses.account_id NOT IN (?)', blocked) unless blocked.empty?  # Only give us statuses from people we haven't blocked, or muted, or that have blocked us
       query   = query.where('accounts.silenced = TRUE') if account.silenced?                  # and if we're hellbanned, only people who are also hellbanned
       query
