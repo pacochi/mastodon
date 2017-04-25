@@ -63,6 +63,6 @@ class Api::V1::TimelinesController < ApiController
   end
 
   def pagination_params(core_params)
-    params.permit(:local, :limit).merge(core_params)
+    params.permit(:local, :limit, :media).merge(core_params)
   end
 end
