@@ -43,7 +43,9 @@ class AccountsController < ApplicationController
   end
 
   def media
-    @statuses = @account.statuses.permitted_for(@account, current_account).order('id desc').joins(:media_attachments).paginate_by_max_id(20, params[:max_id], params[:since_id])
+    @statuses = @account.statuses.permitted_for(@account, current_account).order('id desc').paginate_by_max_id(20, params[:max_id], params[:since_id])
+    status_ids = @statuses.joins(:media_attachments).distinct(:id).ids
+    @statuses = @statuses.where(id: status_ids)
     @statuses = cache_collection(@statuses, Status)
   end
 
