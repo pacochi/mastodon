@@ -21,13 +21,20 @@ class Api::V1::TimelinesController < ApiController
   end
 
   def public
-    @statuses = Status.as_public_timeline(current_account, params[:local]).paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
+    @statuses = Status.as_public_timeline(current_account, params[:local], params[:media])
+                  .paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
+
+    # `SELECT DISTINCT id, updated` is too slow, so pluck ids at first, and then select statuses with id.
+    if params[:media]
+      status_ids = @statuses.distinct(:id).pluck(:id)
+      @statuses = @statuses.where(id: status_ids)
+    end
     @statuses = cache_collection(@statuses)
 
     set_maps(@statuses)
 
-    next_path = api_v1_public_timeline_url(pagination_params(max_id: @statuses.last.id))    unless @statuses.empty?
-    prev_path = api_v1_public_timeline_url(pagination_params(since_id: @statuses.first.id)) unless @statuses.empty?
+    next_path = api_v1_public_timeline_url(pagination_params(max_id: @statuses.last.id, media: params[:media]))    unless @statuses.empty?
+    prev_path = api_v1_public_timeline_url(pagination_params(since_id: @statuses.first.id, media: params[:media])) unless @statuses.empty?
 
     set_pagination_headers(next_path, prev_path)
 
