@@ -65,6 +65,8 @@ RSpec.describe PostStatusService do
   end
 
   it 'creates a status with a language set' do
+    skip 'LanguageDetector is not used'
+
     detector = double(to_iso_s: :en)
     allow(LanguageDetector).to receive(:new).and_return(detector)
 
