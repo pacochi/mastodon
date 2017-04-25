@@ -13,6 +13,7 @@ class HomeController < ApplicationController
 
   private
 
+  # app/controllers/intent/statuses_controller.rb にも同じコードがあるので、ここが更新された場合は気をつける
   def authenticate_user!
     redirect_to(single_user_mode? ? account_path(Account.first) : about_path) unless user_signed_in?
   end
