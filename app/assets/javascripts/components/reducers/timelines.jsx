@@ -73,6 +73,17 @@ const initialState = Immutable.Map({
     items: Immutable.List()
   }),
 
+  media: Immutable.Map({
+      path: () => '/api/v1/timelines/public',
+      next: null,
+      params: { local: true, media: true },
+      isLoading: false,
+      online: false,
+      loaded: false,
+      top: true,
+      unread: 0,
+      items: Immutable.List()
+  }),
   tag: Immutable.Map({
     path: (id) => `/api/v1/timelines/tag/${id}`,
     next: null,

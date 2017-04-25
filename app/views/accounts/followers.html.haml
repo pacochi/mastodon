@@ -1,6 +1,7 @@
 - content_for :page_title do
   = t('accounts.people_who_follow', name: display_name(@account))
 
+= render 'service_logo'
 = render 'header', account: @account
 
 .accounts-grid

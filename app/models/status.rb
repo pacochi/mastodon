@@ -126,7 +126,6 @@ class Status < ApplicationRecord
               .without_reblogs
 
       query = query.where('accounts.domain IS NULL') if local_only
-
       account.nil? ? filter_timeline_default(query) : filter_timeline_default(filter_timeline(query, account))
     end
 

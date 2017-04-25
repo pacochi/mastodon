@@ -83,6 +83,7 @@ Rails.application.routes.draw do
 
   resources :media, only: [:show]
   resources :tags,  only: [:show]
+  resources :oauth_authentications, only: [:show], param: :uid
 
   # Remote follow
   get  :authorize_follow, to: 'authorize_follow#new'
