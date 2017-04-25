@@ -1,26 +1,27 @@
 # frozen_string_literal: true
 
 class Rack::Attack
-
-  # Rate limits for the API
-  # 一旦制限をなくす
-  throttle('api', limit: 1_000_000_000_000, period: 5.minutes) do |req|
-    req.ip if req.path.match(/\A\/api\/v/)
-  end
+  LIMIT = 60
+  PERIOD = 1.minute
 
   # Rate limit logins
-  throttle('login', limit: 5, period: 5.minutes) do |req|
+  throttle('login', limit: LIMIT, period: PERIOD) do |req|
     req.ip if req.path == '/auth/sign_in' && req.post?
   end
 
   # Rate limit sign-ups
-  throttle('register', limit: 5, period: 5.minutes) do |req|
+  throttle('register', limit: LIMIT, period: PERIOD) do |req|
     req.ip if req.path == '/auth' && req.post?
   end
 
   # Rate limit forgotten passwords
-  throttle('reminder', limit: 5, period: 5.minutes) do |req|
+  throttle('reminder', limit: LIMIT, period: PERIOD) do |req|
     req.ip if req.path == '/auth/password' && req.post?
+  end
+  
+  # Rate limit forgotten passwords
+  throttle('pixiv_omniauth', limit: LIMIT, period: PERIOD) do |req|
+    req.ip if req.path == '/auth/oauth/pixiv' && req.get?
   end
 
   self.throttled_response = lambda do |env|
