@@ -24,12 +24,12 @@ import {
   ACCOUNT_TIMELINE_EXPAND_REQUEST,
   ACCOUNT_TIMELINE_EXPAND_SUCCESS,
   ACCOUNT_TIMELINE_EXPAND_FAIL,
-  MEDIA_TIMELINE_FETCH_REQUEST,
-  MEDIA_TIMELINE_FETCH_SUCCESS,
-  MEDIA_TIMELINE_FETCH_FAIL,
-  MEDIA_TIMELINE_EXPAND_REQUEST,
-  MEDIA_TIMELINE_EXPAND_SUCCESS,
-  MEDIA_TIMELINE_EXPAND_FAIL,
+  ACCOUNT_MEDIA_TIMELINE_FETCH_REQUEST,
+  ACCOUNT_MEDIA_TIMELINE_FETCH_SUCCESS,
+  ACCOUNT_MEDIA_TIMELINE_FETCH_FAIL,
+  ACCOUNT_MEDIA_TIMELINE_EXPAND_REQUEST,
+  ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS,
+  ACCOUNT_MEDIA_TIMELINE_EXPAND_FAIL,
   ACCOUNT_BLOCK_SUCCESS,
   ACCOUNT_MUTE_SUCCESS
 } from '../actions/accounts';
@@ -153,7 +153,7 @@ const normalizeAccountTimeline = (state, accountId, statuses, replace = false) =
     .update('items', Immutable.List(), list => (replace ? ids : list.unshift(...ids))));
 };
 
-const normalizeMediaTimeline = (state, accountId, statuses) => {
+const normalizeAccountMediaTimeline = (state, accountId, statuses) => {
   let ids = Immutable.List();
 
   statuses.forEach((status, i) => {
@@ -161,7 +161,7 @@ const normalizeMediaTimeline = (state, accountId, statuses) => {
     ids   = ids.set(i, status.get('id'));
   });
 
-  return state.updateIn(['media_timelines', accountId], Immutable.Map(), map => map
+  return state.updateIn(['account_media_timelines', accountId], Immutable.Map(), map => map
     .set('isLoading', false)
     .set('loaded', true)
     .update('items', Immutable.List(), list => list.unshift(...ids)));
@@ -180,7 +180,7 @@ const appendNormalizedAccountTimeline = (state, accountId, statuses) => {
     .update('items', list => list.push(...moreIds)));
 };
 
-const appendNormalizedMediaTimeline = (state, accountId, statuses) => {
+const appendNormalizedAccountMediaTimeline = (state, accountId, statuses) => {
   let moreIds = Immutable.List([]);
 
   statuses.forEach((status, i) => {
@@ -188,7 +188,7 @@ const appendNormalizedMediaTimeline = (state, accountId, statuses) => {
     moreIds = moreIds.set(i, status.get('id'));
   });
 
-  return state.updateIn(['media_timelines', accountId], Immutable.Map(), map => map
+  return state.updateIn(['account_media_timelines', accountId], Immutable.Map(), map => map
     .set('isLoading', false)
     .update('items', list => list.push(...moreIds)));
 };
@@ -333,16 +333,16 @@ export default function timelines(state = initialState, action) {
     return normalizeAccountTimeline(state, action.id, Immutable.fromJS(action.statuses), action.replace);
   case ACCOUNT_TIMELINE_EXPAND_SUCCESS:
     return appendNormalizedAccountTimeline(state, action.id, Immutable.fromJS(action.statuses));
-  case MEDIA_TIMELINE_FETCH_REQUEST:
-  case MEDIA_TIMELINE_EXPAND_REQUEST:
-    return state.updateIn(['media_timelines', action.id], Immutable.Map(), map => map.set('isLoading', true));
-  case MEDIA_TIMELINE_FETCH_FAIL:
-  case MEDIA_TIMELINE_EXPAND_FAIL:
-    return state.updateIn(['media_timelines', action.id], Immutable.Map(), map => map.set('isLoading', false));
-  case MEDIA_TIMELINE_FETCH_SUCCESS:
-    return normalizeMediaTimeline(state, action.id, Immutable.fromJS(action.statuses), action.replace);
-  case MEDIA_TIMELINE_EXPAND_SUCCESS:
-    return appendNormalizedMediaTimeline(state, action.id, Immutable.fromJS(action.statuses));
+  case ACCOUNT_MEDIA_TIMELINE_FETCH_REQUEST:
+  case ACCOUNT_MEDIA_TIMELINE_EXPAND_REQUEST:
+    return state.updateIn(['account_media_timelines', action.id], Immutable.Map(), map => map.set('isLoading', true));
+  case ACCOUNT_MEDIA_TIMELINE_FETCH_FAIL:
+  case ACCOUNT_MEDIA_TIMELINE_EXPAND_FAIL:
+    return state.updateIn(['account_media_timelines', action.id], Immutable.Map(), map => map.set('isLoading', false));
+  case ACCOUNT_MEDIA_TIMELINE_FETCH_SUCCESS:
+    return normalizeAccountMediaTimeline(state, action.id, Immutable.fromJS(action.statuses), action.replace);
+  case ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS:
+    return appendNormalizedAccountMediaTimeline(state, action.id, Immutable.fromJS(action.statuses));
   case ACCOUNT_BLOCK_SUCCESS:
   case ACCOUNT_MUTE_SUCCESS:
     return filterTimelines(state, action.relationship, action.statuses);

@@ -49,13 +49,13 @@ export const FOLLOWING_FETCH_REQUEST = 'FOLLOWING_FETCH_REQUEST';
 export const FOLLOWING_FETCH_SUCCESS = 'FOLLOWING_FETCH_SUCCESS';
 export const FOLLOWING_FETCH_FAIL    = 'FOLLOWING_FETCH_FAIL';
 
-export const MEDIA_TIMELINE_EXPAND_REQUEST = 'MEDIA_TIMELINE_EXPAND_REQUEST';
-export const MEDIA_TIMELINE_EXPAND_SUCCESS = 'MEDIA_TIMELINE_EXPAND_SUCCESS';
-export const MEDIA_TIMELINE_EXPAND_FAIL    = 'MEDIA_TIMELINE_EXPAND_FAIL';
+export const ACCOUNT_MEDIA_TIMELINE_EXPAND_REQUEST = 'ACCOUNT_MEDIA_TIMELINE_EXPAND_REQUEST';
+export const ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS = 'ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS';
+export const ACCOUNT_MEDIA_TIMELINE_EXPAND_FAIL    = 'ACCOUNT_MEDIA_TIMELINE_EXPAND_FAIL';
 
-export const MEDIA_TIMELINE_FETCH_REQUEST = 'MEDIA_TIMELINE_FETCH_REQUEST';
-export const MEDIA_TIMELINE_FETCH_SUCCESS = 'MEDIA_TIMELINE_FETCH_SUCCESS';
-export const MEDIA_TIMELINE_FETCH_FAIL    = 'MEDIA_TIMELINE_FETCH_FAIL';
+export const ACCOUNT_MEDIA_TIMELINE_FETCH_REQUEST = 'ACCOUNT_MEDIA_TIMELINE_FETCH_REQUEST';
+export const ACCOUNT_MEDIA_TIMELINE_FETCH_SUCCESS = 'ACCOUNT_MEDIA_TIMELINE_FETCH_SUCCESS';
+export const ACCOUNT_MEDIA_TIMELINE_FETCH_FAIL    = 'ACCOUNT_MEDIA_TIMELINE_FETCH_FAIL';
 
 export const FOLLOWING_EXPAND_REQUEST = 'FOLLOWING_EXPAND_REQUEST';
 export const FOLLOWING_EXPAND_SUCCESS = 'FOLLOWING_EXPAND_SUCCESS';
@@ -542,11 +542,11 @@ export function fetchFollowingFail(id, error) {
   };
 };
 
-export function expandMediaTimeline(id) {
+export function expandAccountMediaTimeline(id) {
   return (dispatch, getState) => {
-    const lastId = getState().getIn(['timelines', 'media_timelines', id, 'items'], Immutable.List()).last();
+    const lastId = getState().getIn(['timelines', 'account_media_timelines', id, 'items'], Immutable.List()).last();
 
-    dispatch(expandMediaTimelineRequest(id));
+    dispatch(expandAccountMediaTimelineRequest(id));
 
     api(getState).get(`/api/v1/accounts/${id}/statuses`, {
       params: {
@@ -555,39 +555,39 @@ export function expandMediaTimeline(id) {
         max_id: lastId
       }
     }).then(response => {
-      dispatch(expandMediaTimelineSuccess(id, response.data));
+      dispatch(expandAccountMediaTimelineSuccess(id, response.data));
     }).catch(error => {
-      dispatch(expandMediaTimelineFail(id, error));
+      dispatch(expandAccountMediaTimelineFail(id, error));
     });
   };
 };
 
-export function expandMediaTimelineRequest(id) {
+export function expandAccountMediaTimelineRequest(id) {
   return {
-    type: MEDIA_TIMELINE_EXPAND_REQUEST,
+    type: ACCOUNT_MEDIA_TIMELINE_EXPAND_REQUEST,
     id
   };
 };
 
-export function expandMediaTimelineSuccess(id, statuses) {
+export function expandAccountMediaTimelineSuccess(id, statuses) {
   return {
-    type: MEDIA_TIMELINE_EXPAND_SUCCESS,
+    type: ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS,
     id,
     statuses
   };
 };
 
-export function expandMediaTimelineFail(id, error) {
+export function expandAccountMediaTimelineFail(id, error) {
   return {
-    type: MEDIA_TIMELINE_EXPAND_FAIL,
+    type: ACCOUNT_MEDIA_TIMELINE_EXPAND_FAIL,
     id,
     error
   };
 };
 
-export function fetchMediaTimeline(id, replace = false) {
+export function fetchAccountMediaTimeline(id, replace = false) {
   return (dispatch, getState) => {
-    const ids      = getState().getIn(['timelines', 'media_timelines', id, 'items'], Immutable.List());
+    const ids      = getState().getIn(['timelines', 'account_media_timelines', id, 'items'], Immutable.List());
     const newestId = ids.size > 0 ? ids.first() : null;
 
     let params = { only_media: 1 };
@@ -598,27 +598,27 @@ export function fetchMediaTimeline(id, replace = false) {
       skipLoading = true;
     }
 
-    dispatch(fetchMediaTimelineRequest(id, skipLoading));
+    dispatch(fetchAccountMediaTimelineRequest(id, skipLoading));
 
     api(getState).get(`/api/v1/accounts/${id}/statuses`, { params }).then(response => {
-      dispatch(fetchMediaTimelineSuccess(id, response.data, replace, skipLoading));
+      dispatch(fetchAccountMediaTimelineSuccess(id, response.data, replace, skipLoading));
     }).catch(error => {
-      dispatch(fetchMediaTimelineFail(id, error, skipLoading));
+      dispatch(fetchAccountMediaTimelineFail(id, error, skipLoading));
     });
   };
 };
 
-export function fetchMediaTimelineRequest(id, skipLoading) {
+export function fetchAccountMediaTimelineRequest(id, skipLoading) {
   return {
-    type: MEDIA_TIMELINE_FETCH_REQUEST,
+    type: ACCOUNT_MEDIA_TIMELINE_FETCH_REQUEST,
     id,
     skipLoading
   };
 };
 
-export function fetchMediaTimelineSuccess(id, statuses, replace, skipLoading) {
+export function fetchAccountMediaTimelineSuccess(id, statuses, replace, skipLoading) {
   return {
-    type: MEDIA_TIMELINE_FETCH_SUCCESS,
+    type: ACCOUNT_MEDIA_TIMELINE_FETCH_SUCCESS,
     id,
     statuses,
     replace,
@@ -626,9 +626,9 @@ export function fetchMediaTimelineSuccess(id, statuses, replace, skipLoading) {
   };
 };
 
-export function fetchMediaTimelineFail(id, error, skipLoading) {
+export function fetchAccountMediaTimelineFail(id, error, skipLoading) {
   return {
-    type: MEDIA_TIMELINE_FETCH_FAIL,
+    type: ACCOUNT_MEDIA_TIMELINE_FETCH_FAIL,
     id,
     error,
     skipLoading,

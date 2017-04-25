@@ -3,8 +3,8 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import {
   fetchAccount,
-  fetchMediaTimeline,
-  expandMediaTimeline
+  fetchAccountMediaTimeline,
+  expandAccountMediaTimeline
 } from '../../actions/accounts';
 import StatusList from '../../components/status_list';
 import LoadingIndicator from '../../components/loading_indicator';
@@ -14,13 +14,13 @@ import ColumnBackButton from '../../components/column_back_button';
 import Immutable from 'immutable';
 
 const mapStateToProps = (state, props) => ({
-  statusIds: state.getIn(['timelines', 'media_timelines', Number(props.params.accountId), 'items'], Immutable.List()),
-  isLoading: state.getIn(['timelines', 'media_timelines', Number(props.params.accountId), 'isLoading']),
-  hasMore: !!state.getIn(['timelines', 'media_timelines', Number(props.params.accountId), 'next']),
+  statusIds: state.getIn(['timelines', 'account_media_timelines', Number(props.params.accountId), 'items'], Immutable.List()),
+  isLoading: state.getIn(['timelines', 'account_media_timelines', Number(props.params.accountId), 'isLoading']),
+  hasMore: !!state.getIn(['timelines', 'account_media_timelines', Number(props.params.accountId), 'next']),
   me: state.getIn(['meta', 'me'])
 });
 
-const MediaTimeline = React.createClass({
+const AccountMediaTimeline = React.createClass({
 
   propTypes: {
     params: React.PropTypes.object.isRequired,
@@ -35,18 +35,18 @@ const MediaTimeline = React.createClass({
 
   componentWillMount () {
     this.props.dispatch(fetchAccount(Number(this.props.params.accountId)));
-    this.props.dispatch(fetchMediaTimeline(Number(this.props.params.accountId)));
+    this.props.dispatch(fetchAccountMediaTimeline(Number(this.props.params.accountId)));
   },
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.params.accountId !== this.props.params.accountId && nextProps.params.accountId) {
       this.props.dispatch(fetchAccount(Number(nextProps.params.accountId)));
-      this.props.dispatch(fetchMediaTimeline(Number(nextProps.params.accountId)));
+      this.props.dispatch(fetchAccountMediaTimeline(Number(nextProps.params.accountId)));
     }
   },
 
   handleScrollToBottom () {
-    this.props.dispatch(expandMediaTimeline(Number(this.props.params.accountId)));
+    this.props.dispatch(expandAccountMediaTimeline(Number(this.props.params.accountId)));
   },
 
   render () {
@@ -78,4 +78,4 @@ const MediaTimeline = React.createClass({
 
 });
 
-export default connect(mapStateToProps)(MediaTimeline);
+export default connect(mapStateToProps)(AccountMediaTimeline);
