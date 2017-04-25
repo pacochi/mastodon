@@ -8,9 +8,9 @@ Paperclip.interpolates :filename do |attachment, style|
   # HOTFIX
   # extension    - v1.2.2: Detect extension from filename
   # content_type - v1.0.0: Detect extension from content_type. This behavior is deprecated
-  wrong_extnames = %w(JPG JPEG PNG GIF jpe JPE) # FIXME: Who detects large extname?
-  extname = extension(attachment, style).to_s
-  extname = content_type_extension(attachment, style) if extname.blank? || wrong_extnames.include?(extname)
+  # wrong_extnames = %w(JPG JPEG PNG GIF jpe JPE) # FIXME: Who detects large extname?
+  # extname = extension(attachment, style).to_s
+  extname = content_type_extension(attachment, style) # if extname.blank? || wrong_extnames.include?(extname)
 
   [basename(attachment, style), extname].delete_if(&:empty?).join('.')
 end
