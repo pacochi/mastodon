@@ -2,7 +2,7 @@
   = javascript_include_tag 'application_public', integrity: true
 
 - content_for :page_title do
-  = Rails.configuration.x.local_domain
+  = site_hostname
 
 - content_for :header_tags do
   %meta{ property: 'og:site_name', content: site_title }/
@@ -82,7 +82,7 @@
   = render 'contact'
 
   - unless @instance_presenter.site_description.blank?
-    %h3= t('about.description_headline', domain: Rails.configuration.x.local_domain)
+    %h3= t('about.description_headline', domain: site_hostname)
     %p= @instance_presenter.site_description.html_safe
 
   .actions

@@ -91,7 +91,7 @@ code {
 
     label.checkbox {
       position: relative;
-	    padding-left: 25px;
+      padding-left: 25px;
       flex: 1 1 auto;
     }
 
@@ -241,6 +241,10 @@ code {
       height: 1px;
       background-color: white;
     }
+  }
+
+  select {
+    font-size: 16px;
   }
 
   select {

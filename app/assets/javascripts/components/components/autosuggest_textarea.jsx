@@ -63,6 +63,7 @@ const AutosuggestTextarea = React.createClass({
       this.props.onSuggestionsClearRequested();
     }
 
+    // auto-resize textarea
     e.target.style.height = 'auto';
     e.target.style.height = `${e.target.scrollHeight}px`;
 
