@@ -134,7 +134,8 @@ export function expandAccountTimeline(id) {
         max_id: lastId
       }
     }).then(response => {
-      dispatch(expandAccountTimelineSuccess(id, response.data));
+      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      dispatch(expandAccountTimelineSuccess(id, response.data, next));
     }).catch(error => {
       dispatch(expandAccountTimelineFail(id, error));
     });
@@ -265,11 +266,12 @@ export function expandAccountTimelineRequest(id) {
   };
 };
 
-export function expandAccountTimelineSuccess(id, statuses) {
+export function expandAccountTimelineSuccess(id, statuses, next) {
   return {
     type: ACCOUNT_TIMELINE_EXPAND_SUCCESS,
     id,
-    statuses
+    statuses,
+    next
   };
 };
 

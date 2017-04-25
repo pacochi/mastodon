@@ -161,10 +161,11 @@ const normalizeAccountTimeline = (state, accountId, statuses, replace = false) =
   return state.updateIn(['accounts_timelines', accountId], Immutable.Map(), map => map
     .set('isLoading', false)
     .set('loaded', true)
+    .set('next', true)
     .update('items', Immutable.List(), list => (replace ? ids : list.unshift(...ids))));
 };
 
-const normalizeAccountMediaTimeline = (state, accountId, statuses) => {
+const normalizeAccountMediaTimeline = (state, accountId, statuses, next) => {
   let ids = Immutable.List();
 
   statuses.forEach((status, i) => {
@@ -174,11 +175,11 @@ const normalizeAccountMediaTimeline = (state, accountId, statuses) => {
 
   return state.updateIn(['account_media_timelines', accountId], Immutable.Map(), map => map
     .set('isLoading', false)
-    .set('loaded', true)
+    .set('next', next)
     .update('items', Immutable.List(), list => list.unshift(...ids)));
 };
 
-const appendNormalizedAccountTimeline = (state, accountId, statuses) => {
+const appendNormalizedAccountTimeline = (state, accountId, statuses, next) => {
   let moreIds = Immutable.List([]);
 
   statuses.forEach((status, i) => {
@@ -188,6 +189,7 @@ const appendNormalizedAccountTimeline = (state, accountId, statuses) => {
 
   return state.updateIn(['accounts_timelines', accountId], Immutable.Map(), map => map
     .set('isLoading', false)
+    .set('next', next)
     .update('items', list => list.push(...moreIds)));
 };
 
@@ -343,7 +345,7 @@ export default function timelines(state = initialState, action) {
   case ACCOUNT_TIMELINE_FETCH_SUCCESS:
     return normalizeAccountTimeline(state, action.id, Immutable.fromJS(action.statuses), action.replace);
   case ACCOUNT_TIMELINE_EXPAND_SUCCESS:
-    return appendNormalizedAccountTimeline(state, action.id, Immutable.fromJS(action.statuses));
+    return appendNormalizedAccountTimeline(state, action.id, Immutable.fromJS(action.statuses), action.next);
   case ACCOUNT_MEDIA_TIMELINE_FETCH_REQUEST:
   case ACCOUNT_MEDIA_TIMELINE_EXPAND_REQUEST:
     return state.updateIn(['account_media_timelines', action.id], Immutable.Map(), map => map.set('isLoading', true));
@@ -353,7 +355,7 @@ export default function timelines(state = initialState, action) {
   case ACCOUNT_MEDIA_TIMELINE_FETCH_SUCCESS:
     return normalizeAccountMediaTimeline(state, action.id, Immutable.fromJS(action.statuses), action.replace);
   case ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS:
-    return appendNormalizedAccountMediaTimeline(state, action.id, Immutable.fromJS(action.statuses));
+    return appendNormalizedAccountMediaTimeline(state, action.id, Immutable.fromJS(action.statuses), action.next);
   case ACCOUNT_BLOCK_SUCCESS:
   case ACCOUNT_MUTE_SUCCESS:
     return filterTimelines(state, action.relationship, action.statuses);
