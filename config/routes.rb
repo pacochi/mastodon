@@ -83,8 +83,8 @@ Rails.application.routes.draw do
   resources :media, only: [:show]
   resources :tags,  only: [:show]
 
-  resource :intent do
-    get 'toot'
+  namespace :intent do
+    resources :statuses, only: :new
   end
 
   # Remote follow

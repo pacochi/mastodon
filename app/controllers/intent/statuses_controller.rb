@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-class IntentsController < ApplicationController
+class Intent::StatusesController < ApplicationController
   before_action :authenticate_user!
 
-  def toot
+  def new
     @body_classes = 'app-body'
     @token        = find_or_create_access_token.token
     @web_settings = Web::Setting.find_by(user: current_user)&.data || {}
