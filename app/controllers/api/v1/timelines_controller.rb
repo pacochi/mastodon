@@ -17,7 +17,7 @@ class Api::V1::TimelinesController < ApiController
 
     set_pagination_headers(next_path, prev_path)
 
-    render action: :index
+    render :index
   end
 
   def public
@@ -38,7 +38,7 @@ class Api::V1::TimelinesController < ApiController
 
     set_pagination_headers(next_path, prev_path)
 
-    render action: :index
+    render :index
   end
 
   def tag
@@ -53,7 +53,7 @@ class Api::V1::TimelinesController < ApiController
 
     set_pagination_headers(next_path, prev_path)
 
-    render action: :index
+    render :index
   end
 
   private
@@ -63,6 +63,6 @@ class Api::V1::TimelinesController < ApiController
   end
 
   def pagination_params(core_params)
-    params.permit(:local, :limit).merge(core_params)
+    params.permit(:local, :limit, :media).merge(core_params)
   end
 end

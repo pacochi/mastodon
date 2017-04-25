@@ -45,7 +45,9 @@ const Button = React.createClass({
       lineHeight: `${this.props.size}px`,
       borderRadius: '4px',
       textDecoration: 'none',
-      whiteSpace: 'nowrap'
+      whiteSpace: 'nowrap',
+      textOverflow: 'ellipsis',
+      overflow: 'hidden'
     };
 
     return (

@@ -14,15 +14,18 @@ class PostStatusService < BaseService
   # @return [Status]
   def call(account, text, in_reply_to = nil, options = {})
     media  = validate_media!(options[:media_ids])
-    status = account.statuses.create!(text: text,
-                                      thread: in_reply_to,
-                                      sensitive: options[:sensitive],
-                                      spoiler_text: options[:spoiler_text] || '',
-                                      visibility: options[:visibility],
-                                      language: account&.user&.locale || 'en',
-                                      application: options[:application])
+    status = nil
+    ApplicationRecord.transaction do
+      status = account.statuses.create!(text: text,
+                                        thread: in_reply_to,
+                                        sensitive: options[:sensitive],
+                                        spoiler_text: options[:spoiler_text] || '',
+                                        visibility: options[:visibility],
+                                        language: account&.user&.locale || 'en',
+                                        application: options[:application])
 
-    attach_media(status, media)
+      attach_media(status, media)
+    end
     process_mentions_service.call(status)
     process_hashtags_service.call(status)
 
@@ -36,7 +39,7 @@ class PostStatusService < BaseService
   private
 
   def validate_media!(media_ids)
-    return if media_ids.nil? || !media_ids.is_a?(Enumerable)
+    return if media_ids.blank? || !media_ids.is_a?(Enumerable)
 
     raise Mastodon::ValidationError, I18n.t('media_attachments.validations.too_many') if media_ids.size > 4
 
@@ -53,8 +56,8 @@ class PostStatusService < BaseService
     media.update(status_id: status.id)
   end
 
-  def detect_language(text)
-    WhatLanguage.new(:all).language_iso(text) || 'en'
+  def detect_language_for(text, account)
+    LanguageDetector.new(text, account).to_iso_s
   end
 
   def process_mentions_service
