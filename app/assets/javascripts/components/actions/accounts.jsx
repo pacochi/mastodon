@@ -594,7 +594,7 @@ export function fetchAccountMediaTimeline(id, replace = false) {
     let skipLoading = false;
 
     if (newestId !== null && !replace) {
-      params['since_id'] = newestId;
+      params.since_id = newestId;
       skipLoading = true;
     }
 

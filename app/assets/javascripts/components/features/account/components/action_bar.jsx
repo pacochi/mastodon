@@ -88,7 +88,7 @@ const ActionBar = React.createClass({
 
           <Link className='account__action-bar__tab' to={`/accounts/${account.get('id')}/media`}>
             <span><FormattedMessage id='account.media' defaultMessage='Media' /></span>
-            <strong></strong>
+            <strong/>
           </Link>
 
           <Link className='account__action-bar__tab' to={`/accounts/${account.get('id')}/following`}>
