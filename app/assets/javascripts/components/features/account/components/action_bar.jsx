@@ -19,11 +19,11 @@ const messages = defineMessages({
 
 const outerDropdownStyle = {
   padding: '10px',
-  flex: '1 1 auto'
+  flex: '0 0 auto'
 };
 
 const outerLinksStyle = {
-  flex: '1 1 auto',
+  flex: '4 1 auto',
   display: 'flex',
   lineHeight: '18px'
 };
