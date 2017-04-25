@@ -397,23 +397,22 @@
   }
 }
 
-.oauth-authentications {
+.oauth-statuses {
   z-index: 2;
   position: relative;
-  margin: 10px 0;
-  height: 36px;
   text-align: center;
 
   a {
     display: inline-block;
     vertical-align: top;
+    margin-top: 10px;
     width: 36px;
     height: 36px;
     border-radius: 50%;
     overflow: hidden;
   }
 
-  .oauth-authentication {
+  .oauth-status {
     width: 100%;
     height: 100%;
     background-color: $color1;
@@ -429,7 +428,7 @@
       background-position: 50% 50%;
     }
 
-    & + .account__header__oauth-authentication {
+    & + .account__header__oauth-status {
       margin-left: 18px;
     }
   }

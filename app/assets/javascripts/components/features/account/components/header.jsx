@@ -134,14 +134,14 @@ const Header = React.createClass({
 
           <span style={{ display: 'inline-block', fontSize: '20px', lineHeight: '27px', fontWeight: '500' }} className='account__header__display-name' dangerouslySetInnerHTML={displayNameHTML} />
           <span className='account__header__username' style={{ fontSize: '14px', fontWeight: '400', display: 'block', marginBottom: '10px' }}>@{account.get('acct')} {lockedIcon}</span>
-          <div className='account__header__oauth-authentications oauth-authentications'>
+          <div className='account__header__oauth-statuses oauth-statuses'>
             {account.getIn(['oauth_authentications'], new Immutable.List()).map(oauth_authentication => {
               const provider = oauth_authentication.get('provider');
 
               if (provider === 'pixiv') {
                 return (
                   <a key={provider} href={`https://www.pixiv.net/member.php?id=${oauth_authentication.get('uid')}`} target='_blank' rel='noopener'>
-                    <div className='account__header__oauth-authentication oauth-authentication pixiv' />
+                    <div className='account__header__oauth-status oauth-status pixiv' />
                   </a>
                 );
               }
