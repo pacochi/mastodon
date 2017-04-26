@@ -1,4 +1,6 @@
 - content_for :header_tags do
+  %script#initial-state{:type => 'application/json'}!= json_escape('{"appmode": "``about``"}')
+
   = javascript_include_tag 'application_public', integrity: true
 
 - content_for :page_title do
@@ -50,7 +52,10 @@
     = link_to image_tag('logo_pixiv.png', width: 50, style: 'display:block;margin:40px auto 200px;opacity:0.36'), 'https://www.pixiv.net'
 
   .about-col
-    R
+    .about-col-timeline-head
+      ローカルタイムライン
+    #about-timeline.about-col-timeline-body
+      R
 
 .wrapper
   .screenshot-with-signup

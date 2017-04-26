@@ -101,11 +101,11 @@ const Mastodon = React.createClass({
   },
 
   componentWillMount () {
-    this.intent = store.getState().getIn(['meta', 'intent']);
+    this.appmode = store.getState().getIn(['meta', 'appmode']);
   },
 
   componentDidMount () {
-    if (!this.intent) {
+    if (!this.mode) {
       const { locale }  = this.props;
       const streamingAPIBaseURL = store.getState().getIn(['meta', 'streaming_api_base_url']);
       const accessToken = store.getState().getIn(['meta', 'access_token']);
@@ -161,7 +161,7 @@ const Mastodon = React.createClass({
   render () {
     const { locale } = this.props;
 
-    if (this.intent) {
+    if (this.appmode === 'intent') {
       return (
         <IntlProvider locale={locale} messages={getMessagesForLocale(locale)}>
           <Provider store={store}>
