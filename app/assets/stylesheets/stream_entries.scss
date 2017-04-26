@@ -124,7 +124,7 @@
           height: 100%;
 
           img {
-            max-width: 100%;
+            width: 100%;
           }
         }
       }
@@ -219,7 +219,14 @@
 
       .status__attachments__inner {
         display: flex;
-        height: 360px;
+        height: auto;
+        flex-direction: column;
+
+        .media-item {
+          img {
+            width: 100%;
+          }
+        }
       }
     }
 
@@ -254,6 +261,7 @@
     flex: 1 1 auto;
     height: 100%;
     margin-right: 2px;
+    width: 100%;
 
     &:last-child {
       margin-right: 0;
