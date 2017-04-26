@@ -15,9 +15,44 @@
   %meta{ property: 'twitter:card', content: 'summary' }/
   %meta{ property: 'twitter:image', content: asset_url('mastodon_small.png') }/
 
-.wrapper
-  = render 'header'
+.about-cols
+  .about-col
+    L
 
+  .about-col.main
+    .about-col-head
+      .about-col-head-yasashimi やさしいインターネッツ
+      = image_tag 'about/header.png', width: 535, style: 'display:block;margin:0 auto 80px'
+
+    .about-col-body
+      %p Pawooとは、なんか作れそうな気がする
+      %p Twitterっぽいサービスです。やっさしー！
+
+      = link_to 'はじめるパウー', new_user_registration_path, class: 'signup'
+
+      %p 90,414人が、1,392,548回パウってます
+
+    .about-col-body
+      %p アプリもあります
+
+      .about-col-body-apps
+        .about-col-body-app
+          %p iOS
+          = image_tag 'about/badge-appstore.png', width: 190
+
+        .about-col-body-app
+          %p Android
+          = image_tag 'about/badge-googleplay.png', width: 190
+
+    .about-col-body
+      %p 守ってね、ってアレ
+
+    = link_to image_tag('logo_pixiv.png', width: 50, style: 'display:block;margin:40px auto 200px;opacity:0.36'), 'https://www.pixiv.net'
+
+  .about-col
+    R
+
+.wrapper
   .screenshot-with-signup
     .mascot= image_tag 'fluffy-elephant-friend.png'
 
