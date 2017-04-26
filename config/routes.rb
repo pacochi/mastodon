@@ -81,6 +81,10 @@ Rails.application.routes.draw do
   resources :tags,  only: [:show]
   resources :oauth_authentications, only: [:show], param: :uid
 
+  namespace :intent do
+    resources :statuses, only: :new
+  end
+
   # Remote follow
   get  :authorize_follow, to: 'authorize_follow#new'
   post :authorize_follow, to: 'authorize_follow#create'

@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 
 class AboutController < ApplicationController
-  before_action :authenticate_no_user, only: :show
+  with_options only: :show do
+    skip_before_action :store_current_location
+    before_action :authenticate_no_user
+  end
+
   before_action :set_body_classes
   before_action :set_instance_presenter, only: [:show, :more]
 
