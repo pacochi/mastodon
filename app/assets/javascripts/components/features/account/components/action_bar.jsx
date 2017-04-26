@@ -19,11 +19,11 @@ const messages = defineMessages({
 
 const outerDropdownStyle = {
   padding: '10px',
-  flex: '1 1 auto'
+  flex: '0 0 auto'
 };
 
 const outerLinksStyle = {
-  flex: '1 1 auto',
+  flex: '4 1 auto',
   display: 'flex',
   lineHeight: '18px'
 };
@@ -84,6 +84,11 @@ const ActionBar = React.createClass({
           <Link className='account__action-bar__tab' to={`/accounts/${account.get('id')}`}>
             <span><FormattedMessage id='account.posts' defaultMessage='Posts' /></span>
             <strong><FormattedNumber value={account.get('statuses_count')} /> {extraInfo}</strong>
+          </Link>
+
+          <Link className='account__action-bar__tab' to={`/accounts/${account.get('id')}/media`}>
+            <span><FormattedMessage id='account.media' defaultMessage='Media' /></span>
+            <strong/>
           </Link>
 
           <Link className='account__action-bar__tab' to={`/accounts/${account.get('id')}/following`}>

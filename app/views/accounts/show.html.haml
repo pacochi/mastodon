@@ -14,7 +14,6 @@
 .h-feed
   %data.p-name{ value: "#{@account.username} on #{site_hostname}" }/
 
-  = render 'service_logo'
   = render 'header', account: @account
 
   - if @statuses.empty?
