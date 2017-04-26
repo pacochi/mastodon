@@ -400,17 +400,20 @@
 .oauth-authentications {
   z-index: 2;
   position: relative;
-  margin: 10px 0;
-  height: 36px;
   text-align: center;
 
   a {
     display: inline-block;
     vertical-align: top;
+    margin-top: 10px;
     width: 36px;
     height: 36px;
     border-radius: 50%;
     overflow: hidden;
+
+    & + a {
+      margin-left: 18px;
+    }
   }
 
   .oauth-authentication {
@@ -429,8 +432,5 @@
       background-position: 50% 50%;
     }
 
-    & + .account__header__oauth-authentication {
-      margin-left: 18px;
-    }
   }
 }
