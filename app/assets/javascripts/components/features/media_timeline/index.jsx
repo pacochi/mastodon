@@ -62,16 +62,16 @@ const MediaTimeline = React.createClass({
 
       received (data) {
         switch (data.event) {
-          case 'update':
+        case 'update':
 
-            const status = JSON.parse(data.payload);
-            if (0 < status.media_attachments.length) {
-              dispatch(updateTimeline('media', status));
-            }
-            break;
-          case 'delete':
-            dispatch(deleteFromTimelines(data.payload));
-            break;
+          const status = JSON.parse(data.payload);
+          if (0 < status.media_attachments.length) {
+            dispatch(updateTimeline('media', status));
+          }
+          break;
+        case 'delete':
+          dispatch(deleteFromTimelines(data.payload));
+          break;
         }
       }
 
