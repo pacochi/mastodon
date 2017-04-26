@@ -20,7 +20,7 @@
   - @report.statuses.each do |status|
     .report-status
       .activity-stream.activity-stream-headless
-        .entry= render partial: 'stream_entries/simple_status', locals: { status: status }
+        .entry= render partial: 'stream_entries/simple_status', locals: { status: status, expand_media: false }
       .report-status__actions
         = link_to admin_report_reported_status_path(@report, status), method: :delete, class: 'icon-button', style: 'font-size: 24px; width: 24px; height: 24px', title: t('admin.reports.delete') do
           = fa_icon 'trash'

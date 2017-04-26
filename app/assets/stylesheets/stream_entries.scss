@@ -118,6 +118,15 @@
       .status__attachments__inner {
         display: flex;
         height: 350px;
+
+        &.expand_media {
+          display: block;
+          height: 100%;
+
+          img {
+            width: 100%;
+          }
+        }
       }
     }
   }
@@ -210,7 +219,14 @@
 
       .status__attachments__inner {
         display: flex;
-        height: 360px;
+        height: auto;
+        flex-direction: column;
+
+        .media-item {
+          img {
+            width: 100%;
+          }
+        }
       }
     }
 
@@ -245,6 +261,7 @@
     flex: 1 1 auto;
     height: 100%;
     margin-right: 2px;
+    width: 100%;
 
     &:last-child {
       margin-right: 0;

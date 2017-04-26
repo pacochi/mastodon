@@ -63,7 +63,6 @@ const AccountMediaTimeline = React.createClass({
     return (
       <Column>
         <ColumnBackButton />
-
         <StatusList
           prepend={<HeaderContainer accountId={this.props.params.accountId} />}
           statusIds={statusIds}
@@ -71,6 +70,7 @@ const AccountMediaTimeline = React.createClass({
           hasMore={hasMore}
           me={me}
           onScrollToBottom={this.handleScrollToBottom}
+          expand
         />
       </Column>
     );
