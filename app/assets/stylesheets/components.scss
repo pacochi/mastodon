@@ -511,8 +511,9 @@ a.status__content__spoiler-link {
     color: $color4;
   }
 
-  .account__header__oauth-authentications {
+  .account__header__oauth-authentications a {
     margin-top: 0;
+    margin-bottom: 10px;
   }
 }
 
