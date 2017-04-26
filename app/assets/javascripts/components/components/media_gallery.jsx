@@ -67,8 +67,6 @@ const gifvThumbStyle = {
   width: '100%',
   height: '100%',
   objectFit: 'cover',
-  top: '50%',
-  transform: 'translateY(-50%)',
   cursor: 'zoom-in'
 };
 
