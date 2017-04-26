@@ -117,7 +117,7 @@
 
       .status__attachments__inner {
         display: flex;
-        height: 214px;
+        height: 350px;
       }
     }
   }
@@ -257,6 +257,8 @@
       background: no-repeat scroll center center / cover;
       text-decoration: none;
       cursor: zoom-in;
+      background-position-x: center;
+      background-position-y: 20%;
     }
 
     video {
