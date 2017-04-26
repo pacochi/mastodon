@@ -30,6 +30,6 @@
               .video-item__play
                 = fa_icon('play')
       - else
-        .status__attachments__inner{ class: expand_media ? 'expand_media' : '' }
+        .status__attachments__inner
           - status.media_attachments.each do |media|
-            = render partial: 'stream_entries/media', locals: { media: media, expand_media: expand_media }
+            = render partial: 'stream_entries/media', locals: { media: media }

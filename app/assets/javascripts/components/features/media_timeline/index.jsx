@@ -62,16 +62,16 @@ const MediaTimeline = React.createClass({
 
       received (data) {
         switch (data.event) {
-        case 'update':
+          case 'update':
 
-          const status = JSON.parse(data.payload);
-          if (0 < status.media_attachments.length) {
-            dispatch(updateTimeline('media', status));
-          }
-          break;
-        case 'delete':
-          dispatch(deleteFromTimelines(data.payload));
-          break;
+            const status = JSON.parse(data.payload);
+            if (0 < status.media_attachments.length) {
+              dispatch(updateTimeline('media', status));
+            }
+            break;
+          case 'delete':
+            dispatch(deleteFromTimelines(data.payload));
+            break;
         }
       }
 
@@ -83,8 +83,8 @@ const MediaTimeline = React.createClass({
     return (
       <Column icon='globe' active={hasUnread} heading={intl.formatMessage(messages.title)}>
         <ColumnBackButtonSlim />
-        <StatusListContainer type='media' square emptyMessage={<FormattedMessage id='empty_column.public'
-                                                                                 defaultMessage='There is nothing here! Write something publicly, or manually follow users from other instances to fill it up'/>}/>
+        <StatusListContainer type='media' emptyMessage={<FormattedMessage id='empty_column.public'
+                                                                          defaultMessage='There is nothing here! Write something publicly, or manually follow users from other instances to fill it up'/>}/>
       </Column>
     );
   },

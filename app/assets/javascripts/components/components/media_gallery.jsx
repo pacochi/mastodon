@@ -79,9 +79,7 @@ const Item = React.createClass({
     index: React.PropTypes.number.isRequired,
     size: React.PropTypes.number.isRequired,
     onClick: React.PropTypes.func.isRequired,
-    autoPlayGif: React.PropTypes.bool.isRequired,
-    expand: React.PropTypes.bool.isRequired,
-    square: React.PropTypes.bool.isRequired
+    autoPlayGif: React.PropTypes.bool.isRequired
   },
 
   mixins: [PureRenderMixin],
@@ -98,7 +96,7 @@ const Item = React.createClass({
   },
 
   render () {
-    const { attachment, index, size, square, expand } = this.props;
+    const { attachment, index, size } = this.props;
 
     let width  = 50;
     let height = 100;
@@ -107,73 +105,59 @@ const Item = React.createClass({
     let bottom = 'auto';
     let right  = 'auto';
 
-    if (size === 1 || expand) {
+    if (size === 1) {
       width = 100;
     }
 
-    if (!expand) {
-      if (size === 4 || (size === 3 && index > 0)) {
-        height = 50;
+    if (size === 4 || (size === 3 && index > 0)) {
+      height = 50;
+    }
+
+    if (size === 2) {
+      if (index === 0) {
+        right = '2px';
+      } else {
+        left = '2px';
+      }
+    } else if (size === 3) {
+      if (index === 0) {
+        right = '2px';
+      } else if (index > 0) {
+        left = '2px';
       }
 
-      if (size === 2) {
-        if (index === 0) {
-          right = '2px';
-        } else {
-          left = '2px';
-        }
-      } else if (size === 3) {
-        if (index === 0) {
-          right = '2px';
-        } else if (index > 0) {
-          left = '2px';
-        }
+      if (index === 1) {
+        bottom = '2px';
+      } else if (index > 1) {
+        top = '2px';
+      }
+    } else if (size === 4) {
+      if (index === 0 || index === 2) {
+        right = '2px';
+      }
 
-        if (index === 1) {
-          bottom = '2px';
-        } else if (index > 1) {
-          top = '2px';
-        }
-      } else if (size === 4) {
-        if (index === 0 || index === 2) {
-          right = '2px';
-        }
+      if (index === 1 || index === 3) {
+        left = '2px';
+      }
 
-        if (index === 1 || index === 3) {
-          left = '2px';
-        }
-
-        if (index < 2) {
-          bottom = '2px';
-        } else {
-          top = '2px';
-        }
+      if (index < 2) {
+        bottom = '2px';
+      } else {
+        top = '2px';
       }
     }
 
     let thumbnail = '';
 
     if (attachment.get('type') === 'image') {
-      if (expand) {
-        thumbnail = (
-          <a
-            href={attachment.get('remote_url') ? attachment.get('remote_url') : attachment.get('url')}
-            onClick={this.handleClick}
-            target='_blank'
-          >
-          <img src={attachment.get('preview_url')} alt='media' style={{ width: '100%' }} />
-          </a>
-        );
-      } else {
-        thumbnail = (
-          <a
-            href={attachment.get('remote_url') ? attachment.get('remote_url') : attachment.get('url')}
-            onClick={this.handleClick}
-            target='_blank'
-            style={{ background: `url(${attachment.get('preview_url')}) no-repeat 50% ${square ? '0' : '20%'}`, ...thumbStyle }}
-          />
-        );
-      }
+      thumbnail = (
+        <a
+          href={attachment.get('remote_url') ? attachment.get('remote_url') : attachment.get('url')}
+          onClick={this.handleClick}
+          target='_blank'
+          style={{ background: `url(${attachment.get('preview_url')}) no-repeat 50% 20%`, ...thumbStyle }}
+        />
+      );
     } else if (attachment.get('type') === 'gifv') {
       const autoPlay = !isIOS() && this.props.autoPlayGif;
 
@@ -194,7 +178,7 @@ const Item = React.createClass({
     }
 
     return (
-      <div key={attachment.get('id')} style={{ ...itemStyle, left, top, right, bottom, width: `${width}%`, height: `${height}%` }}>
+      <div key={attachment.get('id')} style={{ ...itemStyle, left: left, top: top, right: right, bottom: bottom, width: `${width}%`, height: `${height}%` }}>
         {thumbnail}
       </div>
     );
@@ -216,9 +200,7 @@ const MediaGallery = React.createClass({
     height: React.PropTypes.number.isRequired,
     onOpenMedia: React.PropTypes.func.isRequired,
     intl: React.PropTypes.object.isRequired,
-    autoPlayGif: React.PropTypes.bool.isRequired,
-    expand: React.PropTypes.bool.isRequired,
-    square: React.PropTypes.bool.isRequired
+    autoPlayGif: React.PropTypes.bool.isRequired
   },
 
   mixins: [PureRenderMixin],
@@ -232,7 +214,7 @@ const MediaGallery = React.createClass({
   },
 
   render () {
-    const { media, intl, sensitive, square, expand } = this.props;
+    const { media, intl, sensitive } = this.props;
 
     let children;
 
@@ -253,13 +235,11 @@ const MediaGallery = React.createClass({
       );
     } else {
       const size = media.take(4).size;
-      children = media.take(4).map((attachment, i) =>
-        <Item key={attachment.get('id')} onClick={this.handleClick} attachment={attachment} autoPlayGif={this.props.autoPlayGif} index={i} size={size} square={square} expand={expand} />
-      );
+      children = media.take(4).map((attachment, i) => <Item key={attachment.get('id')} onClick={this.handleClick} attachment={attachment} autoPlayGif={this.props.autoPlayGif} index={i} size={size} />);
     }
 
     return (
-      <div style={{ ...outerStyle, height: (expand && this.state.visible) ? 'auto' : `${this.props.height}px` }}>
+      <div style={{ ...outerStyle, height: `${this.props.height}px` }}>
         <div style={{ ...spoilerButtonStyle, display: !this.state.visible ? 'none' : 'block' }}>
           <IconButton title={intl.formatMessage(messages.toggle_visible)} icon={this.state.visible ? 'eye' : 'eye-slash'} overlay onClick={this.handleOpen} />
         </div>
