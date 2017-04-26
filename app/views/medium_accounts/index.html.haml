@@ -13,7 +13,7 @@
       = render 'accounts/nothing_here'
   - else
     .activity-stream
-      = render partial: 'stream_entries/status', collection: @statuses, as: :status
+      = render partial: 'stream_entries/status', collection: @statuses, as: :status, locals: { expand_media: true }
 
   .pagination
     - if @statuses.size == 20
