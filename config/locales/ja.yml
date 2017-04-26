@@ -146,6 +146,9 @@ ja:
       title: レポート
       unresolved: 未解決
       view: 表示
+      nsfw:
+        'true': NSFW ON
+        'false': NSFW OFF
     settings:
       click_to_edit: クリックして編集
       contact_information:

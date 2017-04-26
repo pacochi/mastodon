@@ -22,8 +22,11 @@
       .activity-stream.activity-stream-headless
         .entry= render partial: 'stream_entries/simple_status', locals: { status: status, expand_media: false }
       .report-status__actions
-        = link_to admin_report_reported_status_path(@report, status), method: :delete, class: 'icon-button', style: 'font-size: 24px; width: 24px; height: 24px', title: t('admin.reports.delete') do
+        = link_to admin_report_reported_status_path(@report, status), method: :delete, class: 'icon-button', style: 'font-size: 24px; width: 24px; height: 24px; display: block', title: t('admin.reports.delete') do
           = fa_icon 'trash'
+        - unless status.media_attachments.empty?
+          = link_to admin_report_reported_status_path(@report, status, status: { sensitive: !status.sensitive }), method: :patch, style: 'color: white; font-size: 11px; width: 11px; height: 11px; margin-top: 15px; display: block;', title: t("admin.reports.nsfw.#{!status.sensitive}") do
+            = t("admin.reports.nsfw.#{!status.sensitive}")
 
 - if !@report.action_taken?
   %hr/

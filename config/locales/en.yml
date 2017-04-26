@@ -144,6 +144,9 @@ en:
       title: Reports
       unresolved: Unresolved
       view: View
+      nsfw:
+        'true': NSFW ON
+        'false': NSFW OFF
     settings:
       click_to_edit: Click to edit
       contact_information:
