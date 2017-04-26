@@ -102,8 +102,10 @@ const UI = React.createClass({
     document.addEventListener('drop', this.handleDrop, false);
     document.addEventListener('dragleave', this.handleDragLeave, false);
 
-    this.props.dispatch(refreshTimeline('home'));
-    this.props.dispatch(refreshNotifications());
+    if (!this.props.intent) {
+      this.props.dispatch(refreshTimeline('home'));
+      this.props.dispatch(refreshNotifications());
+    }
   },
 
   componentWillUnmount () {
