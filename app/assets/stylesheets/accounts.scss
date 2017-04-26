@@ -410,6 +410,10 @@
     height: 36px;
     border-radius: 50%;
     overflow: hidden;
+
+    & + a {
+      margin-left: 18px;
+    }
   }
 
   .oauth-authentication {
@@ -428,8 +432,5 @@
       background-position: 50% 50%;
     }
 
-    & + .account__header__oauth-authentication {
-      margin-left: 18px;
-    }
   }
 }
