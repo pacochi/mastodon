@@ -83,7 +83,7 @@ const MediaTimeline = React.createClass({
     return (
       <Column icon='globe' active={hasUnread} heading={intl.formatMessage(messages.title)}>
         <ColumnBackButtonSlim />
-        <StatusListContainer type='media' emptyMessage={<FormattedMessage id='empty_column.public'
+        <StatusListContainer type='media' expandMedia emptyMessage={<FormattedMessage id='empty_column.public'
                                                                           defaultMessage='There is nothing here! Write something publicly, or manually follow users from other instances to fill it up'/>}/>
       </Column>
     );

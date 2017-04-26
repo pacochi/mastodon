@@ -31,6 +31,7 @@ const Status = React.createClass({
     me: React.PropTypes.number,
     boostModal: React.PropTypes.bool,
     autoPlayGif: React.PropTypes.bool,
+    expandMedia: React.PropTypes.bool,
     muted: React.PropTypes.bool
   },
 
@@ -50,7 +51,7 @@ const Status = React.createClass({
 
   render () {
     let media = '';
-    const { status, ...other } = this.props;
+    const { status, expandMedia, ...other } = this.props;
 
     if (status === null) {
       return <div />;
@@ -83,7 +84,7 @@ const Status = React.createClass({
       } else if (status.getIn(['media_attachments', 0, 'type']) === 'video') {
         media = <VideoPlayer media={status.getIn(['media_attachments', 0])} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
       } else {
-        media = <MediaGallery media={status.get('media_attachments')} sensitive={status.get('sensitive')} height={132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} />;
+        media = <MediaGallery media={status.get('media_attachments')} sensitive={status.get('sensitive')} height={expandMedia ? '100%' : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} />;
       }
     }
 
