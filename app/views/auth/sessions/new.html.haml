@@ -3,7 +3,7 @@
 
 = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
   .omniauth
-    = render partial: 'oauth/authorizations/pixiv_auth', locals: { auth_type: 'signin' }
+    = render 'oauth/authorizations/pixiv_auth', auth_type: 'signin'
 
   .separate= t('simple_form.labels.omniauth.or')
 

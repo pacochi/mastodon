@@ -5,7 +5,7 @@
   = render 'shared/error_messages', object: resource
 
   .omniauth
-    = render partial: 'oauth/authorizations/pixiv_auth', locals: { auth_type: 'signup' }
+    = render 'oauth/authorizations/pixiv_auth', auth_type: 'signup'
 
   .separate= t('simple_form.labels.omniauth.or')
 
