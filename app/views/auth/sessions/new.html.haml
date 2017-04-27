@@ -3,7 +3,8 @@
 
 = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
   .omniauth
-    - if request.user_agent =~ /Mac OS X.*Mobile*Safari/ && !request.user_agent =~ /Chrome/
+    / FIXME: SFSafariViewの場合、pixivSignupSDKが使えないのでaccounts.pixiv.netでログインし、return_toでリダイレクトしてくる
+    - if ios_safari?
       - query = { return_to: user_pixiv_omniauth_authorize_url }.to_query
       - link = "#{ENV['ACCOUNTS_PIXIV_URL']}/login?#{query}"
       = link_to t('simple_form.labels.omniauth_pixiv.signin'), link, class: 'block-button'
