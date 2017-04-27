@@ -102,6 +102,17 @@ RSpec.describe Auth::OmniauthCallbacksController, type: :controller do
           }.from(nil).to(oauth_authentication.user)
         end
 
+        context 'enable two factor auth' do
+          before do
+            oauth_authentication.user.update!(otp_required_for_login: true)
+          end
+
+          it do
+            subject.call
+            expect(response).to render_template('auth/sessions/two_factor')
+          end
+        end
+
         context 'given other pixiv user' do
           before do
             @request.env['omniauth.auth'] = auth.merge(uid: 'new uid')

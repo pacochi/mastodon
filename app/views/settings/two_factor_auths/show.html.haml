@@ -1,25 +1,17 @@
 - content_for :page_title do
   = t('settings.two_factor_auth')
 
-- if current_user.oauth_authentications.exists?
-  %p
-    pixivアカウント連携をしている場合は、二段階認証を有効にできません。
-    %br
-    大変申し訳ありませんが、
-    = link_to 'こちら', settings_oauth_authentications_path
-    からpixivアカウント連携を解除してください。
-- else
-  .simple_form
-    %p.hint= t('two_factor_auth.description_html')
-
-    - if current_user.otp_required_for_login
-      = link_to t('two_factor_auth.disable'), disable_settings_two_factor_auth_path, data: { method: 'POST' }, class: 'block-button'
-    - else
-      = link_to t('two_factor_auth.setup'), new_settings_two_factor_auth_path, class: 'block-button'
+.simple_form
+  %p.hint= t('two_factor_auth.description_html')
 
   - if current_user.otp_required_for_login
-    %p
+    = link_to t('two_factor_auth.disable'), disable_settings_two_factor_auth_path, data: { method: 'POST' }, class: 'block-button'
+  - else
+    = link_to t('two_factor_auth.setup'), new_settings_two_factor_auth_path, class: 'block-button'
 
-    .simple_form
-      %p.hint= t('two_factor_auth.lost_recovery_codes')
-      = link_to t('two_factor_auth.generate_recovery_codes'), recovery_codes_settings_two_factor_auth_path, data: { method: 'POST' }, class: 'block-button'
+- if current_user.otp_required_for_login
+  %p
+
+  .simple_form
+    %p.hint= t('two_factor_auth.lost_recovery_codes')
+    = link_to t('two_factor_auth.generate_recovery_codes'), recovery_codes_settings_two_factor_auth_path, data: { method: 'POST' }, class: 'block-button'

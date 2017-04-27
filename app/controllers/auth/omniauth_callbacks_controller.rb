@@ -24,8 +24,15 @@ class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       oauth_authentication = OauthAuthentication.find_by(provider: data.provider, uid: data.uid)
 
       if oauth_authentication
-        sign_in(oauth_authentication.user)
-        redirect_to after_sign_in_path_for(oauth_authentication.user)
+        user = oauth_authentication.user
+        if user.otp_required_for_login?
+          session[:otp_user_id] = user.id
+          self.resource = user
+          render 'auth/sessions/two_factor', layout: 'auth'
+        else
+          sign_in(oauth_authentication.user)
+          redirect_to after_sign_in_path_for(oauth_authentication.user)
+        end
       else
         store_omniauth_auth
         redirect_to new_user_oauth_registration_path
