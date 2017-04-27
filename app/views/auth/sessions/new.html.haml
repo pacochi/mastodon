@@ -3,7 +3,7 @@
 
 = simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f|
   .omniauth
-    - if %w(iPhone Safari).all? { |keyword| request.user_agent.include? keyword }
+    - if request.user_agent =~ /Mac OS X.*Mobile/
       - query = { return_to: user_pixiv_omniauth_authorize_url }.to_query
       - link = "#{ENV['ACCOUNT_PIXIV_LOGIN_URL']}?#{query}"
       = link_to t('simple_form.labels.omniauth_pixiv.signin'), link, class: 'block-button'
