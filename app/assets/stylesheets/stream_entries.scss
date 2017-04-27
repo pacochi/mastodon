@@ -223,6 +223,8 @@
         flex-direction: column;
 
         .media-item {
+          flex: 0;
+
           img {
             width: 100%;
           }
