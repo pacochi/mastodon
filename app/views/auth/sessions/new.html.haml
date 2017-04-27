@@ -5,7 +5,7 @@
   .omniauth
     - if request.user_agent =~ /Mac OS X.*Mobile*Safari/ && !request.user_agent =~ /Chrome/
       - query = { return_to: user_pixiv_omniauth_authorize_url }.to_query
-      - link = "#{ENV['ACCOUNT_PIXIV_LOGIN_URL']}?#{query}"
+      - link = "#{ENV['ACCOUNTS_PIXIV_URL']}/login?#{query}"
       = link_to t('simple_form.labels.omniauth_pixiv.signin'), link, class: 'block-button'
     - else
       .block-button.omniauth-pixiv
