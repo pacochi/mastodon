@@ -39,11 +39,13 @@ const Announcements = React.createClass({
         link: { href: '/settings/oauth_authentications', body: 'ユーザー設定へ' }
       });
     }
+
     this.announcements = Immutable.fromJS(announcements);
   },
 
-  handleDismiss (e) {
-    const id = +e.target.getAttribute('title');
+  handleDismiss (event) {
+    const id = +event.currentTarget.getAttribute('title');
+
     if (Number.isInteger(id)) {
       this.setState({ dismissed: [].concat(this.state.dismissed, id) });
     }
