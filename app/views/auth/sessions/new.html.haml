@@ -7,7 +7,7 @@
     - if ios_safari?
       - query = { return_to: user_pixiv_omniauth_authorize_url }.to_query
       - link = "#{ENV['ACCOUNTS_PIXIV_URL']}/login?#{query}"
-      = link_to t('simple_form.labels.omniauth_pixiv.signin'), link, class: 'block-button'
+      = link_to t('simple_form.labels.omniauth_pixiv.signin'), link, class: 'block-button', style: 'text-transform:none;line-height:27px'
     - else
       .block-button.omniauth-pixiv
         = t('simple_form.labels.omniauth_pixiv.signin')
