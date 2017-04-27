@@ -77,4 +77,8 @@ module Mastodon
       Doorkeeper::Application.send :include, ApplicationExtension
     end
   end
+
+  config.x.tap do |x|
+    x.accounts_pixiv_url = ENV['ACCOUNTS_PIXIV_URL']
+  end
 end
