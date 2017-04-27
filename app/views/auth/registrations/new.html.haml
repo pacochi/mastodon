@@ -5,8 +5,7 @@
   = render 'shared/error_messages', object: resource
 
   .omniauth
-    .block-button.omniauth-pixiv
-      = t('simple_form.labels.omniauth_pixiv.signup')
+    = render 'oauth/authorizations/pixiv_auth', auth_type: 'signup'
 
   .separate= t('simple_form.labels.omniauth.or')
 
