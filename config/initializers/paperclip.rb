@@ -4,7 +4,15 @@ Paperclip.options[:read_timeout] = 60
 
 Paperclip.interpolates :filename do |attachment, style|
   return attachment.original_filename if style == :original
-  [basename(attachment, style), content_type_extension(attachment, style)].delete_if(&:empty?).join('.')
+
+  # HOTFIX
+  # extension    - v1.2.2: Detect extension from filename
+  # content_type - v1.0.0: Detect extension from content_type. This behavior is deprecated
+  # wrong_extnames = %w(JPG JPEG PNG GIF jpe JPE) # FIXME: Who detects large extname?
+  # extname = extension(attachment, style).to_s
+  extname = content_type_extension(attachment, style) # if extname.blank? || wrong_extnames.include?(extname)
+
+  [basename(attachment, style), extname].delete_if(&:empty?).join('.')
 end
 
 if ENV['S3_ENABLED'] == 'true'
@@ -16,7 +24,7 @@ if ENV['S3_ENABLED'] == 'true'
   Paperclip::Attachment.default_options[:s3_host_name]   = ENV.fetch('S3_HOSTNAME') { "s3-#{ENV.fetch('S3_REGION')}.amazonaws.com" }
   Paperclip::Attachment.default_options[:path]           = '/:class/:attachment/:id_partition/:style/:filename'
   Paperclip::Attachment.default_options[:s3_headers]     = { 'Cache-Control' => 'max-age=315576000' }
-  Paperclip::Attachment.default_options[:s3_permissions] = 'public-read'
+  Paperclip::Attachment.default_options[:s3_permissions] = ENV.fetch('S3_PERMISSION') { 'public-read' }
   Paperclip::Attachment.default_options[:s3_region]      = ENV.fetch('S3_REGION') { 'us-east-1' }
 
   Paperclip::Attachment.default_options[:s3_credentials] = {
@@ -28,6 +36,7 @@ if ENV['S3_ENABLED'] == 'true'
   unless ENV['S3_ENDPOINT'].blank?
     Paperclip::Attachment.default_options[:s3_options] = {
       endpoint: ENV['S3_ENDPOINT'],
+      signature_version: ENV['S3_SIGNATURE_VERSION'] || 'v4',
       force_path_style: true,
     }
 
@@ -39,6 +48,6 @@ if ENV['S3_ENABLED'] == 'true'
     Paperclip::Attachment.default_options[:s3_host_alias] = ENV['S3_CLOUDFRONT_HOST']
   end
 else
-  Paperclip::Attachment.default_options[:path]           = (ENV['PAPERCLIP_ROOT_PATH'] || ':rails_root/public/system') + '/:class/:attachment/:id_partition/:style/:filename'
-  Paperclip::Attachment.default_options[:url]            = (ENV['PAPERCLIP_ROOT_URL'] || '/system') + '/:class/:attachment/:id_partition/:style/:filename'
+  Paperclip::Attachment.default_options[:path] = (ENV['PAPERCLIP_ROOT_PATH'] || ':rails_root/public/system') + '/:class/:attachment/:id_partition/:style/:filename'
+  Paperclip::Attachment.default_options[:url]  = (ENV['PAPERCLIP_ROOT_URL'] || '/system') + '/:class/:attachment/:id_partition/:style/:filename'
 end

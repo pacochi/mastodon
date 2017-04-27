@@ -2,7 +2,7 @@
   = javascript_include_tag 'application_public', integrity: true
 
 - content_for :page_title do
-  = Rails.configuration.x.local_domain
+  = site_hostname
 
 - content_for :header_tags do
   %meta{ property: 'og:site_name', content: site_title }/
@@ -37,7 +37,7 @@
           = link_to t('about.about_this'), about_more_path
 
   %h3 Mastodon（マストドン）とは
-  = image_tag 'about/demo.png', width: '100%'
+  %video{autoplay: '', loop: '',  src: asset_path('about/demo.mp4'),  poster: asset_path('about/demo.jpg'),  style: 'width:100%;'}
 
   %p
     Mastodonは自由でオープンソースな分散型のSNSです。ユーザーは運営元やインスタンス（サーバー）を自由に選択して参加することができます。
@@ -82,7 +82,7 @@
   = render 'contact'
 
   - unless @instance_presenter.site_description.blank?
-    %h3= t('about.description_headline', domain: Rails.configuration.x.local_domain)
+    %h3= t('about.description_headline', domain: site_hostname)
     %p= @instance_presenter.site_description.html_safe
 
   .actions

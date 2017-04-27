@@ -3,12 +3,14 @@
 class HomeController < ApplicationController
   before_action :authenticate_user!
 
+  # app/controllers/intent/statuses_controller.rb でも使っているので、ここが更新された場合は気をつける
   def index
     @body_classes           = 'app-body'
     @token                  = find_or_create_access_token.token
     @web_settings           = Web::Setting.find_by(user: current_user)&.data || {}
     @admin                  = Account.find_local(Setting.site_contact_username)
     @streaming_api_base_url = Rails.configuration.x.streaming_api_base_url
+    @intent = false
   end
 
   private

@@ -32,12 +32,15 @@ module Mastodon
       :es,
       :fi,
       :fr,
-      :it,
+      :hr,
       :hu,
+      :it,
       :ja,
       :nl,
       :no,
+      :oc,
       :pt,
+      :'pt-BR',
       :ru,
       :uk,
       'zh-CN',
@@ -72,6 +75,10 @@ module Mastodon
       Doorkeeper::AuthorizationsController.layout 'public'
       Doorkeeper::AuthorizedApplicationsController.layout 'admin'
       Doorkeeper::Application.send :include, ApplicationExtension
+    end
+
+    config.x.tap do |x|
+      x.accounts_pixiv_url = ENV['ACCOUNTS_PIXIV_URL']
     end
   end
 end

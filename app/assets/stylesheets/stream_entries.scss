@@ -117,7 +117,16 @@
 
       .status__attachments__inner {
         display: flex;
-        height: 214px;
+        height: 350px;
+
+        &.expand_media {
+          display: block;
+          height: 100%;
+
+          img {
+            width: 100%;
+          }
+        }
       }
     }
   }
@@ -210,7 +219,14 @@
 
       .status__attachments__inner {
         display: flex;
-        height: 360px;
+        height: auto;
+        flex-direction: column;
+
+        .media-item {
+          img {
+            width: 100%;
+          }
+        }
       }
     }
 
@@ -227,7 +243,6 @@
         height: 100%;
         object-fit: cover;
         top: 50%;
-        transform: translateY(-50%);
       }
     }
   }
@@ -245,6 +260,8 @@
     flex: 1 1 auto;
     height: 100%;
     margin-right: 2px;
+    width: 100%;
+    overflow: hidden;
 
     &:last-child {
       margin-right: 0;
@@ -257,6 +274,8 @@
       background: no-repeat scroll center center / cover;
       text-decoration: none;
       cursor: zoom-in;
+      background-position-x: center;
+      background-position-y: 20%;
     }
 
     video {
@@ -265,8 +284,6 @@
       width: 100%;
       height: 100%;
       object-fit: cover;
-      top: 50%;
-      transform: translateY(-50%);
     }
   }
 

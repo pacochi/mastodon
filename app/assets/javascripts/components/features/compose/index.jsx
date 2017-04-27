@@ -20,15 +20,18 @@ const messages = defineMessages({
 });
 
 const mapStateToProps = state => ({
-  showSearch: state.getIn(['search', 'submitted']) && !state.getIn(['search', 'hidden'])
+  showSearch: state.getIn(['search', 'submitted']) && !state.getIn(['search', 'hidden']),
+  submitting: state.getIn(['compose', 'is_submitting'])
 });
 
 const Compose = React.createClass({
 
   propTypes: {
+    intent: React.PropTypes.bool,
     dispatch: React.PropTypes.func.isRequired,
     withHeader: React.PropTypes.bool,
     showSearch: React.PropTypes.bool,
+    submitting: React.PropTypes.bool,
     intl: React.PropTypes.object.isRequired
   },
 
@@ -38,11 +41,30 @@ const Compose = React.createClass({
     this.props.dispatch(mountCompose());
   },
 
+  componentDidUpdate (prevProps) {
+    if (this.props.intent && prevProps.submitting && !this.props.submitting) {
+      window.close();
+      // Cannot close window unless it opened by JavaScript.
+      setTimeout(() => (location.href = '/'), 240);
+    }
+  },
+
   componentWillUnmount () {
     this.props.dispatch(unmountCompose());
   },
 
   render () {
+    if (this.props.intent) {
+      return (
+        <div className='compose-form__intent'>
+          <div style={{ maxWidth: 400, width: '100%' }}>
+            <NavigationContainer />
+            <ComposeFormContainer />
+          </div>
+        </div>
+      );
+    }
+
     const { withHeader, showSearch, intl } = this.props;
 
     let header = '';

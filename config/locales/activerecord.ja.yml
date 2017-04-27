@@ -3,7 +3,7 @@ ja:
     attributes:
       oauth_authentication:
         provider: プロバイダー
-        uid: pixiv ID
+        uid: ユーザーID
     errors:
       models:
         oauth_authentication:

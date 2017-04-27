@@ -18,7 +18,7 @@ Rails.application.routes.draw do
   end
 
   get '.well-known/host-meta', to: 'well_known/host_meta#show', as: :host_meta, defaults: { format: 'xml' }
-  get '.well-known/webfinger', to: 'well_known/webfinger#show', as: :webfinger, defaults: { format: 'json' }
+  get '.well-known/webfinger', to: 'well_known/webfinger#show', as: :webfinger
 
   devise_for :users, path: 'auth', controllers: {
     sessions:           'auth/sessions',
@@ -47,13 +47,11 @@ Rails.application.routes.draw do
     get :remote_follow,  to: 'remote_follow#new'
     post :remote_follow, to: 'remote_follow#create'
 
-    member do
-      get :followers
-      get :following
-
-      post :follow
-      post :unfollow
-    end
+    resources :media, only: [:index], controller: :medium_accounts
+    resources :followers, only: [:index], controller: :follower_accounts
+    resources :following, only: [:index], controller: :following_accounts
+    resource :follow, only: [:create], controller: :account_follow
+    resource :unfollow, only: [:create], controller: :account_unfollow
   end
 
   get '/@:username', to: 'accounts#show', as: :short_account
@@ -82,6 +80,11 @@ Rails.application.routes.draw do
 
   resources :media, only: [:show]
   resources :tags,  only: [:show]
+  resources :oauth_authentications, only: [:show], param: :uid
+
+  namespace :intent do
+    resources :statuses, only: :new
+  end
 
   # Remote follow
   get  :authorize_follow, to: 'authorize_follow#new'
@@ -91,9 +94,10 @@ Rails.application.routes.draw do
     resources :pubsubhubbub, only: [:index]
     resources :domain_blocks, only: [:index, :new, :create, :show, :destroy]
     resources :settings, only: [:index, :update]
+    resources :instances, only: [:index]
 
     resources :reports, only: [:index, :show, :update] do
-      resources :reported_statuses, only: :destroy
+      resources :reported_statuses, only: [:update, :destroy]
     end
 
     resources :accounts, only: [:index, :show] do

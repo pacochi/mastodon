@@ -5,6 +5,7 @@ import PureRenderMixin from 'react-addons-pure-render-mixin';
 import DisplayName from './display_name';
 import MediaGallery from './media_gallery';
 import VideoPlayer from './video_player';
+import AttachmentList from './attachment_list';
 import StatusContent from './status_content';
 import StatusActionBar from './status_action_bar';
 import { FormattedMessage } from 'react-intl';
@@ -29,6 +30,9 @@ const Status = React.createClass({
     onBlock: React.PropTypes.func,
     me: React.PropTypes.number,
     boostModal: React.PropTypes.bool,
+    autoPlayGif: React.PropTypes.bool,
+    expand: React.PropTypes.bool,
+    square: React.PropTypes.bool,
     muted: React.PropTypes.bool
   },
 
@@ -48,7 +52,7 @@ const Status = React.createClass({
 
   render () {
     let media = '';
-    const { status, ...other } = this.props;
+    const { status, expand, square, ...other } = this.props;
 
     if (status === null) {
       return <div />;
@@ -76,10 +80,12 @@ const Status = React.createClass({
     }
 
     if (status.get('media_attachments').size > 0 && !this.props.muted) {
-      if (status.getIn(['media_attachments', 0, 'type']) === 'video') {
+      if (status.get('media_attachments').some(item => item.get('type') === 'unknown')) {
+
+      } else if (status.getIn(['media_attachments', 0, 'type']) === 'video') {
         media = <VideoPlayer media={status.getIn(['media_attachments', 0])} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
       } else {
-        media = <MediaGallery media={status.get('media_attachments')} sensitive={status.get('sensitive')} height={132} onOpenMedia={this.props.onOpenMedia} />;
+        media = <MediaGallery media={status.get('media_attachments')} sensitive={status.get('sensitive')} height={square ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expand={expand} square={square} />;
       }
     }
 

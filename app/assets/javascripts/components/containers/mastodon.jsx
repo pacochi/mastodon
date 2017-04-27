@@ -27,6 +27,7 @@ import PublicTimeline from '../features/public_timeline';
 import CommunityTimeline from '../features/community_timeline';
 import MediaTimeline from '../features/media_timeline';
 import AccountTimeline from '../features/account_timeline';
+import AccountMediaTimeline from '../features/account_media_timeline';
 import HomeTimeline from '../features/home_timeline';
 import Compose from '../features/compose';
 import Followers from '../features/followers';
@@ -49,6 +50,7 @@ import es from 'react-intl/locale-data/es';
 import fi from 'react-intl/locale-data/fi';
 import fr from 'react-intl/locale-data/fr';
 import hu from 'react-intl/locale-data/hu';
+import it from 'react-intl/locale-data/it';
 import ja from 'react-intl/locale-data/ja';
 import pt from 'react-intl/locale-data/pt';
 import nl from 'react-intl/locale-data/nl';
@@ -58,6 +60,7 @@ import uk from 'react-intl/locale-data/uk';
 import zh from 'react-intl/locale-data/zh';
 import bg from 'react-intl/locale-data/bg';
 import { localeData as zh_hk } from '../locales/zh-hk';
+import pt_br from '../locales/pt-br';
 import getMessagesForLocale from '../locales';
 import { hydrateStore } from '../actions/store';
 import createStream from '../stream';
@@ -78,8 +81,10 @@ addLocaleData([
   ...fi,
   ...fr,
   ...hu,
+  ...it,
   ...ja,
   ...pt,
+  ...pt_br,
   ...nl,
   ...no,
   ...ru,
@@ -95,49 +100,55 @@ const Mastodon = React.createClass({
     locale: React.PropTypes.string.isRequired
   },
 
-  componentDidMount() {
-    const { locale }  = this.props;
-    const streamingAPIBaseURL = store.getState().getIn(['meta', 'streaming_api_base_url']);
-    const accessToken = store.getState().getIn(['meta', 'access_token']);
+  componentWillMount () {
+    this.intent = store.getState().getIn(['meta', 'intent']);
+  },
 
-    this.subscription = createStream(streamingAPIBaseURL, accessToken, 'user', {
+  componentDidMount () {
+    if (!this.intent) {
+      const { locale }  = this.props;
+      const streamingAPIBaseURL = store.getState().getIn(['meta', 'streaming_api_base_url']);
+      const accessToken = store.getState().getIn(['meta', 'access_token']);
 
-      connected () {
-        store.dispatch(connectTimeline('home'));
-      },
+      this.subscription = createStream(streamingAPIBaseURL, accessToken, 'user', {
 
-      disconnected () {
-        store.dispatch(disconnectTimeline('home'));
-      },
+        connected () {
+          store.dispatch(connectTimeline('home'));
+        },
 
-      received (data) {
-        switch(data.event) {
-        case 'update':
-          store.dispatch(updateTimeline('home', JSON.parse(data.payload)));
-          break;
-        case 'delete':
-          store.dispatch(deleteFromTimelines(data.payload));
-          break;
-        case 'notification':
-          store.dispatch(updateNotifications(JSON.parse(data.payload), getMessagesForLocale(locale), locale));
-          break;
+        disconnected () {
+          store.dispatch(disconnectTimeline('home'));
+        },
+
+        received (data) {
+          switch(data.event) {
+          case 'update':
+            store.dispatch(updateTimeline('home', JSON.parse(data.payload)));
+            break;
+          case 'delete':
+            store.dispatch(deleteFromTimelines(data.payload));
+            break;
+          case 'notification':
+            store.dispatch(updateNotifications(JSON.parse(data.payload), getMessagesForLocale(locale), locale));
+            break;
+          }
+        },
+
+        reconnected () {
+          store.dispatch(connectTimeline('home'));
+          store.dispatch(refreshTimeline('home'));
+          store.dispatch(refreshNotifications());
         }
-      },
 
-      reconnected () {
-        store.dispatch(connectTimeline('home'));
-        store.dispatch(refreshTimeline('home'));
-        store.dispatch(refreshNotifications());
+      });
+
+      // Desktop notifications
+      if (typeof window.Notification !== 'undefined' && Notification.permission === 'default') {
+        Notification.requestPermission();
       }
 
-    });
-
-    // Desktop notifications
-    if (typeof window.Notification !== 'undefined' && Notification.permission === 'default') {
-      Notification.requestPermission();
+      store.dispatch(showOnboardingOnce());
     }
-
-    store.dispatch(showOnboardingOnce());
   },
 
   componentWillUnmount () {
@@ -149,6 +160,18 @@ const Mastodon = React.createClass({
 
   render () {
     const { locale } = this.props;
+
+    if (this.intent) {
+      return (
+        <IntlProvider locale={locale} messages={getMessagesForLocale(locale)}>
+          <Provider store={store}>
+            <UI intent>
+              <Compose intent />
+            </UI>
+          </Provider>
+        </IntlProvider>
+      );
+    }
 
     return (
       <IntlProvider locale={locale} messages={getMessagesForLocale(locale)}>
@@ -173,6 +196,7 @@ const Mastodon = React.createClass({
               <Route path='statuses/:statusId/favourites' component={Favourites} />
 
               <Route path='accounts/:accountId' component={AccountTimeline} />
+              <Route path='accounts/:accountId/media' component={AccountMediaTimeline} />
               <Route path='accounts/:accountId/followers' component={Followers} />
               <Route path='accounts/:accountId/following' component={Following} />
 

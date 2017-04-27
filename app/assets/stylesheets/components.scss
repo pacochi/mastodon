@@ -191,6 +191,17 @@
   color: $color1;
 }
 
+.compose-form__intent {
+  width: 100%;
+  height: 100%;
+  overflow-y: scroll;
+
+  & > div {
+    margin: 0 auto;
+    padding: 20px;
+  }
+}
+
 .compose-form__warning {
   color: $color2;
   margin-bottom: 15px;
@@ -500,8 +511,9 @@ a.status__content__spoiler-link {
     color: $color4;
   }
 
-  .account__header__oauth-authentications {
+  .account__header__oauth-authentications a {
     margin-top: 0;
+    margin-bottom: 10px;
   }
 }
 
@@ -544,19 +556,24 @@ a.status__content__spoiler-link {
   overflow: visible;
   flex: 0 0 auto;
   display: flex;
+
+  .dropdown__trigger.icon-button i.fa-fw {
+    // React側で.fa-fwと異なる値を設定されるため、このwidthを解除しないとiconがズレる
+    width: auto;
+  }
 }
 
 .account__action-bar__tab {
   text-decoration: none;
   overflow: hidden;
-  width: 80px;
+  flex: 1;
   border-left: 1px solid lighten($color1, 8%);
   padding: 10px 5px;
 
-  & > span {
+  & > span, & > span > span {
     display: block;
     text-transform: uppercase;
-    font-size: 11px;
+    font-size: 10px;
     color: $color3;
   }
 
@@ -1231,7 +1248,7 @@ a.status__content__spoiler-link {
   resize: none;
 
   @media screen and (max-width: 600px) {
-    height: 100px !important;
+    height: 100px !important; // prevent auto-resize textarea
     resize: vertical;
   }
 }
@@ -2068,6 +2085,8 @@ button.icon-button.active i.fa-retweet {
 }
 
 .announcements__body {
+  width: 100%;
+
   p {
     padding-left: 5px;
     font-size: 12px;
@@ -2147,8 +2166,8 @@ button.icon-button.active i.fa-retweet {
 .onboarding-modal__pager {
   height: 80vh;
   width: 80vw;
-  max-width: 500px;
-  max-height: 350px;
+  max-width: 520px;
+  max-height: 420px;
   position: relative;
 
   & > div {
@@ -2378,6 +2397,7 @@ button.icon-button.active i.fa-retweet {
 }
 
 .boost-modal__container {
+  overflow-x: scroll;
   padding: 10px;
 
   .status {
@@ -2410,4 +2430,85 @@ button.icon-button.active i.fa-retweet {
   position: absolute;
   top: 0;
   left: 0;
+}
+
+.media-gallery__gifv__label {
+  display: block;
+  position: absolute;
+  color: $color5;
+  background: rgba($color8, 0.5);
+  bottom: 6px;
+  left: 6px;
+  padding: 2px 6px;
+  border-radius: 2px;
+  font-size: 11px;
+  font-weight: 600;
+  z-index: 1;
+  pointer-events: none;
+  opacity: 0.9;
+  transition: opacity 0.1s ease;
+}
+
+.media-gallery__gifv {
+  &.autoplay {
+    .media-gallery__gifv__label {
+      display: none;
+    }
+  }
+
+  &:hover {
+    .media-gallery__gifv__label {
+      opacity: 1;
+    }
+  }
+}
+
+.attachment-list {
+  display: flex;
+  font-size: 14px;
+  border: 1px solid lighten($color1, 8%);
+  border-radius: 4px;
+  margin-top: 14px;
+  overflow: hidden;
+}
+
+.attachment-list__icon {
+  flex: 0 0 auto;
+  color: lighten($color1, 26%);
+  padding: 8px 18px;
+  cursor: default;
+  border-right: 1px solid lighten($color1, 8%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: 26px;
+
+  .fa {
+    display: block;
+  }
+}
+
+.attachment-list__list {
+  list-style: none;
+  padding: 4px 0;
+  padding-left: 8px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+
+  li {
+    display: block;
+    padding: 4px 0;
+  }
+
+  a {
+    text-decoration: none;
+    color: lighten($color1, 26%);
+    font-weight: 500;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
 }

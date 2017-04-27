@@ -17,16 +17,16 @@ class Api::V1::TimelinesController < ApiController
 
     set_pagination_headers(next_path, prev_path)
 
-    render action: :index
+    render :index
   end
 
   def public
-    @statuses = Status.as_public_timeline(current_account, params[:local], params[:media])
+    @statuses = Status.as_public_timeline(current_account, params[:local])
                   .paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
 
-    # `SELECT DISTINCT id, updated` is too slow, so pluck ids at first, and then select statuses with id.
+    # `SELECT DISTINCT id, updated_at` is too slow, so pluck ids at first, and then select id, updated_at with ids.
     if params[:media]
-      status_ids = @statuses.distinct(:id).pluck(:id)
+      status_ids = @statuses.joins(:media_attachments).distinct(:id).pluck(:id)
       @statuses = @statuses.where(id: status_ids)
     end
     @statuses = cache_collection(@statuses)
@@ -38,7 +38,7 @@ class Api::V1::TimelinesController < ApiController
 
     set_pagination_headers(next_path, prev_path)
 
-    render action: :index
+    render :index
   end
 
   def tag
@@ -53,7 +53,7 @@ class Api::V1::TimelinesController < ApiController
 
     set_pagination_headers(next_path, prev_path)
 
-    render action: :index
+    render :index
   end
 
   private
@@ -63,6 +63,6 @@ class Api::V1::TimelinesController < ApiController
   end
 
   def pagination_params(core_params)
-    params.permit(:local, :limit).merge(core_params)
+    params.permit(:local, :limit, :media).merge(core_params)
   end
 end

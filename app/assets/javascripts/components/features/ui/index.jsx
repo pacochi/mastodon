@@ -18,8 +18,15 @@ import UploadArea from './components/upload_area';
 const UI = React.createClass({
 
   propTypes: {
+    intent: React.PropTypes.bool,
     dispatch: React.PropTypes.func.isRequired,
     children: React.PropTypes.node
+  },
+
+  getDefaultProps () {
+    return {
+      intent: false
+    };
   },
 
   getInitialState () {
@@ -95,8 +102,10 @@ const UI = React.createClass({
     document.addEventListener('drop', this.handleDrop, false);
     document.addEventListener('dragleave', this.handleDragLeave, false);
 
-    this.props.dispatch(refreshTimeline('home'));
-    this.props.dispatch(refreshNotifications());
+    if (!this.props.intent) {
+      this.props.dispatch(refreshTimeline('home'));
+      this.props.dispatch(refreshNotifications());
+    }
   },
 
   componentWillUnmount () {
@@ -113,7 +122,11 @@ const UI = React.createClass({
 
   render () {
     const { width, draggingOver } = this.state;
-    const { children } = this.props;
+    const { intent, children } = this.props;
+
+    if (intent) {
+      return children;
+    }
 
     let mountedColumns;
 
