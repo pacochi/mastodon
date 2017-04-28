@@ -82,7 +82,7 @@ const CommunityTimeline = React.createClass({
     } else {
       this.interval = setInterval(() => {
         dispatch(refreshTimeline('community'));
-      }, 6000);
+      }, 2000);
     }
   },
 
