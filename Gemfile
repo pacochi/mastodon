@@ -72,6 +72,7 @@ gem 'redis-namespace'
 group :development, :test do
   gem 'rspec-rails'
   gem 'pry-rails'
+  gem 'pry-remote'
   gem 'fuubar'
   gem 'fabrication'
   gem 'i18n-tasks', '~> 0.9.6'

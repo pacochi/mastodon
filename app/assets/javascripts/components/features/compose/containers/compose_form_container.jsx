@@ -44,7 +44,7 @@ const mapDispatchToProps = (dispatch) => ({
 
   onChange (text) {
     dispatch(changeCompose(text));
-    const pattern = /(https?:\/\/www\.pixiv\.net\/member_illust\.php[^\n\s]+)/gm;
+    const pattern = /(https?:\/\/(?:www|touch)\.pixiv\.net\/(?:member|member_illust|novel\/show|novel\/member)\.php[^\n\s]+)/gm;
     if (pattern.test(text)) {
       text.match(pattern).forEach(url => {
         dispatch(requestImageCache(url));
