@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
-class PixivTwitterImagesController < ApplicationController
-  skip_before_action :verify_authenticity_token
-
+class Api::V1::PixivTwitterImagesController < ApiController
   def create
     url = params[:url].to_s
 

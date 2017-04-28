@@ -1,6 +1,6 @@
 require 'rails_helper'
 
-RSpec.describe PixivTwitterImagesController, type: :controller do
+RSpec.describe Api::V1::PixivTwitterImagesController, type: :controller do
   describe 'GET #create' do
     before do
       stub_request(:get, "https://www.pixiv.net/member.php?id=1")
