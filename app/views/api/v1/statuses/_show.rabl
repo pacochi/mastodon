@@ -5,7 +5,7 @@ node(:content)          { |status| Formatter.instance.format(status) }
 node(:url)              { |status| TagManager.instance.url_for(status) }
 node(:reblogs_count)    { |status| defined?(@reblogs_counts_map)    ? (@reblogs_counts_map[status.id]    || 0) : status.reblogs_count }
 node(:favourites_count) { |status| defined?(@favourites_counts_map) ? (@favourites_counts_map[status.id] || 0) : status.favourites_count }
-node(:pixiv_cards) { |status| status.pixiv_cards.map(&:image_url).compact }
+node(:pixiv_cards) { |status| status.pixiv_cards.map { |record| record.slice(:url, :image_url) }.compact }
 
 child :application do
   extends 'api/v1/apps/show'

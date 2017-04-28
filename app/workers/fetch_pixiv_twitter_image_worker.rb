@@ -6,6 +6,6 @@ class FetchPixivTwitterImageWorker
   sidekiq_options retry: false
 
   def perform(url)
-    PixivUrl::PixivTwitterImage.fetch_or_cache(url)
+    PixivUrl::PixivTwitterImage.cache_or_fetch(url)
   end
 end
