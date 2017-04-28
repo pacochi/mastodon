@@ -97,7 +97,7 @@ const Status = React.createClass({
       if (attachments.some(item => item.get('type') === 'unknown')) {
 
       } else if (attachments.first().get('type') === 'video') {
-        media = <VideoPlayer media={status.getIn(['media_attachments', 0])} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
+        media = <VideoPlayer media={attachments.first()} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
       } else {
         media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={squareMedia ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} squareMedia={squareMedia} />;
       }

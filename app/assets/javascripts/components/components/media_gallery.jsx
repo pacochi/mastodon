@@ -221,6 +221,13 @@ const MediaGallery = React.createClass({
 
   mixins: [PureRenderMixin],
 
+  getDefaultProps () {
+    return {
+      expandMedia: false,
+      squareMedia: false
+    };
+  },
+
   handleOpen (e) {
     this.setState({ visible: !this.state.visible });
   },

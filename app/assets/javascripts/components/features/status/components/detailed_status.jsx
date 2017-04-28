@@ -1,3 +1,4 @@
+import Immutable from 'immutable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Avatar from '../../../components/avatar';
@@ -40,13 +41,25 @@ const DetailedStatus = React.createClass({
     let media           = '';
     let applicationLink = '';
 
-    if (status.get('media_attachments').size > 0) {
-      if (status.get('media_attachments').some(item => item.get('type') === 'unknown')) {
-        media = <AttachmentList media={status.get('media_attachments')} />;
-      } else if (status.getIn(['media_attachments', 0, 'type']) === 'video') {
-        media = <VideoPlayer sensitive={status.get('sensitive')} media={status.getIn(['media_attachments', 0])} width={300} height={150} onOpenVideo={this.props.onOpenVideo} autoplay />;
+    let attachments = status.get('media_attachments');
+    if (status.get('pixiv_cards').size > 0) {
+      attachments = status.get('pixiv_cards').map(card => Immutable.fromJS({
+        id: Math.random().toString(),
+        preview_url: card.get('image_url'),
+        remote_url: '',
+        text_url: card.get('url'),
+        type: 'image',
+        url: card.get('image_url')
+      }));
+    }
+
+    if (attachments.size > 0) {
+      if (attachments.some(item => item.get('type') === 'unknown')) {
+        media = <AttachmentList media={attachments} />;
+      } else if (attachments.first().get('type') === 'video') {
+        media = <VideoPlayer sensitive={status.get('sensitive')} media={attachments.first()} width={300} height={150} onOpenVideo={this.props.onOpenVideo} autoplay />;
       } else {
-        media = <MediaGallery sensitive={status.get('sensitive')} media={status.get('media_attachments')} height={300} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} />;
+        media = <MediaGallery sensitive={status.get('sensitive')} media={attachments} height={300} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} />;
       }
     } else if (status.get('spoiler_text').length === 0) {
       media = <CardContainer statusId={status.get('id')} />;
