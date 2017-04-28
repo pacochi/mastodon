@@ -82,7 +82,7 @@ const Status = React.createClass({
     }
 
     let attachments = status.get('media_attachments');
-    if (status.get('pixiv_cards').size > 0) {
+    if (status.getIn(['pixiv_cards'], Immutable.List()).size > 0) {
       attachments = status.get('pixiv_cards').map(card => Immutable.fromJS({
         id: Math.random().toString(),
         preview_url: card.get('image_url'),
