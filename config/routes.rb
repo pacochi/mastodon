@@ -81,6 +81,7 @@ Rails.application.routes.draw do
   resources :media, only: [:show]
   resources :tags,  only: [:show]
   resources :oauth_authentications, only: [:show], param: :uid
+  resources :pixiv_twitter_images, only: [:create]
 
   namespace :intent do
     resources :statuses, only: :new
