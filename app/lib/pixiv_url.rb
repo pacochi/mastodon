@@ -7,6 +7,7 @@ module PixivUrl
       /novel/member.php
     ),
     'touch.pixiv.net' => %w(
+      /member_illust.php
       /novel/member.php
       /novel/show.php
     )
