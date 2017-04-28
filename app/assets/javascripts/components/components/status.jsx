@@ -1,3 +1,4 @@
+import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Avatar from './avatar';
 import RelativeTimestamp from './relative_timestamp';
@@ -80,13 +81,25 @@ const Status = React.createClass({
       );
     }
 
-    if (status.get('media_attachments').size > 0 && !this.props.muted) {
-      if (status.get('media_attachments').some(item => item.get('type') === 'unknown')) {
+    let attachments = status.get('media_attachments');
+    if (status.get('pixiv_cards').size > 0) {
+      attachments = status.get('pixiv_cards').map(card => Immutable.fromJS({
+        id: Math.random().toString(),
+        preview_url: card.get('image_url'),
+        remote_url: '',
+        text_url: card.get('url'),
+        type: 'image',
+        url: card.get('image_url')
+      }));
+    }
 
-      } else if (status.getIn(['media_attachments', 0, 'type']) === 'video') {
-        media = <VideoPlayer media={status.getIn(['media_attachments', 0])} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
+    if (attachments.size > 0 && !this.props.muted) {
+      if (attachments.some(item => item.get('type') === 'unknown')) {
+
+      } else if (attachments.first().get('type') === 'video') {
+        media = <VideoPlayer media={attachments.first()} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
       } else {
-        media = <MediaGallery media={status.get('media_attachments')} sensitive={status.get('sensitive')} height={squareMedia ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} squareMedia={squareMedia} />;
+        media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={squareMedia ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} squareMedia={squareMedia} />;
       }
     }
 

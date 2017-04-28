@@ -152,6 +152,7 @@ Rails.application.routes.draw do
       resources :mutes,      only: [:index]
       resources :favourites, only: [:index]
       resources :reports,    only: [:index, :create]
+      resources :pixiv_twitter_images, only: [:create]
 
       resource :instance, only: [:show]
 
