@@ -83,7 +83,7 @@ class StatusList extends React.PureComponent {
             {prepend}
 
             {statusIds.map((statusId) => {
-              return <StatusContainer key={statusId} id={statusId} square={square} expand={expand} />;
+              return <StatusContainer key={statusId} scrollKey={scrollKey} id={statusId} square={square} expand={expand} />;
             })}
 
             {loadMore}
