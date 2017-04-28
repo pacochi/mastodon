@@ -47,7 +47,7 @@ en:
       omniauth:
         or: or
       omniauth_pixiv:
-        register: Get started with pixiv account
+        register: Start with pixiv account
         signin: Sign in with pixiv account
         signup: Sign up with pixiv account
     'no': 'No'

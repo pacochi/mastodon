@@ -2,7 +2,8 @@
   .omniauth
     = render 'oauth/authorizations/pixiv_auth', auth_type: 'register'
 
-  .separate= t('simple_form.labels.omniauth.or')
+  .separate
+    %span= t('simple_form.labels.omniauth.or')
 
   = f.simple_fields_for :account do |account_fields|
     = account_fields.input :username,
@@ -29,7 +30,9 @@
   .actions
     = f.button :button, t('about.get_started'), type: :submit
 
-  .info
-    = link_to t('auth.login'), new_user_session_path, class: 'webapp-btn'
-    ·
-    = link_to t('about.about_this'), about_more_path
+  .separate
+    %span= t('simple_form.labels.omniauth.or')
+
+%div
+  = link_to new_user_session_path, class: 'action signin' do
+    %button= t('auth.login')

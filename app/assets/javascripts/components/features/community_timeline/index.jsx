@@ -30,15 +30,22 @@ const CommunityTimeline = React.createClass({
   propTypes: {
     dispatch: React.PropTypes.func.isRequired,
     intl: React.PropTypes.object.isRequired,
-    streamingAPIBaseURL: React.PropTypes.string.isRequired,
-    accessToken: React.PropTypes.string.isRequired,
-    hasUnread: React.PropTypes.bool
+    streamingAPIBaseURL: React.PropTypes.string,
+    accessToken: React.PropTypes.string,
+    hasUnread: React.PropTypes.bool,
+    standalone: React.PropTypes.bool,
   },
 
   mixins: [PureRenderMixin],
 
+  getDefaultProps () {
+    return {
+      standalone: false
+    };
+  },
+
   componentDidMount () {
-    const { dispatch, streamingAPIBaseURL, accessToken } = this.props;
+    const { dispatch, streamingAPIBaseURL, accessToken, standalone } = this.props;
 
     dispatch(refreshTimeline('community'));
 
@@ -46,32 +53,37 @@ const CommunityTimeline = React.createClass({
       return;
     }
 
-    subscription = createStream(streamingAPIBaseURL, accessToken, 'public:local', {
+    if (!standalone) {
+      subscription = createStream(streamingAPIBaseURL, accessToken, 'public:local', {
 
-      connected () {
-        dispatch(connectTimeline('community'));
-      },
+        connected () {
+          dispatch(connectTimeline('community'));
+        },
 
-      reconnected () {
-        dispatch(connectTimeline('community'));
-      },
+        reconnected () {
+          dispatch(connectTimeline('community'));
+        },
 
-      disconnected () {
-        dispatch(disconnectTimeline('community'));
-      },
+        disconnected () {
+          dispatch(disconnectTimeline('community'));
+        },
 
-      received (data) {
-        switch(data.event) {
-        case 'update':
-          dispatch(updateTimeline('community', JSON.parse(data.payload)));
-          break;
-        case 'delete':
-          dispatch(deleteFromTimelines(data.payload));
-          break;
+        received (data) {
+          switch(data.event) {
+          case 'update':
+            dispatch(updateTimeline('community', JSON.parse(data.payload)));
+            break;
+          case 'delete':
+            dispatch(deleteFromTimelines(data.payload));
+            break;
+          }
         }
-      }
-
-    });
+      });
+    } else {
+      this.interval = setInterval(() => {
+        dispatch(refreshTimeline('community'));
+      }, 2000);
+    }
   },
 
   componentWillUnmount () {
@@ -79,15 +91,28 @@ const CommunityTimeline = React.createClass({
     //   subscription.close();
     //   subscription = null;
     // }
+    clearInterval(this.interval);
   },
 
   render () {
-    const { intl, hasUnread } = this.props;
+    let heading;
+    const { intl, hasUnread, standalone } = this.props;
+
+    if (standalone) {
+      heading = (
+        <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
+          <div>Pawooのローカルタイムライン</div>
+          <div style={{ fontSize: '12px' }}>投稿をリアルタイムに流しています</div>
+        </div>
+      );
+    } else {
+      heading = intl.formatMessage(messages.title);
+    }
 
     return (
-      <Column icon='users' active={hasUnread} heading={intl.formatMessage(messages.title)}>
-        <ColumnBackButtonSlim />
-        <StatusListContainer type='community' emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />} />
+      <Column icon='users' active={hasUnread} heading={heading}>
+        {!standalone && <ColumnBackButtonSlim />}
+        <StatusListContainer type='community' standalone={standalone} emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />} />
       </Column>
     );
   },
