@@ -34,6 +34,7 @@ GEM
       activemodel (= 5.0.2)
       activesupport (= 5.0.2)
       arel (~> 7.0)
+    activerecord-dowsing (1.0.0)
     activesupport (5.0.2)
       concurrent-ruby (~> 1.0, >= 1.0.2)
       i18n (~> 0.7)
@@ -555,6 +556,7 @@ PLATFORMS
 
 DEPENDENCIES
   active_record_query_trace
+  activerecord-dowsing
   addressable
   admin_script
   autoprefixer-rails
