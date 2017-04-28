@@ -3,7 +3,7 @@
 class FetchPixivTwitterImageWorker
   include Sidekiq::Worker
 
-  sidekiq_options retry: false
+  sidekiq_options queue: 'pull', retry: false
 
   def perform(url)
     PixivUrl::PixivTwitterImage.cache_or_fetch(url)
