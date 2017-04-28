@@ -1,12 +1,12 @@
 ja:
   activerecord:
-    attributes:
-      oauth_authentication:
-        provider: プロバイダー
-        uid: ユーザーID
     errors:
       models:
-        oauth_authentication:
+        account:
           attributes:
-            uid:
-              taken: はすでに他のユーザーと連携済みです
+            username:
+              invalid: アルファベット・数値・アンダーバー(_)で入力してください
+        status:
+          attributes:
+            reblog:
+              taken: はすでに存在します

@@ -1,5 +1,5 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PropTypes from 'prop-types';
 import IconButton from './icon_button';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import { isIOS } from '../is_mobile';
@@ -8,81 +8,11 @@ const messages = defineMessages({
   toggle_visible: { id: 'media_gallery.toggle_visible', defaultMessage: 'Toggle visibility' }
 });
 
-const outerStyle = {
-  marginTop: '8px',
-  overflow: 'hidden',
-  width: '100%',
-  boxSizing: 'border-box',
-  position: 'relative'
-};
-
-const spoilerStyle = {
-  textAlign: 'center',
-  height: '100%',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  flexDirection: 'column'
-};
-
-const spoilerSpanStyle = {
-  display: 'block',
-  fontSize: '14px',
-};
-
-const spoilerSubSpanStyle = {
-  display: 'block',
-  fontSize: '11px',
-  fontWeight: '500'
-};
-
-const spoilerButtonStyle = {
-  position: 'absolute',
-  top: '4px',
-  left: '4px',
-  zIndex: '100'
-};
-
-const itemStyle = {
-  boxSizing: 'border-box',
-  position: 'relative',
-  float: 'left',
-  border: 'none',
-  display: 'block'
-};
-
-const thumbStyle = {
-  display: 'block',
-  width: '100%',
-  height: '100%',
-  textDecoration: 'none',
-  backgroundSize: 'cover',
-  cursor: 'zoom-in'
-};
-
-const gifvThumbStyle = {
-  position: 'relative',
-  zIndex: '1',
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover',
-  cursor: 'zoom-in'
-};
-
-const Item = React.createClass({
-
-  propTypes: {
-    attachment: ImmutablePropTypes.map.isRequired,
-    index: React.PropTypes.number.isRequired,
-    size: React.PropTypes.number.isRequired,
-    onClick: React.PropTypes.func.isRequired,
-    autoPlayGif: React.PropTypes.bool.isRequired,
-    expand: React.PropTypes.bool.isRequired,
-    square: React.PropTypes.bool.isRequired
-  },
-
-  mixins: [PureRenderMixin],
+class Item extends React.PureComponent {
+  constructor (props, context) {
+    super(props, context);
+    this.handleClick = this.handleClick.bind(this);
+  }
 
   handleClick (e) {
     const { index, onClick } = this.props;
@@ -93,7 +23,7 @@ const Item = React.createClass({
     }
 
     e.stopPropagation();
-  },
+  }
 
   render () {
     const { attachment, index, size, square, expand } = this.props;
@@ -155,20 +85,21 @@ const Item = React.createClass({
       if (expand) {
         thumbnail = (
           <a
-            href={attachment.get('remote_url') ? attachment.get('remote_url') : attachment.get('url')}
+            href={attachment.get('remote_url') || attachment.get('url')}
             onClick={this.handleClick}
             target='_blank'
           >
-          <img src={attachment.get('preview_url')} alt='media' style={{ width: '100%' }} />
+            <img src={attachment.get('preview_url')} alt='media' style={{ width: '100%' }} />
           </a>
         );
       } else {
         thumbnail = (
           <a
-            href={attachment.get('remote_url') ? attachment.get('remote_url') : attachment.get('url')}
+            className='media-gallery__item-thumbnail'
+            href={attachment.get('remote_url') || attachment.get('url')}
             onClick={this.handleClick}
             target='_blank'
-            style={{ background: `url(${attachment.get('preview_url')}) no-repeat 50% ${square ? '0' : '20%'}`, ...thumbStyle }}
+            style={{ background: `url(${attachment.get('preview_url')}) no-repeat 50% ${square ? '0' : '20%'}` }}
           />
         );
       }
@@ -176,14 +107,15 @@ const Item = React.createClass({
       const autoPlay = !isIOS() && this.props.autoPlayGif;
 
       thumbnail = (
-        <div style={{ position: 'relative', width: '100%', height: '100%', overflow: 'hidden' }} className={`media-gallery__gifv ${autoPlay ? 'autoplay' : ''}`}>
+        <div className={`media-gallery__gifv ${autoPlay ? 'autoplay' : ''}`}>
           <video
+            className='media-gallery__item-gifv-thumbnail'
+            role='application'
             src={attachment.get('url')}
             onClick={this.handleClick}
             autoPlay={autoPlay}
             loop={true}
             muted={true}
-            style={gifvThumbStyle}
           />
 
           <span className='media-gallery__gifv__label'>GIF</span>
@@ -192,42 +124,42 @@ const Item = React.createClass({
     }
 
     return (
-      <div key={attachment.get('id')} style={{ ...itemStyle, left, top, right, bottom, width: `${width}%`, height: `${height}%` }}>
+      <div className='media-gallery__item' key={attachment.get('id')} style={{ left: left, top: top, right: right, bottom: bottom, width: `${width}%`, height: `${height}%` }}>
         {thumbnail}
       </div>
     );
   }
 
-});
+}
 
-const MediaGallery = React.createClass({
+Item.propTypes = {
+  attachment: ImmutablePropTypes.map.isRequired,
+  index: PropTypes.number.isRequired,
+  size: PropTypes.number.isRequired,
+  onClick: PropTypes.func.isRequired,
+  autoPlayGif: PropTypes.bool.isRequired,
+  square: PropTypes.bool,
+  expand: PropTypes.bool
+};
 
-  getInitialState () {
-    return {
-      visible: !this.props.sensitive
+class MediaGallery extends React.PureComponent {
+
+  constructor (props, context) {
+    super(props, context);
+    this.state = {
+      visible: !props.sensitive
     };
-  },
-
-  propTypes: {
-    sensitive: React.PropTypes.bool,
-    media: ImmutablePropTypes.list.isRequired,
-    height: React.PropTypes.number.isRequired,
-    onOpenMedia: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired,
-    autoPlayGif: React.PropTypes.bool.isRequired,
-    expand: React.PropTypes.bool.isRequired,
-    square: React.PropTypes.bool.isRequired
-  },
-
-  mixins: [PureRenderMixin],
+    this.handleOpen = this.handleOpen.bind(this);
+    this.handleClick = this.handleClick.bind(this);
+  }
 
   handleOpen (e) {
     this.setState({ visible: !this.state.visible });
-  },
+  }
 
   handleClick (index) {
     this.props.onOpenMedia(this.props.media, index);
-  },
+  }
 
   render () {
     const { media, intl, sensitive, square, expand } = this.props;
@@ -244,9 +176,9 @@ const MediaGallery = React.createClass({
       }
 
       children = (
-        <div role='button' tabIndex='0' style={spoilerStyle} className='media-spoiler' onClick={this.handleOpen}>
-          <span style={spoilerSpanStyle}>{warning}</span>
-          <span style={spoilerSubSpanStyle}><FormattedMessage id='status.sensitive_toggle' defaultMessage='Click to view' /></span>
+        <div role='button' tabIndex='0' className='media-spoiler' onClick={this.handleOpen}>
+          <span className='media-spoiler__warning'>{warning}</span>
+          <span className='media-spoiler__trigger'><FormattedMessage id='status.sensitive_toggle' defaultMessage='Click to view' /></span>
         </div>
       );
     } else {
@@ -257,8 +189,8 @@ const MediaGallery = React.createClass({
     }
 
     return (
-      <div style={{ ...outerStyle, height: (expand && this.state.visible) ? 'auto' : `${this.props.height}px` }}>
-        <div style={{ ...spoilerButtonStyle, display: !this.state.visible ? 'none' : 'block' }}>
+      <div className='media-gallery' style={{ height: (expand && this.state.visible) ? 'auto' : `${this.props.height}px` }}>
+        <div className='spoiler-button' style={{ display: !this.state.visible ? 'none' : 'block' }}>
           <IconButton title={intl.formatMessage(messages.toggle_visible)} icon={this.state.visible ? 'eye' : 'eye-slash'} overlay onClick={this.handleOpen} />
         </div>
 
@@ -267,6 +199,17 @@ const MediaGallery = React.createClass({
     );
   }
 
-});
+}
+
+MediaGallery.propTypes = {
+  sensitive: PropTypes.bool,
+  media: ImmutablePropTypes.list.isRequired,
+  height: PropTypes.number.isRequired,
+  onOpenMedia: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
+  autoPlayGif: PropTypes.bool.isRequired,
+  expand: PropTypes.bool.isRequired,
+  square: PropTypes.bool.isRequired
+};
 
 export default injectIntl(MediaGallery);

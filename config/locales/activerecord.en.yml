@@ -1,12 +1,12 @@
 en:
   activerecord:
-    attributes:
-      oauth_authentication:
-        provider: Provider
-        uid: User ID
     errors:
       models:
-        oauth_authentication:
+        account:
           attributes:
-            uid:
-              taken: has already been taken
+            username:
+              invalid: only letters, numbers and underscores
+        status:
+          attributes:
+            reblog:
+              taken: is already exists

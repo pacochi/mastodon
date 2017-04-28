@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import TextIconButton from '../components/text_icon_button';
+import PropTypes from 'prop-types';
 import { changeComposeSensitivity } from '../../../actions/compose';
 import { Motion, spring } from 'react-motion';
 import { injectIntl, defineMessages } from 'react-intl';
@@ -12,12 +13,7 @@ const mapStateToProps = state => ({
   visible: state.getIn(['compose', 'media_attachments']).size > 0,
 });
 
-const SensitiveGuide = React.createClass({
-
-  propTypes: {
-    visible: React.PropTypes.bool,
-    intl: React.PropTypes.object.isRequired
-  },
+class SensitiveGuide extends React.PureComponent {
 
   render () {
     const { visible, intl } = this.props;
@@ -35,6 +31,11 @@ const SensitiveGuide = React.createClass({
     );
   }
 
-});
+};
+
+SensitiveGuide.propTypes = {
+  visible: PropTypes.bool,
+  intl: PropTypes.object.isRequired
+};
 
 export default connect(mapStateToProps)(injectIntl(SensitiveGuide));

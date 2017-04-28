@@ -24,6 +24,10 @@ class User < ApplicationRecord
 
   after_update :delete_initial_password_usage, if: :encrypted_password_changed?
 
+  def confirmed?
+    confirmed_at.present?
+  end
+
   def send_devise_notification(notification, *args)
     devise_mailer.send(notification, self, *args).deliver_later
   end

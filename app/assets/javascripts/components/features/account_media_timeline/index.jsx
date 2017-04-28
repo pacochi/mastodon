@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import {
   fetchAccount,
@@ -20,34 +20,28 @@ const mapStateToProps = (state, props) => ({
   me: state.getIn(['meta', 'me'])
 });
 
-const AccountMediaTimeline = React.createClass({
+class AccountMediaTimeline extends React.PureComponent {
 
-  propTypes: {
-    params: React.PropTypes.object.isRequired,
-    dispatch: React.PropTypes.func.isRequired,
-    statusIds: ImmutablePropTypes.list,
-    isLoading: React.PropTypes.bool,
-    hasMore: React.PropTypes.bool,
-    me: React.PropTypes.number.isRequired
-  },
-
-  mixins: [PureRenderMixin],
+  constructor (props, context) {
+    super(props, context);
+    this.handleScrollToBottom = this.handleScrollToBottom.bind(this);
+  }
 
   componentWillMount () {
     this.props.dispatch(fetchAccount(Number(this.props.params.accountId)));
     this.props.dispatch(fetchAccountMediaTimeline(Number(this.props.params.accountId)));
-  },
+  }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.params.accountId !== this.props.params.accountId && nextProps.params.accountId) {
       this.props.dispatch(fetchAccount(Number(nextProps.params.accountId)));
       this.props.dispatch(fetchAccountMediaTimeline(Number(nextProps.params.accountId)));
     }
-  },
+  }
 
   handleScrollToBottom () {
     this.props.dispatch(expandAccountMediaTimeline(Number(this.props.params.accountId)));
-  },
+  }
 
   render () {
     const { statusIds, isLoading, hasMore, me } = this.props;
@@ -76,6 +70,15 @@ const AccountMediaTimeline = React.createClass({
     );
   }
 
-});
+};
+
+AccountMediaTimeline.propTypes = {
+  params: PropTypes.object.isRequired,
+  dispatch: PropTypes.func.isRequired,
+  statusIds: ImmutablePropTypes.list,
+  isLoading: PropTypes.bool,
+  hasMore: PropTypes.bool,
+  me: PropTypes.number.isRequired
+}
 
 export default connect(mapStateToProps)(AccountMediaTimeline);
