@@ -45,6 +45,16 @@
         padding: 0;
       }
 
+      .show_on_wide_display {
+        display: block;
+      }
+
+      .hide_on_wide_display {
+        display: none;
+        margin: 20px auto;
+        width: 300px;
+      }
+
       &.left {
         padding: 20px;
       }
@@ -159,6 +169,24 @@
           .features-list {
             display: block;
           }
+        }
+      }
+    }
+
+    @media screen and (max-width: 1330px) {
+      width: 990px;
+
+      .about-col {
+        .show_on_wide_display {
+          display: none;
+        }
+
+        .hide_on_wide_display {
+          display: block;
+        }
+
+        &.left {
+          display: none;
         }
       }
     }

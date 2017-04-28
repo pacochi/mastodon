@@ -33,9 +33,12 @@
     .about-col-body.first
       %p.main ＼ #{number_with_delimiter @instance_presenter.user_count}人が、#{number_with_delimiter @instance_presenter.status_count}回パウってます／
 
-      .simple_form.signup
+      .simple_form.show_on_wide_display.signup
         = link_to new_user_registration_path do
           %button Pawooをはじめる
+
+      .simple_form.hide_on_wide_display
+        = render 'registration'
 
       .separate
         %span アプリもあります
