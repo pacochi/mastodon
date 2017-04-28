@@ -4,9 +4,11 @@
 .report-accounts
   .report-accounts__item
     %strong= t('admin.reports.reported_account')
+    %strong= link_to("@#{@report.target_account.username}", account_url(@report.target_account))
     = render partial: 'authorize_follow/card', locals: { account: @report.target_account }
   .report-accounts__item
     %strong= t('admin.reports.reported_by')
+    %strong= link_to("@#{@report.account.username}", account_url(@report.account))
     = render partial: 'authorize_follow/card', locals: { account: @report.account }
 
 %p
