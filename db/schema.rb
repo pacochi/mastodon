@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170424123105) do
+ActiveRecord::Schema.define(version: 20170427111847) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -206,6 +206,13 @@ ActiveRecord::Schema.define(version: 20170424123105) do
     t.datetime "updated_at", null: false
     t.index ["provider", "uid"], name: "index_oauth_authentications_on_provider_and_uid", unique: true, using: :btree
     t.index ["user_id", "provider"], name: "index_oauth_authentications_on_user_id_and_provider", unique: true, using: :btree
+  end
+
+  create_table "pixiv_cards", force: :cascade do |t|
+    t.integer "status_id", null: false
+    t.string  "url",       null: false
+    t.string  "image_url"
+    t.index ["status_id"], name: "index_pixiv_cards_on_status_id", using: :btree
   end
 
   create_table "preview_cards", force: :cascade do |t|
