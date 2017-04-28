@@ -78,8 +78,8 @@ const Item = React.createClass({
     size: React.PropTypes.number.isRequired,
     onClick: React.PropTypes.func.isRequired,
     autoPlayGif: React.PropTypes.bool.isRequired,
-    expand: React.PropTypes.bool.isRequired,
-    square: React.PropTypes.bool.isRequired
+    expandMedia: React.PropTypes.bool.isRequired,
+    squareMedia: React.PropTypes.bool.isRequired
   },
 
   mixins: [PureRenderMixin],
@@ -96,7 +96,7 @@ const Item = React.createClass({
   },
 
   render () {
-    const { attachment, index, size, square, expand } = this.props;
+    const { attachment, index, size, squareMedia, expandMedia } = this.props;
 
     let width  = 50;
     let height = 100;
@@ -105,11 +105,11 @@ const Item = React.createClass({
     let bottom = 'auto';
     let right  = 'auto';
 
-    if (size === 1 || expand) {
+    if (size === 1 || expandMedia) {
       width = 100;
     }
 
-    if (!expand) {
+    if (!expandMedia) {
       if (size === 4 || (size === 3 && index > 0)) {
         height = 50;
       }
@@ -152,7 +152,7 @@ const Item = React.createClass({
     let thumbnail = '';
 
     if (attachment.get('type') === 'image') {
-      if (expand) {
+      if (expandMedia) {
         thumbnail = (
           <a
             href={attachment.get('remote_url') ? attachment.get('remote_url') : attachment.get('url')}
@@ -168,7 +168,7 @@ const Item = React.createClass({
             href={attachment.get('remote_url') ? attachment.get('remote_url') : attachment.get('url')}
             onClick={this.handleClick}
             target='_blank'
-            style={{ background: `url(${attachment.get('preview_url')}) no-repeat 50% ${square ? '0' : '20%'}`, ...thumbStyle }}
+            style={{ background: `url(${attachment.get('preview_url')}) no-repeat 50% ${squareMedia ? '0' : '20%'}`, ...thumbStyle }}
           />
         );
       }
@@ -215,8 +215,8 @@ const MediaGallery = React.createClass({
     onOpenMedia: React.PropTypes.func.isRequired,
     intl: React.PropTypes.object.isRequired,
     autoPlayGif: React.PropTypes.bool.isRequired,
-    expand: React.PropTypes.bool.isRequired,
-    square: React.PropTypes.bool.isRequired
+    expandMedia: React.PropTypes.bool.isRequired,
+    squareMedia: React.PropTypes.bool.isRequired
   },
 
   mixins: [PureRenderMixin],
@@ -230,7 +230,7 @@ const MediaGallery = React.createClass({
   },
 
   render () {
-    const { media, intl, sensitive, square, expand } = this.props;
+    const { media, intl, sensitive, squareMedia, expandMedia } = this.props;
 
     let children;
 
@@ -252,12 +252,12 @@ const MediaGallery = React.createClass({
     } else {
       const size = media.take(4).size;
       children = media.take(4).map((attachment, i) =>
-        <Item key={attachment.get('id')} onClick={this.handleClick} attachment={attachment} autoPlayGif={this.props.autoPlayGif} index={i} size={size} square={square} expand={expand} />
+        <Item key={attachment.get('id')} onClick={this.handleClick} attachment={attachment} autoPlayGif={this.props.autoPlayGif} index={i} size={size} squareMedia={squareMedia} expandMedia={expandMedia} />
       );
     }
 
     return (
-      <div style={{ ...outerStyle, height: (expand && this.state.visible) ? 'auto' : `${this.props.height}px` }}>
+      <div style={{ ...outerStyle, height: (expandMedia && this.state.visible) ? 'auto' : `${this.props.height}px` }}>
         <div style={{ ...spoilerButtonStyle, display: !this.state.visible ? 'none' : 'block' }}>
           <IconButton title={intl.formatMessage(messages.toggle_visible)} icon={this.state.visible ? 'eye' : 'eye-slash'} overlay onClick={this.handleOpen} />
         </div>

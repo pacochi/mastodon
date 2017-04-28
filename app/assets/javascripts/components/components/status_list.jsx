@@ -16,17 +16,19 @@ const StatusList = React.createClass({
     isLoading: React.PropTypes.bool,
     isUnread: React.PropTypes.bool,
     hasMore: React.PropTypes.bool,
-    expand: React.PropTypes.bool,
-    square: React.PropTypes.bool,
+    expandMedia: React.PropTypes.bool,
+    squareMedia: React.PropTypes.bool,
+    standalone: React.PropTypes.bool,
     prepend: React.PropTypes.node,
-    emptyMessage: React.PropTypes.node
+    emptyMessage: React.PropTypes.node,
   },
 
   getDefaultProps () {
     return {
       trackScroll: true,
-      expand: false,
-      square: false
+      expandMedia: false,
+      squareMedia: false,
+      standalone: false
     };
   },
 
@@ -78,7 +80,7 @@ const StatusList = React.createClass({
   },
 
   render () {
-    const { statusIds, onScrollToBottom, trackScroll, isLoading, isUnread, hasMore, prepend, emptyMessage, square, expand } = this.props;
+    const { statusIds, onScrollToBottom, trackScroll, isLoading, isUnread, hasMore, prepend, emptyMessage, squareMedia, expandMedia, standalone } = this.props;
 
     let loadMore       = '';
     let scrollableArea = '';
@@ -101,7 +103,7 @@ const StatusList = React.createClass({
             {prepend}
 
             {statusIds.map((statusId) => {
-              return <StatusContainer key={statusId} id={statusId} square={square} expand={expand} />;
+              return <StatusContainer key={statusId} id={statusId} squareMedia={squareMedia} expandMedia={expandMedia} standalone={standalone} />;
             })}
 
             {loadMore}
