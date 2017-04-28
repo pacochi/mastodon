@@ -758,7 +758,7 @@ a.status__content__spoiler-link {
 }
 
 .account__action-bar-dropdown {
-  flex: 1 1 auto;
+  flex: 0 0 auto;
   padding: 10px;
 }
 
@@ -1082,7 +1082,7 @@ a.status__content__spoiler-link {
     display: block;
     padding: 4px 14px;
     box-sizing: border-box;
-    width: 140px;
+    width: 150px;
     text-decoration: none;
     background: $color2;
     color: $color1;
