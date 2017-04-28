@@ -12,7 +12,7 @@ machine:
 
 dependencies:
   pre:
-    - sudo apt-get update; sudo apt-get install libav-tools libavcodec-extra-54 x264 libx264-dev
+    - sudo apt-get update; sudo apt-get install libav-tools libavcodec-extra-54 x264 libx264-dev libav-tools
   cache_directories:
     - ~/.cache/yarn
     - .bundle/config
