@@ -124,5 +124,5 @@ Rails.application.configure do
     'X-XSS-Protection'       => '1; mode=block',
   }
 
-  config.x.activerecord_dowsing.enabled = true
+  config.x.activerecord_dowsing.enabled = false
 end
