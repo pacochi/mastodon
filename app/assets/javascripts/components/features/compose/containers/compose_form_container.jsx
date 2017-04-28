@@ -5,6 +5,7 @@ import { createSelector } from 'reselect';
 import {
   changeCompose,
   submitCompose,
+  requestImageCache,
   clearComposeSuggestions,
   fetchComposeSuggestions,
   selectComposeSuggestion,
@@ -43,6 +44,12 @@ const mapDispatchToProps = (dispatch) => ({
 
   onChange (text) {
     dispatch(changeCompose(text));
+    const pattern = /(https?:\/\/www\.pixiv\.net\/member_illust\.php[^\n\s]+)/gm;
+    if (pattern.test(text)) {
+      text.match(pattern).forEach(url => {
+        dispatch(requestImageCache(url));
+      });
+    }
   },
 
   onSubmit () {
