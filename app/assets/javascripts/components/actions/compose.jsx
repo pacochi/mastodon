@@ -134,7 +134,7 @@ export function requestImageCache(url) {
       requestedImageCaches.push(url);
       const data = new FormData();
       data.append('url', url);
-      api(getState).post('/pixiv_twitter_images', data).catch(() => {
+      api(getState).post('/api/v1/pixiv_twitter_images', data).catch(() => {
         requestedImageCaches.splice(requestedImageCaches.indexOf(url), 1);
       });
     }
