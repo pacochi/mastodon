@@ -4,7 +4,7 @@ const ColumnHeader = React.createClass({
 
   propTypes: {
     icon: React.PropTypes.string,
-    type: React.PropTypes.string,
+    type: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.node]),
     active: React.PropTypes.bool,
     onClick: React.PropTypes.func
   },

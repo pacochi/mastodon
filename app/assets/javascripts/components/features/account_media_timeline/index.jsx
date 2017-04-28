@@ -70,7 +70,7 @@ const AccountMediaTimeline = React.createClass({
           hasMore={hasMore}
           me={me}
           onScrollToBottom={this.handleScrollToBottom}
-          expand
+          expandMedia
         />
       </Column>
     );

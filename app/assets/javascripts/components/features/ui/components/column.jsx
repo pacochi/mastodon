@@ -32,7 +32,7 @@ const scrollTop = (node) => {
 const Column = React.createClass({
 
   propTypes: {
-    heading: React.PropTypes.string,
+    heading: React.PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.node]),
     icon: React.PropTypes.string,
     children: React.PropTypes.node,
     active: React.PropTypes.bool

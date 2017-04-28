@@ -32,8 +32,9 @@ const Status = React.createClass({
     me: React.PropTypes.number,
     boostModal: React.PropTypes.bool,
     autoPlayGif: React.PropTypes.bool,
-    expand: React.PropTypes.bool,
-    square: React.PropTypes.bool,
+    expandMedia: React.PropTypes.bool,
+    squareMedia: React.PropTypes.bool,
+    standalone: React.PropTypes.bool,
     muted: React.PropTypes.bool
   },
 
@@ -53,7 +54,7 @@ const Status = React.createClass({
 
   render () {
     let media = '';
-    const { status, expand, square, ...other } = this.props;
+    const { status, expandMedia, squareMedia, standalone, ...other } = this.props;
 
     if (status === null) {
       return <div />;
@@ -98,8 +99,25 @@ const Status = React.createClass({
       } else if (attachments.first().get('type') === 'video') {
         media = <VideoPlayer media={status.getIn(['media_attachments', 0])} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
       } else {
-        media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={square ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expand={expand} square={square} />;
+        media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={square ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} squareMedia={squareMedia} />;
       }
+    }
+
+    let avatar = {};
+    if (standalone) {
+      avatar = {
+        href: status.getIn(['account', 'url']),
+        className: 'status__display-name',
+        style: { display: 'block', maxWidth: '100%', paddingRight: '25px' },
+        target: '_blank'
+      };
+    } else {
+      avatar ={
+        href: status.getIn(['account', 'url']),
+        className: 'status__display-name',
+        style: { display: 'block', maxWidth: '100%', paddingRight: '25px' },
+        onClick: this.handleAccountClick.bind(this, status.getIn(['account', 'id']))
+      };
     }
 
     return (
@@ -109,7 +127,7 @@ const Status = React.createClass({
             <a href={status.get('url')} className='status__relative-time' target='_blank' rel='noopener'><RelativeTimestamp timestamp={status.get('created_at')} /></a>
           </div>
 
-          <a onClick={this.handleAccountClick.bind(this, status.getIn(['account', 'id']))} href={status.getIn(['account', 'url'])} className='status__display-name' style={{ display: 'block', maxWidth: '100%', paddingRight: '25px' }}>
+          <a {...avatar}>
             <div className='status__avatar' style={{ position: 'absolute', left: '10px', top: '10px', width: '48px', height: '48px' }}>
               <Avatar src={status.getIn(['account', 'avatar'])} staticSrc={status.getIn(['account', 'avatar_static'])} size={48} />
             </div>
@@ -118,11 +136,11 @@ const Status = React.createClass({
           </a>
         </div>
 
-        <StatusContent status={status} onClick={this.handleClick} />
+        <StatusContent standalone status={status} onClick={this.handleClick} />
 
         {media}
 
-        <StatusActionBar {...this.props} />
+        {!standalone && <StatusActionBar {...this.props} />}
       </div>
     );
   }

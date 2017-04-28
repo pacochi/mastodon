@@ -1,13 +1,12 @@
 body {
   font-family: 'Roboto', sans-serif;
-  background: $color1 image-url('background-photo.jpeg');
+  background: $color1;
   background-size: cover;
   background-attachment: fixed;
   font-size: 13px;
   line-height: 18px;
   font-weight: 400;
   color: $color5;
-  padding-bottom: 140px;
   text-rendering: optimizelegibility;
   font-feature-settings: "kern";
   text-size-adjust: none;
@@ -55,4 +54,31 @@ button:focus {
   height: 100%;
   align-items: center;
   justify-content: center;
+}
+
+.separate {
+  display: flex;
+  align-items: center;
+  position: relative;
+  margin: 40px auto;
+  text-align: center;
+
+  span {
+    flex: 0 0 auto;
+    padding: 0 10px;
+  }
+
+  &:before {
+    display: block;
+    content: '';
+    width: 50%;
+    border-bottom: 1px solid $color3;
+  }
+
+  &:after {
+    display: block;
+    content: '';
+    width: 50%;
+    border-bottom: 1px solid $color3;
+  }
 }

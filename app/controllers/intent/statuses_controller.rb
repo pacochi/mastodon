@@ -3,7 +3,7 @@
 class Intent::StatusesController < HomeController
   def new
     index
-    @intent = true
+    @appmode = 'intent'
   end
 
   private :index
