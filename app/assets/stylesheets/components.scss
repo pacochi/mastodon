@@ -89,12 +89,8 @@
   border: none;
   background: transparent;
   cursor: pointer;
-  // <<<<<<< HEAD
-  //   transition: all 100ms ease-in;
-  //   vertical-align: middle;
-  // =======
-  //   transition: color 100ms ease-in;
-  // >>>>>>> 9a085e138e308066ae5e6019d0cb175ae1dd2ddb
+  vertical-align: middle;
+  transition: color 100ms ease-in;
 
   &:hover, &:active, &:focus {
     color: lighten($color1, 33%);
