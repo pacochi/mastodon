@@ -10,6 +10,6 @@ class FollowerAccountsController < ApplicationController
   private
 
   def ordered_accounts
-    @account.followers.order('follows.created_at desc')
+    @account.followers
   end
 end
