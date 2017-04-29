@@ -1,5 +1,9 @@
 en:
   activerecord:
+    attributes:
+      oauth_authentication:
+        provider: Provider
+        uid: User ID
     errors:
       models:
         account:
