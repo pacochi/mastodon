@@ -50,6 +50,8 @@ class Report extends React.PureComponent {
     this.state = { option: false };
     this.handleCommentChange = this.handleCommentChange.bind(this);
     this.handleSubmit = this.handleSubmit.bind(this);
+    this.handlePreSubmit = this.handlePreSubmit.bind(this);
+    this.onToggle = this.onToggle.bind(this);
   }
 
   componentWillMount () {
@@ -143,16 +145,13 @@ class Report extends React.PureComponent {
                     onChange={this.handleCommentChange}
                     disabled={isSubmitting}
                   />
-                </div>
 
-                <div style={{ overflow: 'hidden' }}>
-                  <Button disabled={isSubmitting} text={intl.formatMessage(messages.submit)} onClick={this.handlePreSubmit} block />
+                  <Button disabled={isSubmitting || comment.length === 0} text={intl.formatMessage(messages.submit)} onClick={this.handleSubmit} block />
                 </div>
               </div>
             }
             <div className='report__submit'>
-              <div className='report__submit-button'><Button disabled={isSubmitting} text={intl.formatMessage(messages.submit)} onClick={this.handleSubmit} /></div>
-              <Button disabled={isSubmitting} text={intl.formatMessage(messages.submit)} onClick={this.handleSubmit} block />
+              <Button disabled={isSubmitting} text={intl.formatMessage(messages.submit)} onClick={this.handlePreSubmit} block />
             </div>
           </div>
         </div>
