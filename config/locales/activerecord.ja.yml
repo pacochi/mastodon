@@ -1,5 +1,9 @@
 ja:
   activerecord:
+    attributes:
+      oauth_authentication:
+        provider: プロバイダー
+        uid: ユーザーID
     errors:
       models:
         account:
@@ -9,4 +13,4 @@ ja:
         status:
           attributes:
             reblog:
-              taken: はすでに存在します
+              taken: はすでに他のアカウントと連携済みです
