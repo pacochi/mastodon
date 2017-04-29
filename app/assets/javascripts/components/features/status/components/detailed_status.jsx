@@ -106,7 +106,7 @@ DetailedStatus.propTypes = {
   onOpenVideo: PropTypes.func.isRequired,
   autoPlayGif: PropTypes.bool,
   expandMedia: PropTypes.bool,
-  squaremedia: PropTypes.bool
+  squareMedia: PropTypes.bool
 };
 
 export default DetailedStatus;
