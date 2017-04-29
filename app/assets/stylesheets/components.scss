@@ -1012,7 +1012,6 @@ a.status__content__spoiler-link {
 
 .dropdown {
   display: inline-block;
-  position: relative;
 }
 
 .dropdown__content {
@@ -1083,6 +1082,8 @@ a.status__content__spoiler-link {
     background: $color2;
     color: $color1;
     overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 
     &:focus {
       outline: 0;
