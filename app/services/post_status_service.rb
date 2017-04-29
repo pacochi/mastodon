@@ -70,6 +70,7 @@ class PostStatusService < BaseService
 
     pixiv_urls.uniq.each do |url|
       image_url = PixivUrl::PixivTwitterImage.cache_or_fetch(url) if PixivUrl::PixivTwitterImage.cache_exists?(url)
+      image_url = nil unless PixivUrl.valid_twitter_image?(image_url)
 
       status.pixiv_cards.create!(
         url: url,
