@@ -113,7 +113,8 @@ const hiddenColumnContainerStyle = {
   position: 'absolute',
   left: '0',
   top:  '0',
-  visibility: 'hidden'
+  visibility: 'hidden',
+  display: 'none'
 };
 
 class Container extends React.PureComponent {
