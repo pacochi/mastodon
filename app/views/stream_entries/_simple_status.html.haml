@@ -33,3 +33,27 @@
         .status__attachments__inner{ class: expand_media ? 'expand_media' : '' }
           - status.media_attachments.each do |media|
             = render partial: 'stream_entries/media', locals: { media: media, expand_media: expand_media }
+
+  - pixiv_cards = status.pixiv_cards.select(&:image_url?)
+  - if pixiv_cards.present?
+    .status__attachments
+      - if status.sensitive?
+        = render partial: 'stream_entries/content_spoiler'
+      - klass = 'expand_media' if expand_media
+
+      - if pixiv_cards.size > 1 && pixiv_cards.size.odd?
+        .status__attachments__inner.pixiv-twitter-card{ class: klass }
+          - pixiv_card = pixiv_cards.shift
+          .media-item
+            - style = "background-image: url(#{pixiv_card.image_url})" unless expand_media
+            = link_to pixiv_card.url, style: style, target: '_blank', rel: 'noopener', class: "u-photo" do
+              - if expand_media
+                %img{ src: pixiv_card.image_url, class: 'pixiv-twitter-card' }
+
+      .status__attachments__inner.pixiv-twitter-card{ class: klass }
+        - pixiv_cards.each do |pixiv_card|
+          .media-item
+            - style = "background-image: url(#{pixiv_card.image_url})" unless expand_media
+            = link_to pixiv_card.url, style: style, target: '_blank', rel: 'noopener', class: "u-photo" do
+              - if expand_media
+                %img{ src: pixiv_card.image_url, class: 'pixiv-twitter-card' }

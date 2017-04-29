@@ -1,4 +1,4 @@
-import { Provider } from 'react-redux';
+import { connect, Provider } from 'react-redux';
 import PropTypes from 'prop-types';
 import configureStore from '../store/configureStore';
 import {
@@ -71,7 +71,11 @@ import { hydrateStore } from '../actions/store';
 import createStream from '../stream';
 
 const store = configureStore();
-const initialState = JSON.parse(document.getElementById("initial-state").textContent);
+const initialState = {};
+try {
+  Object.assign(initialState, JSON.parse(document.getElementById("initial-state").textContent));
+} catch (e) {}
+
 store.dispatch(hydrateStore(initialState));
 
 const browserHistory = useRouterHistory(createBrowserHistory)({
@@ -226,11 +230,11 @@ Container.propTypes = {
 class Mastodon extends React.Component {
 
   componentWillMount () {
-    this.intent = store.getState().getIn(['meta', 'intent']);
+    this.appmode = store.getState().getIn(['meta', 'appmode']);
   }
 
   componentDidMount () {
-    if (!this.intent) {
+    if (this.appmode === 'default') {
       const { locale }  = this.props;
       const streamingAPIBaseURL = store.getState().getIn(['meta', 'streaming_api_base_url']);
       const accessToken = store.getState().getIn(['meta', 'access_token']);
@@ -286,7 +290,7 @@ class Mastodon extends React.Component {
   render () {
     const { locale } = this.props;
 
-    if (this.intent) {
+    if (this.appmode === 'intent') {
       return (
         <IntlProvider locale={locale} messages={getMessagesForLocale(locale)}>
           <Provider store={store}>
@@ -298,39 +302,56 @@ class Mastodon extends React.Component {
       );
     }
 
-    return (
-      <IntlProvider locale={locale} messages={getMessagesForLocale(locale)}>
-        <Provider store={store}>
-          <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
-            <Route path='/' component={Container}>
-              <IndexRedirect to="/getting-started" />
+    if (this.appmode === 'about') {
+      return (
+        <IntlProvider locale={locale} messages={getMessagesForLocale(locale)}>
+          <Provider store={store}>
+            <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
+              <UI intent>
+                <Route path='*' component={connect(() => ({ standalone: true }))(CommunityTimeline)} />
+              </UI>
+            </Router>
+          </Provider>
+        </IntlProvider>
+      );
+    }
 
-              <Route path='getting-started' component={GettingStarted} />
-              <Route path='timelines/tag/:id' component={HashtagTimeline} />
+    if (this.appmode === 'default') {
+      return (
+        <IntlProvider locale={locale} messages={getMessagesForLocale(locale)}>
+          <Provider store={store}>
+            <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
+              <Route path='/' component={Container}>
+                <IndexRedirect to="/getting-started" />
 
-              <Route path='statuses/new' component={Compose} />
-              <Route path='statuses/:statusId' component={Status} />
-              <Route path='statuses/:statusId/reblogs' component={Reblogs} />
-              <Route path='statuses/:statusId/favourites' component={Favourites} />
+                <Route path='getting-started' component={GettingStarted} />
+                <Route path='timelines/tag/:id' component={HashtagTimeline} />
 
-              <Route path='accounts/:accountId' component={AccountTimeline} />
-              <Route path='accounts/:accountId/media' component={AccountMediaTimeline} />
-              <Route path='accounts/:accountId/followers' component={Followers} />
-              <Route path='accounts/:accountId/following' component={Following} />
+                <Route path='statuses/new' component={Compose} />
+                <Route path='statuses/:statusId' component={Status} />
+                <Route path='statuses/:statusId/reblogs' component={Reblogs} />
+                <Route path='statuses/:statusId/favourites' component={Favourites} />
 
-              <Route path='follow_requests' component={FollowRequests} />
-              <Route path='blocks' component={Blocks} />
-              <Route path='mutes' component={Mutes} />
-              <Route path='report' component={Report} />
+                <Route path='accounts/:accountId' component={AccountTimeline} />
+                <Route path='accounts/:accountId/media' component={AccountMediaTimeline} />
+                <Route path='accounts/:accountId/followers' component={Followers} />
+                <Route path='accounts/:accountId/following' component={Following} />
 
-              <Route path='*' component={GenericNotFound} />
-            </Route>
-          </Router>
-        </Provider>
-      </IntlProvider>
-    );
+                <Route path='follow_requests' component={FollowRequests} />
+                <Route path='blocks' component={Blocks} />
+                <Route path='mutes' component={Mutes} />
+                <Route path='report' component={Report} />
+
+                <Route path='*' component={GenericNotFound} />
+              </Route>
+            </Router>
+          </Provider>
+        </IntlProvider>
+      );
+    }
+
+    return <div />;
   }
-
 }
 
 Mastodon.propTypes = {

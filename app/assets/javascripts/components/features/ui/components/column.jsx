@@ -57,9 +57,11 @@ class Column extends React.PureComponent {
     let columnHeaderId = null
     let header = '';
 
-    if (heading) {
+    if (typeof heading == 'string') {
       columnHeaderId = heading.replace(/ /g, '-')
       header = <ColumnHeader icon={icon} active={active} type={heading} onClick={this.handleHeaderClick} hideOnMobile={hideHeadingOnMobile} columnHeaderId={columnHeaderId}/>;
+    } else if (heading) {
+      header = <ColumnHeader icon={icon} active={active} type={heading} onClick={this.handleHeaderClick} />;
     }
     return (
       <div role='region' aria-labelledby={columnHeaderId} className='column' onWheel={this.handleWheel}>
@@ -72,7 +74,7 @@ class Column extends React.PureComponent {
 }
 
 Column.propTypes = {
-  heading: PropTypes.string,
+  heading: PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.node]),
   icon: PropTypes.string,
   children: PropTypes.node,
   active: PropTypes.bool,

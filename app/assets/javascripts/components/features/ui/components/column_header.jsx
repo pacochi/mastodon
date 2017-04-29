@@ -32,7 +32,7 @@ class ColumnHeader extends React.PureComponent {
 
 ColumnHeader.propTypes = {
   icon: PropTypes.string,
-  type: PropTypes.string,
+  type: PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.node]),
   active: PropTypes.bool,
   onClick: PropTypes.func,
   hideOnMobile: PropTypes.bool,

@@ -214,35 +214,6 @@ code {
     }
   }
 
-  .separate {
-    position: relative;
-    margin: 40px 0;
-    font-size: 20px;
-    text-align: center;
-
-    &:before {
-      content: '';
-      display: block;
-      position: absolute;
-      top: 50%;
-      left: 0;
-      width: 40%;
-      height: 1px;
-      background-color: white;
-    }
-
-    &:after {
-      content: '';
-      display: block;
-      position: absolute;
-      top: 50%;
-      right: 0;
-      width: 40%;
-      height: 1px;
-      background-color: white;
-    }
-  }
-
   select {
     font-size: 16px;
   }

@@ -76,7 +76,7 @@ class MediaTimeline extends React.PureComponent {
         <ColumnBackButtonSlim />
         <StatusListContainer
           type='media'
-          square
+          squareMedia
           scrollKey='media_timeline'
           emptyMessage={<FormattedMessage id='empty_column.public'
           defaultMessage='There is nothing here! Write something publicly, or manually follow users from other instances to fill it up'/>}

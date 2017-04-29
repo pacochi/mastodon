@@ -1,3 +1,4 @@
+import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import Avatar from './avatar';
@@ -13,7 +14,6 @@ import emojify from '../emoji';
 import escapeTextContentForBrowser from 'escape-html';
 
 class Status extends React.PureComponent {
-
   constructor (props, context) {
     super(props, context);
     this.handleClick = this.handleClick.bind(this);
@@ -34,7 +34,7 @@ class Status extends React.PureComponent {
 
   render () {
     let media = '';
-    const { status, expand, square, ...other } = this.props;
+    const { status, expandMedia, squareMedia, standalone, ...other } = this.props;
 
     if (status === null) {
       return <div />;
@@ -61,14 +61,43 @@ class Status extends React.PureComponent {
       );
     }
 
-    if (status.get('media_attachments').size > 0 && !this.props.muted) {
-      if (status.get('media_attachments').some(item => item.get('type') === 'unknown')) {
+    let attachments = status.get('media_attachments');
+    if (status.getIn(['pixiv_cards'], Immutable.List()).size > 0) {
+      attachments = status.get('pixiv_cards').map(card => {
+        return Immutable.fromJS({
+          id: Math.random().toString(),
+          preview_url: card.get('image_url'),
+          remote_url: '',
+          text_url: card.get('url'),
+          type: 'image',
+          url: card.get('image_url')
+        });
+      });
+    }
 
-      } else if (status.getIn(['media_attachments', 0, 'type']) === 'video') {
-        media = <VideoPlayer media={status.getIn(['media_attachments', 0])} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
+    if (attachments.size > 0 && !this.props.muted) {
+      if (attachments.some(item => item.get('type') === 'unknown')) {
+
+      } else if (attachments.first().get('type') === 'video') {
+        media = <VideoPlayer media={attachments.first()} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
       } else {
-        media = <MediaGallery media={status.get('media_attachments')} sensitive={status.get('sensitive')} height={square ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expand={expand} square={square} />;
+        media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={squareMedia ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} squareMedia={squareMedia} />;
       }
+    }
+
+    let avatar = {
+      href: status.getIn(['account', 'url']),
+      className: 'status__display-name'
+    };
+
+    if (standalone) {
+      avatar = Object.assign(avatar, {
+        target: '_blank'
+      });
+    } else {
+      avatar = Object.assign({
+        onClick: this.handleAccountClick.bind(this, status.getIn(['account', 'id']))
+      });
     }
 
     return (
@@ -78,7 +107,7 @@ class Status extends React.PureComponent {
             <a href={status.get('url')} className='status__relative-time' target='_blank' rel='noopener'><RelativeTimestamp timestamp={status.get('created_at')} /></a>
           </div>
 
-          <a onClick={this.handleAccountClick.bind(this, status.getIn(['account', 'id']))} href={status.getIn(['account', 'url'])} className='status__display-name'>
+          <a {...avatar}>
             <div className='status__avatar'>
               <Avatar src={status.getIn(['account', 'avatar'])} staticSrc={status.getIn(['account', 'avatar_static'])} size={48} />
             </div>
@@ -87,11 +116,11 @@ class Status extends React.PureComponent {
           </a>
         </div>
 
-        <StatusContent status={status} onClick={this.handleClick} />
+        <StatusContent standalone status={status} onClick={this.handleClick} />
 
         {media}
 
-        <StatusActionBar {...this.props} />
+        {!standalone && <StatusActionBar {...this.props} />}
       </div>
     );
   }
@@ -116,8 +145,9 @@ Status.propTypes = {
   boostModal: PropTypes.bool,
   autoPlayGif: PropTypes.bool,
   muted: PropTypes.bool,
-  expand: PropTypes.bool,
-  square: PropTypes.bool,
+  expandMedia: PropTypes.bool,
+  squareMedia: PropTypes.bool,
+  standalone: PropTypes.bool
 };
 
 export default Status;

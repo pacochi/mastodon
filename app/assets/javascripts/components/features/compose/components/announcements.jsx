@@ -9,6 +9,8 @@ class Announcements extends React.PureComponent {
   constructor (props, context) {
     super(props, context);
 
+    this.handleDismiss = this.handleDismiss.bind(this);
+
     try {
       const dismissed = JSON.parse(localStorage.getItem(storageKey));
       this.state = { dismissed: Array.isArray(dismissed) ? dismissed : [] };
@@ -53,7 +55,7 @@ class Announcements extends React.PureComponent {
     this.announcements = Immutable.fromJS(announcements);
   }
 
-  handleDismiss (event) {
+  handleDismiss(event) {
     const id = +event.currentTarget.getAttribute('title');
 
     if (Number.isInteger(id)) {

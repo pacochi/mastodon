@@ -20,6 +20,7 @@ class Status < ApplicationRecord
   has_many :replies, foreign_key: 'in_reply_to_id', class_name: 'Status', inverse_of: :thread
   has_many :mentions, dependent: :destroy
   has_many :media_attachments, dependent: :destroy
+  has_many :pixiv_cards, dependent: :destroy
   has_and_belongs_to_many :tags
 
   has_one :notification, as: :activity, dependent: :destroy
@@ -38,7 +39,7 @@ class Status < ApplicationRecord
   scope :without_replies, -> { where('statuses.reply = FALSE OR statuses.in_reply_to_account_id = statuses.account_id') }
   scope :without_reblogs, -> { where('statuses.reblog_of_id IS NULL') }
 
-  cache_associated :application, :media_attachments, :tags, :stream_entry, mentions: { account: :oauth_authentications }, reblog: [{ account: :oauth_authentications }, :application, :stream_entry, :tags, :media_attachments, mentions: { account: :oauth_authentications }], thread: { account: :oauth_authentications }, account: :oauth_authentications
+  cache_associated :application, :media_attachments, :tags, :stream_entry, :pixiv_cards, mentions: { account: :oauth_authentications }, reblog: [{ account: :oauth_authentications }, :application, :stream_entry, :tags, :media_attachments, :pixiv_cards, mentions: { account: :oauth_authentications }], thread: { account: :oauth_authentications }, account: :oauth_authentications
 
   def reply?
     !in_reply_to_id.nil? || super

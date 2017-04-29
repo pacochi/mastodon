@@ -1,4 +1,5 @@
 import PropTypes from 'prop-types';
+import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Avatar from '../../../components/avatar';
 import DisplayName from '../../../components/display_name';
@@ -27,19 +28,33 @@ class DetailedStatus extends React.PureComponent {
   }
 
   render () {
-    const { expand, square } = this.props;
+    const { expandMedia, squareMedia } = this.props;
     const status = this.props.status.get('reblog') ? this.props.status.get('reblog') : this.props.status;
 
     let media           = '';
     let applicationLink = '';
 
-    if (status.get('media_attachments').size > 0) {
-      if (status.get('media_attachments').some(item => item.get('type') === 'unknown')) {
-        media = <AttachmentList media={status.get('media_attachments')} />;
-      } else if (status.getIn(['media_attachments', 0, 'type']) === 'video') {
-        media = <VideoPlayer sensitive={status.get('sensitive')} media={status.getIn(['media_attachments', 0])} width={300} height={150} onOpenVideo={this.props.onOpenVideo} autoplay />;
+    let attachments = status.get('media_attachments');
+    if (status.getIn(['pixiv_cards'], Immutable.List()).size > 0) {
+      attachments = status.get('pixiv_cards').map(card => {
+        return Immutable.fromJS({
+          id: Math.random().toString(),
+          preview_url: card.get('image_url'),
+          remote_url: '',
+          text_url: card.get('url'),
+          type: 'image',
+          url: card.get('image_url')
+        });
+      });
+    }
+
+    if (attachments.size > 0) {
+      if (attachments.some(item => item.get('type') === 'unknown')) {
+        media = <AttachmentList media={attachments} />;
+      } else if (attachments.first().get('type') === 'video') {
+        media = <VideoPlayer sensitive={status.get('sensitive')} media={attachments.first()} width={300} height={150} onOpenVideo={this.props.onOpenVideo} autoplay />;
       } else {
-        media = <MediaGallery sensitive={status.get('sensitive')} media={status.get('media_attachments')} height={300} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expand square />;
+        media = <MediaGallery sensitive={status.get('sensitive')} media={attachments} height={300} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia squareMedia />;
       }
     } else if (status.get('spoiler_text').length === 0) {
       media = <CardContainer statusId={status.get('id')} />;
@@ -90,8 +105,8 @@ DetailedStatus.propTypes = {
   onOpenMedia: PropTypes.func.isRequired,
   onOpenVideo: PropTypes.func.isRequired,
   autoPlayGif: PropTypes.bool,
-  expand: PropTypes.bool,
-  square: PropTypes.bool
+  expandMedia: PropTypes.bool,
+  squaremedia: PropTypes.bool
 };
 
 export default DetailedStatus;
