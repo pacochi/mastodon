@@ -1,38 +1,18 @@
 import Status from './status';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import { ScrollContainer } from 'react-router-scroll';
+import PropTypes from 'prop-types';
 import StatusContainer from '../containers/status_container';
 import LoadMore from './load_more';
 
-const StatusList = React.createClass({
+class StatusList extends React.PureComponent {
 
-  propTypes: {
-    statusIds: ImmutablePropTypes.list.isRequired,
-    onScrollToBottom: React.PropTypes.func,
-    onScrollToTop: React.PropTypes.func,
-    onScroll: React.PropTypes.func,
-    trackScroll: React.PropTypes.bool,
-    isLoading: React.PropTypes.bool,
-    isUnread: React.PropTypes.bool,
-    hasMore: React.PropTypes.bool,
-    expandMedia: React.PropTypes.bool,
-    squareMedia: React.PropTypes.bool,
-    standalone: React.PropTypes.bool,
-    prepend: React.PropTypes.node,
-    emptyMessage: React.PropTypes.node,
-  },
-
-  getDefaultProps () {
-    return {
-      trackScroll: true,
-      expandMedia: false,
-      squareMedia: false,
-      standalone: false
-    };
-  },
-
-  mixins: [PureRenderMixin],
+  constructor (props, context) {
+    super(props, context);
+    this.handleScroll = this.handleScroll.bind(this);
+    this.setRef = this.setRef.bind(this);
+    this.handleLoadMore = this.handleLoadMore.bind(this);
+  }
 
   handleScroll (e) {
     const { scrollTop, scrollHeight, clientHeight } = e.target;
@@ -46,41 +26,41 @@ const StatusList = React.createClass({
     } else if (this.props.onScroll) {
       this.props.onScroll();
     }
-  },
+  }
 
   componentDidMount () {
     this.attachScrollListener();
-  },
+  }
 
   componentDidUpdate (prevProps) {
     if (this.node.scrollTop > 0 && (prevProps.statusIds.size < this.props.statusIds.size && prevProps.statusIds.first() !== this.props.statusIds.first() && !!this._oldScrollPosition)) {
       this.node.scrollTop = this.node.scrollHeight - this._oldScrollPosition;
     }
-  },
+  }
 
   componentWillUnmount () {
     this.detachScrollListener();
-  },
+  }
 
   attachScrollListener () {
     this.node.addEventListener('scroll', this.handleScroll);
-  },
+  }
 
   detachScrollListener () {
     this.node.removeEventListener('scroll', this.handleScroll);
-  },
+  }
 
   setRef (c) {
     this.node = c;
-  },
+  }
 
   handleLoadMore (e) {
     e.preventDefault();
     this.props.onScrollToBottom();
-  },
+  }
 
   render () {
-    const { statusIds, onScrollToBottom, trackScroll, isLoading, isUnread, hasMore, prepend, emptyMessage, squareMedia, expandMedia, standalone } = this.props;
+    const { statusIds, onScrollToBottom, scrollKey, shouldUpdateScroll, isLoading, isUnread, hasMore, prepend, emptyMessage, squareMedia, expandMedia, standalone } = this.props;
 
     let loadMore       = '';
     let scrollableArea = '';
@@ -99,11 +79,11 @@ const StatusList = React.createClass({
         <div className='scrollable' ref={this.setRef}>
           {unread}
 
-          <div>
+          <div className='status-list'>
             {prepend}
 
             {statusIds.map((statusId) => {
-              return <StatusContainer key={statusId} id={statusId} squareMedia={squareMedia} expandMedia={expandMedia} standalone={standalone} />;
+              return <StatusContainer key={statusId} scrollKey={scrollKey} id={statusId} squareMedia={squareMedia} expandMedia={expandMedia} standalone={standalone} />;
             })}
 
             {loadMore}
@@ -118,17 +98,36 @@ const StatusList = React.createClass({
       );
     }
 
-    if (trackScroll) {
-      return (
-        <ScrollContainer scrollKey='status-list'>
-          {scrollableArea}
-        </ScrollContainer>
-      );
-    } else {
-      return scrollableArea;
-    }
+    return (
+      <ScrollContainer scrollKey={scrollKey} shouldUpdateScroll={shouldUpdateScroll}>
+        {scrollableArea}
+      </ScrollContainer>
+    );
   }
 
-});
+}
+
+StatusList.propTypes = {
+  scrollKey: PropTypes.string.isRequired,
+  statusIds: ImmutablePropTypes.list.isRequired,
+  onScrollToBottom: PropTypes.func,
+  onScrollToTop: PropTypes.func,
+  onScroll: PropTypes.func,
+  shouldUpdateScroll: PropTypes.func,
+  isLoading: PropTypes.bool,
+  isUnread: PropTypes.bool,
+  hasMore: PropTypes.bool,
+  prepend: PropTypes.node,
+  emptyMessage: PropTypes.node,
+  expandMedia: PropTypes.bool,
+  squareMedia: PropTypes.bool,
+  standalone: PropTypes.bool,
+};
+
+StatusList.defaultProps = {
+  expandMedia: false,
+  squareMedia: false,
+  standalone: false
+};
 
 export default StatusList;

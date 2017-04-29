@@ -1,25 +1,23 @@
 import Immutable from 'immutable';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import IconButton from '../../../components/icon_button';
 
 const storageKey = 'announcements_dismissed';
 
-const Announcements = React.createClass({
-  propTypes: {
-    account: ImmutablePropTypes.map.isRequired,
-  },
+class Announcements extends React.PureComponent {
 
-  mixins: [PureRenderMixin],
+  constructor (props, context) {
+    super(props, context);
 
-  getInitialState () {
+    this.handleDismiss = this.handleDismiss.bind(this);
+
     try {
       const dismissed = JSON.parse(localStorage.getItem(storageKey));
-      return { dismissed: Array.isArray(dismissed) ? dismissed : [] };
+      this.state = { dismissed: Array.isArray(dismissed) ? dismissed : [] };
     } catch (e) {
-      return { dismissed: [] };
+      this.state = { dismissed: [] };
     }
-  },
+  }
 
   componentDidUpdate (prevProps, prevState) {
     if (prevState.dismissed !== this.state.dismissed) {
@@ -27,7 +25,7 @@ const Announcements = React.createClass({
         localStorage.setItem(storageKey, JSON.stringify(this.state.dismissed));
       } catch (e) {}
     }
-  },
+  }
 
   componentWillMount () {
     const announcements = [];
@@ -55,15 +53,15 @@ const Announcements = React.createClass({
     );
 
     this.announcements = Immutable.fromJS(announcements);
-  },
+  }
 
-  handleDismiss (event) {
+  handleDismiss(event) {
     const id = +event.currentTarget.getAttribute('title');
 
     if (Number.isInteger(id)) {
       this.setState({ dismissed: [].concat(this.state.dismissed, id) });
     }
-  },
+  }
 
   render () {
     return (
@@ -89,6 +87,10 @@ const Announcements = React.createClass({
       </ul>
     );
   }
-});
+};
+
+Announcements.propTypes = {
+  account: ImmutablePropTypes.map.isRequired
+};
 
 export default Announcements;

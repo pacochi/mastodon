@@ -1,8 +1,8 @@
 import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import PropTypes from 'prop-types';
 import Avatar from './avatar';
 import RelativeTimestamp from './relative_timestamp';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
 import DisplayName from './display_name';
 import MediaGallery from './media_gallery';
 import VideoPlayer from './video_player';
@@ -13,44 +13,24 @@ import { FormattedMessage } from 'react-intl';
 import emojify from '../emoji';
 import escapeTextContentForBrowser from 'escape-html';
 
-const Status = React.createClass({
-
-  contextTypes: {
-    router: React.PropTypes.object
-  },
-
-  propTypes: {
-    status: ImmutablePropTypes.map,
-    wrapped: React.PropTypes.bool,
-    onReply: React.PropTypes.func,
-    onFavourite: React.PropTypes.func,
-    onReblog: React.PropTypes.func,
-    onDelete: React.PropTypes.func,
-    onOpenMedia: React.PropTypes.func,
-    onOpenVideo: React.PropTypes.func,
-    onBlock: React.PropTypes.func,
-    me: React.PropTypes.number,
-    boostModal: React.PropTypes.bool,
-    autoPlayGif: React.PropTypes.bool,
-    expandMedia: React.PropTypes.bool,
-    squareMedia: React.PropTypes.bool,
-    standalone: React.PropTypes.bool,
-    muted: React.PropTypes.bool
-  },
-
-  mixins: [PureRenderMixin],
+class Status extends React.PureComponent {
+  constructor (props, context) {
+    super(props, context);
+    this.handleClick = this.handleClick.bind(this);
+    this.handleAccountClick = this.handleAccountClick.bind(this);
+  }
 
   handleClick () {
     const { status } = this.props;
     this.context.router.push(`/statuses/${status.getIn(['reblog', 'id'], status.get('id'))}`);
-  },
+  }
 
   handleAccountClick (id, e) {
     if (e.button === 0) {
       e.preventDefault();
       this.context.router.push(`/accounts/${id}`);
     }
-  },
+  }
 
   render () {
     let media = '';
@@ -70,10 +50,10 @@ const Status = React.createClass({
       const displayNameHTML = { __html: emojify(escapeTextContentForBrowser(displayName)) };
 
       return (
-        <div style={{ cursor: 'default' }}>
+        <div className='status__wrapper'>
           <div className='status__prepend'>
-            <div style={{ position: 'absolute', 'left': '-26px'}}><i className='fa fa-fw fa-retweet' /></div>
-            <FormattedMessage id='status.reblogged_by' defaultMessage='{name} reblogged' values={{ name: <a onClick={this.handleAccountClick.bind(this, status.getIn(['account', 'id']))} href={status.getIn(['account', 'url'])} className='status__display-name muted'><strong dangerouslySetInnerHTML={displayNameHTML} /></a> }} />
+            <div className='status__prepend-icon-wrapper'><i className='fa fa-fw fa-retweet status__prepend-icon' /></div>
+            <FormattedMessage id='status.reblogged_by' defaultMessage='{name} boosted' values={{ name: <a onClick={this.handleAccountClick.bind(this, status.getIn(['account', 'id']))} href={status.getIn(['account', 'url'])} className='status__display-name muted'><strong dangerouslySetInnerHTML={displayNameHTML} /></a> }} />
           </div>
 
           <Status {...other} wrapped={true} status={status.get('reblog')} />
@@ -105,32 +85,30 @@ const Status = React.createClass({
       }
     }
 
-    let avatar = {};
+    let avatar = {
+      href: status.getIn(['account', 'url']),
+      className: 'status__display-name'
+    };
+
     if (standalone) {
-      avatar = {
-        href: status.getIn(['account', 'url']),
-        className: 'status__display-name',
-        style: { display: 'block', maxWidth: '100%', paddingRight: '25px' },
+      avatar = Object.assign(avatar, {
         target: '_blank'
-      };
+      });
     } else {
-      avatar ={
-        href: status.getIn(['account', 'url']),
-        className: 'status__display-name',
-        style: { display: 'block', maxWidth: '100%', paddingRight: '25px' },
+      avatar = Object.assign({
         onClick: this.handleAccountClick.bind(this, status.getIn(['account', 'id']))
-      };
+      });
     }
 
     return (
       <div className={this.props.muted ? 'status muted' : 'status'}>
-        <div style={{ fontSize: '15px' }}>
-          <div style={{ float: 'right', fontSize: '13px' }}>
+        <div className='status__info'>
+          <div className='status__info-time'>
             <a href={status.get('url')} className='status__relative-time' target='_blank' rel='noopener'><RelativeTimestamp timestamp={status.get('created_at')} /></a>
           </div>
 
           <a {...avatar}>
-            <div className='status__avatar' style={{ position: 'absolute', left: '10px', top: '10px', width: '48px', height: '48px' }}>
+            <div className='status__avatar'>
               <Avatar src={status.getIn(['account', 'avatar'])} staticSrc={status.getIn(['account', 'avatar_static'])} size={48} />
             </div>
 
@@ -147,6 +125,29 @@ const Status = React.createClass({
     );
   }
 
-});
+}
+
+Status.contextTypes = {
+  router: PropTypes.object
+};
+
+Status.propTypes = {
+  status: ImmutablePropTypes.map,
+  wrapped: PropTypes.bool,
+  onReply: PropTypes.func,
+  onFavourite: PropTypes.func,
+  onReblog: PropTypes.func,
+  onDelete: PropTypes.func,
+  onOpenMedia: PropTypes.func,
+  onOpenVideo: PropTypes.func,
+  onBlock: PropTypes.func,
+  me: PropTypes.number,
+  boostModal: PropTypes.bool,
+  autoPlayGif: PropTypes.bool,
+  muted: PropTypes.bool,
+  expandMedia: PropTypes.bool,
+  squareMedia: PropTypes.bool,
+  standalone: PropTypes.bool
+};
 
 export default Status;

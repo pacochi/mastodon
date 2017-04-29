@@ -1,12 +1,13 @@
 - content_for :header_tags do
   %script#initial-state{:type => 'application/json'}!= json_escape('{"meta": {"appmode": "about"}}')
-  = javascript_include_tag 'application_public', integrity: true
+  = javascript_include_tag 'application_public', integrity: true, crossorigin: 'anonymous'
 
 - content_for :page_title do
   = site_hostname
 
 - content_for :header_tags do
   %meta{ property: 'og:site_name', content: site_title }/
+  %meta{ property: 'og:url', content: about_url }/
   %meta{ property: 'og:type', content: 'website' }/
   %meta{ property: 'og:title', content: Rails.configuration.x.local_domain }/
   %meta{ property: 'og:description', content: strip_tags(@instance_presenter.site_description.blank? ? t('about.about_mastodon') : @instance_presenter.site_description) }/

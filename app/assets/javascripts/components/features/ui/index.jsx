@@ -1,6 +1,6 @@
 import ColumnsArea from './components/columns_area';
 import NotificationsContainer from './containers/notifications_container';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PropTypes from 'prop-types';
 import LoadingBarContainer from './containers/loading_bar_container';
 import HomeTimeline from '../home_timeline';
 import Compose from '../compose';
@@ -15,33 +15,28 @@ import { refreshTimeline } from '../../actions/timelines';
 import { refreshNotifications } from '../../actions/notifications';
 import UploadArea from './components/upload_area';
 
-const UI = React.createClass({
+class UI extends React.PureComponent {
 
-  propTypes: {
-    intent: React.PropTypes.bool,
-    dispatch: React.PropTypes.func.isRequired,
-    children: React.PropTypes.node
-  },
-
-  getDefaultProps () {
-    return {
-      intent: false
-    };
-  },
-
-  getInitialState () {
-    return {
+  constructor (props, context) {
+    super(props, context);
+    this.state = {
       width: window.innerWidth,
       draggingOver: false
     };
-  },
-
-  mixins: [PureRenderMixin],
+    this.handleResize = this.handleResize.bind(this);
+    this.handleDragEnter = this.handleDragEnter.bind(this);
+    this.handleDragOver = this.handleDragOver.bind(this);
+    this.handleDrop = this.handleDrop.bind(this);
+    this.handleDragLeave = this.handleDragLeave.bind(this);
+    this.handleDragEnd = this.handleDragLeave.bind(this)
+    this.closeUploadModal = this.closeUploadModal.bind(this)
+    this.setRef = this.setRef.bind(this);
+  }
 
   @debounce(500)
   handleResize () {
     this.setState({ width: window.innerWidth });
-  },
+  }
 
   handleDragEnter (e) {
     e.preventDefault();
@@ -54,10 +49,10 @@ const UI = React.createClass({
       this.dragTargets.push(e.target);
     }
 
-    if (e.dataTransfer && e.dataTransfer.items.length > 0) {
+    if (e.dataTransfer && e.dataTransfer.types.includes('Files')) {
       this.setState({ draggingOver: true });
     }
-  },
+  }
 
   handleDragOver (e) {
     e.preventDefault();
@@ -70,7 +65,7 @@ const UI = React.createClass({
     }
 
     return false;
-  },
+  }
 
   handleDrop (e) {
     e.preventDefault();
@@ -80,7 +75,7 @@ const UI = React.createClass({
     if (e.dataTransfer && e.dataTransfer.files.length === 1) {
       this.props.dispatch(uploadCompose(e.dataTransfer.files));
     }
-  },
+  }
 
   handleDragLeave (e) {
     e.preventDefault();
@@ -93,7 +88,11 @@ const UI = React.createClass({
     }
 
     this.setState({ draggingOver: false });
-  },
+  }
+
+  closeUploadModal() {
+    this.setState({ draggingOver: false });
+  }
 
   componentWillMount () {
     window.addEventListener('resize', this.handleResize, { passive: true });
@@ -101,12 +100,13 @@ const UI = React.createClass({
     document.addEventListener('dragover', this.handleDragOver, false);
     document.addEventListener('drop', this.handleDrop, false);
     document.addEventListener('dragleave', this.handleDragLeave, false);
+    document.addEventListener('dragend', this.handleDragEnd, false);
 
     if (!this.props.intent) {
       this.props.dispatch(refreshTimeline('home'));
       this.props.dispatch(refreshNotifications());
     }
-  },
+  }
 
   componentWillUnmount () {
     window.removeEventListener('resize', this.handleResize);
@@ -114,11 +114,12 @@ const UI = React.createClass({
     document.removeEventListener('dragover', this.handleDragOver);
     document.removeEventListener('drop', this.handleDrop);
     document.removeEventListener('dragleave', this.handleDragLeave);
-  },
+    document.removeEventListener('dragend', this.handleDragEnd);
+  }
 
   setRef (c) {
     this.node = c;
-  },
+  }
 
   render () {
     const { width, draggingOver } = this.state;
@@ -140,9 +141,9 @@ const UI = React.createClass({
       mountedColumns = (
         <ColumnsArea>
           <Compose withHeader={true} />
-          <HomeTimeline trackScroll={false} />
-          <Notifications trackScroll={false} />
-          {children}
+          <HomeTimeline shouldUpdateScroll={() => false} />
+          <Notifications shouldUpdateScroll={() => false} />
+          <div style={{display: 'flex', flex: '1 1 auto', position: 'relative'}}>{children}</div>
         </ColumnsArea>
       );
     }
@@ -156,11 +157,21 @@ const UI = React.createClass({
         <NotificationsContainer />
         <LoadingBarContainer className="loading-bar" />
         <ModalContainer />
-        <UploadArea active={draggingOver} />
+        <UploadArea active={draggingOver} onClose={this.closeUploadModal} />
       </div>
     );
   }
 
-});
+}
+
+UI.defaultProps = {
+  intent: false
+};
+
+UI.propTypes = {
+  intent: PropTypes.bool,
+  dispatch: PropTypes.func.isRequired,
+  children: PropTypes.node
+};
 
 export default connect()(UI);

@@ -26,7 +26,8 @@ module PixivUrl
         return unless response.status == 200
 
         html = Nokogiri::HTML.parse(response.body.to_s)
-        html.xpath('/html/head/meta[@property="twitter:image"]/@content').to_s
+        url = html.xpath('/html/head/meta[@property="twitter:image"]/@content').to_s
+        url if PixivUrl.valid_twitter_image?(url)
       end
 
       def client

@@ -3,11 +3,11 @@ ja:
   simple_form:
     hints:
       defaults:
-        avatar: 2MBまでのPNG・GIF・JPGが利用可能です、120x120pxに縮小されます
-        display_name: 30文字まで設定できます
-        header: 2MBまでのPNG・GIF・JPGが利用可能です、 700x335pxに縮小されます
-        locked: フォロワーを手動で承認する必要があります。また、デフォルトの投稿の公開範囲がフォロワーのみになります。
-        note: 160文字まで設定できます
+        avatar: 2MBまでのPNGやGIF、JPGが利用可能です。120x120pxまで縮小されます。
+        display_name: あと%{counter}文字入力できます。
+        header: 2MBまでのPNGやGIF、JPGが利用可能です。 700x335pxまで縮小されます。
+        locked: フォロワーを手動で承認する必要があります。デフォルトではトゥートの公開範囲はフォロワーのみです。
+        note: あと%{counter}文字入力できます。
       imports:
         data: 他の Mastodon サーバーからエクスポートしたCSVファイルを選択して下さい
       sessions:

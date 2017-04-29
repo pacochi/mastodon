@@ -1,5 +1,5 @@
 import { connect } from 'react-redux';
-import PureRenderMixin from 'react-addons-pure-render-mixin';
+import PropTypes from 'prop-types';
 import StatusListContainer from '../ui/containers/status_list_container';
 import Column from '../ui/components/column';
 import {
@@ -25,24 +25,7 @@ const mapStateToProps = state => ({
 
 let subscription;
 
-const CommunityTimeline = React.createClass({
-
-  propTypes: {
-    dispatch: React.PropTypes.func.isRequired,
-    intl: React.PropTypes.object.isRequired,
-    streamingAPIBaseURL: React.PropTypes.string,
-    accessToken: React.PropTypes.string,
-    hasUnread: React.PropTypes.bool,
-    standalone: React.PropTypes.bool,
-  },
-
-  mixins: [PureRenderMixin],
-
-  getDefaultProps () {
-    return {
-      standalone: false
-    };
-  },
+class CommunityTimeline extends React.PureComponent {
 
   componentDidMount () {
     const { dispatch, streamingAPIBaseURL, accessToken, standalone } = this.props;
@@ -84,15 +67,11 @@ const CommunityTimeline = React.createClass({
         dispatch(refreshTimeline('community'));
       }, 2000);
     }
-  },
+  }
 
   componentWillUnmount () {
-    // if (typeof subscription !== 'undefined') {
-    //   subscription.close();
-    //   subscription = null;
-    // }
     clearInterval(this.interval);
-  },
+  }
 
   render () {
     let heading;
@@ -112,11 +91,24 @@ const CommunityTimeline = React.createClass({
     return (
       <Column icon='users' active={hasUnread} heading={heading}>
         {!standalone && <ColumnBackButtonSlim />}
-        <StatusListContainer type='community' standalone={standalone} emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />} />
+        <StatusListContainer type='community' standalone={standalone} scrollKey='community_timeline' emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />} />
       </Column>
     );
-  },
+  }
 
-});
+}
+
+CommunityTimeline.propTypes = {
+  dispatch: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired,
+  streamingAPIBaseURL: PropTypes.string,
+  accessToken: PropTypes.string,
+  hasUnread: PropTypes.bool,
+  standalone: PropTypes.bool
+};
+
+CommunityTimeline.defaultProps = {
+  standalone: false
+};
 
 export default connect(mapStateToProps)(injectIntl(CommunityTimeline));
