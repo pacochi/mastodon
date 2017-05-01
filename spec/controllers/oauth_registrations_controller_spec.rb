@@ -55,6 +55,26 @@ RSpec.describe OauthRegistrationsController, type: :controller do
           [User.count, Account.count]
         }.from([0, 0]).to([1, 1])
       end
+
+      context 'when the email is duplicated' do
+        let!(:unlinked_user) { Fabricate(:user, email: auth.info.email) }
+
+        it 'redirect to login page with alert' do
+          subject.call
+          expect(response).to redirect_to new_user_session_path
+          expect(flash[:alert]).to eq I18n.t('oauth_registrations.already_registered')
+        end
+      end
+
+      context 'when the username is duplicated' do
+        let(:account) { Fabricate(:account, username: attributes[:username]) }
+        let!(:unlinked_user) { Fabricate(:user, email: "other-#{auth.info.email}", account: account) }
+
+        it 'render oauth registration page' do
+          subject.call
+          expect(response).to render_template(:new)
+        end
+      end
     end
   end
 end
