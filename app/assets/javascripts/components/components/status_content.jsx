@@ -35,8 +35,7 @@ class StatusContent extends React.PureComponent {
       } else if (link.textContent[0] === '#' || (link.previousSibling && link.previousSibling.textContent && link.previousSibling.textContent[link.previousSibling.textContent.length - 1] === '#')) {
         link.addEventListener('click', this.onHashtagClick.bind(this, link.text), false);
       } else if (media) {
-        link.innerHTML = '<i class="fa fa-fw fa-photo"></i>';
-        link.style = 'display: none;' // @norio: 不要なので消す
+        link.innerHTML = '';
       } else {
         link.setAttribute('target', '_blank');
         link.setAttribute('rel', 'noopener');
