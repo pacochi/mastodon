@@ -36,7 +36,6 @@ class StatusContent extends React.PureComponent {
         link.addEventListener('click', this.onHashtagClick.bind(this, link.text), false);
       } else if (media) {
         link.innerHTML = '<i class="fa fa-fw fa-photo"></i>';
-        link.style = 'display: none;' // @norio: 不要なので消す
       } else {
         link.setAttribute('target', '_blank');
         link.setAttribute('rel', 'noopener');
