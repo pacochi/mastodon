@@ -17,6 +17,10 @@ $button-icon-scale-ration-on-pc: 0.85;
   color: $color3;
 }
 
+.including-brand {
+  text-transform: none !important;
+}
+
 @media screen and (min-width: 1025px) {
   .status {
     .icon-button {
