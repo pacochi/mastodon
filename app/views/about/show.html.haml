@@ -36,7 +36,7 @@
 
       .simple_form.show_on_wide_display.signup
         = link_to new_user_registration_path do
-          %button Pawooをはじめる
+          %button.including-brand Pawooをはじめる
 
       .simple_form.hide_on_wide_display
         = render 'registration'
@@ -79,7 +79,7 @@
 
       .simple_form.signup
         = link_to new_user_registration_path do
-          %button Pawooをはじめる
+          %button.including-brand Pawooをはじめる
 
       %p.main{ style: 'margin-top:40px;' }
         = link_to t('about.about_this'), about_more_path, style: 'color:white'
