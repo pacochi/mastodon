@@ -23,6 +23,8 @@ module PixivUrl
 
     uri = Addressable::URI.parse(url)
     (PIXIV_URLS[uri.host] || []).include?(uri.path)
+  rescue Addressable::URI::InvalidURIError, TypeError
+    false
   end
 
   def self.valid_twitter_image?(url)
@@ -30,5 +32,7 @@ module PixivUrl
 
     uri = Addressable::URI.parse(url)
     PIXIV_IMAGE_HOSTS.include?(uri.host)
+  rescue Addressable::URI::InvalidURIError, TypeError
+    false
   end
 end
