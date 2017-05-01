@@ -15,7 +15,8 @@ child :account do
   extends 'api/v1/accounts/show'
 end
 
-child :media_attachments, object_root: false do
+# pawoo iOSが対応していないので、一時的に除外する。🍺 飲みたい
+child({ @object.media_attachments.reject(&:unknown?) => :media_attachments }, object_root: false) do
   extends 'api/v1/statuses/_media'
 end
 
