@@ -300,6 +300,8 @@ en:
     successfully_linked: Successfully linked
     failed_linking: Failed linking
     initial_password_usage_note_html: To change pixiv login, please %{link} at the first.
+  oauth_registrations:
+    already_registered: It has already been registered. After logging in with your e-mail address and password, please link with pixiv account from setting page.
   pagination:
     next: Next
     prev: Prev
