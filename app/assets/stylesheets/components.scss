@@ -2663,12 +2663,18 @@ button.icon-button.active i.fa-retweet {
     display: inline-block;
     color: $color1;
     text-decoration: none;
-    padding: 1px 10px 0;
+    padding: 1px 7px 0;
     border: solid 1px $color1;
     font-size: 10px;
     font-weight: 600;
     border-radius: 4px;
     margin-top: 5px;
+  }
+}
+
+.announcements__link {
+  & + .announcements__link {
+    margin-left: 3px;
   }
 }
 

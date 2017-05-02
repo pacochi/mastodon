@@ -29,26 +29,21 @@ class Announcements extends React.PureComponent {
 
   componentWillMount () {
     const announcements = [];
-    if (this.props.account.get('oauth_authentications').findIndex((a) => a.get('provider') === 'pixiv') === -1) {
-      announcements.push({
-        id: 0,
-        icon: '/announcements/icon_2x_360.png',
-        body: 'pixivアカウント連携機能を追加しました！ユーザー設定から連携できます',
-        link: { href: '/settings/oauth_authentications', body: 'ユーザー設定へ' }
-      });
-    }
 
     announcements.push(
       {
         id: 1,
         icon: '/announcements/icon_2x_360.png',
-        body: 'PawooのiOS版アプリをリリースしました！！',
-        link: { href: 'https://itunes.apple.com/us/app/%E3%83%9E%E3%82%B9%E3%83%88%E3%83%89%E3%83%B3%E3%82%A2%E3%83%97%E3%83%AA-pawoo/id1229070679?l=ja&ls=1&mt=8', body: 'Appストア へ' }
-      }, {
-        id: 2,
-        icon: '/announcements/icon_2x_360.png',
-        body: 'Android版アプリはこちらから！日々進化中～',
-        link: { href: 'https://play.google.com/store/apps/details?id=jp.pxv.pawoo&hl=ja', body: 'Google Playストア へ' }
+        body: 'PawooのiOS・Android版アプリをリリースしました！！',
+        link: [
+          {
+            href: 'https://itunes.apple.com/us/app/%E3%83%9E%E3%82%B9%E3%83%88%E3%83%89%E3%83%B3%E3%82%A2%E3%83%97%E3%83%AA-pawoo/id1229070679?l=ja&ls=1&mt=8',
+            body: 'Appストア'
+          }, {
+            href: 'https://play.google.com/store/apps/details?id=jp.pxv.pawoo&hl=ja',
+            body: 'Google Playストア'
+          }
+        ]
       }
     );
 
@@ -76,11 +71,17 @@ class Announcements extends React.PureComponent {
                 <IconButton icon='close' title={`${announcement.get('id')}`} onClick={this.handleDismiss} />
               </div>
               <p>{announcement.get('body')}</p>
-              {announcement.get('link') &&
-                <a href={announcement.getIn(['link', 'href'])} target='_blank'>
-                  {announcement.getIn(['link', 'body'])}
-                </a>
-              }
+              <p>
+                {
+                  announcement.get('link').map((link) =>
+                    (
+                    <a className='announcements__link' key={link.get('href')} href={link.get('href')} target='_blank'>
+                      {link.get('body')}
+                    </a>
+                    )
+                  )
+                }
+              </p>
             </div>
           </li>
         ))}
