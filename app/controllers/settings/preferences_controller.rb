@@ -35,6 +35,7 @@ class Settings::PreferencesController < ApplicationController
       :setting_boost_modal,
       :setting_auto_play_gif,
       notification_emails: %i(follow follow_request reblog favourite mention digest),
+      notification_firebase_cloud_messagings: %i(follow follow_request reblog favourite mention digest),
       interactions: %i(must_be_follower must_be_following)
     )
   end

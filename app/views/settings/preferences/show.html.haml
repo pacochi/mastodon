@@ -19,6 +19,15 @@
       = ff.input :digest, as: :boolean, wrapper: :with_label
 
   .fields-group
+    = f.simple_fields_for :notification_firebase_cloud_messagings, hash_to_object(current_user.settings.notification_firebase_cloud_messagings) do |ff|
+      = ff.input :follow, as: :boolean, wrapper: :with_label
+      = ff.input :follow_request, as: :boolean, wrapper: :with_label
+      = ff.input :reblog, as: :boolean, wrapper: :with_label
+      = ff.input :favourite, as: :boolean, wrapper: :with_label
+      = ff.input :mention, as: :boolean, wrapper: :with_label
+      = ff.input :digest, as: :boolean, wrapper: :with_label
+
+  .fields-group
     = f.simple_fields_for :interactions, hash_to_object(current_user.settings.interactions) do |ff|
       = ff.input :must_be_follower, as: :boolean, wrapper: :with_label
       = ff.input :must_be_following, as: :boolean, wrapper: :with_label
