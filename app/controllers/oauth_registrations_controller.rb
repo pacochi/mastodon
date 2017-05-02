@@ -15,6 +15,8 @@ class OauthRegistrationsController < DeviseController
     if @oauth_registration.save
       sign_in(@oauth_registration.user)
       redirect_to after_sign_in_path_for(@oauth_registration.user)
+    elsif @oauth_registration.errors.added?(:email, :taken)
+      redirect_to new_user_session_path, alert: t('.already_registered')
     else
       render :new, status: :unprocessable_entity
     end
