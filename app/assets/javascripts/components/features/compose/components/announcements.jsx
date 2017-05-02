@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { Link } from 'react-router';
 import IconButton from '../../../components/icon_button';
 
 const storageKey = 'announcements_dismissed';
@@ -29,26 +30,42 @@ class Announcements extends React.PureComponent {
 
   componentWillMount () {
     const announcements = [];
-    if (this.props.account.get('oauth_authentications').findIndex((a) => a.get('provider') === 'pixiv') === -1) {
-      announcements.push({
-        id: 0,
-        icon: '/announcements/icon_2x_360.png',
-        body: 'pixivアカウント連携機能を追加しました！ユーザー設定から連携できます',
-        link: { href: '/settings/oauth_authentications', body: 'ユーザー設定へ' }
-      });
-    }
 
     announcements.push(
       {
         id: 1,
         icon: '/announcements/icon_2x_360.png',
-        body: 'PawooのiOS版アプリをリリースしました！！',
-        link: { href: 'https://itunes.apple.com/us/app/%E3%83%9E%E3%82%B9%E3%83%88%E3%83%89%E3%83%B3%E3%82%A2%E3%83%97%E3%83%AA-pawoo/id1229070679?l=ja&ls=1&mt=8', body: 'Appストア へ' }
+        body: 'PawooのiOS・Android版アプリをリリースしました！！',
+        link: [
+          {
+            reactRouter: false,
+            inline: true,
+            href: 'https://itunes.apple.com/us/app/%E3%83%9E%E3%82%B9%E3%83%88%E3%83%89%E3%83%B3%E3%82%A2%E3%83%97%E3%83%AA-pawoo/id1229070679?l=ja&ls=1&mt=8',
+            body: 'Appストア'
+          }, {
+            reactRouter: false,
+            inline: true,
+            href: 'https://play.google.com/store/apps/details?id=jp.pxv.pawoo&hl=ja',
+            body: 'Google Playストア'
+          }
+        ]
       }, {
-        id: 2,
+        id: 4,
         icon: '/announcements/icon_2x_360.png',
-        body: 'Android版アプリはこちらから！日々進化中～',
-        link: { href: 'https://play.google.com/store/apps/details?id=jp.pxv.pawoo&hl=ja', body: 'Google Playストア へ' }
+        body: '開催中の企画に参加しよう！',
+        link: [
+          {
+            reactRouter: true,
+            inline: false,
+            href: '/timelines/tag/pawoo人増えたし自己紹介しようぜ',
+            body: '#pawoo人増えたし自己紹介しようぜ'
+          }, {
+            reactRouter: true,
+            inline: false,
+            href: '/timelines/tag/pawoo_maintain',
+            body: '#pawoo_maintain'
+          }
+        ]
       }
     );
 
@@ -76,11 +93,29 @@ class Announcements extends React.PureComponent {
                 <IconButton icon='close' title={`${announcement.get('id')}`} onClick={this.handleDismiss} />
               </div>
               <p>{announcement.get('body')}</p>
-              {announcement.get('link') &&
-                <a href={announcement.getIn(['link', 'href'])} target='_blank'>
-                  {announcement.getIn(['link', 'body'])}
-                </a>
-              }
+              <p>
+                {announcement.get('link').map((link) => {
+                  const classNames = ['announcements__link']
+
+                  if (link.get('inline')) {
+                    classNames.push('announcements__link-inline')
+                  }
+
+                  if (link.get('reactRouter')) {
+                    return (
+                      <Link key={link.get('href')} className={classNames.join(' ')} to={link.get('href')}>
+                        {link.get('body')}
+                      </Link>
+                    );
+                  } else {
+                    return (
+                      <a className={classNames.join(' ')} key={link.get('href')} href={link.get('href')} target='_blank'>
+                        {link.get('body')}
+                      </a>
+                    );
+                  }
+                })}
+              </p>
             </div>
           </li>
         ))}
