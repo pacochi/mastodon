@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import { Link } from 'react-router';
 import IconButton from '../../../components/icon_button';
 
 const storageKey = 'announcements_dismissed';
@@ -37,11 +38,32 @@ class Announcements extends React.PureComponent {
         body: 'PawooのiOS・Android版アプリをリリースしました！！',
         link: [
           {
+            reactRouter: false,
+            inline: true,
             href: 'https://itunes.apple.com/us/app/%E3%83%9E%E3%82%B9%E3%83%88%E3%83%89%E3%83%B3%E3%82%A2%E3%83%97%E3%83%AA-pawoo/id1229070679?l=ja&ls=1&mt=8',
             body: 'Appストア'
           }, {
+            reactRouter: false,
+            inline: true,
             href: 'https://play.google.com/store/apps/details?id=jp.pxv.pawoo&hl=ja',
             body: 'Google Playストア'
+          }
+        ]
+      }, {
+        id: 4,
+        icon: '/announcements/icon_2x_360.png',
+        body: '開催中の企画に参加しよう！',
+        link: [
+          {
+            reactRouter: true,
+            inline: false,
+            href: '/timelines/tag/pawoo人増えたし自己紹介しようぜ',
+            body: '#pawoo人増えたし自己紹介しようぜ'
+          }, {
+            reactRouter: true,
+            inline: false,
+            href: '/timelines/tag/pawoo_maintain',
+            body: '#pawoo_maintain'
           }
         ]
       }
@@ -72,15 +94,27 @@ class Announcements extends React.PureComponent {
               </div>
               <p>{announcement.get('body')}</p>
               <p>
-                {
-                  announcement.get('link').map((link) =>
-                    (
-                    <a className='announcements__link' key={link.get('href')} href={link.get('href')} target='_blank'>
-                      {link.get('body')}
-                    </a>
-                    )
-                  )
-                }
+                {announcement.get('link').map((link) => {
+                  const classNames = ['announcements__link']
+
+                  if (link.get('inline')) {
+                    classNames.push('announcements__link-inline')
+                  }
+
+                  if (link.get('reactRouter')) {
+                    return (
+                      <Link key={link.get('href')} className={classNames.join(' ')} to={link.get('href')}>
+                        {link.get('body')}
+                      </Link>
+                    );
+                  } else {
+                    return (
+                      <a className={classNames.join(' ')} key={link.get('href')} href={link.get('href')} target='_blank'>
+                        {link.get('body')}
+                      </a>
+                    );
+                  }
+                })}
               </p>
             </div>
           </li>
