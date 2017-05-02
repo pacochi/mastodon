@@ -18,10 +18,14 @@ class Rack::Attack
   throttle('reminder', limit: LIMIT, period: PERIOD) do |req|
     req.ip if req.path == '/auth/password' && req.post?
   end
-  
+
   # Rate limit forgotten passwords
   throttle('pixiv_omniauth', limit: LIMIT, period: PERIOD) do |req|
     req.ip if req.path == '/auth/oauth/pixiv' && req.get?
+  end
+
+  throttle('api_v1_accounts_follow', limit: LIMIT, period: PERIOD) do |req|
+    req.ip if req.path.match?(%r{/api/v1/accounts/\d+/follow}) && req.post?
   end
 
   self.throttled_response = lambda do |env|
