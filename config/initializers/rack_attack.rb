@@ -24,8 +24,13 @@ class Rack::Attack
     req.ip if req.path == '/auth/oauth/pixiv' && req.get?
   end
 
-  throttle('api_v1_accounts_follow', limit: LIMIT, period: PERIOD) do |req|
-    req.ip if req.path.match?(%r{/api/v1/accounts/\d+/follow}) && req.post?
+  # Rate limits for the API
+  throttle('api_accounts_follows', limit: 100, period: PERIOD) do |req|
+    req.ip if req.path =~ %r{\A/api/v1/accounts/\d+/follow}
+  end
+
+  throttle('api_accounts_unfollows', limit: 100, period: PERIOD) do |req|
+    req.ip if req.path =~ %r{\A/api/v1/accounts/\d+/unfollow}
   end
 
   self.throttled_response = lambda do |env|
