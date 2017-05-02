@@ -49,6 +49,6 @@ end
 
 # 必要になりそうだから置いておく
 Rack::Attack.blocklist('block fucking boy') do |req|
-  black_list = %w(118.241.187.114).freeze
+  black_list = %w(118.241.187.114 60.108.149.247).freeze
   black_list.include?(req.ip)
 end
