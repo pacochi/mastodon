@@ -17,6 +17,8 @@ class AboutController < ApplicationController
 
   def app_terms; end
 
+  def app_eula; end
+
   private
 
   def authenticate_no_user
