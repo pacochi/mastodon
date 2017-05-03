@@ -5,6 +5,7 @@ ExceptionNotification.configure do |config|
     ActionController::InvalidAuthenticityToken
     ActionController::BadRequest
     ActionController::UnknownFormat
+    ActionController::ParameterMissing
     ActiveRecord::RecordNotUnique
   )
 
