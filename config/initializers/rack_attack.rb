@@ -1,8 +1,40 @@
 # frozen_string_literal: true
 
+require 'doorkeeper/grape/authorization_decorator'
+
 class Rack::Attack
   LIMIT = 60
   PERIOD = 1.minute
+
+  BLACK_LIST_IPS = [
+    '118.241.187.114', # 不正アカウント作成
+    '60.108.149.247',  # botで負荷かける
+    '122.196.21.73',   # 不正アカウント作成
+    '153.203.141.229'  # 不正アカウント作成
+  ].freeze
+
+  # Always allow requests from localhost
+  # (blocklist & throttles are skipped)
+  safelist('allow from localhost') do |req|
+    # Requests are allowed if the return value is truthy
+    '127.0.0.1' == req.ip || '::1' == req.ip
+  end
+
+  blocklist('bot users') do |req|
+    BLACK_LIST_IPS.include?(req.ip)
+  end
+
+  # Rate limits for the API
+  # throttle('api_ip', limit: 300, period: PERIOD) do |req|
+  #   req.ip if req.path =~ /\A\/api\/v/
+  # end
+
+  # Rate limits for the API
+  throttle('api_access_token', limit: LIMIT, period: PERIOD) do |req|
+    # return access_token
+    decorated_request = Doorkeeper::Grape::AuthorizationDecorator.new(req)
+    Doorkeeper::OAuth::Token.from_request(decorated_request, *Doorkeeper.configuration.access_token_methods) if req.post?
+  end
 
   # Rate limit logins
   throttle('login', limit: LIMIT, period: PERIOD) do |req|
@@ -10,27 +42,13 @@ class Rack::Attack
   end
 
   # Rate limit sign-ups
-  throttle('register', limit: LIMIT, period: PERIOD) do |req|
+  throttle('register', limit: 15, period: 5.minutes) do |req|
     req.ip if req.path == '/auth' && req.post?
   end
 
   # Rate limit forgotten passwords
   throttle('reminder', limit: LIMIT, period: PERIOD) do |req|
     req.ip if req.path == '/auth/password' && req.post?
-  end
-
-  # Rate limit forgotten passwords
-  throttle('pixiv_omniauth', limit: LIMIT, period: PERIOD) do |req|
-    req.ip if req.path == '/auth/oauth/pixiv' && req.get?
-  end
-
-  # Rate limits for the API
-  throttle('api_accounts_follows', limit: 100, period: PERIOD) do |req|
-    req.ip if req.path =~ %r{\A/api/v1/accounts/\d+/follow}
-  end
-
-  throttle('api_accounts_unfollows', limit: 100, period: PERIOD) do |req|
-    req.ip if req.path =~ %r{\A/api/v1/accounts/\d+/unfollow}
   end
 
   self.throttled_response = lambda do |env|
@@ -43,12 +61,6 @@ class Rack::Attack
       'X-RateLimit-Reset'     => (now + (match_data[:period] - now.to_i % match_data[:period])).iso8601(6),
     }
 
-    [429, headers, [{ error: 'Throttled' }.to_json]]
+    [429, headers, [{ error: I18n.t('errors.429.throttled') }.to_json]]
   end
-end
-
-# 必要になりそうだから置いておく
-Rack::Attack.blocklist('block fucking boy') do |req|
-  black_list = %w(118.241.187.114 60.108.149.247 122.196.21.73 153.203.141.229).freeze
-  black_list.include?(req.ip)
 end

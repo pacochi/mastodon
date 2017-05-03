@@ -231,6 +231,8 @@ ja:
     '422':
       content: セキュリティ認証に失敗しました。Cookieをブロックしていませんか？
       title: セキュリティ認証に失敗
+    '429':
+      throttled: リクエスト制限に達しました。数分ほどお待ちください。
   exports:
     blocks: ブロック
     csv: CSV
