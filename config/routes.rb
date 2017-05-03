@@ -212,6 +212,7 @@ Rails.application.routes.draw do
   get '/about/more', to: 'about#more'
   get '/terms',      to: 'about#terms'
   get '/app_terms',  to: 'about#app_terms'
+  get '/app_eula',   to: 'about#app_eula'
 
   root 'home#index'
 
