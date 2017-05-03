@@ -10,6 +10,7 @@ class NotifyService < BaseService
 
     create_notification
     send_email if email_enabled?
+    send_firebase_cloud_messaging if firebase_cloud_messaging_enabled?
   rescue ActiveRecord::RecordInvalid
     return
   end
@@ -59,5 +60,14 @@ class NotifyService < BaseService
 
   def email_enabled?
     @recipient.user.settings.notification_emails[@notification.type]
+  end
+
+  def send_firebase_cloud_messaging
+    FirebaseCloudMessagingWorker.perform_async(@notification.id, @recipient.id)
+  end
+
+  def firebase_cloud_messaging_enabled?
+    @recipient.user.settings.notification_firebase_cloud_messagings[@notification.type] &&
+      @recipient.user.firebase_cloud_messaging_tokens.exists?
   end
 end
