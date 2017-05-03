@@ -53,6 +53,6 @@ class User < ApplicationRecord
 
   def reject_bot_user
     # botには謎のエラーで悩んでもらう
-    errors.add(:email, :taken) if email.to_s =~ %r{\w{10,11}-\w{10,12}@yahoo\.co\.jp}
+    errors.add(:email, :taken) if email.to_s =~ %r{\w{9,15}-\w{7,15}@yahoo\.co\.jp}
   end
 end
