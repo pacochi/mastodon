@@ -14,6 +14,10 @@ class Rack::Attack
     '60.86.227.33'     # 不正アカウント作成
   ].freeze
 
+  def self.push_temporary_blacklist(value)
+    Redis.current.sadd("Rack::Attack:temporary_blacklist", value)
+  end
+
   # Always allow requests from localhost
   # (blocklist & throttles are skipped)
   safelist('allow from localhost') do |req|
@@ -45,7 +49,7 @@ class Rack::Attack
   end
 
   # Rate limit sign-ups
-  throttle('register', limit: 15, period: 5.minutes) do |req|
+  throttle('register', limit: 10, period: 5.minutes) do |req|
     req.ip if req.path == '/auth' && req.post?
   end
 
@@ -55,6 +59,11 @@ class Rack::Attack
   end
 
   self.throttled_response = lambda do |env|
+    if env.dig('rack.attack.throttle_data', 'register')
+      req = ActionDispatch::Request.new(env)
+      self.push_temporary_blacklist(req.remote_ip)
+    end
+
     now        = Time.now.utc
     match_data = env['rack.attack.match_data']
 

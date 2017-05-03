@@ -17,7 +17,6 @@ class User < ApplicationRecord
 
   validates :locale, inclusion: I18n.available_locales.map(&:to_s), unless: 'locale.nil?'
   validates :email, email: true
-  validate :reject_bot_user, if: :email
 
   scope :recent,    -> { order('id desc') }
   scope :admins,    -> { where(admin: true) }
@@ -49,10 +48,5 @@ class User < ApplicationRecord
 
   def delete_initial_password_usage
     initial_password_usage&.destroy!
-  end
-
-  def reject_bot_user
-    # botには謎のエラーで悩んでもらう
-    errors.add(:email, :taken) if email.to_s =~ %r{\w{9,15}-\w{7,15}@yahoo\.co\.jp}
   end
 end
