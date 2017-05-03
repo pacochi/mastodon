@@ -31,6 +31,8 @@ class Rack::Attack
 
   # Rate limits for the API
   throttle('api_access_token', limit: LIMIT, period: PERIOD) do |req|
+    next unless req.post? && req.path.start_with?('/api/v1')
+
     # return access_token
     decorated_request = Doorkeeper::Grape::AuthorizationDecorator.new(req)
     Doorkeeper::OAuth::Token.from_request(decorated_request, *Doorkeeper.configuration.access_token_methods) if req.post?
