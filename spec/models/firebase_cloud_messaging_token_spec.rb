@@ -8,7 +8,7 @@ RSpec.describe FirebaseCloudMessagingToken, type: :model do
         dupped = instance.dup
         dupped.valid?
 
-        expect(dupped.errors).to be_added(:token, :taken)
+        expect(dupped.errors).to be_added(:user_id, :taken)
       end
 
       it 'is token format' do
