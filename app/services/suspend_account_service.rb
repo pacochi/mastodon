@@ -25,7 +25,7 @@ class SuspendAccountService < BaseService
       @account.active_relationships,
       @account.passive_relationships
     ].each do |association|
-      destroy_all_in_stand_alone_transaction(association)
+      destroy_all(association)
     end
   end
 
@@ -39,10 +39,10 @@ class SuspendAccountService < BaseService
   end
 
   def unsubscribe_push_subscribers
-    destroy_all_in_stand_alone_transaction(@account.subscriptions)
+    destroy_all(@account.subscriptions)
   end
 
-  def destroy_all_in_stand_alone_transaction(association)
-    association.find_each(&:destroy)
+  def destroy_all(association)
+    association.in_batches.destroy_all
   end
 end
