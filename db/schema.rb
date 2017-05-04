@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170502014349) do
+ActiveRecord::Schema.define(version: 20170504132111) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -84,8 +84,7 @@ ActiveRecord::Schema.define(version: 20170502014349) do
     t.integer "user_id",  null: false
     t.integer "platform", null: false
     t.string  "token",    null: false
-    t.index ["token"], name: "index_firebase_cloud_messaging_tokens_on_token", unique: true, using: :btree
-    t.index ["user_id"], name: "index_firebase_cloud_messaging_tokens_on_user_id", using: :btree
+    t.index ["user_id", "token"], name: "index_firebase_cloud_messaging_tokens_on_user_id_and_token", unique: true, using: :btree
   end
 
   create_table "follow_requests", force: :cascade do |t|

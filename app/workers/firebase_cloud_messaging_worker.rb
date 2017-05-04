@@ -3,6 +3,8 @@
 class FirebaseCloudMessagingWorker
   include Sidekiq::Worker
 
+  sidekiq_options queue: 'push'
+
   def perform(notification_id, recipient_id)
     @notification = Notification.find(notification_id)
     @recipient = Account.find(recipient_id)
