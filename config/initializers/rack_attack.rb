@@ -36,11 +36,15 @@ class Rack::Attack
 
   # Rate limits for the API
   throttle('api_access_token', limit: LIMIT, period: PERIOD) do |req|
-    next unless req.post? && req.path.start_with?('/api/v1')
+    next unless req.post? && req.path.start_with?('/api/v1') && (req.path =~ /follow/ || req.path == '/api/v1/statuses')
 
     # return access_token
     decorated_request = Doorkeeper::Grape::AuthorizationDecorator.new(req)
-    Doorkeeper::OAuth::Token.from_request(decorated_request, *Doorkeeper.configuration.access_token_methods) if req.post?
+    Doorkeeper::OAuth::Token.from_request(decorated_request, *Doorkeeper.configuration.access_token_methods)
+  end
+
+  throttle('accounts_follow_unfollow', limit: LIMIT, period: PERIOD) do |req|
+    req.ip if req.post? && req.path =~ %r{\A/users/[^/]+/(?:follow|unfollow)}
   end
 
   # Rate limit logins
