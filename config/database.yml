@@ -14,6 +14,7 @@ development:
 test:
   <<: *default
   database: pawoo_test<%= ENV['TEST_ENV_NUMBER'] %>
+  host: <%= ENV['DB_HOST'] %>
 
 production:
   <<: *default

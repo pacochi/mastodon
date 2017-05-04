@@ -1,0 +1,110 @@
+version: 2
+jobs:
+  build:
+    docker:
+      - image: pawoo/circleci-primary:20170608
+      - image: postgres:9.5.4
+        environment:
+          POSTGRES_USER: root
+      - image: redis:3.2.4
+    environment:
+      CONTINUOUS_INTEGRATION: true # for fuubar gem
+      DB_HOST: 127.0.0.1
+      LOCAL_DOMAIN: cb6e6126.ngrok.io
+      LOCAL_HTTPS: true
+      PATH: /root/.rbenv/shims:/usr/local/node/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+      RAILS_ENV: test
+    working_directory: /app
+    parallelism: 2
+    steps:
+      - checkout
+      - run: ./.circleci/primary/setup.sh
+      - run: mkdir -p tmp/circleci/db
+      - run: git merge-base $CIRCLE_SHA1 origin/master | tee tmp/circleci/master.hash
+
+      # Bundler
+      - restore_cache:
+          key: bundler/{{ checksum ".ruby-version" }}.{{ checksum "Gemfile.lock" }}/3
+      - run: bundle check || bundle install --without development production --retry=3 --path=vendor/bundle
+      - run:
+          command: ./bin/spring server
+          background: true
+      - run:
+          name: Wake up spring [application_manager:test]
+          command: sleep 1; ./bin/rails r "puts 'Hello!'"; ./bin/spring status
+          background: true
+      - save_cache:
+          key: bundler/{{ checksum ".ruby-version" }}.{{ checksum "Gemfile.lock" }}/3
+          paths:
+            - vendor/bundle
+            - .bundle/config
+
+      # yarn
+      - restore_cache:
+          key: yarn/{{ checksum ".nvmrc" }}.{{ checksum "yarn.lock" }}/1
+      - run: yarn install
+      - save_cache:
+          key: yarn/{{ checksum ".nvmrc" }}.{{ checksum "yarn.lock" }}/1
+          paths:
+            - ~/.cache/.yarn
+            - node_modules
+
+      # Start assets precompilation
+      - restore_cache:
+          key: assets/{{ checksum "tmp/circleci/master.hash" }}/1
+      - run:
+          command: ./bin/rake assets:precompile assets:clean && touch tmp/circleci/assets.done
+          background: true
+
+      # Database schema
+      - restore_cache:
+          key: db/{{ checksum "tmp/circleci/master.hash" }}/1
+      - run:
+          name: Wait for PostgreSQL container
+          command: |
+            for i in $(seq 60); do
+              if nc -z $DB_HOST 5432; then
+                exit 0
+              fi
+              sleep 0.5
+            done
+            exit 1
+      - run:
+          name: Create Database
+          command: |
+            sql=tmp/circleci/db/$(cat tmp/circleci/master.hash).sql
+            if [ -f $sql ]; then
+              psql -h $DB_HOST < $sql
+            else
+              ./bin/rails db:create
+            fi
+      - run: ./bin/rails db:migrate
+      - run: pg_dump --create --host=$DB_HOST --file=tmp/circleci/db/$(cat tmp/circleci/master.hash).sql pawoo_test
+      - save_cache:
+          key: db/{{ checksum "tmp/circleci/master.hash" }}/1
+          paths:
+            - tmp/circleci/db
+
+      # Wait for assets precompilation
+      - run:
+          name: Wait for assets precompilation
+          command: |
+            for i in $(seq 120); do
+              if [ -f tmp/circleci/assets.done ]; then
+                exit 0
+              fi
+              sleep 0.5;
+            done
+            exit 1
+      - save_cache:
+          key: assets/{{ checksum "tmp/circleci/master.hash" }}/1
+          paths:
+            - public/assets
+            - public/packs
+            - tmp/cache/assets
+
+      # Run tests
+      - run: ./bin/rspec --profile -- $(circleci tests glob spec/**/*_spec.rb | circleci tests split --split-by=filesize)
+      - run: if [ $CIRCLE_NODE_INDEX = 0 ]; then npm test; fi
+
+      - run: ./bin/spring stop
