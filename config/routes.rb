@@ -61,6 +61,7 @@ Rails.application.routes.draw do
     resources :oauth_authentications, only: [:index, :destroy]
     resource :profile, only: [:show, :update]
     resource :preferences, only: [:show, :update]
+    resource :push_notification_preferences, only: [:show, :update]
     resource :import, only: [:show, :create]
 
     resource :export, only: [:show]
@@ -161,6 +162,7 @@ Rails.application.routes.draw do
       resources :favourites, only: [:index]
       resources :reports,    only: [:index, :create]
       resources :pixiv_twitter_images, only: [:create]
+      resources :firebase_cloud_messaging_tokens, only: [:create]
 
       resource :instance, only: [:show]
 

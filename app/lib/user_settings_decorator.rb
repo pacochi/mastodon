@@ -16,6 +16,7 @@ class UserSettingsDecorator
 
   def process_update
     user.settings['notification_emails'] = merged_notification_emails
+    user.settings['notification_firebase_cloud_messagings'] = merged_notification_firebase_cloud_messagings
     user.settings['interactions'] = merged_interactions
     user.settings['default_privacy'] = default_privacy_preference
     user.settings['boost_modal'] = boost_modal_preference
@@ -24,6 +25,10 @@ class UserSettingsDecorator
 
   def merged_notification_emails
     user.settings['notification_emails'].merge coerced_settings('notification_emails').to_h
+  end
+
+  def merged_notification_firebase_cloud_messagings
+    user.settings['notification_firebase_cloud_messagings'].merge coerced_settings('notification_firebase_cloud_messagings').to_h
   end
 
   def merged_interactions
