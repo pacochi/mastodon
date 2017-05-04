@@ -15,8 +15,13 @@ module ApplicationHelper
   end
 
   def favicon_path
-    env_suffix = Rails.env.production? ? '' : '-dev'
-    asset_path "favicon#{env_suffix}.ico"
+    path = if Rails.env.production?
+             'favicon.png'
+           else
+             'favicon-dev.ico'
+           end
+
+    asset_path(path)
   end
 
   def title
