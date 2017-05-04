@@ -45,7 +45,6 @@ ja:
         mention: 返信された時にメールで通知
         reblog: ブーストされた時にメールで通知
       notification_firebase_cloud_messagings:
-        digest: タイムラインの要約をアプリで通知
         favourite: いいねされた時にアプリで通知
         follow: フォローされた時にアプリで通知
         follow_request: フォローリクエストを受けた時にアプリで通知

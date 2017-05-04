@@ -322,6 +322,7 @@ en:
     import: Import
     oauth_authentications: pixiv Login
     preferences: Preferences
+    push_notification_preferences: Notification Preferences
     settings: Settings
     two_factor_authentication: Two-factor Authentication
   statuses:

@@ -67,7 +67,7 @@ class NotifyService < BaseService
   end
 
   def firebase_cloud_messaging_enabled?
-    @recipient.user.settings.notification_firebase_cloud_messagings[@notification.type] &&
+    @recipient.user.settings.notification_firebase_cloud_messagings[@notification.type.to_s] &&
       @recipient.user.firebase_cloud_messaging_tokens.exists?
   end
 end

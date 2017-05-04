@@ -24,12 +24,11 @@ defaults: &defaults
     follow_request: true
     digest: true
   notification_firebase_cloud_messagings:
-    follow: false
-    reblog: false
-    favourite: false
-    mention: false
+    follow: true
+    reblog: true
+    favourite: true
+    mention: true
     follow_request: true
-    digest: true
   interactions:
     must_be_follower: false
     must_be_following: false
