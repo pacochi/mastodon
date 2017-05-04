@@ -4,16 +4,19 @@ class Status < ApplicationRecord
   include Paginable
   include Streamable
   include Cacheable
+  include NoDeadlockCallbacks
 
   enum visibility: [:public, :unlisted, :private, :direct], _suffix: :visibility
 
   belongs_to :application, class_name: 'Doorkeeper::Application'
 
-  belongs_to :account, inverse_of: :statuses, counter_cache: true, required: true
+  belongs_to :account, inverse_of: :statuses, required: true
+  no_deadlock_callback(:account, counter_cache: true)
   belongs_to :in_reply_to_account, foreign_key: 'in_reply_to_account_id', class_name: 'Account'
 
   belongs_to :thread, foreign_key: 'in_reply_to_id', class_name: 'Status', inverse_of: :replies
-  belongs_to :reblog, foreign_key: 'reblog_of_id', class_name: 'Status', inverse_of: :reblogs, counter_cache: :reblogs_count
+  belongs_to :reblog, foreign_key: 'reblog_of_id', class_name: 'Status', inverse_of: :reblogs
+  no_deadlock_callback(:reblog, counter_cache: 'reblogs_count')
 
   has_many :favourites, inverse_of: :status, dependent: :destroy
   has_many :reblogs, foreign_key: 'reblog_of_id', class_name: 'Status', inverse_of: :reblog, dependent: :destroy
