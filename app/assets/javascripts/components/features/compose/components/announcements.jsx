@@ -66,6 +66,23 @@ class Announcements extends React.PureComponent {
             body: '#pawoo_maintain'
           }
         ]
+      }, {
+        id: 5,
+        icon: '/announcements/icon_2x_360.png',
+        body: 'イベント向けに使ってみてね',
+        link: [
+          {
+            reactRouter: true,
+            inline: false,
+            href: '/timelines/tag/コミティア120',
+            body: '#コミティア120'
+          }, {
+            reactRouter: true,
+            inline: false,
+            href: '/timelines/tag/例大祭14',
+            body: '#例大祭14'
+          }
+        ]
       }
     );
 
