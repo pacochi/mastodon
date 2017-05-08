@@ -335,6 +335,7 @@ ja:
       private: フォロワーのみに表示
       private_long: フォロワーにのみ表示されます
       public: 全体へ公開
+      public_long: 誰でも見ることができます
       unlisted: 全体へ公開するが、公開タイムラインには表示しない
       unlisted_long: 誰でも見ることができますが、公開タイムラインには表示されません
   stream_entries:
