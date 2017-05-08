@@ -4,18 +4,6 @@ class Notification < ApplicationRecord
   include Paginable
   include Cacheable
 
-  belongs_to :account
-  belongs_to :from_account, class_name: 'Account'
-  belongs_to :activity, polymorphic: true
-
-  belongs_to :mention,        foreign_type: 'Mention',       foreign_key: 'activity_id'
-  belongs_to :status,         foreign_type: 'Status',        foreign_key: 'activity_id'
-  belongs_to :follow,         foreign_type: 'Follow',        foreign_key: 'activity_id'
-  belongs_to :follow_request, foreign_type: 'FollowRequest', foreign_key: 'activity_id'
-  belongs_to :favourite,      foreign_type: 'Favourite',     foreign_key: 'activity_id'
-
-  validates :account_id, uniqueness: { scope: [:activity_type, :activity_id] }
-
   TYPE_CLASS_MAP = {
     mention:        'Mention',
     reblog:         'Status',
@@ -27,7 +15,25 @@ class Notification < ApplicationRecord
   STATUS_INCLUDES = [:stream_entry, :media_attachments, :tags, mentions: { account: :oauth_authentications },
                      reblog: [:stream_entry, :media_attachments, :tags, account: :oauth_authentications, mentions: { account: :oauth_authentications }], account: :oauth_authentications].freeze
 
+  belongs_to :account
+  belongs_to :from_account, class_name: 'Account'
+  belongs_to :activity, polymorphic: true
+
+  belongs_to :mention,        foreign_type: 'Mention',       foreign_key: 'activity_id'
+  belongs_to :status,         foreign_type: 'Status',        foreign_key: 'activity_id'
+  belongs_to :follow,         foreign_type: 'Follow',        foreign_key: 'activity_id'
+  belongs_to :follow_request, foreign_type: 'FollowRequest', foreign_key: 'activity_id'
+  belongs_to :favourite,      foreign_type: 'Favourite',     foreign_key: 'activity_id'
+
+  validates :account_id, uniqueness: { scope: [:activity_type, :activity_id] }
+  validates :activity_type, inclusion: { in: TYPE_CLASS_MAP.values }
+
   scope :cache_ids, -> { select(:id, :updated_at, :activity_type, :activity_id) }
+
+  scope :browserable, ->(exclude_types = []) {
+    types = TYPE_CLASS_MAP.values - activity_types_from_types(exclude_types + [:follow_request])
+    where(activity_type: types)
+  }
 
   cache_associated :from_account, status: STATUS_INCLUDES, mention: [status: STATUS_INCLUDES], favourite: [:account, status: STATUS_INCLUDES], follow: :account
 
@@ -53,11 +59,6 @@ class Notification < ApplicationRecord
   end
 
   class << self
-    def browserable(types = [])
-      types.concat([:follow_request])
-      where.not(activity_type: activity_types_from_types(types))
-    end
-
     def reload_stale_associations!(cached_items)
       account_ids = cached_items.map(&:from_account_id).uniq
       accounts    = Account.where(id: account_ids).map { |a| [a.id, a] }.to_h

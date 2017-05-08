@@ -12,7 +12,7 @@ Paperclip.interpolates :filename do |attachment, style|
   # extname = extension(attachment, style).to_s
   extname = content_type_extension(attachment, style) # if extname.blank? || wrong_extnames.include?(extname)
 
-  [basename(attachment, style), extname].delete_if(&:empty?).join('.')
+  [basename(attachment, style), extname].delete_if(&:blank?).join('.')
 end
 
 if ENV['S3_ENABLED'] == 'true'
