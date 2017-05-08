@@ -140,8 +140,9 @@
 
       = link_to image_tag('logo_pixiv.png', width: 50, style: 'display:block;margin:40px auto'), 'https://www.pixiv.net'
 
-  .about-col
-    = react_component 'Mastodon', default_props, class: 'app-holder', prerender: false
+  .about-col.right
+    .about-timeline-inner
+      = react_component 'Mastodon', default_props, class: 'app-holder', prerender: false
 
 :javascript
   userAgent = window.navigator.userAgent.toLowerCase();
