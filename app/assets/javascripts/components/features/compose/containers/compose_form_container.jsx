@@ -13,6 +13,7 @@ import {
 } from '../../../actions/compose';
 
 const mapStateToProps = state => ({
+  showSearch: state.getIn(['search', 'submitted']) && !state.getIn(['search', 'hidden']),
   text: state.getIn(['compose', 'text']),
   suggestion_token: state.getIn(['compose', 'suggestion_token']),
   suggestions: state.getIn(['compose', 'suggestions']),

@@ -140,6 +140,7 @@ class ComposeForm extends React.PureComponent {
     } else {
       publishText = intl.formatMessage(messages.publish) + (this.props.privacy !== 'unlisted' ? '!' : '');
     }
+    const { showSearch } = this.props;
 
     return (
       <div className='compose-form'>
@@ -166,6 +167,7 @@ class ComposeForm extends React.PureComponent {
             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
             onSuggestionSelected={this.onSuggestionSelected}
             onPaste={onPaste}
+            autoFocus={!showSearch}
           />
 
           <EmojiPickerDropdown onPickEmoji={this.handleEmojiPick} />
@@ -216,7 +218,13 @@ ComposeForm.propTypes = {
   onSuggestionSelected: PropTypes.func.isRequired,
   onChangeSpoilerText: PropTypes.func.isRequired,
   onPaste: PropTypes.func.isRequired,
-  onPickEmoji: PropTypes.func.isRequired
+  onPickEmoji: PropTypes.func.isRequired,
+  showSearch: PropTypes.bool,
 };
+
+ComposeForm.defaultProps = {
+    showSearch: false
+};
+
 
 export default injectIntl(ComposeForm);
