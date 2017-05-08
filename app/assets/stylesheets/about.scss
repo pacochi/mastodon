@@ -241,6 +241,13 @@
       font-weight: 500;
     }
 
+    h2.about-more-header {
+      a {
+        text-decoration: none;
+        color: $color5;
+      }
+    }
+
     .panel-body {
       padding: 14px;
     }
