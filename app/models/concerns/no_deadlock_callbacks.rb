@@ -19,7 +19,7 @@ module NoDeadlockCallbacks
 
       if association.target && !association.stale_target?
         # target has been loaded
-        association.target.increment!(counter_cache_column, by)
+        association.target.increment!(counter_cache_column, by) unless association.target.destroyed?
       else
         target_id = association.__send__(:target_id)
         association.klass.update_counters(target_id, counter_cache_column => by) if target_id
