@@ -7,7 +7,8 @@
   .omniauth
     = render 'oauth/authorizations/pixiv_auth', auth_type: 'signup'
 
-  .separate= t('simple_form.labels.omniauth.or')
+  .separate
+    %span= t('simple_form.labels.omniauth.or')
 
   = f.simple_fields_for :account do |ff|
     = ff.input :username, autofocus: true, placeholder: t('simple_form.labels.defaults.username'), required: true, input_html: { 'aria-label' => t('simple_form.labels.defaults.username') }
