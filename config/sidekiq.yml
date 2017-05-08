@@ -6,7 +6,3 @@
   - pull
   - mailers
   - remove
-:schedule:
-  subscriptions_scheduler:
-    cron: '0 5 * * *'
-    class: Scheduler::SubscriptionsScheduler
