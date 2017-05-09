@@ -2,11 +2,9 @@
 
 class Favourite < ApplicationRecord
   include Paginable
-  include NoDeadlockCallbacks
 
   belongs_to :account, inverse_of: :favourites, required: true
-  belongs_to :status,  inverse_of: :favourites, required: true
-  no_deadlock_callback(:status, counter_cache: true)
+  belongs_to :status,  inverse_of: :favourites, required: true, counter_cache: true
 
   has_one :notification, as: :activity, dependent: :destroy
 
