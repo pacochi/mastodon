@@ -65,10 +65,14 @@ class Formatter
     result = ''
 
     last_index = entities.reduce(0) do |index, entity|
-      normalized_url = Addressable::URI.parse(entity[:url]).normalize
       indices = entity[:indices]
       result += encode(chars[index...indices.first].join)
-      result += Twitter::Autolink.send(:link_to_text, entity, link_html(entity[:url]), normalized_url, html_attrs)
+      begin
+        normalized_url = Addressable::URI.parse(entity[:url]).normalize
+        result += Twitter::Autolink.send(:link_to_text, entity, link_html(entity[:url]), normalized_url, html_attrs)
+      rescue Addressable::URI::InvalidURIError
+        result += encode(entity[:url])
+      end
       indices.last
     end
     result += encode(chars[last_index..-1].join)
