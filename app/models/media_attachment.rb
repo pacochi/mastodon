@@ -52,6 +52,7 @@ class MediaAttachment < ApplicationRecord
   before_create :set_shortcode
   before_post_process :set_type_and_extension
   before_save :set_meta
+  after_validation :clean_up_paperclip_errors
 
   class << self
     private
@@ -144,5 +145,9 @@ class MediaAttachment < ApplicationRecord
     original_extension       = Paperclip::Interpolations.extension(file, :original)
 
     extensions_for_mime_type.include?(original_extension) ? original_extension : extensions_for_mime_type.first
+  end
+
+  def clean_up_paperclip_errors
+    errors.delete(:file)
   end
 end
