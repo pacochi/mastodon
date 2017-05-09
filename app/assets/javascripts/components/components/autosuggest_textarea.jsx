@@ -35,7 +35,7 @@ const textAtCursorMatchesHashToken = (str, caretPosition) => {
 const textAtCursorMatchesMentionToken = (str, caretPosition) => {
   const token = textAtCursorMatchesToken(str, caretPosition, '@');
   const start = token[0];
-  const word = token[1] === null ? null : token[1].trim();
+  const word = token[1] === null ? null : token[1].trim().toLowerCase();
   return [start, word]
 };
 
