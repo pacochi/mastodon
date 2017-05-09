@@ -114,9 +114,14 @@ export function submitCompose() {
       if (tags === null) {
         tags = statusTags;
       } else {
-        statusTags.filter(it => !tags.includes(it)).forEach(it => tags.push(it));
+        tags = tags.filter(it => !statusTags.includes(it));
+        statusTags.forEach(it => tags.push(it));
       }
-
+      const size = tags.length;
+      const maxSize = 1000;
+      for (let i = 0; i < Math.max(size - maxSize, 0); i++) {
+        tags.shift();
+      }
       const data = JSON.stringify(tags);
       localStorage.setItem('hash_tag_history', data);
     }).catch(function (error) {
@@ -253,7 +258,8 @@ export function fetchComposeHashTagSuggestions(token) {
     if (tags === null) {
       tags = [];
     }
-    const suggestions = tags.filter(it => it.startsWith(token));
+    const suggestionMaxSize = 4;
+    const suggestions = tags.filter(it => it.startsWith(token)).reverse().slice(0, suggestionMaxSize);
     dispatch(readyComposeHashTagSuggestions(token, suggestions));
   };
 };
