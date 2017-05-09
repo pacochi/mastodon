@@ -2,9 +2,6 @@
   %script#initial-state{:type => 'application/json'}!= json_escape('{"meta": {"appmode": "about"}}')
   = javascript_include_tag 'application_public', integrity: true, crossorigin: 'anonymous'
 
-- content_for :page_title do
-  = site_hostname
-
 - content_for :header_tags do
   %meta{ property: 'og:site_name', content: site_title }/
   %meta{ property: 'og:url', content: about_url }/
