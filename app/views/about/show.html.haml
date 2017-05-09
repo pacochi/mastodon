@@ -141,7 +141,7 @@
       = link_to image_tag('logo_pixiv.png', width: 50, style: 'display:block;margin:40px auto'), 'https://www.pixiv.net'
 
   .about-col.right
-    .about-timeline-inner
+    .about-timeline-container
       = react_component 'Mastodon', default_props, class: 'app-holder', prerender: false
 
 :javascript
@@ -151,3 +151,6 @@
   if(isMSIE) {
     alert('お使いのブラウザはサポートされていません。Microsoft Edge、Google Chromeなどをお試しください。');
   }
+
+  // タイムラインが伸びすぎないようにする
+  $('.about-timeline-container').height($('.about-col.main').height());
