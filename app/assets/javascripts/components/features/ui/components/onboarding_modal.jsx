@@ -46,6 +46,7 @@ const PageTwo = ({ me }) => (
       <ComposeForm
         text='Awoo! #introductions'
         suggestions={Immutable.List()}
+        hash_tag_suggestions={Immutable.List()}
         mentionedDomains={[]}
         spoiler={false}
         onChange={() => {}}
@@ -56,6 +57,9 @@ const PageTwo = ({ me }) => (
         onClearSuggestions={() => {}}
         onFetchSuggestions={() => {}}
         onSuggestionSelected={() => {}}
+        onHashTagSuggestionsClearRequested={() => {}}
+        onHashTagSuggestionsFetchRequested={() => {}}
+        onHashTagSuggestionsSelected={() => {}}
       />
     </div>
 

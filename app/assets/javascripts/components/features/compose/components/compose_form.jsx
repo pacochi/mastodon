@@ -35,6 +35,9 @@ class ComposeForm extends React.PureComponent {
     this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
     this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
     this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
+    this.onHashTagSuggestionsClearRequested = this.onHashTagSuggestionsClearRequested.bind(this);
+    this.onHashTagSuggestionsFetchRequested = this.onHashTagSuggestionsFetchRequested.bind(this);
+    this.onHashTagSuggestionsSelected = this.onHashTagSuggestionsSelected.bind(this);
     this.handleChangeSpoilerText = this.handleChangeSpoilerText.bind(this);
     this.setAutosuggestTextarea = this.setAutosuggestTextarea.bind(this);
     this.handleEmojiPick = this.handleEmojiPick.bind(this);
@@ -76,6 +79,20 @@ class ComposeForm extends React.PureComponent {
   onSuggestionSelected (tokenStart, token, value) {
     this._restoreCaret = null;
     this.props.onSuggestionSelected(tokenStart, token, value);
+  }
+
+  onHashTagSuggestionsClearRequested() {
+    this.props.onHashTagSuggestionsClearRequested();
+  }
+
+  @debounce(20)
+  onHashTagSuggestionsFetchRequested(token) {
+    this.props.onHashTagSuggestionsFetchRequested(token);
+  }
+
+  onHashTagSuggestionsSelected(tokenStart, token, value) {
+    this._restoreCaret = null;
+    this.props.onHashTagSuggestionsSelected(tokenStart, token, value);
   }
 
   handleChangeSpoilerText (e) {
@@ -162,10 +179,14 @@ class ComposeForm extends React.PureComponent {
             value={this.props.text}
             onChange={this.handleChange}
             suggestions={this.props.suggestions}
+            hash_tag_suggestions={this.props.hash_tag_suggestions}
             onKeyDown={this.handleKeyDown}
             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
             onSuggestionSelected={this.onSuggestionSelected}
+            onHashTagSuggestionsFetchRequested={this.onHashTagSuggestionsFetchRequested}
+            onHashTagSuggestionsClearRequested={this.onHashTagSuggestionsClearRequested}
+            onHashTagSuggestionsSelected={this.onHashTagSuggestionsSelected}
             onPaste={onPaste}
             autoFocus={!showSearch}
           />
@@ -203,6 +224,8 @@ ComposeForm.propTypes = {
   text: PropTypes.string.isRequired,
   suggestion_token: PropTypes.string,
   suggestions: ImmutablePropTypes.list,
+  hash_tag_suggestions: ImmutablePropTypes.list,
+  hash_tag_token: PropTypes.string,
   spoiler: PropTypes.bool,
   privacy: PropTypes.string,
   spoiler_text: PropTypes.string,
@@ -216,6 +239,9 @@ ComposeForm.propTypes = {
   onClearSuggestions: PropTypes.func.isRequired,
   onFetchSuggestions: PropTypes.func.isRequired,
   onSuggestionSelected: PropTypes.func.isRequired,
+  onHashTagSuggestionsClearRequested: PropTypes.func.isRequired,
+  onHashTagSuggestionsFetchRequested: PropTypes.func.isRequired,
+  onHashTagSuggestionsSelected: PropTypes.func.isRequired,
   onChangeSpoilerText: PropTypes.func.isRequired,
   onPaste: PropTypes.func.isRequired,
   onPickEmoji: PropTypes.func.isRequired,
