@@ -22,6 +22,16 @@ class Auth::SessionsController < Devise::SessionsController
 
   protected
 
+  # Overwriting the sign_out redirect path method
+  def after_sign_out_path_for(*)
+    if Rails.configuration.x.pixiv_endpoints[:www]
+      template = Addressable::Template.new("#{Rails.configuration.x.pixiv_endpoints[:www]}/logout.php?return_to=%{return_to}")
+      template.expand(return_to: root_url).to_s
+    else
+      super
+    end
+  end
+
   def find_user
     if session[:otp_user_id]
       User.find(session[:otp_user_id])

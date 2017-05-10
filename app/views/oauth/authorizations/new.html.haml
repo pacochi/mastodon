@@ -1,7 +1,7 @@
 - content_for :page_title do
   = t('doorkeeper.authorizations.new.title')
 
-.form-container
+.oauth-authentications-new.form-container
   .oauth-prompt
     %h2= t('doorkeeper.authorizations.new.prompt', client_name: @pre_auth.client.name)
 
@@ -24,3 +24,6 @@
     = hidden_field_tag :response_type, @pre_auth.response_type
     = hidden_field_tag :scope, @pre_auth.scope
     = button_tag t('doorkeeper.authorizations.buttons.deny'), type: :submit, class: 'negative'
+
+  = link_to destroy_user_session_url, class: 'signout', method: :delete do
+    = t('auth.logout')
