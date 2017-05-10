@@ -30,7 +30,7 @@ class Form::AccountFilter
   def search_by_keyword
     case search_type
     when 'name'
-      Account.where(id: Account.search_for(keyword, 30).map(&:id))
+      Account.where(id: Account.search_for(keyword, 40).map(&:id))
     when 'email'
       matches_email = User.where(User.arel_table[:email].matches("#{keyword}%"))
       Account.joins(:user).merge(matches_email)
