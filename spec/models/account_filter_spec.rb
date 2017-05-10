@@ -1,6 +1,32 @@
 require 'rails_helper'
 
 describe AccountFilter do
+  describe 'validations' do
+    subject(:filter) { AccountFilter.new(attributes) }
+
+    describe 'with invalid ip' do
+      let(:attributes) do
+        { search_type: 'ip', keyword: 'invalid' }
+      end
+
+      it 'adds error' do
+        expect(filter.results).to eq(Account.none)
+        expect(filter.errors).to be_added(:keyword)
+      end
+    end
+
+    describe 'with invalid search_type' do
+      let(:attributes) do
+        { search_type: 'unknown' }
+      end
+
+      it 'adds error' do
+        expect(filter.results).to eq(Account.none)
+        expect(filter.errors).to be_added(:search_type, :inclusion, value: 'unknown')
+      end
+    end
+  end
+
   describe 'with empty params' do
     it 'defaults to alphabetic account list' do
       filter = AccountFilter.new({})
@@ -9,13 +35,6 @@ describe AccountFilter do
     end
   end
 
-  describe 'with invalid params' do
-    it 'raises with key error' do
-      filter = AccountFilter.new(wrong: true)
-
-      expect { filter.results }.to raise_error(/wrong/)
-    end
-  end
 
   describe 'with valid params' do
     it 'combines filters on Account' do
