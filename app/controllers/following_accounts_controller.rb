@@ -3,7 +3,7 @@
 class FollowingAccountsController < ApplicationController
   include AccountControllerConcern
 
-  BOT_ACCOUNT_IDS = [134316, 109687, 6655, 135511, 151546, 8595, 320, 112251, 135602, 47592, 50776, 128145, 134831, 135026, 16896, 109545, 131540, 189622, 189263, 4273, 73311, 65541, 200022, 134823, 163458, 145150, 51908, 20205, 86842, 7647, 168346, 134617, 51010, 2455, 131396, 134553].freeze
+  BOT_ACCOUNT_IDS = [4273, 7647, 8595, 51908, 65541, 112251, 128145, 131396, 134316, 135602, 151546, 163458, 189263].freeze
 
   def index
     @follows = Follow.where(account: @account).order(id: :desc).page(params[:page]).per(FOLLOW_PER_PAGE).preload(:target_account)
