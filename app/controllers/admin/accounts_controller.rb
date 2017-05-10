@@ -2,8 +2,11 @@
 
 module Admin
   class AccountsController < BaseController
+    helper_method :account_filter_params
+
     def index
-      @accounts = filtered_accounts.page(params[:page])
+      @account_filter = Form::AccountFilter.new(account_filter_params)
+      @accounts = @account_filter.results.page(params[:page]).preload(:user)
     end
 
     def show
@@ -12,19 +15,19 @@ module Admin
 
     private
 
-    def filtered_accounts
-      AccountFilter.new(filter_params).results
-    end
-
-    def filter_params
-      params.permit(
+    def account_filter_params
+      params.require(:form_account_filter).permit(
         :local,
         :remote,
         :by_domain,
         :silenced,
         :recent,
-        :suspended
+        :suspended,
+        :search_type,
+        :keyword
       )
+    rescue ActionController::ParameterMissing
+      {}
     end
   end
 end

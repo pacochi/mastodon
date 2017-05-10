@@ -1,4 +1,13 @@
 ja:
+  activemodel:
+    attributes:
+      form/account_filter:
+        keyword: キーワード
+        search_type: 検索対象
+      form/account_filter/search_type:
+        ip: IP
+        email: Email
+        name: 名前
   activerecord:
     attributes:
       oauth_authentication:

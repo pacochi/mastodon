@@ -5,7 +5,7 @@ class Form::AccountFilter
 
   attr_accessor :local, :remote, :by_domain, :silenced, :recent, :suspended, :search_type, :keyword
 
-  SEARCH_TYPES = %i[name email ip].freeze
+  SEARCH_TYPES = %w[name email ip].freeze
 
   validates :search_type, inclusion: { in: SEARCH_TYPES }, allow_nil: true
   validate :validate_ip, if: -> { keyword && search_type == 'ip' }

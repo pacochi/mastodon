@@ -86,6 +86,7 @@ en:
       push_subscription_expires: PuSH subscription expires
       reset_password: Reset password
       salmon_url: Salmon URL
+      search: Search
       show:
         created_reports: Reports created by this account
         report: report

@@ -1,14 +1,16 @@
 # frozen_string_literal: true
 
 module Admin::FilterHelper
-  ACCOUNT_FILTERS = %i[local remote by_domain silenced suspended recent].freeze
+  FORM_ACCOUNT_FILTERS = [{ form_account_filter: %i[local remote by_domain silenced suspended recent search_type keyword] }].freeze
   REPORT_FILTERS = %i[resolved account_id target_account_id].freeze
 
-  FILTERS = ACCOUNT_FILTERS + REPORT_FILTERS
+  FILTERS = (FORM_ACCOUNT_FILTERS + REPORT_FILTERS).freeze
 
-  def filter_link_to(text, more_params)
-    new_url = filtered_url_for(more_params)
-    link_to text, new_url, class: filter_link_class(new_url)
+  def filter_link_to(text, new_params)
+    url = url_for(filtered_params(new_params))
+    klass = 'selected' if filtered_params(params) == filtered_params(new_params)
+
+    link_to(text, url, class: klass)
   end
 
   def table_link_to(icon, text, path, options = {})
@@ -17,15 +19,15 @@ module Admin::FilterHelper
 
   private
 
-  def filter_params(more_params)
-    params.permit(FILTERS).merge(more_params)
+  def compact_params(parameters)
+    parameters.to_h.map { |key, value|
+      value.compact! if value.is_a?(Hash)
+      [key, value.presence]
+    }.to_h.compact
   end
 
-  def filter_link_class(new_url)
-    filtered_url_for(params) == new_url ? 'selected' : ''
-  end
-
-  def filtered_url_for(params)
-    url_for filter_params(params)
+  def filtered_params(parameters)
+    parameters = ActionController::Parameters.new(parameters) unless parameters.is_a?(ActionController::Parameters)
+    compact_params(parameters.permit(FILTERS))
   end
 end
