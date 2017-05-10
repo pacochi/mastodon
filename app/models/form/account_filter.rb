@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class AccountFilter
+class Form::AccountFilter
   include ActiveModel::Model
 
   attr_accessor :local, :remote, :by_domain, :silenced, :recent, :suspended, :search_type, :keyword
