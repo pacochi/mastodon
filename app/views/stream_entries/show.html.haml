@@ -1,3 +1,8 @@
+- content_for :page_title do
+  -# NOTE: 現在はStreamEntry#activity_typeはStatusしかないが、今後増えるかもしれないので注意
+  #{display_name(@stream_entry.account)}のトゥート:
+  &quot;#{@stream_entry.status.text}&quot;
+
 - content_for :header_tags do
   %link{ rel: 'alternate', type: 'application/atom+xml', href: account_stream_entry_url(@account, @stream_entry, format: 'atom') }/
   %link{ rel: 'alternate', type: 'application/json+oembed', href: api_oembed_url(url: account_stream_entry_url(@account, @stream_entry), format: 'json') }/
