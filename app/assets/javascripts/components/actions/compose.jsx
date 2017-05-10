@@ -115,15 +115,18 @@ export function submitCompose() {
         tags = statusTags;
       } else {
         tags = tags.filter(it => !statusTags.includes(it));
-        statusTags.forEach(it => tags.push(it));
+        tags.push(...statusTags);
       }
       const size = tags.length;
       const maxSize = 1000;
-      for (let i = 0; i < Math.max(size - maxSize, 0); i++) {
-        tags.shift();
-      }
+      tags.splice(0, Math.max(size - maxSize, 0));
+
       const data = JSON.stringify(tags);
-      localStorage.setItem('hash_tag_history', data);
+      try {
+        localStorage.setItem('hash_tag_history', data);
+      } catch (e) {
+        //ignore
+      }
     }).catch(function (error) {
       dispatch(submitComposeFail(error));
     });
@@ -254,12 +257,9 @@ export function fetchComposeSuggestions(token) {
 
 export function fetchComposeHashTagSuggestions(token) {
   return (dispatch, _) => {
-    let tags = JSON.parse(localStorage.getItem('hash_tag_history'));
-    if (tags === null) {
-      tags = [];
-    }
+    const tags = JSON.parse(localStorage.getItem('hash_tag_history')) || [];
     const suggestionMaxSize = 4;
-    const suggestions = tags.filter(it => it.startsWith(token)).reverse().slice(0, suggestionMaxSize);
+    const suggestions = tags.filter(it => it.startsWith(token)).slice(tags.length - suggestionMaxSize, tags.length).reverse();
     dispatch(readyComposeHashTagSuggestions(token, suggestions));
   };
 };
