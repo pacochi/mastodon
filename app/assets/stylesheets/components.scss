@@ -666,6 +666,33 @@ a.status__content__spoiler-link {
   margin-right: 12px;
 }
 
+.suggested_accounts__scrollable {
+  $button-height: 36px;
+
+  position: relative;
+
+  .suggested_accounts__local_timeline_button {
+    height: 30px;
+  }
+
+  .account__suggested_accounts_media {
+    padding-left: 13px;
+    padding-top: 13px;
+  }
+
+  .load-more {
+    margin-bottom: $button-height;
+  }
+
+  .button {
+    position: absolute;
+    bottom: 0;
+    width: 97%;
+    height: $button-height;
+    line-height: $button-height;
+  }
+}
+
 .account__avatar {
   border-radius: 4px;
   background: transparent no-repeat;

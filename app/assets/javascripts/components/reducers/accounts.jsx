@@ -11,7 +11,9 @@ import {
   FOLLOW_REQUESTS_FETCH_SUCCESS,
   FOLLOW_REQUESTS_EXPAND_SUCCESS,
   ACCOUNT_FOLLOW_SUCCESS,
-  ACCOUNT_UNFOLLOW_SUCCESS
+  ACCOUNT_UNFOLLOW_SUCCESS,
+  SUGGESTED_ACCOUNTS_FETCH_SUCCESS,
+  SUGGESTED_ACCOUNTS_EXPAND_SUCCESS,
 } from '../actions/accounts';
 import {
   BLOCKS_FETCH_SUCCESS,
@@ -129,6 +131,9 @@ export default function accounts(state = initialState, action) {
     return state.updateIn([action.relationship.id, 'followers_count'], num => num + 1);
   case ACCOUNT_UNFOLLOW_SUCCESS:
     return state.updateIn([action.relationship.id, 'followers_count'], num => Math.max(0, num - 1));
+  case SUGGESTED_ACCOUNTS_FETCH_SUCCESS:
+  case SUGGESTED_ACCOUNTS_EXPAND_SUCCESS:
+    return normalizeAccounts(state, action.accounts);
   default:
     return state;
   }

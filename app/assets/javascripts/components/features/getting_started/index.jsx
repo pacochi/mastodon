@@ -43,7 +43,7 @@ const GettingStarted = ({ intl, me }) => {
         <ColumnLink icon='image' text={intl.formatMessage(messages.media_timeline)} to='/timelines/public/media' />
         <ColumnLink icon='globe' hideOnMobile={true} text={intl.formatMessage(messages.public_timeline)} to='/timelines/public' />
         <ColumnLink icon='star' text={intl.formatMessage(messages.favourites)} to='/favourites' />
-        <ColumnLink text={intl.formatMessage(messages.suggested_accounts)} to='/suggested_accounts' />
+        <ColumnLink icon='' text={intl.formatMessage(messages.suggested_accounts)} to='/suggested_accounts' />
         {followRequests}
         <ColumnLink icon='volume-off' text={intl.formatMessage(messages.mutes)} to='/mutes' />
         <ColumnLink icon='ban' text={intl.formatMessage(messages.blocks)} to='/blocks' />

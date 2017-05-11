@@ -5,10 +5,21 @@ const getStatuses = state => state.get('statuses');
 const getAccounts = state => state.get('accounts');
 
 const getAccountBase         = (state, id) => state.getIn(['accounts', id], null);
+const getSuggestedAccountBase = (state, id) => state.getIn(['suggested_accounts', id], null);
 const getAccountRelationship = (state, id) => state.getIn(['relationships', id], null);
 
 export const makeGetAccount = () => {
   return createSelector([getAccountBase, getAccountRelationship], (base, relationship) => {
+    if (base === null) {
+      return null;
+    }
+
+    return base.set('relationship', relationship);
+  });
+};
+
+export const makeGetSuggestedAccount = () => {
+  return createSelector([getSuggestedAccountBase, getAccountRelationship], (base, relationship) => {
     if (base === null) {
       return null;
     }

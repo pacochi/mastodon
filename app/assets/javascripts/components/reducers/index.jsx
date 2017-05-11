@@ -15,6 +15,7 @@ import settings from './settings';
 import status_lists from './status_lists';
 import cards from './cards';
 import reports from './reports';
+import suggested_accounts from './suggested_accounts';
 
 export default combineReducers({
   timelines,
@@ -32,5 +33,6 @@ export default combineReducers({
   notifications,
   settings,
   cards,
-  reports
+  reports,
+  suggested_accounts
 });

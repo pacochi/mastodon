@@ -6,8 +6,12 @@ import {
   FOLLOW_REQUESTS_FETCH_SUCCESS,
   FOLLOW_REQUESTS_EXPAND_SUCCESS,
   FOLLOW_REQUEST_AUTHORIZE_SUCCESS,
-  FOLLOW_REQUEST_REJECT_SUCCESS
+  FOLLOW_REQUEST_REJECT_SUCCESS,
 } from '../actions/accounts';
+import {
+  SUGGESTED_ACCOUNTS_FETCH_SUCCESS,
+  SUGGESTED_ACCOUNTS_EXPAND_SUCCESS
+} from '../actions/suggested_accounts';
 import {
   REBLOGS_FETCH_SUCCESS,
   FAVOURITES_FETCH_SUCCESS
@@ -29,7 +33,8 @@ const initialState = Immutable.Map({
   favourited_by: Immutable.Map(),
   follow_requests: Immutable.Map(),
   blocks: Immutable.Map(),
-  mutes: Immutable.Map()
+  mutes: Immutable.Map(),
+  suggested_accounts: Immutable.Map()
 });
 
 const normalizeList = (state, type, id, accounts, next) => {
@@ -41,6 +46,19 @@ const normalizeList = (state, type, id, accounts, next) => {
 
 const appendToList = (state, type, id, accounts, next) => {
   return state.updateIn([type, id], map => {
+    return map.set('next', next).update('items', list => list.push(...accounts.map(item => item.id)));
+  });
+};
+
+const normalizeSuggestedAccountsList = (state, type, accounts, next) => {
+  return state.setIn([type], Immutable.Map({
+    next,
+    items: Immutable.List(accounts.map(item => item.id))
+  }));
+};
+
+const appendToSuggestedAccountsList = (state, type, accounts, next) => {
+  return state.updateIn([type], map => {
     return map.set('next', next).update('items', list => list.push(...accounts.map(item => item.id)));
   });
 };
@@ -74,6 +92,10 @@ export default function userLists(state = initialState, action) {
     return state.setIn(['mutes', 'items'], Immutable.List(action.accounts.map(item => item.id))).setIn(['mutes', 'next'], action.next);
   case MUTES_EXPAND_SUCCESS:
     return state.updateIn(['mutes', 'items'], list => list.push(...action.accounts.map(item => item.id))).setIn(['mutes', 'next'], action.next);
+  case SUGGESTED_ACCOUNTS_FETCH_SUCCESS:
+    return normalizeSuggestedAccountsList(state, 'suggested_accounts', action.accounts, action.next);
+  case SUGGESTED_ACCOUNTS_EXPAND_SUCCESS:
+    return appendToSuggestedAccountsList(state, 'suggested_accounts', action.accounts, action.next);
   default:
     return state;
   }
