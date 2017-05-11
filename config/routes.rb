@@ -163,6 +163,7 @@ Rails.application.routes.draw do
       resources :reports,    only: [:index, :create]
       resources :pixiv_twitter_images, only: [:create]
       resources :firebase_cloud_messaging_tokens, only: [:create]
+      resources :suggested_accounts, only: [:index]
 
       resource :instance, only: [:show]
 
