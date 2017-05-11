@@ -42,6 +42,7 @@ import GenericNotFound from '../features/generic_not_found';
 import FavouritedStatuses from '../features/favourited_statuses';
 import Blocks from '../features/blocks';
 import Mutes from '../features/mutes';
+import SuggestedAccounts from '../features/suggested_accounts';
 import Report from '../features/report';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import ar from 'react-intl/locale-data/ar';
@@ -140,6 +141,7 @@ class Container extends React.PureComponent {
           {pathname: '/timelines/public', component: PublicTimeline},
           {pathname: '/timelines/public/local', component: CommunityTimeline},
           {pathname: '/timelines/public/media', component: MediaTimeline},
+          {pathname: '/suggested_accounts', component: SuggestedAccounts},
 
           {pathname: '/notifications', component: Notifications},
           {pathname: '/favourites', component: FavouritedStatuses}
