@@ -18,7 +18,7 @@ class FirebaseCloudMessagingWorker
     data = JSON.parse(InlineRenderer.render(@notification, @recipient, 'firebase_cloud_messagings/push_notification'))
 
     @recipient.user.firebase_cloud_messaging_tokens.each do |firebase_cloud_messaging_token|
-      FirebaseCloudMessagingApi.publish(firebase_cloud_messaging_token.token, data)
+      FirebaseCloudMessagingApi.publish(firebase_cloud_messaging_token.token, data, firebase_cloud_messaging_token.platform)
     end
   end
 end
