@@ -2662,7 +2662,10 @@ button.icon-button.active i.fa-retweet {
 }
 
 .announcements {
-  padding: 10px;
+  margin-bottom: 10px;
+  @media screen and (max-width: 1024px) {
+    padding: 0 10px;
+  }
 
   li {
     display: flex;
