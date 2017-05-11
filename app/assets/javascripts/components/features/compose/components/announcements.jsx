@@ -11,7 +11,6 @@ class Announcements extends React.PureComponent {
     super(props, context);
 
     this.handleDismiss = this.handleDismiss.bind(this);
-    this.onClickSay = this.onClickSay.bind(this);
 
     try {
       const dismissed = JSON.parse(localStorage.getItem(storageKey));
@@ -62,18 +61,6 @@ class Announcements extends React.PureComponent {
             body: '#pawoo人増えたし自己紹介しようぜ'
           }
         ]
-      }, {
-        id: 6,
-        icon: '/announcements/icon_2x_360.png',
-        body: '[超実験中] ホームタイムラインを読み上げる機能を追加しました',
-        link: [
-          {
-            reactRouter: false,
-            inline: false,
-            say: true,
-            body: 'さっそく読み上げてみる'
-          }
-        ]
       }
       // NOTE: id: 5 まで使用した
     );
@@ -87,49 +74,6 @@ class Announcements extends React.PureComponent {
     if (Number.isInteger(id)) {
       this.setState({ dismissed: [].concat(this.state.dismissed, id) });
     }
-  }
-
-  onClickSay(event) {
-    event.preventDefault();
-
-    if (this.tekitoude_sumanna) return;
-
-    this.tekitoude_sumanna = true;
-
-    var previous = '';
-
-    function say(a) {
-      var b = new window.SpeechSynthesisUtterance;
-      b.voice = voices[7]
-        b.rate, b.volume = 1
-        b.pitch = .5
-        b.lang = "ja-JP"
-        b.text = a
-
-        setTimeout(function() {
-          try {
-            window.speechSynthesis.speak(b)
-              sayFirstStatus();
-          } catch(e) {
-            sayFirstStatus();
-          }
-        }, 0)
-
-      return window.speechsynthesis;
-    }
-
-    function sayFirstStatus() {
-      var a = $(".status__content").first();
-      var text= a.text().replace(/(?:ww|ww)/ig, 'わら')
-        if (previous == text) return setTimeout(() => sayFirstStatus(), 100);
-
-      previous = text;
-      say(text);
-    }
-
-    var voices = window.speechSynthesis.getVoices(),
-    localTimeline = $('[role="region"]').last();
-    sayFirstStatus();
   }
 
   render () {
@@ -153,13 +97,7 @@ class Announcements extends React.PureComponent {
                     classNames.push('announcements__link-inline')
                   }
 
-                  if (link.get('say')) {
-                    return (
-                      <a onClick={this.onClickSay} style={{ cursor: 'pointer' }} key='speeeeeeeeeeeeeeeeeeeeeeeeeeek' className={classNames.join(' ')}>
-                        {link.get('body')}
-                      </a>
-                    );
-                  } else if (link.get('reactRouter')) {
+                  if (link.get('reactRouter')) {
                     return (
                       <Link key={link.get('href')} className={classNames.join(' ')} to={link.get('href')}>
                         {link.get('body')}
