@@ -10,19 +10,6 @@ class FirebaseCloudMessagingApi
       else
         publish_to_android(to, data)
       end
-
-      body = {
-        to: to,
-        priority: 'high',
-        content_available: true,
-        data: data
-      }.to_json
-
-      build_client.post(
-        '/fcm/send',
-        body,
-        headers
-      )
     end
 
     private
@@ -32,7 +19,7 @@ class FirebaseCloudMessagingApi
         to: to,
         notification: {
           title: "",
-          body: "Pawoo", # iOSのNotification Share Extensionで書き換えている。iOS側でフックするために空文字列でない必要がある。
+          body: "Pawoo" # iOSのNotification Share Extensionで書き換えている。iOS側でフックするために空文字列でない必要がある。
         },
         priority: 'high',
         mutable_content: true,
