@@ -4,46 +4,34 @@ class FirebaseCloudMessagingApi
   FCM_ENDPOINT = 'https://fcm.googleapis.com'
 
   class << self
-    def publish(to, data, platform)
-      if platform == 'iOS'
-        publish_to_ios(to, data)
-      else
-        publish_to_android(to, data)
-      end
-    end
-
-    private
-
     def publish_to_ios(to, data)
-      body = {
+      post_to_firebase(
         to: to,
         notification: {
-          title: "",
-          body: "Pawoo" # iOSのNotification Share Extensionで書き換えている。iOS側でフックするために空文字列でない必要がある。
+          title: '',
+          body: 'Pawoo' # iOSのNotification Share Extensionで書き換えている。iOS側でフックするために空文字列でない必要がある
         },
         priority: 'high',
         mutable_content: true,
         data: data
-      }.to_json
-
-      build_client.post(
-        '/fcm/send',
-        body,
-        headers
       )
     end
 
     def publish_to_android(to, data)
-      body = {
+      post_to_firebase(
         to: to,
         priority: 'high',
         content_available: true,
         data: data
-      }.to_json
+      )
+    end
 
+    private
+
+    def post_to_firebase(body)
       build_client.post(
         '/fcm/send',
-        body,
+        body.to_json,
         headers
       )
     end
