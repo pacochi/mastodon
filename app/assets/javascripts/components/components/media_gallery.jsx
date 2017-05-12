@@ -164,7 +164,7 @@ class Item extends React.PureComponent {
             href={attachment.get('remote_url') || attachment.get('url')}
             onClick={this.handleClick}
             target='_blank'
-            style={{ background: `url(${attachment.get('preview_url')}) no-repeat 50% ${squareMedia ? '0' : '20%'}` }}
+            style={{ backgroundImage: `url(${attachment.get('preview_url')})`, backgroundRepeat: 'no-repeat', backgroundPosition: `50% ${squareMedia ? '0' : '20%'}` }}
           />
         );
       }

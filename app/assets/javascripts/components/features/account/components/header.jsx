@@ -94,7 +94,7 @@ class Header extends React.Component {
     }
 
     if (me !== account.get('id') && account.getIn(['relationship', 'followed_by'])) {
-      info = <span className='account--follows-info' style={{ position: 'absolute', top: '10px', right: '10px', opacity: '0.7', display: 'inline-block', verticalAlign: 'top', background: 'rgba(0, 0, 0, 0.4)', textTransform: 'uppercase', fontSize: '11px', fontWeight: '500', padding: '4px', borderRadius: '4px' }}><FormattedMessage id='account.follows_you' defaultMessage='Follows you' /></span>
+      info = <span className='account--follows-info' style={{ position: 'absolute', top: '10px', right: '10px', opacity: '0.7', display: 'inline-block', verticalAlign: 'top', backgroundColor: 'rgba(0, 0, 0, 0.4)', textTransform: 'uppercase', fontSize: '11px', fontWeight: '500', padding: '4px', borderRadius: '4px' }}><FormattedMessage id='account.follows_you' defaultMessage='Follows you' /></span>
     }
 
     if (me !== account.get('id')) {

@@ -153,7 +153,7 @@ class VideoPlayer extends React.PureComponent {
 
     if (this.state.preview && !autoplay) {
       return (
-        <div role='button' tabIndex='0' className='media-spoiler-video' style={{ width: `${width}px`, height: `${height}px`, background: `url(${media.get('preview_url')}) no-repeat center` }} onClick={this.handleOpen}>
+        <div role='button' tabIndex='0' className='media-spoiler-video' style={{ width: `${width}px`, height: `${height}px`, backgroundImage: `url(${media.get('preview_url')})`, backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }} onClick={this.handleOpen}>
           {spoilerButton}
           <div className='media-spoiler-video-play-icon'><i className='fa fa-play' /></div>
         </div>
