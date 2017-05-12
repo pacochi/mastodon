@@ -17,6 +17,12 @@
 
   %meta{ property: 'twitter:card', content: 'summary' }/
 
+  -# 以下の条件にマッチするときnoindexをつける:
+  -# - 100文字未満かつ、画像がついていない
+  -# - サイレンスされている
+  - if (@stream_entry.status.present? and @stream_entry.status.text.length < 100 and @stream_entry.status.media_attachments.empty? and @stream_entry.status.pixiv_cards.empty?) or @account.silenced)
+    %meta{ name: 'robots', content: 'noindex,follow' }/
+
 - if show_landing_strip?
   = render partial: 'shared/landing_strip', locals: { account: @stream_entry.account }
 
