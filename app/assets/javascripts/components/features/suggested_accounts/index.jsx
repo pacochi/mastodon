@@ -71,7 +71,7 @@ class SuggestedAccounts extends React.PureComponent {
     }
 
     return (
-      <Column icon='suggested_accounts' active={false} heading={intl.formatMessage(messages.title)}>
+      <Column icon='user' active={false} heading={intl.formatMessage(messages.title)}>
         <ColumnBackButtonSlim />
 
         <ScrollContainer scrollKey='suggested_accounts'>
