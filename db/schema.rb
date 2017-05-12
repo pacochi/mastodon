@@ -323,6 +323,15 @@ ActiveRecord::Schema.define(version: 20170516072309) do
     t.index ["account_id", "callback_url"], name: "index_subscriptions_on_account_id_and_callback_url", unique: true, using: :btree
   end
 
+  create_table "suggestion_tags", force: :cascade do |t|
+    t.string   "description", null: false
+    t.integer  "order",       null: false
+    t.integer  "tag_id",      null: false
+    t.datetime "created_at",  null: false
+    t.datetime "updated_at",  null: false
+    t.index ["tag_id"], name: "index_suggestion_tags_on_tag_id", using: :btree
+  end
+
   create_table "tags", force: :cascade do |t|
     t.string   "name",       default: "", null: false
     t.datetime "created_at",              null: false
@@ -373,4 +382,5 @@ ActiveRecord::Schema.define(version: 20170516072309) do
   end
 
   add_foreign_key "statuses", "statuses", column: "reblog_of_id", on_delete: :cascade
+  add_foreign_key "suggestion_tags", "tags"
 end

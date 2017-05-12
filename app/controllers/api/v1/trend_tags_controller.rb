@@ -6,47 +6,9 @@ class Api::V1::TrendTagsController < ApiController
   before_action :limit_param!
 
   def index
-    @trend_tags = [
-      TrendTag.new(
-        'Pawoo人増えたし自己紹介しようぜ',
-        'https://pawoo.net/tags/hoge',
-        '運営からのおすすめ',
-        'suggestion'),
-      TrendTag.new(
-        'FGO',
-        'https://pawoo.net/tags/FGO',
-        '2500件のトゥート',
-        'trend'),
-      TrendTag.new(
-        'FGO2',
-        'https://pawoo.net/tags/FGO',
-        '2500件のトゥート',
-        'trend'),
-      TrendTag.new(
-        'FGO3',
-        'https://pawoo.net/tags/FGO',
-        '2500件のトゥート',
-        'trend'),
-      TrendTag.new(
-        'FGO4',
-        'https://pawoo.net/tags/FGO',
-        '2500件のトゥート',
-        'trend'),
-      TrendTag.new(
-        'FGO5',
-        'https://pawoo.net/tags/FGO',
-        '2500件のトゥート',
-        'trend'),
-      TrendTag.new(
-        'FGO6',
-        'https://pawoo.net/tags/FGO',
-        '2500件のトゥート',
-        'trend'),
-    ]
-
-    @trend_tags = @trend_tags.first(@limit)
-
-    render :index
+    trend_service = TrendService.new
+    suggestion_tags = trend_service.find_suggestion(@limit)
+    @trend_tags = suggestion_tags + trend_service.find_trend((@limit - suggestion_tags.length).clamp(0, @limit))
   end
 
   private

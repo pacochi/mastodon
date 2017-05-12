@@ -1,2 +1,3 @@
 collection @trend_tags
-attributes :name, :url, :description, :type
+attributes :name , :description, :type
+node(:url) { |tag| tag_url(tag.name) }
