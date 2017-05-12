@@ -9,7 +9,7 @@ class SearchResults extends React.PureComponent {
   render () {
     const { results } = this.props;
 
-    let accounts, statuses, hashtags;
+    let accounts, statuses, hashtags, toots;
     let count = 0;
 
     if (results.get('accounts') && results.get('accounts').size > 0) {
@@ -43,6 +43,19 @@ class SearchResults extends React.PureComponent {
       );
     }
 
+    if (results.get('toots') && results.get('toots').size > 0) {
+      count += results.get('toots').size;
+      toots = (
+        <div className='search-results__section'>
+          {results.get('toots').map(toot =>
+            <div className='search-results-toots'>
+              #{toot.text}
+            </div>
+          )}
+        </div>
+      );
+    }
+
     return (
       <div className='search-results'>
         <div className='search-results__header'>
@@ -52,6 +65,8 @@ class SearchResults extends React.PureComponent {
         {accounts}
         {statuses}
         {hashtags}
+        {toots}
+
       </div>
     );
   }

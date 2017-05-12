@@ -14,7 +14,7 @@ class SearchService < BaseService
     else
       results[:accounts] = AccountSearchService.new.call(query, limit, resolve, account)
       results[:hashtags] = Tag.search_for(query.gsub(/\A#/, ''), limit) unless query.start_with?('@')
-      results[:toots] = Status.search(query)
+      results[:toots] = Status.search(query).to_a
     end
 
     results
