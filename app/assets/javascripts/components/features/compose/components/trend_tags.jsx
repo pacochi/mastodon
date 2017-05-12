@@ -1,8 +1,12 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
+import PropTypes from 'prop-types';
 
 class TrendTags extends React.PureComponent {
 
+  componentDidMount () {
+    this.props.refreshTrendTags();
+  }
   render () {
     return (
       <div className="trend-tags">
@@ -17,12 +21,12 @@ class TrendTags extends React.PureComponent {
         </div>
         <div className="trend-tags__body">
           <ul>
-            {this.props.trendTags.map(trendTag => (
-              <li key={trendTag.get('name')}>
-                <Link className="trend-tags__name" to={`/timelines/tag/${trendTag.get('name')}`}>
-                  #{trendTag.get('name')}
+            {this.props.tags.map(tag => (
+              <li key={tag.get('name')}>
+                <Link className="trend-tags__name" to={`/timelines/tag/${tag.get('name')}`}>
+                  #{tag.get('name')}
                 </Link>
-                <div className={`trend-tags__description ${trendTag.get('type') === 'suggestion' ? 'suggestion' : ''}`}>{trendTag.get('description')}</div>
+                <div className={`trend-tags__description ${tag.get('type') === 'suggestion' ? 'suggestion' : ''}`}>{tag.get('description')}</div>
               </li>
             ))}
           </ul>
@@ -36,7 +40,8 @@ class TrendTags extends React.PureComponent {
 };
 
 TrendTags.propTypes = {
-  trendTags: ImmutablePropTypes.list.isRequired
+  tags: ImmutablePropTypes.list.isRequired,
+  refreshTrendTags: PropTypes.func.isRequired
 };
 
 export default TrendTags;

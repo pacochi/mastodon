@@ -16,6 +16,7 @@ import status_lists from './status_lists';
 import cards from './cards';
 import reports from './reports';
 import suggested_accounts from './suggested_accounts';
+import trend_tags from './trend_tags';
 
 export default combineReducers({
   timelines,
@@ -34,5 +35,6 @@ export default combineReducers({
   settings,
   cards,
   reports,
-  suggested_accounts
+  suggested_accounts,
+  trend_tags
 });
