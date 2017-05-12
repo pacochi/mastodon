@@ -85,3 +85,5 @@
     = link_to t('admin.accounts.undo_suspension'), admin_account_suspension_path(@account.id), method: :delete, class: 'button'
   - else
     = link_to t('admin.accounts.perform_full_suspension'), admin_account_suspension_path(@account.id), method: :post, data: { confirm: t('admin.accounts.are_you_sure') }, class: 'button'
+
+  = link_to t('admin.accounts.show_statuses'), admin_account_statuses_path(@account.id), class: 'button'

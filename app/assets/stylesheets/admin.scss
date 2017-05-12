@@ -236,7 +236,7 @@
   }
 }
 
-.report-status {
+.report-status, .account-status {
   display: flex;
   margin-bottom: 10px;
 
@@ -246,6 +246,6 @@
   }
 }
 
-.report-status__actions {
+.report-status__actions, .account-status__actions {
   flex: 0 0 auto;
 }

@@ -52,6 +52,7 @@ en:
   admin:
     accounts:
       are_you_sure: Are you sure?
+      back: Back
       confirm: Confirm
       confirmed: Confirmed
       display_name: Display name
@@ -91,6 +92,7 @@ en:
         created_reports: Reports created by this account
         report: report
         targeted_reports: Reports made about this account
+      show_statuses: Show statuses
       silence: Silence
       statuses: Statuses
       title: Accounts
