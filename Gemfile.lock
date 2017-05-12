@@ -499,8 +499,6 @@ GEM
       rufus-scheduler (~> 3.2)
       sidekiq (>= 3)
       tilt (>= 1.4.0)
-    sidekiq-statistic (1.2.0)
-      sidekiq (>= 3.3.4, < 5)
     sidekiq-unique-jobs (5.0.0)
       sidekiq (>= 4.0)
       thor
@@ -644,7 +642,6 @@ DEPENDENCIES
   sass-rails (~> 5.0)
   sidekiq
   sidekiq-scheduler
-  sidekiq-statistic
   sidekiq-unique-jobs
   simple-navigation
   simple_form
