@@ -74,6 +74,10 @@ gem 'admin_script'
 gem 'redis-namespace'
 gem 'activerecord-import'
 
+gem 'elasticsearch', git: 'git://github.com/elasticsearch/elasticsearch-ruby.git', branch: '5.x'
+gem 'elasticsearch-model', github: 'elastic/elasticsearch-rails', branch: '5.x'
+gem 'elasticsearch-rails', github: 'elastic/elasticsearch-rails', branch: '5.x'
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'pry-rails'
