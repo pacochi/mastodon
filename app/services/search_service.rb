@@ -2,7 +2,7 @@
 
 class SearchService < BaseService
   def call(query, limit, resolve = false, account = nil)
-    results = { accounts: [], hashtags: [], statuses: [] }
+    results = { accounts: [], hashtags: [], statuses: [], toots: [] }
 
     return results if query.blank?
 
