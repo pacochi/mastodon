@@ -2,7 +2,6 @@
 
 require 'sidekiq/web'
 require 'sidekiq-scheduler/web'
-require 'sidekiq-statistic'
 
 Rails.application.routes.draw do
   mount LetterOpenerWeb::Engine, at: 'letter_opener' if Rails.env.development?
