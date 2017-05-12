@@ -15,9 +15,9 @@
 
     %title<
       - if content_for?(:page_title)
-        = yield(:page_title)
-        = ' - '
-      = title
+        = "#{yield(:page_title).delete("\n")} - #{title}"
+      - else
+        = "Mastodon (マストドン) hosted by pixiv - #{title}"
 
     = stylesheet_link_tag stylesheet_for_layout, media: 'all'
     = csrf_meta_tags

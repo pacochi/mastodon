@@ -1,7 +1,6 @@
+-# NOTE: 現在はStreamEntry#activity_typeはStatusしかないが、今後増えるかもしれないので注意
 - content_for :page_title do
-  -# NOTE: 現在はStreamEntry#activity_typeはStatusしかないが、今後増えるかもしれないので注意
-  #{display_name(@stream_entry.account)}のトゥート:
-  &quot;#{@stream_entry.status.text}&quot;
+  = "#{@stream_entry.status.text.truncate(33, omission: "")} - #{@stream_entry.account.acct}"
 
 - content_for :header_tags do
   %link{ rel: 'alternate', type: 'application/atom+xml', href: account_stream_entry_url(@account, @stream_entry, format: 'atom') }/
