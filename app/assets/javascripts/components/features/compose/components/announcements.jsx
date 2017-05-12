@@ -61,8 +61,20 @@ class Announcements extends React.PureComponent {
             body: '#pawoo人増えたし自己紹介しようぜ'
           }
         ]
+      },{
+        id: 7,
+        icon: '/announcements/icon_2x_360.png',
+        body: 'Pawooにどんなユーザーさんがいるのか見てみよう！',
+        link: [
+          {
+            reactRouter: true,
+            inline: false,
+            href: '/suggested_accounts',
+            body: 'おすすめユーザー（実験中）'
+          }
+        ]
       }
-      // NOTE: id: 5 まで使用した
+      // NOTE: id: 7 まで使用した
     );
 
     this.announcements = Immutable.fromJS(announcements);
