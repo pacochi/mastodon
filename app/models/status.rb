@@ -4,6 +4,7 @@ class Status < ApplicationRecord
   include Paginable
   include Streamable
   include Cacheable
+  include StatusSearchable
 
   enum visibility: [:public, :unlisted, :private, :direct], _suffix: :visibility
 
