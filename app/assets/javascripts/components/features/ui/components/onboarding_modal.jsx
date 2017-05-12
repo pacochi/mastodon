@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import Permalink from '../../../components/permalink';
+import { browserHistory } from 'react-router'
 import { TransitionMotion, spring } from 'react-motion';
 import ComposeForm from '../../compose/components/compose_form';
 import Search from '../../compose/components/search';
@@ -174,6 +175,11 @@ class OnboardingModal extends React.PureComponent {
     this.handleNext = this.handleNext.bind(this);
   }
 
+  componentWillUnmount () {
+    const path = '/suggested_accounts';
+    this.context.router.push(path);
+  }
+
   handleSkip (e) {
     e.preventDefault();
     this.props.onClose();
@@ -259,5 +265,9 @@ OnboardingModal.propTypes = {
   domain: PropTypes.string.isRequired,
   admin: ImmutablePropTypes.map
 }
+
+OnboardingModal.contextTypes = {
+  router: PropTypes.object
+};
 
 export default connect(mapStateToProps)(injectIntl(OnboardingModal));
