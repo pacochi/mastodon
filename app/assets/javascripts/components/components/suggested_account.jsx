@@ -39,7 +39,7 @@ class SuggestedAccount extends React.PureComponent {
     let media = '';
     let attachments = account.get('media_attachments');
 
-    if (attachments.size > 0 && !this.props.muted) {
+    if (attachments.size > 0) {
       if (attachments.some(item => item.get('type') === 'unknown')) {
         // Do nothing
       } else if (attachments.first().get('type') === 'video') {
@@ -93,6 +93,8 @@ SuggestedAccount.propTypes = {
   account: ImmutablePropTypes.map.isRequired,
   me: PropTypes.number.isRequired,
   onFollow: PropTypes.func.isRequired,
+  onOpenVideo: PropTypes.func.isRequired,
+  onOpenMedia: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired
 }
 
