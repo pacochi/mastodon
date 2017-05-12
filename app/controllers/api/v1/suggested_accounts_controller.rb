@@ -3,16 +3,16 @@
 class Api::V1::SuggestedAccountsController < ApiController
   before_action -> { doorkeeper_authorize! :follow }
   before_action :require_user!
-  before_action :set_account
 
   respond_to :json
 
   def index
     limit = limit_param(DEFAULT_ACCOUNTS_LIMIT)
+    limit = 20
 
-    @accounts = suggested_accounts.limit(limit).load
+    @accounts = suggested_accounts(current_user.account).limit(limit)
 
-    media_attachments = published_attachemnts(@accounts.ids)
+    media_attachments = popular_media_attachments(@accounts)
     @media_attachments_map = media_attachments.group_by(&:account_id)
 
     next_path = api_v1_suggested_accounts_url(exclude_ids: (excluded_ids + @accounts.ids).uniq.join(','))  if @accounts.size == limit
@@ -22,50 +22,22 @@ class Api::V1::SuggestedAccountsController < ApiController
 
   private
 
-  def set_account
-    @account = current_user.account
-  end
-
   # Get top n images
-  def published_attachemnts(account_ids)
-    query = %{
-      SELECT
-        *
-      FROM
-        (
-          SELECT
-            ROW_NUMBER() OVER (PARTITION BY media_attachments.account_id ORDER BY media_attachments.id desc) AS row_number,
-            media_attachments.*
-          FROM
-            media_attachments
-          INNER JOIN statuses
-            ON
-              media_attachments.status_id = statuses.id AND
-              statuses.sensitive = :sensitive AND
-              visibility IN (:visibility)
-          WHERE
-            type = :type AND
-            media_attachments.account_id IN (:account_ids)
-        ) t1
-      WHERE
-        t1.row_number <= :limit;
-    }
+  def popular_media_attachments(accounts)
+    media_attachments_ids = accounts.map { |account|
+      Rails.cache.fetch("suggested_account:published_attachments:#{account.id}") do
+        account.media_attachments.joins(:status).where(statuses: { sensitive: false, visibility: [:public, :unlisted] }).order(Status.arel_table[:favourites_count].desc).first(3).map(&:id)
+      end
+    }.flatten
 
-    MediaAttachment.find_by_sql([
-      query,
-      type: MediaAttachment.types['image'],
-      visibility: Status.visibilities.values_at('public', 'unlisted'),
-      sensitive: false,
-      limit: 4, # maximum image length
-      account_ids: account_ids
-    ])
+    MediaAttachment.where(id: media_attachments_ids)
   end
 
-  def suggested_accounts
-    following = @account.following.ids
-    muted_and_blocked = @account.excluded_from_timeline_account_ids
+  def suggested_accounts(account)
+    following = account.following.ids
+    muted_and_blocked = account.excluded_from_timeline_account_ids
 
-    SuggestedAccountQuery.exclude_ids([@account.id] + excluded_ids + following + muted_and_blocked).all
+    SuggestedAccountQuery.exclude_ids([account.id] + excluded_ids + following + muted_and_blocked).all
   end
 
   def excluded_ids

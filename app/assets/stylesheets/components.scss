@@ -677,17 +677,14 @@ a.status__content__spoiler-link {
 
   .account__suggested_accounts_media {
     padding-left: 13px;
+    $media-height: 90px;
 
     .media-gallery {
-      max-height: 60px;
+      max-height: $media-height;
     }
 
     .media-gallery__item {
-      max-height: 60px;
-    }
-
-    .media-gallery__item-thumbnail {
-      background-position: 50% 25%;
+      max-height: $media-height;
     }
   }
 

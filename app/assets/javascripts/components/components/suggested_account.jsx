@@ -45,8 +45,7 @@ class SuggestedAccount extends React.PureComponent {
       } else if (attachments.first().get('type') === 'video') {
         media = <VideoPlayer media={attachments.first()} onOpenVideo={this.props.onOpenVideo} />;
       } else {
-        // media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={squareMedia ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} squareMedia={squareMedia} />;
-        media = <MediaGallery media={attachments} height={132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={false} expandMedia={false} squareMedia={false} />;
+        media = <MediaGallery media={attachments} height={132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={false} expandMedia={false} squareMedia={false} lineMedia={true} />;
       }
 
       media = (<div className='account__suggested_accounts_media'>{media}</div>);
@@ -58,7 +57,7 @@ class SuggestedAccount extends React.PureComponent {
       const blocking  = account.getIn(['relationship', 'blocking']);
       const muting  = account.getIn(['relationship', 'muting']);
 
-      // TODO: blocking/mutingはそもそも表示しない
+      // NOTE: blocking/mutingはそもそもロードされないはず
       if (requested) {
         buttons = <IconButton disabled={true} icon='hourglass' title={intl.formatMessage(messages.requested)} />
       } else if (blocking) {

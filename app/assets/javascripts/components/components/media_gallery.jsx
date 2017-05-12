@@ -88,7 +88,7 @@ class Item extends React.PureComponent {
   }
 
   render () {
-    const { attachment, index, size, squareMedia, expandMedia } = this.props;
+    const { attachment, index, size, squareMedia, expandMedia, lineMedia } = this.props;
 
     let width  = 50;
     let height = 100;
@@ -99,9 +99,12 @@ class Item extends React.PureComponent {
 
     if (size === 1 || expandMedia) {
       width = 100;
+    } else if (lineMedia) {
+      width = (100 - (size - 1)) / size;
+      left = `${index}%`;
     }
 
-    if (!expandMedia) {
+    if (!expandMedia && !lineMedia) {
       if (size === 4 || (size === 3 && index > 0)) {
         height = 50;
       }
@@ -201,6 +204,7 @@ Item.propTypes = {
   onClick: PropTypes.func.isRequired,
   autoPlayGif: PropTypes.bool.isRequired,
   expandMedia: PropTypes.bool.isRequired,
+  lineMedia: PropTypes.bool,
   squareMedia: PropTypes.bool.isRequired
 };
 
@@ -224,7 +228,7 @@ class MediaGallery extends React.PureComponent {
   }
 
   render () {
-    const { media, intl, sensitive, squareMedia, expandMedia } = this.props;
+    const { media, intl, sensitive, squareMedia, expandMedia, lineMedia } = this.props;
 
     let children;
 
@@ -246,7 +250,7 @@ class MediaGallery extends React.PureComponent {
     } else {
       const size = media.take(4).size;
       children = media.take(4).map((attachment, i) =>
-        <Item key={attachment.get('id')} onClick={this.handleClick} attachment={attachment} autoPlayGif={this.props.autoPlayGif} index={i} size={size} squareMedia={squareMedia} expandMedia={expandMedia} />
+        <Item key={attachment.get('id')} onClick={this.handleClick} attachment={attachment} autoPlayGif={this.props.autoPlayGif} index={i} size={size} squareMedia={squareMedia} expandMedia={expandMedia} lineMedia={!!lineMedia} />
       );
     }
 
@@ -271,11 +275,13 @@ MediaGallery.propTypes = {
   intl: PropTypes.object.isRequired,
   autoPlayGif: PropTypes.bool.isRequired,
   expandMedia: PropTypes.bool.isRequired,
+  lineMedia: PropTypes.bool,
   squareMedia: PropTypes.bool.isRequired
 };
 
 MediaGallery.defaultProps = {
   expandMedia: false,
+  lineMedia: false,
   squareMedia: false
 };
 
