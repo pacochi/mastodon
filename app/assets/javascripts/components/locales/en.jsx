@@ -33,7 +33,7 @@ const en = {
   "column.mutes": "Muted users",
   "column.notifications": "Notifications",
   "column.public": "Federated timeline",
-  "column.suggested_accounts": "Suggested Accounts",
+  "column.suggested_accounts": "Active Accounts",
   "column_back_button.label": "Back",
   "column_subheading.navigation": "Navigation",
   "column_subheading.settings": "Settings",

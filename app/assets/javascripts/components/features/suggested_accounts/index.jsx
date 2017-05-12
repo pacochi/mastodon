@@ -22,7 +22,7 @@ const mapStateToProps = (state, props) => ({
 });
 
 const messages = defineMessages({
-  title: { id: 'column.suggested_accounts', defaultMessage: 'Suggested Users' },
+  title: { id: 'column.suggested_accounts', defaultMessage: 'Active Users' },
   goToLocalTimeline: { id: 'suggested_accounts.go_to_local_timeline', defaultMessage: 'Go To Local Timeline' }
 });
 

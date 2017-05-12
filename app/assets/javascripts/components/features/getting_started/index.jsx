@@ -17,7 +17,7 @@ const messages = defineMessages({
   preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },
   follow_requests: { id: 'navigation_bar.follow_requests', defaultMessage: 'Follow requests' },
   sign_out: { id: 'navigation_bar.logout', defaultMessage: 'Logout' },
-  suggested_accounts: { id: 'navigation_bar.suggested_accounts', defaultMessage: 'Suggested Accounts' },
+  suggested_accounts: { id: 'navigation_bar.suggested_accounts', defaultMessage: 'Active Accounts' },
   favourites: { id: 'navigation_bar.favourites', defaultMessage: 'Favourites' },
   blocks: { id: 'navigation_bar.blocks', defaultMessage: 'Blocked users' },
   mutes: { id: 'navigation_bar.mutes', defaultMessage: 'Muted users' },
