@@ -1,18 +1,21 @@
 - content_for :page_title do
   = t('admin.suggestion.title')
 
-%table.table
-  %thead
-    %tr
-      %th= '優先順位'
-      %th= 'ハッシュタグ'
-      %th= '説明文'
-      %th= ''
-  %tbody
-    - for tag in @tags
+%from
+  %table.table
+    %thead
       %tr
-        %td= tag.order
-        %td= tag.tag.name
-        %td= tag.description
-        %td
-          %button= '削除'
+        %th= '優先順位'
+        %th= 'ハッシュタグ'
+        %th= '説明文'
+        %th= ''
+    %tbody
+      - for tag in @tags
+        %tr
+          %td= tag.order
+          %td= tag.tag.name
+          %td= tag.description
+          %td
+            %button= '編集'
+  %button{type: 'button'}= '追加'
+  %button{type: 'submit'}= '保存'

@@ -1,0 +1,16 @@
+- content_for :page_title do
+  = t('admin.suggestion.title')
+
+%from
+  %table.table
+    %tr
+      %td= '優先順位'
+      %td= @tag.order
+    %tr
+      %td= 'ハッシュタグ'
+      %td= @tag.tag.name
+    %tr
+      %td= '説明文'
+      %td= @tag.description
+  %button{type: 'button'}= '削除'
+  %button{type: 'submit'}= '保存'

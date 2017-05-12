@@ -6,5 +6,13 @@ module Admin
     def index
       @tags = SuggestionTag.all.order(:order)
     end
+
+    def show
+      @tag = SuggestionTag.find(params[:id])
+    end
+
+    def update
+      SuggestionTag.find(params[:id]).update(order: params[:order], description: params[:description])
+    end
   end
 end
