@@ -88,8 +88,7 @@ export default function search(state = initialState, action) {
     return state.set('results', Immutable.Map({
       accounts: Immutable.List(action.results.accounts.map(item => item.id)),
       statuses: Immutable.List(action.results.statuses.map(item => item.id)),
-      hashtags: Immutable.List(action.results.hashtags),
-      toots: Immutable.List(action.results.toots)
+      hashtags: Immutable.List(action.results.hashtags)
     })).set('submitted', true);
   default:
     return state;
