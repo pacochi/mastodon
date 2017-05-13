@@ -1,3 +1,6 @@
+- content_for :page_title do
+  Mastodon (マストドン) hosted by pixiv
+
 - content_for :header_tags do
   %script#initial-state{:type => 'application/json'}!= json_escape('{"meta": {"appmode": "about"}}')
   = javascript_include_tag 'application_public', integrity: true, crossorigin: 'anonymous'
