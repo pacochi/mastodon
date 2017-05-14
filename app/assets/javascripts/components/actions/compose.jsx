@@ -115,7 +115,7 @@ export function submitCompose() {
         tags = statusTags;
       } else {
         tags = tags.filter(it => !statusTags.includes(it));
-        tags.push(...statusTags);
+        tags.unshift(...statusTags);
       }
       const size = tags.length;
       const maxSize = 1000;
@@ -259,7 +259,7 @@ export function fetchComposeHashTagSuggestions(token) {
   return (dispatch, _) => {
     const tags = JSON.parse(localStorage.getItem('hash_tag_history')) || [];
     const suggestionMaxSize = 4;
-    const suggestions = tags.filter(it => it.startsWith(token)).slice(tags.length - suggestionMaxSize, tags.length).reverse();
+    const suggestions = tags.filter(it => it.startsWith(token)).slice(0, suggestionMaxSize);
     dispatch(readyComposeHashTagSuggestions(token, suggestions));
   };
 };
