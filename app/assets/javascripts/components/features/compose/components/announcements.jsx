@@ -32,7 +32,6 @@ const translations = {
 const translate = (text) => {
   for (let key in translations) {
     let regexp = translations[key];
-    console.log(regexp);
     text = text.replace(regexp, key);
   }
 
@@ -40,7 +39,6 @@ const translate = (text) => {
 };
 
 const stopSpeeker = () => {
-  console.log('stopSpeeker')
   message.volume = 0;
   message.onerror = message.onend = () => {};
   window.speechSynthesis.cancel();
@@ -51,7 +49,6 @@ stopSpeeker();
 
 let previous = '';
 const speekSpeeker = (text) => {
-  console.log('speekSpeeker')
   message.volume = 1;
 
   if (text == previous) {
@@ -178,7 +175,7 @@ class Announcements extends React.PureComponent {
       }, {
         id: 8,
         icon: '/announcements/icon_2x_360.png',
-        body: '[超実験中] ホームタイムラインを読み上げる機能を追加しました',
+        body: 'TL自動読み上げ機能復活中',
         link: [
           {
             reactRouter: false,
