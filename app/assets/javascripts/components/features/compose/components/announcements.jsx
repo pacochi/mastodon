@@ -116,8 +116,8 @@ class Announcements extends React.PureComponent {
       message.onend = message.onerror = this.onSpeekHome;
     }
 
-    let timeline = $(".status-list").last()
-    const localTimeline = $(`[aria-labelledby="ホームタイムライン"]`);
+    let timeline = $(".status-list").first()
+    const localTimeline = $(`[aria-labelledby="ホーム"]`);
 
     if (localTimeline.length > 0) {
       timeline = localTimeline;
