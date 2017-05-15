@@ -117,9 +117,8 @@ export function submitCompose() {
         tags = tags.filter(it => !statusTags.includes(it));
         tags.unshift(...statusTags);
       }
-      const size = tags.length;
       const maxSize = 1000;
-      tags.splice(0, Math.max(size - maxSize, 0));
+      tags = tags.slice(0, maxSize);
 
       const data = JSON.stringify(tags);
       try {
