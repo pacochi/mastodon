@@ -240,7 +240,7 @@ const appendNormalizedStatusSearchTimeline = (state, keyword, statuses, page) =>
     moreIds = moreIds.set(i, status.get('id'));
   });
 
-  return state.updateIn(['status_saerch_timelines', keyword], Immutable.Map(), map => map
+  return state.updateIn(['status_search_timelines', keyword], Immutable.Map(), map => map
     .set('isLoading', false)
     .set('page', page)
     .update('items', list => list.push(...moreIds)));

@@ -121,7 +121,7 @@ export function expandStatusSearchTimeline(keyword) {
 
     api(getState).get(`/api/v1/search/statuses/${keyword}`, {
       params: {
-        limit: 1,
+        limit: 5,
         page: page
       }
     }).then(response => {
