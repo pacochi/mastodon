@@ -7,8 +7,7 @@ class Api::V1::TrendTagsController < ApiController
 
   def index
     trend_service = TrendService.new
-    suggestion_tags = trend_service.find_suggestion(@limit)
-    @trend_tags = suggestion_tags + trend_service.find_trend((@limit - suggestion_tags.length).clamp(0, @limit))
+    @trend_tags = trend_service.find_suggestion(@limit)
   end
 
   private

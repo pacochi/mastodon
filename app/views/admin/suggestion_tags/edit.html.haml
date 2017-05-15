@@ -3,10 +3,12 @@
 
 = simple_form_for @suggestion_tag, url:admin_suggestion_tag_path(@suggestion_tag) do |f|
   = render 'shared/error_messages', object: @suggestion_tag
-  = f.input :order, placeholder: '表示順'
-  %p.hint 数が小さい順に表示されます
 
   = f.input :description, placeholder: '説明文'
   %p.hint タグの下に出る説明文です
+
+  = f.input :order, placeholder: '表示順'
+  %p.hint 数が小さい順に表示されます
+
   .actions
     = f.button :button, 'タグを更新する', type: :submit

@@ -12,7 +12,7 @@ module Admin
     def show; end
 
     def new
-      @suggestion_tag = SuggestionTag.new
+      @suggestion_tag = SuggestionTag.new(order: 1)
     end
 
     def create
