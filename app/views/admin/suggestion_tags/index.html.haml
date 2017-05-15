@@ -10,12 +10,13 @@
         %th= '説明文'
         %th= ''
     %tbody
-      - for tag in @tags
+      - for tag in @suggestion_tags
         %tr
           %td= tag.order
           %td= tag.tag.name
           %td= tag.description
           %td
             %button= '編集'
+  = link_to '追加', new_admin_suggestion_tag_path
   %button{type: 'button'}= '追加'
   %button{type: 'submit'}= '保存'

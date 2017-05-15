@@ -94,7 +94,7 @@ Rails.application.routes.draw do
     resources :domain_blocks, only: [:index, :new, :create, :show, :destroy]
     resources :settings, only: [:index, :update]
     resources :instances, only: [:index]
-    resources :suggestion_tags, only: [:index, :show, :update]
+    resources :suggestion_tags
 
     resources :reports, only: [:index, :show, :update] do
       resources :reported_statuses, only: [:update, :destroy]
