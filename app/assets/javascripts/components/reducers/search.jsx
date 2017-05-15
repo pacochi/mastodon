@@ -2,7 +2,7 @@ import {
   SEARCH_CHANGE,
   SEARCH_CLEAR,
   SEARCH_FETCH_SUCCESS,
-  SEARCH_SHOW
+  SEARCH_SHOW,
 } from '../actions/search';
 import { COMPOSE_MENTION, COMPOSE_REPLY } from '../actions/compose';
 import Immutable from 'immutable';

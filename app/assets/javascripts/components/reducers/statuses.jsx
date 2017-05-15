@@ -26,6 +26,10 @@ import {
   ACCOUNT_BLOCK_SUCCESS
 } from '../actions/accounts';
 import {
+  STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
+  STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS,
+} from '../actions/search';
+import {
   NOTIFICATIONS_UPDATE,
   NOTIFICATIONS_REFRESH_SUCCESS,
   NOTIFICATIONS_EXPAND_SUCCESS
@@ -117,6 +121,8 @@ export default function statuses(state = initialState, action) {
   case FAVOURITED_STATUSES_FETCH_SUCCESS:
   case FAVOURITED_STATUSES_EXPAND_SUCCESS:
   case SEARCH_FETCH_SUCCESS:
+  case STATUS_SEARCH_TIMELINE_FETCH_SUCCESS:
+  case STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS:
     return normalizeStatuses(state, action.statuses);
   case TIMELINE_DELETE:
     return deleteStatus(state, action.id, action.references);

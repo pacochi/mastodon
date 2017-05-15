@@ -83,21 +83,28 @@ export function showSearch() {
 
 export function fetchStatusSearchTimeline(keyword, replace = false) {
   return (dispatch, getState) => {
-    const ids      = getState().getIn(['timelines', 'status_search_timelines', keyword, 'items'], Immutable.List());
-    const newestId = ids.size > 0 ? ids.first() : null;
-
-    let params = '';
     let skipLoading = false;
+    let page = getState().getIn(['timelines', 'status_search_timelines', keyword, 'page']);
+    console.log('fetched');
+    console.log(`page : ${page}`);
+    if(!page){
+      page = 1;
+    }
+    console.log(`page : ${page}`);
 
-    if (newestId !== null && !replace) {
-      params      = `?since_id=${newestId}`;
-      skipLoading = true;
+    if (!replace) {
+      //skipLoading = true;
     }
 
     dispatch(fetchStatusSearchTimelineRequest(keyword, skipLoading));
 
-    api(getState).get(`/api/v1/search/statuses/${keyword}${params}`).then(response => {
-      dispatch(fetchStatusSearchTimelineSuccess(keyword, response.data, replace, skipLoading));
+    api(getState).get(`/api/v1/search/statuses/${keyword}`, {
+      params: {
+        limit: 10,
+        page: page
+      }
+    }).then(response => {
+      dispatch(fetchStatusSearchTimelineSuccess(keyword, response.data, page, replace, skipLoading));
     }).catch(error => {
       dispatch(fetchStatusSearchTimelineFail(keyword, error, skipLoading));
     });
@@ -106,18 +113,19 @@ export function fetchStatusSearchTimeline(keyword, replace = false) {
 
 export function expandStatusSearchTimeline(keyword) {
   return (dispatch, getState) => {
-    const lastId = getState().getIn(['timelines', 'status_search_timelines', keyword, 'items'], Immutable.List()).last();
+    const page = getState().getIn(['timelines', 'status_search_timelines', keyword, 'page']);
+
+    console.log('expanded');
 
     dispatch(expandStatusSearchTimelineRequest(keyword));
 
     api(getState).get(`/api/v1/search/statuses/${keyword}`, {
       params: {
-        limit: 10,
-        max_id: lastId
+        limit: 1,
+        page: page
       }
     }).then(response => {
-      const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(expandStatusSearchTimelineSuccess(keyword, response.data, next));
+      dispatch(expandStatusSearchTimelineSuccess(keyword, response.data, page));
     }).catch(error => {
       dispatch(expandStatusSearchTimelineFail(keyword, error));
     });
@@ -132,14 +140,14 @@ export function fetchStatusSearchTimelineRequest(keyword, skipLoading) {
   };
 };
 
-export function fetchStatusSearchTimelineSuccess(keyword, statuses, replace, skipLoading) {
-  console.log(statuses);
+export function fetchStatusSearchTimelineSuccess(keyword, statuses, page, replace, skipLoading) {
   return {
     type: STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
     keyword,
     statuses,
     replace,
-    skipLoading
+    skipLoading,
+    page,
   };
 };
 
@@ -160,13 +168,12 @@ export function expandStatusSearchTimelineRequest(keyword) {
   };
 };
 
-export function expandStatusSearchTimelineSuccess(keyword, statuses, next) {
-  console.log(statuses);
+export function expandStatusSearchTimelineSuccess(keyword, statuses,  page) {
   return {
     type: STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS,
     keyword,
     statuses,
-    next
+    page
   };
 };
 

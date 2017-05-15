@@ -38,7 +38,9 @@ export const makeGetStatus = () => {
     ],
 
     (statusBase, statusReblog, accountBase, accountReblog) => {
+        console.log('reselect is called');
       if (!statusBase) {
+        console.log('status base null');
         return null;
       }
 

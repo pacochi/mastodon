@@ -19,7 +19,7 @@ const messages = defineMessages({
 const mapStateToProps = (state, props) => ({
   statusIds: state.getIn(['timelines', 'status_search_timelines', String(props.params.keyword), 'items'], Immutable.List()),
   isLoading: state.getIn(['timelines', 'status_search_timelines', String(props.params.keyword), 'isLoading']),
-  hasMore: !!state.getIn(['timelines', 'status_search_timelines', String(props.params.keyword), 'next']),
+  hasMore: true,
 });
 
 let subscription;
