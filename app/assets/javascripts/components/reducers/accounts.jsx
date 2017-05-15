@@ -16,6 +16,10 @@ import {
   SUGGESTED_ACCOUNTS_EXPAND_SUCCESS,
 } from '../actions/accounts';
 import {
+  STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
+  STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS,
+} from '../actions/search';
+import {
   BLOCKS_FETCH_SUCCESS,
   BLOCKS_EXPAND_SUCCESS
 } from '../actions/blocks';
@@ -118,6 +122,8 @@ export default function accounts(state = initialState, action) {
   case CONTEXT_FETCH_SUCCESS:
   case FAVOURITED_STATUSES_FETCH_SUCCESS:
   case FAVOURITED_STATUSES_EXPAND_SUCCESS:
+  case STATUS_SEARCH_TIMELINE_FETCH_SUCCESS:
+  case STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS:
     return normalizeAccountsFromStatuses(state, action.statuses);
   case REBLOG_SUCCESS:
   case FAVOURITE_SUCCESS:
