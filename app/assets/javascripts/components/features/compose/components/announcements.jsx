@@ -18,7 +18,7 @@ const message = (() => {
 
 setTimeout(() => {
   window.speechSynthesis.speak(message); // 一度話さないとvoiceリストが取得できない
-  const voices = window.speechSynthesis.getVoices().filter((v) => v.lang == 'ja-JP');
+  const voices = window.speechSynthesis.getVoices().filter((v) => v.lang === 'ja-JP');
   message.voice = voices[0];
 });
 
@@ -51,7 +51,7 @@ let previous = '';
 const speekSpeeker = (text) => {
   message.volume = 1;
 
-  if (text == previous) {
+  if (text === previous) {
     setTimeout(message.onend, 500);
   } else {
     previous = text;
