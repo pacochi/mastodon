@@ -28,7 +28,7 @@ module Admin
       @suggestion_tag = SuggestionTag.new(resource_params)
 
       if @suggestion_tag.save
-        redirect_to admin_suggetion_tags_path, notice: 'タグを作成しました'
+        redirect_to admin_suggestion_tags_url, notice: 'タグを作成しました'
       else
         # render :new
       end
@@ -37,15 +37,13 @@ module Admin
     def edit; end
 
     def update
-      # TODO: 未チェック
       @suggestion_tag.update(order: params[:order], description: params[:description])
-      redirect_to admin_suggetion_tags_path, notice: 'タグを更新しました'
+      redirect_to admin_suggestion_tags_url, notice: 'タグを更新しました'
     end
 
     def destroy
-      # TODO: 未チェック
       @suggestion_tag.destroy
-      redirect_to admin_suggetion_tags_path, notice: 'タグを削除しました'
+      redirect_to admin_suggestion_tags_url, notice: 'タグを削除しました'
     end
 
     private

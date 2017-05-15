@@ -16,7 +16,11 @@
           %td= tag.tag.name
           %td= tag.description
           %td
-            %button= '編集'
-  = link_to '追加', new_admin_suggestion_tag_path
-  %button{type: 'button'}= '追加'
-  %button{type: 'submit'}= '保存'
+            = link_to edit_admin_suggestion_tag_path(tag), class:'table-action-link' do
+              %i.fa.fa-pencil-square-o
+              編集する
+          %td
+            = link_to admin_suggestion_tag_path(tag), method: :delete, class:'table-action-link' do
+              %i.fa.fa-trash
+              削除する
+  = link_to '追加', new_admin_suggestion_tag_path, class:'button'
