@@ -40,6 +40,7 @@ import Notifications from '../features/notifications';
 import FollowRequests from '../features/follow_requests';
 import GenericNotFound from '../features/generic_not_found';
 import FavouritedStatuses from '../features/favourited_statuses';
+import StatusSearchResults from '../features/status_search_results';
 import Blocks from '../features/blocks';
 import Mutes from '../features/mutes';
 import SuggestedAccounts from '../features/suggested_accounts';
@@ -331,6 +332,7 @@ class Mastodon extends React.Component {
                 <Route path='timelines/tag/:id' component={HashtagTimeline} />
 
                 <Route path='statuses/new' component={Compose} />
+                <Route path='statuses/search/:keyword' component={StatusSearchResults} />
                 <Route path='statuses/:statusId' component={Status} />
                 <Route path='statuses/:statusId/reblogs' component={Reblogs} />
                 <Route path='statuses/:statusId/favourites' component={Favourites} />

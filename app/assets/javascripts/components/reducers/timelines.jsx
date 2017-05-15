@@ -34,6 +34,14 @@ import {
   ACCOUNT_MUTE_SUCCESS
 } from '../actions/accounts';
 import {
+  STATUS_SEARCH_TIMELINE_FETCH_REQUEST,
+  STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
+  STATUS_SEARCH_TIMELINE_FETCH_FAIL,
+  STATUS_SEARCH_TIMELINE_EXPAND_REQUEST,
+  STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS,
+  STATUS_SEARCH_TIMELINE_EXPAND_FAIL,
+} from '../actions/search';
+import {
   CONTEXT_FETCH_SUCCESS
 } from '../actions/statuses';
 import Immutable from 'immutable';
@@ -96,6 +104,7 @@ const initialState = Immutable.Map({
   }),
 
   accounts_timelines: Immutable.Map(),
+  status_search_timelines: Immutable.Map(),
   ancestors: Immutable.Map(),
   descendants: Immutable.Map()
 });
@@ -179,6 +188,22 @@ const normalizeAccountMediaTimeline = (state, accountId, statuses, next) => {
     .update('items', Immutable.List(), list => list.unshift(...ids)));
 };
 
+const normalizeStatusSearchTimeline = (state, keyword, statuses, replace = true) => {
+  let ids = Immutable.List();
+
+  statuses.forEach((status, i) => {
+    state = normalizeStatus(state, status);
+    ids   = ids.set(i, status.get('id'));
+  });
+
+  return state.updateIn(['status_search_timelines', keyword], Immutable.Map(), map => map
+    .set('isLoading', false)
+    .set('loaded', true)
+    .set('next', true)
+    .update('items', Immutable.List(), list => ids ));
+    // .update('items', Immutable.List(), list => (replace ? ids : list.unshift(...ids))));
+};
+
 const appendNormalizedAccountTimeline = (state, accountId, statuses, next) => {
   let moreIds = Immutable.List([]);
 
@@ -202,6 +227,20 @@ const appendNormalizedAccountMediaTimeline = (state, accountId, statuses, next) 
   });
 
   return state.updateIn(['account_media_timelines', accountId], Immutable.Map(), map => map
+    .set('isLoading', false)
+    .set('next', next)
+    .update('items', list => list.push(...moreIds)));
+};
+
+const appendNormalizedStatusSearchTimeline = (state, keyword, statuses, next) => {
+  let moreIds = Immutable.List([]);
+
+  statuses.forEach((status, i) => {
+    state   = normalizeStatus(state, status);
+    moreIds = moreIds.set(i, status.get('id'));
+  });
+
+  return state.updateIn(['status_saerch_timelines', keyword], Immutable.Map(), map => map
     .set('isLoading', false)
     .set('next', next)
     .update('items', list => list.push(...moreIds)));
@@ -237,6 +276,7 @@ const updateTimeline = (state, timeline, status, references) => {
   return state;
 };
 
+//TODO
 const deleteStatus = (state, id, accountId, references, reblogOf) => {
   if (reblogOf) {
     // If we are deleting a reblog, just replace reblog with its original
@@ -357,6 +397,16 @@ export default function timelines(state = initialState, action) {
     return normalizeAccountMediaTimeline(state, action.id, Immutable.fromJS(action.statuses), action.next);
   case ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS:
     return appendNormalizedAccountMediaTimeline(state, action.id, Immutable.fromJS(action.statuses), action.next);
+  case STATUS_SEARCH_TIMELINE_FETCH_REQUEST:
+  case STATUS_SEARCH_TIMELINE_EXPAND_REQUEST:
+    return state.updateIn(['status_search_timelines', action.keyword], Immutable.Map(), map => map.set('isLoading', true));
+  case STATUS_SEARCH_TIMELINE_FETCH_FAIL:
+  case STATUS_SEARCH_TIMELINE_EXPAND_FAIL:
+    return state.updateIn(['status_search_timelines', action.keyword], Immutable.Map(), map => map.set('isLoading', false));
+  case STATUS_SEARCH_TIMELINE_FETCH_SUCCESS:
+    return normalizeStatusSearchTimeline(state, action.keyword, Immutable.fromJS(action.statuses), action.next);
+  case STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS:
+    return appendNormalizedStatusSearchTimeline(state, action.keyword, Immutable.fromJS(action.statuses), action.next);
   case ACCOUNT_BLOCK_SUCCESS:
   case ACCOUNT_MUTE_SUCCESS:
     return filterTimelines(state, action.relationship, action.statuses);

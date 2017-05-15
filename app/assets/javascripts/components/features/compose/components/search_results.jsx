@@ -1,4 +1,5 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
+import PropTypes from 'prop-types'
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import AccountContainer from '../../../containers/account_container';
 import StatusContainer from '../../../containers/status_container';
@@ -7,7 +8,7 @@ import { Link } from 'react-router';
 class SearchResults extends React.PureComponent {
 
   render () {
-    const { results } = this.props;
+    const { results, searchKeyword } = this.props;
 
     let accounts, statuses, hashtags;
     let count = 0;
@@ -46,7 +47,9 @@ class SearchResults extends React.PureComponent {
     return (
       <div className='search-results'>
         <div className='search-results__header'>
-          <FormattedMessage id='search_results.total' defaultMessage='{count, number} {count, plural, one {result} other {results}}' values={{ count }} />
+          <Link className='search-toots-in-pawoo' to={`/statuses/search/${searchKeyword}`}>
+            Search toots in Pawoo
+          </Link>
         </div>
 
         {accounts}
@@ -60,7 +63,8 @@ class SearchResults extends React.PureComponent {
 }
 
 SearchResults.propTypes = {
-  results: ImmutablePropTypes.map.isRequired
+  results: ImmutablePropTypes.map.isRequired,
+  searchKeyword: PropTypes.string
 };
 
 export default SearchResults;
