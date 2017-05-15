@@ -13,10 +13,7 @@ class TrendTags extends React.PureComponent {
         <div className="trend-tags__header">
           <i className="fa fa-line-chart trend-tags__header__icon" aria-hidden="true" />
           <div className="trend-tags__header__name">
-            トレンド(実験中)
-            <div className="trend-tags__header__description">
-              今Pawooで人気のタグを見てみよう
-            </div>
+            おすすめタグ(実験中)
           </div>
         </div>
         <div className="trend-tags__body">
@@ -30,9 +27,6 @@ class TrendTags extends React.PureComponent {
               </li>
             ))}
           </ul>
-          <div className="trend-tags__note">
-            トレンドタグは直近20分間のトゥートをもとに作成しています。
-          </div>
         </div>
       </div>
     );
