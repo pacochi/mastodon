@@ -382,5 +382,4 @@ ActiveRecord::Schema.define(version: 20170516072309) do
   end
 
   add_foreign_key "statuses", "statuses", column: "reblog_of_id", on_delete: :cascade
-  add_foreign_key "suggestion_tags", "tags"
 end

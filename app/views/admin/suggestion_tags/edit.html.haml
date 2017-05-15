@@ -1,7 +1,7 @@
 - content_for :page_title do
   = t('admin.suggestion.title')
 
-= simple_form_for @suggestion_tag, url:admin_suggestion_tag_path(@suggestion_tag) do |f|
+= simple_form_for @suggestion_tag, url: admin_suggestion_tag_path(@suggestion_tag) do |f|
   = render 'shared/error_messages', object: @suggestion_tag
 
   = f.input :description, placeholder: '説明文'

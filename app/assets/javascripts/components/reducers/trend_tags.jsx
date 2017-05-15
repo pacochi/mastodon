@@ -14,9 +14,7 @@ export default function trendtags(state = initialState, action) {
   case TREND_TAGS_REQUEST:
     return refreshTrendTags();
   case TREND_TAGS_SUCCESS:
-    return state.withMutations(map => {
-      map.set('tags', Immutable.fromJS(action.tags))
-    });
+    return state.set('tags', Immutable.fromJS(action.tags));
   default:
     return state;
   }

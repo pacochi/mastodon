@@ -3,7 +3,7 @@ class CreateSuggestionTags < ActiveRecord::Migration[5.0]
     create_table :suggestion_tags do |t|
       t.string :description, null: false
       t.integer :order, null: false
-      t.belongs_to :tag, foreign_key: true, null: false
+      t.belongs_to :tag, null: false, :unique => true
       t.timestamps
     end
   end

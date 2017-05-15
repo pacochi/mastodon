@@ -1,8 +1,11 @@
 class SuggestionTag < ApplicationRecord
-  validates :tag_name, presence: true, on: :create
-  validates :order, presence: true
-  validates :description, presence: true
-
-  attr_accessor :tag_name
   belongs_to :tag
+
+  validates :order, :description, presence: true
+  validates :tag_id, uniqueness: true
+
+  def self.create_suggestion_tag(order, tag_name, desc)
+    tag = Tag.find_or_create_by!(name: tag_name)
+    SuggestionTag.create!(order: order, description: desc, tag: tag)
+  end
 end

@@ -2,34 +2,23 @@
 
 module Admin
   class SuggestionTagsController < BaseController
-
-    before_action :set_suggestion_tag, except: [:index, :new, :create]
+    before_action :set_suggestion_tag, only: [:edit, :update, :destroy]
 
     def index
-      @suggestion_tags = SuggestionTag.all.order(:order)
+      @suggestion_tags = SuggestionTag.order(:order).preload(:tag)
     end
-
-    def show; end
 
     def new
       @suggestion_tag = SuggestionTag.new(order: 1)
     end
 
     def create
-
-      begin
-        tag_service = SuggestionTagService.new
-        tag_service.create(resource_params[:order],
-                           resource_params[:tag_name],
-                           resource_params[:description])
-      rescue ActiveSupport::DeprecationException => _
-        redirect_to admin_suggestion_tags_url, notice: 'すでに存在するタグです'
-        return
-      rescue StandardError => _
-        redirect_to admin_suggestion_tags_url, notice: '保存に失敗しました'
-        return
-      end
+      SuggestionTag.create_suggestion_tag(resource_params[:order],
+                                          resource_params[:tag][:name],
+                                          resource_params[:description])
       redirect_to admin_suggestion_tags_url, notice: 'タグを作成しました'
+    rescue ActiveRecord::RecordInvalid
+      redirect_to admin_suggestion_tags_url, notice: '保存に失敗しました'
     end
 
     def edit; end
@@ -52,7 +41,7 @@ module Admin
 
     def resource_params
       params.require(:suggestion_tag)
-        .permit(:order, :tag_name, :description)
+        .permit(:order, :description, tag: [:name])
     end
   end
 end

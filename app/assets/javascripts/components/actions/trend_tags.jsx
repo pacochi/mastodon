@@ -18,4 +18,3 @@ export function refreshTrendTagsSuccess(tags) {
     tags
   }
 }
-

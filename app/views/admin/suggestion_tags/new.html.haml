@@ -1,11 +1,12 @@
 - content_for :page_title do
   = t('admin.suggestion.title')
 
-= simple_form_for @suggestion_tag, url:admin_suggestion_tags_path  do |f|
+= simple_form_for @suggestion_tag, url:admin_suggestion_tags_path do |f|
   = render 'shared/error_messages', object: @suggestion_tag
 
-  = f.input :tag_name, placeholder: 'タグ名'
-  %p.hint 先頭シャープは付けないで下さい。
+  = f.fields_for :tag do |tag|
+    = tag.input :name, placeholder: 'タグ名'
+    %p.hint 先頭シャープは付けないで下さい。
 
   = f.input :description, placeholder: '説明文'
   %p.hint タグの下に出る説明文です
