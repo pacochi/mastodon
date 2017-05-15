@@ -34,8 +34,11 @@ class TrendService < BaseService
   end
 
   def find_suggestion(limit = 3)
-    SuggestionTag.all.order(:order).first(limit).map do |tag|
-      TrendTag.new(tag.tag.name, tag.description, 'suggestion')
+    hash = {}
+    suggestion_tags = SuggestionTag.all.order(:order).first(limit)
+    suggestion_tags.each {|it| hash[it.tag_id] = it}
+    Tag.find(suggestion_tags.map { |tag| tag.tag_id }).map do |tag|
+      TrendTag.new(tag.name, hash[tag.id].description, 'suggestion')
     end
   end
 end
