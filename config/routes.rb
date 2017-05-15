@@ -162,7 +162,7 @@ Rails.application.routes.draw do
       resources :favourites, only: [:index]
       resources :reports,    only: [:index, :create]
       resources :pixiv_twitter_images, only: [:create]
-      resources :firebase_cloud_messaging_tokens, only: [:create]
+      resources :firebase_cloud_messaging_tokens, only: [:create, :destroy], param: :platform
       resources :suggested_accounts, only: [:index]
 
       resource :instance, only: [:show]
