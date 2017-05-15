@@ -16,6 +16,16 @@ class Api::V1::FirebaseCloudMessagingTokensController < ApiController
     end
   end
 
+  def destroy
+    firebase_cloud_messaging_token = current_user.firebase_cloud_messaging_tokens.find_by!(firebase_cloud_messaging_token)
+
+    if firebase_cloud_messaging_token.destroy
+      head :ok
+    else
+      head :unprocessable_entity
+    end
+  end
+
   private
 
   def firebase_cloud_messaging_token_params
