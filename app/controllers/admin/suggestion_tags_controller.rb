@@ -16,28 +16,26 @@ module Admin
     end
 
     def create
-      # TODO: 未完成
-      # タグの存在を確認
-      tag = Tag.find_by(name:resource_params[:tag_name]);
-      # なければ作成
-      if !tag.present?
-        tag = Tag.new(name:resource_params[:tag_name]);
-      end
 
-      resource_params[:tag_id] = tag[:id];
-      @suggestion_tag = SuggestionTag.new(resource_params)
-
-      if @suggestion_tag.save
-        redirect_to admin_suggestion_tags_url, notice: 'タグを作成しました'
-      else
-        # render :new
+      begin
+        tag_service = SuggestionTagService.new
+        tag_service.create(resource_params[:order],
+                           resource_params[:tag_name],
+                           resource_params[:description])
+      rescue ActiveSupport::DeprecationException => _
+        redirect_to admin_suggestion_tags_url, notice: 'すでに存在するタグです'
+        return
+      rescue StandardError => _
+        redirect_to admin_suggestion_tags_url, notice: '保存に失敗しました'
+        return
       end
+      redirect_to admin_suggestion_tags_url, notice: 'タグを作成しました'
     end
 
     def edit; end
 
     def update
-      @suggestion_tag.update(order: params[:order], description: params[:description])
+      @suggestion_tag.update(order: resource_params[:order], description: resource_params[:description])
       redirect_to admin_suggestion_tags_url, notice: 'タグを更新しました'
     end
 
@@ -53,7 +51,8 @@ module Admin
     end
 
     def resource_params
-      params.require(:suggestion_tag).permit(:order, :tag_name, :description)
+      params.require(:suggestion_tag)
+        .permit(:order, :tag_name, :description)
     end
   end
 end
