@@ -1,12 +1,13 @@
 require 'rails_helper'
 
-describe Settings::PushNotificationPreferencesController do
+describe Api::V1::PushNotificationPreferencesController do
   render_views
 
-  let(:user) { Fabricate(:user) }
+  let(:user)  { Fabricate(:user, account: Fabricate(:account, username: 'alice')) }
+  let(:token) { double acceptable?: true, resource_owner_id: user.id }
 
   before do
-    sign_in user, scope: :user
+    allow(controller).to receive(:doorkeeper_token) { token }
   end
 
   describe 'GET #show' do
@@ -28,7 +29,7 @@ describe Settings::PushNotificationPreferencesController do
         }
       }
 
-      expect(response).to redirect_to(settings_push_notification_preferences_path)
+      expect(response).to have_http_status(:success)
       user.reload
       expect(user.settings['notification_firebase_cloud_messagings']['follow']).to be true
       expect(user.settings['interactions']['must_be_follower']).to be false

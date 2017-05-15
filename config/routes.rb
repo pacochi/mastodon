@@ -60,7 +60,6 @@ Rails.application.routes.draw do
     resources :oauth_authentications, only: [:index, :destroy]
     resource :profile, only: [:show, :update]
     resource :preferences, only: [:show, :update]
-    resource :push_notification_preferences, only: [:show, :update]
     resource :import, only: [:show, :create]
 
     resource :export, only: [:show]
@@ -154,6 +153,7 @@ Rails.application.routes.draw do
 
       get '/search', to: 'search#index', as: :search
 
+      resource :push_notification_preferences, only: [:show, :update]
       resources :follows,    only: [:create]
       resources :media,      only: [:create]
       resources :apps,       only: [:create]
