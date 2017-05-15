@@ -8,6 +8,9 @@ class TrendTags extends React.PureComponent {
     this.props.refreshTrendTags();
   }
   render () {
+    if (this.props.tags.size === 0) {
+      return null
+    }
     return (
       <div className="trend-tags">
         <div className="trend-tags__header">
