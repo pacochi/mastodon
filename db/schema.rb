@@ -324,12 +324,12 @@ ActiveRecord::Schema.define(version: 20170516072309) do
   end
 
   create_table "suggestion_tags", force: :cascade do |t|
-    t.string   "description", null: false
-    t.integer  "order",       null: false
-    t.integer  "tag_id",      null: false
-    t.datetime "created_at",  null: false
-    t.datetime "updated_at",  null: false
-    t.index ["tag_id"], name: "index_suggestion_tags_on_tag_id", using: :btree
+    t.integer  "tag_id",                   null: false
+    t.integer  "order",       default: 1,  null: false
+    t.string   "description", default: "", null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.index ["tag_id"], name: "index_suggestion_tags_on_tag_id", unique: true, using: :btree
   end
 
   create_table "tags", force: :cascade do |t|
