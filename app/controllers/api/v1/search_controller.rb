@@ -8,9 +8,9 @@ class Api::V1::SearchController < ApiController
   end
 
   def statuses
-    keyword = params[:keyword]
+    query = params[:query]
     current_page = params[:page].to_i
-    @statuses = Status.search(keyword)
+    @statuses = Status.search(query)
                       .page(current_page).per(limit_param(DEFAULT_STATUSES_LIMIT))
                       .to_a.select {|i| Status.exists?(i._source.id)} .map {|i| Status.find(i._source.id)}
   end

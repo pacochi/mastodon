@@ -43,8 +43,22 @@ module StatusSearchable
   end
 
   class_methods do
-    def self.search(params = {})
-      __elasticsearch__.search(params)
+    def search(query)
+      __elasticsearch__.search({
+        "query": {
+          "simple_query_string": {
+            "query": query,
+            "fields": ["text"],
+            "default_operator": "and"
+          }
+        },
+        "sort": [{
+          "@timestamp": {
+            "order": "desc",
+            "missing": "_last"
+          }
+        }]
+      })
     end
   end
 

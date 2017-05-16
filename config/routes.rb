@@ -153,7 +153,7 @@ Rails.application.routes.draw do
       get '/timelines/tag/:id',  to: 'timelines#tag', as: :hashtag_timeline
 
       get '/search', to: 'search#index', as: :search
-      get '/search/statuses/:keyword', to: 'search#statuses', as: :status_search_timeline
+      get '/search/statuses/:query', to: 'search#statuses', as: :status_search_timeline
 
       resource :push_notification_preferences, only: [:show, :update]
       resources :trend_tags, only: [:index]
