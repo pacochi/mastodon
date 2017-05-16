@@ -44,9 +44,9 @@ class StatusSearchResults extends React.PureComponent {
   }
 
   render () {
-    const { intl, statusIds, isLoading, hasMore } = this.props;
-    const keyword = String(this.props.params.keyword);
-    let column_header = <FormattedMessage id='column.search_toots' defaultMessage={'Search: \"{keyword}\"'} values={{ keyword: {keyword} }} />;
+    const { intl, statusIds, isLoading, hasMore, params } = this.props;
+    const keyword = String(params.keyword);
+    let column_header = <FormattedMessage id='column.search_toots' defaultMessage={"Search: \"{keyword}\""} values={{ keyword: keyword }} />;
 
     if (!statusIds && isLoading) {
       return (
