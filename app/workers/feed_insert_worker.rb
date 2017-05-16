@@ -4,8 +4,6 @@ class FeedInsertWorker
   include Sidekiq::Worker
 
   def perform(status_id, follower_ids)
-    followers_ids = Array(follower_ids)
-
     status = Status.find(status_id)
 
     # TODO: reduce N+1 queries to filter followers

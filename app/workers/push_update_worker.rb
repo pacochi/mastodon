@@ -4,8 +4,6 @@ class PushUpdateWorker
   include Sidekiq::Worker
 
   def perform(account_ids, status_id)
-    account_ids = Array(account_ids)
-
     status  = Status.find(status_id)
     Account.where(id: account_ids).each do |account|
       message = InlineRenderer.render(status, account, 'api/v1/statuses/show')

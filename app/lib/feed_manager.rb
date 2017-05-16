@@ -22,7 +22,7 @@ class FeedManager
   end
 
   def push(timeline_type, accounts, status)
-    accounts = Array(accounts)
+    accounts = Array.wrap(accounts)
 
     accounts.each do |account|
       timeline_key = key(timeline_type, account.id)
