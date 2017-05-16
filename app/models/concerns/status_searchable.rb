@@ -26,7 +26,10 @@ module StatusSearchable
     after_commit on: [:create] do
       Rails.logger.debug 'is toot public?'
       Rails.logger.debug public_visibility?
-      if public_visibility?
+      Rails.logger.debug 'is tooted at pawoo'
+      is_pawoo = (uri==nil)
+      Rails.logger.debug is_pawoo
+      if public_visibility? and is_pawoo
         Rails.logger.debug 'toot is sent to ES.@create'
         __elasticsearch__.index_document
       else
