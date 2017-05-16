@@ -100,7 +100,7 @@ class Status < ApplicationRecord
   def ancestors(account = nil)
     ids      = Rails.cache.fetch("ancestors:#{id}") { (Status.find_by_sql(['WITH RECURSIVE search_tree(id, in_reply_to_id, path) AS (SELECT id, in_reply_to_id, ARRAY[id] FROM statuses WHERE id = ? UNION ALL SELECT statuses.id, statuses.in_reply_to_id, path || statuses.id FROM search_tree JOIN statuses ON statuses.id = search_tree.in_reply_to_id WHERE NOT statuses.id = ANY(path)) SELECT id FROM search_tree ORDER BY path DESC', id]) - [self]).pluck(:id) }
     statuses = Status.where(id: ids).group_by(&:id)
-    results  = ids.map { |id| statuses[id]&.first }.compact
+    results  = ids.map { |id| statuses[id].first }
     results  = results.reject { |status| filter_from_context?(status, account) }
 
     results
@@ -165,22 +165,18 @@ class Status < ApplicationRecord
     end
 
     def permitted_for(target_account, account)
-      visibility = %w(public unlisted)
+      return where.not(visibility: [:private, :direct]) if account.nil?
 
-      if account.nil?
-        where(visibility: visibility)
-      elsif target_account.blocking?(account) # get rid of blocked peeps
+      if target_account.blocking?(account) # get rid of blocked peeps
         none
       elsif account.id == target_account.id # author can see own stuff
         all
-      else
-        # followers can see followers-only stuff, but also things they are mentioned in.
-        # non-followers can see everything that isn't private/direct, but can see stuff they are mentioned in.
-        visibility.push('private') if account.following?(target_account)
-
-        joins("LEFT OUTER JOIN mentions ON statuses.id = mentions.status_id AND mentions.account_id = #{account.id}")
-          .where(arel_table[:visibility].in(visibility).or(Mention.arel_table[:id].not_eq(nil)))
-          .order(visibility: :desc)
+      elsif account.following?(target_account) # followers can see followers-only stuff, but also things they are mentioned in
+        joins('LEFT OUTER JOIN mentions ON statuses.id = mentions.status_id AND mentions.account_id = ' + account.id.to_s)
+          .where('statuses.visibility != ? OR mentions.id IS NOT NULL', Status.visibilities[:direct])
+      else # non-followers can see everything that isn't private/direct, but can see stuff they are mentioned in
+        joins('LEFT OUTER JOIN mentions ON statuses.id = mentions.status_id AND mentions.account_id = ' + account.id.to_s)
+          .where('statuses.visibility NOT IN (?) OR mentions.id IS NOT NULL', [Status.visibilities[:direct], Status.visibilities[:private]])
       end
     end
 
