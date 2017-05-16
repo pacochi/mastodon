@@ -1,5 +1,5 @@
 class SuggestionTag < ApplicationRecord
-  belongs_to :tag
+  belongs_to :tag, required: true
 
   validates :order, :description, presence: true
   validates :tag_id, uniqueness: true
