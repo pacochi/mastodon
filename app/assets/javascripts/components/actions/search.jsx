@@ -89,9 +89,7 @@ export function fetchStatusSearchTimeline(keyword) {
     let page = getState().getIn(['timelines', 'status_search_timelines', keyword, 'page']);
     console.log('fetched');
     console.log(`page : ${page}`);
-    if(!page){
-      page = 1;
-    }
+    page = 1;
     console.log(`page : ${page}`);
 
     dispatch(fetchStatusSearchTimelineRequest(keyword, skipLoading));
@@ -114,6 +112,7 @@ export function expandStatusSearchTimeline(keyword) {
     const page = getState().getIn(['timelines', 'status_search_timelines', keyword, 'page']);
 
     console.log('expanded');
+    console.log(`page : ${page}`);
 
     dispatch(expandStatusSearchTimelineRequest(keyword));
 
