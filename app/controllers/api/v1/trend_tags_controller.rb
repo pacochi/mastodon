@@ -9,6 +9,7 @@ class Api::V1::TrendTagsController < ApiController
   end
 
   private
+
   def limit_param!
     limit_size = params[:limit] || 5
     @limit = limit_size.to_i.clamp(0, 5)
