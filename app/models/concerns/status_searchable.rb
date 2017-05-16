@@ -46,19 +46,27 @@ module StatusSearchable
     def search(query)
       __elasticsearch__.search({
         "query": {
-          "simple_query_string": {
-            "query": query,
-            "fields": ["text"],
-            "default_operator": "and"
+          "bool": {
+            "must": [{
+              "simple_query_string": {
+                "query": query,
+                "fields": ["text"],
+                "default_operator": "and"
+              }
+            }],
+            "filter": [
+                { "term": { "visibility": 0 } },
+                { "term": { "is_pawoo": true } }
+            ]
           }
         },
         "sort": [{
-          "@timestamp": {
+          "created_at": {
             "order": "desc",
             "missing": "_last"
           }
         }]
-      })
+      });
     end
   end
 
