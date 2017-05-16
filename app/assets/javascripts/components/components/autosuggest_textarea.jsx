@@ -209,9 +209,23 @@ class AutosuggestTextarea extends React.Component {
     }
   }
 
+  renderHashTagSuggestion(tag, i) {
+    const { selectedHashTagSuggestion} = this.state;
+    return (
+      <div
+        role='button'
+        tabIndex='0'
+        key={tag}
+        className={`autosuggest-textarea__suggestions__item ${i === selectedHashTagSuggestion ? 'selected' : ''}`}
+        onClick={this.onHashTagSuggestionClick.bind(this, tag)}>
+        #{tag}
+      </div>
+    );
+  }
+
   render () {
     const { value, suggestions, hash_tag_suggestions, disabled, placeholder, onKeyUp, autoFocus } = this.props;
-    const { suggestionsHidden, selectedSuggestion, hashTagSuggestionsHidden, selectedHashTagSuggestion } = this.state;
+    const { suggestionsHidden, selectedSuggestion, hashTagSuggestionsHidden } = this.state;
     const style = { direction: 'ltr' };
 
     if (isRtl(value)) {
@@ -248,16 +262,7 @@ class AutosuggestTextarea extends React.Component {
           ))}
         </div>
         <div style={{ display: (hash_tag_suggestions.size > 0 && !hashTagSuggestionsHidden) ? 'block' : 'none' }}  className='autosuggest-textarea__suggestions'>
-          {hash_tag_suggestions.map((tag, i) => (
-            <div
-              role='button'
-              tabIndex='0'
-              key={tag}
-              className={`autosuggest-textarea__suggestions__item ${i === selectedHashTagSuggestion ? 'selected' : ''}`}
-              onClick={this.onHashTagSuggestionClick.bind(this, tag)}>
-              #{tag}
-            </div>
-          ))}
+          {hash_tag_suggestions.map(this.renderHashTagSuggestion.bind(this))}
         </div>
       </div>
     );

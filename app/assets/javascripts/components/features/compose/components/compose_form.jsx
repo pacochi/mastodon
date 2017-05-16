@@ -85,7 +85,6 @@ class ComposeForm extends React.PureComponent {
     this.props.onHashTagSuggestionsClearRequested();
   }
 
-  @debounce(20)
   onHashTagSuggestionsFetchRequested(token) {
     this.props.onHashTagSuggestionsFetchRequested(token);
   }
