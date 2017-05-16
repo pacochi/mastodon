@@ -1,4 +1,4 @@
 - content_for :page_title do
-  = t('admin.suggestion.title')
+  = "「##{@suggestion_tag.tag.name}」を編集"
 
 = render 'form', suggestion_tag: @suggestion_tag
