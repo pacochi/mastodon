@@ -6,7 +6,7 @@ import {
 import Immutable from 'immutable';
 
 const initialState = Immutable.Map({
-    tags: Immutable.List()
+  tags: Immutable.List()
 });
 
 export default function trendtags(state = initialState, action) {
