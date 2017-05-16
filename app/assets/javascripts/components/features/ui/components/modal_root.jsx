@@ -18,6 +18,9 @@ class ModalRoot extends React.PureComponent {
 
   constructor (props, context) {
     super(props, context);
+    this.state = { willHide: false };
+    this.willEnter = this.willEnter.bind(this);
+    this.willLeave = this.willLeave.bind(this);
     this.handleKeyUp = this.handleKeyUp.bind(this);
   }
 
@@ -36,10 +39,12 @@ class ModalRoot extends React.PureComponent {
   }
 
   willEnter () {
+    this.setState({ willHide: false });
     return { opacity: 0, scale: 0.98 };
   }
 
   willLeave () {
+    this.setState({ willHide: true });
     return { opacity: spring(0), scale: spring(0.98) };
   }
 
@@ -61,7 +66,7 @@ class ModalRoot extends React.PureComponent {
         willEnter={this.willEnter}
         willLeave={this.willLeave}>
         {interpolatedStyles =>
-          <div className='modal-root'>
+          <div className='modal-root' style={{ pointerEvents: this.state.willHide ? 'none' : 'auto' }}>
             {interpolatedStyles.map(({ key, data: { type, props }, style }) => {
               const SpecificComponent = MODAL_COMPONENTS[type];
 
