@@ -5,10 +5,14 @@ import AccountContainer from '../../../containers/account_container';
 import StatusContainer from '../../../containers/status_container';
 import { Link } from 'react-router';
 
+const messages = defineMessages({
+  search_toots: { id: 'search_results.search_toots', defaultMessage: 'Search Toots' },
+});
+
 class SearchResults extends React.PureComponent {
 
   render () {
-    const { results, searchKeyword } = this.props;
+    const { results, searchKeyword, intl } = this.props;
 
     let accounts, statuses, hashtags;
     let count = 0;
@@ -47,8 +51,8 @@ class SearchResults extends React.PureComponent {
     return (
       <div className='search-results'>
         <div className='search-results__header'>
-          <Link className='search-toots-in-pawoo' to={`/statuses/search/${searchKeyword}`}>
-            Search toots in Pawoo
+          <Link className='search-results__search-toots' to={`/statuses/search/${searchKeyword}`}>
+            {intl.formatMessage(messages.search_toots)}
           </Link>
         </div>
 
@@ -67,4 +71,4 @@ SearchResults.propTypes = {
   searchKeyword: PropTypes.string
 };
 
-export default SearchResults;
+export default injectIntl(SearchResults);

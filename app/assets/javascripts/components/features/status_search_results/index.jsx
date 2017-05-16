@@ -7,14 +7,10 @@ import {
   expandStatusSearchTimeline
 } from '../../actions/search';
 import Column from '../ui/components/column';
-import {defineMessages, injectIntl, FormattedMessage} from 'react-intl';
+import {injectIntl, FormattedMessage} from 'react-intl';
 import ColumnBackButtonSlim from '../../components/column_back_button_slim';
 import LoadingIndicator from '../../components/loading_indicator';
 import StatusList from '../../components/status_list';
-
-const messages = defineMessages({
-  title: {id: 'column.statusSearchResults', defaultMessage: 'Status search results'}
-});
 
 const mapStateToProps = (state, props) => ({
   statusIds: state.getIn(['timelines', 'status_search_timelines', String(props.params.keyword), 'items'], Immutable.List()),
@@ -49,6 +45,8 @@ class StatusSearchResults extends React.PureComponent {
 
   render () {
     const { intl, statusIds, isLoading, hasMore } = this.props;
+    const keyword = String(this.props.params.keyword);
+    let column_header = <FormattedMessage id='column.search_toots' defaultMessage={'Search: \"{keyword}\"'} values={{ keyword: {keyword} }} />;
 
     if (!statusIds && isLoading) {
       return (
@@ -59,7 +57,7 @@ class StatusSearchResults extends React.PureComponent {
     }
 
     return (
-      <Column icon='globe'  heading={intl.formatMessage(messages.title)}>
+      <Column icon='search' heading={column_header}>
         <ColumnBackButtonSlim />
         <StatusList
           scrollKey='status_search_results'
