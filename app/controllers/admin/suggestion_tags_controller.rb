@@ -9,23 +9,30 @@ module Admin
     end
 
     def new
-      @suggestion_tag = SuggestionTag.new(order: 1)
+      @suggestion_tag = SuggestionTag.new
+      @suggestion_tag.build_tag
     end
 
     def create
-      SuggestionTag.create_suggestion_tag(resource_params[:order],
-                                          resource_params[:tag][:name],
-                                          resource_params[:description])
-      redirect_to admin_suggestion_tags_url, notice: 'タグを作成しました'
-    rescue ActiveRecord::RecordInvalid
-      redirect_to admin_suggestion_tags_url, notice: '保存に失敗しました'
+      @suggestion_tag = SuggestionTag.new(suggestion_tag_params)
+
+      if @suggestion_tag.save
+        redirect_to admin_suggestion_tags_url, notice: 'タグを作成しました'
+      else
+        flash.now[:alert] = '保存に失敗しました'
+        render :new, status: :unprocessable_entity
+      end
     end
 
     def edit; end
 
     def update
-      @suggestion_tag.update(order: resource_params[:order], description: resource_params[:description])
-      redirect_to admin_suggestion_tags_url, notice: 'タグを更新しました'
+      if @suggestion_tag.update(suggestion_tag_params_for_update)
+        redirect_to admin_suggestion_tags_url, notice: 'タグを更新しました'
+      else
+        flash.now[:alert] = 'タグの更新に失敗しました'
+        render :edit, status: :unprocessable_entity
+      end
     end
 
     def destroy
@@ -39,9 +46,12 @@ module Admin
       @suggestion_tag = SuggestionTag.find(params[:id])
     end
 
-    def resource_params
-      params.require(:suggestion_tag)
-        .permit(:order, :description, tag: [:name])
+    def suggestion_tag_params
+      params.require(:suggestion_tag).permit(:order, :description, tag_attributes: [:name])
+    end
+
+    def suggestion_tag_params_for_update
+      params.require(:suggestion_tag).permit(:order, :description)
     end
   end
 end
