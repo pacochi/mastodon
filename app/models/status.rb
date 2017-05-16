@@ -31,7 +31,7 @@ class Status < ApplicationRecord
   validates_with StatusLengthValidator
   validates :reblog, uniqueness: { scope: :account }, if: 'reblog?'
 
-  default_scope { order(id: :desc) }
+  default_scope { order('id desc') }
 
   scope :remote, -> { where.not(uri: nil) }
   scope :local, -> { where(uri: nil) }
