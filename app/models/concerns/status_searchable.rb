@@ -9,14 +9,51 @@ module StatusSearchable
     index_name  "pawoo"
     document_type "status"
 
-    #  settings index: { ... }
-    #mappings dynamic: 'false' do ... end
+    status_search_es_settings = {
+      index: {
+        analysis: {
+          tokenizer: {
+            ja_text_tokenizer: {
+              type: "kuromoji_tokenizer",
+              mode: "search"
+            }
+          },
+          analyzer: {
+            ja_text_analyzer: {
+              tokenizer: "ja_text_tokenizer",
+              type: "custom",
+              char_filter: ["icu_normalizer"],
+              filter: ["kuromoji_part_of_speech"]
+            }
+          }
+        }
+      }
+    }
+
+    settings status_search_es_settings do
+      mappings dynamic: 'false' do
+        indexes :id, type: 'long'
+        indexes :text, type: 'text', analyzer: 'ja_text_analyzer', fielddata: true
+        indexes :favourites_count, type: 'integer'
+        indexes :reblogs_count, type: 'integer'
+        indexes :language, type: 'keyword'
+        indexes :created_at, type: 'date', format: 'date_time'
+        indexes :is_pawoo, type: 'boolean'
+        indexes :visibility, type: 'text'
+      end
+    end
 
     def as_indexed_json(options = {})
-      if public_visibility?
+      if postable_to_es?
         {
           id: id,
           text: text,
+          favourites_count: favourites_count,
+          reblogs_count: reblogs_count,
+          language: language,
+          created_at: created_at,
+          is_pawoo: local?,
+          visibility: visibility
         }
       else
         {}
@@ -24,12 +61,7 @@ module StatusSearchable
     end
 
     after_commit on: [:create] do
-      Rails.logger.debug 'is toot public?'
-      Rails.logger.debug public_visibility?
-      Rails.logger.debug 'is tooted at pawoo'
-      is_pawoo = (uri==nil)
-      Rails.logger.debug is_pawoo
-      if public_visibility? and is_pawoo
+      if postable_to_es?
         Rails.logger.debug 'toot is sent to ES.@create'
         __elasticsearch__.index_document
       else

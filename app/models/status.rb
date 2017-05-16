@@ -48,6 +48,10 @@ class Status < ApplicationRecord
 
   cache_associated :application, :media_attachments, :tags, :stream_entry, :pixiv_cards, mentions: { account: :oauth_authentications }, reblog: [{ account: :oauth_authentications }, :application, :stream_entry, :tags, :media_attachments, :pixiv_cards, mentions: { account: :oauth_authentications }], thread: { account: :oauth_authentications }, account: :oauth_authentications
 
+  def postable_to_es?
+    public_visibility? and local?
+  end
+
   def reply?
     !in_reply_to_id.nil? || super
   end
