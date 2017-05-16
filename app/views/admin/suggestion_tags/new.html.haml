@@ -1,18 +1,4 @@
 - content_for :page_title do
   = t('admin.suggestion.title')
 
-= simple_form_for @suggestion_tag, url:admin_suggestion_tags_path do |f|
-  = render 'shared/error_messages', object: @suggestion_tag
-
-  = f.fields_for :tag do |tag|
-    = tag.input :name, placeholder: 'タグ名'
-    %p.hint 先頭シャープは付けないで下さい。
-
-  = f.input :description, placeholder: '説明文'
-  %p.hint タグの下に出る説明文です
-
-  = f.input :order, placeholder: '表示順'
-  %p.hint 数が小さい順に表示されます
-
-  .actions
-    = f.button :button, 'タグを作成する', type: :submit
+= render 'form', suggestion_tag: @suggestion_tag
