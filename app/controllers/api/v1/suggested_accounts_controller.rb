@@ -13,7 +13,7 @@ class Api::V1::SuggestedAccountsController < ApiController
     seed = params[:seed] ? params[:seed].to_i : Random.new_seed
 
     query = suggested_accounts(current_user.account).shuffle(seed).per(limit).page(params[:page])
-    @accounts = query.all
+    @accounts = Account.where(id: query.all.ids + triadic_closures_accounts.map(&:id))
 
     media_attachments = popular_media_attachments(@accounts)
     @media_attachments_map = media_attachments.group_by(&:account_id)
@@ -24,6 +24,12 @@ class Api::V1::SuggestedAccountsController < ApiController
   end
 
   private
+
+  def triadic_closures_accounts
+    limit = 4
+    offset = params[:page].to_i * limit
+    Account.triadic_closures(current_account, offset: offset, limit: limit)
+  end
 
   # Get top n images
   def popular_media_attachments(accounts)

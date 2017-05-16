@@ -249,7 +249,7 @@ class Account < ApplicationRecord
       nil
     end
 
-    def triadic_closures(account, limit = 5)
+    def triadic_closures(account, offset: 0, limit: 5)
       sql = <<-SQL.squish
         WITH first_degree AS (
             SELECT target_account_id
@@ -262,12 +262,11 @@ class Account < ApplicationRecord
         WHERE account_id IN (SELECT * FROM first_degree) AND target_account_id NOT IN (SELECT * FROM first_degree) AND target_account_id <> :account_id
         GROUP BY target_account_id, accounts.id
         ORDER BY count(account_id) DESC
+        OFFSET :offset
         LIMIT :limit
       SQL
 
-      find_by_sql(
-        [sql, { account_id: account.id, limit: limit }]
-      )
+      find_by_sql([sql, { account_id: account.id, offset: offset, limit: limit }])
     end
 
     def search_for(terms, limit = 10)
