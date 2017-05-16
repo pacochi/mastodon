@@ -104,6 +104,7 @@ Rails.application.routes.draw do
       resource :silence, only: [:create, :destroy]
       resource :suspension, only: [:create, :destroy]
       resource :confirmation, only: [:create]
+      resource :oauth_authentications, only: [:destroy]
       resources :statuses, only: [:index, :update, :destroy]
     end
   end

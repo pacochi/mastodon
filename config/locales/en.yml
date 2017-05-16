@@ -78,6 +78,7 @@ en:
       most_recent_activity: Most recent activity
       most_recent_ip: Most recent IP
       not_subscribed: Not subscribed
+      oauth_authentications: pixiv Login
       order:
         alphabetic: Alphabetic
         most_recent: Most recent
@@ -99,6 +100,7 @@ en:
       title: Accounts
       undo_silenced: Undo silence
       undo_suspension: Undo suspension
+      unlink_forcibly: Unlink forcibly
       username: Username
       web: Web
     domain_blocks:

@@ -80,6 +80,7 @@ ja:
       most_recent_activity: 直近の活動
       most_recent_ip: 直近のIP
       not_subscribed: 購読していない
+      oauth_authentications: pixivアカウント連携
       order:
         alphabetic: アルファベット順
         most_recent: 直近の活動順
@@ -101,6 +102,7 @@ ja:
       title: アカウント
       undo_silenced: サイレンスから戻す
       undo_suspension: 停止から戻す
+      unlink_forcibly: 強制的に解除
       username: ユーザー名
       web: Web
     domain_blocks:
