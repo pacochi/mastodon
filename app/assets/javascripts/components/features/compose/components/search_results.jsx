@@ -1,20 +1,16 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types'
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import AccountContainer from '../../../containers/account_container';
 import StatusContainer from '../../../containers/status_container';
 import { Link } from 'react-router';
-
-const messages = defineMessages({
-  search_toots: { id: 'search_results.search_toots', defaultMessage: 'Search Toots' },
-});
 
 class SearchResults extends React.PureComponent {
 
   render () {
     const { results, searchKeyword, intl } = this.props;
 
-    let accounts, statuses, hashtags;
+    let accounts, statuses, hashtags, search_link;
     let count = 0;
 
     if (results.get('accounts') && results.get('accounts').size > 0) {
@@ -48,12 +44,18 @@ class SearchResults extends React.PureComponent {
       );
     }
 
+    if (searchKeyword.length > 0) {
+      search_link = (
+        <Link className='search-results__search-toots' to={`/statuses/search/${searchKeyword}`}>
+          <FormattedMessage id='search_results.search_toots' defaultMessage={"Search toots with \"{query}\""} values={{ query: searchKeyword }} />
+        </Link>
+      );
+    }
+
     return (
       <div className='search-results'>
         <div className='search-results__header'>
-          <Link className='search-results__search-toots' to={`/statuses/search/${searchKeyword}`}>
-            {intl.formatMessage(messages.search_toots)}
-          </Link>
+          {search_link}
         </div>
 
         {accounts}
