@@ -50,8 +50,6 @@ class StatusSearchResults extends React.PureComponent {
   render () {
     const { intl, statusIds, isLoading, hasMore } = this.props;
 
-    console.log(statusIds);
-
     if (!statusIds && isLoading) {
       return (
         <Column>

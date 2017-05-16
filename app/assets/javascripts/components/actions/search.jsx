@@ -17,6 +17,8 @@ export const STATUS_SEARCH_TIMELINE_EXPAND_REQUEST = 'STATUS_SEARCH_TIMELINE_EXP
 export const STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS = 'STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS';
 export const STATUS_SEARCH_TIMELINE_EXPAND_FAIL    = 'STATUS_SEARCH_TIMELINE_EXPAND_FAIL';
 
+const NUM_FETCH_TOOTS_PER_PAGE = 20;
+
 export function changeSearch(value) {
   return {
     type: SEARCH_CHANGE,
@@ -81,7 +83,7 @@ export function showSearch() {
   };
 };
 
-export function fetchStatusSearchTimeline(keyword, replace = false) {
+export function fetchStatusSearchTimeline(keyword) {
   return (dispatch, getState) => {
     let skipLoading = false;
     let page = getState().getIn(['timelines', 'status_search_timelines', keyword, 'page']);
@@ -92,19 +94,15 @@ export function fetchStatusSearchTimeline(keyword, replace = false) {
     }
     console.log(`page : ${page}`);
 
-    if (!replace) {
-      //skipLoading = true;
-    }
-
     dispatch(fetchStatusSearchTimelineRequest(keyword, skipLoading));
 
     api(getState).get(`/api/v1/search/statuses/${keyword}`, {
       params: {
-        limit: 10,
+        limit: NUM_FETCH_TOOTS_PER_PAGE,
         page: page
       }
     }).then(response => {
-      dispatch(fetchStatusSearchTimelineSuccess(keyword, response.data, page, replace, skipLoading));
+      dispatch(fetchStatusSearchTimelineSuccess(keyword, response.data, page, skipLoading));
     }).catch(error => {
       dispatch(fetchStatusSearchTimelineFail(keyword, error, skipLoading));
     });
@@ -121,7 +119,7 @@ export function expandStatusSearchTimeline(keyword) {
 
     api(getState).get(`/api/v1/search/statuses/${keyword}`, {
       params: {
-        limit: 5,
+        limit: NUM_FETCH_TOOTS_PER_PAGE,
         page: page
       }
     }).then(response => {
@@ -140,12 +138,11 @@ export function fetchStatusSearchTimelineRequest(keyword, skipLoading) {
   };
 };
 
-export function fetchStatusSearchTimelineSuccess(keyword, statuses, page, replace, skipLoading) {
+export function fetchStatusSearchTimelineSuccess(keyword, statuses, page, skipLoading) {
   return {
     type: STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
     keyword,
     statuses,
-    replace,
     skipLoading,
     page,
   };

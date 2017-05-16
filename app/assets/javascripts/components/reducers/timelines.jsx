@@ -188,7 +188,7 @@ const normalizeAccountMediaTimeline = (state, accountId, statuses, next) => {
     .update('items', Immutable.List(), list => list.unshift(...ids)));
 };
 
-const normalizeStatusSearchTimeline = (state, keyword, statuses, page=1, replace = false) => {
+const normalizeStatusSearchTimeline = (state, keyword, statuses, page=1) => {
   let ids = Immutable.List();
 
   statuses.forEach((status, i) => {
@@ -201,7 +201,6 @@ const normalizeStatusSearchTimeline = (state, keyword, statuses, page=1, replace
     .set('loaded', true)
     .set('page', page)
     .update('items', Immutable.List(), list => ids ));
-    //.update('items', Immutable.List(), list => (replace ? ids : list.unshift(...ids))));
 };
 
 const appendNormalizedAccountTimeline = (state, accountId, statuses, next) => {

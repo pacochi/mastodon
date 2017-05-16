@@ -64,9 +64,7 @@ class StatusList extends React.PureComponent {
     let loadMore       = '';
     let scrollableArea = '';
     let unread         = '';
-    console.log('status list');
     console.log(statusIds);
-
     if (!isLoading && statusIds.size > 0 && hasMore) {
       loadMore = <LoadMore onClick={this.handleLoadMore} />;
     }
