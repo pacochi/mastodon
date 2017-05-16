@@ -16,7 +16,7 @@ class TrendTags extends React.PureComponent {
         <div className="trend-tags__header">
           <i className="fa fa-line-chart trend-tags__header__icon" aria-hidden="true" />
           <div className="trend-tags__header__name">
-            おすすめタグ(実験中)
+            おすすめタグ
           </div>
         </div>
         <div className="trend-tags__body">
