@@ -27,7 +27,7 @@
     - account_filter_params.each do |key, value|
       = f.hidden_field key, value: value
     - search_types = f.object.class::SEARCH_TYPES.map { |key| [f.object.class.human_attribute_name("search_type.#{key}"), key] }
-    = f.input :search_type, collection: search_types, wrapper: :with_label
+    = f.input :search_type, collection: search_types, wrapper: :with_label, default: :name
     = f.input :keyword, placeholder: f.object.class.human_attribute_name(:keyword)
 
     .actions
