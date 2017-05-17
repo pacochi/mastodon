@@ -1,0 +1,29 @@
+# frozen_string_literal: true
+
+class FetchPixivFollowsWorker
+  include Sidekiq::Worker
+
+  sidekiq_options queue: 'pull'
+
+  def perform(oauth_authentication_id, access_token, refresh_token, expires_at)
+    client = PixivApi::Client.new(access_token: access_token, refresh_token: refresh_token, expires_at: expires_at)
+
+    uids = fetch_favorite_user_uids(client)
+
+    pixiv_follows = PixivFollow.where(oauth_authentication_id: oauth_authentication_id)
+    pixiv_follows.synchronize!(uids)
+  end
+
+  def fetch_favorite_user_uids(client)
+    page = 1
+    uids = []
+
+    while page
+      response = client.favorite_users(params: { count: 300, page: page })
+      uids += response.map(&:id)
+      page = response.pagination.next
+    end
+
+    uids.map(&:to_i)
+  end
+end
