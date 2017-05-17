@@ -71,6 +71,7 @@ const en = {
   "empty_column.home": "You aren't following anyone yet. Visit {public} or use search to get started and meet other users.",
   "empty_column.notifications": "You don't have any notifications yet. Interact with others to start the conversation.",
   "empty_column.public": "There is nothing here! Write something publicly, or manually follow users from other instances to fill it up",
+  "empty_column.search_toots": "No toots found.",
   "follow_request.authorize": "Authorize",
   "follow_request.reject": "Reject",
   "getting_started.apps": "Various apps are available",

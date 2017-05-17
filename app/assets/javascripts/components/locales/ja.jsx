@@ -63,6 +63,7 @@ const ja = {
   "empty_column.home.suggested_accounts": "おすすめユーザー",
   "empty_column.notifications": "まだ通知がありません。他の人とふれ合って会話を始めましょう。",
   "empty_column.public": "ここにはまだ何もありません！公開で何かを投稿したり、他のインスタンスのユーザーをフォローしたりしていっぱいにしましょう！",
+  "empty_column.search_toots": "トゥートが見つかりませんでした。",
   "follow_request.authorize": "許可",
   "follow_request.reject": "拒否",
   "getting_started.apps": "さまざまなアプリで利用できます。",

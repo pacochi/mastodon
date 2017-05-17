@@ -64,6 +64,7 @@ class StatusSearchResults extends React.PureComponent {
           statusIds={statusIds}
           isLoading={isLoading}
           onScrollToBottom={this.handleScrollToBottom}
+          emptyMessage={<FormattedMessage id='empty_column.search_toots' defaultMessage='No toots found.' />}
         />
       </Column>
     );
