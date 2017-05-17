@@ -10,8 +10,18 @@ ExceptionNotification.configure do |config|
     ActiveRecord::RecordNotUnique
   )
 
-  config.ignore_if do |_exception, _options|
-    !Rails.env.production?
+  ignore_workers = %w[
+    Pubsubhubbub::DeliveryWorker
+    Pubsubhubbub::ConfirmationWorker
+    Pubsubhubbub::DistributionWorker
+    Pubsubhubbub::SubscribeWorker
+  ].freeze
+
+  config.ignore_if do |_exception, options|
+    sidekiq = (options || {})&.dig(:data, :sidekiq)
+    ignore_worker = sidekiq && ignore_workers.include?(sidekiq.dig(:job, 'class'))
+
+    !Rails.env.production? || ignore_worker
   end
 
   if ENV['EXCEPTION_NOTIFICATION_EMAIL']
