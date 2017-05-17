@@ -188,7 +188,7 @@ const normalizeAccountMediaTimeline = (state, accountId, statuses, next) => {
     .update('items', Immutable.List(), list => list.unshift(...ids)));
 };
 
-const normalizeStatusSearchTimeline = (state, keyword, statuses, page=1) => {
+const normalizeStatusSearchTimeline = (state, keyword, statuses, hasMore=true, hitsTotal=0, page=1) => {
   let ids = Immutable.List();
 
   statuses.forEach((status, i) => {
@@ -200,6 +200,8 @@ const normalizeStatusSearchTimeline = (state, keyword, statuses, page=1) => {
     .set('isLoading', false)
     .set('loaded', true)
     .set('page', page)
+    .set('hitsTotal', hitsTotal)
+    .set('hasMore', hasMore)
     .update('items', Immutable.List(), list => ids ));
 };
 
@@ -231,7 +233,7 @@ const appendNormalizedAccountMediaTimeline = (state, accountId, statuses, next) 
     .update('items', list => list.push(...moreIds)));
 };
 
-const appendNormalizedStatusSearchTimeline = (state, keyword, statuses, page) => {
+const appendNormalizedStatusSearchTimeline = (state, keyword, statuses, hasMore, page) => {
   let moreIds = Immutable.List([]);
 
   statuses.forEach((status, i) => {
@@ -242,6 +244,7 @@ const appendNormalizedStatusSearchTimeline = (state, keyword, statuses, page) =>
   return state.updateIn(['status_search_timelines', keyword], Immutable.Map(), map => map
     .set('isLoading', false)
     .set('page', page)
+    .set('hasMore', hasMore)
     .update('items', list => list.push(...moreIds)));
 };
 
@@ -403,9 +406,9 @@ export default function timelines(state = initialState, action) {
   case STATUS_SEARCH_TIMELINE_EXPAND_FAIL:
     return state.updateIn(['status_search_timelines', action.keyword], Immutable.Map(), map => map.set('isLoading', false));
   case STATUS_SEARCH_TIMELINE_FETCH_SUCCESS:
-    return normalizeStatusSearchTimeline(state, action.keyword, Immutable.fromJS(action.statuses), action.page+1);
+    return normalizeStatusSearchTimeline(state, action.keyword, Immutable.fromJS(action.statuses), action.hasMore, action.hitsTotal, action.page+1);
   case STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS:
-    return appendNormalizedStatusSearchTimeline(state, action.keyword, Immutable.fromJS(action.statuses), action.page+1);
+    return appendNormalizedStatusSearchTimeline(state, action.keyword, Immutable.fromJS(action.statuses), action.hasMore, action.page+1);
   case ACCOUNT_BLOCK_SUCCESS:
   case ACCOUNT_MUTE_SUCCESS:
     return filterTimelines(state, action.relationship, action.statuses);

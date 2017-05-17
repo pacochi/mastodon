@@ -15,7 +15,7 @@ import StatusList from '../../components/status_list';
 const mapStateToProps = (state, props) => ({
   statusIds: state.getIn(['timelines', 'status_search_timelines', String(props.params.keyword), 'items'], Immutable.List()),
   isLoading: state.getIn(['timelines', 'status_search_timelines', String(props.params.keyword), 'isLoading']),
-  hasMore: true,
+  hasMore: state.getIn(['timelines', 'status_search_timelines', String(props.params.keyword), 'hasMore']),
 });
 
 let subscription;
@@ -44,7 +44,7 @@ class StatusSearchResults extends React.PureComponent {
   }
 
   render () {
-    const { intl, statusIds, isLoading, hasMore, params } = this.props;
+    const { intl, statusIds, isLoading, params } = this.props;
     const keyword = String(params.keyword);
     let column_header = <FormattedMessage id='column.search_toots' defaultMessage={"Search: \"{keyword}\""} values={{ keyword: keyword }} />;
 
@@ -63,7 +63,6 @@ class StatusSearchResults extends React.PureComponent {
           scrollKey='status_search_results'
           statusIds={statusIds}
           isLoading={isLoading}
-          hasMore={hasMore}
           onScrollToBottom={this.handleScrollToBottom}
         />
       </Column>

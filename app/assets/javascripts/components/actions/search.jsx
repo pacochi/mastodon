@@ -100,7 +100,10 @@ export function fetchStatusSearchTimeline(keyword) {
         page: page
       }
     }).then(response => {
-      dispatch(fetchStatusSearchTimelineSuccess(keyword, response.data, page, skipLoading));
+      let hitsTotal = response.headers['search-hits-total'];
+      const maxPage = Math.ceil(hitsTotal/NUM_FETCH_TOOTS_PER_PAGE);
+      const hasMore = page <= maxPage;
+      dispatch(fetchStatusSearchTimelineSuccess(keyword, response.data, page, skipLoading, hitsTotal, hasMore));
     }).catch(error => {
       dispatch(fetchStatusSearchTimelineFail(keyword, error, skipLoading));
     });
@@ -109,7 +112,15 @@ export function fetchStatusSearchTimeline(keyword) {
 
 export function expandStatusSearchTimeline(keyword) {
   return (dispatch, getState) => {
+    const hitsTotal = getState().getIn(['timelines', 'status_search_timelines', keyword, 'hitsTotal']);
     const page = getState().getIn(['timelines', 'status_search_timelines', keyword, 'page']);
+    const maxPage = Math.ceil(hitsTotal/NUM_FETCH_TOOTS_PER_PAGE);
+    const hasMore = page <= maxPage;
+
+    if(!hasMore){
+      console.log('no more results.');
+      return;
+    }
 
     console.log('expanded');
     console.log(`page : ${page}`);
@@ -122,7 +133,7 @@ export function expandStatusSearchTimeline(keyword) {
         page: page
       }
     }).then(response => {
-      dispatch(expandStatusSearchTimelineSuccess(keyword, response.data, page));
+      dispatch(expandStatusSearchTimelineSuccess(keyword, response.data, page, hasMore));
     }).catch(error => {
       dispatch(expandStatusSearchTimelineFail(keyword, error));
     });
@@ -137,13 +148,17 @@ export function fetchStatusSearchTimelineRequest(keyword, skipLoading) {
   };
 };
 
-export function fetchStatusSearchTimelineSuccess(keyword, statuses, page, skipLoading) {
+export function fetchStatusSearchTimelineSuccess(keyword, statuses, page, skipLoading, hitsTotal, hasMore) {
+  console.log('hits');
+  console.log(hitsTotal);
   return {
     type: STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
     keyword,
     statuses,
     skipLoading,
     page,
+    hitsTotal,
+    hasMore
   };
 };
 
@@ -164,12 +179,13 @@ export function expandStatusSearchTimelineRequest(keyword) {
   };
 };
 
-export function expandStatusSearchTimelineSuccess(keyword, statuses,  page) {
+export function expandStatusSearchTimelineSuccess(keyword, statuses,  page, hasMore) {
   return {
     type: STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS,
     keyword,
     statuses,
-    page
+    page,
+    hasMore
   };
 };
 
