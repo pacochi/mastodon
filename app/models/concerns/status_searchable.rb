@@ -39,7 +39,7 @@ module StatusSearchable
         indexes :language, type: 'keyword'
         indexes :created_at, type: 'date', format: 'date_time'
         indexes :is_pawoo, type: 'boolean'
-        indexes :visibility, type: 'text'
+        indexes :visibility, type: 'integer'
       end
     end
 
@@ -53,7 +53,7 @@ module StatusSearchable
           language: language,
           created_at: created_at,
           is_pawoo: local?,
-          visibility: visibility
+          visibility: visibility_before_type_cast
         }
       else
         {}
