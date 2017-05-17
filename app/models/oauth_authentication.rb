@@ -9,13 +9,14 @@ class OauthAuthentication < ApplicationRecord
   before_destroy :prevent_destory_if_initial_password_usage_is_exists
 
   def force_destroy
-    ApplicationRecord.transaction do
+    transaction do
       user.initial_password_usage&.destroy!
+      user.initial_password_usage = nil
       destroy!
     end
 
     true
-  rescue ActiveRecord::RecordInvalid
+  rescue ActiveRecord::RecordNotDestroyed
     false
   end
 
