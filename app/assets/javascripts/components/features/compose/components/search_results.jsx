@@ -47,7 +47,7 @@ class SearchResults extends React.PureComponent {
     if (searchKeyword.length > 0) {
       search_link = (
         <Link className='search-results__search-toots' to={`/statuses/search/${searchKeyword}`}>
-          <i className='fa fa-fw fa-search' />
+          <i className='fa fa-fw fa-search search-results__search-toots-icon' />
           <FormattedMessage id='search_results.search_toots' defaultMessage={"Search toots with \"{query}\""} values={{ query: searchKeyword }} />
         </Link>
       );
