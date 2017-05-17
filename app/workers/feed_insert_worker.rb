@@ -11,7 +11,7 @@ class FeedInsertWorker
       FeedManager.instance.filter?(:home, status, follower.id)
     end
 
-    FeedManager.instance.push(:home, followers, status)
+    FeedManager.instance.push(:home, followers, status) unless followers.empty?
   rescue ActiveRecord::RecordNotFound
     true
   end
