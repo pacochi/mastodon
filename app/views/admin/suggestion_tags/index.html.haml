@@ -14,7 +14,7 @@
       - @suggestion_tags.each do |tag|
         %tr
           %td= tag.order
-          %td= tag.tag.name
+          %td= tag.name
           %td= tag.description
           %td
             = link_to edit_admin_suggestion_tag_path(tag), class: 'table-action-link' do

@@ -1,6 +1,11 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import PropTypes from 'prop-types';
+import { defineMessages, injectIntl } from 'react-intl';
+
+const messages = defineMessages({
+  title: { id: 'trend_tags.title', defaultMessage: 'Suggested tag' }
+});
 
 class TrendTags extends React.PureComponent {
 
@@ -11,12 +16,14 @@ class TrendTags extends React.PureComponent {
     if (this.props.tags.size === 0) {
       return null
     }
+
+    const { intl } = this.props;
     return (
       <div className="trend-tags">
         <div className="trend-tags__header">
           <i className="fa fa-line-chart trend-tags__header__icon" aria-hidden="true" />
           <div className="trend-tags__header__name">
-            おすすめタグ
+            {intl.formatMessage(messages.title)}
           </div>
         </div>
         <div className="trend-tags__body">
@@ -38,7 +45,8 @@ class TrendTags extends React.PureComponent {
 
 TrendTags.propTypes = {
   tags: ImmutablePropTypes.list.isRequired,
-  refreshTrendTags: PropTypes.func.isRequired
+  refreshTrendTags: PropTypes.func.isRequired,
+  intl: PropTypes.object.isRequired
 };
 
-export default TrendTags;
+export default injectIntl(TrendTags);

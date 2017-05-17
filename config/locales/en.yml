@@ -189,7 +189,7 @@ en:
       title: Site Settings
     title: Administration
     suggestion:
-      title: "Suggestion Tags"
+      title: Suggestion Tags
   application_mailer:
     settings: 'Change e-mail preferences: %{link}'
     signature: Mastodon notifications from %{instance}

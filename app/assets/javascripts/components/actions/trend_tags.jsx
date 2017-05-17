@@ -1,7 +1,6 @@
 import axios from 'axios';
 
 export const TREND_TAGS_SUCCESS = 'TREND_TAGS_SUCCESS';
-export const TREND_TAGS_REQUEST = 'TREND_TAGS_REQUEST';
 
 export function refreshTrendTags() {
   return (dispatch, getState) => {
