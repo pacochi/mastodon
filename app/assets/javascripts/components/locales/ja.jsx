@@ -88,6 +88,7 @@ const ja = {
   "navigation_bar.logout": "ログアウト",
   "navigation_bar.mutes": "ミュートしたユーザー",
   "navigation_bar.preferences": "ユーザー設定",
+  "navigation_bar.help": "Pawooヘルプ",
   "navigation_bar.public_timeline": "連合タイムライン",
   "navigation_bar.suggested_accounts": "おすすめユーザー",
   "notification.favourite": "{name} さんがあなたのトゥートをお気に入りに登録しました",
