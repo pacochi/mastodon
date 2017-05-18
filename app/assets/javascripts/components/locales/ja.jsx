@@ -169,6 +169,7 @@ const ja = {
   "tabs_bar.home": "ホーム",
   "tabs_bar.local_timeline": "ローカル",
   "tabs_bar.notifications": "通知",
+  "trend_tags.title": "おすすめタグ",
   "upload_area.title": "ドラッグ＆ドロップでアップロード",
   "upload_button.label": "メディアを追加",
   "upload_form.undo": "やり直す",

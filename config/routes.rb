@@ -94,6 +94,7 @@ Rails.application.routes.draw do
     resources :domain_blocks, only: [:index, :new, :create, :show, :destroy]
     resources :settings, only: [:index, :update]
     resources :instances, only: [:index]
+    resources :suggestion_tags, only: [:index, :new, :create, :edit, :update, :destroy]
 
     resources :reports, only: [:index, :show, :update] do
       resources :reported_statuses, only: [:update, :destroy]
@@ -154,6 +155,7 @@ Rails.application.routes.draw do
       get '/search', to: 'search#index', as: :search
 
       resource :push_notification_preferences, only: [:show, :update]
+      resources :trend_tags, only: [:index]
       resources :follows,    only: [:create]
       resources :media,      only: [:create]
       resources :apps,       only: [:create]
