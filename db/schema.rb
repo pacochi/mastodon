@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170512095801) do
+ActiveRecord::Schema.define(version: 20170516095828) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -50,6 +50,7 @@ ActiveRecord::Schema.define(version: 20170512095801) do
     t.datetime "last_webfingered_at"
     t.index "(((setweight(to_tsvector('simple'::regconfig, (display_name)::text), 'A'::\"char\") || setweight(to_tsvector('simple'::regconfig, (username)::text), 'B'::\"char\")) || setweight(to_tsvector('simple'::regconfig, (COALESCE(domain, ''::character varying))::text), 'C'::\"char\")))", name: "search_index", using: :gin
     t.index "lower((username)::text), lower((domain)::text)", name: "index_accounts_on_username_and_domain_lower", using: :btree
+    t.index ["uri"], name: "index_accounts_on_uri", using: :btree
     t.index ["url"], name: "index_accounts_on_url", using: :btree
     t.index ["username", "domain"], name: "index_accounts_on_username_and_domain", unique: true, using: :btree
   end
@@ -223,6 +224,14 @@ ActiveRecord::Schema.define(version: 20170512095801) do
     t.index ["status_id"], name: "index_pixiv_cards_on_status_id", using: :btree
   end
 
+  create_table "pixiv_follows", force: :cascade do |t|
+    t.integer  "oauth_authentication_id", null: false
+    t.integer  "target_pixiv_uid",        null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.index ["oauth_authentication_id", "target_pixiv_uid"], name: "index_pixiv_follows_on_oauth_authentication_id", unique: true, using: :btree
+  end
+
   create_table "preview_cards", force: :cascade do |t|
     t.bigint   "status_id"
     t.string   "url",                default: "", null: false
@@ -320,6 +329,15 @@ ActiveRecord::Schema.define(version: 20170512095801) do
     t.datetime "updated_at",                                  null: false
     t.datetime "last_successful_delivery_at"
     t.index ["account_id", "callback_url"], name: "index_subscriptions_on_account_id_and_callback_url", unique: true, using: :btree
+  end
+
+  create_table "suggestion_tags", force: :cascade do |t|
+    t.integer  "tag_id",                   null: false
+    t.integer  "order",       default: 1,  null: false
+    t.string   "description", default: "", null: false
+    t.datetime "created_at",               null: false
+    t.datetime "updated_at",               null: false
+    t.index ["tag_id"], name: "index_suggestion_tags_on_tag_id", unique: true, using: :btree
   end
 
   create_table "tags", force: :cascade do |t|

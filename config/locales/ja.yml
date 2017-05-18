@@ -195,6 +195,8 @@ ja:
       site_title: サイトのタイトル
       title: サイト設定
     title: 管理者メニュー
+    suggestion:
+      title: 運営タグ
   application_mailer:
     settings: 'メール設定の変更: %{link}'
     signature: Mastodon %{instance} インスタンスからの通知

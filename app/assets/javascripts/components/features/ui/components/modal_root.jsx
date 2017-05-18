@@ -45,9 +45,10 @@ class ModalRoot extends React.PureComponent {
 
   render () {
     const { type, props, onClose } = this.props;
+    const visible = !!type;
     const items = [];
 
-    if (!!type) {
+    if (visible) {
       items.push({
         key: type,
         data: { type, props },
@@ -61,7 +62,7 @@ class ModalRoot extends React.PureComponent {
         willEnter={this.willEnter}
         willLeave={this.willLeave}>
         {interpolatedStyles =>
-          <div className='modal-root'>
+          <div className='modal-root' style={{ pointerEvents: visible ? 'auto' : 'none' }}>
             {interpolatedStyles.map(({ key, data: { type, props }, style }) => {
               const SpecificComponent = MODAL_COMPONENTS[type];
 

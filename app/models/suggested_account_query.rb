@@ -1,91 +1,124 @@
 class SuggestedAccountQuery
-  REDIS_KEY = "#{self}:suggested_account_ids".freeze
+  attr_reader :excluded_ids, :seed, :limit, :page_number
 
-  attr_reader :current_scope, :excluded_ids, :seed, :limit, :page_number
+  def initialize
+    @excluded_ids = []
+    @seed = Random.new_seed
+    @limit = 20
+    @page_number = 0
+  end
 
-  class << self
-    delegate :exclude_ids, :shuffle, :all, to: :new
+  def exclude_ids(ids)
+    spawn(excluded_ids: (excluded_ids + ids).uniq)
+  end
+
+  def shuffle(seed)
+    spawn(seed: seed)
+  end
+
+  def per(limit)
+    spawn(limit: limit.to_i)
+  end
+
+  def page(page_number)
+    spawn(page_number: page_number.to_i)
+  end
+
+  concerning :TradicAccountQuery do
+    included do
+      attr_reader :account, :with_tradic_limit
+    end
+
+    def with_tradic(account, limit: 4)
+      spawn(account: account, with_tradic_limit: limit.to_i)
+    end
+
+    private
+
+    def triadic_account_ids
+      return [] unless enable_tradic_account_query?
+
+      offset = with_tradic_limit * page_number
+      accounts = Account.triadic_closures(account, offset: offset, limit: with_tradic_limit, exclude_ids: excluded_ids)
+      accounts.map(&:id)
+    end
+
+    def enable_tradic_account_query?
+      with_tradic_limit.to_i.positive? && account
+    end
+  end
+
+  concerning :PixivFollowQuery do
+    included do
+      attr_reader :oauth_authentication, :with_pixiv_follows_limit
+    end
+
+    def with_pixiv_follows(oauth_authentication, limit: 4)
+      spawn(oauth_authentication: oauth_authentication, with_pixiv_follows_limit: limit.to_i)
+    end
+
+    private
+
+    def pixiv_following_account_ids
+      return [] unless enable_pixiv_follows_query?
+
+      offset = with_pixiv_follows_limit * page_number
+      uid = oauth_authentication.pixiv_follows.pluck(:target_pixiv_uid)
+      default_scoped.where.not(id: excluded_ids).joins(:oauth_authentications).where(oauth_authentications: { provider: 'pixiv', uid: uid }).ids
+    end
+
+    def enable_pixiv_follows_query?
+      with_pixiv_follows_limit.to_i.positive? && oauth_authentication
+    end
+  end
+
+  concerning :PopularAccountQuery do
+    private
+
+    def popular_account_ids
+      all_popular_account_ids - excluded_ids
+    end
 
     # TODO: 自動的に検出するようにする
-    # TODO: フォロー状況を元に、ランダムに似通ったユーザーを混ぜる
     # - localのみ
     # - R18を除く
     # - ファボ・フォロワー数・画像投稿経験の高いユーザーを上位から抜き出す
     # - フォロー数がフォロワー数より多いユーザーを閾値を設けて除外する
     # - 絵をよく投稿しているユーザーを優先する
     # - 社員は抜く(目視チェック)
-    def suggested_account_ids
-      redis.zrange(REDIS_KEY, 0, -1).map(&:to_i)
+    def all_popular_account_ids
+      key = 'SuggestedAccountQuery:suggested_account_ids'
+      Redis.current.zrange(key, 0, -1).map(&:to_i)
     end
-
-    def suggested_account_ids=(ids)
-      redis.multi do
-        redis.del(REDIS_KEY)
-
-        ids.each do |id|
-          redis.zadd(REDIS_KEY, id, id)
-        end
-
-        redis.expire(REDIS_KEY, 3.month)
-      end
-    end
-
-    private
-
-    def redis
-      Redis.current
-    end
-  end
-
-  def initialize(current_scope = default_scoped, excluded_ids: [], seed: Random.new_seed, limit: 20, page_number: 0)
-    @current_scope = current_scope
-    @excluded_ids = excluded_ids
-    @seed = seed
-    @limit = limit
-    @page_number = page_number
-  end
-
-  def exclude_ids(ids)
-    with_options(excluded_ids: excluded_ids + ids)
-  end
-
-  def shuffle(seed)
-    with_options(seed: seed)
-  end
-
-  def per(limit)
-    with_options(limit: limit.to_i)
-  end
-
-  def page(page_number)
-    with_options(page_number: page_number.to_i)
-  end
-
-  def last_page?(page_number)
-    self.class.suggested_account_ids.length <= limit * page_number.to_i
   end
 
   def all
-    offset = limit * page_number
-    ids = (self.class.suggested_account_ids - excluded_ids).shuffle(random: Random.new(seed))[offset..(offset + limit - 1)]
+    ids = []
+    ids += pickup(shuffle_ids(pixiv_following_account_ids), limit: with_pixiv_follows_limit)
+    ids += (triadic_account_ids - ids)
+    ids += pickup((shuffle_ids(popular_account_ids) - ids), limit: limit - ids.length) # limitに達する数までidを取得する
 
-    @current_scope.where(id: ids).where.not(id: excluded_ids).limit(limit)
+    default_scoped.where(id: ids).limit(limit).sort_by { |account| ids.index(account.id) }
   end
 
   private
 
-  def default_scoped
-    Account.where(suspended: false, silenced: false)
+  def pickup(ids, limit: 0)
+    offset = limit * page_number
+    ids.slice(offset, limit) || []
   end
 
-  def with_options(new_options = {})
-    current_options = {
-      excluded_ids: excluded_ids,
-      seed: seed,
-      limit: limit,
-      page_number: page_number
-    }
+  def shuffle_ids(ids)
+    ids.shuffle(random: Random.new(seed))
+  end
 
-    self.class.new(@current_scope, current_options.merge(new_options))
+  def spawn(variables)
+    dup.tap do |instance|
+      variables.each { |key, value| instance.instance_variable_set("@#{key}", value) }
+    end
+  end
+
+  def default_scoped
+    Account.local.where(suspended: false, silenced: false)
   end
 end

@@ -50,18 +50,6 @@ class Announcements extends React.PureComponent {
           }
         ]
       }, {
-        id: 4,
-        icon: '/announcements/icon_2x_360.png',
-        body: '開催中の企画に参加しよう！',
-        link: [
-          {
-            reactRouter: true,
-            inline: false,
-            href: '/timelines/tag/pawoo人増えたし自己紹介しようぜ',
-            body: '#pawoo人増えたし自己紹介しようぜ'
-          }
-        ]
-      }, {
         id: 7,
         icon: '/announcements/icon_2x_360.png',
         body: 'Pawooにどんなユーザーさんがいるのか見てみよう！',

@@ -72,7 +72,7 @@ class Status extends React.PureComponent {
           type: 'image',
           url: card.get('image_url')
         });
-      });
+      }).concat(attachments);
     }
 
     if (attachments.size > 0 && !this.props.muted) {

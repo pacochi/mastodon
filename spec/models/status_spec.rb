@@ -123,6 +123,19 @@ RSpec.describe Status, type: :model do
     pending
   end
 
+  describe '#ancestors' do
+    it 'ignores deleted records' do
+      first_status = Fabricate(:status, account: bob)
+      second_status = Fabricate(:status, thread: first_status, account: alice)
+
+      # Create cache and delete cached record
+      second_status.ancestors
+      first_status.destroy
+
+      expect(second_status.ancestors).to eq([])
+    end
+  end
+
   describe '#filter_from_context?' do
     pending
   end
@@ -282,6 +295,61 @@ RSpec.describe Status, type: :model do
 
       results = Status.as_tag_timeline(tag)
       expect(results).to include(status)
+    end
+  end
+
+  describe '.permitted_for' do
+    subject { query.pluck(:visibility) }
+    let(:query) { described_class.permitted_for(target_account, account) }
+
+    let(:target_account) { alice }
+    let(:account) { bob }
+    let!(:public_status) { Fabricate(:status, account: target_account, visibility: 'public') }
+    let!(:unlisted_status) { Fabricate(:status, account: target_account, visibility: 'unlisted') }
+    let!(:private_status) { Fabricate(:status, account: target_account, visibility: 'private') }
+
+    let!(:direct_status) do
+      Fabricate(:status, account: target_account, visibility: 'direct').tap do |status|
+        Fabricate(:mention, status: status, account: account)
+      end
+    end
+
+    let!(:other_direct_status) do
+      Fabricate(:status, account: target_account, visibility: 'direct').tap do |status|
+        Fabricate(:mention, status: status)
+      end
+    end
+
+    context 'given nil' do
+      let(:account) { nil }
+      let(:direct_status) { nil }
+      it { is_expected.to eq(%w(unlisted public)) }
+    end
+
+    context 'given blocked account' do
+      before do
+        target_account.block!(account)
+      end
+
+      it { is_expected.to be_empty }
+    end
+
+    context 'given same account' do
+      let(:account) { target_account }
+      it { is_expected.to eq(%w(direct direct private unlisted public)) }
+    end
+
+    context 'given followed account' do
+      before do
+        account.follow!(target_account)
+      end
+
+      it { is_expected.to eq(%w(direct private unlisted public)) }
+      it { expect(query).to_not be_include(other_direct_status) }
+    end
+
+    context 'given unfollowed account' do
+      it { is_expected.to eq(%w(direct unlisted public)) }
     end
   end
 end

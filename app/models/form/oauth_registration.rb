@@ -6,7 +6,7 @@ class Form::OauthRegistration
 
   PRIVATE_USER_NAME = /\Auser_/
 
-  attr_accessor :user, :avatar, :email_confirmed, :locale
+  attr_accessor :user, :oauth_authentication, :avatar, :email_confirmed, :locale
   attr_accessor :provider, :uid
   type_attribute :email, :string
   type_attribute :username, :string
@@ -62,7 +62,7 @@ class Form::OauthRegistration
     ApplicationRecord.transaction do
       self.user = User.new(user_attributes)
       user.skip_confirmation_notification! if email_confirmed?
-      oauth_authentication = user.oauth_authentications.build(provider: provider, uid: uid)
+      self.oauth_authentication = user.oauth_authentications.build(provider: provider, uid: uid)
       user.save! && user.create_initial_password_usage! && oauth_authentication.save!
     end
 

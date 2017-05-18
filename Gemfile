@@ -5,6 +5,8 @@ gem 'omniauth-pixiv-public', require: 'omniauth-pixiv'
 source 'https://rubygems.org'
 ruby '>= 2.3.0', '< 2.5.0'
 
+gem 'pixiv_api', git: 'https://github.com/pixiv/pixiv-api-ruby-public.git'
+
 gem 'pkg-config'
 
 gem 'rails', '~> 5.0.2'
@@ -70,6 +72,7 @@ gem 'exception_notification'
 gem 'slack-notifier'
 gem 'admin_script'
 gem 'redis-namespace'
+gem 'activerecord-import'
 
 group :development, :test do
   gem 'rspec-rails'

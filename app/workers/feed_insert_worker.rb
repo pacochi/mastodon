@@ -3,12 +3,15 @@
 class FeedInsertWorker
   include Sidekiq::Worker
 
-  def perform(status_id, follower_id)
-    status   = Status.find(status_id)
-    follower = Account.find(follower_id)
+  def perform(status_id, follower_ids)
+    status = Status.find(status_id)
 
-    return if FeedManager.instance.filter?(:home, status, follower.id)
-    FeedManager.instance.push(:home, follower, status)
+    # TODO: reduce N+1 queries to filter followers
+    followers = Account.where(id: follower_ids).reject do |follower|
+      FeedManager.instance.filter?(:home, status, follower.id)
+    end
+
+    FeedManager.instance.push(:home, followers, status) unless followers.empty?
   rescue ActiveRecord::RecordNotFound
     true
   end

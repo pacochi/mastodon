@@ -1,5 +1,6 @@
 class OauthAuthentication < ApplicationRecord
   belongs_to :user, required: true
+  has_many :pixiv_follows, dependent: :delete_all
 
   validates :provider, :uid, presence: true
   validates :user_id, uniqueness: { scope: :provider }

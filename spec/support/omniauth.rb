@@ -10,6 +10,11 @@ OmniAuth.config.mock_auth[:pixiv] = OmniAuth::AuthHash.new(
     id: 1,
     avatar: 'http://localhost/test.jpg'
   },
+  credentials: {
+    token: 'xxx',
+    refresh_token: 'xxx',
+    expires_at: 1.hours.since.to_i
+  },
   extra: {
     raw_info: {}
   }
