@@ -84,7 +84,7 @@ export function showSearch() {
 };
 
 function hasMore(page, hitsTotal){
-  const maxPage = Math.ceil(hitsTotal/NUM_FETCH_TOOTS_PER_PAGE);
+  const maxPage = Math.ceil(hitsTotal / NUM_FETCH_TOOTS_PER_PAGE);
   return page <= maxPage;
 }
 
@@ -113,9 +113,9 @@ export function expandStatusSearchTimeline(keyword) {
   return (dispatch, getState) => {
     const hitsTotal = getState().getIn(['timelines', 'status_search_timelines', keyword, 'hitsTotal']);
     const page = getState().getIn(['timelines', 'status_search_timelines', keyword, 'page']);
-    const hasMore = hasMore(page, hitsTotal);
+    const hasMoreFlag = hasMore(page, hitsTotal);
 
-    if(!hasMore){
+    if(!hasMoreFlag){
       return;
     }
 
@@ -127,7 +127,7 @@ export function expandStatusSearchTimeline(keyword) {
         page: page
       }
     }).then(response => {
-      dispatch(expandStatusSearchTimelineSuccess(keyword, response.data, page, hasMore));
+      dispatch(expandStatusSearchTimelineSuccess(keyword, response.data, page, hasMoreFlag));
     }).catch(error => {
       dispatch(expandStatusSearchTimelineFail(keyword, error));
     });
