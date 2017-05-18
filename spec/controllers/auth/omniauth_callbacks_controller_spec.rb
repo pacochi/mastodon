@@ -17,6 +17,30 @@ RSpec.describe Auth::OmniauthCallbacksController, type: :controller do
 
     let(:provider) { :pixiv }
 
+    let(:strategy) do
+      omniauth = Devise.omniauth_configs[:pixiv]
+      omniauth.strategy_class.new(nil, *omniauth.args)
+    end
+
+    before do
+      body = {
+        "status": "success",
+        "response": [],
+        "count": 1,
+        "pagination": {
+          "previous": nil,
+          "next": nil,
+        }
+      }
+
+      stub_request(:get, "#{strategy.client.site}/v1/me/favorite-users.json?count=300&page=1")
+        .to_return(
+          status: 200,
+          body: body.to_json,
+          headers: { 'content-type' => 'application/json' }
+        )
+    end
+
     context 'user is signed in' do
       before do
         sign_in(user)
