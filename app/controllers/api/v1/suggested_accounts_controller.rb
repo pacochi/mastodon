@@ -23,7 +23,8 @@ class Api::V1::SuggestedAccountsController < ApiController
     media_attachments = popular_media_attachments(@accounts)
     @media_attachments_map = media_attachments.group_by(&:account_id)
 
-    next_path = api_v1_suggested_accounts_url(seed: seed, page: page + 1) if page > 20 || @accounts.empty?
+    # 巨大なoffsetに対応できるか不明なので、10ページまでしか対応しない
+    next_path = api_v1_suggested_accounts_url(seed: seed, page: page + 1) if page < 10 && @accounts.present?
     prev_path = api_v1_suggested_accounts_url(seed: seed, page: page - 1) if page.positive?
     set_pagination_headers(next_path, prev_path)
   end
