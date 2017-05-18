@@ -11,6 +11,15 @@ RSpec.describe FetchPixivFollowsWorker, type: :worker do
     omniauth.strategy_class.new(nil, *omniauth.args)
   end
 
+  before do
+    configuration = PixivApi.configuration.merge(
+      client_id: 'XXX',
+      client_secret: 'XXX'
+    )
+
+    allow(PixivApi).to receive(:configuration).and_return(configuration)
+  end
+
   describe '#perform' do
     subject do
       -> { described_class.new.perform(oauth_authentication.id, access_token, refresh_token, expires_at) }
