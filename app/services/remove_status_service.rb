@@ -82,7 +82,7 @@ class RemoveStatusService < BaseService
   end
 
   def remove_from_es(status)
-    status.remove_status_from_es_async(status)
+    Status.remove_status_from_es_async(status)
   end
 
   def redis
