@@ -5,6 +5,8 @@ class PixivFollow < ApplicationRecord
   validates :oauth_authentication_id, uniqueness: { scope: :target_pixiv_uid }
 
   def self.synchronize!(uids)
+    raise 'without scope' unless scope_attributes.present?
+
     exists = pluck(:target_pixiv_uid)
 
     deleted_uids = exists - uids
