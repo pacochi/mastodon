@@ -3,7 +3,7 @@
 class FetchPixivFollowsWorker
   include Sidekiq::Worker
 
-  sidekiq_options queue: 'pull'
+  sidekiq_options queue: 'pull', retry: false
 
   def perform(oauth_authentication_id, access_token, refresh_token, expires_at)
     client = PixivApi::Client.new(access_token: access_token, refresh_token: refresh_token, expires_at: expires_at)
