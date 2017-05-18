@@ -62,16 +62,17 @@ module StatusSearchable
 
     after_commit on: [:create] do
       if postable_to_es?
-        Rails.logger.debug 'toot is sent to ES.@create'
-        __elasticsearch__.index_document
+        PostStatusToESWorker.perform_async(id)
       else
         Rails.logger.debug 'toot is not sent to ES.@create'
       end
     end
 
-    after_commit on: [:destroy] do
-      __elasticsearch__.delete_document
-    end
+    #after_commit on: [:destroy] do
+    #  Rails.logger.debug 'toot is removed from ES async. @destroy'
+    #  RemoveStatusFromESWorker.perform_async(id)
+    #end
+
   end
 
   class_methods do
@@ -99,6 +100,15 @@ module StatusSearchable
           }
         }]
       });
+    end
+
+    def post_status_to_es_async(status_id)
+      Rails.logger.debug 'toot is sent to ES async. @create'
+      find(status_id).__elasticsearch__.index_document
+    end
+
+    def remove_status_from_es_async(status)
+      status.__elasticsearch__.delete_document
     end
   end
 
