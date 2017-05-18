@@ -10,11 +10,11 @@ class PixivFollow < ApplicationRecord
     exists = pluck(:target_pixiv_uid)
 
     deleted_uids = exists - uids
-    new_uid_attributes = (uids - exists).map { |uid| { target_pixiv_uid: uid } }
+    new_records = (uids - exists).map { |uid| new(target_pixiv_uid: uid) }
 
     transaction do
       where(target_pixiv_uid: deleted_uids).delete_all
-      create!(new_uid_attributes)
+      import!(new_records)
     end
   end
 end
