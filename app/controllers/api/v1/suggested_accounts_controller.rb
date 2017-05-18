@@ -18,7 +18,7 @@ class Api::V1::SuggestedAccountsController < ApiController
       .per(limit)
       .page(params[:page])
 
-    @accounts = query.all.to_a.shuffle
+    @accounts = query.all
 
     media_attachments = popular_media_attachments(@accounts)
     @media_attachments_map = media_attachments.group_by(&:account_id)

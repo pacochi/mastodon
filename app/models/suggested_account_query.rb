@@ -94,11 +94,11 @@ class SuggestedAccountQuery
 
   def all
     ids = []
-    ids += triadic_account_ids
-    ids += pickup((shuffle_ids(pixiv_following_account_ids) - ids), limit: with_pixiv_follows_limit)
+    ids += pickup(shuffle_ids(pixiv_following_account_ids), limit: with_pixiv_follows_limit)
+    ids += (triadic_account_ids - ids)
     ids += pickup((shuffle_ids(popular_account_ids) - ids), limit: limit - ids.length) # limitに達する数までidを取得する
 
-    default_scoped.where(id: ids).limit(limit)
+    default_scoped.where(id: ids).limit(limit).sort_by { |account| ids.index(account.id) }
   end
 
   private
