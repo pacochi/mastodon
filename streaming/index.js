@@ -36,7 +36,7 @@ if (cluster.isMaster) {
   const pgConfigs = {
     development: {
       database: 'pawoo_development',
-      host:     'localhost',
+      host:     process.env.DB_HOST || '/var/run/postgresql',
       max:      10
     },
 
