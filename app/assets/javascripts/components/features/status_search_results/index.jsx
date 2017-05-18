@@ -31,12 +31,6 @@ class StatusSearchResults extends React.PureComponent {
     this.props.dispatch(fetchStatusSearchTimeline(String(this.props.params.keyword)));
   }
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.params.keyword !== this.props.params.keyword && nextProps.params.keyword) {
-      this.props.dispatch(fetchStatusSearchTimeline(String(nextProps.params.keyword)));
-    }
-  }
-
   handleScrollToBottom () {
     if (!this.props.isLoading && this.props.hasMore) {
       this.props.dispatch(expandStatusSearchTimeline(String(this.props.params.keyword)));
@@ -44,7 +38,7 @@ class StatusSearchResults extends React.PureComponent {
   }
 
   render () {
-    const { intl, statusIds, isLoading, params } = this.props;
+    const { statusIds, isLoading, params } = this.props;
     const keyword = String(params.keyword);
     let column_header = <FormattedMessage id='column.search_toots' defaultMessage={"Search: \"{keyword}\""} values={{ keyword: keyword }} />;
 
@@ -73,7 +67,6 @@ class StatusSearchResults extends React.PureComponent {
 };
 
 StatusSearchResults.propTypes = {
-  intl: PropTypes.object.isRequired,
   params: PropTypes.object.isRequired,
   dispatch: PropTypes.func.isRequired,
   statusIds: ImmutablePropTypes.list,

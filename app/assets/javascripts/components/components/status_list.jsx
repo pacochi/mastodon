@@ -61,10 +61,11 @@ class StatusList extends React.PureComponent {
 
   render () {
     const { statusIds, onScrollToBottom, scrollKey, shouldUpdateScroll, isLoading, isUnread, hasMore, prepend, emptyMessage, squareMedia, expandMedia, standalone } = this.props;
+
     let loadMore       = '';
     let scrollableArea = '';
     let unread         = '';
-    console.log(statusIds);
+    
     if (!isLoading && statusIds.size > 0 && hasMore) {
       loadMore = <LoadMore onClick={this.handleLoadMore} />;
     }

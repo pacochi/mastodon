@@ -148,7 +148,7 @@ const en = {
   "search.placeholder": "Search",
   "search.status_by": "Status by {name}",
   "search_results.total": "{count, number} {count, plural, one {result} other {results}}",
-  "search_results.search_toots": "Search toots with \"{query}\"",
+  "search_results.search_toots": "Search toots with \"{keyword}\"",
   "status.cannot_reblog": "This post cannot be boosted",
   "status.delete": "Delete",
   "status.favourite": "Favourite",

@@ -150,7 +150,7 @@ const ja = {
   "search.placeholder": "検索",
   "search.status_by": "{name}からの投稿",
   "search_results.total": "{count, number} 件の結果",
-  "search_results.search_toots": "\"{query}\" でトゥート検索",
+  "search_results.search_toots": "\"{keyword}\" でトゥート検索",
   "status.cannot_reblog": "この投稿はブーストできません",
   "status.delete": "削除",
   "status.favourite": "お気に入り",

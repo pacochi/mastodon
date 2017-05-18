@@ -278,7 +278,6 @@ const updateTimeline = (state, timeline, status, references) => {
   return state;
 };
 
-//TODO
 const deleteStatus = (state, id, accountId, references, reblogOf) => {
   if (reblogOf) {
     // If we are deleting a reblog, just replace reblog with its original

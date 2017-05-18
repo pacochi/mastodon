@@ -2,7 +2,7 @@ import {
   SEARCH_CHANGE,
   SEARCH_CLEAR,
   SEARCH_FETCH_SUCCESS,
-  SEARCH_SHOW,
+  SEARCH_SHOW
 } from '../actions/search';
 import { COMPOSE_MENTION, COMPOSE_REPLY } from '../actions/compose';
 import Immutable from 'immutable';
@@ -89,7 +89,6 @@ export default function search(state = initialState, action) {
       accounts: Immutable.List(action.results.accounts.map(item => item.id)),
       statuses: Immutable.List(action.results.statuses.map(item => item.id)),
       hashtags: Immutable.List(action.results.hashtags),
-      full_text_search: Immutable.List(action.results.full_text_search),
     })).set('submitted', true);
   default:
     return state;

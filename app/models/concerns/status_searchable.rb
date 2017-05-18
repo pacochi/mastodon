@@ -33,7 +33,7 @@ module StatusSearchable
     settings status_search_es_settings do
       mappings dynamic: 'false' do
         indexes :id, type: 'long'
-        indexes :text, type: 'text', analyzer: 'ja_text_analyzer', fielddata: true
+        indexes :text, type: 'text', analyzer: 'ja_text_analyzer'
         indexes :favourites_count, type: 'integer'
         indexes :reblogs_count, type: 'integer'
         indexes :language, type: 'keyword'
@@ -63,15 +63,8 @@ module StatusSearchable
     after_commit on: [:create] do
       if postable_to_es?
         PostStatusToESWorker.perform_async(id)
-      else
-        Rails.logger.debug 'toot is not sent to ES.@create'
       end
     end
-
-    #after_commit on: [:destroy] do
-    #  Rails.logger.debug 'toot is removed from ES async. @destroy'
-    #  RemoveStatusFromESWorker.perform_async(id)
-    #end
 
   end
 
@@ -99,11 +92,10 @@ module StatusSearchable
             "missing": "_last"
           }
         }]
-      });
+      })
     end
 
     def post_status_to_es_async(status_id)
-      Rails.logger.debug 'toot is sent to ES async. @create'
       find(status_id).__elasticsearch__.index_document
     end
 

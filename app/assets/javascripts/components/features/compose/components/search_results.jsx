@@ -8,7 +8,7 @@ import { Link } from 'react-router';
 class SearchResults extends React.PureComponent {
 
   render () {
-    const { results, searchKeyword, intl } = this.props;
+    const { results, searchKeyword } = this.props;
 
     let accounts, statuses, hashtags, search_link;
     let count = 0;
@@ -46,9 +46,9 @@ class SearchResults extends React.PureComponent {
 
     if (searchKeyword.length > 0) {
       search_link = (
-        <Link className='search-results__search-toots' to={`/statuses/search/${searchKeyword}`}>
-          <i className='fa fa-fw fa-search search-results__search-toots-icon' />
-          <FormattedMessage id='search_results.search_toots' defaultMessage={"Search toots with \"{query}\""} values={{ query: searchKeyword }} />
+        <Link className='search-results__search-statuses' to={`/statuses/search/${searchKeyword}`}>
+          <i className='fa fa-fw fa-search search-results__search-statuses-icon' />
+          <FormattedMessage id='search_results.search_toots' defaultMessage={"Search toots with \"{keyword}\""} values={{ keyword: searchKeyword }} />
         </Link>
       );
     }

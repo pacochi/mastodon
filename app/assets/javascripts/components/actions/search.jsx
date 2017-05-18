@@ -83,14 +83,15 @@ export function showSearch() {
   };
 };
 
+function hasMore(page, hitsTotal){
+  const maxPage = Math.ceil(hitsTotal/NUM_FETCH_TOOTS_PER_PAGE);
+  return page <= maxPage;
+}
+
 export function fetchStatusSearchTimeline(keyword) {
   return (dispatch, getState) => {
     let skipLoading = false;
-    let page = getState().getIn(['timelines', 'status_search_timelines', keyword, 'page']);
-    console.log('fetched');
-    console.log(`page : ${page}`);
-    page = 1;
-    console.log(`page : ${page}`);
+    let page = 1;
 
     dispatch(fetchStatusSearchTimelineRequest(keyword, skipLoading));
 
@@ -101,9 +102,7 @@ export function fetchStatusSearchTimeline(keyword) {
       }
     }).then(response => {
       let hitsTotal = response.headers['search-hits-total'];
-      const maxPage = Math.ceil(hitsTotal/NUM_FETCH_TOOTS_PER_PAGE);
-      const hasMore = page <= maxPage;
-      dispatch(fetchStatusSearchTimelineSuccess(keyword, response.data, page, skipLoading, hitsTotal, hasMore));
+      dispatch(fetchStatusSearchTimelineSuccess(keyword, response.data, page, skipLoading, hitsTotal, hasMore(page, hitsTotal)));
     }).catch(error => {
       dispatch(fetchStatusSearchTimelineFail(keyword, error, skipLoading));
     });
@@ -114,16 +113,11 @@ export function expandStatusSearchTimeline(keyword) {
   return (dispatch, getState) => {
     const hitsTotal = getState().getIn(['timelines', 'status_search_timelines', keyword, 'hitsTotal']);
     const page = getState().getIn(['timelines', 'status_search_timelines', keyword, 'page']);
-    const maxPage = Math.ceil(hitsTotal/NUM_FETCH_TOOTS_PER_PAGE);
-    const hasMore = page <= maxPage;
+    const hasMore = hasMore(page, hitsTotal);
 
     if(!hasMore){
-      console.log('no more results.');
       return;
     }
-
-    console.log('expanded');
-    console.log(`page : ${page}`);
 
     dispatch(expandStatusSearchTimelineRequest(keyword));
 
@@ -149,14 +143,12 @@ export function fetchStatusSearchTimelineRequest(keyword, skipLoading) {
 };
 
 export function fetchStatusSearchTimelineSuccess(keyword, statuses, page, skipLoading, hitsTotal, hasMore) {
-  console.log('hits');
-  console.log(hitsTotal);
   return {
     type: STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
     keyword,
     statuses,
-    skipLoading,
     page,
+    skipLoading,
     hitsTotal,
     hasMore
   };
@@ -179,7 +171,7 @@ export function expandStatusSearchTimelineRequest(keyword) {
   };
 };
 
-export function expandStatusSearchTimelineSuccess(keyword, statuses,  page, hasMore) {
+export function expandStatusSearchTimelineSuccess(keyword, statuses, page, hasMore) {
   return {
     type: STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS,
     keyword,
