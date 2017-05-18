@@ -11,6 +11,7 @@ module Admin
 
     def show
       @account = Account.find(params[:id])
+      @oauth_authentication = @account.oauth_authentications.find_by(provider: :pixiv)
     end
 
     private

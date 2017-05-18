@@ -102,7 +102,6 @@ ja:
       title: アカウント
       undo_silenced: サイレンスから戻す
       undo_suspension: 停止から戻す
-      unlink_forcibly: 強制的に解除
       username: ユーザー名
       web: Web
     domain_blocks:
@@ -139,6 +138,10 @@ ja:
       account_count: 既知のアカウント数
       domain_name: ドメイン名
       title: 既知のインスタンス
+    oauth_authentications:
+      linked: 連携中
+      not_linked: 連携なし
+      unlink_forcibly: 強制的に解除
     pubsubhubbub:
       callback_url: コールバックURL
       confirmed: 確認済み

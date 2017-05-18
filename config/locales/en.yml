@@ -100,7 +100,6 @@ en:
       title: Accounts
       undo_silenced: Undo silence
       undo_suspension: Undo suspension
-      unlink_forcibly: Unlink forcibly
       username: Username
       web: Web
     domain_blocks:
@@ -137,6 +136,10 @@ en:
       account_count: Known accounts
       domain_name: Domain
       title: Known Instances
+    oauth_authentications:
+      linked: Linked
+      not_linked: Not linked
+      unlink_forcibly: Unlink forcibly
     pubsubhubbub:
       callback_url: Callback URL
       confirmed: Confirmed

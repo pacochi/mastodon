@@ -94,6 +94,7 @@ Rails.application.routes.draw do
     resources :domain_blocks, only: [:index, :new, :create, :show, :destroy]
     resources :settings, only: [:index, :update]
     resources :instances, only: [:index]
+    resources :oauth_authentications, only: [:destroy]
 
     resources :reports, only: [:index, :show, :update] do
       resources :reported_statuses, only: [:update, :destroy]
@@ -104,7 +105,6 @@ Rails.application.routes.draw do
       resource :silence, only: [:create, :destroy]
       resource :suspension, only: [:create, :destroy]
       resource :confirmation, only: [:create]
-      resource :oauth_authentication, only: [:destroy]
       resources :statuses, only: [:index, :update, :destroy]
     end
   end

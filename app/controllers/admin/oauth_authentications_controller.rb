@@ -2,22 +2,21 @@
 
 module Admin
   class OauthAuthenticationsController < BaseController
-    before_action :set_account
+    before_action :set_oauth_authentication
 
     def destroy
-      oauth_authentication = @account.oauth_authentications.find_by!(provider: 'pixiv')
-      if oauth_authentication.force_destroy
+      if @oauth_authentication.force_destroy
         flash[:notice] = t('oauth_authentications.successfully_unlinked')
       else
         flash[:alert] = t('oauth_authentications.failed_linking')
       end
-      redirect_to admin_account_path(@account.id)
+      redirect_to admin_account_path(@oauth_authentication.user.account.id)
     end
 
     private
 
-    def set_account
-      @account = Account.find(params[:account_id])
+    def set_oauth_authentication
+      @oauth_authentication = OauthAuthentication.find(params[:id])
     end
   end
 end
