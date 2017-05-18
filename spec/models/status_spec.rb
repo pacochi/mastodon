@@ -7,6 +7,10 @@ RSpec.describe Status, type: :model do
 
   subject { Fabricate(:status, account: alice) }
 
+  before do
+    stub_request(:put, %r{\Ahttp://127.0.0.1:9200/pawoo/status/\d+\z}).to_return(status: 200, body: "", headers: {})
+  end
+
   describe '#local?' do
     it 'returns true when no remote URI is set' do
       expect(subject.local?).to be true
