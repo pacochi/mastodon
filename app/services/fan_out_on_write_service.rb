@@ -36,7 +36,7 @@ class FanOutOnWriteService < BaseService
 
     followers = status.account.followers.where(domain: nil).joins(:user).where('users.current_sign_in_at > ?', 14.days.ago).select(:id).reorder(nil)
 
-    batch_size = Rails.configuration.x.fan_out_job_batch_size.to_i
+    batch_size = Rails.configuration.x.fan_out_job_batch_size
     if batch_size > 1
       followers.find_in_batches do |group|
         group.each_slice(batch_size) do |followers|
