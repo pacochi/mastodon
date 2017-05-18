@@ -6,9 +6,6 @@ class SuggestedAccountQuery
     @seed = Random.new_seed
     @limit = 20
     @page_number = 0
-    @account = nil
-    @with_tradic_limit = 0
-    @with_pixiv_follows_limit = 0
   end
 
   def exclude_ids(ids)
@@ -47,7 +44,7 @@ class SuggestedAccountQuery
     end
 
     def enable_tradic_account_query?
-      with_tradic_limit.positive? && account
+      with_tradic_limit.to_i.positive? && account
     end
   end
 
@@ -71,7 +68,7 @@ class SuggestedAccountQuery
     end
 
     def enable_pixiv_follows_query?
-      with_pixiv_follows_limit.positive? && oauth_authentication
+      with_pixiv_follows_limit.to_i.positive? && oauth_authentication
     end
   end
 
@@ -98,8 +95,8 @@ class SuggestedAccountQuery
   def all
     ids = []
     ids += triadic_account_ids
-    ids += pickup(pixiv_following_account_ids - ids, limit: with_pixiv_follows_limit)
-    ids += pickup(popular_account_ids - ids, limit: limit - ids.length) # limitに達する数までidを取得する
+    ids += pickup((shuffle_ids(pixiv_following_account_ids) - ids), limit: with_pixiv_follows_limit)
+    ids += pickup((shuffle_ids(popular_account_ids) - ids), limit: limit - ids.length) # limitに達する数までidを取得する
 
     default_scoped.where(id: ids).limit(limit)
   end
@@ -108,7 +105,11 @@ class SuggestedAccountQuery
 
   def pickup(ids, limit: 0)
     offset = limit * page_number
-    ids.shuffle(random: Random.new(seed)).slice(offset, limit) || []
+    ids.slice(offset, limit) || []
+  end
+
+  def shuffle_ids(ids)
+    ids.shuffle(random: Random.new(seed))
   end
 
   def spawn(variables)
