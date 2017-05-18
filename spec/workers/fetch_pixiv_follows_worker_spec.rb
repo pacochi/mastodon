@@ -31,9 +31,16 @@ RSpec.describe FetchPixivFollowsWorker, type: :worker do
           "status": "success",
           "response": [
             {
+              "is_mutual": false,
               "id": "1",
-              "user_id": "2",
-              "publicity": "public"
+              "user_id": "XXX",
+              "publicity": "public",
+              "target_user": {
+                "id": "1",
+                "name": "pixiv",
+                "account": "pixiv",
+                "status": "0"
+              }
             }
           ],
           "count": 1,
@@ -49,9 +56,16 @@ RSpec.describe FetchPixivFollowsWorker, type: :worker do
           "status": "success",
           "response": [
             {
+              "is_mutual": false,
               "id": "2",
-              "user_id": "3",
-              "publicity": "public"
+              "user_id": "XXX",
+              "publicity": "public",
+              "target_user": {
+                "id": "2",
+                "name": "pixiv",
+                "account": "pixiv",
+                "status": "0"
+              }
             }
           ],
           "count": 1,

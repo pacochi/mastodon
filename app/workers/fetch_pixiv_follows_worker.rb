@@ -20,7 +20,7 @@ class FetchPixivFollowsWorker
 
     while page
       response = client.favorite_users(params: { count: 300, page: page })
-      uids += response.map(&:id)
+      uids += response.map { |favorite_user| favorite_user.target_user.id.to_i }
       page = response.pagination.next
       sleep 0.1
     end
