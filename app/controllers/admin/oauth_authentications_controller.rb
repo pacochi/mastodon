@@ -10,7 +10,8 @@ module Admin
       else
         flash[:alert] = t('oauth_authentications.failed_linking')
       end
-      redirect_to admin_account_path(@oauth_authentication.user.account.id)
+
+      redirect_to admin_account_path(@oauth_authentication.user.account_id)
     end
 
     private
