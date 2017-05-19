@@ -101,8 +101,12 @@ export function fetchStatusSearchTimeline(keyword) {
         page
       }
     }).then(response => {
-      const hitsTotal = response.headers['search-hits-total'];
-      dispatch(fetchStatusSearchTimelineSuccess(keyword, response.data, page, skipLoading, hitsTotal, calcHasMore(page, hitsTotal)));
+      const hitsTotal = response.data['hits_total'];
+      let statuses = [];
+      if(hitsTotal > 0){
+        statuses = response.data['statuses'];
+      }
+      dispatch(fetchStatusSearchTimelineSuccess(keyword, statuses, page, skipLoading, hitsTotal, calcHasMore(page, hitsTotal)));
     }).catch(error => {
       dispatch(fetchStatusSearchTimelineFail(keyword, error, skipLoading));
     });
@@ -127,7 +131,11 @@ export function expandStatusSearchTimeline(keyword) {
         page
       }
     }).then(response => {
-      dispatch(expandStatusSearchTimelineSuccess(keyword, response.data, page, hasMore));
+      let statuses = [];
+      if(hitsTotal > 0){
+        statuses = response.data['statuses'];
+      }
+      dispatch(expandStatusSearchTimelineSuccess(keyword, statuses, page, hasMore));
     }).catch(error => {
       dispatch(expandStatusSearchTimelineFail(keyword, error));
     });
