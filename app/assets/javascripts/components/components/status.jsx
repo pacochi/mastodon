@@ -35,7 +35,7 @@ class Status extends React.PureComponent {
   render () {
     let media = '';
     const { status, expandMedia, squareMedia, standalone, ...other } = this.props;
-    
+
     if (status === null) {
       return <div />;
     }

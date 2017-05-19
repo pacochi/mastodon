@@ -17,7 +17,7 @@ export const STATUS_SEARCH_TIMELINE_EXPAND_REQUEST = 'STATUS_SEARCH_TIMELINE_EXP
 export const STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS = 'STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS';
 export const STATUS_SEARCH_TIMELINE_EXPAND_FAIL    = 'STATUS_SEARCH_TIMELINE_EXPAND_FAIL';
 
-const NUM_FETCH_TOOTS_PER_PAGE = 20;
+const FETCH_TOOTS_NUM_PER_PAGE = 20;
 
 export function changeSearch(value) {
   return {
@@ -83,26 +83,26 @@ export function showSearch() {
   };
 };
 
-function hasMore(page, hitsTotal){
-  const maxPage = Math.ceil(hitsTotal / NUM_FETCH_TOOTS_PER_PAGE);
+function calcHasMore(page, hitsTotal){
+  const maxPage = Math.ceil(hitsTotal / FETCH_TOOTS_NUM_PER_PAGE);
   return page <= maxPage;
 }
 
 export function fetchStatusSearchTimeline(keyword) {
   return (dispatch, getState) => {
-    let skipLoading = false;
-    let page = 1;
+    const skipLoading = false;
+    const page = 1;
 
     dispatch(fetchStatusSearchTimelineRequest(keyword, skipLoading));
 
     api(getState).get(`/api/v1/search/statuses/${keyword}`, {
       params: {
-        limit: NUM_FETCH_TOOTS_PER_PAGE,
-        page: page
+        limit: FETCH_TOOTS_NUM_PER_PAGE,
+        page
       }
     }).then(response => {
-      let hitsTotal = response.headers['search-hits-total'];
-      dispatch(fetchStatusSearchTimelineSuccess(keyword, response.data, page, skipLoading, hitsTotal, hasMore(page, hitsTotal)));
+      const hitsTotal = response.headers['search-hits-total'];
+      dispatch(fetchStatusSearchTimelineSuccess(keyword, response.data, page, skipLoading, hitsTotal, calcHasMore(page, hitsTotal)));
     }).catch(error => {
       dispatch(fetchStatusSearchTimelineFail(keyword, error, skipLoading));
     });
@@ -113,9 +113,9 @@ export function expandStatusSearchTimeline(keyword) {
   return (dispatch, getState) => {
     const hitsTotal = getState().getIn(['timelines', 'status_search_timelines', keyword, 'hitsTotal']);
     const page = getState().getIn(['timelines', 'status_search_timelines', keyword, 'page']);
-    const hasMoreFlag = hasMore(page, hitsTotal);
+    const hasMore = calcHasMore(page, hitsTotal);
 
-    if(!hasMoreFlag){
+    if(!hasMore){
       return;
     }
 
@@ -123,11 +123,11 @@ export function expandStatusSearchTimeline(keyword) {
 
     api(getState).get(`/api/v1/search/statuses/${keyword}`, {
       params: {
-        limit: NUM_FETCH_TOOTS_PER_PAGE,
-        page: page
+        limit: FETCH_TOOTS_NUM_PER_PAGE,
+        page
       }
     }).then(response => {
-      dispatch(expandStatusSearchTimelineSuccess(keyword, response.data, page, hasMoreFlag));
+      dispatch(expandStatusSearchTimelineSuccess(keyword, response.data, page, hasMore));
     }).catch(error => {
       dispatch(expandStatusSearchTimelineFail(keyword, error));
     });

@@ -1,4 +1,4 @@
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types'
 import Immutable from 'immutable';
@@ -7,18 +7,16 @@ import {
   expandStatusSearchTimeline
 } from '../../actions/search';
 import Column from '../ui/components/column';
-import {injectIntl, FormattedMessage} from 'react-intl';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import ColumnBackButtonSlim from '../../components/column_back_button_slim';
 import LoadingIndicator from '../../components/loading_indicator';
 import StatusList from '../../components/status_list';
 
 const mapStateToProps = (state, props) => ({
-  statusIds: state.getIn(['timelines', 'status_search_timelines', String(props.params.keyword), 'items'], Immutable.List()),
-  isLoading: state.getIn(['timelines', 'status_search_timelines', String(props.params.keyword), 'isLoading']),
-  hasMore: state.getIn(['timelines', 'status_search_timelines', String(props.params.keyword), 'hasMore']),
+  statusIds: state.getIn(['timelines', 'status_search_timelines', props.params.keyword, 'items'], Immutable.List()),
+  isLoading: state.getIn(['timelines', 'status_search_timelines', props.params.keyword, 'isLoading']),
+  hasMore: state.getIn(['timelines', 'status_search_timelines', props.params.keyword, 'hasMore']),
 });
-
-let subscription;
 
 class StatusSearchResults extends React.PureComponent {
 
@@ -28,19 +26,19 @@ class StatusSearchResults extends React.PureComponent {
   }
 
   componentWillMount (){
-    this.props.dispatch(fetchStatusSearchTimeline(String(this.props.params.keyword)));
+    this.props.dispatch(fetchStatusSearchTimeline(this.props.params.keyword));
   }
 
   handleScrollToBottom () {
     if (!this.props.isLoading && this.props.hasMore) {
-      this.props.dispatch(expandStatusSearchTimeline(String(this.props.params.keyword)));
+      this.props.dispatch(expandStatusSearchTimeline(this.props.params.keyword));
     }
   }
 
   render () {
     const { statusIds, isLoading, params } = this.props;
-    const keyword = String(params.keyword);
-    let column_header = <FormattedMessage id='column.search_toots' defaultMessage={"Search: \"{keyword}\""} values={{ keyword: keyword }} />;
+    const keyword = params.keyword;
+    const column_header = <FormattedMessage id='column.search_toots' defaultMessage={'Search: "{keyword}"'} values={{ keyword }} />;
 
     if (!statusIds && isLoading) {
       return (

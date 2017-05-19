@@ -1,29 +1,4 @@
 GIT
-  remote: git://github.com/elastic/elasticsearch-rails.git
-  revision: 22b698aa3f4138db6ec1d1a082e8cd24f8132224
-  branch: 5.x
-  specs:
-    elasticsearch-model (5.0.1)
-      activesupport (> 3)
-      elasticsearch (~> 5)
-      hashie
-    elasticsearch-rails (5.0.1)
-
-GIT
-  remote: git://github.com/elasticsearch/elasticsearch-ruby.git
-  revision: be27b6f73b4e081f54f3943988ffcd4c476fa0f6
-  branch: 5.x
-  specs:
-    elasticsearch (5.0.4)
-      elasticsearch-api (= 5.0.4)
-      elasticsearch-transport (= 5.0.4)
-    elasticsearch-api (5.0.4)
-      multi_json
-    elasticsearch-transport (5.0.4)
-      faraday
-      multi_json
-
-GIT
   remote: https://github.com/pixiv/pixiv-api-ruby-public.git
   revision: 0bbd48fcae4573443faadbc6c04e25ef472127b8
   specs:
@@ -198,6 +173,19 @@ GEM
       json
       thread
       thread_safe
+    elasticsearch (5.0.4)
+      elasticsearch-api (= 5.0.4)
+      elasticsearch-transport (= 5.0.4)
+    elasticsearch-api (5.0.4)
+      multi_json
+    elasticsearch-model (5.0.1)
+      activesupport (> 3)
+      elasticsearch (~> 5)
+      hashie
+    elasticsearch-rails (5.0.1)
+    elasticsearch-transport (5.0.4)
+      faraday
+      multi_json
     encryptor (3.0.0)
     erubis (2.7.0)
     et-orbi (1.0.3)
@@ -624,9 +612,9 @@ DEPENDENCIES
   devise-two-factor
   doorkeeper
   dotenv-rails
-  elasticsearch!
-  elasticsearch-model!
-  elasticsearch-rails!
+  elasticsearch (~> 5.0)
+  elasticsearch-model (~> 5.0)
+  elasticsearch-rails (~> 5.0)
   exception_notification
   fabrication
   faker

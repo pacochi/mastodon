@@ -1,29 +1,27 @@
-#require 'elasticsearch/model'
-
 module StatusSearchable
   extend ActiveSupport::Concern
 
   included do
     include Elasticsearch::Model
 
-    index_name  "pawoo"
-    document_type "status"
+    index_name  'pawoo'
+    document_type 'status'
 
     status_search_es_settings = {
       index: {
         analysis: {
           tokenizer: {
             ja_text_tokenizer: {
-              type: "kuromoji_tokenizer",
-              mode: "search"
+              type: 'kuromoji_tokenizer',
+              mode: 'search'
             }
           },
           analyzer: {
             ja_text_analyzer: {
-              tokenizer: "ja_text_tokenizer",
-              type: "custom",
-              char_filter: ["icu_normalizer"],
-              filter: ["kuromoji_part_of_speech"]
+              tokenizer: 'ja_text_tokenizer',
+              type: 'custom',
+              char_filter: ['icu_normalizer'],
+              filter: ['kuromoji_part_of_speech']
             }
           }
         }
@@ -71,25 +69,25 @@ module StatusSearchable
   class_methods do
     def search(query)
       __elasticsearch__.search({
-        "query": {
-          "bool": {
-            "must": [{
-              "simple_query_string": {
-                "query": query,
-                "fields": ["text"],
-                "default_operator": "and"
+        query: {
+          bool: {
+            must: [{
+              simple_query_string: {
+                query: query,
+                fields: ['text'],
+                default_operator: 'and'
               }
             }],
-            "filter": [
-                { "term": { "visibility": 0 } },
-                { "term": { "is_pawoo": true } }
+            filter: [
+                { term: { visibility: 0 } },
+                { term: { is_pawoo: true } }
             ]
           }
         },
-        "sort": [{
-          "created_at": {
-            "order": "desc",
-            "missing": "_last"
+        sort: [{
+          created_at: {
+            order: 'desc',
+            missing: '_last'
           }
         }]
       })

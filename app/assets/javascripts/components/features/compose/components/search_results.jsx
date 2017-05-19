@@ -1,5 +1,5 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import { injectIntl, FormattedMessage } from 'react-intl';
 import AccountContainer from '../../../containers/account_container';
 import StatusContainer from '../../../containers/status_container';
@@ -48,7 +48,7 @@ class SearchResults extends React.PureComponent {
       search_link = (
         <Link className='search-results__search-statuses' to={`/statuses/search/${searchKeyword}`}>
           <i className='fa fa-fw fa-search search-results__search-statuses-icon' />
-          <FormattedMessage id='search_results.search_toots' defaultMessage={"Search toots with \"{keyword}\""} values={{ keyword: searchKeyword }} />
+          <FormattedMessage id='search_results.search_toots' defaultMessage='Search toots with "{keyword}"' values={{ keyword: searchKeyword }} />
         </Link>
       );
     }
@@ -70,4 +70,4 @@ SearchResults.propTypes = {
   searchKeyword: PropTypes.string
 };
 
-export default injectIntl(SearchResults);
+export default SearchResults;
