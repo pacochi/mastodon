@@ -21,6 +21,10 @@ export const COMPOSE_SUGGESTIONS_CLEAR = 'COMPOSE_SUGGESTIONS_CLEAR';
 export const COMPOSE_SUGGESTIONS_READY = 'COMPOSE_SUGGESTIONS_READY';
 export const COMPOSE_SUGGESTION_SELECT = 'COMPOSE_SUGGESTION_SELECT';
 
+export const COMPOSE_HASH_TAG_CLEAR = 'COMPOSE_HASH_TAG_CLEAR';
+export const COMPOSE_HASH_TAG_READY = 'COMPOSE_HASH_TAG_READY';
+export const COMPOSE_HASH_TAG_SELECT = 'COMPOSE_HASH_TAG_SELECT';
+
 export const COMPOSE_MOUNT   = 'COMPOSE_MOUNT';
 export const COMPOSE_UNMOUNT = 'COMPOSE_UNMOUNT';
 
@@ -103,6 +107,24 @@ export function submitCompose() {
         if (getState().getIn(['timelines', 'public', 'loaded'])) {
           dispatch(updateTimeline('public', { ...response.data }));
         }
+      }
+
+      const statusTags = response.data.tags.map(it => it.name);
+      let tags = JSON.parse(localStorage.getItem('hash_tag_history'));
+      if (tags === null) {
+        tags = statusTags;
+      } else {
+        tags = tags.filter(it => !statusTags.includes(it));
+        tags.unshift(...statusTags);
+      }
+      const maxSize = 1000;
+      tags = tags.slice(0, maxSize);
+
+      const data = JSON.stringify(tags);
+      try {
+        localStorage.setItem('hash_tag_history', data);
+      } catch (e) {
+        //ignore
       }
     }).catch(function (error) {
       dispatch(submitComposeFail(error));
@@ -212,6 +234,12 @@ export function clearComposeSuggestions() {
   };
 };
 
+export function clearComposeHashTagSuggestions() {
+  return {
+    type: COMPOSE_HASH_TAG_CLEAR
+  };
+};
+
 export function fetchComposeSuggestions(token) {
   return (dispatch, getState) => {
     api(getState).get('/api/v1/accounts/search', {
@@ -226,6 +254,15 @@ export function fetchComposeSuggestions(token) {
   };
 };
 
+export function fetchComposeHashTagSuggestions(token) {
+  return (dispatch, _) => {
+    const tags = JSON.parse(localStorage.getItem('hash_tag_history')) || [];
+    const suggestionMaxSize = 4;
+    const suggestions = tags.filter(it => it.startsWith(token)).slice(0, suggestionMaxSize);
+    dispatch(readyComposeHashTagSuggestions(token, suggestions));
+  };
+};
+
 export function readyComposeSuggestions(token, accounts) {
   return {
     type: COMPOSE_SUGGESTIONS_READY,
@@ -233,6 +270,14 @@ export function readyComposeSuggestions(token, accounts) {
     accounts
   };
 };
+
+export function readyComposeHashTagSuggestions(token, tags) {
+  return {
+    type: COMPOSE_HASH_TAG_READY,
+    token,
+    tags
+  }
+}
 
 export function selectComposeSuggestion(position, token, accountId) {
   return (dispatch, getState) => {
@@ -246,6 +291,15 @@ export function selectComposeSuggestion(position, token, accountId) {
     });
   };
 };
+
+export function selectComposeHashTagSuggestion(position, token, tag) {
+  return {
+    type: COMPOSE_HASH_TAG_SELECT,
+    position,
+    token,
+    completion: tag
+  }
+}
 
 export function mountCompose() {
   return {
