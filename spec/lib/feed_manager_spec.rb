@@ -130,7 +130,6 @@ RSpec.describe FeedManager do
     let(:instance) { FeedManager.instance }
 
     it 'performs pushing updates into home timelines' do
-      allow(instance).to receive(:filter?).and_return false
       expect(PushUpdateWorker).to receive(:perform_async).with(accounts.map(&:id), status.id)
 
       instance.push(:home, accounts, status)
@@ -142,13 +141,6 @@ RSpec.describe FeedManager do
 
       reblog = Fabricate(:status, reblog: status)
       instance.push(:home, accounts, reblog)
-    end
-
-    it 'skips pushing update if the accounts are filtered' do
-      allow(instance).to receive(:filter?).and_return true
-      expect(PushUpdateWorker).to_not receive(:perform_async)
-
-      instance.push(:home, accounts, status)
     end
   end
 end
