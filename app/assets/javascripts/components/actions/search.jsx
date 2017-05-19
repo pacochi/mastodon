@@ -101,10 +101,10 @@ export function fetchStatusSearchTimeline(keyword) {
         page
       }
     }).then(response => {
-      const hitsTotal = response.hits_total;
+      const hitsTotal = response.data.hits_total;
       let statuses = [];
       if(hitsTotal > 0){
-        statuses = response.statuses;
+        statuses = response.data.statuses;
       }
       dispatch(fetchStatusSearchTimelineSuccess(keyword, statuses, page, skipLoading, hitsTotal, calcHasMore(page, hitsTotal)));
     }).catch(error => {
@@ -133,7 +133,7 @@ export function expandStatusSearchTimeline(keyword) {
     }).then(response => {
       let statuses = [];
       if(hitsTotal > 0){
-        statuses = response.statuses;
+        statuses = response.data.statuses;
       }
       dispatch(expandStatusSearchTimelineSuccess(keyword, statuses, page, hasMore));
     }).catch(error => {
