@@ -78,6 +78,7 @@ en:
       most_recent_activity: Most recent activity
       most_recent_ip: Most recent IP
       not_subscribed: Not subscribed
+      oauth_authentications: pixiv Login
       order:
         alphabetic: Alphabetic
         most_recent: Most recent
@@ -135,6 +136,10 @@ en:
       account_count: Known accounts
       domain_name: Domain
       title: Known Instances
+    oauth_authentications:
+      linked: Linked
+      not_linked: Not linked
+      unlink_forcibly: Unlink forcibly
     pubsubhubbub:
       callback_url: Callback URL
       confirmed: Confirmed
