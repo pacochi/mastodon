@@ -21,6 +21,12 @@ RSpec.configure do |config|
     end
   end
 
+  config.before(:each) do
+    host = ENV['ELASTIC_SEARCH_URL'] || '192.168.42.1'
+    port = ENV['ELASTIC_SEARCH_PORT'] || '9200'
+    stub_request(:any, %r{\Ahttp://#{host}:#{port}/pawoo/status/\d+\z}).to_return(status: 200, body: "", headers: {})
+  end
+
   config.after :suite do
     FileUtils.rm_rf(Dir["#{Rails.root}/spec/test_files/"])
   end
