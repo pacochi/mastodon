@@ -29,6 +29,12 @@ class StatusSearchResults extends React.PureComponent {
     this.props.dispatch(fetchStatusSearchTimeline(this.props.params.keyword));
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.params.keyword !== this.props.params.keyword && nextProps.params.keyword) {
+      this.props.dispatch(fetchStatusSearchTimeline(nextProps.params.keyword));
+    }
+  }
+
   handleScrollToBottom () {
     if (!this.props.isLoading && this.props.hasMore) {
       this.props.dispatch(expandStatusSearchTimeline(this.props.params.keyword));
