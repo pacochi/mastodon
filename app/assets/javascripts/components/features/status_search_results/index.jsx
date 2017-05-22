@@ -7,7 +7,7 @@ import {
   expandStatusSearchTimeline
 } from '../../actions/search';
 import Column from '../ui/components/column';
-import { injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import ColumnBackButtonSlim from '../../components/column_back_button_slim';
 import LoadingIndicator from '../../components/loading_indicator';
 import StatusList from '../../components/status_list';
@@ -44,7 +44,7 @@ class StatusSearchResults extends React.PureComponent {
   render () {
     const { statusIds, isLoading, params } = this.props;
     const keyword = params.keyword;
-    const column_header = <FormattedMessage id='column.search_toots' defaultMessage={'Search: "{keyword}"'} values={{ keyword }} />;
+    const column_header = <FormattedMessage id='column.search_toots' defaultMessage='Search: "{keyword}"' values={{ keyword }} />;
 
     if (!statusIds && isLoading) {
       return (
@@ -78,4 +78,4 @@ StatusSearchResults.propTypes = {
   hasMore: PropTypes.bool,
 };
 
-export default connect(mapStateToProps)(injectIntl(StatusSearchResults));
+export default connect(mapStateToProps)(StatusSearchResults);
