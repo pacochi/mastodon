@@ -12,7 +12,11 @@ require 'capybara/rspec'
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
-WebMock.disable_net_connect!
+if ENV['ELASTICSEARCH_HOST'] == '127.0.0.1' then
+  WebMock.disable_net_connect!(allow: '127.0.0.1:9200')
+else
+  WebMock.disable_net_connect!
+end
 Sidekiq::Testing.inline!
 
 RSpec.configure do |config|
