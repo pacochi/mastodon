@@ -12,7 +12,6 @@ class RemoveStatusService < BaseService
     remove_reblogs(status)
     remove_from_hashtags(status)
     remove_from_public(status)
-    remove_from_es(status)
 
     status.destroy!
 
@@ -79,10 +78,6 @@ class RemoveStatusService < BaseService
   def remove_from_public(status)
     Redis.current.publish('timeline:public', @payload)
     Redis.current.publish('timeline:public:local', @payload) if status.local?
-  end
-
-  def remove_from_es(status)
-    status.__elasticsearch__.delete_document
   end
 
   def redis
