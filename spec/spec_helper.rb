@@ -21,10 +21,9 @@ RSpec.configure do |config|
     end
   end
 
-  config.before(:each) do
-    host = ENV['ELASTICSEARCH_HOST'] || '192.168.42.1'
-    port = ENV['ELASTICSEARCH_PORT'] || '9200'
-    stub_request(:any, %r{\Ahttp://#{host}:#{port}/pawoo/status/\d+\z}).to_return(status: 200, body: "", headers: {})
+  config.before :suite do
+    # WebMock.disable_net_connect!(:allow_localhost => true)
+    WebMock.disable_net_connect!(allow: 'localhost:9200')
   end
 
   config.after :suite do
