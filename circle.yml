@@ -5,6 +5,7 @@ machine:
     LOCAL_HTTPS: true
     PATH: "${PATH}:${HOME}/${CIRCLE_PROJECT_REPONAME}/node_modules/.bin"
     RAILS_ENV: test
+    ELASTIC_SEARCH_HOST: 127.0.0.1
   hosts:
     cb6e6126.ngrok.io: 127.0.0.1
   services:
@@ -16,22 +17,21 @@ dependencies:
   cache_directories:
     - ~/.cache/yarn
     - .bundle/config
-#    - elasticsearch-5.4.0
+    - elasticsearch-5.4.0
   override:
     - nvm install
     - nvm alias default $(cat .nvmrc)
     - bundle check || bundle install --without development production --retry=3 --jobs=3 --path=vendor/bundle
     - yarn install
-#  post:
-#    - if [[ ! -e elasticsearch-5.4.0 ]]; then wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.4.0.tar.gz && tar -xvf elasticsearch-5.4.0.tar.gz && elasticsearch-5.4.0/bin/elasticsearch-plugin install analysis-kuromoji && elasticsearch-5.4.0/bin/elasticsearch-plugin install analysis-icu; fi
-#    - elasticsearch-5.4.0/bin/elasticsearch: {background: true}
-#    - export ELASTIC_SEARCH_HOST=127.0.0.1
-#    - sleep 10 && wget --waitretry=5 --retry-connrefused -v http://127.0.0.1:9200/
+  post:
+    - if [[ ! -e elasticsearch-5.4.0 ]]; then wget https://artifacts.elastic.co/downloads/elasticsearch/elasticsearch-5.4.0.tar.gz && tar -xvf elasticsearch-5.4.0.tar.gz && elasticsearch-5.4.0/bin/elasticsearch-plugin install analysis-kuromoji && elasticsearch-5.4.0/bin/elasticsearch-plugin install analysis-icu; fi
+    - elasticsearch-5.4.0/bin/elasticsearch: {background: true}
+    - sleep 10 && wget --waitretry=5 --retry-connrefused -v http://127.0.0.1:9200/
 
 database:
   override:
     - bundle exec rails db:create db:migrate
-#    - bundle exec rails runner "Status.__elasticsearch__.create_index! force:true"
+    - bundle exec rails runner "Status.__elasticsearch__.create_index! force:true"
 
 test:
   override:
