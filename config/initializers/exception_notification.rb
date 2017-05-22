@@ -24,11 +24,11 @@ ExceptionNotification.configure do |config|
     !Rails.env.production? || ignore_worker
   end
 
-  if ENV['EXCEPTION_NOTIFICATION_EMAIL']
+  if ENV['EXCEPTION_NOTIFICATION_EMAIL'] && ENV['LOCAL_DOMAIN']
     # Email notifier sends notifications by email.
     config.add_notifier :email,
       email_prefix: '[pawoo-errors] ',
-      sender_address: %{"pawoo Errors" <errors@#{ENV['SMTP_DOMAIN'] || Rails.configuration.x.local_domain}>},
+      sender_address: %{"pawoo Errors" <errors@#{ENV['LOCAL_DOMAIN']}>},
       exception_recipients: ENV['EXCEPTION_NOTIFICATION_EMAIL'].split(',')
   end
 
