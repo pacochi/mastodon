@@ -1,6 +1,6 @@
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import {
   fetchStatusSearchTimeline,

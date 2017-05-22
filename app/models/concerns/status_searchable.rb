@@ -36,8 +36,6 @@ module StatusSearchable
         indexes :reblogs_count, type: 'integer'
         indexes :language, type: 'keyword'
         indexes :created_at, type: 'date', format: 'date_time'
-        indexes :is_pawoo, type: 'boolean'
-        indexes :visibility, type: 'integer'
       end
     end
 
@@ -50,8 +48,6 @@ module StatusSearchable
           reblogs_count: reblogs_count,
           language: language,
           created_at: created_at,
-          is_pawoo: local?,
-          visibility: visibility_before_type_cast
         }
       else
         {}
@@ -63,7 +59,6 @@ module StatusSearchable
         PostStatusToESWorker.perform_async(id)
       end
     end
-
   end
 
   class_methods do
@@ -77,11 +72,7 @@ module StatusSearchable
                 fields: ['text'],
                 default_operator: 'and'
               }
-            }],
-            filter: [
-                { term: { visibility: 0 } },
-                { term: { is_pawoo: true } }
-            ]
+            }]
           }
         },
         sort: [{
