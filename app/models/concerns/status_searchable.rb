@@ -4,7 +4,7 @@ module StatusSearchable
   included do
     include Elasticsearch::Model
 
-    index_name  'pawoo'
+    index_name 'pawoo'
     document_type 'status'
 
     status_search_es_settings = {
@@ -32,8 +32,6 @@ module StatusSearchable
       mappings dynamic: 'false' do
         indexes :id, type: 'long'
         indexes :text, type: 'text', analyzer: 'ja_text_analyzer'
-        indexes :favourites_count, type: 'integer'
-        indexes :reblogs_count, type: 'integer'
         indexes :language, type: 'keyword'
         indexes :created_at, type: 'date', format: 'date_time'
       end
@@ -44,8 +42,6 @@ module StatusSearchable
         {
           id: id,
           text: text,
-          favourites_count: favourites_count,
-          reblogs_count: reblogs_count,
           language: language,
           created_at: created_at,
         }
@@ -83,14 +79,5 @@ module StatusSearchable
         }]
       })
     end
-
-    def post_status_to_es_async(status_id)
-      find(status_id).__elasticsearch__.index_document
-    end
-
-    def remove_status_from_es_async(status)
-      status.__elasticsearch__.delete_document
-    end
   end
-
 end

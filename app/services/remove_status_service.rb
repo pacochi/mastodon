@@ -82,7 +82,7 @@ class RemoveStatusService < BaseService
   end
 
   def remove_from_es(status)
-    Status.remove_status_from_es_async(status)
+    status.__elasticsearch__.delete_document
   end
 
   def redis
