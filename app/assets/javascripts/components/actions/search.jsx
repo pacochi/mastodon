@@ -102,10 +102,7 @@ export function fetchStatusSearchTimeline(keyword) {
       }
     }).then(response => {
       const hitsTotal = response.data.hits_total;
-      let statuses = [];
-      if(hitsTotal > 0){
-        statuses = response.data.statuses;
-      }
+      const statuses = hitsTotal > 0 ? response.data.statuses : [];
       dispatch(fetchStatusSearchTimelineSuccess(keyword, statuses, page, skipLoading, hitsTotal, calcHasMore(page, hitsTotal)));
     }).catch(error => {
       dispatch(fetchStatusSearchTimelineFail(keyword, error, skipLoading));
@@ -131,10 +128,7 @@ export function expandStatusSearchTimeline(keyword) {
         page
       }
     }).then(response => {
-      let statuses = [];
-      if(hitsTotal > 0){
-        statuses = response.data.statuses;
-      }
+      const statuses = hitsTotal > 0 ? response.data.statuses : [];
       dispatch(expandStatusSearchTimelineSuccess(keyword, statuses, page, hasMore));
     }).catch(error => {
       dispatch(expandStatusSearchTimelineFail(keyword, error));
