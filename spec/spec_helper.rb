@@ -21,11 +21,6 @@ RSpec.configure do |config|
     end
   end
 
-  config.before :suite do
-    # WebMock.disable_net_connect!(:allow_localhost => true)
-    WebMock.disable_net_connect!(allow: 'localhost:9200')
-  end
-
   config.after :suite do
     FileUtils.rm_rf(Dir["#{Rails.root}/spec/test_files/"])
   end
