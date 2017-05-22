@@ -14,6 +14,10 @@ class Auth::RegistrationsController < Devise::RegistrationsController
     end
   end
 
+  def destroy
+    not_found
+  end
+
   protected
 
   def send_reset_password_instructions
