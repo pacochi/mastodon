@@ -28,7 +28,7 @@ ExceptionNotification.configure do |config|
     # Email notifier sends notifications by email.
     config.add_notifier :email,
       email_prefix: '[pawoo-errors] ',
-      sender_address: %W("pawoo Errors" <errors@#{ENV['SMTP_DOMAIN'] || Rails.configuration.x.local_domain}>),
+      sender_address: %{"pawoo Errors" <errors@#{ENV['SMTP_DOMAIN'] || Rails.configuration.x.local_domain}>},
       exception_recipients: ENV['EXCEPTION_NOTIFICATION_EMAIL'].split(',')
   end
 
