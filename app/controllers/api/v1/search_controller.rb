@@ -12,8 +12,9 @@ class Api::V1::SearchController < ApiController
     query = params[:query]
     current_page = params[:page].to_i
     statuses_limit = limit_param(DEFAULT_STATUSES_LIMIT)
-    if (current_page * statuses_limit) > MAX_HITS_TOTAL
-      current_page = (MAX_HITS_TOTAL / statuses_limit).ceil
+    if ((current_page - 1) * statuses_limit) >= MAX_HITS_TOTAL
+      render json: {}, status: 404
+      return
     end
 
     search_results = Status.search(query).page(current_page).per(statuses_limit)
