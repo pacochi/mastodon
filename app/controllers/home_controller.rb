@@ -16,7 +16,7 @@ class HomeController < ApplicationController
   private
 
   def authenticate_user!
-    redirect_to(single_user_mode? ? account_path(Account.first) : about_path) unless user_signed_in?
+    redirect_to(find_redirect_path_from_request) unless user_signed_in?
   end
 
   def find_or_create_access_token
@@ -27,5 +27,22 @@ class HomeController < ApplicationController
       Doorkeeper.configuration.access_token_expires_in,
       Doorkeeper.configuration.refresh_token_enabled?
     )
+  end
+
+  def find_redirect_path_from_request
+    return account_path(Account.first) if single_user_mode?
+
+    case request.path
+    when %r{\A/web/statuses/(?<status_id>\d+)\z}
+      status_id = Regexp.last_match[:status_id]
+      status = Status.where(visibility: [:public, :unlisted]).find(status_id)
+      short_account_status_path(status.account, status)
+    when %r{\A/web/accounts/(?<account_id>\d+)\z}
+      account_id = Regexp.last_match[:account_id]
+      account = Account.find(account_id)
+      short_account_path(account)
+    else
+      about_path
+    end
   end
 end
