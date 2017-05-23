@@ -1,10 +1,11 @@
 - content_for :page_title do
   = "##{@tag.name}"
 
+= link_to root_path, class: 'service-logo' do
+  = image_tag 'service_logo.png'
+
 .compact-header
-  %h1<
-    = link_to site_title, root_path
-    %small= "##{@tag.name}"
+  %h1 "##{@tag.name}"
 
 - if @statuses.empty?
   .accounts-grid

@@ -278,6 +278,7 @@ ja:
       muting: ミュートしたアカウントリスト
     upload: アップロード
   landing_strip_html: <strong>%{name}</strong> さんはインスタンス %{link_to_root_path} のユーザーです。アカウントさえ持っていればフォローしたり会話したりできます。もしお持ちでないなら <a href="%{sign_up_path}">こちら</a> からサインアップできます。
+  landing_strip_tag_html: ハッシュタグ <strong>%{name}</strong> がついているトゥート一覧です。アカウントさえ持っていれば会話に参加できます。もしお持ちでないなら <a href="%{sign_up_path}">こちら</a> からサインアップできます。
   media_attachments:
     validations:
       images_and_video: 既に画像が追加されているため、動画を追加することはできません。
