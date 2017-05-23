@@ -9,10 +9,8 @@ class Api::V1::SearchController < ApiController
   end
 
   def statuses
-    unless current_user&.admin?
-      render json: {}, status: 403
-      return
-    end
+    # TODO: 本リリース時（一般ユーザに全文検索機能を公開する場合）は、以下の一行を削除する。
+    return forbidden unless current_user&.admin?
 
     query = params[:query]
     current_page = params[:page].to_i
