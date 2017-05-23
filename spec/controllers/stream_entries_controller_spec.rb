@@ -7,9 +7,9 @@ RSpec.describe StreamEntriesController, type: :controller do
   let(:status) { Fabricate(:status, account: alice) }
 
   describe 'GET #show' do
-    it 'returns http success with HTML' do
+    it 'redirects with HTML' do
       get :show, params: { account_username: alice.username, id: status.stream_entry.id }
-      expect(response).to have_http_status(:success)
+      expect(response).to have_http_status(:redirect)
     end
 
     it 'returns http success with Atom' do
