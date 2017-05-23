@@ -2642,6 +2642,15 @@ button.icon-button.active i.fa-retweet {
   }
 }
 
+.search-results__header {
+  color: lighten($color1, 26%);
+  background: lighten($color1, 2%);
+  border-bottom: 1px solid darken($color1, 4%);
+  padding: 15px 10px;
+  font-size: 14px;
+  font-weight: 500;
+}
+
 .search-results__search-statuses {
   background: lighten($color1, 8%);
   color: $color5;
