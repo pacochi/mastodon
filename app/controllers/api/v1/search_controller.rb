@@ -16,8 +16,7 @@ class Api::V1::SearchController < ApiController
     current_page = params[:page].to_i
     statuses_limit = limit_param(DEFAULT_STATUSES_LIMIT)
     if ((current_page - 1) * statuses_limit) >= MAX_HITS_TOTAL
-      render json: {}, status: 404
-      return
+      return not_found
     end
 
     blocking_account_ids = current_account.blocking.pluck(:target_account_id)
