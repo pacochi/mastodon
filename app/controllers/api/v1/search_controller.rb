@@ -9,6 +9,11 @@ class Api::V1::SearchController < ApiController
   end
 
   def statuses
+    unless current_user&.admin?
+      render json: {}, status: 403
+      return
+    end
+
     query = params[:query]
     current_page = params[:page].to_i
     statuses_limit = limit_param(DEFAULT_STATUSES_LIMIT)
