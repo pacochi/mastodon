@@ -6,6 +6,11 @@
   %link{ rel: 'alternate', type: 'application/atom+xml', href: account_stream_entry_url(@account, @stream_entry, format: 'atom') }/
   %link{ rel: 'alternate', type: 'application/json+oembed', href: api_oembed_url(url: account_stream_entry_url(@account, @stream_entry), format: 'json') }/
 
+  - if @status_pagination&.next
+    %link{ rel: 'next', href: short_account_status_path(@status_pagination.status.account, @status_pagination.next) }
+  - if @status_pagination&.previous
+    %link{ rel: 'prev', href: short_account_status_path(@status_pagination.status.account, @status_pagination.previous) }
+
   %meta{ property: 'og:site_name', content: site_title }/
   %meta{ property: 'og:type', content: 'article' }/
   %meta{ property: 'og:title', content: "#{@account.username} on #{site_hostname}" }/
@@ -28,4 +33,10 @@
 = render 'accounts/service_logo'
 
 .activity-stream.activity-stream-headless.h-entry
-  = render partial: "stream_entries/#{@type}", locals: { @type.to_sym => @stream_entry.activity, include_threads: true }
+  = render partial: "stream_entries/#{@type}", locals: { @type.to_sym => @stream_entry.activity, include_threads: true, status_pagination: @status_pagination }
+
+.pagination
+  - if @status_pagination&.next
+    = link_to safe_join([t('pagination.next'), fa_icon('chevron-right')], ' '), short_account_status_path(@account, @status_pagination.next), class: 'next', rel: 'next'
+  - if @status_pagination&.previous
+    = link_to safe_join([fa_icon('chevron-left'), t('pagination.prev')], ' '), short_account_status_path(@account, @status_pagination.previous), class: 'prev', rel: 'prev'
