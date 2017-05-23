@@ -20,7 +20,11 @@ class Api::V1::SearchController < ApiController
       return
     end
 
-    search_results = Status.search(query).page(current_page).per(statuses_limit)
+    blocking_account_ids = current_account.blocking.pluck(:target_account_id)
+    muting_account_ids = current_account.muting.pluck(:target_account_id)
+    exclude_ids = (blocking_account_ids + muting_account_ids).uniq
+
+    search_results = Status.search(query, exclude_ids).page(current_page).per(statuses_limit)
     # If no records are left after we exclude "records which exist in ES but do not in PSQL,"
     # JS gives an error. Since it is quite a rare case, we leave this issue for a while.
     @statuses = search_results.records
