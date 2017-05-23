@@ -31,6 +31,7 @@ module StatusSearchable
     settings status_search_es_settings do
       mappings dynamic: 'false' do
         indexes :id, type: 'long'
+        indexes :account_id, type: 'integer'
         indexes :text, type: 'text', analyzer: 'ja_text_analyzer'
         indexes :language, type: 'keyword'
         indexes :created_at, type: 'date', format: 'date_time'
@@ -41,6 +42,7 @@ module StatusSearchable
       if postable_to_es?
         {
           id: id,
+          account_id: account_id,
           text: text,
           language: language,
           created_at: created_at,
@@ -62,17 +64,22 @@ module StatusSearchable
   end
 
   class_methods do
-    def search(query)
+    def search(query, exclude_ids)
       __elasticsearch__.search({
         query: {
           bool: {
-            must: [{
+            must: {
               simple_query_string: {
                 query: query,
                 fields: ['text'],
                 default_operator: 'and'
               }
-            }]
+            },
+            must_not: {
+              terms: {
+                account_id: exclude_ids
+              }
+            }
           }
         },
         sort: [{
