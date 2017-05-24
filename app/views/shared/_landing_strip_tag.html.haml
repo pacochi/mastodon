@@ -1,0 +1,6 @@
+.landing-strip
+  = t('landing_strip_tag_html',
+    name: tag.name,
+    domain: site_hostname,
+    link_to_root_path: link_to(content_tag(:strong, site_hostname), root_path),
+    sign_up_path: new_user_registration_path)
