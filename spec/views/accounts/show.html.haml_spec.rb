@@ -12,7 +12,8 @@ describe 'accounts/show.html.haml' do
     status3 =  Fabricate(:status, account: alice, text: 'Are You Still There World?')
 
     assign(:account, alice)
-    assign(:statuses, alice.statuses)
+    assign(:statuses, Kaminari.paginate_array(alice.statuses.to_a).page(1))
+    assign(:statuses_collection, alice.statuses)
     assign(:stream_entry, status.stream_entry)
     assign(:type, status.stream_entry.activity_type.downcase)
 
@@ -26,7 +27,8 @@ describe 'accounts/show.html.haml' do
     status  =  Fabricate(:status, account: alice, text: 'Hello World')
 
     assign(:account, alice)
-    assign(:statuses, alice.statuses)
+    assign(:statuses, Kaminari.paginate_array(alice.statuses.to_a).page(1))
+    assign(:statuses_collection, alice.statuses)
     assign(:stream_entry, status.stream_entry)
     assign(:type, status.stream_entry.activity_type.downcase)
 
