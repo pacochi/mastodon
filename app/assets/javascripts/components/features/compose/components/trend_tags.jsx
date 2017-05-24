@@ -11,7 +11,15 @@ class TrendTags extends React.PureComponent {
 
   componentDidMount () {
     this.props.refreshTrendTags();
+    this.interval = setInterval(() => {
+      this.props.refreshTrendTags();
+    }, 1000 * 60 * 20);
   }
+
+  componentWillUnmount () {
+    clearInterval(this.interval);
+  }
+
   render () {
     if (this.props.tags.size === 0) {
       return null
