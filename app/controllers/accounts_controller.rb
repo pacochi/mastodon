@@ -8,7 +8,7 @@ class AccountsController < ApplicationController
   def show
     respond_to do |format|
       format.html do
-        @statuses = @account.statuses.permitted_for(@account, current_account).order('id desc')
+        @statuses = @account.statuses.permitted_for(@account, current_account).order(id: :desc)
         if params[:max_id].present? || params[:since_id].present?
           @statuses = @statuses.paginate_by_max_id(STATUSES_PER_PAGE, params[:max_id], params[:since_id])
         else
@@ -18,7 +18,7 @@ class AccountsController < ApplicationController
       end
 
       format.atom do
-        @entries = @account.stream_entries.order('id desc').where(hidden: false).with_includes.paginate_by_max_id(STATUSES_PER_PAGE, params[:max_id], params[:since_id])
+        @entries = @account.stream_entries.order(id: :desc).where(hidden: false).with_includes.paginate_by_max_id(STATUSES_PER_PAGE, params[:max_id], params[:since_id])
         render xml: AtomSerializer.render(AtomSerializer.new.feed(@account, @entries.to_a))
       end
 
