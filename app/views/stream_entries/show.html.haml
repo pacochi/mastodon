@@ -27,10 +27,10 @@
   - if (@stream_entry.status.present? && @stream_entry.status.text.length < 100 && @stream_entry.status.media_attachments.empty? && @stream_entry.status.pixiv_cards.empty?) || @account.silenced
     %meta{ name: 'robots', content: 'noindex,follow' }/
 
+= render 'accounts/service_logo'
+
 - if show_landing_strip?
   = render partial: 'shared/landing_strip', locals: { account: @stream_entry.account }
-
-= render 'accounts/service_logo'
 
 .activity-stream.activity-stream-headless.h-entry
   = render partial: "stream_entries/#{@type}", locals: { @type.to_sym => @stream_entry.activity, include_threads: true }
