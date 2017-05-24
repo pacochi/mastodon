@@ -1,11 +1,11 @@
 - content_for :page_title do
   = "##{@tag.name}"
 
-- if show_landing_strip?
-  = render partial: 'shared/landing_strip_tag', locals: { tag: @tag }
-
 = link_to root_path, class: 'service-logo' do
   = image_tag 'service_logo.png'
+
+- if show_landing_strip?
+  = render partial: 'shared/landing_strip_tag', locals: { tag: @tag }
 
 .compact-header
   %h1= "##{@tag.name}"
