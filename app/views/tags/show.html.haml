@@ -1,5 +1,8 @@
 - content_for :page_title do
-  = "##{@tag.name}"
+  - if @statuses.current_page > 1
+    = "page #{@statuses.current_page} - ##{@tag.name}"
+  - else
+    = "##{@tag.name}"
 
 = link_to root_path, class: 'service-logo' do
   = image_tag 'service_logo.png'

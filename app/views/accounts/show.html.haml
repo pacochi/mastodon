@@ -1,5 +1,8 @@
 - content_for :page_title do
-  = "#{display_name(@account)} - #{@account.acct}"
+  - if @statuses.current_page > 1
+    = "page #{@statuses.current_page} - #{display_name(@account)} - #{@account.acct}"
+  - else
+    = "#{display_name(@account)} - #{@account.acct}"
 
 - content_for :header_tags do
   %link{ rel: 'salmon', href: api_salmon_url(@account.id) }/
