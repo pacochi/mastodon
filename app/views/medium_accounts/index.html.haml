@@ -13,8 +13,8 @@
       = render 'accounts/nothing_here'
   - else
     .activity-stream
-      = render partial: 'stream_entries/status', collection: @statuses, as: :status, locals: { expand_media: true }
+      = render partial: 'stream_entries/status', collection: @statuses_collection, as: :status, locals: { expand_media: true }
 
   .pagination
-    - if @statuses.size == 20
-      = link_to safe_join([t('pagination.next'), fa_icon('chevron-right')], ' '), account_media_url(@account, max_id: @statuses.last.id), class: 'next', rel: 'next'
+    = link_to_prev_page @statuses, safe_join([t('pagination.prev'), fa_icon('chevron-left')], ' '), class: 'prev'
+    = link_to_next_page @statuses, safe_join([t('pagination.next'), fa_icon('chevron-right')], ' '), class: 'next'
