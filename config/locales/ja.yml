@@ -197,6 +197,8 @@ ja:
     title: 管理者メニュー
     suggestion:
       title: 運営タグ
+    ngword:
+      title: NGワード
   application_mailer:
     settings: 'メール設定の変更: %{link}'
     signature: Mastodon %{instance} インスタンスからの通知

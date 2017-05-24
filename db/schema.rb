@@ -349,9 +349,10 @@ ActiveRecord::Schema.define(version: 20170524042615) do
   end
 
   create_table "trend_ng_words", force: :cascade do |t|
-    t.string   "word"
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
+    t.string   "word",       default: "", null: false
+    t.string   "memo",       default: "", null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
   end
 
   create_table "users", force: :cascade do |t|
