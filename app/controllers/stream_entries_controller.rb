@@ -14,8 +14,8 @@ class StreamEntriesController < ApplicationController
         return gone if @stream_entry.activity.nil?
 
         if @stream_entry.activity_type == 'Status'
-          @ancestors   = @stream_entry.activity.reply? ? cache_collection(@stream_entry.activity.ancestors(current_account), Status) : []
-          @descendants = cache_collection(@stream_entry.activity.descendants(current_account), Status)
+          # TODO: Status以外のactivityが増えたら対応の必要あり
+          redirect_to short_account_status_url(@stream_entry.account, @stream_entry.status)
         end
       end
 
