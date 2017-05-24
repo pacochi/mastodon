@@ -34,6 +34,9 @@ Rails.application.routes.draw do
     end
   end
 
+  get '/@:username', to: 'accounts#show', as: :short_account
+  get '/@:account_username/:id', to: 'statuses#show', as: :short_account_status
+
   get '/users/:username', to: redirect('/@%{username}'), constraints: { format: :html }
 
   resources :accounts, path: 'users', only: [:show], param: :username do
@@ -52,9 +55,6 @@ Rails.application.routes.draw do
     resource :follow, only: [:create], controller: :account_follow
     resource :unfollow, only: [:create], controller: :account_unfollow
   end
-
-  get '/@:username', to: 'accounts#show', as: :short_account
-  get '/@:account_username/:id', to: 'statuses#show', as: :short_account_status
 
   namespace :settings do
     resources :oauth_authentications, only: [:index, :destroy]
