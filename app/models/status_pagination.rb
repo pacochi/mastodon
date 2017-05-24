@@ -7,24 +7,43 @@ class StatusPagination
   end
 
   def next
-    @next ||= permitted_statuses_without_tree.where(id.gt(@status.id)).reorder(nil).first
+    @next ||= statuses.where(id.gt(@status.id)).reorder(nil).first
   end
 
   def previous
-    @previous ||= permitted_statuses_without_tree.where(id.lt(@status.id)).first
+    @previous ||= statuses.where(id.lt(@status.id)).first
   end
 
   private
 
-  def ancestor_and_descendant_ids
-    @ancestor_and_descendant_ids ||= @status.ancestors.map(&:id) + @status.descendants.map(&:id)
+  def statuses
+    @statuses ||= [
+      @status.account.statuses, # アカウントのステータス
+      Status.without_reblogs,   # ブーストは含まない
+      permitted_statuses,       # 閲覧権限がある
+      without_tree_path,        # 現在のステータスのリプライは含まない(すでに同じページ内で表示されているため)
+      id_in_range               # 最適化のために、探索を打ち切るidのrangeを指定する
+    ].compact.inject(&:merge)
   end
 
   def id
     Status.arel_table[:id]
   end
 
-  def permitted_statuses_without_tree
-    @status.account.statuses.permitted_for(@status.account, @target_account).where.not(id: ancestor_and_descendant_ids)
+  def id_in_range
+    min_max = @status.account.statuses.select(id.maximum.as('max_id')).select(id.minimum.as('min_id')).reorder(nil).group(:account_id).first
+    Status.where(id.between(min_max.min_id..min_max.max_id)) if min_max
+  end
+
+  def permitted_statuses
+    Status.permitted_for(@status.account, @target_account)
+  end
+
+  def without_tree_path
+    Status.where.not(id: ancestor_and_descendant_ids)
+  end
+
+  def ancestor_and_descendant_ids
+    @ancestor_and_descendant_ids ||= @status.ancestors.map(&:id) + @status.descendants.map(&:id)
   end
 end
