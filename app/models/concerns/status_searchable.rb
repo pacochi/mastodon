@@ -43,7 +43,7 @@ module StatusSearchable
         {
           id: id,
           account_id: account_id,
-          text: text,
+          text: Formatter.instance.plaintext_for_elasticsearch(self),
           language: language,
           created_at: created_at,
         }
