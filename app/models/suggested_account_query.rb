@@ -62,9 +62,11 @@ class SuggestedAccountQuery
     def pixiv_following_account_ids
       return [] unless enable_pixiv_follows_query?
 
-      offset = with_pixiv_follows_limit * page_number
+      sign_in_at = User.arel_table[:current_sign_in_at]
       uid = oauth_authentication.pixiv_follows.pluck(:target_pixiv_uid)
-      default_scoped.where.not(id: excluded_ids).joins(:oauth_authentications).where(oauth_authentications: { provider: 'pixiv', uid: uid }).ids
+
+      accounts = default_scoped.joins(:media_attachments).joins(:user).where.not(id: excluded_ids).joins(:oauth_authentications).where(oauth_authentications: { provider: 'pixiv', uid: uid }).where(sign_in_at.gteq(3.weeks.ago)).distinct.preload(:user)
+      accounts.sort_by { |account| account.user.current_sign_in_at }.reverse.map(&:id)
     end
 
     def enable_pixiv_follows_query?
@@ -94,7 +96,7 @@ class SuggestedAccountQuery
 
   def all
     ids = []
-    ids += pickup(shuffle_ids(pixiv_following_account_ids), limit: with_pixiv_follows_limit)
+    ids += pickup(pixiv_following_account_ids, limit: with_pixiv_follows_limit)
     ids += (triadic_account_ids - ids)
     ids += pickup((shuffle_ids(popular_account_ids) - ids), limit: limit - ids.length) # limitに達する数までidを取得する
 
