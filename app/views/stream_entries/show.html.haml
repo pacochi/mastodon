@@ -33,7 +33,7 @@
 = render 'accounts/service_logo'
 
 .activity-stream.activity-stream-headless.h-entry
-  = render partial: "stream_entries/#{@type}", locals: { @type.to_sym => @stream_entry.activity, include_threads: true, status_pagination: @status_pagination }
+  = render partial: "stream_entries/#{@type}", locals: { @type.to_sym => @stream_entry.activity, include_threads: true }
 
 .pagination
   - if @status_pagination&.next

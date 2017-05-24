@@ -12,7 +12,6 @@
 - style_classes    = style_classes(status, is_predecessor, is_successor, include_threads)
 - mf_classes       = microformats_classes(status, is_direct_parent, is_direct_child)
 - entry_classes    = h_class + ' ' + mf_classes + ' ' + style_classes
-- status_pagination ||= nil # initialize local variable
 
 - if status.reply? && include_threads
   = render partial: 'stream_entries/status', collection: @ancestors, as: :status, locals: { is_predecessor: true, direct_reply_id: status.in_reply_to_id}
