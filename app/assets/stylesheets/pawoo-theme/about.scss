@@ -129,6 +129,62 @@
       }
     }
 
+    @media screen and (max-width: 650px) {
+      width: 100%;
+      margin: 0;
+
+      .about-col {
+        margin: 0;
+
+        &.right {
+          display: none;
+        }
+
+        .about-col-head {
+          img {
+            width: 80%;
+          }
+          p {
+            padding: 0 20px;
+          }
+        }
+
+        .about-col-body {
+          width: 100%;
+          border-radius: 0;
+        }
+
+        .first {
+          background: none #000000;
+          display: flex;
+          flex-direction: column;
+
+          .hide_on_wide_display {
+            width: 100%;
+          }
+
+          .about-col-body-apps {
+            order: -1;
+            width: 100%;
+            margin-bottom: 20px;
+
+            .about-col-body-app {
+              max-width: 100%;
+              padding: 0 10px;
+
+              img {
+                width: 100%;
+              }
+            }
+          }
+
+          .separate {
+            display: none;
+          }
+        }
+      }
+    }
+
     .about-col-body {
       box-sizing: border-box;
       margin: 0 auto;
