@@ -5,7 +5,7 @@
   = image_tag 'service_logo.png'
 
 .compact-header
-  %h1 "##{@tag.name}"
+  %h1= "##{@tag.name}"
 
 - if @statuses.empty?
   .accounts-grid
