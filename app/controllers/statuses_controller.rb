@@ -5,12 +5,14 @@ class StatusesController < ApplicationController
 
   before_action :set_account
   before_action :set_status
-  before_action :set_link_headers
   before_action :check_account_suspension
 
   def show
     @ancestors   = @status.reply? ? cache_collection(@status.ancestors(current_account), Status) : []
     @descendants = cache_collection(@status.descendants(current_account), Status)
+
+    @status_pagination = StatusPagination.new(@status, current_account)
+    set_link_headers(@status_pagination.previous, @status_pagination.next)
 
     render 'stream_entries/show'
   end
@@ -21,8 +23,14 @@ class StatusesController < ApplicationController
     @account = Account.find_local!(params[:account_username])
   end
 
-  def set_link_headers
-    response.headers['Link'] = LinkHeader.new([[account_stream_entry_url(@account, @status.stream_entry, format: 'atom'), [%w(rel alternate), %w(type application/atom+xml)]]])
+  def set_link_headers(prev_status, next_status)
+    links = []
+    links.push([account_stream_entry_url(@account, @status.stream_entry, format: 'atom'), [%w(rel alternate), %w(type application/atom+xml)]])
+
+    links.push([short_account_status_path(@account, prev_status), [%w(rel prev)]]) if prev_status
+    links.push([short_account_status_path(@account, next_status), [%w(rel next)]]) if next_status
+
+    response.headers['Link'] = LinkHeader.new(links)
   end
 
   def set_status
