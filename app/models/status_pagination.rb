@@ -7,7 +7,7 @@ class StatusPagination
   end
 
   def next
-    @next ||= statuses.where(id.gt(@status.id)).reorder(nil).first
+    @next ||= statuses.where(id.gt(@status.id)).last
   end
 
   def previous
@@ -22,7 +22,8 @@ class StatusPagination
       Status.without_reblogs,   # ブーストは含まない
       permitted_statuses,       # 閲覧権限がある
       without_tree_path,        # 現在のステータスのリプライは含まない(すでに同じページ内で表示されているため)
-      id_in_range               # 最適化のために、探索を打ち切るidのrangeを指定する
+      id_in_range,              # 最適化のために、探索を打ち切るidのrangeを指定する
+      Status.order(created_at: :desc)
     ].compact.inject(&:merge)
   end
 
