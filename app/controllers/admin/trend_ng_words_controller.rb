@@ -15,7 +15,7 @@ module Admin
     def create
       @ng_word = TrendNgWord.new(ng_word_params)
       if @ng_word.save
-        redirect_to admin_trend_ng_words_url, notice: 'NGワードを追加しました'
+        redirect_to admin_trend_ng_words_path, notice: 'NGワードを追加しました'
       else
         render :new, status: :unprocessable_entity
       end
@@ -25,7 +25,7 @@ module Admin
 
     def update
       if @ng_word.update(ng_word_params)
-        redirect_to admin_trend_ng_words_url, notice: 'NGワードを更新しました'
+        redirect_to admin_trend_ng_words_path, notice: 'NGワードを更新しました'
       else
         render :edit, status: :unprocessable_entity
       end
@@ -33,7 +33,7 @@ module Admin
 
     def destroy
       @ng_word.destroy
-      redirect_to admin_trend_ng_words_url, notice: 'NGワードを削除しました'
+      redirect_to admin_trend_ng_words_path, notice: 'NGワードを削除しました'
     end
 
     private
