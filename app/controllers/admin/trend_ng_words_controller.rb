@@ -2,7 +2,6 @@
 
 module Admin
   class TrendNgWordsController < BaseController
-
     before_action :set_ng_word, only: [:edit, :update, :destroy]
 
     def index
