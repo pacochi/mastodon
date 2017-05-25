@@ -20,8 +20,7 @@ module StatusSearchable
             ja_text_analyzer: {
               tokenizer: 'ja_text_tokenizer',
               type: 'custom',
-              char_filter: ['icu_normalizer'],
-              filter: ['kuromoji_part_of_speech']
+              char_filter: ['icu_normalizer']
             }
           }
         }
