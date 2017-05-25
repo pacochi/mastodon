@@ -74,6 +74,8 @@ gem 'admin_script'
 gem 'redis-namespace'
 gem 'activerecord-import'
 
+gem 'elasticsearch-model', '~> 5.0'
+
 group :development, :test do
   gem 'rspec-rails'
   gem 'pry-rails'

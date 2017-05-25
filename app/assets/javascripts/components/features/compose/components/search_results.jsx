@@ -1,5 +1,6 @@
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import AccountContainer from '../../../containers/account_container';
 import StatusContainer from '../../../containers/status_container';
 import { Link } from 'react-router';
@@ -7,9 +8,9 @@ import { Link } from 'react-router';
 class SearchResults extends React.PureComponent {
 
   render () {
-    const { results } = this.props;
+    const { results, searchKeyword, isAdmin } = this.props;
 
-    let accounts, statuses, hashtags;
+    let accounts, statuses, hashtags, search_header;
     let count = 0;
 
     if (results.get('accounts') && results.get('accounts').size > 0) {
@@ -43,12 +44,24 @@ class SearchResults extends React.PureComponent {
       );
     }
 
-    return (
-      <div className='search-results'>
+    if (isAdmin && searchKeyword.length > 0) {
+      search_header = (
+        <Link className='search-results__search-statuses' to={`/statuses/search/${searchKeyword}`}>
+          <i className='fa fa-fw fa-search search-results__search-statuses-icon' />
+          <FormattedMessage id='search_results.search_toots' defaultMessage='Search toots with "{keyword}"' values={{ keyword: searchKeyword }} />
+        </Link>
+      );
+    } else {
+      search_header = (
         <div className='search-results__header'>
           <FormattedMessage id='search_results.total' defaultMessage='{count, number} {count, plural, one {result} other {results}}' values={{ count }} />
         </div>
+      );
+    }
 
+    return (
+      <div className='search-results'>
+        {search_header}
         {accounts}
         {statuses}
         {hashtags}
@@ -59,7 +72,9 @@ class SearchResults extends React.PureComponent {
 }
 
 SearchResults.propTypes = {
-  results: ImmutablePropTypes.map.isRequired
+  results: ImmutablePropTypes.map.isRequired,
+  isAdmin: PropTypes.bool,
+  searchKeyword: PropTypes.string
 };
 
 export default SearchResults;

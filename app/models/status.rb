@@ -4,6 +4,7 @@ class Status < ApplicationRecord
   include Paginable
   include Streamable
   include Cacheable
+  include StatusSearchable
 
   enum visibility: [:public, :unlisted, :private, :direct], _suffix: :visibility
 
@@ -46,6 +47,10 @@ class Status < ApplicationRecord
   scope :not_excluded_by_account, ->(account) { where.not(account_id: account.excluded_from_timeline_account_ids) }
 
   cache_associated :application, :media_attachments, :tags, :stream_entry, :pixiv_cards, mentions: { account: :oauth_authentications }, reblog: [{ account: :oauth_authentications }, :application, :stream_entry, :tags, :media_attachments, :pixiv_cards, mentions: { account: :oauth_authentications }], thread: { account: :oauth_authentications }, account: :oauth_authentications
+
+  def postable_to_es?
+    public_visibility? && local?
+  end
 
   def reply?
     !in_reply_to_id.nil? || super

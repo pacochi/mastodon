@@ -55,10 +55,21 @@ class Formatter
     Sanitize.fragment(html, config)
   end
 
+  def plaintext_for_elasticsearch(status)
+    strip_urls(strip_tags(status.text))
+  end
+
   private
 
   def encode(html)
     HTMLEntities.new.encode(html)
+  end
+
+  def strip_urls(text)
+    text.dup.tap do |dupped|
+      entities = Extractor.extract_entities_with_indices(text, extract_url_without_protocol: false)
+      entities.each { |entry| dupped.remove!(entry[:url]) if entry[:url]}
+    end
   end
 
   def encode_and_link_urls(html, mentions = nil)
