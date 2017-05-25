@@ -195,8 +195,8 @@ en:
     title: Administration
     suggestion:
       title: Suggestion Tags
-    ngword:
-      title: "Banned word"
+    trend_ngword:
+      title: "NG word"
   application_mailer:
     settings: 'Change e-mail preferences: %{link}'
     signature: Mastodon notifications from %{instance}

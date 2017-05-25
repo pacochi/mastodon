@@ -18,7 +18,7 @@ SimpleNavigation::Configuration.run do |navigation|
 
     primary.item :admin, safe_join([fa_icon('cogs fw'), t('admin.title')]), admin_reports_url, if: proc { current_user.admin? } do |admin|
       admin.item :suggestion_tags, safe_join([fa_icon('tags fw'), t('admin.suggestion.title')]), admin_suggestion_tags_url, highlights_on: %r{/admin/suggestion_tags}
-      admin.item :trend_ng_words, safe_join([fa_icon('ban fw'), t('admin.ngword.title')]), admin_trend_ng_words_url, highlights_on: %r{/admin/ng_words}
+      admin.item :trend_ng_words, safe_join([fa_icon('ban fw'), t('admin.trend_ngword.title')]), admin_trend_ng_words_url, highlights_on: %r{/admin/trend_ng_words}
       admin.item :reports, safe_join([fa_icon('flag fw'), t('admin.reports.title')]), admin_reports_url, highlights_on: %r{/admin/reports}
       admin.item :accounts, safe_join([fa_icon('users fw'), t('admin.accounts.title')]), admin_accounts_url, highlights_on: %r{/admin/accounts}
       admin.item :instances, safe_join([fa_icon('cloud fw'), t('admin.instances.title')]), admin_instances_url, highlights_on: %r{/admin/instances}
