@@ -1,0 +1,11 @@
+= simple_form_for [:admin, trend_ng_word] do |f|
+  = render 'shared/error_messages', object: f.object
+
+  = f.input :word, placeholder: 'NGワード'
+  %p.hint トレンドタグから弾きたいワードを入れてください
+
+  = f.input :memo, placeholder: 'メモ'
+  %p.hint 除外理由などのメモを入れてください
+
+  .actions
+    = f.button :button, '作成する', type: :submit

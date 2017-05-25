@@ -1,0 +1,26 @@
+- content_for :page_title do
+  = t('admin.trend_ng_word.title')
+
+%form
+  %table.table
+    %thead
+      %tr
+        %th NGワード
+        %th メモ
+        %th 作成日時
+        %th
+    %tbody
+      - @trend_ng_words.find_each do |word|
+        %tr
+          %td= word.word
+          %td= word.memo
+          %td= word.created_at
+          %td
+            = link_to edit_admin_trend_ng_word_path(word), class: 'table-action-link' do
+              %i.fa.fa-pencil-square-o
+              編集する
+          %td
+            = link_to admin_trend_ng_word_path(word), method: :delete, class: 'table-action-link', data: { confirm: '削除してよろしいですか？' } do
+              %i.fa.fa-trash
+              削除する
+  = link_to '追加', new_admin_trend_ng_word_path, class: 'button'

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170516095828) do
+ActiveRecord::Schema.define(version: 20170524042615) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -346,6 +346,14 @@ ActiveRecord::Schema.define(version: 20170516095828) do
     t.datetime "updated_at",              null: false
     t.index "to_tsvector('simple'::regconfig, (name)::text)", name: "hashtag_search_index", using: :gin
     t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
+  end
+
+  create_table "trend_ng_words", force: :cascade do |t|
+    t.string   "word",       default: "", null: false
+    t.string   "memo",       default: "", null: false
+    t.datetime "created_at",              null: false
+    t.datetime "updated_at",              null: false
+    t.index ["word"], name: "index_trend_ng_words_on_word", unique: true, using: :btree
   end
 
   create_table "users", force: :cascade do |t|

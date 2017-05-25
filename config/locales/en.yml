@@ -195,6 +195,8 @@ en:
     title: Administration
     suggestion:
       title: Suggestion Tags
+    trend_ng_word:
+      title: "NG word"
   application_mailer:
     settings: 'Change e-mail preferences: %{link}'
     signature: Mastodon notifications from %{instance}

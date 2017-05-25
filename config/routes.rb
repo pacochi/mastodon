@@ -95,6 +95,7 @@ Rails.application.routes.draw do
     resources :settings, only: [:index, :update]
     resources :instances, only: [:index]
     resources :suggestion_tags, only: [:index, :new, :create, :edit, :update, :destroy]
+    resources :trend_ng_words, only: [:index, :new, :create, :edit, :update, :destroy]
     resources :oauth_authentications, only: [:destroy]
 
     resources :reports, only: [:index, :show, :update] do
