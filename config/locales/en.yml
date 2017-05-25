@@ -195,7 +195,7 @@ en:
     title: Administration
     suggestion:
       title: Suggestion Tags
-    trend_ngword:
+    trend_ng_word:
       title: "NG word"
   application_mailer:
     settings: 'Change e-mail preferences: %{link}'

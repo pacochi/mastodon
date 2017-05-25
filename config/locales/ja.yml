@@ -197,7 +197,7 @@ ja:
     title: 管理者メニュー
     suggestion:
       title: 運営タグ
-    trend_ngword:
+    trend_ng_word:
       title: NGワード
   application_mailer:
     settings: 'メール設定の変更: %{link}'
