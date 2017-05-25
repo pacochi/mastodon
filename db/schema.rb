@@ -353,6 +353,7 @@ ActiveRecord::Schema.define(version: 20170524042615) do
     t.string   "memo",       default: "", null: false
     t.datetime "created_at",              null: false
     t.datetime "updated_at",              null: false
+    t.index ["word"], name: "index_trend_ng_words_on_word", unique: true, using: :btree
   end
 
   create_table "users", force: :cascade do |t|
