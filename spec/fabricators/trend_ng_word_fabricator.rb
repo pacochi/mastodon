@@ -1,4 +1,4 @@
 Fabricator(:trend_ng_word) do
-  word Faker::Lorem.word
+  word { sequence(:word) }
   memo Faker::Lorem.sentence
 end
