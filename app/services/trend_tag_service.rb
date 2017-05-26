@@ -23,7 +23,7 @@ class TrendTagService < BaseService
     return [] if len + 1 < HISTORY_COUNT
 
     current_trend = calc_current_trend(current_score)
-    redis.set(TrendTag::TREND_CURRENT_KEY, current_trend)
+    redis.set(TrendTag::TREND_CURRENT_KEY, current_trend.to_json)
     current_trend
   end
 
