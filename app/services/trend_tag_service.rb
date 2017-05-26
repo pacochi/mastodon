@@ -35,7 +35,7 @@ class TrendTagService < BaseService
 
   # 現在の各タグのスコアの計算
   def calc_current_score(status_ids)
-    status_tags = Status.joins(:tags).preload(:tags).where(id: status_ids).pluck(:id, :tag_id).map { |it| StatusTags.new(it[0], it[1]) }
+    status_tags = Status.joins(:tags).where(id: status_ids).pluck(:id, :tag_id).map { |it| StatusTags.new(it[0], it[1]) }
     statuses = Status.where(id: status_tags.map(&:status_id).uniq, uri: nil)
     tags = Tag.where(id: status_tags.map(&:tag_id).uniq)
 
@@ -129,7 +129,7 @@ class TrendTagService < BaseService
   # - ハッシュタグに対するリブログがREBLOGS_COUNT_MINよりちいさい
   # - 本文にハッシュタグ以外の文字列が含まれていない
   def create_score_obj(tag, status_tags, statuses)
-    tag_statuses = statuses.select {|s| status_tags[tag.id].map(&:status_id).include?(s.id)}
+    tag_statuses = statuses.select { |s| status_tags[tag.id].any? { |st| st.status_id == s.id } }
 
     # 本文がタグのみの投稿を弾く(タグのみで遊ぶ投稿への対策、内容のないものはトレンドとしてふさわしくない)
     tag_statuses = tag_statuses.reject { |ts| ts.text.gsub(/#\S+/, '').strip.empty? }
