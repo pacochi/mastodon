@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-HISTORY_COUNT = 3
-
 namespace :trend do
   desc 'sample'
   task sample: :environment do
