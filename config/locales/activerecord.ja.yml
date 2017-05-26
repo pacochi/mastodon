@@ -13,6 +13,10 @@ ja:
       oauth_authentication:
         provider: プロバイダー
         uid: ユーザーID
+      media_attachment:
+        file: ファイル
+        file_content_type: Content-Type
+        file_file_size: ファイルサイズ
     errors:
       models:
         account:
