@@ -40,9 +40,11 @@ class TrendTagService < BaseService
 
     status_tags = status_tags.group_by(&:tag_id)
 
+    trend_ng_words = TrendNgWord.pluck(:word)
+    tags = tags.reject { |tag| trend_ng_words.any? { |ng_word| tag.name.include?(ng_word) } }
+
     current_score = tags.map { |tag| create_score_obj(tag, status_tags, statuses) }.reject(&:nil?).to_h
-    current_score = {} if current_score.nil?
-    current_score
+    current_score || {}
   end
 
   def calc_current_trend(current_score)

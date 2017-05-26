@@ -11,10 +11,13 @@ class TrendTag
     trend_tags = []
 
     if trend_cache.present?
+      trend_ng_words = TrendNgWord.pluck(:word)
       trend_tags = JSON.parse(trend_cache, {:symbolize_names => true}).take(3).map do |tag|
+        next if trend_ng_words.any? { |ng_word| tag[:tag_name].include?(ng_word) }
         # NOTE: 本来はdescriptionにトゥート件数を表示したいが、現状表示するほどトゥートがないので空を出している
         new(name: tag[:tag_name], description: '', tag_type: 'trend')
       end
+      trend_tags = trend_tags.reject(&:nil?)
     end
 
     suggestion_tags = SuggestionTag.order(:order).preload(:tag).first(limit).map do |tag|
