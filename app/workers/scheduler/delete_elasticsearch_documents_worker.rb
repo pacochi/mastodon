@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class Scheduler::DeleteElasticsearchDocumentsWorker
-  EXPIRE_BEFORE = 7.days
+  EXPIRE_BEFORE = 14.days
 
   def perform
     Elasticsearch::Model.client.delete_by_query(
