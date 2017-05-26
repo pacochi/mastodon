@@ -24,6 +24,6 @@ class TrendTag
       new(name: tag.name, description: tag.description, tag_type: 'suggestion')
     end
 
-    trend_tags.concat(suggestion_tags).dup(&:name).take(limit)
+    trend_tags.concat(suggestion_tags).group_by(&:name).map(&:last).flatten.take(limit)
   end
 end
