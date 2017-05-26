@@ -1,3 +1,6 @@
 subscriptions_scheduler:
   cron: '0 4,9 * * *'
   class: Scheduler::SubscriptionsScheduler
+delete_elasticsearch_documents_worker:
+  cron: '*/2 * * * *'
+  class: Scheduler::DeleteElasticsearchDocumentsWorker
