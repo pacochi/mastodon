@@ -7,7 +7,7 @@ class TrendTag
   attr_accessor :name, :description, :tag_type
 
   def self.find_tags(limit = 3)
-    trend_cache = Redis.current.get(TrendTag::TREND_CURRENT_KEY)
+    trend_cache = Redis.current.get(TREND_CURRENT_KEY)
     trend_tags = []
 
     if trend_cache.present?
@@ -20,7 +20,7 @@ class TrendTag
       trend_tags = trend_tags.reject(&:nil?)
     end
 
-    suggestion_tags = SuggestionTag.order(:order).preload(:tag).first(limit).map do |tag|
+    suggestion_tags = SuggestionTag.order(:order).preload(:tag).limit(limit).map do |tag|
       new(name: tag.name, description: tag.description, tag_type: 'suggestion')
     end
 
