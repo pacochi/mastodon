@@ -61,11 +61,10 @@ class TrendTagService < BaseService
   # 伸び率が1.0以下のものはトレンドから除外されるため、トレンドが出ずにから配列が返ることもあります。
   def calc_current_trend(current_score)
     # redisからスコアの履歴を復元
-    history = (0...HISTORY_COUNT).map { |i| JSON.parse(redis.lindex(TREND_HISTORIES_KEY, i), symbolize_names: true) }
+    history = (1...HISTORY_COUNT).map { |i| JSON.parse(redis.lindex(TREND_HISTORIES_KEY, i), symbolize_names: true) }
 
-    # 最新の履歴はcurrent_scoreなので除外して、過去のスコアを合計する
     len = HISTORY_COUNT - 1
-    merged_tag_score = history.last(len).flatten.reduce do |a, entry|
+    merged_tag_score = history.flatten.reduce do |a, entry|
       a.merge(entry) do |_, oldval, newval|
         {
           tag_id: oldval[:tag_id],
