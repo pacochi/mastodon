@@ -54,33 +54,35 @@ class TrendTagService < BaseService
     # 履歴の数がHISTORY_COUNTより少ない場合はトレンドを出すことができないため、空配列を返す
     return [] if redis.llen(TREND_HISTORIES_KEY) + 1 < HISTORY_COUNT
 
-    # current_tag_scoresを除くhistoryを取り出す
+    # historyから過去のcurrent_tag_scoresを取り出す
     tag_score_histories = redis.lrange(TREND_HISTORIES_KEY, 1, -1).map do |history_tag_score|
       JSON.parse(history_tag_score).map { |tag_score_attributes| TagScore.new(tag_score_attributes) }
     end
 
     # 現在のトレンドを計算する
-    current_trend_tag_scores(current_tag_scores, tag_score_histories)
+    tag_scores = current_trend_tag_scores(current_tag_scores, tag_score_histories)
+
+    tag_scores.map(&:name).tap do |tag_names|
+      TrendTag.update_trend_tags(tag_names)
+    end
   end
 
   private
 
   # redisに新しいハッシュタグのスコア履歴を保存する
   def lpush_current_tag_scores(current_tag_scores)
-    # redisに新しいハッシュタグのスコア履歴を保存する
     redis.lpush(TREND_HISTORIES_KEY, current_tag_scores.to_json)
     redis.ltrim(TREND_HISTORIES_KEY, 0, HISTORY_COUNT - 1)
   end
 
   # 現在のスコアからトレンドの配列を返します。
   # トレンドは過去のスコアの平均から現在のスコアがどれだけ伸びたかの伸び率で出します。
-  # 伸び率が1.0以下のものはトレンドから除外されるため、トレンドが出ずにから配列が返ることもあります。
+  # 伸び率が1.0以下のものはトレンドから除外されるため、トレンドが出ずに空配列が返ることもあります。
   def current_trend_tag_scores(current_tag_scores, tag_score_histories)
     by_tag_id = tag_score_histories.flatten.group_by { |tag_score| tag_score.tag_id.to_i }
     min_tag_score = TagScore.new(favourites_count: FAVOURITES_COUNT_MIN, reblogs_count: REBLOGS_COUNT_MIN, accounts_count: ACCOUNTS_COUNT_MIN)
 
-    # 過去のスコアを合計する
-    # 各タグのスコアの平均を求める
+    # 過去の値を合計する
     merged_tag_score_histories = by_tag_id.map { |tag_id, tag_scores| [tag_id, tag_scores.inject(&:+)] }.to_h
 
     # 過去スコアから現在スコアの伸び率を求める
@@ -104,7 +106,7 @@ class TrendTagService < BaseService
 
   def build_tag_scores_from_statuses(statuses)
     trend_ng_words = TrendNgWord.pluck(:word)
-    tag_statuses = Hash.new { |h,k| h[k] = [] }
+    tag_statuses = Hash.new { |h, k| h[k] = [] }
 
     # tagでStatusをグルーピングする
     statuses.each do |status|
@@ -134,9 +136,9 @@ class TrendTagService < BaseService
   def recent_public_statuses(time)
     time_from = time.ago(SPAN)
     latest_id = Status.maximum(:id) || 0
-    max_id = [latest_id - 100_000, 0].max # 全件探索は重いので雑に間引く
+    min_id = [latest_id - 100_000, 0].max # 全件探索は重いので雑に間引く
 
-    recent_tags = Status.with_public_visibility.where(created_at: time_from..time).where(Status.arel_table[:id].gteq(max_id))
+    recent_tags = Status.with_public_visibility.where(created_at: time_from..time).where(Status.arel_table[:id].gteq(min_id))
     recent_tags.local.joins(:tags).preload(:tags).distinct
   end
 
