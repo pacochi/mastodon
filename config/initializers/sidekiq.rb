@@ -1,5 +1,6 @@
 require 'sidekiq'
 require 'sidekiq/scheduler'
+require 'sidekiq-scheduler'
 
 host = ENV.fetch('REDIS_HOST') { 'localhost' }
 port = ENV.fetch('REDIS_PORT') { 6379 }
