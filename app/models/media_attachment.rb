@@ -3,10 +3,11 @@
 class MediaAttachment < ApplicationRecord
   self.inheritance_column = nil
 
-  enum type: [:image, :gifv, :video, :unknown]
+  enum type: [:image, :gifv, :video, :unknown, :music]
 
   IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif'].freeze
   VIDEO_MIME_TYPES = ['video/webm', 'video/mp4'].freeze
+  MUSIC_MIME_TYPES = ['audio/mpeg'].freeze
 
   IMAGE_STYLES = { original: '1280x1280>', small: '400x400>' }.freeze
   VIDEO_STYLES = {
@@ -20,6 +21,30 @@ class MediaAttachment < ApplicationRecord
       time: 0,
     },
   }.freeze
+  MUSIC_STYLES = {
+    original: {
+      format: 'mp4',
+      convert_options: {
+        encode_music: {
+          'vn',
+          'ar'      => 44100,
+          'ac'      => 2,
+          'ab'      => '192k',
+          'f'       => 'mp3'
+        },
+        generate_movie: {
+          'loop'     => 1,
+          'r'        => 4,
+          'y',
+          'movflags' => 'faststart',
+          'vf'       => 'scale=\'min(400,iw)\':-2,format=yuv420p',
+          'c:v'      => 'libx264',
+          'shortest',
+          'c:a'      => 'copy'
+        }
+      },
+    },
+  }.freeze
 
   belongs_to :account, inverse_of: :media_attachments
   belongs_to :status,  inverse_of: :media_attachments
@@ -28,7 +53,7 @@ class MediaAttachment < ApplicationRecord
                     styles: ->(f) { file_styles f },
                     processors: ->(f) { file_processors f },
                     convert_options: { all: '-quality 90 -strip' }
-  validates_attachment_content_type :file, content_type: IMAGE_MIME_TYPES + VIDEO_MIME_TYPES
+  validates_attachment_content_type :file, content_type: IMAGE_MIME_TYPES + VIDEO_MIME_TYPES + MUSIC_MIME_TYPES
   validates_attachment_size :file, less_than: 8.megabytes
 
   validates :account, presence: true
@@ -77,6 +102,8 @@ class MediaAttachment < ApplicationRecord
         }
       elsif IMAGE_MIME_TYPES.include? f.instance.file_content_type
         IMAGE_STYLES
+      elsif MUSIC_MIME_TYPES.include? f.instance.file_content_type
+        MUSIC_STYLES
       else
         VIDEO_STYLES
       end
@@ -87,6 +114,8 @@ class MediaAttachment < ApplicationRecord
         [:gif_transcoder]
       elsif VIDEO_MIME_TYPES.include? f.file_content_type
         [:video_transcoder]
+      elsif MUSIC_MIME_TYPES.include? f.file_content_type
+        [:music_transcoder]
       else
         [:thumbnail]
       end
