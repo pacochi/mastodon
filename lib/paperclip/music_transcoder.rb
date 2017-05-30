@@ -8,11 +8,7 @@ module Paperclip
 
       # ffmpeg generates 60 extra silent frames at the end when you generate mp4 from png and mp3
       # we get the length of the mp3 file and trim the output to circumvent this issue
-      id3tags = Id3Tags.read_from_file(file.path)
-      num_frames = id3tags[:length]
-
-      meta = ::Av.cli.identify(@file.path)
-      attachment.instance.type = MediaAttachment.types[:gifv] unless meta[:audio_encode]
+      music_length = Mp3Info.open(file.path, &:length)
 
       Paperclip::Transcoder.make(file, options, attachment)
     end
