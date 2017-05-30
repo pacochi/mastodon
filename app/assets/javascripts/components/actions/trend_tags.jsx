@@ -4,7 +4,7 @@ export const TREND_TAGS_SUCCESS = 'TREND_TAGS_SUCCESS';
 
 export function refreshTrendTags() {
   return (dispatch, getState) => {
-    axios.get('/api/v1/trend_tags?limit=5')
+    axios.get('/api/v1/trend_tags?limit=7')
       .then(response => {
         dispatch(refreshTrendTagsSuccess(response.data));
       });
