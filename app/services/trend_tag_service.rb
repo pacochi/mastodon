@@ -62,7 +62,7 @@ class TrendTagService < BaseService
     # 現在のトレンドを計算する
     tag_scores = current_trend_tag_scores(current_tag_scores, tag_score_histories)
 
-    tag_scores.map(&:name).tap do |tag_names|
+    tag_scores.map(&:tag_name).tap do |tag_names|
       TrendTag.update_trend_tags(tag_names)
     end
   end
