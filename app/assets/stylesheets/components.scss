@@ -3092,6 +3092,84 @@ button.icon-button.active i.fa-retweet {
   margin-left: 10px;
 }
 
+.music-modal{
+  background: lighten($color2, 8%);
+  color: $color1;
+  border-radius: 8px;
+  overflow: hidden;
+  max-width: 90vw;
+  width: 480px;
+  position: relative;
+  flex-direction: column;
+
+  .music-modal__metabox{
+    margin: 8px;
+    flex: 1;
+  }
+
+  .music-modal__artwork{
+    width: 80px;
+    height: 80px;
+    background: #fff;
+    border-radius: 4px;
+    margin: 8px;
+    cursor: pointer;
+  }
+
+  .music-modal__title{
+    width: calc(100% - 10px);
+    padding: 5px;
+    border: 0;
+    border-bottom: solid 1px #d9e1e8;
+    font-size: 16px;
+    margin-bottom: 10px;
+  }
+
+  .music-modal__artist{
+    width: 150px;
+    background: transparent;
+    border: 0;
+  }
+
+  .action-bar__checkarea{
+    text-align: left;
+  }
+
+  .music-modal__artwork-none{
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: rgba(0,0,0,0.1);
+  }
+}
+
+.music-modal__container {
+  overflow-x: scroll;
+  padding: 10px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.music-modal__action-bar, .confirmation-modal__action-bar {
+  display: flex;
+  background: $color2;
+  padding: 10px;
+  line-height: 36px;
+
+  & > div {
+    flex: 1 1 auto;
+    text-align: right;
+    color: lighten($color1, 33%);
+    padding-right: 10px;
+  }
+
+  .button {
+    flex: 0 0 auto;
+  }
+}
+
 .boost-modal, .confirmation-modal {
   background: lighten($color2, 8%);
   color: $color1;
