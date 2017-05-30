@@ -75,7 +75,7 @@ gem 'redis-namespace'
 gem 'activerecord-import'
 
 gem 'elasticsearch-model', '~> 5.0'
-gem 'id3_tags'
+gem 'ruby-mp3info'
 
 group :development, :test do
   gem 'rspec-rails'

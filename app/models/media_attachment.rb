@@ -26,7 +26,7 @@ class MediaAttachment < ApplicationRecord
       format: 'mp4',
       convert_options: {
         encode_music: {
-          'vn',
+          'vn'      => nil,
           'ar'      => 44100,
           'ac'      => 2,
           'ab'      => '192k',
@@ -35,11 +35,11 @@ class MediaAttachment < ApplicationRecord
         generate_movie: {
           'loop'     => 1,
           'r'        => 4,
-          'y',
+          'y'        => nil,
           'movflags' => 'faststart',
           'vf'       => 'scale=\'min(400,iw)\':-2,format=yuv420p',
           'c:v'      => 'libx264',
-          'shortest',
+          'shortest' => nil,
           'c:a'      => 'copy'
         }
       },
@@ -136,7 +136,13 @@ class MediaAttachment < ApplicationRecord
   end
 
   def set_type_and_extension
-    self.type = VIDEO_MIME_TYPES.include?(file_content_type) ? :video : :image
+    if VIDEO_MIME_TYPES.include?(file_content_type)
+      self.type = :video
+    elsif MUSIC_MIME_TYPES.include?(file_content_type)
+      self.type = :music
+    else
+      self.type = :image
+    end
     extension = appropriate_extension
     basename  = Paperclip::Interpolations.basename(file, :original)
     file.instance_write :file_name, [basename, extension].delete_if(&:blank?).join('.')
