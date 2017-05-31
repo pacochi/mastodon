@@ -70,7 +70,6 @@ class NotifyService < BaseService
 
   def email_enabled?
     @recipient.user.settings.notification_emails[@notification.type.to_s]
-<<<<<<< HEAD
   end
 
   def send_firebase_cloud_messaging
@@ -80,7 +79,5 @@ class NotifyService < BaseService
   def firebase_cloud_messaging_enabled?
     @recipient.user.settings.notification_firebase_cloud_messagings[@notification.type.to_s] &&
       @recipient.user.firebase_cloud_messaging_tokens.exists?
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
   end
 end
