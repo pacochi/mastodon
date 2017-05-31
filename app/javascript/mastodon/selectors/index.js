@@ -5,12 +5,9 @@ const getStatuses = state => state.get('statuses');
 const getAccounts = state => state.get('accounts');
 
 const getAccountBase         = (state, id) => state.getIn(['accounts', id], null);
-<<<<<<< HEAD:app/assets/javascripts/components/selectors/index.jsx
-const getSuggestedAccountBase = (state, id) => state.getIn(['suggested_accounts', id], null);
-=======
 const getAccountCounters     = (state, id) => state.getIn(['accounts_counters', id], null);
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/selectors/index.js
 const getAccountRelationship = (state, id) => state.getIn(['relationships', id], null);
+const getSuggestedAccountBase = (state, id) => state.getIn(['suggested_accounts', id], null);
 
 export const makeGetAccount = () => {
   return createSelector([getAccountBase, getAccountCounters, getAccountRelationship], (base, counters, relationship) => {
