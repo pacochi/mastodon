@@ -156,11 +156,7 @@ class VideoPlayer extends React.PureComponent {
 
     if (this.state.preview && !autoplay) {
       return (
-<<<<<<< HEAD:app/assets/javascripts/components/components/video_player.jsx
-        <div role='button' tabIndex='0' className='media-spoiler-video' style={{ width: `${width}px`, height: `${height}px`, backgroundImage: `url(${media.get('preview_url')})`, backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }} onClick={this.handleOpen}>
-=======
         <div role='button' tabIndex='0' className='media-spoiler-video' style={{ width: `${width}px`, height: `${height}px`, backgroundImage: `url(${media.get('preview_url')})` }} onClick={this.handleOpen}>
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/components/video_player.js
           {spoilerButton}
           <div className='media-spoiler-video-play-icon'><i className='fa fa-play' /></div>
         </div>
