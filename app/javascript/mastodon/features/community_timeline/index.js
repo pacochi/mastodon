@@ -34,6 +34,11 @@ class CommunityTimeline extends React.PureComponent {
     streamingAPIBaseURL: PropTypes.string.isRequired,
     accessToken: PropTypes.string.isRequired,
     hasUnread: PropTypes.bool,
+    standalone: PropTypes.bool,
+  };
+
+  static defaultProps = {
+    standalone: false
   };
 
   componentDidMount () {
@@ -70,21 +75,19 @@ class CommunityTimeline extends React.PureComponent {
             break;
           }
         }
-<<<<<<< HEAD:app/assets/javascripts/components/features/community_timeline/index.jsx
       });
     } else {
       this.interval = setInterval(() => {
         dispatch(refreshTimeline('community'));
       }, 2000);
     }
-=======
-      },
-
-    });
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/community_timeline/index.js
   }
 
   componentWillUnmount () {
+    // if (typeof subscription !== 'undefined') {
+    //   subscription.close();
+    //   subscription = null;
+    // }
     clearInterval(this.interval);
   }
 
@@ -113,20 +116,4 @@ class CommunityTimeline extends React.PureComponent {
 
 }
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/community_timeline/index.jsx
-CommunityTimeline.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
-  streamingAPIBaseURL: PropTypes.string,
-  accessToken: PropTypes.string,
-  hasUnread: PropTypes.bool,
-  standalone: PropTypes.bool
-};
-
-CommunityTimeline.defaultProps = {
-  standalone: false
-};
-
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/community_timeline/index.js
 export default connect(mapStateToProps)(injectIntl(CommunityTimeline));
