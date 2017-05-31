@@ -64,11 +64,8 @@ en:
       feed_url: Feed URL
       followers: Followers
       follows: Follows
-<<<<<<< HEAD
       media: Media
-=======
       ip: IP
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
       location:
         all: All
         local: Local
@@ -175,10 +172,7 @@ en:
       nsfw:
         'true': NSFW ON
         'false': NSFW OFF
-<<<<<<< HEAD
-=======
       are_you_sure: Are you sure?
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
     settings:
       contact_information:
         email: Enter a public e-mail address
@@ -251,12 +245,7 @@ en:
     '422':
       content: Security verification failed. Are you blocking cookies?
       title: Security verification failed
-<<<<<<< HEAD
-    '429':
-      throttled: Too many requests. Please wait a few seconds.
-=======
     '429': Throttled
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
   exports:
     blocks: You block
     csv: CSV
@@ -290,13 +279,9 @@ en:
       following: Following list
       muting: Muting list
     upload: Upload
-<<<<<<< HEAD
   landing_strip_html: <strong>%{name}</strong> is a user on %{link_to_root_path}. You can follow them or interact with them if you have an account anywhere in the fediverse. If you don't, you can <a href="%{sign_up_path}">sign up here</a>.
   landing_strip_tag_html: There are tagged with <strong>#%{name}</strong>. You can interact with them if you have an account anywhere in the fediverse. If you don't, you can <a href="%{sign_up_path}">sign up here</a>.
-=======
-  landing_strip_html: <strong>%{name}</strong> is a user on %{link_to_root_path}. You can follow them or interact with them if you have an account anywhere in the fediverse.
   landing_strip_signup_html: If you don't, you can <a href="%{sign_up_path}">sign up here</a>.
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
   media_attachments:
     validations:
       images_and_video: Cannot attach a video to a status that already contains images
