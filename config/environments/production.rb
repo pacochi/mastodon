@@ -51,20 +51,7 @@ Rails.application.configure do
   # config.logger = ActiveSupport::TaggedLogging.new(SyslogLogger.new)
 
   # Use a different cache store in production.
-<<<<<<< HEAD
-  config.cache_store = :redis_store, {
-    compress: true,
-    compress_threshold: 5.kilobytes, # FIXME: 本番環境で試して一番効率がよかった。疑ってかかって良い。
-    host: ENV.fetch('REDIS_HOST') { 'localhost' },
-    port: ENV.fetch('REDIS_PORT') { 6379 },
-    password: ENV.fetch('REDIS_PASSWORD') { false },
-    db: ENV.fetch('REDIS_DB') { 0 },
-    namespace: 'cache',
-    expires_in: 10.minutes,
-  }
-=======
   config.cache_store = :redis_store, ENV['REDIS_URL'], REDIS_CACHE_PARAMS
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
   # Enable serving of images, stylesheets, and JavaScripts from an asset server.
   # config.action_controller.asset_host = 'http://assets.example.com'

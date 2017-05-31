@@ -12,6 +12,8 @@ end
 namespace = ENV.fetch('REDIS_NAMESPACE') { nil }
 cache_namespace = namespace ? namespace + '_cache' : 'cache'
 REDIS_CACHE_PARAMS = {
+  compress: true,
+  compress_threshold: 5.kilobytes, # FIXME: 本番環境で試して一番効率がよかった。疑ってかかって良い。
   expires_in: 10.minutes,
   namespace: cache_namespace,
 }.freeze
