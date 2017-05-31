@@ -1,22 +1,13 @@
 body {
-<<<<<<< HEAD:app/assets/stylesheets/basics.scss
-  font-family: 'Roboto', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo sans-serif;
-  background: $color1 image-url('background-photo.jpg');
-=======
-  font-family: 'mastodon-font-sans-serif', sans-serif;
+  font-family: 'mastodon-font-sans-serif', 'ヒラギノ角ゴ Pro W3', 'Hiragino Kaku Gothic Pro', 'メイリオ', Meiryo sans-serif, sans-serif;
   background: $ui-base-color url('../images/background-photo.jpg');
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/styles/basics.scss
   background-size: cover;
   background-attachment: fixed;
   font-size: 13px;
   line-height: 18px;
   font-weight: 400;
-<<<<<<< HEAD:app/assets/stylesheets/basics.scss
-  color: $color5;
-=======
   color: $primary-text-color;
   padding-bottom: 140px;
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/styles/basics.scss
   text-rendering: optimizelegibility;
   font-feature-settings: "kern";
   text-size-adjust: none;
@@ -87,13 +78,13 @@ button {
     display: block;
     content: '';
     width: 50%;
-    border-bottom: 1px solid $color3;
+    border-bottom: 1px solid $ui-primary-color;
   }
 
   &:after {
     display: block;
     content: '';
     width: 50%;
-    border-bottom: 1px solid $color3;
+    border-bottom: 1px solid $ui-primary-color;
   }
 }
