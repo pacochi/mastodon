@@ -25,14 +25,9 @@
           %strong= number_with_delimiter @instance_presenter.domain_count
           %span= t 'about.domain_count_after'
 
-<<<<<<< HEAD
       = render 'header'
       = render 'notice'
       = render 'contact'
-=======
-      - unless @instance_presenter.site_extended_description.blank?
-        .panel!= @instance_presenter.site_extended_description
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
     .sidebar
       = render 'contact', contact: @instance_presenter

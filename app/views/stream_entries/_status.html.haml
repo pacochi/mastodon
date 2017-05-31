@@ -1,19 +1,3 @@
-<<<<<<< HEAD
-- include_threads ||= false
-- is_predecessor  ||= false
-- is_successor    ||= false
-- direct_reply_id ||= false
-- parent_id       ||= false
-- expand_media    ||= false
-- is_direct_parent = direct_reply_id == status.id
-- is_direct_child  = parent_id == status.in_reply_to_id
-- parent_id       ||= false
-- centered        ||= include_threads && !is_predecessor && !is_successor
-- h_class          = microformats_h_class(status, is_predecessor, is_successor, include_threads)
-- style_classes    = style_classes(status, is_predecessor, is_successor, include_threads)
-- mf_classes       = microformats_classes(status, is_direct_parent, is_direct_child)
-- entry_classes    = h_class + ' ' + mf_classes + ' ' + style_classes
-=======
 :ruby
   include_threads ||= false
   is_predecessor  ||= false
@@ -27,7 +11,7 @@
   style_classes = style_classes(status, is_predecessor, is_successor, include_threads)
   mf_classes    = microformats_classes(status, is_direct_parent, is_direct_child)
   entry_classes = h_class + ' ' + mf_classes + ' ' + style_classes
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
+  expand_media    ||= false
 
 - if status.reply? && include_threads
   = render partial: 'stream_entries/status', collection: @ancestors, as: :status, locals: { is_predecessor: true, direct_reply_id: status.in_reply_to_id }

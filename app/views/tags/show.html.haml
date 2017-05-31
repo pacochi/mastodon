@@ -11,13 +11,7 @@
   = render partial: 'shared/landing_strip_tag', locals: { tag: @tag }
 
 .compact-header
-<<<<<<< HEAD
   %h1= "##{@tag.name}"
-=======
-  %h1<
-    = link_to site_title, root_path
-    %small ##{@tag.name}
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
 - if @statuses.empty?
   .accounts-grid

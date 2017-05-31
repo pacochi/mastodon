@@ -1,5 +1,4 @@
 .landing-strip
-<<<<<<< HEAD
   = t('landing_strip_html',
     name: content_tag(:span, display_name(account), class: :emojify),
     domain: site_hostname,
@@ -9,9 +8,3 @@
 .landing-form
   = link_to t('about.get_started'), new_user_registration_path, class: 'button'
   = link_to t('auth.login'), new_user_session_path, class: 'signin button'
-=======
-  = t('landing_strip_html', name: content_tag(:span, display_name(account), class: :emojify), link_to_root_path: link_to(content_tag(:strong, site_hostname), root_path))
-
-  - if open_registrations?
-    = t('landing_strip_signup_html', sign_up_path: new_user_registration_path)
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
