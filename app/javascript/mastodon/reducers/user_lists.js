@@ -34,10 +34,7 @@ const initialState = Immutable.Map({
   follow_requests: Immutable.Map(),
   blocks: Immutable.Map(),
   mutes: Immutable.Map(),
-<<<<<<< HEAD:app/assets/javascripts/components/reducers/user_lists.jsx
   suggested_accounts: Immutable.Map()
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/reducers/user_lists.js
 });
 
 const normalizeList = (state, type, id, accounts, next) => {
@@ -94,15 +91,11 @@ export default function userLists(state = initialState, action) {
   case MUTES_FETCH_SUCCESS:
     return state.setIn(['mutes', 'items'], Immutable.List(action.accounts.map(item => item.id))).setIn(['mutes', 'next'], action.next);
   case MUTES_EXPAND_SUCCESS:
-<<<<<<< HEAD:app/assets/javascripts/components/reducers/user_lists.jsx
-    return state.updateIn(['mutes', 'items'], list => list.push(...action.accounts.map(item => item.id))).setIn(['mutes', 'next'], action.next);
+    return state.updateIn(['mutes', 'items'], list => list.concat(action.accounts.map(item => item.id))).setIn(['mutes', 'next'], action.next);
   case SUGGESTED_ACCOUNTS_FETCH_SUCCESS:
     return normalizeSuggestedAccountsList(state, 'suggested_accounts', action.accounts, action.next);
   case SUGGESTED_ACCOUNTS_EXPAND_SUCCESS:
     return appendToSuggestedAccountsList(state, 'suggested_accounts', action.accounts, action.next);
-=======
-    return state.updateIn(['mutes', 'items'], list => list.concat(action.accounts.map(item => item.id))).setIn(['mutes', 'next'], action.next);
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/reducers/user_lists.js
   default:
     return state;
   }
