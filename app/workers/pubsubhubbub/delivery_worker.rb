@@ -23,12 +23,7 @@ class Pubsubhubbub::DeliveryWorker
   def process_delivery
     payload_delivery
 
-<<<<<<< HEAD
-    return subscription.destroy! if response_failed_permanently?(response) # HTTP 4xx means error is not temporary, except for 429 (throttling)
-    raise "Delivery failed for #{subscription.callback_url}: HTTP #{response.code}" unless response_successful?(response)
-=======
     raise "Delivery failed for #{subscription.callback_url}: HTTP #{payload_delivery.code}" unless response_successful?
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
     subscription.touch(:last_successful_delivery_at)
   end
@@ -85,13 +80,5 @@ class Pubsubhubbub::DeliveryWorker
 
   def response_successful?
     payload_delivery.code > 199 && payload_delivery.code < 300
-  end
-
-  def response_failed_permanently?(response)
-    response.code > 299 && response.code < 500 && response.code != 429
-  end
-
-  def response_successful?(response)
-    response.code > 199 && response.code < 300
   end
 end
