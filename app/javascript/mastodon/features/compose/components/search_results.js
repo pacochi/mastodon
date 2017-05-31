@@ -11,6 +11,8 @@ class SearchResults extends ImmutablePureComponent {
 
   static propTypes = {
     results: ImmutablePropTypes.map.isRequired,
+    isAdmin: PropTypes.bool,
+    searchKeyword: PropTypes.string,
   };
 
   render () {
@@ -77,13 +79,4 @@ class SearchResults extends ImmutablePureComponent {
 
 }
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/compose/components/search_results.jsx
-SearchResults.propTypes = {
-  results: ImmutablePropTypes.map.isRequired,
-  isAdmin: PropTypes.bool,
-  searchKeyword: PropTypes.string
-};
-
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/compose/components/search_results.js
 export default SearchResults;
