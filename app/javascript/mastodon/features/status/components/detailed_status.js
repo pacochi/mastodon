@@ -24,6 +24,8 @@ class DetailedStatus extends ImmutablePureComponent {
     onOpenMedia: PropTypes.func.isRequired,
     onOpenVideo: PropTypes.func.isRequired,
     autoPlayGif: PropTypes.bool,
+    expandMedia: PropTypes.bool,
+    squareMedia: PropTypes.bool,
   };
 
   handleAccountClick = (e) => {
@@ -104,20 +106,4 @@ class DetailedStatus extends ImmutablePureComponent {
 
 }
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/status/components/detailed_status.jsx
-DetailedStatus.contextTypes = {
-  router: PropTypes.object
-};
-
-DetailedStatus.propTypes = {
-  status: ImmutablePropTypes.map.isRequired,
-  onOpenMedia: PropTypes.func.isRequired,
-  onOpenVideo: PropTypes.func.isRequired,
-  autoPlayGif: PropTypes.bool,
-  expandMedia: PropTypes.bool,
-  squareMedia: PropTypes.bool
-};
-
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/status/components/detailed_status.js
 export default DetailedStatus;
