@@ -78,14 +78,9 @@ const startWorker = (workerId) => {
 
   const pgConfigs = {
     development: {
-<<<<<<< HEAD
       database: 'pawoo_development',
       host:     process.env.DB_HOST || '/var/run/postgresql',
-      max:      10
-=======
-      database: 'mastodon_development',
       max:      10,
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
     },
 
     production: {
@@ -94,15 +89,9 @@ const startWorker = (workerId) => {
       database: process.env.DB_NAME || 'mastodon_production',
       host:     process.env.DB_HOST || 'localhost',
       port:     process.env.DB_PORT || 5432,
-<<<<<<< HEAD
       max:      50
-    }
-  }
-=======
-      max:      10,
     },
   };
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
   const app    = express();
   const pgPool = new pg.Pool(Object.assign(pgConfigs[env], dbUrlToConfig(process.env.DATABASE_URL)));
@@ -229,12 +218,8 @@ const startWorker = (workerId) => {
   const placeholders = (arr, shift = 0) => arr.map((_, i) => `$${i + 1 + shift}`).join(', ');
 
   const streamFrom = (id, req, output, attachCloseHandler, needsFiltering = false) => {
-<<<<<<< HEAD
-    log.verbose(req.requestId, `Starting stream from ${id} for ${req.accountId}`)
-=======
     log.verbose(req.requestId, `Starting stream from ${id} for ${req.accountId}`);
 
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
     const listener = message => {
       const { event, payload, queued_at } = JSON.parse(message);
 
