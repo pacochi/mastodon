@@ -1,21 +1,15 @@
 ---
-<<<<<<< HEAD
 :concurrency: 20
-=======
-:concurrency: 5
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 :queues:
   - default
   - push
   - pull
   - mailers
-<<<<<<< HEAD
   - remove
   - elasticsearch
-=======
 :schedule:
   subscriptions_scheduler:
-    cron: '0 5 * * *'
+    cron: '0 4,9 * * *'
     class: Scheduler::SubscriptionsScheduler
   media_cleanup_scheduler:
     cron: '5 4 * * *'
@@ -23,4 +17,9 @@
   feed_cleanup_scheduler:
     cron: '0 0 * * *'
     class: Scheduler::FeedCleanupScheduler
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
+  delete_elasticsearch_documents_worker:
+    cron: '*/2 * * * *'
+    class: Scheduler::DeleteElasticsearchDocumentsWorker
+  trend_tag_scheduler:
+    cron: '*/30 * * * *'
+    class: Scheduler::TrendTagScheduler
