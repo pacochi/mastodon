@@ -36,11 +36,8 @@ class StatusContent extends React.PureComponent {
         link.setAttribute('title', mention.get('acct'));
       } else if (link.textContent[0] === '#' || (link.previousSibling && link.previousSibling.textContent && link.previousSibling.textContent[link.previousSibling.textContent.length - 1] === '#')) {
         link.addEventListener('click', this.onHashtagClick.bind(this, link.text), false);
-<<<<<<< HEAD:app/assets/javascripts/components/components/status_content.jsx
       } else if (media) {
         link.innerHTML = '';
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/components/status_content.js
       } else {
         link.setAttribute('target', '_blank');
         link.setAttribute('rel', 'noopener');
