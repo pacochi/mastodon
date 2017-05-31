@@ -14,9 +14,9 @@ import ColumnBackButton from '../../components/column_back_button';
 import Immutable from 'immutable';
 
 const mapStateToProps = (state, props) => ({
-  statusIds: state.getIn(['timelines', 'account_media_timelines', Number(props.params.accountId), 'items'], Immutable.List()),
-  isLoading: state.getIn(['timelines', 'account_media_timelines', Number(props.params.accountId), 'isLoading']),
-  hasMore: !!state.getIn(['timelines', 'account_media_timelines', Number(props.params.accountId), 'next']),
+  statusIds: state.getIn(['timelines', 'accounts_media_timelines', Number(props.params.accountId), 'items'], Immutable.List()),
+  isLoading: state.getIn(['timelines', 'accounts_media_timelines', Number(props.params.accountId), 'isLoading']),
+  hasMore: !!state.getIn(['timelines', 'accounts_media_timelines', Number(props.params.accountId), 'next']),
   me: state.getIn(['meta', 'me'])
 });
 

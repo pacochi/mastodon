@@ -654,7 +654,7 @@ export function fetchFollowingFail(id, error) {
 
 export function expandAccountMediaTimeline(id) {
   return (dispatch, getState) => {
-    const lastId = getState().getIn(['timelines', 'account_media_timelines', id, 'items'], Immutable.List()).last();
+    const lastId = getState().getIn(['timelines', 'accounts_media_timelines', id, 'items'], Immutable.List()).last();
 
     dispatch(expandAccountMediaTimelineRequest(id));
 
@@ -697,7 +697,7 @@ export function expandAccountMediaTimelineFail(id, error) {
 
 export function fetchAccountMediaTimeline(id, replace = false) {
   return (dispatch, getState) => {
-    const ids      = getState().getIn(['timelines', 'account_media_timelines', id, 'items'], Immutable.List());
+    const ids      = getState().getIn(['timelines', 'accounts_media_timelines', id, 'items'], Immutable.List());
     const newestId = ids.size > 0 ? ids.first() : null;
 
     let params = { only_media: 1 };
