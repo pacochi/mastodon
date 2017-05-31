@@ -1,3 +1,4 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -35,18 +36,17 @@ const buttonStyle = {
 
 class SuggestedAccounts extends React.PureComponent {
 
-  constructor (props, context) {
-    super(props, context);
-
-    this.handleScroll = this.handleScroll.bind(this);
-    this.handleLoadMore = this.handleLoadMore.bind(this);
-  }
+  static propTypes = {
+    intl: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    accountIds: ImmutablePropTypes.list
+  };
 
   componentWillMount () {
     this.props.dispatch(fetchSuggestedAccounts());
   }
 
-  handleScroll (e) {
+  handleScroll = (e) => {
     const { scrollTop, scrollHeight, clientHeight } = e.target;
 
     if (scrollTop === scrollHeight - clientHeight) {
@@ -54,7 +54,7 @@ class SuggestedAccounts extends React.PureComponent {
     }
   }
 
-  handleLoadMore (e) {
+  handleLoadMore = (e) => {
     e.preventDefault();
     this.props.dispatch(expandSuggestedAccounts());
   }
@@ -91,11 +91,5 @@ class SuggestedAccounts extends React.PureComponent {
   }
 
 }
-
-SuggestedAccounts.propTypes = {
-  intl: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  accountIds: ImmutablePropTypes.list
-};
 
 export default connect(mapStateToProps)(injectIntl(SuggestedAccounts));
