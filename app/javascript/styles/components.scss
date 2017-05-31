@@ -844,8 +844,6 @@
   @include avatar-radius();
   position: relative;
   cursor: pointer;
-<<<<<<< HEAD:app/assets/stylesheets/components.scss
-=======
 
   &-inline {
     display: inline-block;
@@ -871,7 +869,6 @@
     right: 0;
     z-index: 1;
   }
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/styles/components.scss
 }
 
 .account__relationship {
@@ -993,25 +990,15 @@
 .account__action-bar__tab {
   text-decoration: none;
   overflow: hidden;
-<<<<<<< HEAD:app/assets/stylesheets/components.scss
   flex: 1;
-  border-left: 1px solid lighten($color1, 8%);
-=======
-  width: 80px;
   border-left: 1px solid lighten($ui-base-color, 8%);
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/styles/components.scss
   padding: 10px 5px;
 
   & > span, & > span > span {
     display: block;
     text-transform: uppercase;
-<<<<<<< HEAD:app/assets/stylesheets/components.scss
     font-size: 10px;
-    color: $color3;
-=======
-    font-size: 11px;
     color: $ui-primary-color;
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/styles/components.scss
   }
 
   strong {
@@ -1296,10 +1283,7 @@
     display: block;
     padding: 4px 14px;
     box-sizing: border-box;
-<<<<<<< HEAD:app/assets/stylesheets/components.scss
     width: 150px;
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/styles/components.scss
     text-decoration: none;
     background: $ui-secondary-color;
     color: $ui-base-color;
@@ -1476,10 +1460,7 @@
   position: absolute;
   top: 0;
   left: 0;
-<<<<<<< HEAD:app/assets/stylesheets/components.scss
-=======
   background: lighten($ui-base-color, 13%);
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/styles/components.scss
   box-sizing: border-box;
   padding: 0;
   display: flex;
@@ -1496,7 +1477,7 @@
 
 .drawer__block{
   margin-bottom: 10px;
-  background: lighten($color1, 13%);
+  background: lighten($ui-base-color, 13%);
 }
 
 .pseudo-drawer {
@@ -2303,15 +2284,7 @@ button.icon-button.active i.fa-retweet {
   border: 0;
   border-bottom: 2px solid $ui-primary-color;
   border-radius: 2px 2px 0 0;
-<<<<<<< HEAD:app/assets/stylesheets/components.scss
-  padding: 7px 4px;
-  font-size: 14px;
-  color: $color1;
-  // <<<
-  // color: $color5;
-=======
-  color: $primary-text-color;
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/styles/components.scss
+  color: $ui-base-color;
   display: block;
   font-family: inherit;
   font-size: 14px;
@@ -2328,7 +2301,7 @@ button.icon-button.active i.fa-retweet {
   }
 
   &.filled {
-    color: $color3;
+    color: $ui-primary-color;
   }
 }
 
@@ -2339,7 +2312,7 @@ button.icon-button.active i.fa-retweet {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba($color8, 0.7);
+  background: rgba($base-shadow-color, 0.7);
   display: flex;
   justify-content: space-around;
   align-items: center;
@@ -2349,15 +2322,15 @@ button.icon-button.active i.fa-retweet {
     padding: 20px;
     width: 100%;
     max-width: 320px;
-    color: $color1;
-    background-color: $color5;
+    color: $ui-base-color;
+    background-color: $primary-text-color;
     border-radius: 4px;
   }
 }
 
 .report__select__title {
   margin-bottom: 10px;
-  color: $color4;
+  color: $ui-highlight-color;
   font-size: 15px;
   text-align: center;
 }
@@ -2383,12 +2356,10 @@ button.icon-button.active i.fa-retweet {
   flex: 1 1 auto;
   align-items: center;
   justify-content: center;
-<<<<<<< HEAD:app/assets/stylesheets/components.scss
-=======
+
   @supports(display: grid) { // hack to fix Chrome <57
     contain: strict;
   }
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/styles/components.scss
 
   a {
     color: $ui-highlight-color;
@@ -2922,8 +2893,8 @@ button.icon-button.active i.fa-retweet {
 }
 
 .search-results__search-statuses {
-  background: lighten($color1, 8%);
-  color: $color5;
+  background: lighten($ui-base-color, 8%);
+  color: $primary-text-color;
   display: block;
   margin: 10px;
   border-radius: 4px;
@@ -2934,7 +2905,7 @@ button.icon-button.active i.fa-retweet {
   text-decoration: none;
 
   &:hover {
-    background: lighten($color1, 11%);
+    background: lighten($ui-base-color, 11%);
   }
 }
 
@@ -2966,8 +2937,8 @@ button.icon-button.active i.fa-retweet {
   li {
     display: flex;
     padding: 10px;
-    color: $color1;
-    background: darken($color5, 8%);
+    color: $ui-base-color;
+    background: darken($primary-text-color, 8%);
     border-radius: 4px;
 
     & + li {
@@ -3002,10 +2973,10 @@ button.icon-button.active i.fa-retweet {
 
 .announcements__link {
   display: inline-block;
-  color: $color1;
+  color: $ui-base-color;
   text-decoration: none;
   padding: 1px 10px 0;
-  border: solid 1px $color1;
+  border: solid 1px $ui-base-color;
   font-size: 10px;
   font-weight: 600;
   border-radius: 4px;
@@ -3018,14 +2989,14 @@ button.icon-button.active i.fa-retweet {
 }
 
 .trend-tags {
-  background: $color1;
+  background: $ui-base-color;
 }
 
 .trend-tags__header {
   display: flex;
   align-items: center;
   padding: 15px;
-  background: lighten($color1, 4%);
+  background: lighten($ui-base-color, 4%);
   font-size: 16px;
 }
 
