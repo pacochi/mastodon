@@ -31,7 +31,6 @@ const textAtCursorMatchesToken = (str, caretPosition, prefix) => {
   }
 };
 
-<<<<<<< HEAD:app/assets/javascripts/components/components/autosuggest_textarea.jsx
 const textAtCursorMatchesHashToken = (str, caretPosition) => {
   return textAtCursorMatchesToken(str, caretPosition, '#');
 };
@@ -43,32 +42,6 @@ const textAtCursorMatchesMentionToken = (str, caretPosition) => {
   return [start, word]
 };
 
-class AutosuggestTextarea extends React.Component {
-
-  constructor (props, context) {
-    super(props, context);
-    this.state = {
-      suggestionsHidden: false,
-      hashTagSuggestionsHidden: false,
-      selectedSuggestion: 0,
-      selectedHashTagSuggestion: 0,
-      lastToken: null,
-      lastHashTagToken: null,
-      tokenStart: 0,
-      hashTagTokenStart: 0
-    };
-    this.onChange = this.onChange.bind(this);
-    this.onKeyDown = this.onKeyDown.bind(this);
-    this.onBlur = this.onBlur.bind(this);
-    this.onSuggestionClick = this.onSuggestionClick.bind(this);
-    this.onHashTagSuggestionClick = this.onHashTagSuggestionClick.bind(this);
-    this.setTextarea = this.setTextarea.bind(this);
-    this.onPaste = this.onPaste.bind(this);
-  }
-
-  onChange (e) {
-    const [ tokenStart, token ] = textAtCursorMatchesMentionToken(e.target.value, e.target.selectionStart);
-=======
 class AutosuggestTextarea extends ImmutablePureComponent {
 
   static propTypes = {
@@ -84,6 +57,10 @@ class AutosuggestTextarea extends ImmutablePureComponent {
     onKeyDown: PropTypes.func,
     onPaste: PropTypes.func.isRequired,
     autoFocus: PropTypes.bool,
+    hash_tag_suggestions: ImmutablePropTypes.list,
+    onHashTagSuggestionsSelected: PropTypes.func.isRequired,
+    onHashTagSuggestionsClearRequested: PropTypes.func.isRequired,
+    onHashTagSuggestionsFetchRequested: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -95,11 +72,14 @@ class AutosuggestTextarea extends ImmutablePureComponent {
     selectedSuggestion: 0,
     lastToken: null,
     tokenStart: 0,
+    hashTagSuggestionsHidden: false,
+    selectedHashTagSuggestion: 0,
+    lastHashTagToken: null,
+    hashTagTokenStart: 0
   };
 
   onChange = (e) => {
-    const [ tokenStart, token ] = textAtCursorMatchesToken(e.target.value, e.target.selectionStart);
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/components/autosuggest_textarea.js
+    const [ tokenStart, token ] = textAtCursorMatchesMentionToken(e.target.value, e.target.selectionStart);
 
     if (token !== null && this.state.lastToken !== token) {
       this.setState({ lastToken: token, selectedSuggestion: 0, tokenStart });
@@ -109,7 +89,6 @@ class AutosuggestTextarea extends ImmutablePureComponent {
       this.props.onSuggestionsClearRequested();
     }
 
-<<<<<<< HEAD:app/assets/javascripts/components/components/autosuggest_textarea.jsx
     const [ hashTagTokenStart, hashToken ] = textAtCursorMatchesHashToken(e.target.value, e.target.selectionStart);
     if (hashToken !== null && this.state.lastHashTagToken !== hashToken) {
       this.setState({ lastHashTagToken: hashToken, selectedHashTagSuggestion: 0, hashTagTokenStart });
@@ -126,17 +105,9 @@ class AutosuggestTextarea extends ImmutablePureComponent {
     this.props.onChange(e);
   }
 
-  onKeyDown (e) {
+  onKeyDown = (e) => {
     const { suggestions, disabled, hash_tag_suggestions } = this.props;
     const { selectedSuggestion, suggestionsHidden, hashTagSuggestionsHidden, selectedHashTagSuggestion } = this.state;
-=======
-    this.props.onChange(e);
-  }
-
-  onKeyDown = (e) => {
-    const { suggestions, disabled } = this.props;
-    const { selectedSuggestion, suggestionsHidden } = this.state;
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/components/autosuggest_textarea.js
 
     if (disabled) {
       e.preventDefault();
@@ -270,13 +241,8 @@ class AutosuggestTextarea extends ImmutablePureComponent {
   }
 
   render () {
-<<<<<<< HEAD:app/assets/javascripts/components/components/autosuggest_textarea.jsx
     const { value, suggestions, hash_tag_suggestions, disabled, placeholder, onKeyUp, autoFocus } = this.props;
     const { suggestionsHidden, selectedSuggestion, hashTagSuggestionsHidden } = this.state;
-=======
-    const { value, suggestions, disabled, placeholder, onKeyUp, autoFocus } = this.props;
-    const { suggestionsHidden, selectedSuggestion } = this.state;
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/components/autosuggest_textarea.js
     const style = { direction: 'ltr' };
 
     if (isRtl(value)) {
@@ -320,33 +286,6 @@ class AutosuggestTextarea extends ImmutablePureComponent {
     );
   }
 
-<<<<<<< HEAD:app/assets/javascripts/components/components/autosuggest_textarea.jsx
 };
-
-AutosuggestTextarea.propTypes = {
-  value: PropTypes.string,
-  suggestions: ImmutablePropTypes.list,
-  hash_tag_suggestions: ImmutablePropTypes.list,
-  disabled: PropTypes.bool,
-  placeholder: PropTypes.string,
-  onSuggestionSelected: PropTypes.func.isRequired,
-  onSuggestionsClearRequested: PropTypes.func.isRequired,
-  onSuggestionsFetchRequested: PropTypes.func.isRequired,
-  onHashTagSuggestionsSelected: PropTypes.func.isRequired,
-  onHashTagSuggestionsClearRequested: PropTypes.func.isRequired,
-  onHashTagSuggestionsFetchRequested: PropTypes.func.isRequired,
-  onChange: PropTypes.func.isRequired,
-  onKeyUp: PropTypes.func,
-  onKeyDown: PropTypes.func,
-  onPaste: PropTypes.func.isRequired,
-  autoFocus: PropTypes.bool
-};
-
-AutosuggestTextarea.defaultProps = {
-  autoFocus: true,
-};
-=======
-}
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/components/autosuggest_textarea.js
 
 export default AutosuggestTextarea;
