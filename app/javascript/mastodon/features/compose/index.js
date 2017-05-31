@@ -24,10 +24,7 @@ const messages = defineMessages({
 
 const mapStateToProps = state => ({
   showSearch: state.getIn(['search', 'submitted']) && !state.getIn(['search', 'hidden']),
-<<<<<<< HEAD:app/assets/javascripts/components/features/compose/index.jsx
-  submitting: state.getIn(['compose', 'is_submitting'])
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/compose/index.js
+  submitting: state.getIn(['compose', 'is_submitting']),
 });
 
 class Compose extends React.PureComponent {
@@ -37,6 +34,8 @@ class Compose extends React.PureComponent {
     withHeader: PropTypes.bool,
     showSearch: PropTypes.bool,
     intl: PropTypes.object.isRequired,
+    intent: PropTypes.bool,
+    submitting: PropTypes.bool,
   };
 
   componentDidMount () {
@@ -115,16 +114,4 @@ class Compose extends React.PureComponent {
 
 }
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/compose/index.jsx
-Compose.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  withHeader: PropTypes.bool,
-  intent: PropTypes.bool,
-  showSearch: PropTypes.bool,
-  submitting: PropTypes.bool,
-  intl: PropTypes.object.isRequired
-};
-
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/compose/index.js
 export default connect(mapStateToProps)(injectIntl(Compose));
