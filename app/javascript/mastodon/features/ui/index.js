@@ -20,9 +20,14 @@ const noOp = () => false;
 
 class UI extends React.PureComponent {
 
+  static defaultProps = {
+    intent: false
+  };
+
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     children: PropTypes.node,
+    intent: PropTypes.bool,
   };
 
   state = {
@@ -160,17 +165,4 @@ class UI extends React.PureComponent {
 
 }
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/ui/index.jsx
-UI.defaultProps = {
-  intent: false
-};
-
-UI.propTypes = {
-  intent: PropTypes.bool,
-  dispatch: PropTypes.func.isRequired,
-  children: PropTypes.node
-};
-
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/ui/index.js
 export default connect()(UI);
