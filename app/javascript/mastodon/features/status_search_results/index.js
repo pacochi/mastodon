@@ -1,3 +1,4 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
@@ -20,10 +21,13 @@ const mapStateToProps = (state, props) => ({
 
 class StatusSearchResults extends React.PureComponent {
 
-  constructor (props, context) {
-    super(props, context);
-    this.handleScrollToBottom = this.handleScrollToBottom.bind(this);
-  }
+  static propTypes = {
+    params: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    statusIds: ImmutablePropTypes.list,
+    isLoading: PropTypes.bool,
+    hasMore: PropTypes.bool,
+  };
 
   componentWillMount (){
     this.props.dispatch(fetchStatusSearchTimeline(this.props.params.keyword));
@@ -35,7 +39,7 @@ class StatusSearchResults extends React.PureComponent {
     }
   }
 
-  handleScrollToBottom () {
+  handleScrollToBottom = () => {
     if (!this.props.isLoading && this.props.hasMore) {
       this.props.dispatch(expandStatusSearchTimeline(this.props.params.keyword));
     }
@@ -68,14 +72,6 @@ class StatusSearchResults extends React.PureComponent {
     );
   }
 
-};
-
-StatusSearchResults.propTypes = {
-  params: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  statusIds: ImmutablePropTypes.list,
-  isLoading: PropTypes.bool,
-  hasMore: PropTypes.bool,
 };
 
 export default connect(mapStateToProps)(StatusSearchResults);
