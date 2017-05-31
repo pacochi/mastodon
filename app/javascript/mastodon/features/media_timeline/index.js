@@ -26,6 +26,13 @@ const mapStateToProps = state => ({
 let subscription;
 
 class MediaTimeline extends React.PureComponent {
+  static propTypes = {
+    dispatch: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired,
+    streamingAPIBaseURL: PropTypes.string.isRequired,
+    accessToken: PropTypes.string.isRequired,
+    hasUnread: PropTypes.bool,
+  };
 
   componentDidMount () {
     const {dispatch, streamingAPIBaseURL, accessToken} = this.props;
@@ -85,14 +92,6 @@ class MediaTimeline extends React.PureComponent {
     );
   }
 
-};
-
-MediaTimeline.propTypes = {
-  dispatch: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
-  streamingAPIBaseURL: PropTypes.string.isRequired,
-  accessToken: PropTypes.string.isRequired,
-  hasUnread: PropTypes.bool
 };
 
 export default connect(mapStateToProps)(injectIntl(MediaTimeline));
