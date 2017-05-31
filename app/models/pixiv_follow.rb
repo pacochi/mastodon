@@ -1,3 +1,14 @@
+# == Schema Information
+#
+# Table name: pixiv_follows
+#
+#  id                      :integer          not null, primary key
+#  oauth_authentication_id :integer          not null
+#  target_pixiv_uid        :integer          not null
+#  created_at              :datetime         not null
+#  updated_at              :datetime         not null
+#
+
 class PixivFollow < ApplicationRecord
   belongs_to :oauth_authentication, required: true
 
