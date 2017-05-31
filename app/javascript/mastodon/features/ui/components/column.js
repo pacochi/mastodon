@@ -34,7 +34,7 @@ const scrollTop = (node) => {
 class Column extends React.PureComponent {
 
   static propTypes = {
-    heading: PropTypes.string,
+    heading: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     icon: PropTypes.string,
     children: PropTypes.node,
     active: PropTypes.bool,
@@ -65,13 +65,8 @@ class Column extends React.PureComponent {
     let columnHeaderId = null;
     let header = '';
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/ui/components/column.jsx
     if (typeof heading === 'string') {
       columnHeaderId = heading.replace(/ /g, '-')
-=======
-    if (heading) {
-      columnHeaderId = heading.replace(/ /g, '-');
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/ui/components/column.js
       header = <ColumnHeader icon={icon} active={active} type={heading} onClick={this.handleHeaderClick} hideOnMobile={hideHeadingOnMobile} columnHeaderId={columnHeaderId}/>;
     } else if (heading) {
       header = <ColumnHeader icon={icon} active={active} type={heading} onClick={this.handleHeaderClick} />;
@@ -91,15 +86,4 @@ class Column extends React.PureComponent {
 
 }
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/ui/components/column.jsx
-Column.propTypes = {
-  heading: PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.node]),
-  icon: PropTypes.string,
-  children: PropTypes.node,
-  active: PropTypes.bool,
-  hideHeadingOnMobile: PropTypes.bool
-};
-
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/ui/components/column.js
 export default Column;
