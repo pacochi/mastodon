@@ -2,7 +2,7 @@ $button-icon-scale-ration-on-pc: 0.85;
 
 .status__prepend {
   i.fa-retweet {
-      color: $color4;
+    color: $ui-highlight-color;
   }
 }
 
@@ -14,7 +14,7 @@ $button-icon-scale-ration-on-pc: 0.85;
 
 .status__content a.hashtag,
 .status__content a span.ellipsis {
-  color: $color3;
+  color: $ui-primary-color;
 }
 
 .including-brand {
