@@ -9,19 +9,6 @@
   }
 }
 
-<<<<<<< HEAD:app/assets/stylesheets/containers.scss
-.mastodon-column-container {
-  display: flex;
-  // height: 100%;
-  width: 100%;
-
-  // 707568 - height 100% doesn't work on child of a flex item - chromium - Monorail
-  // https://bugs.chromium.org/p/chromium/issues/detail?id=707568
-  flex: 1 1 auto;
-}
-
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/styles/containers.scss
 .logo-container {
   max-width: 400px;
   margin: 100px auto;
