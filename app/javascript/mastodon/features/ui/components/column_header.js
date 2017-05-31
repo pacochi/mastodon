@@ -5,7 +5,7 @@ class ColumnHeader extends React.PureComponent {
 
   static propTypes = {
     icon: PropTypes.string,
-    type: PropTypes.string,
+    type: PropTypes.oneOfType([PropTypes.string, PropTypes.node]),
     active: PropTypes.bool,
     onClick: PropTypes.func,
     hideOnMobile: PropTypes.bool,
@@ -35,16 +35,4 @@ class ColumnHeader extends React.PureComponent {
 
 }
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/ui/components/column_header.jsx
-ColumnHeader.propTypes = {
-  icon: PropTypes.string,
-  type: PropTypes.oneOfType([React.PropTypes.string, React.PropTypes.node]),
-  active: PropTypes.bool,
-  onClick: PropTypes.func,
-  hideOnMobile: PropTypes.bool,
-  columnHeaderId: PropTypes.string
-};
-
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/ui/components/column_header.js
 export default ColumnHeader;
