@@ -1,3 +1,4 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import TextIconButton from '../components/text_icon_button';
 import PropTypes from 'prop-types';
@@ -15,6 +16,11 @@ const mapStateToProps = state => ({
 
 class SensitiveGuide extends React.PureComponent {
 
+  static propTypes = {
+    visible: PropTypes.bool,
+    intl: PropTypes.object.isRequired,
+  };
+
   render () {
     const { visible, intl } = this.props;
 
@@ -31,11 +37,6 @@ class SensitiveGuide extends React.PureComponent {
     );
   }
 
-};
-
-SensitiveGuide.propTypes = {
-  visible: PropTypes.bool,
-  intl: PropTypes.object.isRequired
 };
 
 export default connect(mapStateToProps)(injectIntl(SensitiveGuide));
