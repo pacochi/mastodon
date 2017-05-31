@@ -4,7 +4,6 @@ Paperclip.options[:read_timeout] = 60
 
 Paperclip.interpolates :filename do |attachment, style|
   return attachment.original_filename if style == :original
-<<<<<<< HEAD
 
   # HOTFIX
   # extension    - v1.2.2: Detect extension from filename
@@ -14,9 +13,6 @@ Paperclip.interpolates :filename do |attachment, style|
   extname = content_type_extension(attachment, style) # if extname.blank? || wrong_extnames.include?(extname)
 
   [basename(attachment, style), extname].delete_if(&:blank?).join('.')
-=======
-  [basename(attachment, style), extension(attachment, style)].delete_if(&:blank?).join('.')
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 end
 
 if ENV['S3_ENABLED'] == 'true'
