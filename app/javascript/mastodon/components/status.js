@@ -1,4 +1,5 @@
 import React from 'react';
+import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import Avatar from './avatar';
@@ -38,6 +39,9 @@ class Status extends ImmutablePureComponent {
     boostModal: PropTypes.bool,
     autoPlayGif: PropTypes.bool,
     muted: PropTypes.bool,
+    expandMedia: PropTypes.bool,
+    squareMedia: PropTypes.bool,
+    standalone: PropTypes.bool,
   };
 
   state = {
@@ -97,6 +101,10 @@ class Status extends ImmutablePureComponent {
   }
 
   handleAccountClick = (e) => {
+    if (this.props.standalone) {
+      return e.preventDefault();
+    }
+
     if (e.button === 0) {
       const id = Number(e.currentTarget.getAttribute('data-id'));
       e.preventDefault();
@@ -107,7 +115,7 @@ class Status extends ImmutablePureComponent {
   render () {
     let media = null;
     let statusAvatar;
-    const { status, account, isIntersecting, onRef, ...other } = this.props;
+    const { status, account, isIntersecting, onRef, expandMedia, squareMedia, standalone, ...other } = this.props;
     const { isHidden } = this.state;
 
     if (status === null) {
@@ -144,19 +152,33 @@ class Status extends ImmutablePureComponent {
       );
     }
 
-    if (status.get('media_attachments').size > 0 && !this.props.muted) {
-      if (status.get('media_attachments').some(item => item.get('type') === 'unknown')) {
+    let attachments = status.get('media_attachments');
+    if (status.getIn(['pixiv_cards'], Immutable.List()).size > 0) {
+      attachments = status.get('pixiv_cards').map(card => {
+        return Immutable.fromJS({
+          id: Math.random().toString(),
+          preview_url: card.get('image_url'),
+          remote_url: '',
+          text_url: card.get('url'),
+          type: 'image',
+          url: card.get('image_url')
+        });
+      }).concat(attachments);
+    }
 
-      } else if (status.getIn(['media_attachments', 0, 'type']) === 'video') {
-        media = <VideoPlayer media={status.getIn(['media_attachments', 0])} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
+    if (attachments.size > 0 && !this.props.muted) {
+      if (attachments.some(item => item.get('type') === 'unknown')) {
+
+      } else if (attachments.first().get('type') === 'video') {
+        media = <VideoPlayer media={attachments.first()} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
       } else {
-        media = <MediaGallery media={status.get('media_attachments')} sensitive={status.get('sensitive')} height={110} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} />;
+        media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={squareMedia ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} squareMedia={squareMedia} />;
       }
     }
 
     if (account === undefined || account === null) {
       statusAvatar = <Avatar src={status.getIn(['account', 'avatar'])} staticSrc={status.getIn(['account', 'avatar_static'])} size={48}/>;
-    }else{
+    } else {
       statusAvatar = <AvatarOverlay staticSrc={status.getIn(['account', 'avatar_static'])} overlaySrc={account.get('avatar_static')} />;
     }
 
@@ -168,17 +190,18 @@ class Status extends ImmutablePureComponent {
           <a onClick={this.handleAccountClick} data-id={status.getIn(['account', 'id'])} href={status.getIn(['account', 'url'])} className='status__display-name'>
             <div className='status__avatar'>
               {statusAvatar}
+
             </div>
 
             <DisplayName account={status.get('account')} />
           </a>
         </div>
 
-        <StatusContent status={status} onClick={this.handleClick} />
+        <StatusContent status={status} onClick={this.handleClick} standalone />
 
         {media}
 
-        <StatusActionBar {...this.props} />
+        {!standalone && <StatusActionBar {...this.props} />}
       </div>
     );
   }
