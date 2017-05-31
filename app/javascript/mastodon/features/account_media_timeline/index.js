@@ -1,3 +1,4 @@
+import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -21,6 +22,14 @@ const mapStateToProps = (state, props) => ({
 });
 
 class AccountMediaTimeline extends React.PureComponent {
+  static propTypes = {
+    params: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
+    statusIds: ImmutablePropTypes.list,
+    isLoading: PropTypes.bool,
+    hasMore: PropTypes.bool,
+    me: PropTypes.number.isRequired
+  };
 
   constructor (props, context) {
     super(props, context);
@@ -72,14 +81,5 @@ class AccountMediaTimeline extends React.PureComponent {
   }
 
 };
-
-AccountMediaTimeline.propTypes = {
-  params: PropTypes.object.isRequired,
-  dispatch: PropTypes.func.isRequired,
-  statusIds: ImmutablePropTypes.list,
-  isLoading: PropTypes.bool,
-  hasMore: PropTypes.bool,
-  me: PropTypes.number.isRequired
-}
 
 export default connect(mapStateToProps)(AccountMediaTimeline);
