@@ -4,27 +4,21 @@ import { uploadCompose } from '../../../actions/compose';
 import {
   changeCompose,
   submitCompose,
-  requestImageCache,
   clearComposeSuggestions,
   fetchComposeSuggestions,
   selectComposeSuggestion,
   changeComposeSpoilerText,
   insertEmojiCompose,
-<<<<<<< HEAD:app/assets/javascripts/components/features/compose/containers/compose_form_container.jsx
+  requestImageCache,
   clearComposeHashTagSuggestions,
   fetchComposeHashTagSuggestions,
   selectComposeHashTagSuggestion
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/compose/containers/compose_form_container.js
 } from '../../../actions/compose';
 
 const mapStateToProps = state => ({
-  showSearch: state.getIn(['search', 'submitted']) && !state.getIn(['search', 'hidden']),
   text: state.getIn(['compose', 'text']),
   suggestion_token: state.getIn(['compose', 'suggestion_token']),
   suggestions: state.getIn(['compose', 'suggestions']),
-  hash_tag_suggestions: state.getIn(['compose', 'hash_tag_suggestions']),
-  hash_tag_token: state.getIn(['compose', 'hash_tag_token']),
   spoiler: state.getIn(['compose', 'spoiler']),
   spoiler_text: state.getIn(['compose', 'spoiler_text']),
   privacy: state.getIn(['compose', 'privacy']),
@@ -34,6 +28,8 @@ const mapStateToProps = state => ({
   is_uploading: state.getIn(['compose', 'is_uploading']),
   me: state.getIn(['compose', 'me']),
   showSearch: state.getIn(['search', 'submitted']) && !state.getIn(['search', 'hidden']),
+  hash_tag_suggestions: state.getIn(['compose', 'hash_tag_suggestions']),
+  hash_tag_token: state.getIn(['compose', 'hash_tag_token']),
 });
 
 const mapDispatchToProps = (dispatch) => ({
