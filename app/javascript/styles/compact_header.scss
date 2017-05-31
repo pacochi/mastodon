@@ -1,17 +1,13 @@
 .compact-header {
   background: $color8;
   border-radius: 4px 4px 0 0;
-  box-shadow: 0 0 15px rgba($color8, 0.2);
+  box-shadow: 0 0 15px rgba($base-shadow-color, 0.2);
   padding: 20px 0;
 
   h1 {
     font-size: 24px;
     line-height: 28px;
-<<<<<<< HEAD:app/assets/stylesheets/compact_header.scss
-    color: $color5;
-=======
     color: $ui-primary-color;
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/styles/compact_header.scss
     overflow: hidden;
     font-weight: 500;
     margin-left: 15px;
