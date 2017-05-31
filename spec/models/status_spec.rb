@@ -232,23 +232,6 @@ RSpec.describe Status, type: :model do
     end
   end
 
-<<<<<<< HEAD
-  describe '#ancestors' do
-    it 'ignores deleted records' do
-      first_status = Fabricate(:status, account: bob)
-      second_status = Fabricate(:status, thread: first_status, account: alice)
-
-      # Create cache and delete cached record
-      second_status.ancestors
-      first_status.destroy
-
-      expect(second_status.ancestors).to eq([])
-    end
-  end
-
-  describe '#filter_from_context?' do
-    pending
-=======
   describe '#descendants' do
     let!(:alice)  { Fabricate(:account, username: 'alice') }
     let!(:bob)    { Fabricate(:account, username: 'bob', domain: 'example.com') }
@@ -337,7 +320,6 @@ RSpec.describe Status, type: :model do
       Fabricate(:status, account: account, reblog: status)
       expect(subject[status.id]).to be true
     end
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
   end
 
   describe '.local_only' do
@@ -600,12 +582,7 @@ RSpec.describe Status, type: :model do
   end
 
   describe '.permitted_for' do
-<<<<<<< HEAD
-    subject { query.pluck(:visibility) }
-    let(:query) { described_class.permitted_for(target_account, account) }
-=======
     subject { described_class.permitted_for(target_account, account).pluck(:visibility) }
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
     let(:target_account) { alice }
     let(:account) { bob }
@@ -650,18 +627,12 @@ RSpec.describe Status, type: :model do
       end
 
       it { is_expected.to eq(%w(direct private unlisted public)) }
-<<<<<<< HEAD
-      it { expect(query).to_not be_include(other_direct_status) }
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
     end
 
     context 'given unfollowed account' do
       it { is_expected.to eq(%w(direct unlisted public)) }
     end
   end
-<<<<<<< HEAD
-=======
 
   describe 'before_create' do
     it 'sets account being replied to correctly over intermediary nodes' do
@@ -681,5 +652,4 @@ RSpec.describe Status, type: :model do
       expect(Status.create(account: alice, thread: parent, text: 'Response').conversation_id).to eq parent.conversation_id
     end
   end
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 end
