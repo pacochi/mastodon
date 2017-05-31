@@ -1,5 +1,5 @@
 import React from 'react';
-import { Provider } from 'react-redux';
+import { connect, Provider } from 'react-redux';
 import PropTypes from 'prop-types';
 import configureStore from '../store/configureStore';
 import {
@@ -26,7 +26,6 @@ import GettingStarted from '../features/getting_started';
 import PublicTimeline from '../features/public_timeline';
 import CommunityTimeline from '../features/community_timeline';
 import AccountTimeline from '../features/account_timeline';
-import AccountGallery from '../features/account_gallery';
 import HomeTimeline from '../features/home_timeline';
 import Compose from '../features/compose';
 import Followers from '../features/followers';
@@ -45,6 +44,10 @@ import { hydrateStore } from '../actions/store';
 import createStream from '../stream';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { getLocale } from '../locales';
+import MediaTimeline from '../features/media_timeline';
+import AccountMediaTimeline from '../features/account_media_timeline';
+import StatusSearchResults from '../features/status_search_results';
+import SuggestedAccounts from '../features/suggested_accounts';
 const { localeData, messages } = getLocale();
 addLocaleData(localeData);
 
@@ -57,6 +60,10 @@ const browserHistory = useRouterHistory(createBrowserHistory)({
 });
 
 class Mastodon extends React.PureComponent {
+
+  componentWillMount() {
+    this.appmode = store.getState().getIn(['meta', 'appmode']);
+  }
 
   componentDidMount() {
     const { locale }  = this.props;
@@ -133,45 +140,77 @@ class Mastodon extends React.PureComponent {
   render () {
     const { locale } = this.props;
 
-    return (
-      <IntlProvider locale={locale} messages={messages}>
-        <Provider store={store}>
-          <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
-            <Route path='/' component={UI}>
-              <IndexRedirect to='/getting-started' />
-              <Route path='getting-started' component={GettingStarted} />
-              <Route path='timelines/home' component={HomeTimeline} />
-              <Route path='timelines/public' component={PublicTimeline} />
-              <Route path='timelines/public/local' component={CommunityTimeline} />
-              <Route path='timelines/tag/:id' component={HashtagTimeline} />
+    if (this.appmode === 'intent') {
+      return (
+        <IntlProvider locale={locale} messages={messages}>
+          <Provider store={store}>
+            <UI intent>
+              <Compose intent />
+            </UI>
+          </Provider>
+        </IntlProvider>
+      );
+    }
 
-              <Route path='notifications' component={Notifications} />
-              <Route path='favourites' component={FavouritedStatuses} />
+    if (this.appmode === 'about') {
+      return (
+        <IntlProvider locale={locale} messages={messages}>
+          <Provider store={store}>
+            <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
+              <UI intent>
+                <Route path='*' component={connect(() => ({ standalone: true }))(CommunityTimeline)} />
+              </UI>
+            </Router>
+          </Provider>
+        </IntlProvider>
+      );
+    }
 
-              <Route path='statuses/new' component={Compose} />
-              <Route path='statuses/:statusId' component={Status} />
-              <Route path='statuses/:statusId/reblogs' component={Reblogs} />
-              <Route path='statuses/:statusId/favourites' component={Favourites} />
+    if (this.appmode === 'default') {
+      return (
+        <IntlProvider locale={locale} messages={messages}>
+          <Provider store={store}>
+            <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
+              <Route path='/' component={UI}>
+                <IndexRedirect to='/getting-started' />
+                <Route path='getting-started' component={GettingStarted} />
+                <Route path='timelines/home' component={HomeTimeline} />
+                <Route path='timelines/public' component={PublicTimeline} />
+                <Route path='timelines/public/local' component={CommunityTimeline} />
+                <Route path='timelines/tag/:id' component={HashtagTimeline} />
+                <Route path='timelines/public/media' component={MediaTimeline} />
+                <Route path='suggested_accounts' component={SuggestedAccounts} />
 
-              <Route path='accounts/:accountId' component={AccountTimeline} />
-              <Route path='accounts/:accountId/followers' component={Followers} />
-              <Route path='accounts/:accountId/following' component={Following} />
-              <Route path='accounts/:accountId/media' component={AccountGallery} />
+                <Route path='notifications' component={Notifications} />
+                <Route path='favourites' component={FavouritedStatuses} />
 
-              <Route path='follow_requests' component={FollowRequests} />
-              <Route path='blocks' component={Blocks} />
-              <Route path='mutes' component={Mutes} />
-              <Route path='report' component={Report} />
+                <Route path='statuses/new' component={Compose} />
+                <Route path='statuses/search/:keyword' component={StatusSearchResults} />
+                <Route path='statuses/:statusId' component={Status} />
+                <Route path='statuses/:statusId/reblogs' component={Reblogs} />
+                <Route path='statuses/:statusId/favourites' component={Favourites} />
 
-              <Route path='*' component={GenericNotFound} />
-            </Route>
-          </Router>
-        </Provider>
-      </IntlProvider>
-    );
+                <Route path='accounts/:accountId' component={AccountTimeline} />
+                <Route path='accounts/:accountId/followers' component={Followers} />
+                <Route path='accounts/:accountId/following' component={Following} />
+                <Route path='accounts/:accountId/media' component={AccountMediaTimeline} />
+
+                <Route path='follow_requests' component={FollowRequests} />
+                <Route path='blocks' component={Blocks} />
+                <Route path='mutes' component={Mutes} />
+                <Route path='report' component={Report} />
+
+                <Route path='*' component={GenericNotFound} />
+              </Route>
+            </Router>
+          </Provider>
+        </IntlProvider>
+      )
+    }
+
+    return <div />;
   }
-
-}
+};
 
 Mastodon.propTypes = {
   locale: PropTypes.string.isRequired,
