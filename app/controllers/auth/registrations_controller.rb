@@ -6,7 +6,6 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   before_action :check_enabled_registrations, only: [:new, :create]
   before_action :configure_sign_up_params, only: [:create]
 
-<<<<<<< HEAD
   def update
     if current_user.initial_password_usage
       send_reset_password_instructions
@@ -15,8 +14,6 @@ class Auth::RegistrationsController < Devise::RegistrationsController
     end
   end
 
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
   def destroy
     not_found
   end
