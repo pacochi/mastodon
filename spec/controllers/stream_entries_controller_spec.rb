@@ -64,11 +64,6 @@ RSpec.describe StreamEntriesController, type: :controller do
   end
 
   describe 'GET #show' do
-<<<<<<< HEAD
-    it 'redirects with HTML' do
-      get :show, params: { account_username: alice.username, id: status.stream_entry.id }
-      expect(response).to have_http_status(:redirect)
-=======
     include_examples 'before_action', :show
 
     it 'renders with HTML' do
@@ -77,11 +72,7 @@ RSpec.describe StreamEntriesController, type: :controller do
       descendant = Fabricate(:status, in_reply_to_id: status.id)
 
       get :show, params: { account_username: status.account.username, id: status.stream_entry.id }
-
-      expect(assigns(:ancestors)).to match_array([ancestor])
-      expect(assigns(:descendants)).to match_array([descendant])
-      expect(response).to have_http_status(:success)
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
+      expect(response).to have_http_status(:redirect)
     end
 
     it 'returns http success with Atom' do
