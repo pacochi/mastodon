@@ -19,25 +19,15 @@ module ApplicationHelper
   end
 
   def favicon_path
-<<<<<<< HEAD
-    path = if Rails.env.production? && !is_staging?
-             'favicon.png'
-           else
-             'favicon-dev.ico'
-           end
-
-    asset_path(path)
-=======
-    env_suffix = Rails.env.production? ? '' : '-dev'
+    env_suffix = is_production_or_staging? ? '' : '-dev'
     "/favicon#{env_suffix}.ico"
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
   end
 
   def title
-    if is_staging?
-      "#{site_title} (Staging)"
-    elsif Rails.env.production?
+    if Rails.env.production?
       site_title
+    elsif is_production_or_staging?
+      "#{site_title} (Staging)"
     else
       "#{site_title} (Dev)"
     end
@@ -45,7 +35,7 @@ module ApplicationHelper
 
   private
 
-  def is_staging?
+  def is_production_or_staging?
     Rails.env.production? && Socket.gethostname == 'ap-staging'
   rescue
     # FIXME: Socket.gethostname あんまり使わないから。。rescueいらないと思うねんけどね。
