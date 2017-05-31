@@ -9,68 +9,6 @@ const messages = defineMessages({
   toggle_visible: { id: 'media_gallery.toggle_visible', defaultMessage: 'Toggle visibility' },
 });
 
-const outerStyle = {
-  marginTop: '8px',
-  overflow: 'hidden',
-  width: '100%',
-  boxSizing: 'border-box',
-  position: 'relative'
-};
-
-const spoilerStyle = {
-  textAlign: 'center',
-  height: '100%',
-  cursor: 'pointer',
-  display: 'flex',
-  alignItems: 'center',
-  justifyContent: 'center',
-  flexDirection: 'column'
-};
-
-const spoilerSpanStyle = {
-  display: 'block',
-  fontSize: '14px',
-};
-
-const spoilerSubSpanStyle = {
-  display: 'block',
-  fontSize: '11px',
-  fontWeight: '500'
-};
-
-const spoilerButtonStyle = {
-  position: 'absolute',
-  top: '4px',
-  left: '4px',
-  zIndex: '100'
-};
-
-const itemStyle = {
-  boxSizing: 'border-box',
-  position: 'relative',
-  float: 'left',
-  border: 'none',
-  display: 'block'
-};
-
-const thumbStyle = {
-  display: 'block',
-  width: '100%',
-  height: '100%',
-  textDecoration: 'none',
-  backgroundSize: 'cover',
-  cursor: 'zoom-in'
-};
-
-const gifvThumbStyle = {
-  position: 'relative',
-  zIndex: '1',
-  width: '100%',
-  height: '100%',
-  objectFit: 'cover',
-  cursor: 'zoom-in'
-};
-
 class Item extends React.PureComponent {
 
   static propTypes = {
@@ -79,6 +17,9 @@ class Item extends React.PureComponent {
     size: PropTypes.number.isRequired,
     onClick: PropTypes.func.isRequired,
     autoPlayGif: PropTypes.bool.isRequired,
+    expandMedia: PropTypes.bool.isRequired,
+    lineMedia: PropTypes.bool,
+    squareMedia: PropTypes.bool.isRequired,
   };
 
   handleClick = (e) => {
@@ -202,20 +143,6 @@ class Item extends React.PureComponent {
 
 }
 
-<<<<<<< HEAD:app/assets/javascripts/components/components/media_gallery.jsx
-Item.propTypes = {
-  attachment: ImmutablePropTypes.map.isRequired,
-  index: PropTypes.number.isRequired,
-  size: PropTypes.number.isRequired,
-  onClick: PropTypes.func.isRequired,
-  autoPlayGif: PropTypes.bool.isRequired,
-  expandMedia: PropTypes.bool.isRequired,
-  lineMedia: PropTypes.bool,
-  squareMedia: PropTypes.bool.isRequired
-};
-
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/components/media_gallery.js
 class MediaGallery extends React.PureComponent {
 
   static propTypes = {
@@ -225,6 +152,15 @@ class MediaGallery extends React.PureComponent {
     onOpenMedia: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
     autoPlayGif: PropTypes.bool.isRequired,
+    expandMedia: PropTypes.bool.isRequired,
+    lineMedia: PropTypes.bool,
+    squareMedia: PropTypes.bool.isRequired,
+  };
+
+  static defaultProps = {
+    expandMedia: false,
+    lineMedia: false,
+    squareMedia: false
   };
 
   state = {
@@ -267,13 +203,8 @@ class MediaGallery extends React.PureComponent {
     }
 
     return (
-<<<<<<< HEAD:app/assets/javascripts/components/components/media_gallery.jsx
       <div className='media-gallery' style={{ height: (expandMedia && this.state.visible) ? 'auto' : `${this.props.height}px` }}>
-        <div className='spoiler-button' style={{ display: !this.state.visible ? 'none' : 'block' }}>
-=======
-      <div className='media-gallery' style={{ height: `${this.props.height}px` }}>
         <div className={`spoiler-button ${this.state.visible ? 'spoiler-button--visible' : ''}`}>
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/components/media_gallery.js
           <IconButton title={intl.formatMessage(messages.toggle_visible)} icon={this.state.visible ? 'eye' : 'eye-slash'} overlay onClick={this.handleOpen} />
         </div>
 
@@ -284,26 +215,4 @@ class MediaGallery extends React.PureComponent {
 
 }
 
-<<<<<<< HEAD:app/assets/javascripts/components/components/media_gallery.jsx
-MediaGallery.propTypes = {
-  sensitive: PropTypes.bool,
-  media: ImmutablePropTypes.list.isRequired,
-  height: PropTypes.number.isRequired,
-  onOpenMedia: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
-  autoPlayGif: PropTypes.bool.isRequired,
-  expandMedia: PropTypes.bool.isRequired,
-  lineMedia: PropTypes.bool,
-  squareMedia: PropTypes.bool.isRequired
-};
-
-MediaGallery.defaultProps = {
-  expandMedia: false,
-  lineMedia: false,
-  squareMedia: false
-};
-
-
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/components/media_gallery.js
 export default injectIntl(MediaGallery);
