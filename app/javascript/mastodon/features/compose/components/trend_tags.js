@@ -1,3 +1,4 @@
+import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
 import PropTypes from 'prop-types';
@@ -8,6 +9,12 @@ const messages = defineMessages({
 });
 
 class TrendTags extends React.PureComponent {
+
+  static propTypes = {
+    tags: ImmutablePropTypes.list.isRequired,
+    refreshTrendTags: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
+  };
 
   componentDidMount () {
     this.props.refreshTrendTags();
@@ -49,12 +56,6 @@ class TrendTags extends React.PureComponent {
       </div>
     );
   }
-};
-
-TrendTags.propTypes = {
-  tags: ImmutablePropTypes.list.isRequired,
-  refreshTrendTags: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired
 };
 
 export default injectIntl(TrendTags);
