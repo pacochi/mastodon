@@ -25,12 +25,8 @@ class StreamEntry < ApplicationRecord
   STATUS_INCLUDES = [:account, :stream_entry, :conversation, :media_attachments, :tags, mentions: :account, reblog: [:stream_entry, :account, :conversation, :media_attachments, :tags, mentions: :account], thread: [:stream_entry, :account]].freeze
 
   default_scope { where(activity_type: 'Status') }
-<<<<<<< HEAD
-  scope :with_includes, -> { includes(status: STATUS_INCLUDES, account: :oauth_authentications) }
-=======
   scope :recent, -> { reorder(id: :desc) }
-  scope :with_includes, -> { includes(:account, status: STATUS_INCLUDES) }
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
+  scope :with_includes, -> { includes(account: :oauth_authentications, status: STATUS_INCLUDES) }
 
   delegate :target, :title, :content, :thread,
            to: :status,
