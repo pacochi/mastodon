@@ -1,8 +1,4 @@
-<<<<<<< HEAD:app/assets/javascripts/components/features/account/components/header.jsx
 import Immutable from 'immutable';
-=======
-import React from 'react';
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/account/components/header.js
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import emojify from '../../../emoji';
@@ -101,11 +97,7 @@ class Header extends ImmutablePureComponent {
     }
 
     if (me !== account.get('id') && account.getIn(['relationship', 'followed_by'])) {
-<<<<<<< HEAD:app/assets/javascripts/components/features/account/components/header.jsx
-      info = <span className='account--follows-info' style={{ position: 'absolute', top: '10px', right: '10px', opacity: '0.7', display: 'inline-block', verticalAlign: 'top', backgroundColor: 'rgba(0, 0, 0, 0.4)', textTransform: 'uppercase', fontSize: '11px', fontWeight: '500', padding: '4px', borderRadius: '4px' }}><FormattedMessage id='account.follows_you' defaultMessage='Follows you' /></span>
-=======
       info = <span className='account--follows-info'><FormattedMessage id='account.follows_you' defaultMessage='Follows you' /></span>;
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/account/components/header.js
     }
 
     if (me !== account.get('id')) {
@@ -136,9 +128,8 @@ class Header extends ImmutablePureComponent {
         <div>
           <Avatar account={account} autoPlayGif={this.props.autoPlayGif} />
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/account/components/header.jsx
-          <span style={{ display: 'inline-block', fontSize: '20px', lineHeight: '27px', fontWeight: '500' }} className='account__header__display-name' dangerouslySetInnerHTML={displayNameHTML} />
-          <span className='account__header__username' style={{ fontSize: '14px', fontWeight: '400', display: 'block', marginBottom: '10px' }}>@{account.get('acct')} {lockedIcon}</span>
+          <span className='account__header__display-name' dangerouslySetInnerHTML={displayNameHTML} />
+          <span className='account__header__username'>@{account.get('acct')} {lockedIcon}</span>
           <div className='account__header__oauth-authentications oauth-authentications'>
             {account.getIn(['oauth_authentications'], new Immutable.List()).map(oauth_authentication => {
               const provider = oauth_authentication.get('provider');
@@ -154,12 +145,7 @@ class Header extends ImmutablePureComponent {
               return <div key={provider} />;
             })}
           </div>
-          <div style={{ fontSize: '14px' }} className='account__header__content' dangerouslySetInnerHTML={content} />
-=======
-          <span className='account__header__display-name' dangerouslySetInnerHTML={displayNameHTML} />
-          <span className='account__header__username'>@{account.get('acct')} {lockedIcon}</span>
           <div className='account__header__content' dangerouslySetInnerHTML={content} />
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/account/components/header.js
 
           {info}
           {actionBtn}
