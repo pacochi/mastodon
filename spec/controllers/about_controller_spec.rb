@@ -53,18 +53,18 @@ RSpec.describe AboutController, type: :controller do
     end
   end
 
-<<<<<<< HEAD
-  describe 'GET #terms' do
+  describe 'GET #app_eula' do
     it 'returns http success' do
       get :app_eula
       expect(response).to have_http_status(:success)
-=======
+    end
+  end
+
   describe 'helper_method :new_user' do
     it 'returns a new User' do
       user = @controller.view_context.new_user
       expect(user).to be_kind_of User
       expect(user.account).to be_kind_of Account
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
     end
   end
 end
