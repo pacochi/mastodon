@@ -24,12 +24,8 @@ class Pubsubhubbub::ConfirmationWorker
     confirm_callback
     logger.debug "Confirming PuSH subscription for #{subscription.callback_url} with challenge #{challenge}: #{callback_response_body}"
 
-<<<<<<< HEAD
-    logger.debug "Confirming PuSH subscription for #{subscription.callback_url} with challenge #{challenge}: #{body}"
-=======
     update_subscription
   end
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
   def update_subscription
     if successful_subscribe?
