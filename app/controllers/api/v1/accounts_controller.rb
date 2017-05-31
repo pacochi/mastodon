@@ -23,21 +23,11 @@ class Api::V1::AccountsController < ApiController
   end
 
   def following
-<<<<<<< HEAD
-    if FollowingAccountsController::BOT_ACCOUNT_IDS.include?(@account.id)
-      raise ActiveRecord::RecordNotFound, 'banned account'
-    end
-
-    results   = Follow.where(account: @account).paginate_by_max_id(limit_param(DEFAULT_ACCOUNTS_LIMIT), params[:max_id], params[:since_id])
-    accounts  = Account.where(id: results.map(&:target_account_id)).map { |a| [a.id, a] }.to_h
-    @accounts = results.map { |f| accounts[f.target_account_id] }
-=======
     @accounts = Account.includes(:passive_relationships)
                        .references(:passive_relationships)
                        .merge(Follow.where(account: @account)
                                     .paginate_by_max_id(limit_param(DEFAULT_ACCOUNTS_LIMIT), params[:max_id], params[:since_id]))
                        .to_a
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
     next_path = following_api_v1_account_url(pagination_params(max_id: @accounts.last.passive_relationships.first.id))     if @accounts.size == limit_param(DEFAULT_ACCOUNTS_LIMIT)
     prev_path = following_api_v1_account_url(pagination_params(since_id: @accounts.first.passive_relationships.first.id)) unless @accounts.empty?
