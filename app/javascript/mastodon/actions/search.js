@@ -1,9 +1,4 @@
-<<<<<<< HEAD:app/assets/javascripts/components/actions/search.jsx
-import api from '../api'
-import Immutable from 'immutable';
-=======
 import api from '../api';
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/actions/search.js
 
 export const SEARCH_CHANGE = 'SEARCH_CHANGE';
 export const SEARCH_CLEAR  = 'SEARCH_CLEAR';
