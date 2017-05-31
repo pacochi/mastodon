@@ -2491,7 +2491,7 @@ button.icon-button.active i.fa-retweet {
   position: relative;
 }
 
-.privacy-dropdown__dropdown {
+.privacy-dropdown__dropdown, .time-limit-dropdown__dropdown {
   display: none;
   position: absolute;
   left: 0;
@@ -2503,7 +2503,12 @@ button.icon-button.active i.fa-retweet {
   overflow: hidden;
 }
 
-.privacy-dropdown__option {
+.time-limit-dropdown__dropdown {
+  left: -210px;
+  top: 0;
+}
+
+.privacy-dropdown__option, .time-limit-dropdown__option {
   color: $color1;
   padding: 10px;
   cursor: pointer;
@@ -2513,7 +2518,7 @@ button.icon-button.active i.fa-retweet {
     background: $color4;
     color: $color5;
 
-    .privacy-dropdown__option__content {
+    .privacy-dropdown__option__content, .time-limit-dropdown__option__content {
       color: $color5;
 
       strong {
@@ -2534,7 +2539,7 @@ button.icon-button.active i.fa-retweet {
   margin-right: 10px;
 }
 
-.privacy-dropdown__option__content {
+.privacy-dropdown__option__content, .time-limit-dropdown__option__content {
   flex: 1 1 auto;
   color: darken($color3, 24%);
 
@@ -2557,6 +2562,20 @@ button.icon-button.active i.fa-retweet {
     box-shadow: 2px 4px 6px rgba($color8, 0.1);
   }
 }
+
+ .time-limit-dropdown.dropdown--active {
+   .time-limit-dropdown__dropdown {
+     display: block;
+     box-shadow: 0 0 8px rgba($color8, 0.1);
+   }
+   .dropdown__trigger {
+     color: $color4;
+   }
+ }
+
+ .time-limit-dropdown .icon-button {
+   font-size: 24px;
+ }
 
 .search {
   position: relative;

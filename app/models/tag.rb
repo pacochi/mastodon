@@ -5,11 +5,28 @@ class Tag < ApplicationRecord
   has_one :suggestion_tag, dependent: :destroy
 
   HASHTAG_RE = /(?:^|[^\/\)\w])#([[:word:]_]*[[:alpha:]_][[:word:]_]*)/i
+  TIME_LIMIT_RE = /^(\d+)([mh])$/
 
   validates :name, presence: true, uniqueness: true
 
   def to_param
     name
+  end
+
+  def time_limit?
+    TIME_LIMIT_RE.match?(name)
+  end
+
+  def time_limit
+    matched = name.match(TIME_LIMIT_RE)
+    return 0 unless matched
+
+    case  matched[2]
+    when 'm'
+      matched[1].to_i.minutes
+    when 'h'
+      matched[1].to_i.hours
+    end
   end
 
   class << self
