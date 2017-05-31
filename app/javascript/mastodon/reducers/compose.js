@@ -21,14 +21,10 @@ import {
   COMPOSE_SPOILER_TEXT_CHANGE,
   COMPOSE_VISIBILITY_CHANGE,
   COMPOSE_LISTABILITY_CHANGE,
-<<<<<<< HEAD:app/assets/javascripts/components/reducers/compose.jsx
   COMPOSE_HASH_TAG_CLEAR,
   COMPOSE_HASH_TAG_READY,
   COMPOSE_HASH_TAG_SELECT,
-  COMPOSE_EMOJI_INSERT
-=======
   COMPOSE_EMOJI_INSERT,
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/reducers/compose.js
 } from '../actions/compose';
 import { TIMELINE_DELETE } from '../actions/timelines';
 import { STORE_HYDRATE } from '../actions/store';
