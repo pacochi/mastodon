@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20170524042615) do
-=======
-ActiveRecord::Schema.define(version: 20170520145338) do
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -356,7 +352,6 @@ ActiveRecord::Schema.define(version: 20170520145338) do
     t.datetime "updated_at",                                  null: false
     t.datetime "last_successful_delivery_at"
     t.index ["account_id", "callback_url"], name: "index_subscriptions_on_account_id_and_callback_url", unique: true, using: :btree
-<<<<<<< HEAD
   end
 
   create_table "suggestion_tags", force: :cascade do |t|
@@ -366,8 +361,6 @@ ActiveRecord::Schema.define(version: 20170520145338) do
     t.datetime "created_at",               null: false
     t.datetime "updated_at",               null: false
     t.index ["tag_id"], name: "index_suggestion_tags_on_tag_id", unique: true, using: :btree
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
   end
 
   create_table "tags", force: :cascade do |t|
