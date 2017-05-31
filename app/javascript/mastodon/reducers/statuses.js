@@ -25,11 +25,7 @@ import {
   ACCOUNT_TIMELINE_EXPAND_SUCCESS,
   ACCOUNT_MEDIA_TIMELINE_FETCH_SUCCESS,
   ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS,
-<<<<<<< HEAD:app/assets/javascripts/components/reducers/statuses.jsx
-  ACCOUNT_BLOCK_SUCCESS
-=======
   ACCOUNT_BLOCK_SUCCESS,
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/reducers/statuses.js
 } from '../actions/accounts';
 import {
   STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
