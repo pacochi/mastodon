@@ -1,8 +1,5 @@
-<<<<<<< HEAD:app/assets/javascripts/components/features/compose/components/compose_form.jsx
 import qs from 'querystring';
-=======
 import React from 'react';
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/compose/components/compose_form.js
 import CharacterCounter from './character_counter';
 import Button from '../../../components/button';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -31,36 +28,6 @@ const messages = defineMessages({
   publishLoud: { id: 'compose_form.publish_loud', defaultMessage: '{publish}!' },
 });
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/compose/components/compose_form.jsx
-class ComposeForm extends React.PureComponent {
-
-  constructor (props, context) {
-    super(props, context);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.onSuggestionsClearRequested = this.onSuggestionsClearRequested.bind(this);
-    this.onSuggestionsFetchRequested = this.onSuggestionsFetchRequested.bind(this);
-    this.onSuggestionSelected = this.onSuggestionSelected.bind(this);
-    this.onHashTagSuggestionsClearRequested = this.onHashTagSuggestionsClearRequested.bind(this);
-    this.onHashTagSuggestionsFetchRequested = this.onHashTagSuggestionsFetchRequested.bind(this);
-    this.onHashTagSuggestionsSelected = this.onHashTagSuggestionsSelected.bind(this);
-    this.handleChangeSpoilerText = this.handleChangeSpoilerText.bind(this);
-    this.setAutosuggestTextarea = this.setAutosuggestTextarea.bind(this);
-    this.handleEmojiPick = this.handleEmojiPick.bind(this);
-  }
-
-  componentDidMount () {
-    const rawQuery = location.search.replace(/^\?/, '');
-    if (rawQuery.length > 0) {
-      window.history.replaceState(window.history.state, null, location.pathname);
-      const query = qs.parse(rawQuery);
-      this.props.onChange(query.text);
-    }
-  }
-
-  handleChange (e) {
-=======
 class ComposeForm extends ImmutablePureComponent {
 
   static propTypes = {
@@ -85,14 +52,27 @@ class ComposeForm extends ImmutablePureComponent {
     onPaste: PropTypes.func.isRequired,
     onPickEmoji: PropTypes.func.isRequired,
     showSearch: PropTypes.bool,
+    hash_tag_suggestions: ImmutablePropTypes.list,
+    hash_tag_token: PropTypes.string,
+    onHashTagSuggestionsClearRequested: PropTypes.func.isRequired,
+    onHashTagSuggestionsFetchRequested: PropTypes.func.isRequired,
+    onHashTagSuggestionsSelected: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     showSearch: false,
   };
 
+  componentDidMount () {
+    const rawQuery = location.search.replace(/^\?/, '');
+    if (rawQuery.length > 0) {
+      window.history.replaceState(window.history.state, null, location.pathname);
+      const query = qs.parse(rawQuery);
+      this.props.onChange(query.text);
+    }
+  }
+
   handleChange = (e) => {
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/compose/components/compose_form.js
     this.props.onChange(e.target.value);
   }
 
@@ -119,24 +99,20 @@ class ComposeForm extends ImmutablePureComponent {
     this.props.onSuggestionSelected(tokenStart, token, value);
   }
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/compose/components/compose_form.jsx
-  onHashTagSuggestionsClearRequested() {
+  onHashTagSuggestionsClearRequested = () => {
     this.props.onHashTagSuggestionsClearRequested();
   }
 
-  onHashTagSuggestionsFetchRequested(token) {
+  onHashTagSuggestionsFetchRequested = (token) => {
     this.props.onHashTagSuggestionsFetchRequested(token);
   }
 
-  onHashTagSuggestionsSelected(tokenStart, token, value) {
+  onHashTagSuggestionsSelected = (tokenStart, token, value) => {
     this._restoreCaret = null;
     this.props.onHashTagSuggestionsSelected(tokenStart, token, value);
   }
 
-  handleChangeSpoilerText (e) {
-=======
   handleChangeSpoilerText = (e) => {
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/compose/components/compose_form.js
     this.props.onChangeSpoilerText(e.target.value);
   }
 
@@ -198,7 +174,6 @@ class ComposeForm extends ImmutablePureComponent {
     } else {
       publishText = this.props.privacy !== 'unlisted' ? intl.formatMessage(messages.publishLoud, { publish: intl.formatMessage(messages.publish) }) : intl.formatMessage(messages.publish);
     }
-    const { showSearch } = this.props;
 
     return (
       <div className='compose-form'>
@@ -220,16 +195,16 @@ class ComposeForm extends ImmutablePureComponent {
             value={this.props.text}
             onChange={this.handleChange}
             suggestions={this.props.suggestions}
-            hash_tag_suggestions={this.props.hash_tag_suggestions}
             onKeyDown={this.handleKeyDown}
             onSuggestionsFetchRequested={this.onSuggestionsFetchRequested}
             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
             onSuggestionSelected={this.onSuggestionSelected}
+            onPaste={onPaste}
+            autoFocus={!showSearch}
+            hash_tag_suggestions={this.props.hash_tag_suggestions}
             onHashTagSuggestionsFetchRequested={this.onHashTagSuggestionsFetchRequested}
             onHashTagSuggestionsClearRequested={this.onHashTagSuggestionsClearRequested}
             onHashTagSuggestionsSelected={this.onHashTagSuggestionsSelected}
-            onPaste={onPaste}
-            autoFocus={!showSearch}
           />
 
           <EmojiPickerDropdown onPickEmoji={this.handleEmojiPick} />
@@ -260,41 +235,4 @@ class ComposeForm extends ImmutablePureComponent {
 
 }
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/compose/components/compose_form.jsx
-ComposeForm.propTypes = {
-  intl: PropTypes.object.isRequired,
-  text: PropTypes.string.isRequired,
-  suggestion_token: PropTypes.string,
-  suggestions: ImmutablePropTypes.list,
-  hash_tag_suggestions: ImmutablePropTypes.list,
-  hash_tag_token: PropTypes.string,
-  spoiler: PropTypes.bool,
-  privacy: PropTypes.string,
-  spoiler_text: PropTypes.string,
-  focusDate: PropTypes.instanceOf(Date),
-  preselectDate: PropTypes.instanceOf(Date),
-  is_submitting: PropTypes.bool,
-  is_uploading: PropTypes.bool,
-  me: PropTypes.number,
-  onChange: PropTypes.func.isRequired,
-  onSubmit: PropTypes.func.isRequired,
-  onClearSuggestions: PropTypes.func.isRequired,
-  onFetchSuggestions: PropTypes.func.isRequired,
-  onSuggestionSelected: PropTypes.func.isRequired,
-  onHashTagSuggestionsClearRequested: PropTypes.func.isRequired,
-  onHashTagSuggestionsFetchRequested: PropTypes.func.isRequired,
-  onHashTagSuggestionsSelected: PropTypes.func.isRequired,
-  onChangeSpoilerText: PropTypes.func.isRequired,
-  onPaste: PropTypes.func.isRequired,
-  onPickEmoji: PropTypes.func.isRequired,
-  showSearch: PropTypes.bool,
-};
-
-ComposeForm.defaultProps = {
-    showSearch: false
-};
-
-
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/compose/components/compose_form.js
 export default injectIntl(ComposeForm);
