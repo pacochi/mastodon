@@ -39,9 +39,6 @@ export default combineReducers({
   settings,
   cards,
   reports,
-<<<<<<< HEAD:app/assets/javascripts/components/reducers/index.jsx
   suggested_accounts,
-  trend_tags
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/reducers/index.js
+  trend_tags,
 });
