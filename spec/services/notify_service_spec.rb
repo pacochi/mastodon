@@ -7,12 +7,6 @@ RSpec.describe NotifyService do
 
   let(:user) { Fabricate(:user) }
   let(:recipient) { user.account }
-<<<<<<< HEAD
-  let(:activity) { Fabricate(:follow, target_account: recipient) }
-
-  it { is_expected.to change(Notification, :count).by(1) }
-
-=======
   let(:sender) { Fabricate(:account, domain: 'example.com') }
   let(:activity) { Fabricate(:follow, account: sender, target_account: recipient) }
 
@@ -68,7 +62,6 @@ RSpec.describe NotifyService do
     end
   end
 
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
   describe 'email' do
     before do
       ActionMailer::Base.deliveries.clear
