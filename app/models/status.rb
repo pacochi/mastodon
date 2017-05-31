@@ -34,12 +34,12 @@ class Status < ApplicationRecord
 
   belongs_to :application, class_name: 'Doorkeeper::Application'
 
-  belongs_to :account, inverse_of: :statuses, required: true, counter_cache: true
+  belongs_to :account, inverse_of: :statuses, counter_cache: true, required: true
   belongs_to :in_reply_to_account, foreign_key: 'in_reply_to_account_id', class_name: 'Account'
   belongs_to :conversation
 
   belongs_to :thread, foreign_key: 'in_reply_to_id', class_name: 'Status', inverse_of: :replies
-  belongs_to :reblog, foreign_key: 'reblog_of_id', class_name: 'Status', inverse_of: :reblogs, counter_cache: 'reblogs_count'
+  belongs_to :reblog, foreign_key: 'reblog_of_id', class_name: 'Status', inverse_of: :reblogs, counter_cache: :reblogs_count
 
   has_many :favourites, inverse_of: :status, dependent: :destroy
   has_many :reblogs, foreign_key: 'reblog_of_id', class_name: 'Status', inverse_of: :reblog, dependent: :destroy
@@ -57,11 +57,7 @@ class Status < ApplicationRecord
   validates_with StatusLengthValidator
   validates :reblog, uniqueness: { scope: :account }, if: :reblog?
 
-<<<<<<< HEAD
-  default_scope { order(id: :desc) }
-=======
   default_scope { recent }
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
   scope :recent, -> { reorder(id: :desc) }
   scope :remote, -> { where.not(uri: nil) }
@@ -134,17 +130,8 @@ class Status < ApplicationRecord
   end
 
   def ancestors(account = nil)
-<<<<<<< HEAD
-    ids      = Rails.cache.fetch("ancestors:#{id}") { (Status.find_by_sql(['WITH RECURSIVE search_tree(id, in_reply_to_id, path) AS (SELECT id, in_reply_to_id, ARRAY[id] FROM statuses WHERE id = ? UNION ALL SELECT statuses.id, statuses.in_reply_to_id, path || statuses.id FROM search_tree JOIN statuses ON statuses.id = search_tree.in_reply_to_id WHERE NOT statuses.id = ANY(path)) SELECT id FROM search_tree ORDER BY path DESC', id]) - [self]).pluck(:id) }
-    statuses = Status.where(id: ids).group_by(&:id)
-    results  = ids.map { |id| statuses[id]&.first }.compact
-    results  = results.reject { |status| filter_from_context?(status, account) }
-
-    results
-=======
     ids = Rails.cache.fetch("ancestors:#{id}") { (Status.find_by_sql(['WITH RECURSIVE search_tree(id, in_reply_to_id, path) AS (SELECT id, in_reply_to_id, ARRAY[id] FROM statuses WHERE id = ? UNION ALL SELECT statuses.id, statuses.in_reply_to_id, path || statuses.id FROM search_tree JOIN statuses ON statuses.id = search_tree.in_reply_to_id WHERE NOT statuses.id = ANY(path)) SELECT id FROM search_tree ORDER BY path DESC', id]) - [self]).pluck(:id) }
     find_statuses_from_tree_path(ids, account)
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
   end
 
   def descendants(account = nil)
@@ -215,11 +202,7 @@ class Status < ApplicationRecord
     end
 
     def permitted_for(target_account, account)
-<<<<<<< HEAD
-      visibility = %w(public unlisted)
-=======
       visibility = [:public, :unlisted]
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
       if account.nil?
         where(visibility: visibility)
@@ -230,11 +213,7 @@ class Status < ApplicationRecord
       else
         # followers can see followers-only stuff, but also things they are mentioned in.
         # non-followers can see everything that isn't private/direct, but can see stuff they are mentioned in.
-<<<<<<< HEAD
-        visibility.push('private') if account.following?(target_account)
-=======
         visibility.push(:private) if account.following?(target_account)
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
         joins("LEFT OUTER JOIN mentions ON statuses.id = mentions.status_id AND mentions.account_id = #{account.id}")
           .where(arel_table[:visibility].in(visibility).or(Mention.arel_table[:id].not_eq(nil)))
