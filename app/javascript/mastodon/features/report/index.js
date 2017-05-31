@@ -17,17 +17,12 @@ const messages = defineMessages({
   heading: { id: 'report.heading', defaultMessage: 'New report' },
   placeholder: { id: 'report.placeholder', defaultMessage: 'Additional comments' },
   submit: { id: 'report.submit', defaultMessage: 'Submit' },
-<<<<<<< HEAD:app/assets/javascripts/components/features/report/index.jsx
   reportTitle: { id: 'report.select.title', defaultMessage: 'Please select the reason for reporting' },
-  reportOptions: {
-    donotlike: { id: 'report.select.donotlike', defaultMessage: 'I do not like it' },
-    incorrectage: { id: 'report.select.incorrectage', defaultMessage: 'Incorrect CW・NSFW setting' },
-    spam: { id: 'report.select.spam', defaultMessage: 'Spam' },
-    reproduction: { id: 'report.select.reproduction', defaultMessage: 'Unauthorized reproduction' },
-    prohibited: { id: 'report.select.prohibited', defaultMessage: 'Prohibited act' },
-  }
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/report/index.js
+  donotlike: { id: 'report.select.donotlike', defaultMessage: 'I do not like it' },
+  incorrectage: { id: 'report.select.incorrectage', defaultMessage: 'Incorrect CW・NSFW setting' },
+  spam: { id: 'report.select.spam', defaultMessage: 'Spam' },
+  reproduction: { id: 'report.select.reproduction', defaultMessage: 'Unauthorized reproduction' },
+  prohibited: { id: 'report.select.prohibited', defaultMessage: 'Prohibited act' },
 });
 
 const makeMapStateToProps = () => {
@@ -49,16 +44,6 @@ const makeMapStateToProps = () => {
 
 class Report extends React.PureComponent {
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/report/index.jsx
-  constructor (props, context) {
-    super(props, context);
-    this.state = { option: false };
-    this.handleCommentChange = this.handleCommentChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
-    this.handlePreSubmit = this.handlePreSubmit.bind(this);
-    this.onToggle = this.onToggle.bind(this);
-  }
-=======
   static contextTypes = {
     router: PropTypes.object,
   };
@@ -71,7 +56,8 @@ class Report extends React.PureComponent {
     dispatch: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
   };
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/report/index.js
+
+  state = { option: false };
 
   componentWillMount () {
     if (!this.props.account) {
@@ -110,11 +96,12 @@ class Report extends React.PureComponent {
     this.context.router.replace('/');
   }
 
-  handlePreSubmit () {
+  handlePreSubmit = () => {
     this.setState({ option: true });
   }
 
-  onToggle (e) {
+  onToggle = (e) => {
+    this.props.dispatch(changeReportComment('')); // FIXME: Re render self
     this.props.dispatch(changeReportComment(e.target.getAttribute('name')));
   }
 
@@ -150,7 +137,7 @@ class Report extends React.PureComponent {
                   {this.options.map(option =>
                     <div key={option.get('id')} style={{ display: 'flex' }}>
                       <div style={{ flex: '1 1 auto', padding: '10px' }}>
-                        {intl.formatMessage(messages.reportOptions[option.get('id')])}
+                        {intl.formatMessage(messages[option.get('id')])}
                       </div>
                       <div style={{ flex: '0 0 auto', padding: '10px', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
                         <Toggle name={option.get('value')} checked={this.props.comment === option.get('value')} onChange={this.onToggle} disabled={isSubmitting} />
