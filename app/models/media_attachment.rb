@@ -7,7 +7,6 @@ class MediaAttachment < ApplicationRecord
 
   IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif'].freeze
   VIDEO_MIME_TYPES = ['video/webm', 'video/mp4'].freeze
-  MUSIC_MIME_TYPES = ['audio/mpeg'].freeze
 
   IMAGE_STYLES = { original: '1280x1280>', small: '400x400>' }.freeze
   VIDEO_STYLES = {
@@ -24,26 +23,7 @@ class MediaAttachment < ApplicationRecord
   MUSIC_STYLES = {
     original: {
       format: 'mp4',
-      convert_options: {
-        encode_music: {
-          'vn'      => nil,
-          'ar'      => 44100,
-          'ac'      => 2,
-          'ab'      => '192k',
-          'f'       => 'mp3'
-        },
-        generate_movie: {
-          'loop'     => 1,
-          'r'        => 4,
-          'y'        => nil,
-          'movflags' => 'faststart',
-          'vf'       => 'scale=\'min(400,iw)\':-2,format=yuv420p',
-          'c:v'      => 'libx264',
-          'shortest' => nil,
-          'c:a'      => 'copy'
-        }
-      },
-    },
+    }
   }.freeze
 
   belongs_to :account, inverse_of: :media_attachments
@@ -53,7 +33,7 @@ class MediaAttachment < ApplicationRecord
                     styles: ->(f) { file_styles f },
                     processors: ->(f) { file_processors f },
                     convert_options: { all: '-quality 90 -strip' }
-  validates_attachment_content_type :file, content_type: IMAGE_MIME_TYPES + VIDEO_MIME_TYPES + MUSIC_MIME_TYPES
+  validates_attachment_content_type :file, content_type: IMAGE_MIME_TYPES + VIDEO_MIME_TYPES
   validates_attachment_size :file, less_than: 8.megabytes
 
   validates :account, presence: true
@@ -102,7 +82,8 @@ class MediaAttachment < ApplicationRecord
         }
       elsif IMAGE_MIME_TYPES.include? f.instance.file_content_type
         IMAGE_STYLES
-      elsif MUSIC_MIME_TYPES.include? f.instance.file_content_type
+        # music file is converted into mp4 before thrown into this module
+      elsif f.instance.type == 'music'
         MUSIC_STYLES
       else
         VIDEO_STYLES
@@ -114,8 +95,9 @@ class MediaAttachment < ApplicationRecord
         [:gif_transcoder]
       elsif VIDEO_MIME_TYPES.include? f.file_content_type
         [:video_transcoder]
-      elsif MUSIC_MIME_TYPES.include? f.file_content_type
-        [:music_transcoder]
+        # music file is converted into mp4 before thrown into this module
+      elsif f.instance.type == 'music'
+        [nil]
       else
         [:thumbnail]
       end
@@ -138,10 +120,10 @@ class MediaAttachment < ApplicationRecord
   def set_type_and_extension
     if VIDEO_MIME_TYPES.include?(file_content_type)
       self.type = :video
-    elsif MUSIC_MIME_TYPES.include?(file_content_type)
-      self.type = :music
-    else
+    elsif IMAGE_MIME_TYPES.include?(file_content_type)
       self.type = :image
+    else # music file is converted into mp4 before thrown into this module
+      self.type = :music
     end
     extension = appropriate_extension
     basename  = Paperclip::Interpolations.basename(file, :original)
