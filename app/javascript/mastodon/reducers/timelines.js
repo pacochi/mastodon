@@ -34,7 +34,6 @@ import {
   ACCOUNT_MUTE_SUCCESS,
 } from '../actions/accounts';
 import {
-<<<<<<< HEAD:app/assets/javascripts/components/reducers/timelines.jsx
   STATUS_SEARCH_TIMELINE_FETCH_REQUEST,
   STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
   STATUS_SEARCH_TIMELINE_FETCH_FAIL,
@@ -43,10 +42,7 @@ import {
   STATUS_SEARCH_TIMELINE_EXPAND_FAIL,
 } from '../actions/search';
 import {
-  CONTEXT_FETCH_SUCCESS
-=======
   CONTEXT_FETCH_SUCCESS,
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/reducers/timelines.js
 } from '../actions/statuses';
 import Immutable from 'immutable';
 
@@ -96,6 +92,7 @@ const initialState = Immutable.Map({
       unread: 0,
       items: Immutable.List()
   }),
+
   tag: Immutable.Map({
     path: (id) => `/api/v1/timelines/tag/${id}`,
     next: null,
@@ -108,11 +105,8 @@ const initialState = Immutable.Map({
   }),
 
   accounts_timelines: Immutable.Map(),
-<<<<<<< HEAD:app/assets/javascripts/components/reducers/timelines.jsx
   status_search_timelines: Immutable.Map(),
-=======
   accounts_media_timelines: Immutable.Map(),
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/reducers/timelines.js
   ancestors: Immutable.Map(),
   descendants: Immutable.Map(),
 });
@@ -183,37 +177,6 @@ const normalizeAccountMediaTimeline = (state, accountId, statuses, replace, next
     .update('items', Immutable.List(), list => (replace ? ids : ids.concat(list))));
 };
 
-const normalizeAccountMediaTimeline = (state, accountId, statuses, next) => {
-  let ids = Immutable.List();
-
-  statuses.forEach((status, i) => {
-    state = normalizeStatus(state, status);
-    ids   = ids.set(i, status.get('id'));
-  });
-
-  return state.updateIn(['account_media_timelines', accountId], Immutable.Map(), map => map
-    .set('isLoading', false)
-    .set('next', next)
-    .update('items', Immutable.List(), list => list.unshift(...ids)));
-};
-
-const normalizeStatusSearchTimeline = (state, keyword, statuses, hasMore=true, hitsTotal=0, page=1) => {
-  let ids = Immutable.List();
-
-  statuses.forEach((status, i) => {
-    state = normalizeStatus(state, status);
-    ids   = ids.set(i, status.get('id'));
-  });
-
-  return state.updateIn(['status_search_timelines', keyword], Immutable.Map(), map => map
-    .set('isLoading', false)
-    .set('loaded', true)
-    .set('page', page)
-    .set('hitsTotal', hitsTotal)
-    .set('hasMore', hasMore)
-    .update('items', Immutable.List(), list => ids ));
-};
-
 const appendNormalizedAccountTimeline = (state, accountId, statuses, next) => {
   let moreIds = Immutable.List([]);
 
@@ -242,20 +205,6 @@ const appendNormalizedAccountMediaTimeline = (state, accountId, statuses, next) 
     .update('items', list => list.concat(moreIds)));
 };
 
-const appendNormalizedAccountMediaTimeline = (state, accountId, statuses, next) => {
-  let moreIds = Immutable.List([]);
-
-  statuses.forEach((status, i) => {
-    state   = normalizeStatus(state, status);
-    moreIds = moreIds.set(i, status.get('id'));
-  });
-
-  return state.updateIn(['account_media_timelines', accountId], Immutable.Map(), map => map
-    .set('isLoading', false)
-    .set('next', next)
-    .update('items', list => list.push(...moreIds)));
-};
-
 const appendNormalizedStatusSearchTimeline = (state, keyword, statuses, hasMore, page) => {
   let moreIds = Immutable.List([]);
 
@@ -270,6 +219,24 @@ const appendNormalizedStatusSearchTimeline = (state, keyword, statuses, hasMore,
     .set('hasMore', hasMore)
     .update('items', list => list.push(...moreIds)));
 };
+
+const normalizeStatusSearchTimeline = (state, keyword, statuses, hasMore=true, hitsTotal=0, page=1) => {
+  let ids = Immutable.List();
+
+  statuses.forEach((status, i) => {
+    state = normalizeStatus(state, status);
+    ids   = ids.set(i, status.get('id'));
+  });
+
+  return state.updateIn(['status_search_timelines', keyword], Immutable.Map(), map => map
+    .set('isLoading', false)
+    .set('loaded', true)
+    .set('page', page)
+    .set('hitsTotal', hitsTotal)
+    .set('hasMore', hasMore)
+    .update('items', Immutable.List(), list => ids ));
+};
+
 
 const updateTimeline = (state, timeline, status, references) => {
   const top = state.getIn([timeline, 'top']);
@@ -414,13 +381,12 @@ export default function timelines(state = initialState, action) {
     return appendNormalizedAccountTimeline(state, action.id, Immutable.fromJS(action.statuses), action.next);
   case ACCOUNT_MEDIA_TIMELINE_FETCH_REQUEST:
   case ACCOUNT_MEDIA_TIMELINE_EXPAND_REQUEST:
-<<<<<<< HEAD:app/assets/javascripts/components/reducers/timelines.jsx
-    return state.updateIn(['account_media_timelines', action.id], Immutable.Map(), map => map.set('isLoading', true));
+    return state.updateIn(['accounts_media_timelines', action.id], Immutable.Map(), map => map.set('isLoading', true));
   case ACCOUNT_MEDIA_TIMELINE_FETCH_FAIL:
   case ACCOUNT_MEDIA_TIMELINE_EXPAND_FAIL:
-    return state.updateIn(['account_media_timelines', action.id], Immutable.Map(), map => map.set('isLoading', false));
+    return state.updateIn(['accounts_media_timelines', action.id], Immutable.Map(), map => map.set('isLoading', false));
   case ACCOUNT_MEDIA_TIMELINE_FETCH_SUCCESS:
-    return normalizeAccountMediaTimeline(state, action.id, Immutable.fromJS(action.statuses), action.next);
+    return normalizeAccountMediaTimeline(state, action.id, Immutable.fromJS(action.statuses), action.replace, action.next);
   case ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS:
     return appendNormalizedAccountMediaTimeline(state, action.id, Immutable.fromJS(action.statuses), action.next);
   case STATUS_SEARCH_TIMELINE_FETCH_REQUEST:
@@ -433,16 +399,6 @@ export default function timelines(state = initialState, action) {
     return normalizeStatusSearchTimeline(state, action.keyword, Immutable.fromJS(action.statuses), action.hasMore, action.hitsTotal, action.page+1);
   case STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS:
     return appendNormalizedStatusSearchTimeline(state, action.keyword, Immutable.fromJS(action.statuses), action.hasMore, action.page+1);
-=======
-    return state.updateIn(['accounts_media_timelines', action.id], Immutable.Map(), map => map.set('isLoading', true));
-  case ACCOUNT_MEDIA_TIMELINE_FETCH_FAIL:
-  case ACCOUNT_MEDIA_TIMELINE_EXPAND_FAIL:
-    return state.updateIn(['accounts_media_timelines', action.id], Immutable.Map(), map => map.set('isLoading', false));
-  case ACCOUNT_MEDIA_TIMELINE_FETCH_SUCCESS:
-    return normalizeAccountMediaTimeline(state, action.id, Immutable.fromJS(action.statuses), action.replace, action.next);
-  case ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS:
-    return appendNormalizedAccountMediaTimeline(state, action.id, Immutable.fromJS(action.statuses), action.next);
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/reducers/timelines.js
   case ACCOUNT_BLOCK_SUCCESS:
   case ACCOUNT_MUTE_SUCCESS:
     return filterTimelines(state, action.relationship, action.statuses);
