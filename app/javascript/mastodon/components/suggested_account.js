@@ -1,3 +1,4 @@
+import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import Avatar from './avatar';
@@ -19,12 +20,16 @@ const messages = defineMessages({
 
 class SuggestedAccount extends React.PureComponent {
 
-  constructor (props, context) {
-    super(props, context);
-    this.handleFollow = this.handleFollow.bind(this);
-  }
+  static propTypes = {
+    account: ImmutablePropTypes.map.isRequired,
+    me: PropTypes.number.isRequired,
+    onFollow: PropTypes.func.isRequired,
+    onOpenVideo: PropTypes.func.isRequired,
+    onOpenMedia: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired
+  };
 
-  handleFollow () {
+  handleFollow = () => {
     this.props.onFollow(this.props.account);
   }
 
@@ -87,15 +92,6 @@ class SuggestedAccount extends React.PureComponent {
     );
   }
 
-}
-
-SuggestedAccount.propTypes = {
-  account: ImmutablePropTypes.map.isRequired,
-  me: PropTypes.number.isRequired,
-  onFollow: PropTypes.func.isRequired,
-  onOpenVideo: PropTypes.func.isRequired,
-  onOpenMedia: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired
 }
 
 export default injectIntl(SuggestedAccount);
