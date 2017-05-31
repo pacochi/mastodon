@@ -92,12 +92,11 @@ class User < ApplicationRecord
 
   private
 
-<<<<<<< HEAD
   def delete_initial_password_usage
     initial_password_usage&.destroy!
-=======
+  end
+
   def sanitize_languages
     filtered_languages.reject!(&:blank?)
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
   end
 end
