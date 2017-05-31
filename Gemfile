@@ -5,13 +5,9 @@ gem 'omniauth-pixiv-public', require: 'omniauth-pixiv'
 source 'https://rubygems.org'
 ruby '>= 2.3.0', '< 2.5.0'
 
-<<<<<<< HEAD
 gem 'pixiv_api', git: 'https://github.com/pixiv/pixiv-api-ruby-public.git'
 
-gem 'pkg-config'
-=======
 gem 'pkg-config', '~> 1.2'
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
 gem 'puma', '~> 3.8'
 gem 'rails', '~> 5.0'
@@ -26,57 +22,6 @@ gem 'aws-sdk', '~> 2.9'
 gem 'paperclip', '~> 5.1'
 gem 'paperclip-av-transcoder', '~> 0.6'
 
-<<<<<<< HEAD
-gem 'addressable'
-gem 'devise'
-gem 'devise-two-factor'
-gem 'doorkeeper'
-gem 'fast_blank'
-gem 'goldfinger'
-gem 'hiredis'
-gem 'htmlentities'
-gem 'http'
-gem 'http_accept_language'
-gem 'httplog'
-gem 'kaminari'
-gem 'link_header'
-gem 'local_time'
-gem 'nokogiri'
-gem 'oj'
-gem 'ostatus2', '~> 2.0'
-gem 'ox'
-gem 'rabl'
-gem 'rack-attack'
-gem 'rack-cors', require: 'rack/cors'
-gem 'rack-timeout'
-gem 'rails-i18n'
-gem 'rails-settings-cached'
-gem 'redis', '~>3.2', require: ['redis', 'redis/connection/hiredis']
-gem 'rqrcode'
-gem 'ruby-oembed', require: 'oembed'
-gem 'sanitize'
-gem 'sidekiq'
-gem 'sidekiq-scheduler'
-gem 'sidekiq-unique-jobs'
-gem 'simple-navigation'
-gem 'simple_form'
-gem 'sprockets-rails', require: 'sprockets/railtie'
-gem 'statsd-instrument'
-gem 'twitter-text'
-gem 'tzinfo-data'
-gem 'whatlanguage'
-
-gem 'react-rails'
-gem 'browserify-rails'
-gem 'autoprefixer-rails'
-gem 'exception_notification'
-gem 'slack-notifier'
-gem 'admin_script'
-gem 'redis-namespace'
-gem 'activerecord-import'
-
-gem 'elasticsearch-model', '~> 5.0'
-=======
 gem 'addressable', '~> 2.5'
 gem 'bootsnap', '~> 0.3'
 gem 'cld3', '~> 3.1'
@@ -117,7 +62,13 @@ gem 'statsd-instrument', '~> 2.1'
 gem 'twitter-text', '~> 1.14'
 gem 'tzinfo-data', '~> 1.2017'
 gem 'webpacker', '~> 1.2'
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
+
+# extra
+gem 'exception_notification'
+gem 'slack-notifier'
+gem 'admin_script'
+gem 'activerecord-import'
+gem 'elasticsearch-model', '~> 5.0'
 
 group :development, :test do
   gem 'fabrication', '~> 2.16'
@@ -151,30 +102,14 @@ group :development do
   gem 'bundler-audit', '~> 0.5', require: false
   gem 'scss_lint', '~> 0.53', require: false
 
-<<<<<<< HEAD
-  gem 'capistrano', '3.8.0'
-  gem 'capistrano-rails'
-  gem 'capistrano-rbenv'
-  gem 'capistrano-yarn'
-  gem 'capistrano-faster-assets', '~> 1.0'
-
-  gem 'guard-rspec'
-end
-
-group :production do
-  gem 'rails_12factor'
-  gem 'redis-rails'
-  gem 'lograge'
-  gem 'activerecord-dowsing'
-=======
   gem 'capistrano', '~> 3.8'
   gem 'capistrano-rails', '~> 1.2'
   gem 'capistrano-rbenv', '~> 2.1'
   gem 'capistrano-yarn', '~> 2.0'
+  gem 'guard-rspec'
 end
 
 group :production do
   gem 'lograge', '~> 0.5'
   gem 'redis-rails', '~> 5.0'
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 end
