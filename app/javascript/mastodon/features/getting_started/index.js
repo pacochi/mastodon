@@ -22,6 +22,8 @@ const messages = defineMessages({
   blocks: { id: 'navigation_bar.blocks', defaultMessage: 'Blocked users' },
   mutes: { id: 'navigation_bar.mutes', defaultMessage: 'Muted users' },
   info: { id: 'navigation_bar.info', defaultMessage: 'Extended information' },
+  suggested_accounts: { id: 'navigation_bar.suggested_accounts', defaultMessage: 'Active Accounts' },
+  media_timeline: { id: 'navigation_bar.media_timeline', defaultMessage: 'Media timeline' },
 });
 
 const mapStateToProps = state => ({
@@ -49,8 +51,10 @@ class GettingStarted extends ImmutablePureComponent {
         <div className='getting-started__wrapper'>
           <ColumnSubheading text={intl.formatMessage(messages.navigation_subheading)}/>
           <ColumnLink icon='users' hideOnMobile={true} text={intl.formatMessage(messages.community_timeline)} to='/timelines/public/local' />
+          <ColumnLink icon='image' text={intl.formatMessage(messages.media_timeline)} to='/timelines/public/media' />
           <ColumnLink icon='globe' hideOnMobile={true} text={intl.formatMessage(messages.public_timeline)} to='/timelines/public' />
           <ColumnLink icon='star' text={intl.formatMessage(messages.favourites)} to='/favourites' />
+          <ColumnLink icon='user' text={intl.formatMessage(messages.suggested_accounts)} to='/suggested_accounts' />
           {followRequests}
           <ColumnLink icon='volume-off' text={intl.formatMessage(messages.mutes)} to='/mutes' />
           <ColumnLink icon='ban' text={intl.formatMessage(messages.blocks)} to='/blocks' />
@@ -77,7 +81,7 @@ class GettingStarted extends ImmutablePureComponent {
               <FormattedMessage
                 id='getting_started.open_source_notice'
                 defaultMessage='Mastodon is open source software. You can contribute or report issues on GitHub at {github}.'
-                values={{ github: <a href="https://github.com/tootsuite/mastodon" rel="noopener" target="_blank">tootsuite/mastodon</a> }}
+                values={{ github: <a href="https://github.com/pixiv/mastodon" rel="noopener" target="_blank">pixiv/mastodon (pawoo)</a> }}
               />
             </p>
           </div>
