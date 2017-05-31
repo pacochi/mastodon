@@ -4,13 +4,8 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import Permalink from '../../../components/permalink';
-<<<<<<< HEAD:app/assets/javascripts/components/features/ui/components/onboarding_modal.jsx
-import { browserHistory } from 'react-router'
-import { TransitionMotion, spring } from 'react-motion';
-=======
 import TransitionMotion from 'react-motion/lib/TransitionMotion';
 import spring from 'react-motion/lib/spring';
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/ui/components/onboarding_modal.js
 import ComposeForm from '../../compose/components/compose_form';
 import Search from '../../compose/components/search';
 import NavigationBar from '../../compose/components/navigation_bar';
@@ -54,22 +49,9 @@ const PageTwo = ({ me }) => (
       <ComposeForm
         text='Awoo! #introductions'
         suggestions={Immutable.List()}
-        hash_tag_suggestions={Immutable.List()}
         mentionedDomains={[]}
         spoiler={false}
-<<<<<<< HEAD:app/assets/javascripts/components/features/ui/components/onboarding_modal.jsx
-        onChange={() => {}}
-        onSubmit={() => {}}
-        onPaste={() => {}}
-        onPickEmoji={() => {}}
-        onChangeSpoilerText={() => {}}
-        onClearSuggestions={() => {}}
-        onFetchSuggestions={() => {}}
-        onSuggestionSelected={() => {}}
-        onHashTagSuggestionsClearRequested={() => {}}
-        onHashTagSuggestionsFetchRequested={() => {}}
-        onHashTagSuggestionsSelected={() => {}}
-=======
+        hash_tag_suggestions={Immutable.List()}
         onChange={noop}
         onSubmit={noop}
         onPaste={noop}
@@ -78,7 +60,9 @@ const PageTwo = ({ me }) => (
         onClearSuggestions={noop}
         onFetchSuggestions={noop}
         onSuggestionSelected={noop}
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/ui/components/onboarding_modal.js
+        onHashTagSuggestionsClearRequested={noop}
+        onHashTagSuggestionsFetchRequested={noop}
+        onHashTagSuggestionsSelected={noop}
       />
     </div>
 
@@ -196,20 +180,20 @@ class OnboardingModal extends React.PureComponent {
     admin: ImmutablePropTypes.map,
   };
 
+  static contextTypes = {
+    router: PropTypes.object
+  };
+
   state = {
     currentIndex: 0,
   };
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/ui/components/onboarding_modal.jsx
   componentWillUnmount () {
     const path = '/suggested_accounts';
     this.context.router.push(path);
   }
 
-  handleSkip (e) {
-=======
   handleSkip = (e) => {
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/ui/components/onboarding_modal.js
     e.preventDefault();
     this.props.onClose();
   }
@@ -301,19 +285,4 @@ class OnboardingModal extends React.PureComponent {
 
 }
 
-<<<<<<< HEAD:app/assets/javascripts/components/features/ui/components/onboarding_modal.jsx
-OnboardingModal.propTypes = {
-  onClose: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
-  me: ImmutablePropTypes.map.isRequired,
-  domain: PropTypes.string.isRequired,
-  admin: ImmutablePropTypes.map
-}
-
-OnboardingModal.contextTypes = {
-  router: PropTypes.object
-};
-
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/features/ui/components/onboarding_modal.js
 export default connect(mapStateToProps)(injectIntl(OnboardingModal));
