@@ -19,6 +19,7 @@ $button-icon-scale-ration-on-pc: 0.85;
 
 .including-brand {
   text-transform: none !important;
+  display: inline;
 }
 
 @media screen and (min-width: 1025px) {
