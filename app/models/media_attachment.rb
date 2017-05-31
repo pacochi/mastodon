@@ -82,8 +82,7 @@ class MediaAttachment < ApplicationRecord
         }
       elsif IMAGE_MIME_TYPES.include? f.instance.file_content_type
         IMAGE_STYLES
-        # music file is converted into mp4 before thrown into this module
-      elsif f.instance.type == 'music'
+      elsif f.instance.type == 'music' # music file is converted into mp4 before thrown into this module
         MUSIC_STYLES
       else
         VIDEO_STYLES
@@ -93,11 +92,10 @@ class MediaAttachment < ApplicationRecord
     def file_processors(f)
       if f.file_content_type == 'image/gif'
         [:gif_transcoder]
+      elsif f.instance.type == 'music' # music file is converted into mp4 before thrown into this module
+        [:original]
       elsif VIDEO_MIME_TYPES.include? f.file_content_type
         [:video_transcoder]
-        # music file is converted into mp4 before thrown into this module
-      elsif f.instance.type == 'music'
-        [nil]
       else
         [:thumbnail]
       end
