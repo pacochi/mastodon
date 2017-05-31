@@ -3,7 +3,6 @@
 require 'doorkeeper/grape/authorization_decorator'
 
 class Rack::Attack
-<<<<<<< HEAD
   LIMIT = 60
   PERIOD = 1.minute
 
@@ -22,16 +21,10 @@ class Rack::Attack
   # Always allow requests from localhost
   # (blocklist & throttles are skipped)
   safelist('allow from localhost') do |req|
-=======
-  # Always allow requests from localhost
-  # (blocklist & throttles are skipped)
-  Rack::Attack.safelist('allow from localhost') do |req|
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
     # Requests are allowed if the return value is truthy
     '127.0.0.1' == req.ip || '::1' == req.ip
   end
 
-<<<<<<< HEAD
   blocklist('bot users') do |req|
     BLACK_LIST_IPS.include?(req.ip)
   end
@@ -41,8 +34,6 @@ class Rack::Attack
   #   req.ip if req.path =~ /\A\/api\/v/
   # end
 
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
   # Rate limits for the API
   throttle('api_access_token', limit: LIMIT, period: PERIOD) do |req|
     next unless req.post? && req.path.start_with?('/api/v1') && (req.path =~ /follow/ || req.path == '/api/v1/statuses')
@@ -86,10 +77,6 @@ class Rack::Attack
       'X-RateLimit-Reset'     => (now + (match_data[:period] - now.to_i % match_data[:period])).iso8601(6),
     }
 
-<<<<<<< HEAD
-    [429, headers, [{ error: I18n.t('errors.429.throttled') }.to_json]]
-=======
     [429, headers, [{ error: I18n.t('errors.429') }.to_json]]
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
   end
 end
