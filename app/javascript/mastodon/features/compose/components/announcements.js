@@ -1,3 +1,4 @@
+import React from 'react';
 import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { Link } from 'react-router';
@@ -6,6 +7,9 @@ import IconButton from '../../../components/icon_button';
 const storageKey = 'announcements_dismissed';
 
 class Announcements extends React.PureComponent {
+  static propTypes = {
+    account: ImmutablePropTypes.map.isRequired
+  };
 
   constructor (props, context) {
     super(props, context);
@@ -118,10 +122,6 @@ class Announcements extends React.PureComponent {
       </ul>
     );
   }
-};
-
-Announcements.propTypes = {
-  account: ImmutablePropTypes.map.isRequired
 };
 
 export default Announcements;
