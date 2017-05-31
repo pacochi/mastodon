@@ -84,17 +84,10 @@ class FetchLinkCardService < BaseService
 
     page = Nokogiri::HTML(response.to_s)
 
-<<<<<<< HEAD
-    card.type        = :link
-    card.title       = meta_property(page, 'og:title') || page.at_xpath('//title')&.content
-    card.description = meta_property(page, 'og:description') || meta_property(page, 'description')
-    card.image       = URI.parse(Addressable::URI.parse(meta_property(page, 'og:image')).normalize.to_s) if meta_property(page, 'og:image').present?
-=======
     card.type             = :link
     card.title            = meta_property(page, 'og:title') || page.at_xpath('//title')&.content
     card.description      = meta_property(page, 'og:description') || meta_property(page, 'description')
     card.image_remote_url = meta_property(page, 'og:image') if meta_property(page, 'og:image')
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
     return if card.title.blank?
 
