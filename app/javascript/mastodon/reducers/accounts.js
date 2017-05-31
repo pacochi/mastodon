@@ -6,18 +6,15 @@ import {
   FOLLOWING_EXPAND_SUCCESS,
   ACCOUNT_TIMELINE_FETCH_SUCCESS,
   ACCOUNT_TIMELINE_EXPAND_SUCCESS,
-  ACCOUNT_MEDIA_TIMELINE_FETCH_SUCCESS,
-  ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS,
   FOLLOW_REQUESTS_FETCH_SUCCESS,
   FOLLOW_REQUESTS_EXPAND_SUCCESS,
-<<<<<<< HEAD:app/assets/javascripts/components/reducers/accounts.jsx
-  ACCOUNT_FOLLOW_SUCCESS,
-  ACCOUNT_UNFOLLOW_SUCCESS,
+  ACCOUNT_MEDIA_TIMELINE_FETCH_SUCCESS,
+  ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS,
+} from '../actions/accounts';
+import {
   SUGGESTED_ACCOUNTS_FETCH_SUCCESS,
   SUGGESTED_ACCOUNTS_EXPAND_SUCCESS,
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/reducers/accounts.js
-} from '../actions/accounts';
+} from '../actions/suggested_accounts';
 import {
   STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
   STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS,
@@ -144,16 +141,9 @@ export default function accounts(state = initialState, action) {
   case TIMELINE_UPDATE:
   case STATUS_FETCH_SUCCESS:
     return normalizeAccountFromStatus(state, action.status);
-<<<<<<< HEAD:app/assets/javascripts/components/reducers/accounts.jsx
-  case ACCOUNT_FOLLOW_SUCCESS:
-    return state.updateIn([action.relationship.id, 'followers_count'], num => num + 1);
-  case ACCOUNT_UNFOLLOW_SUCCESS:
-    return state.updateIn([action.relationship.id, 'followers_count'], num => Math.max(0, num - 1));
   case SUGGESTED_ACCOUNTS_FETCH_SUCCESS:
   case SUGGESTED_ACCOUNTS_EXPAND_SUCCESS:
     return normalizeAccounts(state, action.accounts);
-=======
->>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc:app/javascript/mastodon/reducers/accounts.js
   default:
     return state;
   }
