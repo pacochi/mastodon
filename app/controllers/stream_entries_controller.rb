@@ -11,12 +11,17 @@ class StreamEntriesController < ApplicationController
   def show
     respond_to do |format|
       format.html do
+<<<<<<< HEAD
         return gone if @stream_entry.activity.nil?
 
         if @stream_entry.activity_type == 'Status'
           # TODO: Status以外のactivityが増えたら対応の必要あり
           redirect_to short_account_status_url(@stream_entry.account, @stream_entry.status)
         end
+=======
+        @ancestors   = @stream_entry.activity.reply? ? cache_collection(@stream_entry.activity.ancestors(current_account), Status) : []
+        @descendants = cache_collection(@stream_entry.activity.descendants(current_account), Status)
+>>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
       end
 
       format.atom do
@@ -46,7 +51,7 @@ class StreamEntriesController < ApplicationController
     @stream_entry = @account.stream_entries.where(activity_type: 'Status').find(params[:id])
     @type         = @stream_entry.activity_type.downcase
 
-    raise ActiveRecord::RecordNotFound if @stream_entry.activity.nil? || (@stream_entry.hidden? && (@stream_entry.activity_type != 'Status' || (@stream_entry.activity_type == 'Status' && !@stream_entry.activity.permitted?(current_account))))
+    raise ActiveRecord::RecordNotFound if @stream_entry.activity.nil? || (@stream_entry.hidden? && !@stream_entry.activity.permitted?(current_account))
   end
 
   def check_account_suspension

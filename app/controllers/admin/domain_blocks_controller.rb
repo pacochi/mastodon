@@ -5,7 +5,7 @@ module Admin
     before_action :set_domain_block, only: [:show, :destroy]
 
     def index
-      @blocks = DomainBlock.page(params[:page])
+      @domain_blocks = DomainBlock.page(params[:page])
     end
 
     def new

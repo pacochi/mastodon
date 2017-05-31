@@ -22,7 +22,7 @@ class NotifyService < BaseService
   end
 
   def blocked_favourite?
-    false
+    @recipient.muting?(@notification.from_account)
   end
 
   def blocked_follow?
@@ -38,14 +38,24 @@ class NotifyService < BaseService
   end
 
   def blocked?
-    blocked   = @recipient.suspended?                                                                                              # Skip if the recipient account is suspended anyway
-    blocked ||= @recipient.id == @notification.from_account.id                                                                     # Skip for interactions with self
-    blocked ||= @recipient.blocking?(@notification.from_account)                                                                   # Skip for blocked accounts
-    blocked ||= (@notification.from_account.silenced? && !@recipient.following?(@notification.from_account))                       # Hellban
-    blocked ||= (@recipient.user.settings.interactions['must_be_follower']  && !@notification.from_account.following?(@recipient)) # Options
-    blocked ||= (@recipient.user.settings.interactions['must_be_following'] && !@recipient.following?(@notification.from_account)) # Options
-    blocked ||= send("blocked_#{@notification.type}?")                                                                             # Type-dependent filters
+    blocked   = @recipient.suspended?                                                                                                # Skip if the recipient account is suspended anyway
+    blocked ||= @recipient.id == @notification.from_account.id                                                                       # Skip for interactions with self
+    blocked ||= @recipient.domain_blocking?(@notification.from_account.domain) && !@recipient.following?(@notification.from_account) # Skip for domain blocked accounts
+    blocked ||= @recipient.blocking?(@notification.from_account)                                                                     # Skip for blocked accounts
+    blocked ||= (@notification.from_account.silenced? && !@recipient.following?(@notification.from_account))                         # Hellban
+    blocked ||= (@recipient.user.settings.interactions['must_be_follower']  && !@notification.from_account.following?(@recipient))   # Options
+    blocked ||= (@recipient.user.settings.interactions['must_be_following'] && !@recipient.following?(@notification.from_account))   # Options
+    blocked ||= conversation_muted?
+    blocked ||= send("blocked_#{@notification.type}?")                                                                               # Type-dependent filters
     blocked
+  end
+
+  def conversation_muted?
+    if @notification.target_status
+      @recipient.muting_conversation?(@notification.target_status.conversation)
+    else
+      false
+    end
   end
 
   def create_notification
@@ -60,6 +70,7 @@ class NotifyService < BaseService
 
   def email_enabled?
     @recipient.user.settings.notification_emails[@notification.type.to_s]
+<<<<<<< HEAD
   end
 
   def send_firebase_cloud_messaging
@@ -69,5 +80,7 @@ class NotifyService < BaseService
   def firebase_cloud_messaging_enabled?
     @recipient.user.settings.notification_firebase_cloud_messagings[@notification.type.to_s] &&
       @recipient.user.firebase_cloud_messaging_tokens.exists?
+=======
+>>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
   end
 end

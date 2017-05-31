@@ -33,6 +33,20 @@
     .actions
       = f.button :button, t('admin.accounts.search'), type: :submit
 
+= form_tag admin_accounts_url, method: 'GET', class: 'simple_form' do
+  .fields-group
+    - Admin::FilterHelper::ACCOUNT_FILTERS.each do |key|
+      - if params[key].present?
+        = hidden_field_tag key, params[key]
+
+    - %i(username display_name email ip).each do |key|
+      .input.string.optional
+        = text_field_tag key, params[key], class: 'string optional', placeholder: I18n.t("admin.accounts.#{key}")
+
+    .actions
+      %button= t('admin.accounts.search')
+      = link_to t('admin.accounts.reset'), admin_accounts_path, class: 'button negative'
+
 %table.table
   %thead
     %tr
@@ -42,6 +56,7 @@
       %th= fa_icon 'paper-plane-o'
       %th
   %tbody
+<<<<<<< HEAD
     - @accounts.each do |account|
       %tr
         %td= account.username
@@ -65,5 +80,8 @@
           = table_link_to 'circle', t('admin.accounts.web'), web_path("accounts/#{account.id}")
           = table_link_to 'globe', t('admin.accounts.public'), TagManager.instance.url_for(account)
           = table_link_to 'pencil', t('admin.accounts.edit'), admin_account_path(account.id)
+=======
+    = render @accounts
+>>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
 = paginate @accounts

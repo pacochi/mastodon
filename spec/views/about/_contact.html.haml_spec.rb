@@ -2,8 +2,17 @@
 
 require 'rails_helper'
 
+<<<<<<< HEAD
 xdescribe 'about/_contact.html.haml' do
   describe 'the contact account' do
+=======
+describe 'about/_contact.html.haml' do
+  describe 'the contact account', without_verify_partial_doubles: true do
+    before do
+      allow(view).to receive(:display_name).and_return('Display Name!')
+    end
+
+>>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
     it 'shows info when account is present' do
       account = Account.new(username: 'admin')
       contact = double(contact_account: account, site_contact_email: '')

@@ -1,4 +1,8 @@
 # frozen_string_literal: true
+<<<<<<< HEAD
+=======
+require 'sidekiq-scheduler'
+>>>>>>> 8963f8c3c2630bfcc377a5ca0513eef5a6b2a4bc
 
 class Scheduler::SubscriptionsScheduler
   include Sidekiq::Worker
