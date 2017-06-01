@@ -8,10 +8,9 @@ class Api::V1::MusicController < ApiController
 
   def create
     mp4 = MusicConvertService.new.call(media_params[:title], media_params[:artist], media_params[:music], media_params[:picture])
-    @media = MediaAttachment.create!(account: current_user.account, file: mp4, type: MediaAttachment.types[:music])
-  rescue Paperclip::Error
-    #TODO: エラーメッセージが適切でないのでいいかんじにする
-    render json: { error: 'Error processing thumbnail for uploaded media' }, status: 500
+    @media = MediaAttachment.new(account: current_user.account, file: mp4, type: MediaAttachment.types[:music])
+    @media.save!(validate: false)
+    mp4.close
   end
 
   private
