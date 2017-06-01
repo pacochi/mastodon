@@ -73,8 +73,10 @@ gem 'slack-notifier'
 gem 'admin_script'
 gem 'redis-namespace'
 gem 'activerecord-import'
+gem 'streamio-ffmpeg'
 
 gem 'elasticsearch-model', '~> 5.0'
+gem 'ruby-mp3info'
 
 group :development, :test do
   gem 'rspec-rails'

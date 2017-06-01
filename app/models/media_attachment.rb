@@ -3,7 +3,7 @@
 class MediaAttachment < ApplicationRecord
   self.inheritance_column = nil
 
-  enum type: [:image, :gifv, :video, :unknown]
+  enum type: [:image, :gifv, :video, :unknown, :music]
 
   IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif'].freeze
   VIDEO_MIME_TYPES = ['video/webm', 'video/mp4'].freeze
@@ -19,6 +19,11 @@ class MediaAttachment < ApplicationRecord
       format: 'png',
       time: 0,
     },
+  }.freeze
+  MUSIC_STYLES = {
+    original: {
+      format: 'mp4',
+    }
   }.freeze
 
   belongs_to :account, inverse_of: :media_attachments
@@ -77,6 +82,8 @@ class MediaAttachment < ApplicationRecord
         }
       elsif IMAGE_MIME_TYPES.include? f.instance.file_content_type
         IMAGE_STYLES
+      elsif f.instance.type == 'music' # music file is converted into mp4 before thrown into this module
+        MUSIC_STYLES
       else
         VIDEO_STYLES
       end
