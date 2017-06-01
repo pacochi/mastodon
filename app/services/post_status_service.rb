@@ -33,8 +33,8 @@ class PostStatusService < BaseService
       attach_pixiv_cards(status)
     end
 
-    process_mentions_service.call(status)
     process_hashtags_service.call(status)
+    process_mentions_service.call(status)
 
     PixivCardUpdateWorker.perform_async(status.id) if status.pixiv_cards.any?
     LinkCrawlWorker.perform_async(status.id) unless status.spoiler_text.present?
