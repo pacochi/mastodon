@@ -3092,7 +3092,7 @@ button.icon-button.active i.fa-retweet {
   margin-left: 10px;
 }
 
-.music-modal{
+.music-modal {
   background: lighten($color2, 8%);
   color: $color1;
   border-radius: 8px;
@@ -3102,12 +3102,12 @@ button.icon-button.active i.fa-retweet {
   position: relative;
   flex-direction: column;
 
-  .music-modal__metabox{
+  .music-modal__metabox {
     margin: 8px;
     flex: 1;
   }
 
-  .music-modal__artwork{
+  .music-modal__artwork {
     width: 80px;
     height: 80px;
     background: #fff;
@@ -3116,7 +3116,7 @@ button.icon-button.active i.fa-retweet {
     cursor: pointer;
   }
 
-  .music-modal__title{
+  .music-modal__title {
     width: calc(100% - 10px);
     padding: 5px;
     border: 0;
@@ -3125,23 +3125,43 @@ button.icon-button.active i.fa-retweet {
     margin-bottom: 10px;
   }
 
-  .music-modal__artist{
+  .music-modal__artist {
     width: 150px;
     background: transparent;
     border: 0;
   }
 
-  .action-bar__checkarea{
+  .action-bar__checkarea {
     text-align: left;
   }
 
-  .music-modal__artwork-none{
+  .music-modal__artwork-exist,
+  .music-modal__artwork-none {
     width: 100%;
     height: 100%;
     display: flex;
     align-items: center;
     justify-content: center;
+  }
+
+  .music-modal__artwork-exist{
+    background-size: cover;
+  }
+
+  .music-modal__artwork-none{
     background: rgba(0,0,0,0.1);
+  }
+
+  .action-bar__checkarea{
+    padding-left: 5px;
+  }
+
+  label{
+    cursor: pointer;
+  }
+
+  input[type="file"]{
+    display: none;
   }
 }
 

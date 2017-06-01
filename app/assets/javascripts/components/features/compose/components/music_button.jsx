@@ -42,7 +42,7 @@ class MusicButton extends React.PureComponent {
     return (
       <div className='compose-form__music-button'>
         <IconButton icon='music' title={intl.formatMessage(messages.music)} disabled={disabled} onClick={this.handleClick} className='compose-form__music-button-icon' size={18} inverted style={iconStyle}/>
-        <input key={resetFileKey} ref={this.setRef} type='file' multiple={false} onChange={this.handleChange} disabled={disabled} style={{ display: 'none' }} />
+        <input key={resetFileKey} accept="audio/*" ref={this.setRef} type='file' multiple={false} onChange={this.handleChange} disabled={disabled} style={{ display: 'none' }} />
       </div>
     );
   }
