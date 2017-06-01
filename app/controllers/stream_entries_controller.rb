@@ -20,6 +20,7 @@ class StreamEntriesController < ApplicationController
       end
 
       format.atom do
+        return not_found if TimeLimit.from_tags(@stream_entry.status&.tags)
         render xml: AtomSerializer.render(AtomSerializer.new.entry(@stream_entry, true))
       end
     end
