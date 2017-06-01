@@ -3,9 +3,11 @@ import PropTypes from 'prop-types';
 import { injectIntl, defineMessages } from 'react-intl';
 
 const messages = defineMessages({
-  minutes: { id: 'time_limit.minutes', defaultMessage: '{minutes, number} {minutes, plural, one {minute} other {minutes}}' },
-  hours: { id: 'time_limit.hours', defaultMessage: '{hours, number} {hours, plural, one {hour} other {hours}}' },
-  select_time_limit: { id: 'time_limit.select_time_limit', defaultMessage: 'Select time limit' },
+  days: { id: 'time_limit.days', defaultMessage: '{days, number} {days, plural, one {day} other {days}} later' },
+  hours: { id: 'time_limit.hours', defaultMessage: '{hours, number} {hours, plural, one {hour} other {hours}} later' },
+  minutes: { id: 'time_limit.minutes', defaultMessage: '{minutes, number} {minutes, plural, one {minute} other {minutes}} later' },
+  select_time_limit: { id: 'time_limit.select_time_limit', defaultMessage: 'Select auto delete time (Beta)' },
+  time_limit_note: { id: 'time_limit.time_limit_note', defaultMessage: 'Note: Not sent to external instance' },
 });
 
 const dropdownStyle = {
@@ -34,11 +36,12 @@ class TimeLimitDropdown extends React.PureComponent {
     const { intl } = this.props;
 
     const options = [
-      { value: '#1m', text: intl.formatMessage(messages.minutes, { minutes: 1 }) },
-      { value: '#5m', text: intl.formatMessage(messages.minutes, { minutes: 5 }) },
-      { value: '#10m', text: intl.formatMessage(messages.minutes, { minutes: 10 }) },
-      { value: '#30m', text: intl.formatMessage(messages.minutes, { minutes: 30 }) },
-      { value: '#1h', text: intl.formatMessage(messages.hours, { hours: 1 }) },
+      { value: '#exp1m', text: intl.formatMessage(messages.minutes, { minutes: 1 }) },
+      { value: '#exp10m', text: intl.formatMessage(messages.minutes, { minutes: 10 }) },
+      { value: '#exp1h', text: intl.formatMessage(messages.hours, { hours: 1 }) },
+      { value: '#exp12h', text: intl.formatMessage(messages.hours, { hours: 12 }) },
+      { value: '#exp1d', text: intl.formatMessage(messages.days, { days: 1 }) },
+      { value: '#exp7d', text: intl.formatMessage(messages.days, { days: 7 }) },
     ];
 
     return (
@@ -49,13 +52,21 @@ class TimeLimitDropdown extends React.PureComponent {
 
         <DropdownContent className='dropdown__left'>
           <div className='time-limit-dropdown__dropdown'>
-            {options.map(item =>
-              <div role='button' tabIndex='0' key={item.value} onClick={this.handleClick.bind(this, item.value)} className='time-limit-dropdown__option'>
-                <div className='time-limit-dropdown__option__content'>
-                  <strong>{item.text}</strong>
-                </div>
+            <div className='time-limit-dropdown__header'>
+              <strong>{intl.formatMessage(messages.select_time_limit)}</strong>
+              <div className='time-limit-dropdown__header_note'>
+                <strong>{intl.formatMessage(messages.time_limit_note)}</strong>
               </div>
-            )}
+            </div>
+            <div className='time-limit-dropdown__options'>
+              {options.map(item =>
+                <div role='button' tabIndex='0' key={item.value} onClick={this.handleClick.bind(this, item.value)} className='time-limit-dropdown__option'>
+                  <div className='time-limit-dropdown__option__content'>
+                    {item.text}
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </DropdownContent>
       </Dropdown>

@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 class TimeLimit
-  TIME_LIMIT_RE = /^(?<value>\d+)(?<unit>[mhd])$/
+  TIME_LIMIT_RE = /^exp(?<value>\d+)(?<unit>[mhd])$/
   VALID_DURATION = (1.minute..7.days)
 
   def self.from_tags(tags)
