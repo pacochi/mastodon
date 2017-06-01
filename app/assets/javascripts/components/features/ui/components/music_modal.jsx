@@ -30,14 +30,12 @@ class MusicModal extends React.PureComponent {
   }
 
   handleUpload() {
-    alert(2);
-    const payload = {
+    this.props.onUpload({
       title: this.titleElement.value,
       artist: this.artistElement.value,
       picture: this.pictureFileElement.files[0],
       music: this.props.music
-    };
-    this.props.onUpload(payload);
+    });
     this.props.onClose();
   }
 

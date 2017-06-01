@@ -195,10 +195,7 @@ export function uploadMusicCompose(payload) {
     dispatch(uploadComposeRequest());
 
     let data = new FormData();
-    Object.keys(payload).forEach((name)=>{
-      const param = payload[name];
-      data.append(name, param);
-    })
+    Object.entries(payload).forEach((param)=>data.append(param[0], param[1]));
 
     api(getState).post('/api/v1/music', data, {
       onUploadProgress: function (e) {
