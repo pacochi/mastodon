@@ -19,11 +19,19 @@ module Api::V1::Timelines
     end
 
     def public_statuses
-      public_timeline_statuses.paginate_by_max_id(
+      statuses = public_timeline_statuses.paginate_by_max_id(
         limit_param(DEFAULT_STATUSES_LIMIT),
         params[:max_id],
         params[:since_id]
       )
+
+      if params[:media]
+        # `SELECT DISTINCT id, updated_at` is too slow, so pluck ids at first, and then select id, updated_at with ids.
+        status_ids = statuses.joins(:media_attachments).distinct(:id).pluck(:id)
+        statuses.where(id: status_ids)
+      else
+        statuses
+      end
     end
 
     def public_timeline_statuses

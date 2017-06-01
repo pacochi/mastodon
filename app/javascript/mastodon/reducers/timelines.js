@@ -82,15 +82,15 @@ const initialState = Immutable.Map({
   }),
 
   media: Immutable.Map({
-      path: () => '/api/v1/timelines/public',
-      next: null,
-      params: { local: true, media: true },
-      isLoading: false,
-      online: false,
-      loaded: false,
-      top: true,
-      unread: 0,
-      items: Immutable.List()
+    path: () => '/api/v1/timelines/public',
+    next: null,
+    params: { local: true, media: true },
+    isLoading: false,
+    online: false,
+    loaded: false,
+    top: true,
+    unread: 0,
+    items: Immutable.List(),
   }),
 
   tag: Immutable.Map({
@@ -275,7 +275,7 @@ const deleteStatus = (state, id, accountId, references, reblogOf) => {
   }
 
   // Remove references from timelines
-  ['home', 'public', 'community', 'tag'].forEach(function (timeline) {
+  ['home', 'media', 'public', 'community', 'tag'].forEach(function (timeline) {
     state = state.updateIn([timeline, 'items'], list => list.filterNot(item => item === id));
   });
 
