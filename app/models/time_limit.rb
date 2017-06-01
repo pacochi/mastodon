@@ -15,11 +15,12 @@ class TimeLimit
   end
 
   def valid?
-    TIME_LIMIT_RE.match?(@name) && VALID_DURATION.include?(to_duration)
+    VALID_DURATION.include?(to_duration)
   end
 
   def to_duration
     matched = @name.match(TIME_LIMIT_RE)
+    return 0 unless matched
 
     case matched[:unit]
     when 'm'
@@ -29,7 +30,7 @@ class TimeLimit
     when 'd'
       matched[:value].to_i.days
     else
-      raise NotImplementedError, "Unsupported unit(#{matched[:unit]}) given"
+      0
     end
   end
 end
