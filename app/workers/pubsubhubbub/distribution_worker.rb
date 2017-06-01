@@ -9,6 +9,7 @@ class Pubsubhubbub::DistributionWorker
     stream_entry = StreamEntry.find(stream_entry_id)
 
     return if stream_entry.status&.direct_visibility?
+    return if stream_entry.status&.local? && TimeLimit.from_tags(stream_entry.status&.tags)
 
     account = stream_entry.account
     payload = AtomSerializer.render(AtomSerializer.new.feed(account, [stream_entry]))

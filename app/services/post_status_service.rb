@@ -41,6 +41,9 @@ class PostStatusService < BaseService
     DistributionWorker.perform_async(status.id)
     Pubsubhubbub::DistributionWorker.perform_async(status.stream_entry.id)
 
+    time_limit = TimeLimit.from_tags(status.tags)
+    RemovalWorker.perform_in(time_limit.to_duration, status.id) if time_limit
+
     if options[:idempotency].present?
       redis.setex("idempotency:status:#{account.id}:#{options[:idempotency]}", 3_600, status.id)
     end
