@@ -27,7 +27,7 @@ class ProcessMentionsService < BaseService
       mentioned_account.mentions.where(status: status).first_or_create(status: status)
     end
 
-    time_limit = TimeLimit.from_tags(status)
+    time_limit = TimeLimit.from_tags(status.tags)
 
     status.mentions.includes(:account).each do |mention|
       mentioned_account = mention.account
