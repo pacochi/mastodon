@@ -27,12 +27,14 @@ class ProcessMentionsService < BaseService
       mentioned_account.mentions.where(status: status).first_or_create(status: status)
     end
 
+    time_limit = TimeLimit.from_tags(status)
+
     status.mentions.includes(:account).each do |mention|
       mentioned_account = mention.account
 
       if mentioned_account.local?
         NotifyService.new.call(mentioned_account, mention)
-      else
+      elsif time_limit.nil?
         NotificationWorker.perform_async(stream_entry_to_xml(status.stream_entry), status.account_id, mentioned_account.id)
       end
     end
