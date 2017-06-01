@@ -92,8 +92,6 @@ class MediaAttachment < ApplicationRecord
     def file_processors(f)
       if f.file_content_type == 'image/gif'
         [:gif_transcoder]
-      elsif f.instance.type == 'music' # music file is converted into mp4 before thrown into this module
-        [:original]
       elsif VIDEO_MIME_TYPES.include? f.file_content_type
         [:video_transcoder]
       else
@@ -116,13 +114,7 @@ class MediaAttachment < ApplicationRecord
   end
 
   def set_type_and_extension
-    if VIDEO_MIME_TYPES.include?(file_content_type)
-      self.type = :video
-    elsif IMAGE_MIME_TYPES.include?(file_content_type)
-      self.type = :image
-    else # music file is converted into mp4 before thrown into this module
-      self.type = :music
-    end
+    self.type = VIDEO_MIME_TYPES.include?(file_content_type) ? :video : :image
     extension = appropriate_extension
     basename  = Paperclip::Interpolations.basename(file, :original)
     file.instance_write :file_name, [basename, extension].delete_if(&:blank?).join('.')
