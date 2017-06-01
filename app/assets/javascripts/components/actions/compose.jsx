@@ -190,18 +190,17 @@ export function uploadCompose(files) {
   };
 };
 
-export function uploadMusicCompose(files) {
+export function uploadMusicCompose(payload) {
   return function (dispatch, getState) {
-    if (getState().getIn(['compose', 'media_attachments']).size > 3) {
-      return;
-    }
-
     dispatch(uploadComposeRequest());
 
     let data = new FormData();
-    data.append('file', files[0]);
+    Object.keys(payload).forEach((name)=>{
+      const param = payload[name];
+      data.append(name, param);
+    })
 
-    api(getState).post('/api/v1/media', data, {
+    api(getState).post('/api/v1/music', data, {
       onUploadProgress: function (e) {
         dispatch(uploadComposeProgress(e.loaded, e.total));
       }

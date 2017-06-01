@@ -3,6 +3,7 @@ import MusicButton from '../components/music_button';
 
 import jsmediatags from 'jsmediatags';
 
+import { uploadMusicCompose } from '../../../actions/compose';
 import { openModal } from '../../../actions/modal';
 //import { uploadMusicCompose } from '../../../actions/compose';
 
@@ -13,8 +14,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 
-  onUpload () {
-//    alert(1);
+  onUpload (payload) {
+    dispatch(uploadMusicCompose(payload));
   },
 
   onSelectFile (files) {

@@ -5,7 +5,7 @@ import IconButton from '../../../components/icon_button';
 import Button from '../../../components/button';
 
 const messages = defineMessages({
-  publish: { id: 'status.publush', defaultMessage: 'Upload' }
+  publish: { id: 'status.publish', defaultMessage: 'Upload' }
 });
 
 class MusicModal extends React.PureComponent {
@@ -17,6 +17,9 @@ class MusicModal extends React.PureComponent {
 
     this.setMusicRef = this.setMusicRef.bind(this);
     this.setPictureRef = this.setPictureRef.bind(this);
+    this.setTitleRef = this.setTitleRef.bind(this);
+    this.setArtistRef = this.setArtistRef.bind(this);
+
     this.handleChoosePicture = this.handleChoosePicture.bind(this);
     this.handleOnSelectPicture = this.handleOnSelectPicture.bind(this);
 
@@ -27,13 +30,14 @@ class MusicModal extends React.PureComponent {
   }
 
   handleUpload() {
-    this.props.onUploadMusic({
-      title: "",
-      artist: "",
-      picture: this.setPictureRef.files[0],
+    alert(2);
+    const payload = {
+      title: this.titleElement.value,
+      artist: this.artistElement.value,
+      picture: this.pictureFileElement.files[0],
       music: this.props.music
-    })
-//    this.props.onUpload(this.props.status);
+    };
+    this.props.onUpload(payload);
     this.props.onClose();
   }
 
@@ -76,6 +80,14 @@ class MusicModal extends React.PureComponent {
     this.pictureFileElement = c;
   }
 
+  setTitleRef (c) {
+    this.titleElement = c;
+  }
+
+  setArtistRef (c) {
+    this.artistElement = c;
+  }
+
   render () {
     const { title, artist, status, intl, onClose } = this.props;
 
@@ -99,9 +111,9 @@ class MusicModal extends React.PureComponent {
 
           <div className="music-modal__metabox">
             <div>
-              <input className="music-modal__title" placeholder="楽曲名を入力" value={title} />
+              <input className="music-modal__title" placeholder="楽曲名を入力" ref={this.setTitleRef} value={title} />
             </div>
-            <input className="music-modal__artist" placeholder="作者名を入力" value={artist} />
+            <input className="music-modal__artist" placeholder="作者名を入力" ref={this.setArtistRef} value={artist} />
 
             <input type="file" name="music"   accept="audio/*" ref={this.setMusicRef} />
             <input type="file" name="picture" accept="image/*" ref={this.setPictureRef} onChange={this.handleOnSelectPicture} />
@@ -125,7 +137,6 @@ class MusicModal extends React.PureComponent {
       </div>
     );
   }
-
 }
 
 MusicModal.contextTypes = {
@@ -136,7 +147,6 @@ MusicModal.propTypes = {
   title: PropTypes.string.isRequired,
   artist: PropTypes.string.isRequired,
   onUpload: PropTypes.func.isRequired,
-  music: PropsTypes.object.isRequired,
   onClose: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired
 };
