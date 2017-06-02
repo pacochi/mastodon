@@ -40,14 +40,14 @@
 
 .about-cols
   .about-col.left
-    = image_tag 'service_logo.png', width: 150, style: 'display:block;margin:0 auto 40px'
+    = image_tag asset_pack_path('service_logo.png'), width: 150, style: 'display:block;margin:0 auto 40px'
 
     .simple_form
       = render 'registration'
 
   .about-col.main
     .about-col-head
-      = image_tag 'about/header.png', width: 535
+      = image_tag asset_pack_path('about/header.png'), width: 535
       %p
         ピクシブが運営するマストドンインスタンス「Pawoo」は、文章や画像を投稿して楽しむSNSです。
         「創作活動や自由なコミュニケーションを楽しめる場」として、どなたにも幅広く使っていただけます。
@@ -68,18 +68,18 @@
       .about-col-body-apps
         .about-col-body-app
           = link_to 'https://itunes.apple.com/us/app/pawoo/id1229070679' do
-            = image_tag 'about/badge-appstore.png', width: 190
+            = image_tag asset_pack_path('about/badge-appstore.png'), width: 190
 
         .about-col-body-app
           = link_to 'https://play.google.com/store/apps/details?id=jp.pxv.pawoo' do
-            = image_tag 'about/badge-googleplay.png', width: 190
+            = image_tag asset_pack_path('about/badge-googleplay.png'), width: 190
 
     .about-col-body
       %p.main ＼ Pawooの特徴 ／
 
       %p.title 一度に500文字までのテキスト・画像・動画を投稿できる
 
-      = image_tag 'about/submit-form.png', width: '100%'
+      = image_tag asset_pack_path('about/submit-form.png'), width: '100%'
 
       %p.title Pawooにはたくさんのユーザーがいて、わいわいしてる場を楽しめる
       %p
@@ -112,7 +112,7 @@
         オープンソースで公開されているため、誰でも自分のインスタンスを立ち上げることが可能である他、様々なインスタンスにアカウントを持つこともできます。
         また、インスタンス間を超えたやり取りも可能であるため、様々なコミュニティを介したコミュニケーションが展開されています。
 
-      %video{autoplay: '', loop: '',  src: asset_path('about/demo.mp4'),  poster: asset_path('about/demo.jpg'),  style: 'width:100%;'}
+      %video{autoplay: '', loop: '',  src: asset_pack_path('about/demo.mp4'),  poster: asset_pack_path('about/demo.jpg'),  style: 'width:100%;'}
 
     .about-col-body
       %p.main ＼ マストドンの特徴 ／
@@ -159,7 +159,7 @@
         ·
         = link_to t('about.other_instances'), 'https://github.com/tootsuite/documentation/blob/master/Using-Mastodon/List-of-Mastodon-instances.md'
 
-      = link_to image_tag('logo_pixiv.png', width: 50, style: 'display:block;margin:40px auto'), 'https://www.pixiv.net'
+      = link_to image_tag(asset_pack_path('logo_pixiv.png'), width: 50, style: 'display:block;margin:40px auto'), 'https://www.pixiv.net'
 
   .about-col.right
     .about-timeline-container
