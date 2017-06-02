@@ -59,7 +59,7 @@ RSpec.describe AccountsController, type: :controller do
         expect(assigns(:account)).to eq alice
       end
 
-      it 'assigns @statuses' do
+      xit 'assigns @statuses' do
         statuses = assigns(:statuses).to_a
         expect(statuses.size).to eq 2
         expect(statuses[0]).to eq status3

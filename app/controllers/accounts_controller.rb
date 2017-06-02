@@ -8,7 +8,7 @@ class AccountsController < ApplicationController
   def show
     respond_to do |format|
       format.html do
-        @statuses = @account.statuses.permitted_for(@account, current_account).order(id: :desc).page(params[:page]).per(STATUSES_PER_PAGE).without_count
+        @statuses = @account.statuses.permitted_for(@account, current_account).recent.page(params[:page]).per(STATUSES_PER_PAGE).without_count
         @statuses_collection = cache_collection(@statuses, Status)
       end
 

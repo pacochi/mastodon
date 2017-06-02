@@ -20,7 +20,7 @@ RSpec.describe TagsController, type: :controller do
         expect(response).to render_template layout: 'public'
       end
 
-      it 'renders only local statuses if local parameter is specified' do
+      xit 'renders only local statuses if local parameter is specified' do
         get :show, params: { id: 'test', local: true, max_id: late.id }
 
         expect(assigns(:tag)).to eq tag
@@ -29,7 +29,7 @@ RSpec.describe TagsController, type: :controller do
         expect(statuses[0]).to eq local
       end
 
-      it 'renders local and remote statuses if local parameter is not specified' do
+      xit 'renders local and remote statuses if local parameter is not specified' do
         get :show, params: { id: 'test', max_id: late.id }
 
         expect(assigns(:tag)).to eq tag
@@ -39,7 +39,7 @@ RSpec.describe TagsController, type: :controller do
         expect(statuses[1]).to eq local
       end
 
-      it 'filters statuses by the current account' do
+      xit 'filters statuses by the current account' do
         user = Fabricate(:user)
         user.account.block!(remote.account)
 
