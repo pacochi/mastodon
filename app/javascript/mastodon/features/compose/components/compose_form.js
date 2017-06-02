@@ -16,6 +16,7 @@ import PrivacyDropdownContainer from '../containers/privacy_dropdown_container';
 import SensitiveButtonContainer from '../containers/sensitive_button_container';
 import SensitiveGuideContainer from '../containers/sensitive_guide_container';
 import EmojiPickerDropdown from './emoji_picker_dropdown';
+import TimeLimitDropdown from './time_limit_dropdown';
 import UploadFormContainer from '../containers/upload_form_container';
 import TextIconButton from './text_icon_button';
 import WarningContainer from '../containers/warning_container';
@@ -57,6 +58,7 @@ class ComposeForm extends ImmutablePureComponent {
     onHashTagSuggestionsClearRequested: PropTypes.func.isRequired,
     onHashTagSuggestionsFetchRequested: PropTypes.func.isRequired,
     onHashTagSuggestionsSelected: PropTypes.func.isRequired,
+    onSelectTimeLimit: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -161,6 +163,11 @@ class ComposeForm extends ImmutablePureComponent {
     this.props.onPickEmoji(position, data);
   }
 
+  handleSelectTimeLimit = (data) => {
+    this._restoreCaret = this.autosuggestTextarea.textarea.selectionStart;
+    this.props.onSelectTimeLimit(data);
+  }
+
   render () {
     const { intl, onPaste, showSearch } = this.props;
     const disabled = this.props.is_submitting;
@@ -208,6 +215,7 @@ class ComposeForm extends ImmutablePureComponent {
           />
 
           <EmojiPickerDropdown onPickEmoji={this.handleEmojiPick} />
+          <TimeLimitDropdown onSelectTimeLimit={this.handleSelectTimeLimit} />
         </div>
 
         <div className='compose-form__modifiers'>

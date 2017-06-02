@@ -10,9 +10,10 @@ import {
   changeComposeSpoilerText,
   insertEmojiCompose,
   requestImageCache,
+  insertTagCompose,
   clearComposeHashTagSuggestions,
   fetchComposeHashTagSuggestions,
-  selectComposeHashTagSuggestion
+  selectComposeHashTagSuggestion,
 } from '../../../actions/compose';
 
 const mapStateToProps = state => ({
@@ -82,6 +83,10 @@ const mapDispatchToProps = (dispatch) => ({
 
   onPickEmoji (position, data) {
     dispatch(insertEmojiCompose(position, data));
+  },
+
+  onSelectTimeLimit (tag) {
+    dispatch(insertTagCompose(tag));
   },
 
 });
