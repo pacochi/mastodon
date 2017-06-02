@@ -53,10 +53,10 @@ class MusicModal extends React.PureComponent {
 
   handleOnSelectPicture (e) {
     Promise.resolve()
-    .then(()=>new Promise((resolve, reject)=>{
-        const reader = new FileReader();
-        reader.onloadend = () => resolve(reader.result);
-        reader.readAsDataURL(this.pictureFileElement.files[0]);
+    .then(() => new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(this.pictureFileElement.files[0]);
     }))
     .then((url)=>{
       this.setState({
@@ -86,7 +86,7 @@ class MusicModal extends React.PureComponent {
   }
 
   render () {
-    const { title, artist, status, intl, onClose } = this.props;
+    const { title, artist, intl } = this.props;
 
     return (
       <div className='modal-root__modal music-modal'>
@@ -120,12 +120,7 @@ class MusicModal extends React.PureComponent {
         <div className='music-modal__action-bar'>
           <div className="action-bar__checkarea">
             <label>
-              {(()=>{
-                if(this.state.isClickedWaring){
-                  return (<input type="checkbox" checked="true" onClick={this.handleClickCheckbox} />)
-                }
-                return (<input type="checkbox" onClick={this.handleClickCheckbox} />)
-              })()}
+              <input type="checkbox" checked={this.state.isClickedWaring} onChange={this.handleClickCheckbox} />
               あなた自身が作成したコンテンツです
             </label>
           </div>
