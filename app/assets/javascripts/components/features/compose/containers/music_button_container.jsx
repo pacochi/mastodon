@@ -1,8 +1,6 @@
 import { connect } from 'react-redux';
 import MusicButton from '../components/music_button';
 
-import jsmediatags from 'jsmediatags';
-
 import { uploadMusicCompose } from '../../../actions/compose';
 import { openModal } from '../../../actions/modal';
 
@@ -17,21 +15,13 @@ const mapDispatchToProps = dispatch => ({
     dispatch(uploadMusicCompose(payload));
   },
 
-  onSelectFile (files) {
-    const self = this;
-    jsmediatags.read(files[0], {
-      onSuccess(tag) {
-        dispatch(openModal('MUSIC',{
-          title: tag.tags.title,
-          artist: tag.tags.artist,
-          music: files[0],
-          onUpload: self.onUpload
-        }));
-      },
-      onError(error) {
-        console.log(':(', error.type, error.info);
-      }
-    });
+  onSelectFile (file, tag) {
+    dispatch(openModal('MUSIC',{
+      title: tag.tags.title,
+      artist: tag.tags.artist,
+      music: file,
+      onUpload: this.onUpload
+    }));
   }
 
 });

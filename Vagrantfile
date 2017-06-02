@@ -107,8 +107,8 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   end
 
   # Otherwise, you can access the site at http://localhost:3000
-    config.vm.network :forwarded_port, guest: 80, host: 3000
-    config.vm.network :forwarded_port, guest: 4000, host: 4000
+  config.vm.network :forwarded_port, guest: 80, host: 3000
+  config.vm.network :forwarded_port, guest: 4000, host: 4000
 
   # Full provisioning script, only runs on first 'vagrant up' or with 'vagrant provision'
   config.vm.provision :shell, inline: $provision, privileged: false
