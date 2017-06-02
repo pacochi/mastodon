@@ -1,8 +1,8 @@
-import emojify from 'mastodon/emoji';
-import { getLocale } from 'mastodon/locales';
 import { length } from 'stringz';
 import IntlRelativeFormat from 'intl-relativeformat';
 import { delegate } from 'rails-ujs';
+import emojify from '../mastodon/emoji';
+import { getLocale } from '../mastodon/locales';
 
 require.context('../images/', true);
 
@@ -36,6 +36,28 @@ function main() {
       const datetime = new Date(content.getAttribute('datetime'));
       content.textContent = relativeFormat.format(datetime);;
     });
+
+    (() => {
+      // MSIE(IE11のみUAにMSIEを含まないのでTridentで検出)
+      const userAgent = window.navigator.userAgent.toLowerCase();
+      const isMSIE = /MSIE/i.test(userAgent) || /Trident/i.test(userAgent);
+
+      if (isMSIE) {
+        alert('お使いのブラウザはサポートされていません。Microsoft Edge、Google Chromeなどをお試しください。');
+      }
+    })()
+
+    // タイムラインが伸びすぎないようにする
+    if (location.pathname === '/about') {
+      const timeline = document.getElementsByClassName('about-col main')[0];
+      if (!timeline) return;
+
+      [].forEach.call(document.getElementsByClassName('about-timeline-container'), (content) => {
+        [].forEach.call(content.getElementsByClassName('column'), (column) => {
+          column.style.height = `${timeline.clientHeight}px`;
+        });
+      });
+    }
   });
 
   delegate(document, '.video-player video', 'click', ({ target }) => {
@@ -82,6 +104,14 @@ function main() {
     if (noteCounter) {
       noteCounter.textContent = 160 - length(target.value);
     }
+  });
+
+  delegate(document, '.omniauth-pixiv', 'click', ({ target }) => {
+    event.preventDefault();
+
+    window.pixivSignupSDK.start('index', 'pawoo', () => {
+      location.href = '/auth/oauth/pixiv';
+    });
   });
 }
 
