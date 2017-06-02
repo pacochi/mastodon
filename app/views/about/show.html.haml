@@ -2,7 +2,28 @@
   Mastodon (マストドン) hosted by pixiv
 
 - content_for :header_tags do
-  %script#initial-state{:type => 'application/json'}!= json_escape('{"meta": {"appmode": "about"}}')
+  :ruby
+    initial_state = {
+      meta: {
+        streaming_api_base_url: Rails.configuration.x.streaming_api_base_url,
+        access_token: '',
+        locale: I18n.locale,
+        domain: site_hostname,
+        auto_play_gif: false,
+        appmode: 'about'
+      },
+      compose: {},
+      accounts: {},
+      media_attachments: {
+        accept_content_types: MediaAttachment::IMAGE_MIME_TYPES + MediaAttachment::VIDEO_MIME_TYPES
+      },
+      settings: {
+        onboarded: true # related: app/javascript/mastodon/actions/onboarding.js
+      }
+    }
+
+  %script#initial-state{ type: 'application/json' }!= json_escape(initial_state.to_json)
+  = javascript_pack_tag 'application', integrity: true, crossorigin: 'anonymous'
   = javascript_pack_tag 'public', integrity: true, crossorigin: 'anonymous'
 
 - content_for :header_tags do
@@ -142,15 +163,4 @@
 
   .about-col.right
     .about-timeline-container
-      = react_component 'Mastodon', default_props, class: 'app-holder', prerender: false
-
-:javascript
-  userAgent = window.navigator.userAgent.toLowerCase();
-  // MSIE(IE11のみUAにMSIEを含まないのでTridentで検出)
-  isMSIE = /MSIE/i.test(userAgent) || /Trident/i.test(userAgent)
-  if(isMSIE) {
-    alert('お使いのブラウザはサポートされていません。Microsoft Edge、Google Chromeなどをお試しください。');
-  }
-
-  // タイムラインが伸びすぎないようにする
-  $('.about-timeline-container').height($('.about-col.main').height());
+      #mastodon{ data: { props: Oj.dump(default_props) } }
