@@ -8,12 +8,12 @@ export function refreshTrendTags() {
       .then(response => {
         dispatch(refreshTrendTagsSuccess(response.data));
       });
-  }
+  };
 }
 
 export function refreshTrendTagsSuccess(tags) {
   return {
     type: TREND_TAGS_SUCCESS,
-    tags
-  }
+    tags,
+  };
 }

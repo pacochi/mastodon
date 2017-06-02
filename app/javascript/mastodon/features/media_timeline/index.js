@@ -1,6 +1,6 @@
 import React from 'react';
 import {connect} from 'react-redux';
-import PropTypes from 'prop-types'
+import PropTypes from 'prop-types';
 import StatusListContainer from '../ui/containers/status_list_container';
 import Column from '../ui/components/column';
 import {
@@ -8,25 +8,26 @@ import {
   updateTimeline,
   deleteFromTimelines,
   connectTimeline,
-  disconnectTimeline
+  disconnectTimeline,
 } from '../../actions/timelines';
 import {defineMessages, injectIntl, FormattedMessage} from 'react-intl';
 import ColumnBackButtonSlim from '../../components/column_back_button_slim';
 import createStream from '../../stream';
 
 const messages = defineMessages({
-  title: {id: 'column.media', defaultMessage: 'Media timeline'}
+  title: {id: 'column.media', defaultMessage: 'Media timeline'},
 });
 
 const mapStateToProps = state => ({
   hasUnread: state.getIn(['timelines', 'media', 'unread']) > 0,
   streamingAPIBaseURL: state.getIn(['meta', 'streaming_api_base_url']),
-  accessToken: state.getIn(['meta', 'access_token'])
+  accessToken: state.getIn(['meta', 'access_token']),
 });
 
 let subscription;
 
 class MediaTimeline extends React.PureComponent {
+
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
@@ -61,7 +62,6 @@ class MediaTimeline extends React.PureComponent {
       received (data) {
         switch (data.event) {
         case 'update':
-
           const status = JSON.parse(data.payload);
           if (0 < status.media_attachments.length) {
             dispatch(updateTimeline('media', status));
@@ -71,7 +71,7 @@ class MediaTimeline extends React.PureComponent {
           dispatch(deleteFromTimelines(data.payload));
           break;
         }
-      }
+      },
 
     });
   }

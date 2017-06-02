@@ -23,13 +23,13 @@ const messages = defineMessages({
 
 const outerDropdownStyle = {
   padding: '10px',
-  flex: '0 0 auto'
+  flex: '0 0 auto',
 };
 
 const outerLinksStyle = {
   flex: '4 1 auto',
   display: 'flex',
-  lineHeight: '18px'
+  lineHeight: '18px',
 };
 
 class ActionBar extends React.PureComponent {

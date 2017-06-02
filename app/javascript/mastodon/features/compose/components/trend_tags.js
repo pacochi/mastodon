@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 
 const messages = defineMessages({
-  title: { id: 'trend_tags.title', defaultMessage: 'Suggested tag' }
+  title: { id: 'trend_tags.title', defaultMessage: 'Suggested tag' },
 });
 
 class TrendTags extends React.PureComponent {
@@ -13,7 +13,7 @@ class TrendTags extends React.PureComponent {
   static propTypes = {
     tags: ImmutablePropTypes.list.isRequired,
     refreshTrendTags: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired,
   };
 
   componentDidMount () {
@@ -29,7 +29,7 @@ class TrendTags extends React.PureComponent {
 
   render () {
     if (this.props.tags.size === 0) {
-      return null
+      return null;
     }
 
     const { intl } = this.props;
@@ -56,6 +56,7 @@ class TrendTags extends React.PureComponent {
       </div>
     );
   }
+
 };
 
 export default injectIntl(TrendTags);

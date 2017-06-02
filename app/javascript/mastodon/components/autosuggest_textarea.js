@@ -39,7 +39,7 @@ const textAtCursorMatchesMentionToken = (str, caretPosition) => {
   const token = textAtCursorMatchesToken(str, caretPosition, '@');
   const start = token[0];
   const word = token[1] === null ? null : token[1].toLowerCase();
-  return [start, word]
+  return [start, word];
 };
 
 class AutosuggestTextarea extends ImmutablePureComponent {
@@ -75,7 +75,7 @@ class AutosuggestTextarea extends ImmutablePureComponent {
     hashTagSuggestionsHidden: false,
     selectedHashTagSuggestion: 0,
     lastHashTagToken: null,
-    hashTagTokenStart: 0
+    hashTagTokenStart: 0,
   };
 
   onChange = (e) => {
@@ -198,8 +198,9 @@ class AutosuggestTextarea extends ImmutablePureComponent {
     this.textarea.focus();
   }
 
-  onHashTagSuggestionClick(tag, e) {
+  onHashTagSuggestionClick = (e) => {
     e.preventDefault();
+    const tag = String(e.currentTarget.getAttribute('data-tag'));
     this.props.onHashTagSuggestionsSelected(this.state.hashTagTokenStart, this.state.lastHashTagToken, tag);
     this.textarea.focus();
   }
@@ -226,15 +227,17 @@ class AutosuggestTextarea extends ImmutablePureComponent {
     }
   }
 
-  renderHashTagSuggestion(tag, i) {
+  renderHashTagSuggestion = (tag, i) => {
     const { selectedHashTagSuggestion} = this.state;
+
     return (
       <div
         role='button'
         tabIndex='0'
         key={tag}
         className={`autosuggest-textarea__suggestions__item ${i === selectedHashTagSuggestion ? 'selected' : ''}`}
-        onClick={this.onHashTagSuggestionClick.bind(this, tag)}>
+        data-tag={tag}
+        onClick={this.onHashTagSuggestionClick}>
         #{tag}
       </div>
     );
@@ -280,7 +283,7 @@ class AutosuggestTextarea extends ImmutablePureComponent {
           ))}
         </div>
         <div style={{ display: (hash_tag_suggestions.size > 0 && !hashTagSuggestionsHidden) ? 'block' : 'none' }}  className='autosuggest-textarea__suggestions'>
-          {hash_tag_suggestions.map(this.renderHashTagSuggestion.bind(this))}
+          {hash_tag_suggestions.map(this.renderHashTagSuggestion)}
         </div>
       </div>
     );

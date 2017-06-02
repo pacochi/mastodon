@@ -124,7 +124,7 @@ const insertHashTag = (state, position, token, completion) => {
     map.set('focusDate', new Date());
     map.set('idempotencyKey', uuid());
   });
-}
+};
 
 const insertEmoji = (state, position, emojiData) => {
   const emoji = emojiData.shortname;

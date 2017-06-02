@@ -165,7 +165,7 @@ export function requestImageCache(url) {
         requestedImageCaches.splice(requestedImageCaches.indexOf(url), 1);
       });
     }
-  }
+  };
 }
 
 export function uploadCompose(files) {
@@ -237,7 +237,7 @@ export function clearComposeSuggestions() {
 
 export function clearComposeHashTagSuggestions() {
   return {
-    type: COMPOSE_HASH_TAG_CLEAR
+    type: COMPOSE_HASH_TAG_CLEAR,
   };
 };
 
@@ -276,8 +276,8 @@ export function readyComposeHashTagSuggestions(token, tags) {
   return {
     type: COMPOSE_HASH_TAG_READY,
     token,
-    tags
-  }
+    tags,
+  };
 }
 
 export function selectComposeSuggestion(position, token, accountId) {
@@ -298,8 +298,8 @@ export function selectComposeHashTagSuggestion(position, token, tag) {
     type: COMPOSE_HASH_TAG_SELECT,
     position,
     token,
-    completion: tag
-  }
+    completion: tag,
+  };
 }
 
 export function mountCompose() {
@@ -351,6 +351,6 @@ export function insertEmojiCompose(position, emoji) {
 export function insertTagCompose(tag) {
   return {
     type: COMPOSE_TAG_INSERT,
-    tag
+    tag,
   };
 }

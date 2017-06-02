@@ -160,7 +160,7 @@ class MediaGallery extends React.PureComponent {
   static defaultProps = {
     expandMedia: false,
     lineMedia: false,
-    squareMedia: false
+    squareMedia: false,
   };
 
   state = {

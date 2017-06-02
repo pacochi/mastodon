@@ -10,19 +10,19 @@ import {
 } from '../actions/accounts';
 import {
   SUGGESTED_ACCOUNTS_FETCH_SUCCESS,
-  SUGGESTED_ACCOUNTS_EXPAND_SUCCESS
+  SUGGESTED_ACCOUNTS_EXPAND_SUCCESS,
 } from '../actions/suggested_accounts';
 import {
   REBLOGS_FETCH_SUCCESS,
-  FAVOURITES_FETCH_SUCCESS
+  FAVOURITES_FETCH_SUCCESS,
 } from '../actions/interactions';
 import {
   BLOCKS_FETCH_SUCCESS,
-  BLOCKS_EXPAND_SUCCESS
+  BLOCKS_EXPAND_SUCCESS,
 } from '../actions/blocks';
 import {
   MUTES_FETCH_SUCCESS,
-  MUTES_EXPAND_SUCCESS
+  MUTES_EXPAND_SUCCESS,
 } from '../actions/mutes';
 import Immutable from 'immutable';
 

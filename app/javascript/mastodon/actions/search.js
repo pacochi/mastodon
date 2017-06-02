@@ -97,8 +97,8 @@ export function fetchStatusSearchTimeline(keyword) {
     api(getState).get(`/api/v1/search/statuses/${keyword}`, {
       params: {
         limit: FETCH_TOOTS_NUM_PER_PAGE,
-        page
-      }
+        page,
+      },
     }).then(response => {
       const hitsTotal = response.data.hits_total;
       const statuses = hitsTotal > 0 ? response.data.statuses : [];
@@ -124,8 +124,8 @@ export function expandStatusSearchTimeline(keyword) {
     api(getState).get(`/api/v1/search/statuses/${keyword}`, {
       params: {
         limit: FETCH_TOOTS_NUM_PER_PAGE,
-        page
-      }
+        page,
+      },
     }).then(response => {
       const statuses = hitsTotal > 0 ? response.data.statuses : [];
       dispatch(expandStatusSearchTimelineSuccess(keyword, statuses, page, hasMore));
@@ -139,7 +139,7 @@ export function fetchStatusSearchTimelineRequest(keyword, skipLoading) {
   return {
     type: STATUS_SEARCH_TIMELINE_FETCH_REQUEST,
     keyword,
-    skipLoading
+    skipLoading,
   };
 };
 
@@ -151,7 +151,7 @@ export function fetchStatusSearchTimelineSuccess(keyword, statuses, page, skipLo
     page,
     skipLoading,
     hitsTotal,
-    hasMore
+    hasMore,
   };
 };
 
@@ -161,14 +161,14 @@ export function fetchStatusSearchTimelineFail(keyword, error, skipLoading) {
     keyword,
     error,
     skipLoading,
-    skipAlert: error.response.status === 404
+    skipAlert: error.response.status === 404,
   };
 };
 
 export function expandStatusSearchTimelineRequest(keyword) {
   return {
     type: STATUS_SEARCH_TIMELINE_EXPAND_REQUEST,
-    keyword
+    keyword,
   };
 };
 
@@ -178,7 +178,7 @@ export function expandStatusSearchTimelineSuccess(keyword, statuses, page, hasMo
     keyword,
     statuses,
     page,
-    hasMore
+    hasMore,
   };
 };
 
@@ -186,6 +186,6 @@ export function expandStatusSearchTimelineFail(keyword, error) {
   return {
     type: STATUS_SEARCH_TIMELINE_EXPAND_FAIL,
     keyword,
-    error
+    error,
   };
 };

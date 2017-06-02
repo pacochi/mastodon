@@ -5,7 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import {
   fetchAccount,
   fetchAccountMediaTimeline,
-  expandAccountMediaTimeline
+  expandAccountMediaTimeline,
 } from '../../actions/accounts';
 import StatusList from '../../components/status_list';
 import LoadingIndicator from '../../components/loading_indicator';
@@ -18,17 +18,18 @@ const mapStateToProps = (state, props) => ({
   statusIds: state.getIn(['timelines', 'accounts_media_timelines', Number(props.params.accountId), 'items'], Immutable.List()),
   isLoading: state.getIn(['timelines', 'accounts_media_timelines', Number(props.params.accountId), 'isLoading']),
   hasMore: !!state.getIn(['timelines', 'accounts_media_timelines', Number(props.params.accountId), 'next']),
-  me: state.getIn(['meta', 'me'])
+  me: state.getIn(['meta', 'me']),
 });
 
 class AccountMediaTimeline extends React.PureComponent {
+
   static propTypes = {
     params: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     statusIds: ImmutablePropTypes.list,
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
-    me: PropTypes.number.isRequired
+    me: PropTypes.number.isRequired,
   };
 
   constructor (props, context) {

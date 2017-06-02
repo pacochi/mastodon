@@ -7,7 +7,7 @@ import { Link } from 'react-router';
 import {
   fetchAccount,
   fetchSuggestedAccounts,
-  expandSuggestedAccounts
+  expandSuggestedAccounts,
 } from '../../actions/suggested_accounts';
 import { ScrollContainer } from 'react-router-scroll';
 import {defineMessages, injectIntl, FormattedMessage} from 'react-intl';
@@ -19,19 +19,19 @@ import ColumnBackButtonSlim from '../../components/column_back_button_slim';
 import Button from '../../components/button';
 
 const mapStateToProps = (state, props) => ({
-  accountIds: state.getIn(['user_lists', 'suggested_accounts', 'items'])
+  accountIds: state.getIn(['user_lists', 'suggested_accounts', 'items']),
 });
 
 const messages = defineMessages({
   title: { id: 'column.suggested_accounts', defaultMessage: 'Active Users' },
-  goToLocalTimeline: { id: 'suggested_accounts.go_to_local_timeline', defaultMessage: 'Go To Local Timeline' }
+  goToLocalTimeline: { id: 'suggested_accounts.go_to_local_timeline', defaultMessage: 'Go To Local Timeline' },
 });
 
 const buttonStyle = {
   display: 'block',
   lineHeight: 0,
   padding: '25px 0',
-  fontSize: '16px'
+  fontSize: '16px',
 };
 
 class SuggestedAccounts extends React.PureComponent {
@@ -39,7 +39,7 @@ class SuggestedAccounts extends React.PureComponent {
   static propTypes = {
     intl: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
-    accountIds: ImmutablePropTypes.list
+    accountIds: ImmutablePropTypes.list,
   };
 
   componentWillMount () {

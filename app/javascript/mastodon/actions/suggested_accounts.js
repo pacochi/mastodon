@@ -1,5 +1,5 @@
-import api, { getLinks } from '../api'
-import { fetchRelationships } from './accounts'
+import api, { getLinks } from '../api';
+import { fetchRelationships } from './accounts';
 import Immutable from 'immutable';
 
 export const SUGGESTED_ACCOUNTS_FETCH_REQUEST = 'SUGGESTED_ACCOUNTS_FETCH_REQUEST';
@@ -24,21 +24,21 @@ export function fetchSuggestedAccounts() {
 };
 
 export function fetchSuggestedAccountsRequest() {
-  return { type: SUGGESTED_ACCOUNTS_FETCH_REQUEST, };
+  return { type: SUGGESTED_ACCOUNTS_FETCH_REQUEST };
 };
 
 export function fetchSuggestedAccountsSuccess(accounts, next) {
   return {
     type: SUGGESTED_ACCOUNTS_FETCH_SUCCESS,
     accounts,
-    next
+    next,
   };
 };
 
 export function fetchSuggestedAccountsFail(error) {
   return {
     type: SUGGESTED_ACCOUNTS_FETCH_FAIL,
-    error
+    error,
   };
 };
 
@@ -71,13 +71,13 @@ export function expandSuggestedAccountsSuccess(accounts, next) {
   return {
     type: SUGGESTED_ACCOUNTS_EXPAND_SUCCESS,
     accounts,
-    next
+    next,
   };
 };
 
 export function expandSuggestedAccountsFail(error) {
   return {
     type: SUGGESTED_ACCOUNTS_EXPAND_FAIL,
-    error
+    error,
   };
 };

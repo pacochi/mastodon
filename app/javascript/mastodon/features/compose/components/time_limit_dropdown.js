@@ -14,17 +14,18 @@ const messages = defineMessages({
 const dropdownStyle = {
   position: 'absolute',
   right: '3px',
-  top: '35px'
+  top: '35px',
 };
 
 class TimeLimitDropdown extends React.PureComponent {
 
   static propTypes = {
     onSelectTimeLimit: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired,
   };
 
-  handleClick = (value) => {
+  handleClick = (e) => {
+    const value = e.currentTarget.getAttribute('data-value');
     this.dropdown.hide();
     this.props.onSelectTimeLimit(value);
   }
@@ -61,7 +62,7 @@ class TimeLimitDropdown extends React.PureComponent {
             </div>
             <div className='time-limit-dropdown__options'>
               {options.map(item =>
-                <div role='button' tabIndex='0' key={item.value} onClick={this.handleClick.bind(this, item.value)} className='time-limit-dropdown__option'>
+                <div role='button' tabIndex='0' key={item.value} onClick={this.handleClick} data-value={item.value} className='time-limit-dropdown__option'>
                   <div className='time-limit-dropdown__option__content'>
                     {item.text}
                   </div>

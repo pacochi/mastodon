@@ -45,7 +45,7 @@ function main() {
       if (isMSIE) {
         alert('お使いのブラウザはサポートされていません。Microsoft Edge、Google Chromeなどをお試しください。');
       }
-    })()
+    })();
 
     // タイムラインが伸びすぎないようにする
     if (location.pathname === '/about') {

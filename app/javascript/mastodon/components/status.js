@@ -102,10 +102,8 @@ class Status extends ImmutablePureComponent {
 
   handleAccountClick = (e) => {
     if (this.props.standalone) {
-      return e.preventDefault();
-    }
-
-    if (e.button === 0) {
+      e.preventDefault();
+    } else if (e.button === 0) {
       const id = Number(e.currentTarget.getAttribute('data-id'));
       e.preventDefault();
       this.context.router.push(`/accounts/${id}`);
@@ -161,7 +159,7 @@ class Status extends ImmutablePureComponent {
           remote_url: '',
           text_url: card.get('url'),
           type: 'image',
-          url: card.get('image_url')
+          url: card.get('image_url'),
         });
       }).concat(attachments);
     }

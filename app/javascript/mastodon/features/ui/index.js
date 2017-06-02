@@ -21,7 +21,7 @@ const noOp = () => false;
 class UI extends React.PureComponent {
 
   static defaultProps = {
-    intent: false
+    intent: false,
   };
 
   static propTypes = {

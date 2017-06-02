@@ -15,7 +15,7 @@ const messages = defineMessages({
   unfollow: { id: 'account.unfollow', defaultMessage: 'Unfollow' },
   requested: { id: 'account.requested', defaultMessage: 'Awaiting approval' },
   unblock: { id: 'account.unblock', defaultMessage: 'Unblock @{name}' },
-  unmute: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' }
+  unmute: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' },
 });
 
 class SuggestedAccount extends React.PureComponent {
@@ -26,7 +26,7 @@ class SuggestedAccount extends React.PureComponent {
     onFollow: PropTypes.func.isRequired,
     onOpenVideo: PropTypes.func.isRequired,
     onOpenMedia: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired
+    intl: PropTypes.object.isRequired,
   };
 
   handleFollow = () => {
@@ -64,7 +64,7 @@ class SuggestedAccount extends React.PureComponent {
 
       // NOTE: blocking/mutingはそもそもロードされないはず
       if (requested) {
-        buttons = <IconButton disabled={true} icon='hourglass' title={intl.formatMessage(messages.requested)} />
+        buttons = <IconButton disabled={true} icon='hourglass' title={intl.formatMessage(messages.requested)} />;
       } else if (blocking) {
         buttons = <IconButton active={true} icon='unlock-alt' title={intl.formatMessage(messages.unblock, { name: account.get('username') })} onClick={this.handleBlock} />;
       } else if (muting) {

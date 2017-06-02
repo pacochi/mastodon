@@ -67,7 +67,7 @@ class Mastodon extends React.PureComponent {
 
   componentDidMount() {
     const { locale }  = this.props;
-    if (this.appmode == 'about') return;
+    if (this.appmode === 'about') return;
 
     const streamingAPIBaseURL = store.getState().getIn(['meta', 'streaming_api_base_url']);
     const accessToken = store.getState().getIn(['meta', 'access_token']);
@@ -207,11 +207,12 @@ class Mastodon extends React.PureComponent {
             </Router>
           </Provider>
         </IntlProvider>
-      )
+      );
     }
 
     return <div />;
   }
+
 };
 
 Mastodon.propTypes = {

@@ -38,7 +38,7 @@ class CommunityTimeline extends React.PureComponent {
   };
 
   static defaultProps = {
-    standalone: false
+    standalone: false,
   };
 
   componentDidMount () {
@@ -74,7 +74,7 @@ class CommunityTimeline extends React.PureComponent {
             dispatch(deleteFromTimelines(data.payload));
             break;
           }
-        }
+        },
       });
     } else {
       this.interval = setInterval(() => {

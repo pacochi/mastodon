@@ -29,7 +29,7 @@ class StatusList extends ImmutablePureComponent {
     trackScroll: true,
     expandMedia: false,
     squareMedia: false,
-    standalone: false
+    standalone: false,
   };
 
   state = {

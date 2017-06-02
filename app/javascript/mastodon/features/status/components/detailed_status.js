@@ -53,7 +53,7 @@ class DetailedStatus extends ImmutablePureComponent {
           remote_url: '',
           text_url: card.get('url'),
           type: 'image',
-          url: card.get('image_url')
+          url: card.get('image_url'),
         });
       });
     }

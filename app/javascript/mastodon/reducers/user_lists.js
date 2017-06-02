@@ -10,7 +10,7 @@ import {
 } from '../actions/accounts';
 import {
   SUGGESTED_ACCOUNTS_FETCH_SUCCESS,
-  SUGGESTED_ACCOUNTS_EXPAND_SUCCESS
+  SUGGESTED_ACCOUNTS_EXPAND_SUCCESS,
 } from '../actions/suggested_accounts';
 import {
   REBLOGS_FETCH_SUCCESS,
@@ -34,7 +34,7 @@ const initialState = Immutable.Map({
   follow_requests: Immutable.Map(),
   blocks: Immutable.Map(),
   mutes: Immutable.Map(),
-  suggested_accounts: Immutable.Map()
+  suggested_accounts: Immutable.Map(),
 });
 
 const normalizeList = (state, type, id, accounts, next) => {
@@ -53,7 +53,7 @@ const appendToList = (state, type, id, accounts, next) => {
 const normalizeSuggestedAccountsList = (state, type, accounts, next) => {
   return state.setIn([type], Immutable.Map({
     next,
-    items: Immutable.List(accounts.map(item => item.id))
+    items: Immutable.List(accounts.map(item => item.id)),
   }));
 };
 

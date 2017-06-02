@@ -5,7 +5,7 @@ import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import {
   fetchStatusSearchTimeline,
-  expandStatusSearchTimeline
+  expandStatusSearchTimeline,
 } from '../../actions/search';
 import Column from '../ui/components/column';
 import { FormattedMessage } from 'react-intl';

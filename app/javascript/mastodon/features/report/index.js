@@ -69,7 +69,7 @@ class Report extends React.PureComponent {
       { id: 'incorrectage', value: 'CW・NSFW設定の不足' },
       { id: 'spam', value: 'スパム・迷惑行為' },
       { id: 'reproduction', value: '無断転載' },
-      { id: 'prohibited', value: '禁止行為に該当' }
+      { id: 'prohibited', value: '禁止行為に該当' },
     ]);
   }
 
