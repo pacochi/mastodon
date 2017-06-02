@@ -3,10 +3,6 @@ import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import IconButton from '../../../components/icon_button';
 import Button from '../../../components/button';
 
-const messages = defineMessages({
-  publish: { id: 'status.publish', defaultMessage: 'Upload' }
-});
-
 class MusicModal extends React.PureComponent {
 
   constructor (props, context) {
@@ -37,14 +33,6 @@ class MusicModal extends React.PureComponent {
       music: this.props.music
     });
     this.props.onClose();
-  }
-
-  handleAccountClick (e) {
-    if (e.button === 0) {
-      e.preventDefault();
-      this.props.onClose();
-      this.context.router.push(`/accounts/${this.props.status.getIn(['account', 'id'])}`);
-    }
   }
 
   handleChoosePicture (e) {
@@ -138,6 +126,7 @@ MusicModal.contextTypes = {
 MusicModal.propTypes = {
   title: PropTypes.string.isRequired,
   artist: PropTypes.string.isRequired,
+  music: PropTypes.object.isRequired,
   onUpload: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
   intl: PropTypes.object.isRequired
