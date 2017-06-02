@@ -3439,8 +3439,6 @@ button.icon-button.active i.fa-retweet {
   height: 100%;
   object-fit: cover;
   position: relative;
-  top: 50%;
-  transform: translateY(-35%);
   width: 100%;
   z-index: 1;
 }
@@ -3479,15 +3477,32 @@ button.icon-button.active i.fa-retweet {
   margin-top: 8px;
   position: relative;
 }
+.media-spoiler-video:after{
+  content: "";
+
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0,0,0,0.3);
+  z-index: 100;
+}
 
 .media-spoiler-video-play-icon {
   border-radius: 100px;
-  color: rgba(255, 255, 255, 0.8);
+  color: #fff;
   font-size: 36px;
   left: 50%;
-  padding: 5px;
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
+  z-index: 200;
+
+  padding: 19px 18px 19px 23px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: rgba(0,0,0,0.6);
 }
 /* End Video Player */

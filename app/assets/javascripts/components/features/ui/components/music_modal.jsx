@@ -1,4 +1,3 @@
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import IconButton from '../../../components/icon_button';
@@ -25,7 +24,8 @@ class MusicModal extends React.PureComponent {
 
     this.handleClickCheckbox = this.handleClickCheckbox.bind(this);
     this.state = {
-      isClickedWaring: false
+      isClickedWaring: false,
+      pictureURL: null
     }
   }
 
@@ -59,7 +59,6 @@ class MusicModal extends React.PureComponent {
         reader.readAsDataURL(this.pictureFileElement.files[0]);
     }))
     .then((url)=>{
-      this.isSelected = true;
       this.setState({
         pictureURL: `url(${url})`
       });
@@ -94,14 +93,14 @@ class MusicModal extends React.PureComponent {
         <div className='music-modal__container'>
           <div className="music-modal__artwork">
             {(()=>{
-              if(this.isSelected) {
+              if(this.state.pictureURL) {
                 return (
                   <div className="music-modal__artwork-exist" style={{backgroundImage: this.state.pictureURL}} onClick={this.handleChoosePicture} />
                 );
               }
               return (
                 <div className="music-modal__artwork-none" onClick={this.handleChoosePicture} >
-                  <IconButton icon='camera' title="test" />
+                  <IconButton icon='camera' title="Upload Album Art" />
                 </div>
               );
             })()}

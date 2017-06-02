@@ -3,7 +3,7 @@
   "license": "AGPL-3.0",
   "scripts": {
     "postversion": "git push --tags",
-    "start": "npm run build && node streaming/build.js",
+    "start": "babel-node ./streaming/index.js --presets es2015,stage-2",
     "storybook": "start-storybook -p 9001 -c storybook",
     "build": "rm -rf ./streaming/build.js && babel ./streaming/index.js > ./streaming/build.js",
     "test": "npm run test:lint && npm run test:mocha",

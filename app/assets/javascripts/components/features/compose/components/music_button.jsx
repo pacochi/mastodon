@@ -36,7 +36,6 @@ class MusicButton extends React.PureComponent {
   }
 
   render () {
-
     const { intl, resetFileKey, disabled } = this.props;
 
     return (
