@@ -8,7 +8,6 @@ class MusicModal extends React.PureComponent {
   constructor (props, context) {
     super(props, context);
     this.handleUpload = this.handleUpload.bind(this);
-    this.handleAccountClick = this.handleAccountClick.bind(this);
 
     this.setMusicRef = this.setMusicRef.bind(this);
     this.setPictureRef = this.setPictureRef.bind(this);

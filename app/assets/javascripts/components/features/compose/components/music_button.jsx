@@ -25,11 +25,13 @@ class MusicButton extends React.PureComponent {
 
   handleChange (e) {
     if (!e.target.files.length) return;
+    const file = e.target.files[0];
+
     jsmediatags.read(
-      files[0],
+      file,
       {
         onSuccess: (tag) => {
-          this.props.onSelectFile(e.target.files[0], tag);
+          this.props.onSelectFile(file, tag);
         },
         onError: (error) => {
           console.log(':(', error.type, error.info);
