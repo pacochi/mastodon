@@ -3,7 +3,6 @@
 module Admin
   class ReportsController < BaseController
     before_action :set_report, except: [:index]
-    helper_method :filter_params
 
     def index
       @reports = filtered_reports.page(params[:page])
