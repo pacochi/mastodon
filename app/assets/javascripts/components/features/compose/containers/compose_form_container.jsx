@@ -10,6 +10,7 @@ import {
   selectComposeSuggestion,
   changeComposeSpoilerText,
   insertEmojiCompose,
+  insertTagCompose,
   clearComposeHashTagSuggestions,
   fetchComposeHashTagSuggestions,
   selectComposeHashTagSuggestion
@@ -82,6 +83,10 @@ const mapDispatchToProps = (dispatch) => ({
 
   onPickEmoji (position, data) {
     dispatch(insertEmojiCompose(position, data));
+  },
+
+  onSelectTimeLimit (tag) {
+    dispatch(insertTagCompose(tag));
   },
 
 });
