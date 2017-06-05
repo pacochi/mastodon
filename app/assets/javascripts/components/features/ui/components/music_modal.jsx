@@ -17,7 +17,7 @@ class MusicModal extends React.PureComponent {
     this.handleChoosePicture = this.handleChoosePicture.bind(this);
     this.handleOnSelectPicture = this.handleOnSelectPicture.bind(this);
 
-    this.handleClickCheckbox = this.handleClickCheckbox.bind(this);
+    this.handleChangeCheckbox = this.handleChangeCheckbox.bind(this);
     this.state = {
       isClickedWaring: false,
       pictureURL: null
@@ -52,7 +52,7 @@ class MusicModal extends React.PureComponent {
     });
   }
 
-  handleClickCheckbox (e) {
+  handleChangeCheckbox (e) {
     this.setState({isClickedWaring: !this.state.isClickedWaring});
   }
 
@@ -107,7 +107,7 @@ class MusicModal extends React.PureComponent {
         <div className='music-modal__action-bar'>
           <div className="action-bar__checkarea">
             <label>
-              <input type="checkbox" checked={this.state.isClickedWaring} onChange={this.handleClickCheckbox} />
+              <input type="checkbox" checked={this.state.isClickedWaring} onChange={this.handleChangeCheckbox} />
               あなた自身が作成したコンテンツです
             </label>
           </div>
