@@ -1,3 +1,5 @@
+require 'mp3info'
+
 class MusicAttachment
   include ActiveModel::Model
 
@@ -12,6 +14,10 @@ class MusicAttachment
 
   def initialize(title, artist, music, image, account)
     @title = title; @artist = artist; @music = music; @image = image; @account = account
+    # remove cover images if exist (to simplify mimetype decision)
+    Mp3Info.open music.path do |m|
+      m.tag2.remove_pictures
+    end
   end
 
   def convert
