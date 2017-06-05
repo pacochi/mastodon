@@ -109,7 +109,8 @@ class CommunityTimeline extends React.PureComponent {
     return (
       <Column icon='users' active={hasUnread} heading={heading}>
         {!standalone && <ColumnBackButtonSlim />}
-        <StatusListContainer type='community' standalone={standalone} scrollKey='community_timeline' emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />} />
+
+        <StatusListContainer {...this.props} scrollKey='community_timeline' type='community' emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />} />
       </Column>
     );
   }
