@@ -7,6 +7,7 @@ import ReplyIndicatorContainer from '../containers/reply_indicator_container';
 import AutosuggestTextarea from '../../../components/autosuggest_textarea';
 import { debounce } from 'react-decoration';
 import UploadButtonContainer from '../containers/upload_button_container';
+import MusicButtonContainer from '../containers/music_button_container';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import Toggle from 'react-toggle';
 import Collapsable from '../../../components/collapsable';
@@ -208,6 +209,7 @@ class ComposeForm extends React.PureComponent {
         <div className='compose-form__buttons-wrapper'>
           <div className='compose-form__buttons'>
             <UploadButtonContainer />
+            <MusicButtonContainer />
             <PrivacyDropdownContainer />
             <SensitiveButtonContainer />
             <SpoilerButtonContainer />

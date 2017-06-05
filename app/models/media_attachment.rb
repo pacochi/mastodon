@@ -121,6 +121,7 @@ class MediaAttachment < ApplicationRecord
   end
 
   def set_meta
+    self.type = :video if file.instance.type == 'music'
     meta = populate_meta
     return if meta == {}
     file.instance_write :meta, meta
