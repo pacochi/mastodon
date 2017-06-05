@@ -62,9 +62,7 @@ $start = <<SCRIPT
 
 cd /vagrant
 export $(cat ".env.vagrant" | xargs)
-rails s -d -b 0.0.0.0 &
-bundle exec sidekiq &
-yarn start
+rails s -d -b 0.0.0.0
 
 SCRIPT
 
@@ -76,7 +74,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   config.vm.provider :virtualbox do |vb|
     vb.name = "mastodon"
-    vb.customize ["modifyvm", :id, "--memory", "4096"]
+    vb.customize ["modifyvm", :id, "--memory", "1024"]
 
     # Disable VirtualBox DNS proxy to skip long-delay IPv6 resolutions.
     # https://github.com/mitchellh/vagrant/issues/1172
@@ -108,7 +106,6 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
 
   # Otherwise, you can access the site at http://localhost:3000
   config.vm.network :forwarded_port, guest: 80, host: 3000
-  config.vm.network :forwarded_port, guest: 4000, host: 4000
 
   # Full provisioning script, only runs on first 'vagrant up' or with 'vagrant provision'
   config.vm.provision :shell, inline: $provision, privileged: false
