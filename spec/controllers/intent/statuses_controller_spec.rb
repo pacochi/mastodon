@@ -1,6 +1,8 @@
 require 'rails_helper'
 
 RSpec.describe Intent::StatusesController, type: :controller do
+  render_views
+
   describe 'GET #new' do
     before do
       sign_in(user)
