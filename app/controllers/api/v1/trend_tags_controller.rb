@@ -5,8 +5,8 @@ class Api::V1::TrendTagsController < ApiController
 
   def index
     limit_size = params[:limit] || 5
-    limit = limit_size.to_i.clamp(0, 5)
+    limit = limit_size.to_i.clamp(0, 10)
 
-    @trend_tags = TrendTag.find_suggestion(limit)
+    @trend_tags = TrendTag.find_tags(limit)
   end
 end

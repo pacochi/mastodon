@@ -33,13 +33,16 @@ class PostStatusService < BaseService
       attach_pixiv_cards(status)
     end
 
-    process_mentions_service.call(status)
     process_hashtags_service.call(status)
+    process_mentions_service.call(status)
 
     PixivCardUpdateWorker.perform_async(status.id) if status.pixiv_cards.any?
     LinkCrawlWorker.perform_async(status.id) unless status.spoiler_text.present?
     DistributionWorker.perform_async(status.id)
     Pubsubhubbub::DistributionWorker.perform_async(status.stream_entry.id)
+
+    time_limit = TimeLimit.from_tags(status.tags)
+    RemovalWorker.perform_in(time_limit.to_duration, status.id) if time_limit
 
     if options[:idempotency].present?
       redis.setex("idempotency:status:#{account.id}:#{options[:idempotency]}", 3_600, status.id)

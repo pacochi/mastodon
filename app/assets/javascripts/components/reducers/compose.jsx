@@ -24,7 +24,8 @@ import {
   COMPOSE_HASH_TAG_CLEAR,
   COMPOSE_HASH_TAG_READY,
   COMPOSE_HASH_TAG_SELECT,
-  COMPOSE_EMOJI_INSERT
+  COMPOSE_EMOJI_INSERT,
+  COMPOSE_TAG_INSERT
 } from '../actions/compose';
 import { TIMELINE_DELETE } from '../actions/timelines';
 import { STORE_HYDRATE } from '../actions/store';
@@ -130,6 +131,14 @@ const insertEmoji = (state, position, emojiData) => {
 
   return state.withMutations(map => {
     map.update('text', oldText => `${oldText.slice(0, position)}${emoji} ${oldText.slice(position)}`);
+    map.set('focusDate', new Date());
+    map.set('idempotencyKey', uuid());
+  });
+};
+
+const insertTag = (state, tag) => {
+  return state.withMutations(map => {
+    map.update('text', oldText => `${oldText} ${tag}`);
     map.set('focusDate', new Date());
     map.set('idempotencyKey', uuid());
   });
@@ -246,6 +255,8 @@ export default function compose(state = initialState, action) {
     }
   case COMPOSE_EMOJI_INSERT:
     return insertEmoji(state, action.position, action.emoji);
+  case COMPOSE_TAG_INSERT:
+    return insertTag(state, action.tag);
   default:
     return state;
   }
