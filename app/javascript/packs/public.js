@@ -49,14 +49,17 @@ function main() {
 
     // タイムラインが伸びすぎないようにする
     if (location.pathname === '/about') {
-      const timeline = document.getElementsByClassName('about-col main')[0];
-      if (!timeline) return;
+      // Reactのレンダリングを待つ必要がある？
+      setTimeout(() => {
+        const timeline = document.getElementsByClassName('about-col main')[0];
+        if (!timeline) return;
 
-      [].forEach.call(document.getElementsByClassName('about-timeline-container'), (content) => {
-        [].forEach.call(content.getElementsByClassName('column'), (column) => {
-          column.style.height = `${timeline.clientHeight}px`;
+        [].forEach.call(document.getElementsByClassName('about-timeline-container'), (content) => {
+          [].forEach.call(content.getElementsByClassName('column'), (column) => {
+            column.style.height = `${timeline.clientHeight}px`;
+          });
         });
-      });
+      }, 200);
     }
   });
 
