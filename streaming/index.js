@@ -76,7 +76,7 @@ if (cluster.isMaster) {
   })
 
   redisClient.psubscribe('timeline:*')
-  redisClient.psubscribe('streaming:music:*')
+  redisClient.psubscribe('streaming:playlist:*')
 
   const subscribe = (channel, callback) => {
     log.silly(`Adding listener for ${channel}`)
@@ -288,10 +288,10 @@ if (cluster.isMaster) {
     streamFrom(`timeline:hashtag:${req.query.tag}`, req, streamToHttp(req, res), streamHttpEnd(req), true)
   })
 
-  app.get('/api/v1/streaming/music', (req, res) => {
+  app.get('/api/v1/streaming/playlist', (req, res) => {
     const deck = Number(req.query.deck);
     if ([1, 2, 3].includes(deck)) {
-      streamFrom(`streaming:music:deck:${deck}`, req, streamToHttp(req, res), streamHttpEnd(req))
+      streamFrom(`streaming:playlist:${deck}`, req, streamToHttp(req, res), streamHttpEnd(req))
     } else {
       // FIXME
     }
@@ -325,10 +325,10 @@ if (cluster.isMaster) {
       case 'hashtag:local':
         streamFrom(`timeline:hashtag:${location.query.tag}:local`, req, streamToWs(req, ws), streamWsEnd(ws), true)
         break;
-      case 'music': {
+      case 'playlist': {
         const deck = Number(location.query.deck);
         if ([1, 2, 3].includes(deck)) {
-          streamFrom(`streaming:music:deck:${deck}`, req, streamToWs(req, ws), streamWsEnd(ws), true)
+          streamFrom(`streaming:playlist:${deck}`, req, streamToWs(req, ws), streamWsEnd(ws), true)
         } else {
           ws.close()
         }
