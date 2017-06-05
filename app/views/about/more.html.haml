@@ -9,7 +9,7 @@
           = link_to site_hostname, root_path
 
         - unless @instance_presenter.site_description.blank?
-          %p= @instance_presenter.site_description.html_safe
+          %p!= @instance_presenter.site_description
 
       .information-board
         .section

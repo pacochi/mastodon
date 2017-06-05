@@ -1,3 +1,15 @@
+# == Schema Information
+#
+# Table name: oauth_authentications
+#
+#  id         :integer          not null, primary key
+#  user_id    :integer          not null
+#  provider   :string           not null
+#  uid        :string           not null
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
 class OauthAuthentication < ApplicationRecord
   belongs_to :user, required: true
   has_many :pixiv_follows, dependent: :delete_all

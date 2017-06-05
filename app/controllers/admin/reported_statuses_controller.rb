@@ -21,12 +21,12 @@ module Admin
       params.require(:status).permit(:sensitive)
     end
 
-    def set_status
-      @status = @report.statuses.find(params[:id])
-    end
-
     def set_report
       @report = Report.find(params[:report_id])
+    end
+
+    def set_status
+      @status = @report.statuses.find(params[:id])
     end
   end
 end

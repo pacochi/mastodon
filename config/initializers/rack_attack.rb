@@ -77,6 +77,6 @@ class Rack::Attack
       'X-RateLimit-Reset'     => (now + (match_data[:period] - now.to_i % match_data[:period])).iso8601(6),
     }
 
-    [429, headers, [{ error: I18n.t('errors.429.throttled') }.to_json]]
+    [429, headers, [{ error: I18n.t('errors.429') }.to_json]]
   end
 end

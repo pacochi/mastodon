@@ -7,3 +7,19 @@
   - mailers
   - remove
   - elasticsearch
+:schedule:
+  subscriptions_scheduler:
+    cron: '0 4,9 * * *'
+    class: Scheduler::SubscriptionsScheduler
+  media_cleanup_scheduler:
+    cron: '5 4 * * *'
+    class: Scheduler::MediaCleanupScheduler
+  feed_cleanup_scheduler:
+    cron: '0 0 * * *'
+    class: Scheduler::FeedCleanupScheduler
+  delete_elasticsearch_documents_worker:
+    cron: '*/2 * * * *'
+    class: Scheduler::DeleteElasticsearchDocumentsWorker
+  trend_tag_scheduler:
+    cron: '*/30 * * * *'
+    class: Scheduler::TrendTagScheduler
