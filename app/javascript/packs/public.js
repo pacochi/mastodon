@@ -106,7 +106,7 @@ function main() {
     }
   });
 
-  delegate(document, '.omniauth-pixiv', 'click', ({ target }) => {
+  delegate(document, '.omniauth-pixiv', 'click', (event) => {
     event.preventDefault();
 
     window.pixivSignupSDK.start('index', 'pawoo', () => {
