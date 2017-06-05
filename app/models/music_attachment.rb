@@ -1,5 +1,3 @@
-require 'mp3info'
-
 class MusicAttachment
   include ActiveModel::Model
 
@@ -18,11 +16,6 @@ class MusicAttachment
     Mp3Info.open music.path do |m|
       m.tag2.remove_pictures
     end
-  end
-
-  def convert
-    mp4 = MusicConvertService.new.call(title, artist, music, image)
-    return mp4
   end
 
 end

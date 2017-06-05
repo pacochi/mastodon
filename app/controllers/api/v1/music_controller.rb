@@ -8,7 +8,10 @@ class Api::V1::MusicController < ApiController
 
   def create
       music = MusicAttachment.new(params[:title], params[:artist], params[:music], params[:image], current_user.account)
-      render json: music.errors.messages, status: :unprocessable_entity and return if music.invalid?
+      if music.invalid?
+        render json: music.errors.messages, status: :unprocessable_entity
+        return
+      end
 
       mp4 = MusicConvertService.new.call(params[:title], params[:artist], params[:music], params[:image])
       @media = MediaAttachment.new(account: current_user.account, file: mp4, type: MediaAttachment.types[:music])

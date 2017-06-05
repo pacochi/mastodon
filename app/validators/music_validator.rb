@@ -1,6 +1,4 @@
 # frozen_string_literal: true
-require 'mp3info'
-require 'filemagic'
 
 class MusicValidator < ActiveModel::Validator
 

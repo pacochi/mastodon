@@ -1,7 +1,3 @@
-require 'mp3info'
-require 'streamio-ffmpeg'
-require 'tempfile'
-
 class MusicConvertService < BaseService
   def call(title, artist, music_file, image_file)
     # ffmpeg generates 60 extra silent frames at the end when you generate mp4 from png and mp3
