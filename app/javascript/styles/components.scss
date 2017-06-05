@@ -2814,20 +2814,31 @@ button.icon-button.active i.fa-retweet {
   }
 }
 
- .time-limit-dropdown.dropdown--active {
-   .time-limit-dropdown__dropdown {
-     display: block;
-     box-shadow: 0 0 8px rgba($base-shadow-color, 0.1);
-   }
-   .dropdown__trigger {
-     color: $ui-highlight-color;
-   }
- }
+.time-limit-dropdown.dropdown--active {
+  &:after {
+    right: auto;
+    bottom: 0px;
+    left: 9px;
+  }
 
- .time-limit-dropdown .icon-button {
-   font-size: 24px;
-   margin-left: -2px;
- }
+  .time-limit-dropdown__dropdown {
+    display: block;
+    box-shadow: 0 0 8px rgba($base-shadow-color, 0.1);
+  }
+
+  .dropdown__trigger {
+    color: $ui-highlight-color;
+  }
+}
+
+.time-limit-dropdown .icon-button {
+  font-size: 24px;
+  margin-left: -2px;
+}
+
+.time-limit-dropdown .dropdown__content {
+  position: relative;
+}
 
 .search {
   position: relative;
