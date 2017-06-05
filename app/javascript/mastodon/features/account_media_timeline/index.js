@@ -32,11 +32,6 @@ class AccountMediaTimeline extends React.PureComponent {
     me: PropTypes.number.isRequired,
   };
 
-  constructor (props, context) {
-    super(props, context);
-    this.handleScrollToBottom = this.handleScrollToBottom.bind(this);
-  }
-
   componentWillMount () {
     this.props.dispatch(fetchAccount(Number(this.props.params.accountId)));
     this.props.dispatch(fetchAccountMediaTimeline(Number(this.props.params.accountId)));
@@ -49,7 +44,7 @@ class AccountMediaTimeline extends React.PureComponent {
     }
   }
 
-  handleScrollToBottom () {
+  handleScrollToBottom = () => {
     this.props.dispatch(expandAccountMediaTimeline(Number(this.props.params.accountId)));
   }
 
