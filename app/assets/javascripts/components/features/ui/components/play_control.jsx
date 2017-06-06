@@ -18,9 +18,12 @@ class MusicPlayer extends React.PureComponent {
     this.handleClickOverlay = this.handleClickOverlay.bind(this);
     this.handleClickDeckTab = this.handleClickDeckTab.bind(this);
     this.handleSubmitAddForm = this.handleSubmitAddForm.bind(this);
+    this.handleClickToggle = this.handleClickToggle.bind(this);
+
     this.setURLRef = this.setURLRef.bind(this);
 
     this.fetchDeck(1);
+
   }
 
   fetchDeck(id) {
@@ -64,13 +67,16 @@ class MusicPlayer extends React.PureComponent {
     });
   }
 
+  handleClickToggle () {
+    this.setState({isPlaying: (!this.state.isPlaying)});
+  }
+
   setURLRef (c) {
     this.urlRef = c;
   }
 
   render () {
     const playerClass = `player-control${this.state.isOpen ? ' is-open':''}`;
-    const toggleClass = `control-bar__controller-toggle${this.state.isPlaying?' is-playing':''}`
     let nowPlayingArtwork = {};
     if(this.state.deck && this.state.deck.playlists.length){
       nowPlayingArtwork = {
@@ -82,9 +88,21 @@ class MusicPlayer extends React.PureComponent {
       <div className={playerClass}>
         <div className='player-control__control-bar'>
           <div className='control-bar__controller'>
-            <div className={toggleClass}>
-              <i className="fa fa-play" />
-            </div>
+            {(()=>{
+              if(this.state.isPlaying){
+                return (
+                  <div className='control-bar__controller-toggle is-playing' onClick={this.handleClickToggle}>
+                    <i className="fa fa-play" />
+                  </div>
+                )
+              }else{
+                return (
+                  <div className='control-bar__controller-toggle is-pause' onClick={this.handleClickToggle}>
+                    <i className="fa fa-pause" />
+                  </div>
+                )
+              }
+            })()}
             <div className='control-bar__controller-skip'>
               SKIP
             </div>

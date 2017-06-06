@@ -29,7 +29,7 @@ class Api::V1::PlaylistsController < ApiController
             video_url: nil,
             duration: 360,
             link: 'https://potato4d.me/',
-            source_type: 'pawoo',
+            source_type: 'booth',
           },
           {
             id: 'uuid',

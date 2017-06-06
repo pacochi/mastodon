@@ -3442,21 +3442,32 @@ button.icon-button.active i.fa-retweet {
         display: flex;
         align-items: center;
         justify-content: center;
-        background: #EF2463;
         border-radius: 50%;
         margin: 10px;
         cursor: pointer;
-        transition: background 0.4s ease-out;
 
         .fa{
           font-size: 19px;
           display: block;
-          margin-left: 3px;
         }
 
-        &:hover{
-          background: #df1152;
+        &.is-playing{
+          background: #EF2463;
+          .fa{
+            margin-left: 3px;
+          }
+          &:hover{
+            background: #df1152;
+          }
         }
+
+        &.is-pause{
+          background: #AAA;
+          &:hover{
+            background: #999;
+          }
+        }
+
       }
 
       .control-bar__controller-skip{
