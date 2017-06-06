@@ -42,7 +42,7 @@ class HomeController < ApplicationController
       account = Account.find(account_id)
       short_account_path(account)
     when %r{\A/web/timelines/tag/(?<tag>.+)\z}
-      tag_path(URI.decode(Regexp.last_match[:tag]))
+      return tag_path(URI.decode(Regexp.last_match[:tag]))
     else
       about_path
     end
