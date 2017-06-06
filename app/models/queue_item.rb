@@ -137,7 +137,8 @@ class QueueItem
     end
 
     def find_youtube_id(link)
-      matched = link.match(%r{https:\/\/www\.youtube\.com\/watch\?v=(\w+)})
+      # TODO: 余裕があればちゃんとパースする
+      matched = link.match(%r{https://www\.youtube\.com/watch\?v=(\w+)})
       matched ? matched[1] : nil
     end
 
