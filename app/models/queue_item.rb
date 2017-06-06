@@ -28,7 +28,7 @@ class QueueItem
       status_id = find_status_id(link)
       return nil unless status_id
 
-      cache = find_item('pawoo', status_id)
+      cache = find_cache('pawoo-music', status_id)
       return cache if cache
 
       video = MediaAttachment.find_by(status_id: status_id, type: MediaAttachment.types[:video])
@@ -49,7 +49,7 @@ class QueueItem
         account_id: account.id
       )
 
-      save_item('pawoo', status_id, item)
+      cache_item('pawoo-music', status_id, item)
     end
 
     def find_status_id(link)
@@ -62,7 +62,7 @@ class QueueItem
       shop_id = find_shop_id(link)
       return nil unless shop_id
 
-      cache = find_item('booth', shop_id)
+      cache = find_cache('booth', shop_id)
       return cache if cache
 
       json = JSON.parse(http_client.get("https://api.booth.pm/pixiv/items/#{shop_id}").body.to_s)
@@ -81,7 +81,7 @@ class QueueItem
         account_id: account.id,
       )
 
-      save_item('booth', shop_id, item)
+      cache_item('booth', shop_id, item)
     end
 
     def find_shop_id(link)
@@ -90,13 +90,13 @@ class QueueItem
     end
 
     def youtube_link(link, account)
-      id = find_youtube_id(link)
-      return nil unless id
+      video_id = find_youtube_id(link)
+      return nil unless video_id
 
-      cache = find_item('youtube', id)
+      cache = find_cache('youtube', video_id)
       return cache if cache
 
-      duration_sec = fetch_youtube_duration(id)
+      duration_sec = fetch_youtube_duration(video_id)
       title = fetch_youtube_title(link)
 
       item = new(
@@ -108,14 +108,14 @@ class QueueItem
         link: link,
         duration: duration_sec,
         source_type: 'youtube',
-        source_id: id,
+        source_id: video_id,
         account_id: account.id
       )
-      save_item('youtube', id, item)
+      cache_item('youtube', video_id, item)
     end
 
-    def fetch_youtube_duration(id)
-      url = "https://www.googleapis.com/youtube/v3/videos?key=#{YOUTUBE_API_KEY}&part=contentDetails&id=#{id}"
+    def fetch_youtube_duration(video_id)
+      url = "https://www.googleapis.com/youtube/v3/videos?key=#{YOUTUBE_API_KEY}&part=contentDetails&id=#{video_id}"
       json = JSON.parse(http_client.get(url).body.to_s)
       return nil if json['items'].blank?
       item = json['items'].first
@@ -146,13 +146,13 @@ class QueueItem
       true
     end
 
-    def find_item(type, id)
-      cache = redis.get("music:link:#{type}:#{id}")
+    def find_cache(type, source_id)
+      cache = redis.get("music:link:#{type}:#{source_id}")
       cache ? new(JSON.parse(cache, symbolize: true)) : nil
     end
 
-    def save_item(type, id, item)
-      redis.setex("music:link:#{type}:#{id}", 3600, item.to_json)
+    def cache_item(type, source_id, item)
+      redis.setex("music:link:#{type}:#{source_id}", 3600, item.to_json)
       item
     end
 
