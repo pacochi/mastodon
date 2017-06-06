@@ -142,7 +142,7 @@ class QueueItem
       matched ? matched[1] : nil
     end
 
-    def skip(deck, account)
+    def skip(deck, id, account)
       # TODO:
       true
     end
