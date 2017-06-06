@@ -71,7 +71,7 @@ class QueueItem
         duration: json['body']['sound']['duration'],
         link: link,
         source_type: 'booth',
-        account: 1,
+        account: account.id,
       )
 
       Redis.current.set("booth-kink:#{shop_id}", item.to_json)
