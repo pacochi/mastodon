@@ -14,7 +14,8 @@
         %tr
           %td= word.word
           %td= word.memo
-          %td= local_time(word.created_at, format: :default)
+          %td
+            %time.formatted{ datetime: word.created_at.iso8601, title: l(word.created_at) }= l(word.created_at)
           %td
             = link_to edit_admin_trend_ng_word_path(word), class: 'table-action-link' do
               %i.fa.fa-pencil-square-o
