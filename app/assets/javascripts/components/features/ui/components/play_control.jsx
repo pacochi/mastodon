@@ -101,13 +101,21 @@ class MusicPlayer extends React.PureComponent {
               )))()}
             </ul>
             <div className="deck_queue-wrapper">
-              <div className="queue-item__artwork">
-                <video autoPlay style={nowPlayingArtwork}>
-                  {(()=>{
-                    if(!this.state.deck) return;
-                    return (<source src={this.state.deck.playlists[0].video_url}/>);
-                  })()}
-                </video>
+              <div className="queue-item__artwork" style={nowPlayingArtwork}>
+                {(()=>{
+                  if(!this.state.deck) return;
+                  if(this.state.deck.playlists[0].video_url){
+                    return (
+                      <video autoPlay style={nowPlayingArtwork}>
+                        <source src={this.state.deck.playlists[0].video_url}/>
+                      </video>
+                    );
+                  }else{
+                    return (
+                      <audio autoPlay src={this.state.deck.playlists[0].music_url} />
+                    );
+                  }
+                })()}
               </div>
               <ul className="deck__queue">
                 {(()=>{
