@@ -1,17 +1,20 @@
 # frozen_string_literal: true
 
 class QueueItem
-  include RoutingHelper
-  include HttpHelper
+  include ActiveModel::Model
+  include ActiveModel::Serialization
 
   attr_accessor :id, :info, :thumbnail_url, :music_url, :video_url, :duration, :link, :source_type, :account
 
   class << self
+    include RoutingHelper
+    include HttpHelper
+
     def create(link, account)
       #todo linkをパースしてAddQueueItemを作る
       ret = pawoo_link(link, account)
       return ret if ret
-      booth_link(link)
+      booth_link(link, account)
     end
 
     private
@@ -58,21 +61,21 @@ class QueueItem
         return QueueItem.new(cache)
       end
 
-      json = http_client.get('https://api.booth.pm/pixiv/items/393675')
+      json = JSON.parse(http_client.get("https://api.booth.pm/pixiv/items/#{shop_id}").body.to_s)
       item = QueueItem.new(
         id: SecureRandom.uuid,
-        title: json['body']['name'],
-        artist: json['body']['shop']['user']['nickname'],
+        info: "#{json['body']['name']} #{json['body']['shop']['user']['nickname']}",
         thumbnail_url: json['body']['primary_image']['url'],
-        music_url: json['body']['sound']['long'],
+        music_url: json['body']['sound']['long_url'],
         video_url: '',
         duration: json['body']['sound']['duration'],
         link: link,
         source_type: 'booth',
-        account: account.id
+        account: 1,
       )
 
-      Redis.current.set("booth-kink:#{shop_id}", JSON.generate(item.to_h))
+      Redis.current.set("booth-kink:#{shop_id}", item.to_json)
+      item
     end
 
     def find_shop_id(link)
