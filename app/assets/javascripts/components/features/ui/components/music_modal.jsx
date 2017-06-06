@@ -10,17 +10,17 @@ class MusicModal extends React.PureComponent {
     this.handleUpload = this.handleUpload.bind(this);
 
     this.setMusicRef = this.setMusicRef.bind(this);
-    this.setPictureRef = this.setPictureRef.bind(this);
+    this.setImageRef = this.setImageRef.bind(this);
     this.setTitleRef = this.setTitleRef.bind(this);
     this.setArtistRef = this.setArtistRef.bind(this);
 
-    this.handleChoosePicture = this.handleChoosePicture.bind(this);
-    this.handleOnSelectPicture = this.handleOnSelectPicture.bind(this);
+    this.handleChooseImage = this.handleChooseImage.bind(this);
+    this.handleOnSelectImage = this.handleOnSelectImage.bind(this);
 
     this.handleChangeCheckbox = this.handleChangeCheckbox.bind(this);
     this.state = {
       isClickedWaring: false,
-      pictureURL: null
+      imageURL: null
     }
   }
 
@@ -28,26 +28,26 @@ class MusicModal extends React.PureComponent {
     this.props.onUpload({
       title: this.titleElement.value,
       artist: this.artistElement.value,
-      picture: this.pictureFileElement.files[0],
+      image: this.imageFileElement.files[0],
       music: this.props.music
     });
     this.props.onClose();
   }
 
-  handleChoosePicture (e) {
-    this.pictureFileElement.click();
+  handleChooseImage (e) {
+    this.imageFileElement.click();
   }
 
-  handleOnSelectPicture (e) {
+  handleOnSelectImage (e) {
     Promise.resolve()
     .then(() => new Promise((resolve, reject) => {
       const reader = new FileReader();
       reader.onloadend = () => resolve(reader.result);
-      reader.readAsDataURL(this.pictureFileElement.files[0]);
+      reader.readAsDataURL(this.imageFileElement.files[0]);
     }))
     .then((url)=>{
       this.setState({
-        pictureURL: `url(${url})`
+        imageURL: `url(${url})`
       });
     });
   }
@@ -60,8 +60,8 @@ class MusicModal extends React.PureComponent {
     this.musicFileElement = c;
   }
 
-  setPictureRef (c) {
-    this.pictureFileElement = c;
+  setImageRef (c) {
+    this.imageFileElement = c;
   }
 
   setTitleRef (c) {
@@ -80,13 +80,13 @@ class MusicModal extends React.PureComponent {
         <div className='music-modal__container'>
           <div className="music-modal__artwork">
             {(()=>{
-              if(this.state.pictureURL) {
+              if(this.state.imageURL) {
                 return (
-                  <div className="music-modal__artwork-exist" style={{backgroundImage: this.state.pictureURL}} onClick={this.handleChoosePicture} />
+                  <div className="music-modal__artwork-exist" style={{backgroundImage: this.state.imageURL}} onClick={this.handleChooseImage} />
                 );
               }
               return (
-                <div className="music-modal__artwork-none" onClick={this.handleChoosePicture} >
+                <div className="music-modal__artwork-none" onClick={this.handleChooseImage} >
                   <IconButton icon='camera' title="Upload Album Art" />
                 </div>
               );
@@ -100,7 +100,7 @@ class MusicModal extends React.PureComponent {
             <input className="music-modal__artist" placeholder="作者名を入力" ref={this.setArtistRef} value={artist} />
 
             <input type="file" name="music"   accept="audio/*" ref={this.setMusicRef} />
-            <input type="file" name="picture" accept="image/*" ref={this.setPictureRef} onChange={this.handleOnSelectPicture} />
+            <input type="file" name="image" accept="image/*" ref={this.setImageRef} onChange={this.handleOnSelectImage} />
           </div>
         </div>
 
