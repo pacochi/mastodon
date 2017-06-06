@@ -23,17 +23,17 @@ class Api::V1::PlaylistsController < ApiController
         playlists: [
           {
             id: 'uuid',
-            info: 'artist - music name',
-            thumbnail_url: 'url',
+            info: 'artist - Deck' + deck.to_s + ' music name',
+            thumbnail_url: 'https://potato4d.me/res/images/icon.png',
             music_url: nil,
-            video_url: 'url',
+            video_url: 'http://localhost:3000/system/media_attachments/files/000/000/021/original/music-20170602-3003-1hxoozv.mp4?1496367745',
             duration: 360,
-            link: 'url',
+            link: 'https://potato4d.me/',
             source_type: 'pawoo',
           },
           {
             id: 'uuid2',
-            info: 'artist2 - music name2',
+            info: 'artist - Deck' + deck.to_s + ' music name2',
             thumbnail_url: 'url',
             music_url: nil,
             video_url: 'url',
