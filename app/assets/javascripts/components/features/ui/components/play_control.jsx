@@ -48,13 +48,13 @@ class MusicPlayer extends React.PureComponent {
           <div className='control-bar__deck' onClick={this.handleClickDeck}>
             <ul className='control-bar__deck-selector'>
               {(()=>[1,2,3].map(index=>(
-                <li key={index} className={'deck-selector__selector-body'+(this.state.targetDeck == index ? ' active':'')} onClick={()=>{this.handleClickDeckTab(index)}}>
+                <li key={index} className={'deck-selector__selector-body'+(this.state.targetDeck === index ? ' active':'')} onClick={()=>{this.handleClickDeckTab(index)}}>
                   <img src="/player/pawoo-music-playlist-icon.svg" /><span>DECK{index}</span>
                 </li>
               )))()}
             </ul>
             <div className="deck_queue-wrapper">
-              <div className="queue-item__artwork"></div>
+              <div className="queue-item__artwork" />
               <ul className="deck__queue">
                 <li className="deck__queue-item">
                   <div className="queue-item__main">
