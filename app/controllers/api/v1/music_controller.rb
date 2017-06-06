@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
 class Api::V1::MusicController < ApiController
-  # before_action -> { doorkeeper_authorize! :write }
-  # before_action :require_user!
+  before_action -> { doorkeeper_authorize! :write }
+  before_action :require_user!
 
   respond_to :json
 
   def create
-      music = MusicAttachment.new(params[:title], params[:artist], params[:music], params[:image], current_user.account)
+      music = MusicAttachment.new(music_params)
       if music.invalid?
-        render json: music.errors.messages, status: :unprocessable_entity
+        render json: { error: music.errors.full_messages.first }, status: :unprocessable_entity
         return
       end
 
