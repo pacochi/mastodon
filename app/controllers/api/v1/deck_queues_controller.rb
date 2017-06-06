@@ -3,7 +3,7 @@
 class Api::V1::DeckQueuesController < ApiController
   before_action -> { doorkeeper_authorize! :write }
   before_action :require_user!
-  before_action :check_deck
+  before_action :check_deck, only: [:destroy]
 
   respond_to :json
 
