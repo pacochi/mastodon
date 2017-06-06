@@ -148,7 +148,6 @@ class QueueItem
 
     def find_item(type, id)
       cache = redis.get("music:link:#{type}:#{id}")
-      puts 'cache hit!' if cache
       cache ? new(JSON.parse(cache, symbolize: true)) : nil
     end
 
