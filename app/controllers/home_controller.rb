@@ -36,13 +36,12 @@ class HomeController < ApplicationController
     when %r{\A/web/statuses/(?<status_id>\d+)\z}
       status_id = Regexp.last_match[:status_id]
       status = Status.where(visibility: [:public, :unlisted]).find(status_id)
-      short_account_status_path(status.account, status)
+      return short_account_status_path(status.account, status)
     when %r{\A/web/accounts/(?<account_id>\d+)\z}
       account_id = Regexp.last_match[:account_id]
       account = Account.find(account_id)
-      short_account_path(account)
-    else
-      about_path
+      return short_account_path(account) if account.local?
     end
+    about_path
   end
 end
