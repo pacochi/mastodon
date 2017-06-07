@@ -8,7 +8,7 @@ class Api::V1::DeckQueuesController < ApiController
   respond_to :json
 
   def create
-    if item && @playlist.add(params[:link], current_user.account)
+    if @playlist.add(params[:link], current_user.account)
       render_empty
     else
       render json: { error: 'エラー' }, status: :unprocessable_entity # TODO
