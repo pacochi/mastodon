@@ -5,14 +5,14 @@ import { defineMessages, injectIntl } from 'react-intl';
 import jsmediatags from 'jsmediatags';
 
 const messages = defineMessages({
-  music: { id: 'music_button.label', defaultMessage: 'Add Your Music' }
+  music: { id: 'music_button.label', defaultMessage: 'Add Your Music' },
 });
 
 
 const iconStyle = {
   height: null,
-  lineHeight: '27px'
-}
+  lineHeight: '27px',
+};
 
 class MusicButton extends React.PureComponent {
 
@@ -35,7 +35,7 @@ class MusicButton extends React.PureComponent {
         },
         onError: (error) => {
           console.log(':(', error.type, error.info);
-        }
+        },
       }
     );
   }
@@ -66,7 +66,7 @@ MusicButton.propTypes = {
   onSelectFile: PropTypes.func.isRequired,
   style: PropTypes.object,
   resetFileKey: PropTypes.number,
-  intl: PropTypes.object.isRequired
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(MusicButton);

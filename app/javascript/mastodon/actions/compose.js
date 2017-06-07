@@ -201,7 +201,7 @@ export function uploadMusicCompose(payload) {
     api(getState).post('/api/v1/music', data, {
       onUploadProgress: function (e) {
         dispatch(uploadComposeProgress(e.loaded, e.total));
-      }
+      },
     }).then(function (response) {
       dispatch(uploadComposeSuccess(response.data));
     }).catch(function (error) {

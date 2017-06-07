@@ -20,8 +20,8 @@ class MusicModal extends React.PureComponent {
     this.handleChangeCheckbox = this.handleChangeCheckbox.bind(this);
     this.state = {
       isClickedWaring: false,
-      imageURL: null
-    }
+      imageURL: null,
+    };
   }
 
   handleUpload() {
@@ -29,7 +29,7 @@ class MusicModal extends React.PureComponent {
       title: this.titleElement.value,
       artist: this.artistElement.value,
       image: this.imageFileElement.files[0],
-      music: this.props.music
+      music: this.props.music,
     });
     this.props.onClose();
   }
@@ -47,7 +47,7 @@ class MusicModal extends React.PureComponent {
     }))
     .then((url)=>{
       this.setState({
-        imageURL: `url(${url})`
+        imageURL: `url(${url})`,
       });
     });
   }
@@ -116,10 +116,11 @@ class MusicModal extends React.PureComponent {
       </div>
     );
   }
+
 }
 
 MusicModal.contextTypes = {
-  router: PropTypes.object
+  router: PropTypes.object,
 };
 
 MusicModal.propTypes = {
@@ -128,7 +129,7 @@ MusicModal.propTypes = {
   music: PropTypes.object.isRequired,
   onUpload: PropTypes.func.isRequired,
   onClose: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired
+  intl: PropTypes.object.isRequired,
 };
 
 export default injectIntl(MusicModal);
