@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Api::V1::PlaylistsController < ApiController
-  before_action -> { doorkeeper_authorize! :read }
-  before_action :require_user!
   before_action :set_playlist
 
   respond_to :json
@@ -10,7 +8,7 @@ class Api::V1::PlaylistsController < ApiController
   def show
     render json: {
       deck: {
-        number: deck,
+        number: params[:deck],
         time_offset: 20, # TODO
         queues: @playlist.queue_items
       },

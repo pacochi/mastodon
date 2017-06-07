@@ -1,13 +1,11 @@
 # frozen_string_literal: true
 
-require 'time'
-
 class Playlist
 
   MAX_QUEUE_SIZE = 10
   MAX_ADD_COUNT = 2
   MAX_SKIP_COUNT = 1
-  attr_accessor deck
+  attr_accessor :deck
 
   def initialize(deck)
     @deck = deck
@@ -15,31 +13,37 @@ class Playlist
 
   def add(link, account)
     # TODO: 回数チェック
-    last_one_hour = Time.current - 1.hour...Time.current
-    if MAX_QUEUE_SIZE < queue_items.size || MAX_ADD_COUNT < ControlLog.where(account: account, type: 'add_queue_item', created_at: last_one_hour).count
-      return nil
-    end
+    # last_one_hour = Time.current - 1.hour...Time.current
+    # if MAX_QUEUE_SIZE < queue_items.size || MAX_ADD_COUNT < ControlLog.where(account: account, type: 'add_queue_item', created_at: last_one_hour).count
+    #   return nil
+    # end
 
     queue_item = QueueItem.create_from_link(link, account)
+    Rails.logger.debug queue_item
     if queue_item && redis_push(queue_item)
       PushPlaylistWorker.perform_async(@deck, 'add', queue_item.to_json)
     end
   end
 
   def skip(id, account)
-    last_one_hour = Time.current - 1.hour...Time.current
-    if MAX_SKIP_COUNT < ControlLog.where(account: account, type: 'skip_queue_item', created_at: last_one_hour).count
-      return nil
-    end
+    # TODO: 回数チェック
+    # last_one_hour = Time.current - 1.hour...Time.current
+    # if MAX_SKIP_COUNT < ControlLog.where(account: account, type: 'skip_queue_item', created_at: last_one_hour).count
+    #   return nil
+    # end
 
     if redis_shift(id)
-      PushPlaylistWorker.perform_async(deck, 'play', id: item.id)
-      # TODO: 曲の再生が終わるころにskipを実行するやつをsidekiqに積む
+      item = queue_items.first
+      if item
+        PushPlaylistWorker.perform_async(deck, 'play', id: id)
+        # TODO: 曲の再生が終わるころにskipを実行するやつをsidekiqに積む
+      end
+      true
     end
   end
 
   def queue_items
-    JSON.parse(redis.get(playlist_key) || '[]', symbolize: true)
+    JSON.parse(redis.get(playlist_key) || '[]', symbolize_names: true)
   end
 
   private
@@ -71,8 +75,10 @@ class Playlist
 
   def redis_push(item)
     update_queue_items do |items|
+      Rails.logger.debug items
+      Rails.logger.debug items.size
       if items.size < 10
-        items.push(item.to_json)
+        items.push(item)
       else
         # TODO: エラー追加
         nil
@@ -85,6 +91,7 @@ class Playlist
       first_item = items.first
       if first_item && first_item[:id] == id
         items.shift
+        items
       else
         # TODO: エラー追加
         nil

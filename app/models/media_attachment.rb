@@ -3,7 +3,7 @@
 class MediaAttachment < ApplicationRecord
   self.inheritance_column = nil
 
-  enum type: [:image, :gifv, :video, :unknown, :music]
+  enum type: [:image, :gifv, :video, :unknown]
 
   IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif'].freeze
   VIDEO_MIME_TYPES = ['video/webm', 'video/mp4'].freeze
@@ -19,11 +19,6 @@ class MediaAttachment < ApplicationRecord
       format: 'png',
       time: 0,
     },
-  }.freeze
-  MUSIC_STYLES = {
-    original: {
-      format: 'mp4',
-    }
   }.freeze
 
   belongs_to :account, inverse_of: :media_attachments
@@ -82,8 +77,6 @@ class MediaAttachment < ApplicationRecord
         }
       elsif IMAGE_MIME_TYPES.include? f.instance.file_content_type
         IMAGE_STYLES
-      elsif f.instance.type == 'music' # music file is converted into mp4 before thrown into this module
-        MUSIC_STYLES
       else
         VIDEO_STYLES
       end
@@ -121,9 +114,6 @@ class MediaAttachment < ApplicationRecord
   end
 
   def set_meta
-    # change music file's filetype at this point to handle the converted mp4 as a mere video file in DB
-    # we must not change it earlier than here, otherwise the converted mp4 would be meaninglessly converted again by Paperclip
-    self.type = :video if file.instance.type == 'music'
     meta = populate_meta
     return if meta == {}
     file.instance_write :meta, meta
