@@ -1,4 +1,5 @@
 import { connect } from 'react-redux';
+import axios from 'axios';
 import ComposeForm from '../components/compose_form';
 import { uploadCompose } from '../../../actions/compose';
 import {
