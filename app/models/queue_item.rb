@@ -140,10 +140,10 @@ class QueueItem
       matched = link.match(%r{https://www\.youtube\.com/watch\?(.*)})
       params = matched ? matched[1] : nil
       if params
-        matched = params.match(%r{v=(.+)$})
+        matched = params.match(%r{v=([^&]+)})
         return matched[1] if matched
       end
-      matched = link.match(%r{https:\/\/youtu\.be\/(.*)$})
+      matched = link.match(%r{https:\/\/youtu\.be\/([^/^?]+)})
       matched ? matched[1] : nil
     end
 
