@@ -40,7 +40,7 @@ class MusicPlayer extends React.PureComponent {
         case 'play':
           {
             const deck = Object.assign({},this.state.deck);
-            deck.queue.shift();
+            deck.queues.shift();
             this.setState({
               deck,
               offset_start_time: (new Date().getTime() / 1000),
@@ -52,7 +52,7 @@ class MusicPlayer extends React.PureComponent {
           {
             const payload = data.payload;
             const deck = Object.assign({},this.state.deck);
-            deck.queue.push(payload);
+            deck.queues.push(payload);
             console.log(deck);
             this.setState({
               deck
@@ -119,7 +119,7 @@ class MusicPlayer extends React.PureComponent {
   }
 
   handleClickSkip () {
-    api(this.getMockState).post(`/api/v1/playlists/${this.state.targetDeck}/deck_queues/${this.state.deck.queue[0].id}`)
+    api(this.getMockState).post(`/api/v1/playlists/${this.state.targetDeck}/deck_queues/${this.state.deck.queues[0].id}`)
     .then((response)=>{
     })
     .catch((err)=>{
@@ -145,9 +145,9 @@ class MusicPlayer extends React.PureComponent {
   render () {
     const playerClass = `player-control${this.state.isOpen ? ' is-open':''}`;
     let nowPlayingArtwork = {};
-    if(this.state.deck && ("queue" in this.state.deck) && this.state.deck.queue.length) {
+    if(this.state.deck && ("queue" in this.state.deck) && this.state.deck.queues.length) {
       nowPlayingArtwork = {
-        backgroundImage: `url(${this.state.deck.queue[0].thumbnail_url})`
+        backgroundImage: `url(${this.state.deck.queues[0].thumbnail_url})`
       };
     }
 
@@ -174,12 +174,12 @@ class MusicPlayer extends React.PureComponent {
               SKIP
             </div>
             {(()=>{
-              if(!this.state.deck || !("queue" in this.state.deck) || !(this.state.deck.queue.length) ) return;
+              if(!this.state.deck || !("queue" in this.state.deck) || !(this.state.deck.queues.length) ) return;
               return (
                 <div className='control-bar__controller-info'>
                   <span className='control-bar__controller-now'>{parseInt(this.state.offset_time/60)}:{("0"+this.state.offset_time%60).slice(-2)}</span>
                   <span className='control-bar__controller-separater'>/</span>
-                  <span className='control-bar__controller-time'>{parseInt(this.state.deck.queue[0].duration/60)}:{("0"+this.state.deck.queue[0].duration%60).slice(-2)}</span>
+                  <span className='control-bar__controller-time'>{parseInt(this.state.deck.queues[0].duration/60)}:{("0"+this.state.deck.queues[0].duration%60).slice(-2)}</span>
                 </div>
               );
             })()}
@@ -195,31 +195,31 @@ class MusicPlayer extends React.PureComponent {
             <div className="deck_queue-wrapper">
               <div className="queue-item__artwork" style={nowPlayingArtwork}>
                 {(()=>{
-                  if(!this.state.deck || !("queue" in this.state.deck) || !(this.state.deck.queue.length) ) return;
+                  if(!this.state.deck || !("queue" in this.state.deck) || !(this.state.deck.queues.length) ) return;
 
-                  if(this.state.deck.queue[0].source_type == 'youtube'){
-                    const url = `https://www.youtube.com/embed/${this.state.deck.queue[0].source_id}?autoplay=1&rel=0&amp;controls=0&amp;showinfo=0`;
+                  if(this.state.deck.queues[0].source_type == 'youtube'){
+                    const url = `https://www.youtube.com/embed/${this.state.deck.queues[0].source_id}?autoplay=1&rel=0&amp;controls=0&amp;showinfo=0`;
                     return (
                       <iframe width="560" height="315" src={url} frameBorder="0" allowFullScreen />
                     );
                   }
 
-                  if(this.state.deck.queue[0].video_url){
+                  if(this.state.deck.queues[0].video_url){
                     return (
                       <video autoPlay style={nowPlayingArtwork}>
-                        <source src={this.state.deck.queue[0].video_url}/>
+                        <source src={this.state.deck.queues[0].video_url}/>
                       </video>
                     );
                   }else{
                     return (
-                      <audio ref={this.setAudioRef} autoPlay src={this.state.deck.queue[0].music_url} />
+                      <audio ref={this.setAudioRef} autoPlay src={this.state.deck.queues[0].music_url} />
                     );
                   }
                 })()}
               </div>
               <ul className="deck__queue">
                 {(()=>{
-                  if(!this.state.deck || !("queue" in this.state.deck) || !(this.state.deck.queue.length) ){
+                  if(!this.state.deck || !("queue" in this.state.deck) || !(this.state.deck.queues.length) ){
                     return (
                       <li className="deck__queue-item">
                         <div className="queue-item__main">
@@ -233,7 +233,7 @@ class MusicPlayer extends React.PureComponent {
                     );
                   }
 
-                  return this.state.deck.queue.map((queue_item,i)=>{
+                  return this.state.deck.queues.map((queue_item,i)=>{
                     return (
                       <li key={i} className="deck__queue-item">
                         <div className="queue-item__main">
