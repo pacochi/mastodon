@@ -154,6 +154,8 @@ Rails.application.routes.draw do
           post :mute
           post :unmute
         end
+
+        resource :pin, only: [:create, :destroy], controller: :pinned_statuses
       end
 
       namespace :timelines do

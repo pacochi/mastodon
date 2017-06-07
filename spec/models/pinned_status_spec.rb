@@ -22,7 +22,7 @@ RSpec.describe PinnedStatus, type: :model do
       subject.save!
       dupped = subject.dup
 
-      expect(dupped).to be_invalid.and model_have_error_on_field(:account)
+      expect(dupped).to be_invalid.and model_have_error_on_field(:status)
     end
 
     it "is invalid with other's status" do
