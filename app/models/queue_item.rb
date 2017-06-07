@@ -81,7 +81,7 @@ class QueueItem
     end
 
     def find_shop_id(link)
-      matched = link.match(%r{https://([\w-]+\.booth\.pm|booth\.pm/(zh-tw|zh-cn|ko|ja|en))/items/(?<item_id>\d+)})
+      matched = link.match(%r{https://([a-z0-9][a-z0-9\-]+[a-z0-9]\.booth\.pm|booth\.pm/(zh-tw|zh-cn|ko|ja|en))/items/(?<item_id>\d+)})
       matched ? matched[:item_id] : nil
     end
 
