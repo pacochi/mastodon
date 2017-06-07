@@ -1,0 +1,41 @@
+$button-icon-scale-ration-on-pc: 0.85;
+
+.status__prepend {
+  i.fa-retweet {
+    color: $ui-highlight-color;
+  }
+}
+
+.status {
+  .display-name strong {
+    opacity: 0.85;
+  }
+}
+
+.status__content a.hashtag,
+.status__content a span.ellipsis {
+  color: $ui-primary-color;
+}
+
+.including-brand {
+  text-transform: none !important;
+  display: inline;
+}
+
+@media screen and (min-width: 1025px) {
+  .status {
+    .icon-button {
+      font-size: 18px * $button-icon-scale-ration-on-pc !important;
+      width: 23.1429px * $button-icon-scale-ration-on-pc  !important;
+      height: 23.1429px * $button-icon-scale-ration-on-pc !important;
+
+      & > i.fa-retweet {
+        transform: rotate(360deg) scale($button-icon-scale-ration-on-pc) translateY(0.5px) !important; // 0.5px is magic number!!
+      }
+
+      &.active > i.fa-retweet {
+        transform: rotate(0deg) scale($button-icon-scale-ration-on-pc) translateY(0.5px) !important;
+      }
+    }
+  }
+}

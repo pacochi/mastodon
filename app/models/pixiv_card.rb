@@ -1,4 +1,14 @@
 # frozen_string_literal: true
+# == Schema Information
+#
+# Table name: pixiv_cards
+#
+#  id        :integer          not null, primary key
+#  status_id :integer          not null
+#  url       :string           not null
+#  image_url :string
+#
+
 
 class PixivCard < ApplicationRecord
   belongs_to :status, required: true

@@ -92,7 +92,7 @@ Rails.application.routes.draw do
   namespace :admin do
     resources :pubsubhubbub, only: [:index]
     resources :domain_blocks, only: [:index, :new, :create, :show, :destroy]
-    resources :settings, only: [:index, :update]
+    resource :settings, only: [:edit, :update]
     resources :instances, only: [:index]
     resources :suggestion_tags, only: [:index, :new, :create, :edit, :update, :destroy]
     resources :trend_ng_words, only: [:index, :new, :create, :edit, :update, :destroy]
@@ -109,9 +109,13 @@ Rails.application.routes.draw do
       resource :confirmation, only: [:create]
       resources :statuses, only: [:index, :update, :destroy]
     end
+
+    resources :users, only: [] do
+      resource :two_factor_authentication, only: [:destroy]
+    end
   end
 
-  get '/admin', to: redirect('/admin/settings', status: 302)
+  get '/admin', to: redirect('/admin/settings/edit', status: 302)
 
   namespace :api do
     # PubSubHubbub outgoing subscriptions
@@ -147,12 +151,16 @@ Rails.application.routes.draw do
           post :unreblog
           post :favourite
           post :unfavourite
+          post :mute
+          post :unmute
         end
       end
 
-      get '/timelines/home',     to: 'timelines#home', as: :home_timeline
-      get '/timelines/public',   to: 'timelines#public', as: :public_timeline
-      get '/timelines/tag/:id',  to: 'timelines#tag', as: :hashtag_timeline
+      namespace :timelines do
+        resource :home, only: :show, controller: :home
+        resource :public, only: :show, controller: :public
+        resources :tag, only: :show
+      end
 
       get '/search', to: 'search#index', as: :search
       get '/search/statuses/:query', to: 'search#statuses', as: :status_search_timeline
@@ -172,7 +180,8 @@ Rails.application.routes.draw do
       resources :suggested_accounts, only: [:index]
       resources :oauth_authentications, only: [:show], param: :uid
 
-      resource :instance, only: [:show]
+      resource :instance,      only: [:show]
+      resource :domain_blocks, only: [:show, :create, :destroy]
 
       resources :follow_requests, only: [:index] do
         member do

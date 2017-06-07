@@ -3,7 +3,6 @@
 module Admin
   class ReportsController < BaseController
     before_action :set_report, except: [:index]
-    helper_method :filter_params
 
     def index
       @reports = filtered_reports.page(params[:page])
@@ -50,7 +49,7 @@ module Admin
     end
 
     def filtered_reports
-      ReportFilter.new(filter_params).results.order('id desc').includes(
+      ReportFilter.new(filter_params).results.order(id: :desc).includes(
         :account,
         :target_account
       )

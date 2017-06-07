@@ -12,7 +12,7 @@ class FeedInsertWorker
       FeedManager.instance.filter?(:home, status, follower.id)
     end
 
-    FeedManager.instance.push(:home, followers, status)
+    FeedManager.instance.push(:home, followers, status) if followers.present?
   rescue ActiveRecord::RecordNotFound
     true
   end

@@ -2,8 +2,29 @@
   Mastodon (マストドン) hosted by pixiv
 
 - content_for :header_tags do
-  %script#initial-state{:type => 'application/json'}!= json_escape('{"meta": {"appmode": "about"}}')
-  = javascript_include_tag 'application_public', integrity: true, crossorigin: 'anonymous'
+  :ruby
+    initial_state = {
+      meta: {
+        streaming_api_base_url: Rails.configuration.x.streaming_api_base_url,
+        access_token: '',
+        locale: I18n.locale,
+        domain: site_hostname,
+        auto_play_gif: false,
+        appmode: 'about'
+      },
+      compose: {},
+      accounts: {},
+      media_attachments: {
+        accept_content_types: MediaAttachment::IMAGE_MIME_TYPES + MediaAttachment::VIDEO_MIME_TYPES
+      },
+      settings: {
+        onboarded: true # related: app/javascript/mastodon/actions/onboarding.js
+      }
+    }
+
+  %script#initial-state{ type: 'application/json' }!= json_escape(initial_state.to_json)
+  = javascript_pack_tag 'application', integrity: true, crossorigin: 'anonymous'
+  = javascript_pack_tag 'public', integrity: true, crossorigin: 'anonymous'
 
 - content_for :header_tags do
   %meta{ property: 'og:site_name', content: site_title }/
@@ -11,7 +32,7 @@
   %meta{ property: 'og:type', content: 'website' }/
   %meta{ property: 'og:title', content: Rails.configuration.x.local_domain }/
   %meta{ property: 'og:description', content: strip_tags(@instance_presenter.site_description.blank? ? t('about.about_mastodon') : @instance_presenter.site_description) }/
-  %meta{ property: 'og:image', content: asset_url('mastodon_small.png') }/
+  %meta{ property: 'og:image', content: asset_pack_path('mastodon_small.jpg') }/
   %meta{ property: 'og:image:width', content: '400' }/
   %meta{ property: 'og:image:height', content: '400' }/
   %meta{ property: 'twitter:card', content: 'summary' }/
@@ -19,14 +40,14 @@
 
 .about-cols
   .about-col.left
-    = image_tag 'service_logo.png', width: 150, style: 'display:block;margin:0 auto 40px'
+    = image_tag asset_pack_path('service_logo.png'), width: 150, style: 'display:block;margin:0 auto 40px'
 
     .simple_form
       = render 'registration'
 
   .about-col.main
     .about-col-head
-      = image_tag 'about/header.png', width: 535
+      = image_tag asset_pack_path('about/header.png'), width: 535
       %p
         ピクシブが運営するマストドンインスタンス「Pawoo」は、文章や画像を投稿して楽しむSNSです。
         「創作活動や自由なコミュニケーションを楽しめる場」として、どなたにも幅広く使っていただけます。
@@ -47,18 +68,18 @@
       .about-col-body-apps
         .about-col-body-app
           = link_to 'https://itunes.apple.com/us/app/pawoo/id1229070679' do
-            = image_tag 'about/badge-appstore.png', width: 190
+            = image_tag asset_pack_path('about/badge-appstore.png'), width: 190
 
         .about-col-body-app
           = link_to 'https://play.google.com/store/apps/details?id=jp.pxv.pawoo' do
-            = image_tag 'about/badge-googleplay.png', width: 190
+            = image_tag asset_pack_path('about/badge-googleplay.png'), width: 190
 
     .about-col-body
       %p.main ＼ Pawooの特徴 ／
 
       %p.title 一度に500文字までのテキスト・画像・動画を投稿できる
 
-      = image_tag 'about/submit-form.png', width: '100%'
+      = image_tag asset_pack_path('about/submit-form.png'), width: '100%'
 
       %p.title Pawooにはたくさんのユーザーがいて、わいわいしてる場を楽しめる
       %p
@@ -91,7 +112,7 @@
         オープンソースで公開されているため、誰でも自分のインスタンスを立ち上げることが可能である他、様々なインスタンスにアカウントを持つこともできます。
         また、インスタンス間を超えたやり取りも可能であるため、様々なコミュニティを介したコミュニケーションが展開されています。
 
-      %video{autoplay: '', loop: '',  src: asset_path('about/demo.mp4'),  poster: asset_path('about/demo.jpg'),  style: 'width:100%;'}
+      %video{autoplay: '', loop: '',  src: asset_pack_path('about/demo.mp4'),  poster: asset_pack_path('about/demo.jpg'),  style: 'width:100%;'}
 
     .about-col-body
       %p.main ＼ マストドンの特徴 ／
@@ -138,19 +159,8 @@
         ·
         = link_to t('about.other_instances'), 'https://github.com/tootsuite/documentation/blob/master/Using-Mastodon/List-of-Mastodon-instances.md'
 
-      = link_to image_tag('logo_pixiv.png', width: 50, style: 'display:block;margin:40px auto'), 'https://www.pixiv.net'
+      = link_to image_tag(asset_pack_path('logo_pixiv.png'), width: 50, style: 'display:block;margin:40px auto'), 'https://www.pixiv.net'
 
   .about-col.right
     .about-timeline-container
-      = react_component 'Mastodon', default_props, class: 'app-holder', prerender: false
-
-:javascript
-  userAgent = window.navigator.userAgent.toLowerCase();
-  // MSIE(IE11のみUAにMSIEを含まないのでTridentで検出)
-  isMSIE = /MSIE/i.test(userAgent) || /Trident/i.test(userAgent)
-  if(isMSIE) {
-    alert('お使いのブラウザはサポートされていません。Microsoft Edge、Google Chromeなどをお試しください。');
-  }
-
-  // タイムラインが伸びすぎないようにする
-  $('.about-timeline-container').height($('.about-col.main').height());
+      #mastodon{ data: { props: Oj.dump(default_props) } }
