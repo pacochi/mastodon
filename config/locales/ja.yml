@@ -285,6 +285,10 @@ ja:
     validations:
       images_and_video: 既に画像が追加されているため、動画を追加することはできません。
       too_many: 追加できるファイルは4つまでです。
+  music_attachments:
+    too_large_total_size: MP3ファイルと画像ファイルのサイズは合計%{max_size_in_mb}MB以下である必要があります
+    invalid_music_ext: 音楽ファイルの形式が無効です
+    invalid_image_ext: 画像ファイルの形式が無効です
   notification_mailer:
     digest:
       body: "%{instance} での最後のログインからの出来事:"
