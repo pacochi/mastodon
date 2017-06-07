@@ -1,5 +1,6 @@
 import { Link } from 'react-router';
 import { FormattedMessage } from 'react-intl';
+import PropTypes from 'prop-types';
 import IconButton from '../../../components/icon_button';
 import api from '../../../api';
 import YouTubePlayer from 'youtube-player';
@@ -38,6 +39,15 @@ class MusicPlayer extends React.PureComponent {
     this.subscription = createStream('ws://localhost:4000/', this.props.accessToken, `playlist&deck=${this.state.targetDeck}`, {
       received: (data) => {
         switch(data.event) {
+
+        case 'add':
+          {
+            const payload = data.payload;
+            const deck = Object.assign({}, this.state.deck);
+            deck.push(payload);
+            this.setState({deck});
+          }
+          break;
         case 'play':
           {
             const deck = Object.assign({}, this.state.deck);
@@ -228,7 +238,7 @@ class MusicPlayer extends React.PureComponent {
               if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ) return null;
               return (
                 <div className='control-bar__controller-info'>
-                  <span className='control-bar__controller-now'>{parseInt(this.state.offset_time/60)}:{("0"+this.state.offset_time%60).slice(-2)}</span>
+                  <span className='control-bar__controller-now'>{parseInt(Math.min(this.state.offset_time, this.state.deck.queues[0].duration)/60)}:{("0"+Math.min(this.state.offset_time, this.state.deck.queues[0].duration)%60).slice(-2)}</span>
                   <span className='control-bar__controller-separater'>/</span>
                   <span className='control-bar__controller-time'>{parseInt(this.state.deck.queues[0].duration/60)}:{("0"+this.state.deck.queues[0].duration%60).slice(-2)}</span>
                 </div>
@@ -319,7 +329,7 @@ class MusicPlayer extends React.PureComponent {
 }
 
 MusicPlayer.propTypes = {
-  accessToken: PropTypes.object.isRequired
+  accessToken: PropTypes.string.isRequired
 }
 
 export default MusicPlayer;
