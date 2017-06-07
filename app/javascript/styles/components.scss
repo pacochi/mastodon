@@ -3427,8 +3427,8 @@ button.icon-button.active i.fa-retweet {
 }
 
 .music-modal {
-  background: lighten($color2, 8%);
-  color: $color1;
+  background: lighten($ui-secondary-color, 8%);
+  color: $ui-base-color;
   border-radius: 8px;
   overflow: hidden;
   max-width: 90vw;
@@ -3508,14 +3508,14 @@ button.icon-button.active i.fa-retweet {
 
 .music-modal__action-bar, .confirmation-modal__action-bar {
   display: flex;
-  background: $color2;
+  background: $ui-secondary-color;
   padding: 10px;
   line-height: 36px;
 
   & > div {
     flex: 1 1 auto;
     text-align: right;
-    color: lighten($color1, 33%);
+    color: lighten($ui-base-color, 33%);
     padding-right: 10px;
   }
 
