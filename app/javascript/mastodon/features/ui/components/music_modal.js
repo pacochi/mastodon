@@ -1,3 +1,4 @@
+import React from 'react';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import IconButton from '../../../components/icon_button';
@@ -85,8 +86,8 @@ class MusicModal extends React.PureComponent {
                 );
               }
               return (
-                <div className="music-modal__artwork-none" onClick={this.handleChooseImage} >
-                  <IconButton icon='camera' title="Upload Album Art" />
+                <div className="music-modal__artwork-none icon-button" onClick={this.handleChooseImage} >
+                  <i style={{ fontSize: '30px' }} className={`fa fa-fw fa-camera`} aria-hidden='true' />
                 </div>
               );
             })()}
@@ -94,9 +95,9 @@ class MusicModal extends React.PureComponent {
 
           <div className="music-modal__metabox">
             <div>
-              <input className="music-modal__title" placeholder="楽曲名を入力" ref={this.setTitleRef} value={title} />
+              <input className="music-modal__title" placeholder="楽曲名を入力" ref={this.setTitleRef} defaultValue={title} />
             </div>
-            <input className="music-modal__artist" placeholder="作者名を入力" ref={this.setArtistRef} value={artist} />
+            <input className="music-modal__artist" placeholder="作者名を入力" ref={this.setArtistRef} defaultValue={artist} />
 
             <input type="file" name="music"   accept="audio/*" ref={this.setMusicRef} />
             <input type="file" name="image" accept="image/*" ref={this.setImageRef} onChange={this.handleOnSelectImage} />

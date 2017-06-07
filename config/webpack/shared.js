@@ -80,5 +80,6 @@ module.exports = {
     // Called by http-link-header in an API we never use, increases
     // bundle size unnecessarily
     Buffer: false,
+    fs: 'empty', // for jsmediatags
   },
 };
