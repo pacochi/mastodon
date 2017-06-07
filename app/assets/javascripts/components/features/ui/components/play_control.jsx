@@ -40,19 +40,24 @@ class MusicPlayer extends React.PureComponent {
         switch(data.event) {
         case 'play':
           {
-            const deck = Object.assign({},this.state.deck);
+            const deck = Object.assign({}, this.state.deck);
             deck.queues.shift();
             if(this.ytControl){
               this.ytControl.stopVideo();
             }
 
-            if(this.state.deck.queues[0].source_type == 'youtube'){
+            if(this.state.deck.queues[0].source_type === 'youtube'){
               setTimeout(()=>{
                 this.ytControl = YouTubePlayer('yt-player');
                 this.ytControl.loadVideoById(this.state.deck.queues[0].source_id);
                 this.ytControl.playVideo();
-                (!this.state.isPlaying) ? this.ytControl.mute() : this.ytControl.unMute();
-              },0);
+
+                if(this.state.isPlaying){
+                  this.ytControl.mute();
+                }else{
+                  this.ytControl.unMute();
+                }
+              }, 0);
             }else{
               if(this.ytControl) this.ytControl.destroy();
               this.ytControl = undefined;
@@ -70,7 +75,6 @@ class MusicPlayer extends React.PureComponent {
             const payload = data.payload;
             const deck = Object.assign({},this.state.deck);
             deck.queues.push(payload);
-            console.log(deck);
             this.setState({
               deck
             });
@@ -97,12 +101,17 @@ class MusicPlayer extends React.PureComponent {
           offset_counter: interval
         })
 
-        if(this.state.deck.queues[0].source_type == 'youtube'){
+        if(this.state.deck.queues[0].source_type === 'youtube'){
           setTimeout(()=>{
             this.ytControl = YouTubePlayer('yt-player');
             this.ytControl.loadVideoById(this.state.deck.queues[0].source_id);
             this.ytControl.playVideo();
-            (!this.state.isPlaying) ? this.ytControl.mute() : this.ytControl.unMute();
+
+            if(!this.state.isPlaying) {
+              this.ytControl.mute()
+            } else {
+              this.ytControl.unMute();
+            }
           },0);
         }else{
           if(this.ytControl) this.ytControl.destroy();
@@ -145,8 +154,12 @@ class MusicPlayer extends React.PureComponent {
   }
 
   handleClickToggle () {
-    if(this.ytControl){
-      this.state.isPlaying ? this.ytControl.mute() : this.ytControl.unMute();
+    if(this.ytControl) {
+      if(this.state.isPlaying) {
+        this.ytControl.mute();
+      }else{
+        this.ytControl.unMute();
+      }
     }
     this.setState({isPlaying: (!this.state.isPlaying)});
   }
@@ -185,7 +198,7 @@ class MusicPlayer extends React.PureComponent {
         backgroundImage: `url(${this.state.deck.queues[0].thumbnail_url})`
       };
       ytplayerStyle = {
-        display: this.state.deck.queues[0].source_type == 'youtube' ? 'block' : 'none'
+        display: this.state.deck.queues[0].source_type === 'youtube' ? 'block' : 'none'
       }
     }
 
@@ -212,7 +225,7 @@ class MusicPlayer extends React.PureComponent {
               SKIP
             </div>
             {(()=>{
-              if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ) return;
+              if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ) return null;
               return (
                 <div className='control-bar__controller-info'>
                   <span className='control-bar__controller-now'>{parseInt(this.state.offset_time/60)}:{("0"+this.state.offset_time%60).slice(-2)}</span>
@@ -225,7 +238,7 @@ class MusicPlayer extends React.PureComponent {
           <div className='control-bar__deck' onClick={this.handleClickDeck}>
             <ul className='control-bar__deck-selector'>
               {(()=>[1,2,3].map(index=>(
-                <li key={index} className={'deck-selector__selector-body'+(this.state.targetDeck === index ? ' active':'')} onClick={()=>{this.handleClickDeckTab(index)}}>
+                <li key={index} className={'deck-selector__selector-body'+(this.state.targetDeck === index ? ' active':'')} onClick={()=>this.handleClickDeckTab(index)}>
                   <img src="/player/pawoo-music-playlist-icon.svg" /><span>DECK{index}</span>
                 </li>
               )))()}
@@ -233,9 +246,9 @@ class MusicPlayer extends React.PureComponent {
             <div className="deck_queue-wrapper">
               <div className="queue-item__artwork" style={nowPlayingArtwork}>
                 {(()=>{
-                  if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ) return;
+                  if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ) return null;
 
-                  if(this.state.deck.queues[0].source_type == 'youtube'){
+                  if(this.state.deck.queues[0].source_type === 'youtube'){
                     return (
                       <div className='queue-item__ytplayer' style={ytplayerStyle}>
                         <div id="yt-player" />
@@ -266,8 +279,7 @@ class MusicPlayer extends React.PureComponent {
                             プレイリストに曲がありません
                           </div>
                         </div>
-                        <div className='queue-item__datasource'>
-                        </div>
+                        <div className='queue-item__datasource' />
                       </li>
                     );
                   }
@@ -304,6 +316,10 @@ class MusicPlayer extends React.PureComponent {
     );
   }
 
+}
+
+MusicPlayer.propTypes = {
+  accessToken: PropTypes.object.isRequired
 }
 
 export default MusicPlayer;
