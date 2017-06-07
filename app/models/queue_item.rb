@@ -12,14 +12,11 @@ class QueueItem
 
     YOUTUBE_API_KEY = ENV['YOUTUBE_API_KEY']
 
-    def create_from_link(deck, link, account)
+    def create_from_link(link, account)
       # TODO: 回数制限チェック
 
       # TODO: linkをパースしてAddQueueItemを作る
-      item = pawoo_link(link, account) || booth_link(link, account) || youtube_link(link, account)
-      redis.set("music:playlist:#{deck}:#{item.id}", item.to_json) if item
-
-      item
+      pawoo_link(link, account) || booth_link(link, account) || youtube_link(link, account)
     end
 
     private
@@ -142,11 +139,6 @@ class QueueItem
       matched ? matched[1] : nil
     end
 
-    def skip(deck, id, account)
-      # TODO:
-      true
-    end
-
     def find_cache(type, source_id)
       cache = redis.get("music:link:#{type}:#{source_id}")
       cache ? new(JSON.parse(cache, symbolize: true)) : nil
@@ -160,6 +152,5 @@ class QueueItem
     def redis
       Redis.current
     end
-
   end
 end

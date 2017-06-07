@@ -3,15 +3,12 @@
 class Api::V1::DeckQueuesController < ApiController
   before_action -> { doorkeeper_authorize! :write }
   before_action :require_user!
-  before_action :check_deck, only: [:destroy]
+  before_action :set_playlist
 
   respond_to :json
 
   def create
-    deck = params[:playlist_deck]
-    item = QueueItem.create_from_link(deck, params[:link], current_user.account)
-    if item
-      PushPlaylistWorker.perform_async(deck, 'add', item.to_json)
+    if item && @playlist.add(params[:link], current_user.account)
       render_empty
     else
       render json: { error: 'エラー' }, status: :unprocessable_entity # TODO
@@ -19,10 +16,7 @@ class Api::V1::DeckQueuesController < ApiController
   end
 
   def destroy
-    deck = params[:playlist_deck]
-    if QueueItem.skip(deck, params[:id], current_user.account)
-      item = QueueItem.all(deck).first
-      PushPlaylistWorker.perform_async(deck, 'play', id: item.id)
+    if @playlist.skip(params[:id], current_user.account)
       render_empty
     else
       render json: { error: 'エラー' }, status: :unprocessable_entity # TODO
@@ -31,7 +25,9 @@ class Api::V1::DeckQueuesController < ApiController
 
   private
 
-  def check_deck
-    raise ActiveRecord::RecordNotFound unless [1, 2, 3].include?(params[:deck].to_i)
+  def set_playlist
+    raise ActiveRecord::RecordNotFound unless [1, 2, 3].include?(params[:playlist_deck].to_i)
+
+    @playlist = Playlist.new(params[:playlist_deck])
   end
 end
