@@ -3,7 +3,7 @@
 class MediaAttachment < ApplicationRecord
   self.inheritance_column = nil
 
-  enum type: [:image, :gifv, :video, :unknown, :music]
+  enum type: [:image, :gifv, :video, :unknown]
 
   IMAGE_MIME_TYPES = ['image/jpeg', 'image/png', 'image/gif'].freeze
   VIDEO_MIME_TYPES = ['video/webm', 'video/mp4'].freeze
@@ -82,7 +82,7 @@ class MediaAttachment < ApplicationRecord
         }
       elsif IMAGE_MIME_TYPES.include? f.instance.file_content_type
         IMAGE_STYLES
-      elsif f.instance.type == 'music' # music file is converted into mp4 before thrown into this module
+      elsif f.instance.music_info != nil # music file is converted into mp4 before thrown into this module
         MUSIC_STYLES
       else
         VIDEO_STYLES
@@ -92,8 +92,10 @@ class MediaAttachment < ApplicationRecord
     def file_processors(f)
       if f.file_content_type == 'image/gif'
         [:gif_transcoder]
-      elsif VIDEO_MIME_TYPES.include? f.file_content_type
+      elsif VIDEO_MIME_TYPES.include? f.file_content_type && f.music_info != nil
         [:video_transcoder]
+      elsif f.music_info != nil
+        [:music_transcoder]
       else
         [:thumbnail]
       end
@@ -114,17 +116,17 @@ class MediaAttachment < ApplicationRecord
   end
 
   def set_type_and_extension
-    self.type = VIDEO_MIME_TYPES.include?(file_content_type) ? :video : :image
+    self.type ||= VIDEO_MIME_TYPES.include?(file_content_type) ? :video : :image
     extension = appropriate_extension
     basename  = Paperclip::Interpolations.basename(file, :original)
     file.instance_write :file_name, [basename, extension].delete_if(&:blank?).join('.')
   end
 
   def set_meta
+    meta = populate_meta
     # change music file's filetype at this point to handle the converted mp4 as a mere video file in DB
     # we must not change it earlier than here, otherwise the converted mp4 would be meaninglessly converted again by Paperclip
-    self.type = :video if file.instance.type == 'music'
-    meta = populate_meta
+    self.type = :video if file.instance.music_info != nil
     return if meta == {}
     file.instance_write :meta, meta
   end

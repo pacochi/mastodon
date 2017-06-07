@@ -17,4 +17,8 @@ class MusicAttachment
     end
   end
 
+  def duration
+    Mp3Info.open(music.path, &:length).ceil
+  end
+
 end
