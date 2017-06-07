@@ -51,6 +51,7 @@ class Status < ApplicationRecord
 
   has_one :notification, as: :activity, dependent: :destroy
   has_one :preview_card, dependent: :destroy
+  has_one :pinned_status, dependent: :destroy
 
   validates :uri, uniqueness: true, unless: :local?
   validates :text, presence: true, unless: :reblog?
