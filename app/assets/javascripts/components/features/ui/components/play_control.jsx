@@ -104,7 +104,7 @@ class MusicPlayer extends React.PureComponent {
   handleSubmitAddForm (e) {
     e.preventDefault();
     return new Promise((resolve, reject)=>{
-      api(this.getMockState).post(`/api/v1/playlists`)
+      api(this.getMockState).post(`/api/v1/playlists/${this.state.targetDeck}/deck_queues`, {url: this.urlRef.value})
       .then((response)=>{
         this.urlRef.value = "";
       })
