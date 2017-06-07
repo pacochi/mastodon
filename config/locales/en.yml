@@ -283,6 +283,10 @@ en:
     validations:
       images_and_video: Cannot attach a video to a status that already contains images
       too_many: Cannot attach more than 4 files
+  music_attachments:
+    too_large_total_size: Your mp3 and cover image must be less than %{max_size_in_mb}MB in total
+    invalid_music_ext: The music file is invalid
+    invalid_image_ext: The cover image file is invalid
   notification_mailer:
     digest:
       body: 'Here is a brief summary of what you missed on %{instance} since your last visit on %{since}:'
