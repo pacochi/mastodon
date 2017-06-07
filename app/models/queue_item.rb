@@ -85,6 +85,7 @@ class QueueItem
 
     def find_shop_id(link)
       matched = link.match(%r{https://booth\.pm/ja/items/(\d+)})
+      matched = link.match(%r{https://\w+\.booth\.pm/items/(\d+)}) unless matched
       matched ? matched[1] : nil
     end
 
@@ -136,8 +137,13 @@ class QueueItem
     end
 
     def find_youtube_id(link)
-      # TODO: 余裕があればちゃんとパースする
-      matched = link.match(%r{https://www\.youtube\.com/watch\?v=(\w+)})
+      matched = link.match(%r{https://www\.youtube\.com/watch\?(.*)})
+      params = matched ? matched[1] : nil
+      if params
+        matched = params.match(%r{v=(.+)$})
+        return matched[1] if matched
+      end
+      matched = link.match(%r{https:\/\/youtu\.be\/(.*)$})
       matched ? matched[1] : nil
     end
 
