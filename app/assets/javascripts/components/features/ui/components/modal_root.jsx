@@ -3,6 +3,7 @@ import MediaModal from './media_modal';
 import OnboardingModal from './onboarding_modal';
 import VideoModal from './video_modal';
 import BoostModal from './boost_modal';
+import MusicModal from './music_modal';
 import ConfirmationModal from './confirmation_modal';
 import { TransitionMotion, spring } from 'react-motion';
 
@@ -11,6 +12,7 @@ const MODAL_COMPONENTS = {
   'ONBOARDING': OnboardingModal,
   'VIDEO': VideoModal,
   'BOOST': BoostModal,
+  'MUSIC': MusicModal,
   'CONFIRM': ConfirmationModal
 };
 

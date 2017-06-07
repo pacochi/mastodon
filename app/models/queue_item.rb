@@ -48,7 +48,7 @@ class QueueItem
 
     def find_status_id(link)
       domain = 'localhost:3000' # TODO: 直す
-      matched = link.match(%r{https://pawoo.net/(@\W+)|(web/statuses)/(?<status_id>\d+)})
+      matched = link.match(%r{https?://#{domain}/(@\W+)|(web/statuses)/(?<status_id>\d+)})
       matched ? matched[:status_id] : nil
     end
 

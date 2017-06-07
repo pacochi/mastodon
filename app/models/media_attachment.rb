@@ -121,6 +121,9 @@ class MediaAttachment < ApplicationRecord
   end
 
   def set_meta
+    # change music file's filetype at this point to handle the converted mp4 as a mere video file in DB
+    # we must not change it earlier than here, otherwise the converted mp4 would be meaninglessly converted again by Paperclip
+    self.type = :video if file.instance.type == 'music'
     meta = populate_meta
     return if meta == {}
     file.instance_write :meta, meta

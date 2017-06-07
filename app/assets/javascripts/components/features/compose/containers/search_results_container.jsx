@@ -3,7 +3,7 @@ import SearchResults from '../components/search_results';
 
 const mapStateToProps = state => ({
   results: state.getIn(['search', 'results']),
-  isAdmin: state.getIn(['meta', 'me']) === state.getIn(['meta', 'admin']),
+  isAdmin: state.getIn(['meta', 'is_user_admin']),
   searchKeyword: state.getIn(['search', 'value'])
 });
 

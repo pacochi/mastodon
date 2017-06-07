@@ -10,10 +10,11 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170602102729) do
+ActiveRecord::Schema.define(version: 20170606065413) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+  enable_extension "pg_stat_statements"
 
   create_table "accounts", force: :cascade do |t|
     t.string   "username",                default: "",    null: false
@@ -135,6 +136,7 @@ ActiveRecord::Schema.define(version: 20170602102729) do
     t.string   "shortcode"
     t.integer  "type",              default: 0,  null: false
     t.json     "file_meta"
+    t.json     "music_info"
     t.index ["account_id"], name: "index_media_attachments_on_account_id", using: :btree
     t.index ["shortcode"], name: "index_media_attachments_on_shortcode", unique: true, using: :btree
     t.index ["status_id"], name: "index_media_attachments_on_status_id", using: :btree

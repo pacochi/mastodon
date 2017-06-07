@@ -35,6 +35,7 @@ export const COMPOSE_VISIBILITY_CHANGE  = 'COMPOSE_VISIBILITY_CHANGE';
 export const COMPOSE_LISTABILITY_CHANGE = 'COMPOSE_LISTABILITY_CHANGE';
 
 export const COMPOSE_EMOJI_INSERT = 'COMPOSE_EMOJI_INSERT';
+export const COMPOSE_TAG_INSERT = 'COMPOSE_TAG_INSERT';
 
 export function changeCompose(text) {
   return {
@@ -179,6 +180,25 @@ export function uploadCompose(files) {
     data.append('file', files[0]);
 
     api(getState).post('/api/v1/media', data, {
+      onUploadProgress: function (e) {
+        dispatch(uploadComposeProgress(e.loaded, e.total));
+      }
+    }).then(function (response) {
+      dispatch(uploadComposeSuccess(response.data));
+    }).catch(function (error) {
+      dispatch(uploadComposeFail(error));
+    });
+  };
+};
+
+export function uploadMusicCompose(payload) {
+  return function (dispatch, getState) {
+    dispatch(uploadComposeRequest());
+
+    const data = new FormData();
+    Object.keys(payload).forEach((key) => data.append(key, payload[key]));
+
+    api(getState).post('/api/v1/music', data, {
       onUploadProgress: function (e) {
         dispatch(uploadComposeProgress(e.loaded, e.total));
       }
@@ -346,3 +366,10 @@ export function insertEmojiCompose(position, emoji) {
     emoji
   };
 };
+
+export function insertTagCompose(tag) {
+  return {
+    type: COMPOSE_TAG_INSERT,
+    tag
+  };
+}
