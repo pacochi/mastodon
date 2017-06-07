@@ -98,7 +98,7 @@ class CommunityTimeline extends React.PureComponent {
     if (standalone) {
       heading = (
         <div style={{ display: 'inline-block', verticalAlign: 'top' }}>
-          <div>Pawooのローカルタイムライン</div>
+          <div>Pawoo Musicのローカルタイムライン</div>
           <div style={{ fontSize: '12px' }}>投稿をリアルタイムに流しています</div>
         </div>
       );
