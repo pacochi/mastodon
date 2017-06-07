@@ -14,13 +14,13 @@ class Api::V1::MusicController < ApiController
       end
 
       mp4 = MusicConvertService.new.call(music)
-      binding.pry
+      # because MediaAttachment->before_post_process is called as soon as file is loaded,
+      # all the values should be written BEFORE file (otherwise they are ignored)
       @media = MediaAttachment.new(
         account: current_user.account,
+        music_info: music_params.slice(:title, :artist).merge(duration: music.duration),
         file: mp4,
-        music_info: { title: music_params[:title], artist: music_params[:artist], duration: music.duration },
       )
-      binding.pry
       begin
         @media.save!
       ensure

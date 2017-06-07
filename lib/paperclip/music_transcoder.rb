@@ -3,7 +3,7 @@
 module Paperclip
   class MusicTranscoder < Paperclip::Processor
     def make
-      @file
+      File.open(@file.path)
     end
   end
 end
