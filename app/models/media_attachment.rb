@@ -20,11 +20,6 @@ class MediaAttachment < ApplicationRecord
       time: 0,
     },
   }.freeze
-  MUSIC_STYLES = {
-    original: {
-      format: 'mp4',
-    }
-  }.freeze
 
   belongs_to :account, inverse_of: :media_attachments
   belongs_to :status,  inverse_of: :media_attachments
@@ -82,20 +77,17 @@ class MediaAttachment < ApplicationRecord
         }
       elsif IMAGE_MIME_TYPES.include? f.instance.file_content_type
         IMAGE_STYLES
-      elsif f.instance.music_info != nil # music file is converted into mp4 before thrown into this module
-        MUSIC_STYLES
       else
         VIDEO_STYLES
       end
     end
 
     def file_processors(f)
+      binding.pry
       if f.file_content_type == 'image/gif'
         [:gif_transcoder]
-      elsif VIDEO_MIME_TYPES.include? f.file_content_type && f.music_info != nil
+      elsif VIDEO_MIME_TYPES.include? f.file_content_type
         [:video_transcoder]
-      elsif f.music_info != nil
-        [:music_transcoder]
       else
         [:thumbnail]
       end
