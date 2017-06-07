@@ -71,10 +71,14 @@ gem 'activerecord-import'
 gem 'elasticsearch-model', '~> 5.0'
 
 group :development, :test do
+  gem 'spring'
+  gem 'spring-commands-rspec'
+
   gem 'fabrication', '~> 2.16'
   gem 'fuubar', '~> 2.2'
   gem 'i18n-tasks', '~> 0.9', require: false
   gem 'pry-rails', '~> 0.3'
+  gem 'pry-doc'
   gem 'rspec-rails', '~> 3.6'
 end
 

@@ -367,6 +367,9 @@ GEM
       coderay (~> 1.1.0)
       method_source (~> 0.8.1)
       slop (~> 3.4)
+    pry-doc (0.10.0)
+      pry (~> 0.9)
+      yard (~> 0.9)
     pry-rails (0.3.6)
       pry (>= 0.10.4)
     public_suffix (2.0.5)
@@ -521,6 +524,10 @@ GEM
     simplecov-html (0.10.1)
     slack-notifier (2.2.1)
     slop (3.6.0)
+    spring (2.0.2)
+      activesupport (>= 4.2)
+    spring-commands-rspec (1.0.4)
+      spring (>= 0.9.1)
     sprockets (3.7.1)
       concurrent-ruby (~> 1.0)
       rack (> 1, < 3)
@@ -569,6 +576,7 @@ GEM
     websocket-extensions (0.1.2)
     xpath (2.1.0)
       nokogiri (~> 1.3)
+    yard (0.9.9)
 
 PLATFORMS
   ruby
@@ -630,6 +638,7 @@ DEPENDENCIES
   pghero (~> 1.7)
   pixiv_api!
   pkg-config (~> 1.2)
+  pry-doc
   pry-rails (~> 0.3)
   puma (~> 3.8)
   rabl (~> 0.13)
@@ -657,6 +666,8 @@ DEPENDENCIES
   simple_form (~> 3.4)
   simplecov (~> 0.14)
   slack-notifier
+  spring
+  spring-commands-rspec
   sprockets-rails (~> 3.2)
   statsd-instrument (~> 2.1)
   twitter-text (~> 1.14)
