@@ -14,7 +14,8 @@ class Api::V1::MusicController < ApiController
       end
 
       mp4 = MusicConvertService.new.call(params[:title], params[:artist], params[:music], params[:image])
-      @media = MediaAttachment.new(account: current_user.account, file: mp4, type: MediaAttachment.types[:music])
+      @media = MediaAttachment.new(account: current_user.account, file: mp4, type: MediaAttachment.types[:music],
+        music_info: { title: music_params[:title], artist: music_params[:artist], duration: music.duration })
       mp4.close
       @media.save!
   end
