@@ -16,14 +16,15 @@ const iconStyle = {
 
 class MusicButton extends React.PureComponent {
 
-  constructor (props, context) {
-    super(props, context);
-    this.handleChange = this.handleChange.bind(this);
-    this.handleClick = this.handleClick.bind(this);
-    this.setRef = this.setRef.bind(this);
-  }
+  static propTypes = {
+    disabled: PropTypes.bool,
+    onSelectFile: PropTypes.func.isRequired,
+    style: PropTypes.object,
+    resetFileKey: PropTypes.number,
+    intl: PropTypes.object.isRequired,
+  };
 
-  handleChange (e) {
+  handleChange = (e) => {
     if (!e.target.files.length) return;
     const file = e.target.files[0];
 
@@ -40,11 +41,11 @@ class MusicButton extends React.PureComponent {
     );
   }
 
-  handleClick () {
+  handleClick = () => {
     this.fileElement.click();
   }
 
-  setRef (c) {
+  setRef = (c) => {
     this.fileElement = c;
   }
 
@@ -60,13 +61,5 @@ class MusicButton extends React.PureComponent {
   }
 
 }
-
-MusicButton.propTypes = {
-  disabled: PropTypes.bool,
-  onSelectFile: PropTypes.func.isRequired,
-  style: PropTypes.object,
-  resetFileKey: PropTypes.number,
-  intl: PropTypes.object.isRequired,
-};
 
 export default injectIntl(MusicButton);

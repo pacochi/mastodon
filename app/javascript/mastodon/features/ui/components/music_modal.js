@@ -5,26 +5,25 @@ import Button from '../../../components/button';
 
 class MusicModal extends React.PureComponent {
 
-  constructor (props, context) {
-    super(props, context);
-    this.handleUpload = this.handleUpload.bind(this);
+  static contextTypes = {
+    router: PropTypes.object,
+  };
 
-    this.setMusicRef = this.setMusicRef.bind(this);
-    this.setImageRef = this.setImageRef.bind(this);
-    this.setTitleRef = this.setTitleRef.bind(this);
-    this.setArtistRef = this.setArtistRef.bind(this);
+  static propTypes = {
+    title: PropTypes.string.isRequired,
+    artist: PropTypes.string.isRequired,
+    music: PropTypes.object.isRequired,
+    onUpload: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
+    intl: PropTypes.object.isRequired,
+  };
 
-    this.handleChooseImage = this.handleChooseImage.bind(this);
-    this.handleOnSelectImage = this.handleOnSelectImage.bind(this);
+  state = {
+    isClickedWaring: false,
+    imageURL: null,
+  };
 
-    this.handleChangeCheckbox = this.handleChangeCheckbox.bind(this);
-    this.state = {
-      isClickedWaring: false,
-      imageURL: null,
-    };
-  }
-
-  handleUpload() {
+  handleUpload = () => {
     this.props.onUpload({
       title: this.titleElement.value,
       artist: this.artistElement.value,
@@ -34,11 +33,11 @@ class MusicModal extends React.PureComponent {
     this.props.onClose();
   }
 
-  handleChooseImage (e) {
+  handleChooseImage = (e) => {
     this.imageFileElement.click();
   }
 
-  handleOnSelectImage (e) {
+  handleOnSelectImage = (e) => {
     Promise.resolve()
     .then(() => new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -52,23 +51,23 @@ class MusicModal extends React.PureComponent {
     });
   }
 
-  handleChangeCheckbox (e) {
+  handleChangeCheckbox = (e) => {
     this.setState({isClickedWaring: !this.state.isClickedWaring});
   }
 
-  setMusicRef (c) {
+  setMusicRef = (c) => {
     this.musicFileElement = c;
   }
 
-  setImageRef (c) {
+  setImageRef = (c) => {
     this.imageFileElement = c;
   }
 
-  setTitleRef (c) {
+  setTitleRef = (c) => {
     this.titleElement = c;
   }
 
-  setArtistRef (c) {
+  setArtistRef = (c) => {
     this.artistElement = c;
   }
 
@@ -118,18 +117,5 @@ class MusicModal extends React.PureComponent {
   }
 
 }
-
-MusicModal.contextTypes = {
-  router: PropTypes.object,
-};
-
-MusicModal.propTypes = {
-  title: PropTypes.string.isRequired,
-  artist: PropTypes.string.isRequired,
-  music: PropTypes.object.isRequired,
-  onUpload: PropTypes.func.isRequired,
-  onClose: PropTypes.func.isRequired,
-  intl: PropTypes.object.isRequired,
-};
 
 export default injectIntl(MusicModal);
