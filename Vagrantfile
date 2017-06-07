@@ -36,7 +36,6 @@ sudo apt-get install \
   postgresql-contrib \
   yarn \
   libreadline-dev \
-  libmagic-dev \
   ffmpeg \
   -y
 
