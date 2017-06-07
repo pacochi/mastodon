@@ -20,6 +20,7 @@ class MusicPlayer extends React.PureComponent {
       offset_counter: undefined
     };
 
+    this.ytControl = undefined;
     this.audioRef = undefined;
 
     this.handleClickDeck = this.handleClickDeck.bind(this);
@@ -41,6 +42,22 @@ class MusicPlayer extends React.PureComponent {
           {
             const deck = Object.assign({},this.state.deck);
             deck.queues.shift();
+            if(this.ytControl){
+              this.ytControl.stopVideo();
+            }
+
+            if(this.state.deck.queues[0].source_type == 'youtube'){
+              setTimeout(()=>{
+                this.ytControl = YouTubePlayer('yt-player');
+                this.ytControl.loadVideoById(this.state.deck.queues[0].source_id);
+                this.ytControl.playVideo();
+                (!this.state.isPlaying) ? this.ytControl.mute() : this.ytControl.unMute();
+              },0);
+            }else{
+              if(this.ytControl) this.ytControl.destroy();
+              this.ytControl = undefined;
+            }
+
             this.setState({
               deck,
               offset_start_time: (new Date().getTime() / 1000),
@@ -79,6 +96,19 @@ class MusicPlayer extends React.PureComponent {
           offset_time: parseInt(response.data.deck.time_offset),
           offset_counter: interval
         })
+
+        if(this.state.deck.queues[0].source_type == 'youtube'){
+          setTimeout(()=>{
+            this.ytControl = YouTubePlayer('yt-player');
+            this.ytControl.loadVideoById(this.state.deck.queues[0].source_id);
+            this.ytControl.playVideo();
+            (!this.state.isPlaying) ? this.ytControl.mute() : this.ytControl.unMute();
+          },0);
+        }else{
+          if(this.ytControl) this.ytControl.destroy();
+          this.ytControl = undefined;
+        }
+
         return resolve();
       })
       .catch((err)=>{
@@ -115,6 +145,9 @@ class MusicPlayer extends React.PureComponent {
   }
 
   handleClickToggle () {
+    if(this.ytControl){
+      this.state.isPlaying ? this.ytControl.mute() : this.ytControl.unMute();
+    }
     this.setState({isPlaying: (!this.state.isPlaying)});
   }
 
@@ -145,10 +178,15 @@ class MusicPlayer extends React.PureComponent {
   render () {
     const playerClass = `player-control${this.state.isOpen ? ' is-open':''}`;
     let nowPlayingArtwork = {};
+    let ytplayerStyle = {};
+
     if(this.state.deck && ("queues" in this.state.deck) && this.state.deck.queues.length) {
       nowPlayingArtwork = {
         backgroundImage: `url(${this.state.deck.queues[0].thumbnail_url})`
       };
+      ytplayerStyle = {
+        display: this.state.deck.queues[0].source_type == 'youtube' ? 'block' : 'none'
+      }
     }
 
     return (
@@ -198,9 +236,10 @@ class MusicPlayer extends React.PureComponent {
                   if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ) return;
 
                   if(this.state.deck.queues[0].source_type == 'youtube'){
-                    const url = `https://www.youtube.com/embed/${this.state.deck.queues[0].source_id}?autoplay=1&rel=0&amp;controls=0&amp;showinfo=0`;
                     return (
-                      <iframe width="560" height="315" src={url} frameBorder="0" allowFullScreen />
+                      <div className='queue-item__ytplayer' style={ytplayerStyle}>
+                        <div id="yt-player" />
+                      </div>
                     );
                   }
 
