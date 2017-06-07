@@ -13,9 +13,6 @@ class QueueItem
     YOUTUBE_API_KEY = ENV['YOUTUBE_API_KEY']
 
     def create_from_link(deck, link, account)
-      # TODO: 回数制限チェック
-
-      # TODO: linkをパースしてAddQueueItemを作る
       item = pawoo_link(link, account) || booth_link(link, account) || youtube_link(link, account)
       redis.set("music:playlist:#{deck}:#{item.id}", item.to_json) if item
 
@@ -66,7 +63,9 @@ class QueueItem
       return cache if cache
 
       json = JSON.parse(http_client.get("https://api.booth.pm/pixiv/items/#{shop_id}").body.to_s)
-      # TODO: 音楽かどうかの判定
+
+      return nil if json['body']['sound'].nil? || json['body']['adult']
+
       user_or_shop_name = json['body']['shop']['user']['nickname'] || json['body']['shop']['name']
       item = new(
         id: SecureRandom.uuid,
