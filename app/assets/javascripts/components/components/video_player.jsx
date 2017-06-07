@@ -18,7 +18,7 @@ class VideoPlayer extends React.PureComponent {
     this.state = {
       visible: !this.props.sensitive,
       preview: true,
-      muted: true,
+      muted: false,
       hasAudio: true,
       videoError: false
     };
@@ -135,7 +135,6 @@ class VideoPlayer extends React.PureComponent {
       if (sensitive) {
         return (
           <div role='button' tabIndex='0' style={{ width: `${width}px`, height: `${height}px` }} className='media-spoiler' onClick={this.handleVisibility}>
-            {spoilerButton}
             <span className='media-spoiler__warning'><FormattedMessage id='status.sensitive_warning' defaultMessage='Sensitive content' /></span>
             <span className='media-spoiler__trigger'><FormattedMessage id='status.sensitive_toggle' defaultMessage='Click to view' /></span>
           </div>
@@ -143,7 +142,6 @@ class VideoPlayer extends React.PureComponent {
       } else {
         return (
           <div role='button' tabIndex='0' style={{ width: `${width}px`, height: `${height}px` }} className='media-spoiler' onClick={this.handleVisibility}>
-            {spoilerButton}
             <span className='media-spoiler__warning'><FormattedMessage id='status.media_hidden' defaultMessage='Media hidden' /></span>
             <span className='media-spoiler__trigger'><FormattedMessage id='status.sensitive_toggle' defaultMessage='Click to view' /></span>
           </div>
@@ -154,7 +152,6 @@ class VideoPlayer extends React.PureComponent {
     if (this.state.preview && !autoplay) {
       return (
         <div role='button' tabIndex='0' className='media-spoiler-video' style={{ width: `${width}px`, height: `${height}px`, backgroundImage: `url(${media.get('preview_url')})`, backgroundRepeat: 'no-repeat', backgroundPosition: 'center' }} onClick={this.handleOpen}>
-          {spoilerButton}
           <div className='media-spoiler-video-play-icon'><i className='fa fa-play' /></div>
         </div>
       );
@@ -170,9 +167,6 @@ class VideoPlayer extends React.PureComponent {
 
     return (
       <div className='status__video-player' style={{ width: `${width}px`, height: `${height}px` }}>
-        {spoilerButton}
-        {muteButton}
-        {expandButton}
         <video className='status__video-player-video' role='button' tabIndex='0' ref={this.setRef} src={media.get('url')} autoPlay={!isIOS()} loop={true} muted={this.state.muted} onClick={this.handleVideoClick} />
       </div>
     );
@@ -192,7 +186,7 @@ VideoPlayer.propTypes = {
 
 VideoPlayer.defaultProps = {
   width: 239,
-  height: 110
+  height: 239
 };
 
 export default injectIntl(VideoPlayer);

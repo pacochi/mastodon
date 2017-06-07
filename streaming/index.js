@@ -327,7 +327,7 @@ if (cluster.isMaster) {
         break;
       case 'playlist': {
         const deck = Number(location.query.deck);
-        if ([1, 2, 3].includes(deck)) {
+        if ([1, 2, 3].indexOf(deck)+1) {
           streamFrom(`streaming:playlist:${deck}`, req, streamToWs(req, ws), streamWsEnd(ws), true)
         } else {
           ws.close()

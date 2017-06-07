@@ -9,6 +9,9 @@ cd /vagrant # This is where the host folder/repo is mounted
 curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
 sudo apt-add-repository 'deb https://dl.yarnpkg.com/debian/ stable main'
 
+# Add repo for ffmpeg
+sudo apt-add-repository ppa:mc3man/trusty-media -y
+
 # Add repo for NodeJS
 curl -sL https://deb.nodesource.com/setup_4.x | sudo bash -
 
@@ -33,6 +36,7 @@ sudo apt-get install \
   postgresql-contrib \
   yarn \
   libreadline-dev \
+  ffmpeg \
   -y
 
 # Install rvm

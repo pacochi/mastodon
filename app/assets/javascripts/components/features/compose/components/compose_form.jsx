@@ -7,6 +7,7 @@ import ReplyIndicatorContainer from '../containers/reply_indicator_container';
 import AutosuggestTextarea from '../../../components/autosuggest_textarea';
 import { debounce } from 'react-decoration';
 import UploadButtonContainer from '../containers/upload_button_container';
+import MusicButtonContainer from '../containers/music_button_container';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import Toggle from 'react-toggle';
 import Collapsable from '../../../components/collapsable';
@@ -15,6 +16,7 @@ import PrivacyDropdownContainer from '../containers/privacy_dropdown_container';
 import SensitiveButtonContainer from '../containers/sensitive_button_container';
 import SensitiveGuideContainer from '../containers/sensitive_guide_container';
 import EmojiPickerDropdown from './emoji_picker_dropdown';
+import TimeLimitDropdown from './time_limit_dropdown';
 import UploadFormContainer from '../containers/upload_form_container';
 import TextIconButton from './text_icon_button';
 import WarningContainer from '../containers/warning_container';
@@ -39,6 +41,7 @@ class ComposeForm extends React.PureComponent {
     this.onHashTagSuggestionsFetchRequested = this.onHashTagSuggestionsFetchRequested.bind(this);
     this.onHashTagSuggestionsSelected = this.onHashTagSuggestionsSelected.bind(this);
     this.handleChangeSpoilerText = this.handleChangeSpoilerText.bind(this);
+    this.handleSelectTimeLimit = this.handleSelectTimeLimit.bind(this);
     this.setAutosuggestTextarea = this.setAutosuggestTextarea.bind(this);
     this.handleEmojiPick = this.handleEmojiPick.bind(this);
   }
@@ -143,6 +146,11 @@ class ComposeForm extends React.PureComponent {
     this.props.onPickEmoji(position, data);
   }
 
+  handleSelectTimeLimit (data) {
+    this._restoreCaret = this.autosuggestTextarea.textarea.selectionStart;
+    this.props.onSelectTimeLimit(data);
+  }
+
   render () {
     const { intl, onPaste } = this.props;
     const disabled = this.props.is_submitting;
@@ -191,6 +199,7 @@ class ComposeForm extends React.PureComponent {
           />
 
           <EmojiPickerDropdown onPickEmoji={this.handleEmojiPick} />
+          <TimeLimitDropdown onSelectTimeLimit={this.handleSelectTimeLimit} />
         </div>
 
         <div className='compose-form__modifiers'>
@@ -200,6 +209,7 @@ class ComposeForm extends React.PureComponent {
         <div className='compose-form__buttons-wrapper'>
           <div className='compose-form__buttons'>
             <UploadButtonContainer />
+            <MusicButtonContainer />
             <PrivacyDropdownContainer />
             <SensitiveButtonContainer />
             <SpoilerButtonContainer />
@@ -244,6 +254,7 @@ ComposeForm.propTypes = {
   onChangeSpoilerText: PropTypes.func.isRequired,
   onPaste: PropTypes.func.isRequired,
   onPickEmoji: PropTypes.func.isRequired,
+  onSelectTimeLimit: PropTypes.func.isRequired,
   showSearch: PropTypes.bool,
 };
 
