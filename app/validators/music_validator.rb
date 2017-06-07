@@ -18,12 +18,12 @@ class MusicValidator < ActiveModel::Validator
   end
 
   def valid_music_extension?(record)
-    mime_type = FileMagic.new(FileMagic::MAGIC_MIME).file(record.music.path)
+    mime_type = MimeMagic.by_magic(record.music).try(:type)
     return MUSIC_MIME_TYPES.any? { |m| mime_type.include? m }
   end
 
   def valid_image_extension?(record)
-    mime_type = FileMagic.new(FileMagic::MAGIC_MIME).file(record.image.path)
+    mime_type = MimeMagic.by_magic(record.image).try(:type)
     return IMAGE_MIME_TYPES.any? { |m| mime_type.include? m }
   end
 
