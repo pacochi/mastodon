@@ -83,7 +83,6 @@ class MediaAttachment < ApplicationRecord
     end
 
     def file_processors(f)
-      binding.pry
       if f.file_content_type == 'image/gif'
         [:gif_transcoder]
       elsif VIDEO_MIME_TYPES.include? f.file_content_type
