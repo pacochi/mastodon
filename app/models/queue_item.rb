@@ -23,7 +23,7 @@ class QueueItem
       return nil unless status_id
 
       cache = find_cache('pawoo-music', status_id)
-      return cache if cache
+      return set_uuid(cache) if cache
 
       video = MediaAttachment.find_by(status_id: status_id, type: MediaAttachment.types[:video])
       return nil unless video
@@ -57,7 +57,7 @@ class QueueItem
       return nil unless shop_id
 
       cache = find_cache('booth', shop_id)
-      return cache if cache
+      return set_uuid(cache) if cache
 
       json = JSON.parse(http_client.get("https://api.booth.pm/pixiv/items/#{shop_id}").body.to_s)
 
@@ -90,7 +90,7 @@ class QueueItem
       return nil unless video_id
 
       cache = find_cache('youtube', video_id)
-      return cache if cache
+      return set_uuid(cache) if cache
 
       duration_sec = fetch_youtube_duration(video_id)
       title = fetch_youtube_title(link)
@@ -136,6 +136,11 @@ class QueueItem
       # TODO: 余裕があればちゃんとパースする
       matched = link.match(%r{https://www\.youtube\.com/watch\?v=(\w+)})
       matched ? matched[1] : nil
+    end
+
+    def set_uuid(item)
+      item.id = SecureRandom.uuid
+      item
     end
 
     def find_cache(type, source_id)
