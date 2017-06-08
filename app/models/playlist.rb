@@ -24,6 +24,7 @@ class Playlist
       items = queue_items
       #TODO 同時にアイテムが追加されたときまずそう
       play_item(queue_item.id, queue_item.duration) if items.size == 1
+      queue_item
     end
   end
 

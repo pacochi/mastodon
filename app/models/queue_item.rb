@@ -26,19 +26,19 @@ class QueueItem
       return set_uuid(cache) if cache
 
       video = MediaAttachment.find_by(status_id: status_id, type: MediaAttachment.types[:video])
-      return nil unless video
+      return nil unless video&.music_info
 
       video_url = full_asset_url(video.file.url(:original))
 
       item = new(
         id: SecureRandom.uuid,
-        info: 'title - artist', # TODO: DBからinfo取ってくる
+        info: "#{video.music_info['title']} - #{video.music_info['artist']}",
         thumbnail_url: nil,
         music_url: nil,
         video_url: video_url,
         link: link,
-        duration: 0, # TODO: DBからinfo取ってくる
-        source_type: 'pawoo',
+        duration: video.music_info['duration'],
+        source_type: 'pawoo-music',
         source_id: status_id,
         account_id: account.id
       )
@@ -47,8 +47,7 @@ class QueueItem
     end
 
     def find_status_id(link)
-      domain = 'localhost:3000' # TODO: 直す
-      matched = link.match(%r{https?://#{domain}/(@\w+)|(web/statuses)/(?<status_id>\d+)})
+      matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/(@\w+)|(web/statuses)/(?<status_id>\d+)})
       matched ? matched[:status_id] : nil
     end
 
