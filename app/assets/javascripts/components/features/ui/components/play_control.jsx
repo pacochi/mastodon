@@ -24,15 +24,17 @@ class MusicPlayer extends React.PureComponent {
     this.ytControl = undefined;
     this.audioRef = undefined;
 
-    this.handleClickDeck = this.handleClickDeck.bind(this);
-    this.handleClickOverlay = this.handleClickOverlay.bind(this);
-    this.handleClickDeckTab = this.handleClickDeckTab.bind(this);
-    this.handleSubmitAddForm = this.handleSubmitAddForm.bind(this);
-    this.handleClickToggle = this.handleClickToggle.bind(this);
     this.setURLRef = this.setURLRef.bind(this);
     this.setAudioRef = this.setAudioRef.bind(this);
-    this.handleClickSkip = this.handleClickSkip.bind(this);
+    this.getDuration = this.getDuration.bind(this);
     this.getMockState = this.getMockState.bind(this);
+    this.handleClickSkip = this.handleClickSkip.bind(this);
+    this.handleClickDeck = this.handleClickDeck.bind(this);
+    this.handleClickToggle = this.handleClickToggle.bind(this);
+    this.handleClickOverlay = this.handleClickOverlay.bind(this);
+    this.handleClickDeckTab = this.handleClickDeckTab.bind(this);
+    this.getStartOffsetTime = this.getStartOffsetTime.bind(this);
+    this.handleSubmitAddForm = this.handleSubmitAddForm.bind(this);
 
     this.fetchDeck(1);
 
@@ -75,7 +77,7 @@ class MusicPlayer extends React.PureComponent {
 
             this.setState({
               deck,
-              offset_start_time: (new Date().getTime() / 1000),
+              offset_start_time: (new Date().getTime()),
               offset_time: 0,
             });
           }
@@ -101,12 +103,12 @@ class MusicPlayer extends React.PureComponent {
       .then((response)=>{
         const interval = setInterval(()=>{
           this.setState({
-            offset_time: parseInt(new Date().getTime() / 1000) - parseInt(this.state.offset_start_time)
+            offset_time: parseInt(new Date().getTime()) - parseInt(this.state.offset_start_time)
           })
-        },300);
+        },14);
         this.setState({
           deck: response.data.deck,
-          offset_start_time: (new Date().getTime() / 1000) - parseInt(response.data.deck.time_offset),
+          offset_start_time: (new Date().getTime()) - (new Date(0).setSeconds(response.data.deck.time_offset)),
           offset_time: parseInt(response.data.deck.time_offset),
           offset_counter: interval
         })
@@ -193,6 +195,16 @@ class MusicPlayer extends React.PureComponent {
     }
   }
 
+  getStartOffsetTime () {
+    if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ) return 0;
+    return !this.state.offset_time ? 0 : parseInt(this.state.offset_time / 1000);
+  }
+
+  getDuration () {
+    if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ) return 0;
+    return this.state.deck.queues[0].duration;
+  }
+
   setAudioRef (c) {
     this.audioRef = c;
     if(this.audioRef) this.audioRef.volume = 0.1;
@@ -200,6 +212,10 @@ class MusicPlayer extends React.PureComponent {
 
   render () {
     const playerClass = `player-control${this.state.isOpen ? ' is-open':''}`;
+    const iconClass = `fa fa-volume-${this.state.isPlaying?'up':'off'}`;
+    const toggleClass = `control-bar__controller-toggle is-${this.state.isPlaying?'playing':'pause'}`;
+
+    let playerSeekBarStyle = {};
     let nowPlayingArtwork = {};
     let ytplayerStyle = {};
 
@@ -210,27 +226,18 @@ class MusicPlayer extends React.PureComponent {
       ytplayerStyle = {
         display: this.state.deck.queues[0].source_type === 'youtube' ? 'block' : 'none'
       }
+      playerSeekBarStyle = {
+        width: `${(this.state.offset_time / (this.state.deck.queues[0].duration*1000) )*100}%`
+      }
     }
 
     return (
       <div className={playerClass}>
         <div className='player-control__control-bar'>
           <div className='control-bar__controller'>
-            {(()=>{
-              if(this.state.isPlaying){
-                return (
-                  <div className='control-bar__controller-toggle is-playing' onClick={this.handleClickToggle}>
-                    <i className="fa fa-volume-up" />
-                  </div>
-                )
-              }else{
-                return (
-                  <div className='control-bar__controller-toggle is-pause' onClick={this.handleClickToggle}>
-                    <i className="fa fa-volume-off" />
-                  </div>
-                )
-              }
-            })()}
+            <div className={toggleClass} onClick={this.handleClickToggle}>
+              <i className={iconClass} />
+            </div>
             <div className='control-bar__controller-skip' onClick={this.handleClickSkip}>
               SKIP
             </div>
@@ -238,9 +245,9 @@ class MusicPlayer extends React.PureComponent {
               if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ) return null;
               return (
                 <div className='control-bar__controller-info'>
-                  <span className='control-bar__controller-now'>{parseInt(Math.min(this.state.offset_time, this.state.deck.queues[0].duration)/60)}:{("0"+Math.min(this.state.offset_time, this.state.deck.queues[0].duration)%60).slice(-2)}</span>
+                  <span className='control-bar__controller-now'>{parseInt(Math.min(this.getStartOffsetTime(), this.getDuration())/60)}:{("0"+Math.min(this.getStartOffsetTime(), this.getDuration())%60).slice(-2)}</span>
                   <span className='control-bar__controller-separater'>/</span>
-                  <span className='control-bar__controller-time'>{parseInt(this.state.deck.queues[0].duration/60)}:{("0"+this.state.deck.queues[0].duration%60).slice(-2)}</span>
+                  <span className='control-bar__controller-time'>{parseInt(this.getDuration()/60)}:{("0"+this.getDuration()%60).slice(-2)}</span>
                 </div>
               );
             })()}
@@ -294,9 +301,8 @@ class MusicPlayer extends React.PureComponent {
                     );
                   }
 
-                  return this.state.deck.queues.map((queue_item,i)=>{
-                    return (
-                      <li key={i} className="deck__queue-item">
+                  return this.state.deck.queues.map(queue_item=>(
+                      <li key={queue_item.id} className="deck__queue-item">
                         <div className="queue-item__main">
                           <div className='queue-item__metadata'>
                             {queue_item.info}
@@ -306,9 +312,8 @@ class MusicPlayer extends React.PureComponent {
                           <a href={queue_item.link} target="_blank"><img src={(()=>`/player/logos/${queue_item.source_type}.svg`)()} /></a>
                         </div>
                       </li>
-                    );
-                  });
-
+                    )
+                  );
                 })()}
                 <li className="deck__queue-add-form">
                   <form onSubmit={this.handleSubmitAddForm}>
@@ -321,11 +326,11 @@ class MusicPlayer extends React.PureComponent {
             </div>
           </div>
         </div>
+        <div className='player-seekbar' style={playerSeekBarStyle} />
         <div className='player-control__overlay' onClick={this.handleClickOverlay} />
       </div>
     );
   }
-
 }
 
 MusicPlayer.propTypes = {
