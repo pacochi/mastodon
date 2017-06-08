@@ -17,7 +17,6 @@ import cards from './cards';
 import reports from './reports';
 import suggested_accounts from './suggested_accounts';
 import trend_tags from './trend_tags';
-import playlists from './playlists';
 
 export default combineReducers({
   timelines,
@@ -37,6 +36,5 @@ export default combineReducers({
   cards,
   reports,
   suggested_accounts,
-  trend_tags,
-  playlists
+  trend_tags
 });
