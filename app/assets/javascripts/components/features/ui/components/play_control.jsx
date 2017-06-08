@@ -23,6 +23,7 @@ class MusicPlayer extends React.PureComponent {
 
     this.ytControl = undefined;
     this.audioRef = undefined;
+    this.videoRef = undefined;
 
     this.setURLRef = this.setURLRef.bind(this);
     this.setAudioRef = this.setAudioRef.bind(this);
@@ -58,7 +59,7 @@ class MusicPlayer extends React.PureComponent {
               this.ytControl.stopVideo();
             }
 
-            if(!deck || !("queues" in deck) || !(deck.queues.length) || deck.queues[0].source_type === 'youtube') {
+            if(!deck || !("queues" in deck) || !(deck.queues.length) || deck.queues[0].source_type !== 'youtube') {
               if(this.ytControl) this.ytControl.destroy();
               this.ytControl = undefined;
             }else{
@@ -93,7 +94,7 @@ class MusicPlayer extends React.PureComponent {
 
   fetchDeck(id) {
     return new Promise((resolve, reject)=>{
-      api(this.getMockState).get(`/api/v1/playlists/${id}`)
+      return api(this.getMockState).get(`/api/v1/playlists/${id}`)
       .then((response)=>{
         const interval = setInterval(()=>{
           this.setState({
@@ -107,20 +108,40 @@ class MusicPlayer extends React.PureComponent {
           offset_counter: interval
         })
 
-        if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) || this.state.deck.queues[0].source_type === 'youtube') {
+        if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) || this.state.deck.queues[0].source_type !== 'youtube') {
           if(this.ytControl) this.ytControl.destroy();
           this.ytControl = undefined;
+        }
+        if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length)){
           return resolve();
         }
-        setTimeout(()=>{
-          this.ytControl = YouTubePlayer('yt-player');
-          this.ytControl.loadVideoById(this.state.deck.queues[0].source_id);
-          this.ytControl.playVideo();
 
-          if(!this.state.isPlaying) {
-            this.ytControl.mute()
-          } else {
-            this.ytControl.unMute();
+        setTimeout(()=>{
+          const offset = this.state.offset_time * 0.001;
+          switch (this.state.deck.queues[0].source_type) {
+            case 'youtube':
+              {
+                this.ytControl = YouTubePlayer('yt-player');
+                this.ytControl.loadVideoById(this.state.deck.queues[0].source_id);
+                this.ytControl.playVideo();
+                this.ytControl.seekTo(offset);
+
+                if(!this.state.isPlaying) {
+                  this.ytControl.mute()
+                } else {
+                  this.ytControl.unMute();
+                }
+              }
+              break;
+            case 'pawoo':
+              {
+                this.videoRef.currentTime = offset;
+              }
+              break;
+            case 'booth':
+              {
+                this.audioRef.currentTime = offset;
+              }
           }
         },0);
       })
@@ -197,6 +218,10 @@ class MusicPlayer extends React.PureComponent {
     return this.state.deck.queues[0].duration;
   }
 
+  setVideoRef (c) {
+    this.videoRef = c;
+  }
+
   setAudioRef (c) {
     this.audioRef = c;
     if(this.audioRef) this.audioRef.volume = 0.1;
@@ -267,7 +292,7 @@ class MusicPlayer extends React.PureComponent {
 
                   if(this.state.deck.queues[0].video_url){
                     return (
-                      <video autoPlay style={nowPlayingArtwork} muted={!this.state.isPlaying}>
+                      <video ref={setVideoRef} autoPlay style={nowPlayingArtwork} muted={!this.state.isPlaying}>
                         <source src={this.state.deck.queues[0].video_url}/>
                       </video>
                     );
