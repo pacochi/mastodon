@@ -43,6 +43,7 @@ class Playlist
 
   def next(id)
     if redis_shift(id)
+      PushPlaylistWorker.perform_async(deck, 'end', {})
       first_item = queue_items.first
 
       if first_item
