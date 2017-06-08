@@ -35,6 +35,7 @@ class MusicPlayer extends React.PureComponent {
     this.handleClickOverlay = this.handleClickOverlay.bind(this);
     this.handleClickDeckTab = this.handleClickDeckTab.bind(this);
     this.handleSubmitAddForm = this.handleSubmitAddForm.bind(this);
+    this.playNextQueueItem = this.playNextQueueItem.bind(this);
   }
 
   componentDidMount () {
@@ -49,44 +50,17 @@ class MusicPlayer extends React.PureComponent {
             const payload = JSON.parse(data.payload);
             const deck = Object.assign({}, this.state.deck);
             deck.queues.push(payload);
-            this.setState({deck});
+            if(deck.queues.length === 1) {
+              this.playNextQueueItem(deck);
+            }
           }
           break;
           case 'play':
           {
             const deck = Object.assign({}, this.state.deck);
             deck.queues.shift();
-            if(this.ytControl){
-              this.ytControl.stopVideo();
-            }
-
-            if(!deck || !("queues" in deck) || !(deck.queues.length) || deck.queues[0].source_type !== 'youtube') {
-              if(this.ytControl) this.ytControl.destroy();
-              this.ytControl = undefined;
-            }else{
-              setTimeout(()=>{
-                this.ytControl = YouTubePlayer('yt-player');
-                this.ytControl.loadVideoById(deck.queues[0].source_id);
-                this.ytControl.playVideo();
-
-                if(this.state.isPlaying){
-                  this.ytControl.mute();
-                }else{
-                  this.ytControl.unMute();
-                }
-              }, 0);
-            }
-
-            this.setState({
-              deck,
-              offset_start_time: (new Date().getTime()),
-              offset_time: 0,
-              isSeekbarActive: false
-            });
-
-            // アニメーション対応
-            // isSeekbarActiveを一度falseにしてシークをリセットした後に再度trueにして、曲の時間と同じ時間かかるtransitionを生成する
-            setTimeout(()=>this.setState({isSeekbarActive:true}),0);
+            deck.time_offset = 0;
+            this.playNextQueueItem(deck);
           }
           break;
           case 'delete':
@@ -96,6 +70,40 @@ class MusicPlayer extends React.PureComponent {
         }
       }
     });
+  }
+
+  playNextQueueItem (deck) {
+    if(this.ytControl){
+      this.ytControl.stopVideo();
+    }
+
+    if(!deck || !("queues" in deck) || !(deck.queues.length) || deck.queues[0].source_type !== 'youtube') {
+      if(this.ytControl) this.ytControl.destroy();
+      this.ytControl = undefined;
+    }else{
+      setTimeout(()=>{
+        this.ytControl = YouTubePlayer('yt-player');
+        this.ytControl.loadVideoById(deck.queues[0].source_id, 0);
+        this.ytControl.playVideo();
+
+        if(!this.state.isPlaying){
+          this.ytControl.mute();
+        }else{
+          this.ytControl.unMute();
+        }
+      }, 20);
+    }
+
+    this.setState({
+      deck,
+      offset_start_time: (new Date().getTime() / 1000),
+      offset_time: 0,
+      isSeekbarActive: false
+    });
+
+    // アニメーション対応
+    // isSeekbarActiveを一度falseにしてシークをリセットした後に再度trueにして、曲の時間と同じ時間かかるtransitionを生成する
+    setTimeout(()=>this.setState({isSeekbarActive:true}),0);
   }
 
   fetchDeck(id) {
@@ -132,9 +140,8 @@ class MusicPlayer extends React.PureComponent {
             case 'youtube':
               {
                 this.ytControl = YouTubePlayer('yt-player');
-                this.ytControl.loadVideoById(this.state.deck.queues[0].source_id);
+                this.ytControl.loadVideoById(this.state.deck.queues[0].source_id, offset);
                 this.ytControl.playVideo();
-                this.ytControl.seekTo(offset);
 
                 if(!this.state.isPlaying) {
                   this.ytControl.mute()
@@ -153,7 +160,7 @@ class MusicPlayer extends React.PureComponent {
                 this.audioRef.currentTime = offset;
               }
           }
-        },0);
+        },20);
       })
       .catch((err)=>{
         return reject(err);
