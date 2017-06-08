@@ -16,9 +16,13 @@ const mapDispatchToProps = dispatch => ({
   },
 
   onSelectFile (file, tag) {
+    const tagSupport = tag.version[0] === '2';
+    const title = tagSupport ? tag.tags.title : '';
+    const artist = tagSupport ? tag.tags.artist : '';
+
     dispatch(openModal('MUSIC', {
-      title: tag.tags.title,
-      artist: tag.tags.artist,
+      title,
+      artist,
       music: file,
       onUpload: this.onUpload,
     }));
