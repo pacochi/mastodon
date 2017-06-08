@@ -83,6 +83,9 @@ class MusicPlayer extends React.PureComponent {
               offset_time: 0,
               isSeekbarActive: false
             });
+
+            // アニメーション対応
+            // isSeekbarActiveを一度falseにしてシークをリセットした後に再度trueにして、曲の時間と同じ時間かかるtransitionを生成する
             setTimeout(()=>this.setState({isSeekbarActive:true}),0);
           }
           break;
