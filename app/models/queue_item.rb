@@ -48,7 +48,7 @@ class QueueItem
 
     def find_status_id(link)
       domain = 'localhost:3000' # TODO: 直す
-      matched = link.match(%r{https?://#{domain}/(@\W+)|(web/statuses)/(?<status_id>\d+)})
+      matched = link.match(%r{https?://#{domain}/(@\w+)|(web/statuses)/(?<status_id>\d+)})
       matched ? matched[:status_id] : nil
     end
 
@@ -81,8 +81,8 @@ class QueueItem
     end
 
     def find_shop_id(link)
-      matched = link.match(%r{https://booth\.pm/ja/items/(\d+)})
-      matched ? matched[1] : nil
+      matched = link.match(%r{https://([a-z0-9][a-z0-9\-]+[a-z0-9]\.booth\.pm|booth\.pm/(zh-tw|zh-cn|ko|ja|en))/items/(?<item_id>\d+)})
+      matched ? matched[:item_id] : nil
     end
 
     def youtube_link(link, account)
@@ -133,8 +133,13 @@ class QueueItem
     end
 
     def find_youtube_id(link)
-      # TODO: 余裕があればちゃんとパースする
-      matched = link.match(%r{https://www\.youtube\.com/watch\?v=(\w+)})
+      matched = link.match(%r{https://www\.youtube\.com/watch\?(.*)})
+      params = matched ? matched[1] : nil
+      if params
+        matched = params.match(%r{v=([^&]+)})
+        return matched[1] if matched
+      end
+      matched = link.match(%r{https://youtu\.be/([^/^?]+)})
       matched ? matched[1] : nil
     end
 
