@@ -210,6 +210,7 @@ Rails.application.routes.draw do
           get :statuses
           get :followers
           get :following
+          get :pinned_statuses
 
           post :follow
           post :unfollow

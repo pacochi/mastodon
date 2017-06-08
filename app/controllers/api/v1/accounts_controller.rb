@@ -68,6 +68,21 @@ class Api::V1::AccountsController < ApiController
     set_pagination_headers(next_path, prev_path)
   end
 
+  def pinned_statuses
+    statuses = Status.where(id: @account.pinned_statuses.pluck(:status_id)).joins(:pinned_status).merge(PinnedStatus.recent)
+    @statuses = statuses.permitted_for(@account, current_account).paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
+    @statuses = cache_collection(@statuses, Status)
+
+    set_maps(@statuses)
+
+    next_path = pinned_statuses_api_v1_account_url(statuses_pagination_params(max_id: @statuses.last.id))    if @statuses.size == limit_param(DEFAULT_STATUSES_LIMIT)
+    prev_path = pinned_statuses_api_v1_account_url(statuses_pagination_params(since_id: @statuses.first.id)) unless @statuses.empty?
+
+    set_pagination_headers(next_path, prev_path)
+
+    render :statuses
+  end
+
   def follow
     FollowService.new.call(current_user.account, @account.acct)
     set_relationship
