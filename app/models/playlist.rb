@@ -94,7 +94,7 @@ class Playlist
 
   def redis_push(item)
     update_queue_items do |items|
-      if items.size < 10
+      if items.size < MAX_QUEUE_SIZE
         items.push(item)
       else
         # TODO: エラー追加
