@@ -46,7 +46,7 @@ class Playlist
         queue_item = QueueItem.new(queue_items.first)
         play_item(queue_item.id, queue_item.duration)
       end
-      first_item
+      true
     end
   end
 
