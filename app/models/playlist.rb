@@ -22,11 +22,8 @@ class Playlist
     if queue_item && redis_push(queue_item)
       PushPlaylistWorker.perform_async(deck, 'add', queue_item.to_json)
       items = queue_items
-      if items.size == 1
-        set_start_time
-        PushPlaylistWorker.perform_async(deck, 'play', id: queue_item.id)
-        NextPlaylistWorker.perform_in(queue_item.duration, deck, queue_item.id)
-      end
+      #TODO 同時にアイテムが追加されたときまずそう
+      play_item(queue_item.id, queue_item.duration) if items.size == 1
     end
   end
 
@@ -43,11 +40,7 @@ class Playlist
   def next(id)
     if redis_shift(id)
       item = queue_items.first
-      if item
-        set_start_time
-        NextPlaylistWorker.perform_in(item[:duration], deck, item[:id])
-        PushPlaylistWorker.perform_async(deck, 'play', id: item[:id])
-      end
+      play_item(item[:id], item[:duration]) if item
     end
   end
 
@@ -56,7 +49,7 @@ class Playlist
   end
 
   def set_start_time
-    redis.set(start_time_key, Time.now.to_i.to_s)
+    redis.set(start_time_key, Time.now.to_i)
   end
 
   def current_time_sec
@@ -65,6 +58,12 @@ class Playlist
   end
 
   private
+
+  def play_item(queue_item_id, duration)
+    set_start_time
+    NextPlaylistWorker.perform_in(duration, deck, item[:id])
+    PushPlaylistWorker.perform_async(deck, 'play', id: queue_item_id)
+  end
 
   def playlist_key
     "music:playlist:#{deck}"
