@@ -288,6 +288,10 @@ if (cluster.isMaster) {
     streamFrom(`timeline:hashtag:${req.query.tag}`, req, streamToHttp(req, res), streamHttpEnd(req), true)
   })
 
+  app.get('/api/v1/streaming/hashtag/local', (req, res) => {
+    streamFrom(`timeline:hashtag:${req.query.tag}:local`, req, streamToHttp(req, res), streamHttpEnd(req), true)
+  })
+
   app.get('/api/v1/streaming/playlist', (req, res) => {
     const deck = Number(req.query.deck);
     if ([1, 2, 3].includes(deck)) {
