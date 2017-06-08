@@ -6,11 +6,13 @@ class Api::V1::PlaylistsController < ApiController
   respond_to :json
 
   def show
+    items = @playlist.queue_items
+
     render json: {
       deck: {
         number: params[:deck],
-        time_offset: 20, # TODO
-        queues: @playlist.queue_items
+        time_offset: items.blank? ? 0 : @playlist.current_time_sec,
+        queues: items,
       },
     }
   end
