@@ -61,7 +61,7 @@ class Playlist
 
   def play_item(queue_item_id, duration)
     set_start_time
-    NextPlaylistWorker.perform_in(duration, deck, item[:id])
+    NextPlaylistWorker.perform_in(duration, deck, queue_item_id)
     PushPlaylistWorker.perform_async(deck, 'play', id: queue_item_id)
   end
 
