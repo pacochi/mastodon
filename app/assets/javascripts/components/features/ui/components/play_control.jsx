@@ -18,7 +18,8 @@ class MusicPlayer extends React.PureComponent {
       player: undefined,
       offset_time: 0,
       offset_start_time: 0,
-      offset_counter: undefined
+      offset_counter: undefined,
+      isSeekbarActive: false
     };
 
     this.ytControl = undefined;
@@ -27,23 +28,23 @@ class MusicPlayer extends React.PureComponent {
 
     this.setURLRef = this.setURLRef.bind(this);
     this.setAudioRef = this.setAudioRef.bind(this);
-    this.getDuration = this.getDuration.bind(this);
     this.getMockState = this.getMockState.bind(this);
     this.handleClickSkip = this.handleClickSkip.bind(this);
     this.handleClickDeck = this.handleClickDeck.bind(this);
     this.handleClickToggle = this.handleClickToggle.bind(this);
     this.handleClickOverlay = this.handleClickOverlay.bind(this);
     this.handleClickDeckTab = this.handleClickDeckTab.bind(this);
-    this.getStartOffsetTime = this.getStartOffsetTime.bind(this);
     this.handleSubmitAddForm = this.handleSubmitAddForm.bind(this);
+  }
 
+  componentDidMount () {
     this.fetchDeck(1);
 
     this.subscription = createStream('ws://localhost:4000/', this.props.accessToken, `playlist&deck=${this.state.targetDeck}`, {
       received: (data) => {
         switch(data.event) {
 
-        case 'add':
+          case 'add':
           {
             const payload = JSON.parse(data.payload);
             const deck = Object.assign({}, this.state.deck);
@@ -51,7 +52,7 @@ class MusicPlayer extends React.PureComponent {
             this.setState({deck});
           }
           break;
-        case 'play':
+          case 'play':
           {
             const deck = Object.assign({}, this.state.deck);
             deck.queues.shift();
@@ -80,10 +81,12 @@ class MusicPlayer extends React.PureComponent {
               deck,
               offset_start_time: (new Date().getTime()),
               offset_time: 0,
+              isSeekbarActive: false
             });
+            setTimeout(()=>this.setState({isSeekbarActive:true}),0);
           }
           break;
-        case 'delete':
+          case 'delete':
           {
           }
           break;
@@ -98,14 +101,15 @@ class MusicPlayer extends React.PureComponent {
       .then((response)=>{
         const interval = setInterval(()=>{
           this.setState({
-            offset_time: parseInt(new Date().getTime()) - parseInt(this.state.offset_start_time)
+            offset_time: parseInt(new Date().getTime() / 1000) - parseInt(this.state.offset_start_time)
           })
-        },14);
+        }, 300);
         this.setState({
           deck: response.data.deck,
-          offset_start_time: (new Date().getTime()) - (new Date(0).setSeconds(response.data.deck.time_offset)),
+          offset_start_time: (new Date().getTime() / 1000) - response.data.deck.time_offset,
           offset_time: parseInt(response.data.deck.time_offset),
-          offset_counter: interval
+          offset_counter: interval,
+          isSeekbarActive: true
         })
 
         if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) || this.state.deck.queues[0].source_type !== 'youtube') {
@@ -113,9 +117,12 @@ class MusicPlayer extends React.PureComponent {
           this.ytControl = undefined;
         }
         if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length)){
-          return resolve();
+          resolve();
+          return;
         }
 
+        // YouTubeのDOM操作の前に明示的にReactのレンダリングを行うために処理を遅延させる
+        // setTimeoutを利用することによって、無名関数内の処理を遅延させることができる
         setTimeout(()=>{
           const offset = this.state.offset_time * 0.001;
           switch (this.state.deck.queues[0].source_type) {
@@ -208,16 +215,6 @@ class MusicPlayer extends React.PureComponent {
     }
   }
 
-  getStartOffsetTime () {
-    if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ) return 0;
-    return !this.state.offset_time ? 0 : parseInt(this.state.offset_time / 1000);
-  }
-
-  getDuration () {
-    if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ) return 0;
-    return this.state.deck.queues[0].duration;
-  }
-
   setVideoRef (c) {
     this.videoRef = c;
   }
@@ -231,6 +228,7 @@ class MusicPlayer extends React.PureComponent {
     const playerClass = `player-control${this.state.isOpen ? ' is-open':''}`;
     const iconClass = `fa fa-volume-${this.state.isPlaying?'up':'off'}`;
     const toggleClass = `control-bar__controller-toggle is-${this.state.isPlaying?'playing':'pause'}`;
+    const seekbarClass = `player-seekbar ${this.state.isSeekbarActive?'active':''}`;
 
     let playerSeekBarStyle = {};
     let nowPlayingArtwork = {};
@@ -244,7 +242,7 @@ class MusicPlayer extends React.PureComponent {
         display: this.state.deck.queues[0].source_type === 'youtube' ? 'block' : 'none'
       }
       playerSeekBarStyle = {
-        width: `${(this.state.offset_time / (this.state.deck.queues[0].duration*1000) )*100}%`
+        transition: `width ${this.state.deck.queues[0].duration}s linear`
       }
     }
 
@@ -262,9 +260,9 @@ class MusicPlayer extends React.PureComponent {
               if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ) return null;
               return (
                 <div className='control-bar__controller-info'>
-                  <span className='control-bar__controller-now'>{parseInt(Math.min(this.getStartOffsetTime(), this.getDuration())/60)}:{("0"+Math.min(this.getStartOffsetTime(), this.getDuration())%60).slice(-2)}</span>
+                  <span className='control-bar__controller-now'>{parseInt(Math.min(this.state.offset_time, this.state.deck.queues[0].duration)/60)}:{("0"+Math.min(this.state.offset_time, this.state.deck.queues[0].duration)%60).slice(-2)}</span>
                   <span className='control-bar__controller-separater'>/</span>
-                  <span className='control-bar__controller-time'>{parseInt(this.getDuration()/60)}:{("0"+this.getDuration()%60).slice(-2)}</span>
+                  <span className='control-bar__controller-time'>{parseInt(this.state.deck.queues[0].duration/60)}:{("0"+this.state.deck.queues[0].duration%60).slice(-2)}</span>
                 </div>
               );
             })()}
@@ -343,7 +341,7 @@ class MusicPlayer extends React.PureComponent {
             </div>
           </div>
         </div>
-        <div className='player-seekbar' style={playerSeekBarStyle} />
+        <div className={seekbarClass} style={playerSeekBarStyle} />
         <div className='player-control__overlay' onClick={this.handleClickOverlay} />
       </div>
     );
