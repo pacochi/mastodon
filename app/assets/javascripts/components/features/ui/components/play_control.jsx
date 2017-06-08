@@ -252,7 +252,7 @@ class MusicPlayer extends React.PureComponent {
         display: this.state.deck.queues[0].source_type === 'youtube' ? 'block' : 'none'
       }
       playerSeekBarStyle = {
-        transition: `width ${this.state.deck.queues[0].duration}s linear`
+        transition: `width ${this.state.isSeekbarActive ? this.state.deck.queues[0].duration : '0'}s linear`
       }
     }
 
