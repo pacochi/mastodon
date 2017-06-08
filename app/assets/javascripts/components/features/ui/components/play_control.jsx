@@ -44,7 +44,7 @@ class MusicPlayer extends React.PureComponent {
 
         case 'add':
           {
-            const payload = data.payload;
+            const payload = JSON.parse(data.payload);
             const deck = Object.assign({}, this.state.deck);
             deck.queues.push(payload);
             this.setState({deck});
@@ -84,12 +84,6 @@ class MusicPlayer extends React.PureComponent {
           break;
         case 'delete':
           {
-            const payload = data.payload;
-            const deck = Object.assign({},this.state.deck);
-            deck.queues.push(payload);
-            this.setState({
-              deck
-            });
           }
           break;
         }
