@@ -21,14 +21,13 @@ class Playlist
     queue_item = QueueItem.create_from_link(link, account)
     if queue_item && redis_push(queue_item)
       PushPlaylistWorker.perform_async(deck, 'add', queue_item.to_json)
-      log = PlaylistLog.new(
+      PlaylistLog.create(
         account: account,
         uuid: queue_item.id,
         deck: deck,
         link: link,
         info: queue_item.info,
       )
-      log.save
 
       items = queue_items
       #TODO 同時にアイテムが追加されたときまずそう
@@ -46,7 +45,7 @@ class Playlist
     # end
 
     ret = self.next(id)
-    PlaylistLog.find_by(uuid: id)&.update(skipped_at: Time.now, skipped_account_id: account.id)
+    PlaylistLog.find_by(uuid: id)&.update(skipped_at: Time.now, skipped_account_id: account.id) if ret
     ret
   end
 
