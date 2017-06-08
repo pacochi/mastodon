@@ -13,6 +13,12 @@ class Api::V1::DeckQueuesController < ApiController
     else
       render json: { error: 'エラー' }, status: :unprocessable_entity # TODO
     end
+  rescue Mastodon::MusicSourceNotFoundError => _
+    render json: { error: '無効なURL' }, status: :bad_request
+  rescue Mastodon::PlayerControlLimitError => _
+    render json: { error: '操作回数制限' }, status: :too_many_requests
+  rescue Mastodon::PlaylistSizeOverError => _
+    render json: { error: 'プレイリストのサイズ制限オーバー' }, status: :bad_request
   end
 
   def destroy
@@ -21,6 +27,10 @@ class Api::V1::DeckQueuesController < ApiController
     else
       render json: { error: 'エラー' }, status: :unprocessable_entity # TODO
     end
+  rescue Mastodon::PlayerControlLimitError => _
+    render json: { error: '操作回数制限' }, status: :too_many_requests
+  rescue Mastodon::PlaylistEmptyError => _
+    render json: { error: 'プレイリストが空' }, status: :bad_request
   end
 
   private

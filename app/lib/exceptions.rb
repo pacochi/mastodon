@@ -5,4 +5,8 @@ module Mastodon
   class NotPermittedError < Error; end
   class ValidationError < Error; end
   class RaceConditionError < Error; end
+  class MusicSourceNotFoundError < Error; end
+  class PlayerControlLimitError < Error; end
+  class PlaylistSizeOverError < Error; end
+  class PlaylistEmptyError < Error; end
 end
