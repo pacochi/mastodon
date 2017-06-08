@@ -13,6 +13,8 @@ import {
   CONTEXT_FETCH_SUCCESS,
   STATUS_MUTE_SUCCESS,
   STATUS_UNMUTE_SUCCESS,
+  STATUS_PIN_SUCCESS,
+  STATUS_UNPIN_SUCCESS,
 } from '../actions/statuses';
 import {
   TIMELINE_REFRESH_SUCCESS,
@@ -134,6 +136,10 @@ export default function statuses(state = initialState, action) {
     return deleteStatus(state, action.id, action.references);
   case ACCOUNT_BLOCK_SUCCESS:
     return filterStatuses(state, action.relationship);
+  case STATUS_PIN_SUCCESS:
+    return state.setIn([action.id, 'pinned'], true);
+  case STATUS_UNPIN_SUCCESS:
+    return state.setIn([action.id, 'pinned'], false);
   default:
     return state;
   }

@@ -42,6 +42,7 @@ class Status extends ImmutablePureComponent {
     expandMedia: PropTypes.bool,
     squareMedia: PropTypes.bool,
     standalone: PropTypes.bool,
+    onPin: PropTypes.func,
   };
 
   state = {
