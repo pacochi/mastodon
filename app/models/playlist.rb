@@ -12,7 +12,7 @@ class Playlist
   end
 
   def add(link, account)
-    return nil unless check_count(music_add_count_key(account))
+    return nil unless check_count(music_add_count_key(account), account)
 
     queue_item = QueueItem.create_from_link(link, account)
     if queue_item && redis_push(queue_item)
@@ -25,7 +25,7 @@ class Playlist
   end
 
   def skip(id, account)
-    return nil unless check_count(music_skip_count_key(account))
+    return nil unless check_count(music_skip_count_key(account), account)
 
     self.next(id)
   end
@@ -124,7 +124,9 @@ class Playlist
     "music:playlist:skip-count:#{account.id}"
   end
 
-  def check_count(key)
+  def check_count(key, account)
+    return true if User.find_by(account: account)&.admin
+
     redis_watch(key) do
       count = redis.get(key)&.to_i || 0
       ttl = redis.ttl(key)
