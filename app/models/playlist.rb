@@ -3,8 +3,8 @@
 class Playlist
 
   MAX_QUEUE_SIZE = 10
-  MAX_ADD_COUNT = 3
-  MAX_SKIP_COUNT = 3
+  MAX_ADD_COUNT = 5
+  MAX_SKIP_COUNT = 5
   attr_accessor :deck
 
   def initialize(deck)
@@ -127,30 +127,27 @@ class Playlist
   def check_count(key, account)
     return true if User.find_by(account: account)&.admin
 
-    redis_watch(key) do
-      count = redis.get(key)&.to_i || 0
-      ttl = redis.ttl(key)
-      ttl = 60 * 60 if ttl <= 0
-
-      return false unless count < MAX_ADD_COUNT
-
-      redis.setex(key, ttl, count + 1)
-      true
-    end
-
-  end
-
-  def redis_watch(keys, retry_count = 3)
+    retry_count = 3
     while retry_count.positive?
       begin
-        redis.watch(keys) do
-          return yield()
+        redis.watch(key) do
+          count = redis.get(key)&.to_i || 0
+          ttl = redis.ttl(key)
+          ttl = 60 * 60 if ttl <= 0
+
+          return false unless count < MAX_ADD_COUNT
+
+          result = redis.multi do |m|
+            m.setex(key, ttl, count + 1)
+          end
+          return true if result
         end
       ensure
         redis.unwatch
         retry_count -= 1
       end
     end
+
     false
   end
 
