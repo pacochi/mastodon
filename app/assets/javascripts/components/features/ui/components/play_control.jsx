@@ -44,29 +44,28 @@ class MusicPlayer extends React.PureComponent {
     this.subscription = createStream('ws://localhost:4000/', this.props.accessToken, `playlist&deck=${this.state.targetDeck}`, {
       received: (data) => {
         switch(data.event) {
-
           case 'add':
           {
             const payload = JSON.parse(data.payload);
             const deck = Object.assign({}, this.state.deck);
             deck.queues.push(payload);
             if(deck.queues.length === 1) {
-              console.log(deck);
               this.playNextQueueItem(deck);
             }
           }
           break;
           case 'play':
           {
-            console.log("test");
             const deck = Object.assign({}, this.state.deck);
             if(deck.queues.length >= 2) deck.queues.shift();
             deck.time_offset = 0;
             this.playNextQueueItem(deck);
           }
           break;
-          case 'delete':
+          case 'end':
           {
+            if(deck.queues.length <= 1) deck.queues = [];
+            deck.time_offset = 0;
           }
           break;
         }
