@@ -81,6 +81,10 @@ export const FOLLOW_REQUEST_REJECT_REQUEST = 'FOLLOW_REQUEST_REJECT_REQUEST';
 export const FOLLOW_REQUEST_REJECT_SUCCESS = 'FOLLOW_REQUEST_REJECT_SUCCESS';
 export const FOLLOW_REQUEST_REJECT_FAIL    = 'FOLLOW_REQUEST_REJECT_FAIL';
 
+export const ACCOUNT_PINNED_STATUSES_FETCH_REQUEST = 'ACCOUNT_PINNED_STATUSES_FETCH_REQUEST';
+export const ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS = 'ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS';
+export const ACCOUNT_PINNED_STATUSES_FETCH_FAIL = 'ACCOUNT_PINNED_STATUSES_FETCH_FAIL';
+
 export function fetchAccount(id) {
   return (dispatch, getState) => {
     dispatch(fetchRelationships([id]));
@@ -866,5 +870,57 @@ export function rejectFollowRequestFail(id, error) {
     type: FOLLOW_REQUEST_REJECT_FAIL,
     id,
     error,
+  };
+};
+
+export function fetchAccountPinnedStatuses(id) {
+  return (dispatch, getState) => {
+    const ids = getState().getIn(['timelines', 'accounts_pinned_statuses', id, 'items'], Immutable.List());
+    const newestId = ids.size > 0 ? ids.first() : null;
+
+    let params = {};
+
+    if (newestId !== null) {
+      params.since_id = newestId;
+    }
+
+    dispatch(fetchAccountPinnedStatusesRequest(id));
+
+    api(getState).get(`/api/v1/accounts/${id}/pinned_statuses`, { params }).then(response => {
+      const next = getLinks(response).refs.find(link => link.rel === 'next');
+      dispatch(fetchAccountPinnedStatusesSuccess(id, response.data, next));
+
+      // 次のpinnedStatusを取得する。数件のpinしか存在しないユーザーなら、1度目のリクエストで完了している。
+      if (next) {
+        setTimeout(() => fetchAccountPinnedStatuses(id), 500);
+      }
+    }).catch(error => {
+      dispatch(fetchAccountPinnedStatusesFail(id, error));
+    });
+  };
+};
+
+export function fetchAccountPinnedStatusesRequest(id) {
+  return {
+    type: ACCOUNT_PINNED_STATUSES_FETCH_REQUEST,
+    id,
+  };
+};
+
+export function fetchAccountPinnedStatusesSuccess(id, statuses, next) {
+  return {
+    type: ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS,
+    id,
+    statuses,
+    next,
+  };
+};
+
+export function fetchAccountPinnedStatusesFail(id, error) {
+  return {
+    type: ACCOUNT_PINNED_STATUSES_FETCH_FAIL,
+    id,
+    error,
+    skipAlert: error.response.status === 404,
   };
 };

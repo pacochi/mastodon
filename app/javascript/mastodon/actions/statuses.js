@@ -230,7 +230,7 @@ export function pinStatus(id) {
 
     api(getState).post(`/api/v1/statuses/${id}/pin`).then(response => {
       dispatch(fetchStatusSuccess(response.data));
-      dispatch(pinStatusSuccess(id));
+      dispatch(pinStatusSuccess(id, response.data.account.id));
     }).catch(error => {
       dispatch(pinStatusFail(id, error));
     });
@@ -244,10 +244,11 @@ export function pinStatusRequest(id) {
   };
 };
 
-export function pinStatusSuccess(id) {
+export function pinStatusSuccess(id, accountId) {
   return {
     type: STATUS_PIN_SUCCESS,
     id,
+    accountId,
   };
 };
 
@@ -264,7 +265,8 @@ export function unpinStatus(id) {
     dispatch(unpinStatusRequest(id));
 
     api(getState).delete(`/api/v1/statuses/${id}/pin`).then(() => {
-      dispatch(unpinStatusSuccess(id));
+      const accountId = getState().getIn(['statuses', id, 'account'])
+      dispatch(unpinStatusSuccess(id, accountId));
     }).catch(error => {
       dispatch(unpinStatusFail(id, error));
     });
@@ -278,10 +280,11 @@ export function unpinStatusRequest(id) {
   };
 };
 
-export function unpinStatusSuccess(id) {
+export function unpinStatusSuccess(id, accountId) {
   return {
     type: STATUS_UNPIN_SUCCESS,
     id,
+    accountId,
   };
 };
 

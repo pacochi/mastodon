@@ -32,6 +32,7 @@ import {
   ACCOUNT_MEDIA_TIMELINE_EXPAND_FAIL,
   ACCOUNT_BLOCK_SUCCESS,
   ACCOUNT_MUTE_SUCCESS,
+  ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS,
 } from '../actions/accounts';
 import {
   STATUS_SEARCH_TIMELINE_FETCH_REQUEST,
@@ -42,6 +43,8 @@ import {
   STATUS_SEARCH_TIMELINE_EXPAND_FAIL,
 } from '../actions/search';
 import {
+  STATUS_PIN_SUCCESS,
+  STATUS_UNPIN_SUCCESS,
   CONTEXT_FETCH_SUCCESS,
 } from '../actions/statuses';
 import Immutable from 'immutable';
@@ -109,6 +112,7 @@ const initialState = Immutable.Map({
   accounts_media_timelines: Immutable.Map(),
   ancestors: Immutable.Map(),
   descendants: Immutable.Map(),
+  accounts_pinned_statuses: Immutable.Map(),
 });
 
 const normalizeStatus = (state, status) => {
@@ -351,6 +355,20 @@ const updateTop = (state, timeline, top) => {
   return state.setIn([timeline, 'top'], top);
 };
 
+const normalizeAccountPinnedStatuses = (state, accountId, statuses, next) => {
+  let ids = Immutable.List();
+
+  statuses.forEach((status, i) => {
+    ids = ids.set(i, status.id);
+  });
+
+  return state.updateIn(['accounts_pinned_statuses', accountId], Immutable.Map(), map => map
+    .set('isLoading', false)
+    .set('loaded', true)
+    .set('next', next)
+    .update('items', Immutable.List(), list => ids.concat(list)));
+}
+
 export default function timelines(state = initialState, action) {
   switch(action.type) {
   case TIMELINE_REFRESH_REQUEST:
@@ -408,6 +426,14 @@ export default function timelines(state = initialState, action) {
     return state.setIn([action.timeline, 'online'], true);
   case TIMELINE_DISCONNECT:
     return state.setIn([action.timeline, 'online'], false);
+  case ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS:
+    return normalizeAccountPinnedStatuses(state, action.id, action.statuses, action.next);
+  case STATUS_PIN_SUCCESS:
+    return state.updateIn(['accounts_pinned_statuses', action.accountId], Immutable.Map(), map => map
+      .update('items', Immutable.List(), list => list.unshift(action.id).toOrderedSet().toList()));
+  case STATUS_UNPIN_SUCCESS:
+    return state.updateIn(['accounts_pinned_statuses', action.accountId], Immutable.Map(), map => map
+      .update('items', Immutable.List(), list => list.filter((id) => id != action.id)));
   default:
     return state;
   }

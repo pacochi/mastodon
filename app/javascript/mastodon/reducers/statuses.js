@@ -28,6 +28,7 @@ import {
   ACCOUNT_MEDIA_TIMELINE_FETCH_SUCCESS,
   ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS,
   ACCOUNT_BLOCK_SUCCESS,
+  ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS,
 } from '../actions/accounts';
 import {
   STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
@@ -131,6 +132,7 @@ export default function statuses(state = initialState, action) {
   case SEARCH_FETCH_SUCCESS:
   case STATUS_SEARCH_TIMELINE_FETCH_SUCCESS:
   case STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS:
+  case ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS:
     return normalizeStatuses(state, action.statuses);
   case TIMELINE_DELETE:
     return deleteStatus(state, action.id, action.references);
