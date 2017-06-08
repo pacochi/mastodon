@@ -24,6 +24,7 @@ class Playlist
       items = queue_items
       #TODO 同時にアイテムが追加されたときまずそう
       play_item(queue_item.id, queue_item.duration) if items.size == 1
+      queue_item
     end
   end
 
@@ -39,8 +40,13 @@ class Playlist
 
   def next(id)
     if redis_shift(id)
-      item = queue_items.first
-      play_item(item[:id], item[:duration]) if item
+      first_item = queue_items.first
+
+      if first_item
+        queue_item = QueueItem.new(queue_items.first)
+        play_item(queue_item.id, queue_item.duration)
+      end
+      first_item
     end
   end
 
