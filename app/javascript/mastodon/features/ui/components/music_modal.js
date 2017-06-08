@@ -111,7 +111,7 @@ class MusicModal extends React.PureComponent {
               あなた自身が作成したコンテンツです
             </label>
           </div>
-          <Button disabled={!this.state.isClickedWaring} text="upload" onClick={this.handleUpload} />
+          <Button disabled={!this.state.isClickedWaring || !this.state.imageURL} text="upload" onClick={this.handleUpload} />
         </div>
       </div>
     );

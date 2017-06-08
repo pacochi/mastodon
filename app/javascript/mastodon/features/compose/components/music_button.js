@@ -33,6 +33,7 @@ class MusicButton extends React.PureComponent {
       file,
       {
         onSuccess: (tag) => {
+          console.log(tag); // TODO: タグを正しく取得できたかチェック
           this.props.onSelectFile(file, tag);
         },
         onError: (error) => {
