@@ -19,9 +19,14 @@ class Playlist
     # end
 
     queue_item = QueueItem.create_from_link(link, account)
-    Rails.logger.debug queue_item
     if queue_item && redis_push(queue_item)
-      PushPlaylistWorker.perform_async(@deck, 'add', queue_item.to_json)
+      PushPlaylistWorker.perform_async(deck, 'add', queue_item.to_json)
+      items = queue_items
+      if items.size == 1
+        set_start_time
+        PushPlaylistWorker.perform_async(deck, 'play', id: queue_item.id)
+        NextPlaylistWorker.perform_in(queue_item.duration, deck, queue_item.id)
+      end
     end
   end
 
@@ -32,13 +37,17 @@ class Playlist
     #   return nil
     # end
 
+    self.next(id)
+  end
+
+  def next(id)
     if redis_shift(id)
       item = queue_items.first
       if item
-        PushPlaylistWorker.perform_async(deck, 'play', id: id)
-        # TODO: 曲の再生が終わるころにskipを実行するやつをsidekiqに積む
+        set_start_time
+        NextPlaylistWorker.perform_in(item[:duration], deck, item[:id])
+        PushPlaylistWorker.perform_async(deck, 'play', id: item[:id])
       end
-      true
     end
   end
 
@@ -46,10 +55,23 @@ class Playlist
     JSON.parse(redis.get(playlist_key) || '[]', symbolize_names: true)
   end
 
+  def set_start_time
+    redis.set(start_time_key, Time.now.to_i.to_s)
+  end
+
+  def current_time_sec
+    start_time = redis.get(start_time_key).to_i
+    Time.now.to_i - start_time
+  end
+
   private
 
   def playlist_key
-    "music:playlist:#{@deck}"
+    "music:playlist:#{deck}"
+  end
+
+  def start_time_key
+    "music:playlist:time:#{deck}"
   end
 
   def update_queue_items(retry_count = 3)
@@ -75,8 +97,6 @@ class Playlist
 
   def redis_push(item)
     update_queue_items do |items|
-      Rails.logger.debug items
-      Rails.logger.debug items.size
       if items.size < 10
         items.push(item)
       else
