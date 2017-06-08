@@ -15,7 +15,11 @@ class PinnedStatus < ApplicationRecord
 
   validates :status, uniqueness: { scope: :account_id }
   validate :validate_status_owner, if: %i(account status)
-  validate :validate_status_visibility, if: :status
+
+  with_options if: :status do
+    validate :validate_status_visibility
+    validate :reject_reblog
+  end
 
   scope :recent, -> { reorder(id: :desc) }
 
@@ -27,5 +31,9 @@ class PinnedStatus < ApplicationRecord
 
   def validate_status_visibility
     errors.add(:status, :private) unless status.public_visibility? || status.unlisted_visibility?
+  end
+
+  def reject_reblog
+    errors.add(:status, :reblog) if status.reblog_of_id?
   end
 end

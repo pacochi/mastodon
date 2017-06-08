@@ -8,7 +8,7 @@ class Api::V1::PinnedStatusesController < ApiController
   respond_to :json
 
   def create
-    @status.create_pinned_status(account: current_account) unless @status.pinned_status
+    @status.create_pinned_status!(account: current_account) unless @status.pinned_status
     render 'api/v1/statuses/show'
   end
 
@@ -24,6 +24,6 @@ class Api::V1::PinnedStatusesController < ApiController
   end
 
   def pinnable_statuses
-    Status.where(account: current_account, visibility: [:public, :unlisted])
+    Status.where(account: current_account)
   end
 end

@@ -37,6 +37,13 @@ RSpec.describe PinnedStatus, type: :model do
       expect(subject).to be_invalid
       expect(subject.errors).to be_added(:status, :private)
     end
+
+    it 'is invalid with private status' do
+      subject.status.reblog = Fabricate(:status)
+
+      expect(subject).to be_invalid
+      expect(subject.errors).to be_added(:status, :reblog)
+    end
   end
 
   describe 'scopes' do
