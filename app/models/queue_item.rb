@@ -91,8 +91,10 @@ class QueueItem
       cache = find_cache('youtube', video_id)
       return set_uuid(cache) if cache
 
-      duration_sec = fetch_youtube_duration(video_id)
       title = fetch_youtube_title(link)
+      return nil unless title
+
+      duration_sec = fetch_youtube_duration(video_id)
 
       item = new(
         id: SecureRandom.uuid,
@@ -127,7 +129,10 @@ class QueueItem
 
     def fetch_youtube_title(link)
       url = "https://www.youtube.com/oembed?url=#{link}"
-      json = JSON.parse(http_client.get(url).body.to_s)
+      body = http_client.get(url).body.to_s
+      return nil if body == 'Unauthorized'
+
+      json = JSON.parse(body)
       json['title']
     end
 
