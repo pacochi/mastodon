@@ -136,11 +136,13 @@ class MusicPlayer extends React.PureComponent {
         // YouTubeのDOM操作の前に明示的にReactのレンダリングを行うために処理を遅延させる
         // setTimeoutを利用することによって、無名関数内の処理を遅延させることができる
         setTimeout(()=>{
-          const offset = this.state.offset_time * 0.001;
+          const offset = this.state.offset_time;
           switch (this.state.deck.queues[0].source_type) {
             case 'youtube':
               {
-                this.ytControl = YouTubePlayer('yt-player');
+                this.ytControl = YouTubePlayer('yt-player', {
+                  playerVars: { 'controls': 0 }
+                });
                 this.ytControl.loadVideoById(this.state.deck.queues[0].source_id, offset);
                 this.ytControl.playVideo();
 
