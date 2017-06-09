@@ -27,7 +27,7 @@
         = link_to TagManager.instance.url_for(status.account), class: 'status__display-name muted' do
           %strong.emojify= display_name(status.account)
         = t('stream_entries.reblogged')
-  - if status.pinned_status
+  - if display_pinned && status.pinned_status
     .pre-header
       %span
         = t('stream_entries.pinned')
