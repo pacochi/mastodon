@@ -7,6 +7,7 @@ import HomeTimeline from '../home_timeline';
 import Compose from '../compose';
 import TabsBar from './components/tabs_bar';
 import ModalContainer from './containers/modal_container';
+import PlayControlContainer from './containers/play_control_container';
 import Notifications from '../notifications';
 import { connect } from 'react-redux';
 import { isMobile } from '../../is_mobile';
@@ -158,6 +159,7 @@ class UI extends React.PureComponent {
         <NotificationsContainer />
         <LoadingBarContainer className="loading-bar" />
         <ModalContainer />
+        <PlayControlContainer />
         <UploadArea active={draggingOver} onClose={this.closeUploadModal} />
       </div>
     );
