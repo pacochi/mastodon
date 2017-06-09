@@ -7,6 +7,8 @@ import api from '../../../api';
 import YouTubePlayer from 'youtube-player';
 import createStream from '../../../../mastodon/stream';
 
+// FIXME: Old react style
+
 class MusicPlayer extends React.PureComponent {
 
   constructor (props, context) {
