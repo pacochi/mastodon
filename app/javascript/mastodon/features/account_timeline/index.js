@@ -45,6 +45,7 @@ class AccountTimeline extends ImmutablePureComponent {
   componentWillReceiveProps (nextProps) {
     if (nextProps.params.accountId !== this.props.params.accountId && nextProps.params.accountId) {
       this.props.dispatch(fetchAccount(Number(nextProps.params.accountId)));
+      this.props.dispatch(fetchAccountPinnedStatuses(Number(nextProps.params.accountId)));
       this.props.dispatch(fetchAccountTimeline(Number(nextProps.params.accountId)));
     }
   }
