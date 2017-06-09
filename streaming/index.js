@@ -129,7 +129,7 @@ const startWorker = (workerId) => {
   });
 
   redisClient.psubscribe(`${redisPrefix}timeline:*`);
-  redisClient.psubscribe(`${redisPrefix}streaming:playlist:*`)
+  redisClient.psubscribe(`${redisPrefix}streaming:playlist:*`);
 
   const subscribe = (channel, callback) => {
     log.silly(`Adding listener for ${channel}`);
@@ -357,11 +357,11 @@ const startWorker = (workerId) => {
   app.get('/api/v1/streaming/playlist', (req, res) => {
     const deck = Number(req.query.deck);
     if ([1, 2, 3].includes(deck)) {
-      streamFrom(`streaming:playlist:${deck}`, req, streamToHttp(req, res), streamHttpEnd(req))
+      streamFrom(`streaming:playlist:${deck}`, req, streamToHttp(req, res), streamHttpEnd(req));
     } else {
       // FIXME
     }
-  })
+  });
 
   wss.on('connection', ws => {
     const location = url.parse(ws.upgradeReq.url, true);
@@ -399,10 +399,10 @@ const startWorker = (workerId) => {
         break;
       case 'playlist': {
         const deck = Number(location.query.deck);
-        if ([1, 2, 3].indexOf(deck)+1) {
-          streamFrom(`streaming:playlist:${deck}`, req, streamToWs(req, ws), streamWsEnd(ws), true)
+        if ([1, 2, 3].includes(deck)) {
+          streamFrom(`streaming:playlist:${deck}`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);
         } else {
-          ws.close()
+          ws.close();
         }
         break;
       }
