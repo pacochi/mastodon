@@ -31,6 +31,7 @@ class MusicPlayer extends React.PureComponent {
     this.subscription = null;
 
     this.setURLRef = this.setURLRef.bind(this);
+    this.setVideoRef = this.setVideoRef.bind(this);
     this.setAudioRef = this.setAudioRef.bind(this);
     this.getMockState = this.getMockState.bind(this);
     this.handleClickSkip = this.handleClickSkip.bind(this);
@@ -166,7 +167,7 @@ class MusicPlayer extends React.PureComponent {
               }
             }
             break;
-          case 'pawoo':
+          case 'pawoo-music':
             {
               this.videoRef.currentTime = offset;
             }
@@ -175,6 +176,7 @@ class MusicPlayer extends React.PureComponent {
             {
               this.audioRef.currentTime = offset;
             }
+            break;
           }
         }, 20);
       })
@@ -327,7 +329,7 @@ class MusicPlayer extends React.PureComponent {
 
                   if(this.state.deck.queues[0].video_url){
                     return (
-                      <video ref={setVideoRef} autoPlay style={nowPlayingArtwork} muted={!this.state.isPlaying}>
+                      <video ref={this.setVideoRef} autoPlay style={nowPlayingArtwork} muted={!this.state.isPlaying}>
                         <source src={this.state.deck.queues[0].video_url}/>
                       </video>
                     );
