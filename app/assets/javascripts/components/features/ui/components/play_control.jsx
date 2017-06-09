@@ -5,6 +5,7 @@ import IconButton from '../../../components/icon_button';
 import api from '../../../api';
 import YouTubePlayer from 'youtube-player';
 import createStream from '../../../../components/stream';
+//import miscErrors from '../../../actions/miscerrors';
 
 class MusicPlayer extends React.PureComponent {
 
@@ -35,6 +36,8 @@ class MusicPlayer extends React.PureComponent {
     this.handleClickOverlay = this.handleClickOverlay.bind(this);
     this.handleClickDeckTab = this.handleClickDeckTab.bind(this);
     this.handleSubmitAddForm = this.handleSubmitAddForm.bind(this);
+
+    this.isDeckInActive = this.isDeckInActive.bind(this)
   }
 
   componentDidMount () {
@@ -125,11 +128,11 @@ class MusicPlayer extends React.PureComponent {
           isSeekbarActive: true
         })
 
-        if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) || this.state.deck.queues[0].source_type !== 'youtube') {
+        if(this.isDeckInActive() || this.state.deck.queues[0].source_type !== 'youtube') {
           if(this.ytControl) this.ytControl.destroy();
           this.ytControl = undefined;
         }
-        if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length)){
+        if(this.isDeckInActive()){
           resolve();
           return;
         }
@@ -166,8 +169,9 @@ class MusicPlayer extends React.PureComponent {
           }
         },20);
       })
-      .catch((err)=>{
-        return reject(err);
+      .catch((error)=>{
+        this.props.onError(error);
+        return reject(error);
       })
     });
   }
@@ -193,8 +197,9 @@ class MusicPlayer extends React.PureComponent {
       .then((response)=>{
         this.urlRef.value = "";
       })
-      .catch((err)=>{
-        return reject(err);
+      .catch((error)=>{
+        this.props.onError(error);
+        return reject(error);
       })
     });
   }
@@ -211,11 +216,13 @@ class MusicPlayer extends React.PureComponent {
   }
 
   handleClickSkip () {
+    if(this.isDeckInActive()) return
     api(this.getMockState).delete(`/api/v1/playlists/${this.state.targetDeck}/deck_queues/${this.state.deck.queues[0].id}`)
     .then((response)=>{
     })
-    .catch((err)=>{
-      return err;
+    .catch((error)=>{
+      this.props.onError(error);
+      return error;
     })
   }
 
@@ -236,6 +243,10 @@ class MusicPlayer extends React.PureComponent {
   setAudioRef (c) {
     this.audioRef = c;
     if(this.audioRef) this.audioRef.volume = 0.1;
+  }
+
+  isDeckInActive () {
+    return !this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length);
   }
 
   render () {
@@ -271,7 +282,7 @@ class MusicPlayer extends React.PureComponent {
               SKIP
             </div>
             {(()=>{
-              if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ) return null;
+              if(this.isDeckInActive() ) return null;
               return (
                 <div className='control-bar__controller-info'>
                   <span className='control-bar__controller-now'>{parseInt(Math.min(this.state.offset_time, this.state.deck.queues[0].duration)/60)}:{("0"+Math.min(this.state.offset_time, this.state.deck.queues[0].duration)%60).slice(-2)}</span>
@@ -292,7 +303,7 @@ class MusicPlayer extends React.PureComponent {
             <div className="deck_queue-wrapper">
               <div className="queue-item__artwork" style={nowPlayingArtwork}>
                 {(()=>{
-                  if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ) return null;
+                  if(this.isDeckInActive() ) return null;
 
                   if(this.state.deck.queues[0].source_type === 'youtube'){
                     return (
@@ -317,7 +328,7 @@ class MusicPlayer extends React.PureComponent {
               </div>
               <ul className="deck__queue">
                 {(()=>{
-                  if(!this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length) ){
+                  if(this.isDeckInActive() ){
                     return (
                       <li className="deck__queue-item">
                         <div className="queue-item__main">
@@ -364,7 +375,8 @@ class MusicPlayer extends React.PureComponent {
 
 MusicPlayer.propTypes = {
   accessToken: PropTypes.string.isRequired,
-  streamingAPIBaseURL: PropTypes.string.isRequired
+  streamingAPIBaseURL: PropTypes.string.isRequired,
+  onError: PropTypes.func.isRequired
 }
 
 export default MusicPlayer;
