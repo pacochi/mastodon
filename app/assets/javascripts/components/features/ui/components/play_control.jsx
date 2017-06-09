@@ -43,15 +43,15 @@ class MusicPlayer extends React.PureComponent {
 
   componentDidMount () {
     this.fetchDeck(1);
-    this.setSubscription();
+    this.setSubscription(1);
   }
 
-  setSubscription () {
+  setSubscription (target) {
     // TODO: ソケットが正しくクローズされているかをしっかり調査する
-    
     if(this.subscription) this.subscription.close();
-    this.subscription = createStream(this.props.streamingAPIBaseURL, this.props.accessToken, `playlist&deck=${this.state.targetDeck}`, {
+    this.subscription = createStream(this.props.streamingAPIBaseURL, this.props.accessToken, `playlist&deck=${target}`, {
       received: (data) => {
+        console.log(`PLAYLIST| EVENT - ${data.event}`);
         switch(data.event) {
           case 'add':
           {
@@ -195,7 +195,7 @@ class MusicPlayer extends React.PureComponent {
     if(index === this.state.targetDeck) return;
     this.setState({targetDeck: index});
     this.fetchDeck(index);
-    this.setSubscription();
+    this.setSubscription(index);
   }
 
   handleSubmitAddForm (e) {
