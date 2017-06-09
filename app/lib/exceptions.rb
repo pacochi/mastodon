@@ -9,4 +9,5 @@ module Mastodon
   class PlayerControlLimitError < Error; end
   class PlaylistSizeOverError < Error; end
   class PlaylistEmptyError < Error; end
+  class RedisMaxRetryError < Error; end
 end
