@@ -3755,6 +3755,7 @@ button.icon-button.active i.fa-retweet {
         margin: 8px 16px 8px 8px;
         transition: width 0.2s ease-out 0.2s, height 0.2s ease-out 0.2s, margin 0.2s ease-out 0.2s;
         position: relative;
+        overflow: hidden;
 
         video, iframe, .queue-item__ytplayer{
           object-fit: cover;
