@@ -77,7 +77,7 @@ class Api::V1::AccountsController < ApiController
       .joins(:pinned_status)
       .merge(PinnedStatus.recent)
 
-    @statuses = cache_collection(paginated_statuses, Status)
+    @statuses = cache_collection(statuses, Status)
     set_maps(@statuses)
 
     next_path = pinned_statuses_api_v1_account_url(statuses_pagination_params(max_id: paginated_pinned_statuses.last.id))    if paginated_pinned_statuses.size == limit_param(DEFAULT_STATUSES_LIMIT)
