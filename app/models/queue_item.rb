@@ -13,6 +13,7 @@ class QueueItem
     YOUTUBE_API_KEY = ENV['YOUTUBE_API_KEY']
 
     def create_from_link(link, account)
+      return nil if link.blank?
       pawoo_link(link, account) || booth_link(link, account) || youtube_link(link, account)
     end
 
@@ -47,7 +48,7 @@ class QueueItem
     end
 
     def find_status_id(link)
-      matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/(@\w+)|(web/statuses)/(?<status_id>\d+)})
+      matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/((@\w+)|(web/statuses))/(?<status_id>\d+)})
       matched ? matched[:status_id] : nil
     end
 
