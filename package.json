@@ -3,10 +3,9 @@
   "license": "AGPL-3.0",
   "scripts": {
     "postversion": "git push --tags",
-    "start": "babel-node ./streaming/index.js --presets es2015,stage-2",
+    "start": "npm run build && node streaming/build.js",
     "storybook": "start-storybook -p 9001 -c storybook",
     "build": "rm -rf ./streaming/build.js && babel ./streaming/index.js > ./streaming/build.js",
-    "start": "npm run build && node streaming/build.js",
     "test": "npm run test:lint && npm run test:mocha",
     "test:lint": "eslint -c .eslintrc.json --ext=js --ext=jsx app/assets/javascripts/",
     "test:mocha": "mocha --require ./spec/javascript/setup.js --compilers js:babel-register ./spec/javascript/components/*.test.jsx"
@@ -89,7 +88,8 @@
     "uuid": "^3.0.1",
     "webpack": "^2.2.1",
     "websocket.js": "^0.1.7",
-    "ws": "^2.1.0"
+    "ws": "^2.1.0",
+    "youtube-player": "^5.4.0"
   },
   "devDependencies": {
     "babel-eslint": "^7.2.2",
