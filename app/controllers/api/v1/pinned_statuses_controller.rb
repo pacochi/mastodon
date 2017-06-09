@@ -20,10 +20,6 @@ class Api::V1::PinnedStatusesController < ApiController
   private
 
   def set_status
-    @status = pinnable_statuses.find(params[:status_id])
-  end
-
-  def pinnable_statuses
-    Status.where(account: current_account)
+    @status = Status.where(account: current_account).find(params[:status_id])
   end
 end
