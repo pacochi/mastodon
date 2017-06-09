@@ -13,7 +13,9 @@ class Playlist
 
   def add(link, account)
     count = redis.get(music_add_count_key(account))&.to_i || 0
-    raise Mastodon::PlayerControlLimitError unless count < MAX_ADD_COUNT
+    if MAX_ADD_COUNT <= count && !User.find_by(account: account)&.admin
+      raise Mastodon::PlayerControlLimitError
+    end
 
     queue_item = QueueItem.create_from_link(link, account)
     raise Mastodon::MusicSourceNotFoundError if queue_item.nil?
@@ -21,28 +23,41 @@ class Playlist
     retry_count = 3
     add_count_key = music_add_count_key(account)
     while retry_count.positive?
-      redis.watch(playlist_key, add_count_key) do
-        items = queue_items
-        ttl = redis.ttl(add_count_key)
-        ttl = 60 * 60 if ttl <= 0
-        redis.multi do |m|
-          raise Mastodon::PlaylistSizeOverError unless items.size < MAX_QUEUE_SIZE
-          items.push(queue_item)
-          m.set(playlist_key, items.to_json)
-          m.setex(add_count_key, ttl, count + 1)
-        end
-
-        PushPlaylistWorker.perform_async(deck, 'add', queue_item.to_json)
-        PlaylistLog.create(
-          account: account,
-          uuid: queue_item.id,
-          deck: deck,
-          link: link,
-          info: queue_item.info,
-        )
-        play_item(queue_item.id, queue_item.duration) if items.size == 1
+      count = redis.get(music_add_count_key(account))&.to_i || 0
+      if MAX_ADD_COUNT <= count && !User.find_by(account: account)&.admin
+        raise Mastodon::PlayerControlLimitError
       end
-      return queue_item
+
+      begin
+        redis.watch(playlist_key, add_count_key) do
+          items = queue_items
+          raise Mastodon::PlaylistSizeOverError unless items.size < MAX_QUEUE_SIZE
+
+          ttl = redis.ttl(add_count_key)
+          ttl = 60 * 60 if ttl <= 0
+          result = redis.multi do |m|
+            items.push(queue_item)
+            m.set(playlist_key, items.to_json)
+            m.setex(add_count_key, ttl, count + 1)
+          end
+
+          if result
+            PushPlaylistWorker.perform_async(deck, 'add', queue_item.to_json)
+            PlaylistLog.create(
+              account: account,
+              uuid: queue_item.id,
+              deck: deck,
+              link: link,
+              info: queue_item.info,
+            )
+            play_item(queue_item.id, queue_item.duration) if items.size == 1
+            return queue_item
+          end
+        end
+      ensure
+        retry_count -= 1
+        redis.unwatch
+      end
     end
     raise Mastodon::RedisMaxRetryError
   end
