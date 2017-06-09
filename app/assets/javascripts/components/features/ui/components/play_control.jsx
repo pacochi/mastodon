@@ -15,17 +15,18 @@ class MusicPlayer extends React.PureComponent {
       isOpen: false,
       isPlaying: false,
       targetDeck: 1,
-      deck: undefined,
-      player: undefined,
+      deck: null,
+      player: null,
       offset_time: 0,
       offset_start_time: 0,
-      offset_counter: undefined,
+      offset_counter: null,
       isSeekbarActive: false
     };
 
-    this.ytControl = undefined;
-    this.audioRef = undefined;
-    this.videoRef = undefined;
+    this.ytControl = null;
+    this.audioRef = null;
+    this.videoRef = null;
+    this.subscription = null;
 
     this.setURLRef = this.setURLRef.bind(this);
     this.setAudioRef = this.setAudioRef.bind(this);
@@ -42,7 +43,13 @@ class MusicPlayer extends React.PureComponent {
 
   componentDidMount () {
     this.fetchDeck(1);
+    this.setSubscription();
+  }
 
+  setSubscription () {
+    // TODO: ソケットが正しくクローズされているかをしっかり調査する
+    
+    if(this.subscription) this.subscription.close();
     this.subscription = createStream(this.props.streamingAPIBaseURL, this.props.accessToken, `playlist&deck=${this.state.targetDeck}`, {
       received: (data) => {
         switch(data.event) {
@@ -84,7 +91,7 @@ class MusicPlayer extends React.PureComponent {
 
     if(!deck || !("queues" in deck) || !(deck.queues.length) || deck.queues[0].source_type !== 'youtube') {
       if(this.ytControl) this.ytControl.destroy();
-      this.ytControl = undefined;
+      this.ytControl = null;
     }else{
       setTimeout(()=>{
         this.ytControl = YouTubePlayer('yt-player');
@@ -130,7 +137,7 @@ class MusicPlayer extends React.PureComponent {
 
         if(this.isDeckInActive() || this.state.deck.queues[0].source_type !== 'youtube') {
           if(this.ytControl) this.ytControl.destroy();
-          this.ytControl = undefined;
+          this.ytControl = null;
         }
         if(this.isDeckInActive()){
           resolve();
@@ -188,6 +195,7 @@ class MusicPlayer extends React.PureComponent {
     if(index === this.state.targetDeck) return;
     this.setState({targetDeck: index});
     this.fetchDeck(index);
+    this.setSubscription();
   }
 
   handleSubmitAddForm (e) {
