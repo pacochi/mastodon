@@ -69,11 +69,13 @@ class Api::V1::AccountsController < ApiController
   end
 
   def pinned_statuses
-    pinned_statuses = @account.pinned_statuses.recent
+    pinned_statuses = PinnedStatus.where(account: @account).recent
     paginated_pinned_statuses = pinned_statuses.paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
 
-    statuses = Status.where(id: pinned_statuses.pluck(:status_id)).permitted_for(@account, current_account)
-    paginated_statuses = statuses.joins(:pinned_status).merge(paginated_pinned_statuses)
+    statuses = Status.permitted_for(@account, current_account)
+      .where(id: pinned_statuses.pluck(:status_id))
+      .joins(:pinned_status)
+      .merge(PinnedStatus.recent)
 
     @statuses = cache_collection(paginated_statuses, Status)
     set_maps(@statuses)
