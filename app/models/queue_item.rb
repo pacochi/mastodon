@@ -53,7 +53,7 @@ class QueueItem
     end
 
     def find_apollo_shop_id(link)
-      matched = link.match(%r{https?://booth\.pm\/apollo\/a\d+/item\?.*id=(?<shop_id>\d+)})
+      matched = link.match(%r{https?://booth\.pm/apollo/a\d+/item\?.*id=(?<shop_id>\d+)})
       matched ? matched[:shop_id] : nil
     end
 
