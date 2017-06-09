@@ -26,6 +26,8 @@
       = render 'nothing_here'
   - else
     .activity-stream
+      - if params[:page].to_i.zero?
+        = render partial: 'stream_entries/status', collection: @statuses_from_pinned_status, as: :status, locals: { display_pinned: true }
       = render partial: 'stream_entries/status', collection: @statuses_collection, as: :status
 
   .pagination

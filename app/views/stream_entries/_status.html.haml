@@ -12,6 +12,7 @@
   mf_classes    = microformats_classes(status, is_direct_parent, is_direct_child)
   entry_classes = h_class + ' ' + mf_classes + ' ' + style_classes
   expand_media    ||= false
+  display_pinned  ||= false
 
 - if status.reply? && include_threads
   = render partial: 'stream_entries/status', collection: @ancestors, as: :status, locals: { is_predecessor: true, direct_reply_id: status.in_reply_to_id }
@@ -26,6 +27,10 @@
         = link_to TagManager.instance.url_for(status.account), class: 'status__display-name muted' do
           %strong.emojify= display_name(status.account)
         = t('stream_entries.reblogged')
+  - if status.pinned_status
+    .pre-header
+      %span
+        = t('stream_entries.pinned')
 
   = render (centered ? 'stream_entries/detailed_status' : 'stream_entries/simple_status'), status: status.proper, expand_media: expand_media
 

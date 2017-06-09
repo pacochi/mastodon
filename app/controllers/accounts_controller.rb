@@ -8,7 +8,9 @@ class AccountsController < ApplicationController
   def show
     respond_to do |format|
       format.html do
-        @statuses = @account.statuses.permitted_for(@account, current_account).recent.page(params[:page]).per(STATUSES_PER_PAGE).without_count
+        # 固定されたトゥートは全件表示する。固定数が多いユーザーが現れたら考え直す。
+        @statuses_from_pinned_status = cache_collection(statuses_from_pinned_status, Status)
+        @statuses = permitted_statuses.where.not(id: @statuses_from_pinned_status.map(&:id)).page(params[:page]).per(STATUSES_PER_PAGE).without_count
         @statuses_collection = cache_collection(@statuses, Status)
       end
 
@@ -22,6 +24,19 @@ class AccountsController < ApplicationController
   end
 
   private
+
+  def statuses_from_pinned_status
+    records = PinnedStatus.where(account: @account)
+
+    permitted_statuses
+      .where(id: records.pluck(:status_id))
+      .joins(:pinned_status)
+      .merge(PinnedStatus.recent)
+  end
+
+  def permitted_statuses
+    Status.where(account: @account).permitted_for(@account, current_account).recent
+  end
 
   def set_account
     @account = Account.find_local!(params[:username])
