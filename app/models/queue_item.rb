@@ -14,7 +14,7 @@ class QueueItem
 
     def create_from_link(link, account)
       return nil if link.blank?
-      pawoo_link(link, account) || booth_link(link, account) || youtube_link(link, account)
+      pawoo_link(link, account) || booth_link(link, account) || apollo_link(link, account) || youtube_link(link, account)
     end
 
     private
@@ -50,6 +50,40 @@ class QueueItem
     def find_status_id(link)
       matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/((@\w+)|(web/statuses))/(?<status_id>\d+)})
       matched ? matched[:status_id] : nil
+    end
+
+    def find_apollo_shop_id(link)
+      matched = link.match(%r{https?:\/\/booth\.pm\/apollo\/a\d+\/item\?.*id=(?<shop_id>\d+)[^&\n\s]+})
+      matched ? matched[:shop_id] : nil
+    end
+
+    def apollo_link(link, account)
+      shop_id = find_apollo_shop_id(link)
+      return nil unless shop_id
+
+      cache = find_cache('apollo', shop_id)
+      return set_uuid(cache) if cache
+
+      json = JSON.parse(http_client.get("https://api.booth.pm/pixiv/items/#{shop_id}").body.to_s)
+
+      return nil if json['body']['sound'].nil? || json['body']['adult']
+
+      user_or_shop_name = json['body']['shop']['user']['nickname'] || json['body']['shop']['name']
+      item = new(
+        id: SecureRandom.uuid,
+        info: "#{json['body']['name']} - #{user_or_shop_name}",
+        thumbnail_url: json['body']['primary_image']['url'],
+        music_url: json['body']['sound']['long_url'],
+        video_url: nil,
+        duration: json['body']['sound']['duration'],
+        link: link,
+        source_type: 'apollo',
+        source_id: shop_id,
+        account_id: account.id,
+      )
+
+      cache_item('apollo', shop_id, item)
+
     end
 
     def booth_link(link, account)
