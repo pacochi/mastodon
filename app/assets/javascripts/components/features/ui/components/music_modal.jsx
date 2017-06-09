@@ -95,9 +95,9 @@ class MusicModal extends React.PureComponent {
 
           <div className="music-modal__metabox">
             <div>
-              <input className="music-modal__title" placeholder="楽曲名を入力" ref={this.setTitleRef} value={title} />
+              <input className="music-modal__title" placeholder="楽曲名を入力" ref={this.setTitleRef} defaultValue={title} />
             </div>
-            <input className="music-modal__artist" placeholder="作者名を入力" ref={this.setArtistRef} value={artist} />
+            <input className="music-modal__artist" placeholder="作者名を入力" ref={this.setArtistRef} defaultValue={artist} />
 
             <input type="file" name="music"   accept="audio/*" ref={this.setMusicRef} />
             <input type="file" name="image" accept="image/*" ref={this.setImageRef} onChange={this.handleOnSelectImage} />
