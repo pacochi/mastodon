@@ -7,5 +7,7 @@ class NextPlaylistWorker
   def perform(deck, item_id)
     playlist = Playlist.new(deck)
     playlist.next(item_id)
+  rescue Mastodon::PlaylistEmptyError
+    nil
   end
 end
