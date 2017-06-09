@@ -13,6 +13,7 @@ class QueueItem
     YOUTUBE_API_KEY = ENV['YOUTUBE_API_KEY']
 
     def create_from_link(link, account)
+      return nil if link.blank?
       pawoo_link(link, account) || booth_link(link, account) || youtube_link(link, account)
     end
 
@@ -47,7 +48,7 @@ class QueueItem
     end
 
     def find_status_id(link)
-      matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/(@\w+)|(web/statuses)/(?<status_id>\d+)})
+      matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/((@\w+)|(web/statuses))/(?<status_id>\d+)})
       matched ? matched[:status_id] : nil
     end
 
@@ -117,7 +118,7 @@ class QueueItem
       return nil if json['items'].blank?
       item = json['items'].first
       duration = item['contentDetails']['duration']
-      matched = duration.match(%r{PT(\d+H)?(\d+M)?(\d+S)})
+      matched = duration.match(%r{PT(\d+H)?(\d+M)?(\d+S)?})
       return nil unless matched
 
       hour = matched[1]&.slice(/\d+/)&.to_i || 0

@@ -1,5 +1,6 @@
 import { connect } from 'react-redux';
 import PlayControl from '../components/play_control';
+import { miscFail } from '../../../actions/miscerrors';
 
 const mapStateToProps = state => ({
   accessToken: state.getIn(['meta', 'access_token']),
@@ -7,7 +8,9 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch => ({
-
+  onError(e){
+    dispatch(miscFail(e));
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(PlayControl);
