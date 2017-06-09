@@ -13,7 +13,7 @@ class Playlist
 
   def add(link, account)
     count = redis.get(music_add_count_key(account))&.to_i || 0
-    if MAX_ADD_COUNT <= count && !User.find_by(account: account)&.admin
+    if MAX_ADD_COUNT <= count && !account.user.admin
       raise Mastodon::PlayerControlLimitError
     end
 
@@ -23,13 +23,13 @@ class Playlist
     retry_count = 3
     add_count_key = music_add_count_key(account)
     while retry_count.positive?
-      count = redis.get(music_add_count_key(account))&.to_i || 0
-      if MAX_ADD_COUNT <= count && !User.find_by(account: account)&.admin
-        raise Mastodon::PlayerControlLimitError
-      end
-
       begin
         redis.watch(playlist_key, add_count_key) do
+          count = redis.get(music_add_count_key(account))&.to_i || 0
+          if MAX_ADD_COUNT <= count && !account.user.admin
+            raise Mastodon::PlayerControlLimitError
+          end
+
           items = queue_items
           raise Mastodon::PlaylistSizeOverError unless items.size < MAX_QUEUE_SIZE
 
