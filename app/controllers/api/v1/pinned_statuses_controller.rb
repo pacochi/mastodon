@@ -13,7 +13,7 @@ class Api::V1::PinnedStatusesController < ApiController
   end
 
   def destroy
-    @status.pinned_status.nil? || @status.pinned_status.destroy!
+    @status.pinned_status&.destroy!
     render_empty
   end
 
