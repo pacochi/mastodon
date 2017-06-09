@@ -244,6 +244,7 @@ ActiveRecord::Schema.define(version: 20170607055007) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id", "status_id"], name: "index_pinned_statuses_on_account_id_and_status_id", unique: true, using: :btree
+    t.index ["status_id"], name: "index_pinned_statuses_on_status_id", using: :btree
   end
 
   create_table "pixiv_cards", force: :cascade do |t|
