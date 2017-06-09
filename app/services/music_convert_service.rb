@@ -16,7 +16,7 @@ class MusicConvertService < BaseService
     }
 
     options = [
-      '-vf', 'format=yuv420p', '-c:v', 'libx264', '-tune', 'stillimage',
+      '-vf', 'format=yuv420p,scale=trunc(iw/2)*2:trunc(ih/2)*2', '-c:v', 'libx264', '-tune', 'stillimage',
       '-c:a', 'copy',
       '-shortest', '-t', "#{music_length}",
       '-metadata', "title=#{music.title}", '-metadata', "artist=#{music.artist}",
