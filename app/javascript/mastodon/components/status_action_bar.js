@@ -119,7 +119,7 @@ class StatusActionBar extends ImmutablePureComponent {
     }
 
     if (status.getIn(['account', 'id']) === me) {
-      if (!status.get('reblog') && ['public', 'unlisted', 'private'].indexOf(status.get('visibility')) >= 0) {
+      if (!status.get('reblog') && ['public', 'unlisted', 'private'].includes(status.get('visibility'))) {
         if (status.get('pinned')) {
           menu.push({ text: intl.formatMessage(messages.unpin), action: this.handlePinClick });
         } else {
