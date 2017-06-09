@@ -28,8 +28,8 @@ const messages = defineMessages({
   deleteMessage: { id: 'confirmations.delete.message', defaultMessage: 'Are you sure you want to delete this status?' },
   blockConfirm: { id: 'confirmations.block.confirm', defaultMessage: 'Block' },
   muteConfirm: { id: 'confirmations.mute.confirm', defaultMessage: 'Mute' },
-  unpinConfirm: { id: 'confirmations.pin.confirm', defaultMessage: 'Unpin' },
-  pinConfirm: { id: 'confirmations.unpin.confirm', defaultMessage: 'Pin' },
+  unpinConfirm: { id: 'confirmations.unpin.confirm', defaultMessage: 'Unpin' },
+  pinConfirm: { id: 'confirmations.pin.confirm', defaultMessage: 'Pin' },
 });
 
 const makeMapStateToProps = () => {

@@ -265,7 +265,7 @@ export function unpinStatus(id) {
     dispatch(unpinStatusRequest(id));
 
     api(getState).delete(`/api/v1/statuses/${id}/pin`).then(() => {
-      const accountId = getState().getIn(['statuses', id, 'account'])
+      const accountId = getState().getIn(['statuses', id, 'account']);
       dispatch(unpinStatusSuccess(id, accountId));
     }).catch(error => {
       dispatch(unpinStatusFail(id, error));

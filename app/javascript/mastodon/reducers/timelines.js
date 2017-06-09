@@ -367,7 +367,7 @@ const normalizeAccountPinnedStatuses = (state, accountId, statuses, next) => {
     .set('loaded', true)
     .set('next', next)
     .update('items', Immutable.List(), list => ids.concat(list)));
-}
+};
 
 export default function timelines(state = initialState, action) {
   switch(action.type) {
@@ -433,7 +433,7 @@ export default function timelines(state = initialState, action) {
       .update('items', Immutable.List(), list => list.unshift(action.id).toOrderedSet().toList()));
   case STATUS_UNPIN_SUCCESS:
     return state.updateIn(['accounts_pinned_statuses', action.accountId], Immutable.Map(), map => map
-      .update('items', Immutable.List(), list => list.filter((id) => id != action.id)));
+      .update('items', Immutable.List(), list => list.filter((id) => id !== action.id)));
   default:
     return state;
   }

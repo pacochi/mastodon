@@ -132,6 +132,7 @@ class Status extends ImmutablePureComponent {
     }
 
     if (this.props.displayPinned && status.get('pinned')) {
+      // onRefは要素の高さが変わらない場合のみ使用する
       const { displayPinned, onRef, ...otherProps } = this.props;
 
       return (
@@ -162,7 +163,7 @@ class Status extends ImmutablePureComponent {
             <FormattedMessage id='status.reblogged_by' defaultMessage='{name} boosted' values={{ name: <a onClick={this.handleAccountClick} data-id={status.getIn(['account', 'id'])} href={status.getIn(['account', 'url'])} className='status__display-name muted'><strong dangerouslySetInnerHTML={displayNameHTML} /></a> }} />
           </div>
 
-          <Status {...other} wrapped={true} status={status.get('reblog')} account={status.get('account')} />
+          <Status {...other} wrapped={true} status={status.get('reblog')} account={status.get('account')} displayPinned={false} />
         </div>
       );
     }
