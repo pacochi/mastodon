@@ -53,8 +53,8 @@ class QueueItem
     end
 
     def find_apollo_shop_id(link)
-      matched = link.match(%r{https?:\/\/booth\.pm\/apollo\/a\d+\/item\?.*id=(?<shop_id>\d+)})
-      matched ? matched[:shop_id]&.to_i : nil
+      matched = link.match(%r{https?://booth\.pm\/apollo\/a\d+/item\?.*id=(?<shop_id>\d+)})
+      matched ? matched[:shop_id] : nil
     end
 
     def apollo_link(link, account)
@@ -83,7 +83,6 @@ class QueueItem
       )
 
       cache_item('apollo', shop_id, item)
-
     end
 
     def booth_link(link, account)
