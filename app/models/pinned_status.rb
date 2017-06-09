@@ -32,7 +32,7 @@ class PinnedStatus < ApplicationRecord
   end
 
   def validate_status_visibility
-    errors.add(:status, :private) unless status.public_visibility? || status.unlisted_visibility?
+    errors.add(:status, :private) if status.direct_visibility?
   end
 
   def reject_reblog
