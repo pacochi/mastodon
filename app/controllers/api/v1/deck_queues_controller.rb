@@ -11,7 +11,7 @@ class Api::V1::DeckQueuesController < ApiController
     if @playlist.add(params[:link], current_user.account)
       render_empty
     else
-      render json: { error: 'エラー' }, status: :unprocessable_entity
+      render json: { error: 'エラー' }, status: :service_unavailable
     end
   rescue Mastodon::MusicSourceNotFoundError => _
     render json: { error: '無効なURL' }, status: :bad_request
@@ -27,7 +27,7 @@ class Api::V1::DeckQueuesController < ApiController
     if @playlist.skip(params[:id], current_user.account)
       render_empty
     else
-      render json: { error: 'エラー' }, status: :unprocessable_entity
+      render json: { error: 'エラー' }, status: :service_unavailable
     end
   rescue Mastodon::PlayerControlLimitError => _
     render json: { error: '操作回数制限' }, status: :too_many_requests
