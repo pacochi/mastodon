@@ -12,10 +12,12 @@ class Playlist
   end
 
   def add(link, account)
-    return nil unless check_count(music_add_count_key(account), account)
+    check_count(music_add_count_key(account), account)
 
     queue_item = QueueItem.create_from_link(link, account)
-    if queue_item && redis_push(queue_item)
+    raise Mastodon::MusicSourceNotFoundError if queue_item.nil?
+
+    if redis_push(queue_item)
       PushPlaylistWorker.perform_async(deck, 'add', queue_item.to_json)
       PlaylistLog.create(
         account: account,
@@ -34,7 +36,7 @@ class Playlist
   end
 
   def skip(id, account)
-    return nil unless check_count(music_skip_count_key(account), account)
+    check_count(music_skip_count_key(account), account)
 
     ret = self.next(id)
     PlaylistLog.find_by(uuid: id)&.update(skipped_at: Time.now, skipped_account_id: account.id) if ret
@@ -87,22 +89,24 @@ class Playlist
   def update_queue_items(retry_count = 3)
     while retry_count.positive?
       redis.watch(playlist_key) do
-        items = yield queue_items
-        if items
-          res = redis.multi do |m|
-            m.set(playlist_key, items.to_json)
-          end
+        begin
+          items = yield queue_items
+          if items
+            res = redis.multi do |m|
+              m.set(playlist_key, items.to_json)
+            end
 
-          return true if res
-        else
+            return true if res
+          else
+            return false
+          end
+        ensure
           redis.unwatch
-          return false
         end
       end
       retry_count -= 1
     end
-    # TODO: エラー追加
-    false
+    raise Mastodon::RedisMaxRetryError
   end
 
   def redis_push(item)
@@ -110,8 +114,7 @@ class Playlist
       if items.size < MAX_QUEUE_SIZE
         items.push(item)
       else
-        # TODO: エラー追加
-        nil
+        raise Mastodon::PlaylistSizeOverError
       end
     end
   end
@@ -123,8 +126,7 @@ class Playlist
         items.shift
         items
       else
-        # TODO: エラー追加
-        nil
+        raise Mastodon::PlaylistEmptyError
       end
     end
   end
@@ -148,7 +150,7 @@ class Playlist
           ttl = redis.ttl(key)
           ttl = 60 * 60 if ttl <= 0
 
-          return false unless count < MAX_ADD_COUNT
+          raise Mastodon::PlayerControlLimitError unless count < MAX_ADD_COUNT
 
           result = redis.multi do |m|
             m.setex(key, ttl, count + 1)
@@ -160,8 +162,7 @@ class Playlist
         retry_count -= 1
       end
     end
-
-    false
+    raise Mastodon::RedisMaxRetryError
   end
 
   def redis
