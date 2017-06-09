@@ -42,6 +42,8 @@ class Status extends ImmutablePureComponent {
     expandMedia: PropTypes.bool,
     squareMedia: PropTypes.bool,
     standalone: PropTypes.bool,
+    onPin: PropTypes.func,
+    displayPinned: PropTypes.bool,
   };
 
   state = {
@@ -129,6 +131,22 @@ class Status extends ImmutablePureComponent {
       );
     }
 
+    if (this.props.displayPinned && status.get('pinned')) {
+      // onRefは要素の高さが変わらない場合のみ使用する
+      const { displayPinned, onRef, ...otherProps } = this.props;
+
+      return (
+        <div className='status__wrapper' ref={this.handleRef} data-id={status.get('id')} >
+          <div className='status__prepend'>
+            <div className='status__prepend-icon-wrapper'><i className='fa fa-fw fa-pin status__prepend-icon' /></div>
+            <FormattedMessage id='status.pinned' defaultMessage='Pinned Toot' className='status__display-name muted' />
+          </div>
+
+          <Status {...otherProps} />
+        </div>
+      );
+    }
+
     if (status.get('reblog', null) !== null && typeof status.get('reblog') === 'object') {
       let displayName = status.getIn(['account', 'display_name']);
 
@@ -145,7 +163,7 @@ class Status extends ImmutablePureComponent {
             <FormattedMessage id='status.reblogged_by' defaultMessage='{name} boosted' values={{ name: <a onClick={this.handleAccountClick} data-id={status.getIn(['account', 'id'])} href={status.getIn(['account', 'url'])} className='status__display-name muted'><strong dangerouslySetInnerHTML={displayNameHTML} /></a> }} />
           </div>
 
-          <Status {...other} wrapped={true} status={status.get('reblog')} account={status.get('account')} />
+          <Status {...other} wrapped={true} status={status.get('reblog')} account={status.get('account')} displayPinned={false} />
         </div>
       );
     }

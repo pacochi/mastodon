@@ -6,6 +6,7 @@ import {
   fetchAccount,
   fetchAccountTimeline,
   expandAccountTimeline,
+  fetchAccountPinnedStatuses,
 } from '../../actions/accounts';
 import StatusList from '../../components/status_list';
 import LoadingIndicator from '../../components/loading_indicator';
@@ -20,6 +21,7 @@ const mapStateToProps = (state, props) => ({
   isLoading: state.getIn(['timelines', 'accounts_timelines', Number(props.params.accountId), 'isLoading']),
   hasMore: !!state.getIn(['timelines', 'accounts_timelines', Number(props.params.accountId), 'next']),
   me: state.getIn(['meta', 'me']),
+  pinnedStatusIds: state.getIn(['timelines', 'accounts_pinned_statuses', Number(props.params.accountId), 'items'], Immutable.List()),
 });
 
 class AccountTimeline extends ImmutablePureComponent {
@@ -31,16 +33,19 @@ class AccountTimeline extends ImmutablePureComponent {
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
     me: PropTypes.number.isRequired,
+    pinnedStatusIds: ImmutablePropTypes.list,
   };
 
   componentWillMount () {
     this.props.dispatch(fetchAccount(Number(this.props.params.accountId)));
+    this.props.dispatch(fetchAccountPinnedStatuses(Number(this.props.params.accountId)));
     this.props.dispatch(fetchAccountTimeline(Number(this.props.params.accountId)));
   }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.params.accountId !== this.props.params.accountId && nextProps.params.accountId) {
       this.props.dispatch(fetchAccount(Number(nextProps.params.accountId)));
+      this.props.dispatch(fetchAccountPinnedStatuses(Number(nextProps.params.accountId)));
       this.props.dispatch(fetchAccountTimeline(Number(nextProps.params.accountId)));
     }
   }
@@ -52,7 +57,7 @@ class AccountTimeline extends ImmutablePureComponent {
   }
 
   render () {
-    const { statusIds, isLoading, hasMore, me } = this.props;
+    const { statusIds, isLoading, hasMore, me, pinnedStatusIds } = this.props;
 
     if (!statusIds && isLoading) {
       return (
@@ -62,6 +67,8 @@ class AccountTimeline extends ImmutablePureComponent {
       );
     }
 
+    const uniqueStatusIds = pinnedStatusIds.concat(statusIds).toOrderedSet().toList();
+
     return (
       <Column>
         <ColumnBackButton />
@@ -69,11 +76,12 @@ class AccountTimeline extends ImmutablePureComponent {
         <StatusList
           prepend={<HeaderContainer accountId={this.props.params.accountId} />}
           scrollKey='account_timeline'
-          statusIds={statusIds}
+          statusIds={uniqueStatusIds}
           isLoading={isLoading}
           hasMore={hasMore}
           me={me}
           onScrollToBottom={this.handleScrollToBottom}
+          displayPinned={true}
         />
       </Column>
     );

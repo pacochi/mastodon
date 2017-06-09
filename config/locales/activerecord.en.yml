@@ -27,3 +27,9 @@ en:
           attributes:
             reblog:
               taken: of status already exists
+        pinned_status:
+          attributes:
+            status:
+              no_permission: isn't own toot
+              private: is direct toot
+              reblog: is boost

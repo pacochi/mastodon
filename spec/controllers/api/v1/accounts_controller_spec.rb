@@ -75,6 +75,15 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
     end
   end
 
+  describe 'GET #pinned_statuses' do
+    let!(:pinned_status) { Fabricate(:pinned_status, account: user.account) }
+
+    it 'returns http success' do
+      get :pinned_statuses, params: { id: user.account.id }
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe 'GET #followers' do
     it 'returns http success' do
       get :followers, params: { id: user.account.id }

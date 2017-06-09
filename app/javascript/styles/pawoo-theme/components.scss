@@ -39,3 +39,15 @@ $button-icon-scale-ration-on-pc: 0.85;
     }
   }
 }
+
+.status__action-bar-dropdown {
+  .dropdown__content {
+    width: 210px;
+  }
+
+  .dropdown--active {
+    .dropdown__content > ul > li > a {
+      width: auto;
+    }
+  }
+}

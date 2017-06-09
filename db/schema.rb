@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170524042615) do
+ActiveRecord::Schema.define(version: 20170607055007) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -238,6 +238,15 @@ ActiveRecord::Schema.define(version: 20170524042615) do
     t.index ["user_id", "provider"], name: "index_oauth_authentications_on_user_id_and_provider", unique: true, using: :btree
   end
 
+  create_table "pinned_statuses", force: :cascade do |t|
+    t.integer  "account_id", null: false
+    t.bigint   "status_id",  null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["account_id", "status_id"], name: "index_pinned_statuses_on_account_id_and_status_id", unique: true, using: :btree
+    t.index ["status_id"], name: "index_pinned_statuses_on_status_id", using: :btree
+  end
+
   create_table "pixiv_cards", force: :cascade do |t|
     t.integer "status_id", null: false
     t.string  "url",       null: false
@@ -422,5 +431,7 @@ ActiveRecord::Schema.define(version: 20170524042615) do
     t.index ["user_id"], name: "index_web_settings_on_user_id", unique: true, using: :btree
   end
 
+  add_foreign_key "pinned_statuses", "accounts"
+  add_foreign_key "pinned_statuses", "statuses"
   add_foreign_key "statuses", "statuses", column: "reblog_of_id", on_delete: :cascade
 end
