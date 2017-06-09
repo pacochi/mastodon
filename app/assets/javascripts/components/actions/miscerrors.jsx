@@ -1,7 +1,8 @@
-export const FAIL_MISC_ERROR = 'FAIL_MISC_ERROR';
-export function failMiscError(error) {
+export const MISC_FAIL = 'MISC_FAIL';
+export function miscFail(error) {
+  console.log(error);
   return {
-    type: FAIL_MISC_ERROR,
+    type: MISC_FAIL,
     error
   };
 };
