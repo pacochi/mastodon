@@ -895,7 +895,7 @@ export function fetchAccountPinnedStatuses(id) {
       // 数件のpinしか存在しないユーザーなら、1度目のリクエストで完了している。
       // 今後、アクセスが多いかつ大量のPinnedStatusをもつアカウントが現れたら、実装方法を変えるかもしれない
       if (next) {
-        setTimeout(() => { dispatch(expandAccountPinnedStatuses(id)) }, 300);
+        setTimeout(() => dispatch(expandAccountPinnedStatuses(id)), 300);
       }
     }).catch(error => {
       dispatch(fetchAccountPinnedStatusesFail(id, error));
@@ -945,7 +945,7 @@ export function expandAccountPinnedStatuses(id) {
 
       // PinnedStatusを全件まで取得する
       if (next) {
-        setTimeout(() => { dispatch(expandAccountPinnedStatuses(id)) }, 500);
+        setTimeout(() => dispatch(expandAccountPinnedStatuses(id)), 500);
       }
     }).catch(error => {
       dispatch(expandAccountPinnedStatusesFail(id, error));
