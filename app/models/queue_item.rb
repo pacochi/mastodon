@@ -118,7 +118,7 @@ class QueueItem
       return nil if json['items'].blank?
       item = json['items'].first
       duration = item['contentDetails']['duration']
-      matched = duration.match(%r{PT(\d+H)?(\d+M)?(\d+S)})
+      matched = duration.match(%r{PT(\d+H)?(\d+M)?(\d+S)?})
       return nil unless matched
 
       hour = matched[1]&.slice(/\d+/)&.to_i || 0
