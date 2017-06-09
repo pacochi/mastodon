@@ -10,7 +10,7 @@
 #
 
 class PinnedStatus < ApplicationRecord
-  belongs_to :account, required: true, touch: true
+  belongs_to :account, required: true
   belongs_to :status, required: true, touch: true
 
   validates :status, uniqueness: { scope: :account_id }
