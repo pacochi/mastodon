@@ -32,15 +32,15 @@ RSpec.describe Api::V1::PinnedStatusesController, type: :controller do
     end
   end
 
-  # describe 'DELETE #destroy' do
-  #   subject do
-  #     -> { delete :destroy, params: { status_id: status.id } }
-  #   end
-  #
-  #   let!(:pinned_status) { Fabricate(:pinned_status, account: account, status: status) }
-  #
-  #   it 'destroys pinned_status' do
-  #     is_expected.to change(PinnedStatus, :count).from(1).to(0)
-  #   end
-  # end
+  describe 'DELETE #destroy' do
+    subject do
+      -> { delete :destroy, params: { status_id: status.id } }
+    end
+
+    let!(:pinned_status) { Fabricate(:pinned_status, account: account, status: status) }
+
+    it 'destroys pinned_status' do
+      is_expected.to change(PinnedStatus, :count).from(1).to(0)
+    end
+  end
 end
