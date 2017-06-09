@@ -2,6 +2,7 @@
 
 class NextPlaylistWorker
   include Sidekiq::Worker
+  sidekiq_options queue: 'playlist'
 
   def perform(deck, item_id)
     playlist = Playlist.new(deck)
