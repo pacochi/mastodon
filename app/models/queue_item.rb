@@ -47,7 +47,7 @@ class QueueItem
     end
 
     def find_status_id(link)
-      matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/(@\w+)|(web/statuses)/(?<status_id>\d+)})
+      matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/((@\w+)|(web/statuses))/(?<status_id>\d+)})
       matched ? matched[:status_id] : nil
     end
 
