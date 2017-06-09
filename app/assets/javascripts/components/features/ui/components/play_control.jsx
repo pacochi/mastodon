@@ -35,13 +35,12 @@ class MusicPlayer extends React.PureComponent {
     this.handleClickOverlay = this.handleClickOverlay.bind(this);
     this.handleClickDeckTab = this.handleClickDeckTab.bind(this);
     this.handleSubmitAddForm = this.handleSubmitAddForm.bind(this);
-    this.playNextQueueItem = this.playNextQueueItem.bind(this);
   }
 
   componentDidMount () {
     this.fetchDeck(1);
 
-    this.subscription = createStream('ws://localhost:4000/', this.props.accessToken, `playlist&deck=${this.state.targetDeck}`, {
+    this.subscription = createStream(this.props.streamingAPIBaseURL, this.props.accessToken, `playlist&deck=${this.state.targetDeck}`, {
       received: (data) => {
         switch(data.event) {
           case 'add':
@@ -64,8 +63,10 @@ class MusicPlayer extends React.PureComponent {
           break;
           case 'end':
           {
+            const deck = Object.assign({}, this.state.deck);
             if(deck.queues.length <= 1) deck.queues = [];
             deck.time_offset = 0;
+            this.setState({deck});
           }
           break;
         }
@@ -362,7 +363,8 @@ class MusicPlayer extends React.PureComponent {
 }
 
 MusicPlayer.propTypes = {
-  accessToken: PropTypes.string.isRequired
+  accessToken: PropTypes.string.isRequired,
+  streamingAPIBaseURL: PropTypes.string.isRequired
 }
 
 export default MusicPlayer;
