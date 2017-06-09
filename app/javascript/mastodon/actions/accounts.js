@@ -85,6 +85,10 @@ export const ACCOUNT_PINNED_STATUSES_FETCH_REQUEST = 'ACCOUNT_PINNED_STATUSES_FE
 export const ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS = 'ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS';
 export const ACCOUNT_PINNED_STATUSES_FETCH_FAIL = 'ACCOUNT_PINNED_STATUSES_FETCH_FAIL';
 
+export const ACCOUNT_PINNED_STATUSES_EXPAND_REQUEST = 'ACCOUNT_PINNED_STATUSES_EXPAND_REQUEST';
+export const ACCOUNT_PINNED_STATUSES_EXPAND_SUCCESS = 'ACCOUNT_PINNED_STATUSES_EXPAND_SUCCESS';
+export const ACCOUNT_PINNED_STATUSES_EXPAND_FAIL = 'ACCOUNT_PINNED_STATUSES_EXPAND_FAIL';
+
 export function fetchAccount(id) {
   return (dispatch, getState) => {
     dispatch(fetchRelationships([id]));
@@ -875,24 +879,23 @@ export function rejectFollowRequestFail(id, error) {
 
 export function fetchAccountPinnedStatuses(id) {
   return (dispatch, getState) => {
-    const ids = getState().getIn(['timelines', 'accounts_pinned_statuses', id, 'items'], Immutable.List());
-    const newestId = ids.size > 0 ? ids.first() : null;
+    let nextUrl = getState().getIn(['timelines', 'accounts_pinned_statuses', id, 'next']);
 
-    let params = {};
-
-    if (newestId !== null) {
-      params.since_id = newestId;
+    if (!nextUrl) {
+      nextUrl = `/api/v1/accounts/${id}/pinned_statuses`;
     }
 
     dispatch(fetchAccountPinnedStatusesRequest(id));
 
-    api(getState).get(`/api/v1/accounts/${id}/pinned_statuses`, { params }).then(response => {
+    api(getState).get(nextUrl).then(response => {
       const next = getLinks(response).refs.find(link => link.rel === 'next');
-      dispatch(fetchAccountPinnedStatusesSuccess(id, response.data, next));
+      dispatch(fetchAccountPinnedStatusesSuccess(id, response.data, next ? next.uri : null));
 
-      // 次のpinnedStatusを取得する。数件のpinしか存在しないユーザーなら、1度目のリクエストで完了している。
+      // PinnedStatusを全件まで取得する
+      // 数件のpinしか存在しないユーザーなら、1度目のリクエストで完了している。
+      // 今後、アクセスが多いかつ大量のPinnedStatusをもつアカウントが現れたら、実装方法を変えるかもしれない
       if (next) {
-        setTimeout(() => fetchAccountPinnedStatuses(id), 500);
+        setTimeout(() => { dispatch(expandAccountPinnedStatuses(id)) }, 300);
       }
     }).catch(error => {
       dispatch(fetchAccountPinnedStatusesFail(id, error));
@@ -922,5 +925,54 @@ export function fetchAccountPinnedStatusesFail(id, error) {
     id,
     error,
     skipAlert: error.response.status === 404,
+  };
+};
+
+export function expandAccountPinnedStatuses(id) {
+  return (dispatch, getState) => {
+    const url = getState().getIn(['timelines', 'accounts_pinned_statuses', id, 'next']);
+
+    if (url === null) {
+      return;
+    }
+
+    dispatch(expandAccountPinnedStatusesRequest(id));
+
+    api(getState).get(url).then(response => {
+      const next = getLinks(response).refs.find(link => link.rel === 'next');
+
+      dispatch(expandAccountPinnedStatusesSuccess(id, response.data, next ? next.uri : null));
+
+      // PinnedStatusを全件まで取得する
+      if (next) {
+        setTimeout(() => { dispatch(expandAccountPinnedStatuses(id)) }, 500);
+      }
+    }).catch(error => {
+      dispatch(expandAccountPinnedStatusesFail(id, error));
+    });
+  };
+};
+
+export function expandAccountPinnedStatusesRequest(id) {
+  return {
+    type: ACCOUNT_PINNED_STATUSES_EXPAND_REQUEST,
+    id,
+  };
+};
+
+export function expandAccountPinnedStatusesSuccess(id, statuses, next) {
+  return {
+    type: ACCOUNT_PINNED_STATUSES_EXPAND_SUCCESS,
+    id,
+    statuses,
+    next,
+  };
+};
+
+export function expandAccountPinnedStatusesFail(id, error) {
+  return {
+    type: ACCOUNT_PINNED_STATUSES_EXPAND_FAIL,
+    id,
+    error,
   };
 };

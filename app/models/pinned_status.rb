@@ -10,6 +10,8 @@
 #
 
 class PinnedStatus < ApplicationRecord
+  include Paginable
+
   belongs_to :account, required: true
   belongs_to :status, required: true, touch: true
 

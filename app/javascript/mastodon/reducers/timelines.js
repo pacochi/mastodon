@@ -33,6 +33,7 @@ import {
   ACCOUNT_BLOCK_SUCCESS,
   ACCOUNT_MUTE_SUCCESS,
   ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS,
+  ACCOUNT_PINNED_STATUSES_EXPAND_SUCCESS,
 } from '../actions/accounts';
 import {
   STATUS_SEARCH_TIMELINE_FETCH_REQUEST,
@@ -366,7 +367,7 @@ const normalizeAccountPinnedStatuses = (state, accountId, statuses, next) => {
     .set('isLoading', false)
     .set('loaded', true)
     .set('next', next)
-    .update('items', Immutable.List(), list => ids.concat(list)));
+    .update('items', Immutable.List(), list => list.concat(ids)));
 };
 
 export default function timelines(state = initialState, action) {
@@ -427,6 +428,7 @@ export default function timelines(state = initialState, action) {
   case TIMELINE_DISCONNECT:
     return state.setIn([action.timeline, 'online'], false);
   case ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS:
+  case ACCOUNT_PINNED_STATUSES_EXPAND_SUCCESS:
     return normalizeAccountPinnedStatuses(state, action.id, action.statuses, action.next);
   case STATUS_PIN_SUCCESS:
     return state.updateIn(['accounts_pinned_statuses', action.accountId], Immutable.Map(), map => map

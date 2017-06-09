@@ -69,14 +69,17 @@ class Api::V1::AccountsController < ApiController
   end
 
   def pinned_statuses
-    statuses = Status.where(id: @account.pinned_statuses.pluck(:status_id)).joins(:pinned_status).merge(PinnedStatus.recent)
-    @statuses = statuses.permitted_for(@account, current_account).paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
-    @statuses = cache_collection(@statuses, Status)
+    pinned_statuses = @account.pinned_statuses.recent
+    paginated_pinned_statuses = pinned_statuses.paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
 
+    statuses = Status.where(id: pinned_statuses.pluck(:status_id)).permitted_for(@account, current_account)
+    paginated_statuses = statuses.joins(:pinned_status).merge(paginated_pinned_statuses)
+
+    @statuses = cache_collection(paginated_statuses, Status)
     set_maps(@statuses)
 
-    next_path = pinned_statuses_api_v1_account_url(statuses_pagination_params(max_id: @statuses.last.id))    if @statuses.size == limit_param(DEFAULT_STATUSES_LIMIT)
-    prev_path = pinned_statuses_api_v1_account_url(statuses_pagination_params(since_id: @statuses.first.id)) unless @statuses.empty?
+    next_path = pinned_statuses_api_v1_account_url(statuses_pagination_params(max_id: paginated_pinned_statuses.last.id))    if @statuses.size == limit_param(DEFAULT_STATUSES_LIMIT)
+    prev_path = pinned_statuses_api_v1_account_url(statuses_pagination_params(since_id: paginated_pinned_statuses.first.id)) unless @statuses.empty?
 
     set_pagination_headers(next_path, prev_path)
 
