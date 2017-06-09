@@ -12,12 +12,14 @@ class Playlist
   end
 
   def add(link, account)
-    check_count(music_add_count_key(account), account)
+    count = redis.get(music_add_count_key(account))&.to_i || 0
+    raise Mastodon::PlayerControlLimitError unless count < MAX_ADD_COUNT
 
     queue_item = QueueItem.create_from_link(link, account)
     raise Mastodon::MusicSourceNotFoundError if queue_item.nil?
 
     if redis_push(queue_item)
+      check_count(music_add_count_key(account), MAX_ADD_COUNT, account)
       PushPlaylistWorker.perform_async(deck, 'add', queue_item.to_json)
       PlaylistLog.create(
         account: account,
@@ -36,10 +38,13 @@ class Playlist
   end
 
   def skip(id, account)
-    check_count(music_skip_count_key(account), account)
-
+    count = redis.get(music_skip_count_key(account))&.to_i || 0
+    raise Mastodon::PlayerControlLimitError unless count < MAX_SKIP_COUNT
     ret = self.next(id)
-    PlaylistLog.find_by(uuid: id)&.update(skipped_at: Time.now, skipped_account_id: account.id) if ret
+    if ret
+      check_count(music_skip_count_key(account), MAX_SKIP_COUNT, account)
+      PlaylistLog.find_by(uuid: id)&.update(skipped_at: Time.now, skipped_account_id: account.id)
+    end
     ret
   end
 
@@ -139,7 +144,7 @@ class Playlist
     "music:playlist:skip-count:#{account.id}"
   end
 
-  def check_count(key, account)
+  def check_count(key, max_control_limit, account)
     return true if User.find_by(account: account)&.admin
 
     retry_count = 3
@@ -150,7 +155,7 @@ class Playlist
           ttl = redis.ttl(key)
           ttl = 60 * 60 if ttl <= 0
 
-          raise Mastodon::PlayerControlLimitError unless count < MAX_ADD_COUNT
+          raise Mastodon::PlayerControlLimitError unless count < max_control_limit
 
           result = redis.multi do |m|
             m.setex(key, ttl, count + 1)
