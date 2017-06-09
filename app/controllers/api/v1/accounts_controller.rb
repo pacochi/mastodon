@@ -78,8 +78,8 @@ class Api::V1::AccountsController < ApiController
     @statuses = cache_collection(paginated_statuses, Status)
     set_maps(@statuses)
 
-    next_path = pinned_statuses_api_v1_account_url(statuses_pagination_params(max_id: paginated_pinned_statuses.last.id))    if @statuses.size == limit_param(DEFAULT_STATUSES_LIMIT)
-    prev_path = pinned_statuses_api_v1_account_url(statuses_pagination_params(since_id: paginated_pinned_statuses.first.id)) unless @statuses.empty?
+    next_path = pinned_statuses_api_v1_account_url(statuses_pagination_params(max_id: paginated_pinned_statuses.last.id))    if pinned_statuses.size == limit_param(DEFAULT_STATUSES_LIMIT)
+    prev_path = pinned_statuses_api_v1_account_url(statuses_pagination_params(since_id: paginated_pinned_statuses.first.id)) unless pinned_statuses.empty?
 
     set_pagination_headers(next_path, prev_path)
 
