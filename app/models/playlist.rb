@@ -75,7 +75,7 @@ class Playlist
 
   def next(id)
     if redis_shift(id)
-      PushPlaylistWorker.perform_async(deck, 'end', {})
+      PushPlaylistWorker.perform_async(deck, 'end', {}.to_json)
       first_item = queue_items.first
 
       if first_item
@@ -104,7 +104,7 @@ class Playlist
   def play_item(queue_item_id, duration)
     set_start_time
     NextPlaylistWorker.perform_in(duration, deck, queue_item_id)
-    PushPlaylistWorker.perform_async(deck, 'play', id: queue_item_id)
+    PushPlaylistWorker.perform_async(deck, 'play', { id: queue_item_id }.to_json)
     PlaylistLog.find_by(uuid: queue_item_id)&.update(started_at: Time.now)
   end
 
