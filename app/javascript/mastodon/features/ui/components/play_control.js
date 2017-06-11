@@ -289,12 +289,12 @@ class MusicPlayer extends React.PureComponent {
 
       if(this.state.isSeekbarActive){
         playerSeekBarStyle = {
-          transition: `width ${this.state.isSeekbarActive ? (this.state.deck.queues[0].duration-this.state.offset_time) : '0'}s linear`
+          transition: `width ${this.state.isSeekbarActive ? (this.state.deck.queues[0].duration-this.state.offset_time) : '0'}s linear`,
         }
       }else{
         playerSeekBarStyle = {
           transition: `width 0s linear`,
-          width: `${this.state.deck.queues[0].duration ? (this.state.offset_time / this.state.deck.queues[0].duration) * 100 : 0}%`
+          width: `${this.state.deck.queues[0].duration ? (this.state.offset_time / this.state.deck.queues[0].duration) * 100 : 0}%`,
         }
       }
     }
