@@ -368,7 +368,7 @@ class MusicPlayer extends React.PureComponent {
                           </div>
                         </div>
                         <div className='queue-item__datasource'>
-                          <a href={queue_item.link} target="_blank"><img src={(()=>`/player/logos/${queue_item.source_type}.svg`)()} /></a>
+                          <a href={queue_item.link} target="_blank"><img src={`/player/logos/${queue_item.source_type}.${queue_item.source_type === 'apollo' ? 'png' : 'svg'}`} /></a>
                         </div>
                       </li>
                     )
