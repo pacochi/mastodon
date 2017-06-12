@@ -4176,10 +4176,11 @@ button.icon-button.active i.fa-retweet {
 
 
           .queue-item__main{
-            width: 100%;
+            width: calc(100% - 56px);
             display: flex;
             align-items: center;
             justify-content: flex-start;
+            overflow-x: hidden;
 
             .queue-item__metadata{
               display: flex;
