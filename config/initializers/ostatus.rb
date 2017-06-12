@@ -16,6 +16,7 @@ Rails.application.configure do
   config.x.alternate_domains = alternate_domains.split(/\s*,\s*/)
 
   config.action_mailer.default_url_options = { host: web_host, protocol: https ? 'https://' : 'http://', trailing_slash: false }
+  Rails.application.routes.default_url_options = config.action_mailer.default_url_options
   config.x.streaming_api_base_url          = 'ws://localhost:4000'
 
   if Rails.env.production?
