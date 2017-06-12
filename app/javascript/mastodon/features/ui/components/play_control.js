@@ -361,7 +361,7 @@ class MusicPlayer extends React.PureComponent {
                 <li className="deck__queue-add-form">
                   <form onSubmit={this.handleSubmitAddForm}>
                     <span>曲を追加</span>
-                    <input ref={this.setURLRef} type="text" placeholder="URLを入力(Pawoo Music, APPOLO(BOOTH) and YouTube URL)" required />
+                    <input ref={this.setURLRef} type="text" placeholder="URLを入力(Pawoo Music, APOLLO(BOOTH) and YouTube URL)" required />
                     <input type="submit" />
                   </form>
                 </li>
