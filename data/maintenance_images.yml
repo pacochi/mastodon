@@ -62,11 +62,6 @@
     - 503
   images:
     - https://img.pawoo.net/media_attachments/files/000/368/399/original/502d77104196dc14.png
-- id: 4676294
-  statuses:
-    - 503
-  images:
-    - https://img.pawoo.net/media_attachments/files/000/367/673/original/media.mp4
 - id: 4650516
   statuses:
     - 503
@@ -612,16 +607,6 @@
     - 503
   images:
     - https://img.pawoo.net/media_attachments/files/000/380/668/original/78d1aa83fe8eda2d.jpg
-- id: 4838318
-  statuses:
-    - 403
-    - 404
-    - 410
-    - 422
-    - 500
-    - 503
-  images:
-    - https://img.pawoo.net/media_attachments/files/000/379/924/original/media.mp4
 - id: 4825171
   statuses:
     - 403
