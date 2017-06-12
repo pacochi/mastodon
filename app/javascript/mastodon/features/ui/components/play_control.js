@@ -112,22 +112,6 @@ class MusicPlayer extends React.PureComponent {
         isSeekbarActive:true,
         isLoadingArtwork: false
       });
-
-      setTimeout(()=>{
-        if(!deck.queues.length) return;
-        switch (deck.queues[0].source_type) {
-          case 'pawoo-music': {
-
-          }
-          case 'booth':
-          case 'apollo': {
-
-          }
-            break;
-          default:
-            break;
-        }
-      }, 80);
     }, 20);
   }
 
