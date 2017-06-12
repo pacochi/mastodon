@@ -39,7 +39,9 @@
         var imageUrls = [];
         var defaultUrl = '/oops.png';
 
-        for(var attributes of json) {
+        for(var index in json) {
+          var attributes = json[index];
+
           if (attributes['statuses'].indexOf(statusCode) > -1) {
             Array.prototype.push.apply(imageUrls, attributes['images']);
           }
