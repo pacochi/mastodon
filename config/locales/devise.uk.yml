@@ -17,13 +17,13 @@ uk:
       unconfirmed: Для продовження Вам потрібно підтвердити Вашу поштову скриньку.
     mailer:
       confirmation_instructions:
-        subject: 'Pawoo: Інструкції для підтвердження'
+        subject: 'Pawoo Music: Інструкції для підтвердження'
       password_change:
-        subject: 'Pawoo: Ваш пароль змінений'
+        subject: 'Pawoo Music: Ваш пароль змінений'
       reset_password_instructions:
-        subject: 'Pawoo: Інструкції для скидання паролю'
+        subject: 'Pawoo Music: Інструкції для скидання паролю'
       unlock_instructions:
-        subject: 'Pawoo: Інструкції для розблокування'
+        subject: 'Pawoo Music: Інструкції для розблокування'
     omniauth_callbacks:
       failure: Нам не вдалося аутентифікувати Вас з %{kind} через те, що "%{reason}".
       success: Успішно аутентифіковано з акаунту %{kind}.

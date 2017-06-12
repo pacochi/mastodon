@@ -82,11 +82,11 @@ jobs:
             sql=tmp/circleci/db/$(cat tmp/circleci/master.hash).sql
             if [ -f $sql ]; then
               psql -h $DB_HOST < $sql
-            else
-              ./bin/rails db:create
             fi
+            ./bin/rails db:create
+          # pawoo_music_testが作られないので一時的に毎回作るように
       - run: ./bin/rails db:migrate
-      - run: pg_dump --create --host=$DB_HOST --file=tmp/circleci/db/$(cat tmp/circleci/master.hash).sql pawoo_test
+      - run: pg_dump --create --host=$DB_HOST --file=tmp/circleci/db/$(cat tmp/circleci/master.hash).sql pawoo_music_test
       - save_cache:
           key: db/{{ checksum "tmp/circleci/master.hash" }}/1
           paths:

@@ -17,13 +17,13 @@ ja:
       unconfirmed: 続行するにはメールアドレスを確認する必要があります。
     mailer:
       confirmation_instructions:
-        subject: 'Pawoo: メールアドレスの確認'
+        subject: 'Pawoo Music: メールアドレスの確認'
       password_change:
-        subject: 'Pawoo: パスワードが変更されました'
+        subject: 'Pawoo Music: パスワードが変更されました'
       reset_password_instructions:
-        subject: 'Pawoo: パスワード再発行'
+        subject: 'Pawoo Music: パスワード再発行'
       unlock_instructions:
-        subject: 'Pawoo: アカウントのロックの解除'
+        subject: 'Pawoo Music: アカウントのロックの解除'
     omniauth_callbacks:
       failure: '%{reason}によって%{kind}からのアクセスを認証できませんでした。'
       success: '%{kind}からのアクセスは正常に認証されました。'

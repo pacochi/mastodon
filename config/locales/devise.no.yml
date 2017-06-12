@@ -17,13 +17,13 @@
       unconfirmed: Du må bekrefte e-postadressen din før du kan fortsette.
     mailer:
       confirmation_instructions:
-        subject: 'Pawoo: Instruksjoner for å bekrefte e-postadresse'
+        subject: 'Pawoo Music: Instruksjoner for å bekrefte e-postadresse'
       password_change:
-        subject: 'Pawoo: Passord endret'
+        subject: 'Pawoo Music: Passord endret'
       reset_password_instructions:
-        subject: 'Pawoo: Hvordan nullstille passord'
+        subject: 'Pawoo Music: Hvordan nullstille passord'
       unlock_instructions:
-        subject: 'Pawoo: Instruksjoner for å gjenåpne konto'
+        subject: 'Pawoo Music: Instruksjoner for å gjenåpne konto'
     omniauth_callbacks:
       failure: Kunne ikke autentisere deg fra %{kind} fordi "%{reason}".
       success: Vellykket autentisering fra %{kind}.

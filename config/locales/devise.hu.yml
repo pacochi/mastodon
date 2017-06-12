@@ -17,13 +17,13 @@ hu:
       unconfirmed: A folytatás előtt meg kell erősítened az e-mail címed.
     mailer:
       confirmation_instructions:
-        subject: 'Pawoo: Megerősítési lépések'
+        subject: 'Pawoo Music: Megerősítési lépések'
       password_change:
-        subject: 'Pawoo: Jelszó megváltoztatva'
+        subject: 'Pawoo Music: Jelszó megváltoztatva'
       reset_password_instructions:
-        subject: 'Pawoo: Jelszó visszaállítási lépések'
+        subject: 'Pawoo Music: Jelszó visszaállítási lépések'
       unlock_instructions:
-        subject: 'Pawoo: Feloldási lépések'
+        subject: 'Pawoo Music: Feloldási lépések'
     omniauth_callbacks:
       failure: "%{kind} nem hitelesíthető, mert %{reason}."
       success: Sikeres hitelesítés %{kind} fiókról.
