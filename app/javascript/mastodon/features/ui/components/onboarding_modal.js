@@ -188,11 +188,6 @@ class OnboardingModal extends React.PureComponent {
     currentIndex: 0,
   };
 
-  componentWillUnmount () {
-    const path = '/suggested_accounts';
-    this.context.router.push(path);
-  }
-
   handleSkip = (e) => {
     e.preventDefault();
     this.props.onClose();
