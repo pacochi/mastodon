@@ -109,6 +109,10 @@
         color: $ui-primary-color;
         text-decoration: underline;
       }
+
+      p a {
+        text-decoration: none;
+      }
     }
   }
 

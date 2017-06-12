@@ -32,11 +32,11 @@
   %meta{ property: 'og:type', content: 'website' }/
   %meta{ property: 'og:title', content: Rails.configuration.x.local_domain }/
   %meta{ property: 'og:description', content: strip_tags(@instance_presenter.site_description.blank? ? t('about.about_mastodon') : @instance_presenter.site_description) }/
-  %meta{ property: 'og:image', content: asset_pack_path('mastodon_small.jpg') }/
+  %meta{ property: 'og:image', content: asset_pack_path('pawoo_music_small.png') }/
   %meta{ property: 'og:image:width', content: '400' }/
   %meta{ property: 'og:image:height', content: '400' }/
   %meta{ property: 'twitter:card', content: 'summary' }/
-  %meta{ property: 'twitter:image', content: asset_url('mastodon_small.png') }/
+  %meta{ property: 'twitter:image', content: asset_pack_path('pawoo_music_small.png') }/
 
 .about-cols
   .about-col.left
@@ -48,16 +48,13 @@
   .about-col.main
     .about-col-head
       = image_tag asset_pack_path('about/header.png'), width: 535
-      %p
-        ピクシブが運営するマストドンインスタンス「Pawoo」は、文章や画像を投稿して楽しむSNSです。
-        「創作活動や自由なコミュニケーションを楽しめる場」として、どなたにも幅広く使っていただけます。
 
     .about-col-body.first
       %p.main ＼ #{number_with_delimiter @instance_presenter.user_count}人が、#{number_with_delimiter @instance_presenter.status_count}回パウってます／
 
       .simple_form.show_on_wide_display.signup
         = link_to new_user_registration_path do
-          %button.including-brand Pawooをはじめる
+          %button.including-brand Pawoo Musicをはじめる
 
       .simple_form.hide_on_wide_display
         = render 'registration'
@@ -74,83 +71,11 @@
           = link_to 'https://play.google.com/store/apps/details?id=jp.pxv.pawoo' do
             = image_tag asset_pack_path('about/badge-googleplay.png'), width: 190
 
-    .about-col-body
-      %p.main ＼ Pawooの特徴 ／
-
-      %p.title 一度に500文字までのテキスト・画像・動画を投稿できる
-
-      = image_tag asset_pack_path('about/submit-form.png'), width: '100%'
-
-      %p.title Pawooにはたくさんのユーザーがいて、わいわいしてる場を楽しめる
-      %p
-        ローカルタイムラインを見れば、Pawoo内での会話がすべて流れてくるので、フォローしている人がいなくても使い始めから楽しい！
-
-      %p.title 投稿時に公開範囲を制限できる
-      %p
-        例えば、Pawoo上のユーザーに広く見てもらいたいイラストと、フォロワーのみに見せたいイラストを分けて投稿することができる！
-
-      %p.title Pawooだけの機能「メディアタイムライン」がとっても面白い
-      %p
-        投稿された画像や動画だけが一覧で見れる「メディアタイムライン」機能が追加されています。
-        メディアタイムラインには常に多数のイラストが登場し、クリエイター間での交流も盛んに行われています。
-
-      %p.title pixivアカウントと連携できる
-      %p
-        創作活動が好きなpixivユーザーがもっと気軽に楽しく参加できるよう、pixivアカウントとの連携し、pixivの作品をPawooでシェアできる機能を追加しています。
-
-      .simple_form.signup
-        = link_to new_user_registration_path do
-          %button.including-brand Pawooをはじめる
-
-      %p.main{ style: 'margin-top:40px;' }
-        = link_to t('about.about_this'), about_more_path, style: 'color:white'
-
-    .about-col-body
-      %p.main ＼ マストドン（Mastodon）とは？ ／
-      %p
-        マストドンは、所属するインスタンスを選んでアカウントを登録し、トゥートと呼ばれる投稿を通じてコミュニケーションを楽しむSNSです。
-        オープンソースで公開されているため、誰でも自分のインスタンスを立ち上げることが可能である他、様々なインスタンスにアカウントを持つこともできます。
-        また、インスタンス間を超えたやり取りも可能であるため、様々なコミュニティを介したコミュニケーションが展開されています。
-
-      %video{autoplay: '', loop: '',  src: asset_pack_path('about/demo.mp4'),  poster: asset_pack_path('about/demo.jpg'),  style: 'width:100%;'}
-
-    .about-col-body
-      %p.main ＼ マストドンの特徴 ／
-
-      .features-list
-        .features-list__column
-          %ul.fa-ul
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.chronology'
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.public'
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.characters'
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.gifv'
-        .features-list__column
-          %ul.fa-ul
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.privacy'
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.blocks'
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.ethics'
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.api'
-
-      %p まずはローカルタイムラインを眺めて、気になるユーザーをフォローしてみましょう！
 
     .actions
       .info
+        %p.main
+          = link_to t('about.about_this'), about_more_path, style: 'color:white; text-decoration: none'
         = link_to t('about.terms'), terms_path
         ·
         = link_to t('about.apps'), 'https://github.com/tootsuite/documentation/blob/master/Using-Mastodon/Apps.md'
