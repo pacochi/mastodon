@@ -230,7 +230,7 @@ class MusicPlayer extends React.PureComponent {
       event.target.mute();
     }
     this.setState({
-      ytControl: event.target
+      ytControl: event.target,
     })
   }
 
