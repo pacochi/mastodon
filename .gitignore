@@ -58,3 +58,10 @@ yarn-debug.log
 # Ignore Docker option files
 docker-compose.override.yml
 
+# Ignore generated error pages
+public/400*.html
+public/403*.html
+public/410*.html
+public/422*.html
+public/500*.html
+public/503*.html

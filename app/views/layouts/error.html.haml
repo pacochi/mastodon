@@ -6,6 +6,7 @@
     %title= yield :page_title
     %meta{ content: 'width=device-width,initial-scale=1', name: 'viewport' }/
     %link{ href: 'https://fonts.googleapis.com/css?family=Roboto:400', rel: 'stylesheet' }/
+
     :css
       body {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -29,8 +30,31 @@
         font: 20px/28px -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
         font-weight: 400;
       }
+
+    :javascript
+      document.addEventListener('DOMContentLoaded', function() {
+        var json = JSON.parse(document.getElementById('maintenance_images').textContent);
+        var img = document.getElementById('error_image');
+        var statusCode = Number(img.getAttribute('data-status-code'));
+        var imageUrls = [];
+        var defaultUrl = '/oops.png';
+
+        for(var index in json) {
+          var attributes = json[index];
+
+          if (attributes['statuses'].indexOf(statusCode) > -1) {
+            Array.prototype.push.apply(imageUrls, attributes['images']);
+          }
+        }
+
+        var imageUrl = imageUrls[Math.floor(Math.random() * imageUrls.length)];
+        img.setAttribute('src', imageUrl || defaultUrl);
+      });
+
   %body
+    %script#maintenance_images{ type: 'application/json' }!= json_escape(MaintenanceImage.mappings.to_json)
+
     .dialog
-      %img{ alt: 'Mastodon', src: '/oops.png' }/
+      %img#error_image{ alt: 'Mastodon', src: '', data: { status_code: response.code } }/
       %div
         %h1= yield :content
