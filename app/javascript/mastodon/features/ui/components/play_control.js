@@ -284,7 +284,7 @@ class MusicPlayer extends React.PureComponent {
         backgroundImage: `url(${this.state.deck.queues[0].thumbnail_url})`,
       };
       ytplayerStyle = {
-        display: this.state.deck.queues[0].source_type === 'youtube' ? 'block' : 'none'
+        display: this.state.deck.queues[0].source_type === 'youtube' ? 'block' : 'none',
       };
 
       if(this.state.isSeekbarActive){
