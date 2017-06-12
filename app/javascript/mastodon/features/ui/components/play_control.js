@@ -102,7 +102,7 @@ class MusicPlayer extends React.PureComponent {
           controls: 0,
           start: deck.time_offset,
         },
-      } : {}
+      } : {},
     });
 
     // YouTube / Animation用の遅延ローディング
