@@ -181,7 +181,6 @@ class Mastodon extends React.PureComponent {
                 <Route path='timelines/public/local' component={CommunityTimeline} />
                 <Route path='timelines/tag/:id' component={HashtagTimeline} />
                 <Route path='timelines/public/media' component={MediaTimeline} />
-                <Route path='suggested_accounts' component={SuggestedAccounts} />
 
                 <Route path='notifications' component={Notifications} />
                 <Route path='favourites' component={FavouritedStatuses} />

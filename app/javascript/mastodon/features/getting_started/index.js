@@ -22,7 +22,6 @@ const messages = defineMessages({
   blocks: { id: 'navigation_bar.blocks', defaultMessage: 'Blocked users' },
   mutes: { id: 'navigation_bar.mutes', defaultMessage: 'Muted users' },
   info: { id: 'navigation_bar.info', defaultMessage: 'Extended information' },
-  suggested_accounts: { id: 'navigation_bar.suggested_accounts', defaultMessage: 'Active Accounts' },
   media_timeline: { id: 'navigation_bar.media_timeline', defaultMessage: 'Media timeline' },
 });
 
@@ -54,7 +53,6 @@ class GettingStarted extends ImmutablePureComponent {
           <ColumnLink icon='image' text={intl.formatMessage(messages.media_timeline)} to='/timelines/public/media' />
           <ColumnLink icon='globe' hideOnMobile={true} text={intl.formatMessage(messages.public_timeline)} to='/timelines/public' />
           <ColumnLink icon='star' text={intl.formatMessage(messages.favourites)} to='/favourites' />
-          <ColumnLink icon='user' text={intl.formatMessage(messages.suggested_accounts)} to='/suggested_accounts' />
           {followRequests}
           <ColumnLink icon='volume-off' text={intl.formatMessage(messages.mutes)} to='/mutes' />
           <ColumnLink icon='ban' text={intl.formatMessage(messages.blocks)} to='/blocks' />

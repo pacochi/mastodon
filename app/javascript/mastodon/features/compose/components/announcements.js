@@ -48,18 +48,6 @@ class Announcements extends React.PureComponent {
             body: 'Google Playストア',
           },
         ],
-      }, {
-        id: 7,
-        icon: '/announcements/icon_2x_360.png',
-        body: 'Pawooにどんなユーザーさんがいるのか見てみよう！',
-        link: [
-          {
-            reactRouter: true,
-            inline: false,
-            href: '/suggested_accounts',
-            body: 'おすすめユーザー（実験中）',
-          },
-        ],
       },
       // NOTE: id: 8 まで使用した
     );
