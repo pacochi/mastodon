@@ -1,4 +1,7 @@
-#!/bin/bash -eux
+#!/bin/bash -x
+pwd
+source /etc/profile
+set -eux
 git fetch --prune
 git checkout --force ${DEPLOY_COMMIT#origin/} # これをしないとgit symbolic-ref --short HEADがブランチ名を返してくれない
 git reset --hard $DEPLOY_COMMIT
