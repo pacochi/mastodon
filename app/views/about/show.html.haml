@@ -1,5 +1,5 @@
 - content_for :page_title do
-  Pawoo Music hosted by pixiv
+  Mastodon (マストドン) hosted by pixiv
 
 - content_for :header_tags do
   :ruby
@@ -32,11 +32,11 @@
   %meta{ property: 'og:type', content: 'website' }/
   %meta{ property: 'og:title', content: Rails.configuration.x.local_domain }/
   %meta{ property: 'og:description', content: strip_tags(@instance_presenter.site_description.blank? ? t('about.about_mastodon') : @instance_presenter.site_description) }/
-  %meta{ property: 'og:image', content: asset_url('pawoo_music_small.png') }/
+  %meta{ property: 'og:image', content: asset_pack_path('pawoo_music_small.png') }/
   %meta{ property: 'og:image:width', content: '400' }/
   %meta{ property: 'og:image:height', content: '400' }/
   %meta{ property: 'twitter:card', content: 'summary' }/
-  %meta{ property: 'twitter:image', content: asset_url('pawoo_music_small.png') }/
+  %meta{ property: 'twitter:image', content: asset_pack_path('pawoo_music_small.png') }/
 
 .about-cols
   .about-col.left
