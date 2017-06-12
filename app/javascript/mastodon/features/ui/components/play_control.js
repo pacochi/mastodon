@@ -128,7 +128,7 @@ class MusicPlayer extends React.PureComponent {
             break;
         }
       }, 80);
-    }, 0);
+    }, 20);
   }
 
   fetchDeck(id) {
