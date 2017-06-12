@@ -57,7 +57,6 @@ class MusicPlayer extends React.PureComponent {
     if(this.subscription) this.subscription.close();
     this.subscription = createStream(this.props.streamingAPIBaseURL, this.props.accessToken, `playlist&deck=${target}`, {
       received: (data) => {
-        console.log(`PLAYLIST| EVENT - ${data.event}`);
         switch(data.event) {
         case 'add':
           {
@@ -125,7 +124,6 @@ class MusicPlayer extends React.PureComponent {
     return new Promise((resolve, reject)=>{
       return api(this.getMockState).get(`/api/v1/playlists/${id}`)
       .then((response)=>{
-        console.log(response.data.deck.time_offset);
         const interval = setInterval(()=>{
           this.setState({
             offset_time: parseInt(new Date().getTime() / 1000) - parseInt(this.state.offset_start_time),
