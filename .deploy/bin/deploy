@@ -1,0 +1,16 @@
+#!/bin/bash -x
+source /etc/profile
+set -eux
+PARENT_DIR=$(cd $(dirname $0);cd ../..;pwd)
+
+export USER=$DEPLOY_USER
+export BRANCH=`git symbolic-ref --short HEAD`
+
+cd $PARENT_DIR; FROM_DEPLOY=1 bundle exec cap $DEPLOY_ENV deploy:check
+cd $PARENT_DIR; FROM_DEPLOY=1 bundle exec cap $DEPLOY_ENV deploy --trace
+
+if [ $DEPLOY_ENV == "production"  ]; then
+  tag=release/$(date +"%Y.%m.%d.%H.%M.%S").$DEPLOY_USER
+  git tag $tag
+  git push origin $tag
+fi
