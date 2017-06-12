@@ -14,7 +14,6 @@ class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
       )
 
       if oauth_authentication.save
-        enqueue_fetch_pixiv_follows_worker(oauth_authentication, data)
         flash[:notice] = t('oauth_authentications.successfully_linked')
       else
         flash[:alert] = oauth_authentication.errors.full_messages.first
@@ -32,7 +31,6 @@ class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
           render 'auth/sessions/two_factor', layout: 'auth'
         else
           sign_in(oauth_authentication.user)
-          enqueue_fetch_pixiv_follows_worker(oauth_authentication, data)
 
           redirect_to after_sign_in_path_for(oauth_authentication.user)
         end
@@ -44,13 +42,6 @@ class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
   end
 
   private
-
-  def enqueue_fetch_pixiv_follows_worker(oauth_authentication, data)
-    FetchPixivFollowsWorker.perform_async(
-      oauth_authentication.id,
-      *data['credentials'].values_at('token', 'refresh_token', 'expires_at')
-    )
-  end
 
   def store_omniauth_auth
     redis_session_store('devise.omniauth') do |redis|

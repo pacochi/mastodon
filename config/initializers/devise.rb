@@ -250,7 +250,7 @@ Devise.setup do |config|
       :pixiv,
       secret['key'],
       secret['secret'],
-      scope: 'read-email read-favorite-users',
+      scope: 'read-email',
     ]
 
     client_options = secret.slice('site', 'authorize_url', 'token_url').symbolize_keys.compact
