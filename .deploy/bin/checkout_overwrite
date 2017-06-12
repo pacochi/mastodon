@@ -3,3 +3,5 @@ git fetch --prune
 git checkout --force ${DEPLOY_COMMIT#origin/} # これをしないとgit symbolic-ref --short HEADがブランチ名を返してくれない
 git reset --hard $DEPLOY_COMMIT
 git clean -fdx -e vendor -e config/deploy
+bundle -v
+bundle install --path=vendor/bundle --without test
