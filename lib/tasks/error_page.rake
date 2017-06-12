@@ -10,6 +10,10 @@ namespace :error_page do
     ).generate
   end
 
+  Rake::Task['assets:precompile'].enhance do
+    Rake::Task['error_page:generate'].invoke
+  end
+
   class ErrorPageGenerator
     attr_accessor :status_codes, :locales, :public_path
 
