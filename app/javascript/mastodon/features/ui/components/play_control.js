@@ -364,7 +364,7 @@ class MusicPlayer extends React.PureComponent {
                       <li key={queue_item.id} className="deck__queue-item">
                         <div className="queue-item__main">
                           <div className='queue-item__metadata'>
-                            {queue_item.info}
+                            <span className='queue-item__metadata-title'>{queue_item.info.length > 40 ? `${queue_item.info.slice(0, 40)}……` : queue_item.info}</span>
                           </div>
                         </div>
                         <div className='queue-item__datasource'>
