@@ -149,7 +149,11 @@ class MusicPlayer extends React.PureComponent {
     const index = Number(e.currentTarget.getAttribute('data-index'));
     if(index === this.state.targetDeck) return;
 
-    this.setState({targetDeck: index});
+    this.setState({
+      targetDeck: index,
+      isSeekbarActive: false,
+      isLoadingArtwork: true,
+    });
     this.fetchDeck(index);
     this.setSubscription(index);
   }
