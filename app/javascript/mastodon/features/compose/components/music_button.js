@@ -3,7 +3,7 @@ import IconButton from '../../../components/icon_button';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 
-import jsmediatags from 'jsmediatags';
+import jsmediatags from 'jsmediatags/dist/jsmediatags';
 
 const messages = defineMessages({
   music: { id: 'music_button.label', defaultMessage: 'Add Your Music' },
