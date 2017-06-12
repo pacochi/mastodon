@@ -23,6 +23,7 @@ class StatusList extends ImmutablePureComponent {
     expandMedia: PropTypes.bool,
     squareMedia: PropTypes.bool,
     standalone: PropTypes.bool,
+    displayPinned: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -30,6 +31,7 @@ class StatusList extends ImmutablePureComponent {
     expandMedia: false,
     squareMedia: false,
     standalone: false,
+    displayPinned: false,
   };
 
   state = {
@@ -146,7 +148,7 @@ class StatusList extends ImmutablePureComponent {
   }
 
   render () {
-    const { statusIds, onScrollToBottom, scrollKey, shouldUpdateScroll, isLoading, isUnread, hasMore, prepend, emptyMessage, squareMedia, expandMedia, standalone } = this.props;
+    const { statusIds, onScrollToBottom, scrollKey, shouldUpdateScroll, isLoading, isUnread, hasMore, prepend, emptyMessage, squareMedia, expandMedia, standalone, displayPinned } = this.props;
     const { isIntersecting } = this.state;
 
     let loadMore       = null;
@@ -170,7 +172,7 @@ class StatusList extends ImmutablePureComponent {
             {prepend}
 
             {statusIds.map((statusId) => {
-              return <StatusContainer key={statusId} id={statusId} isIntersecting={isIntersecting[statusId]} onRef={this.handleStatusRef} squareMedia={squareMedia} expandMedia={expandMedia} standalone={standalone} />;
+              return <StatusContainer key={statusId} id={statusId} isIntersecting={isIntersecting[statusId]} onRef={this.handleStatusRef} squareMedia={squareMedia} expandMedia={expandMedia} standalone={standalone} displayPinned={displayPinned} />;
             })}
 
             {loadMore}

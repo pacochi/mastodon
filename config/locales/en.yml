@@ -360,6 +360,7 @@ en:
   stream_entries:
     click_to_show: Click to show
     reblogged: boosted
+    pinned: Pinned Toot
     sensitive_content: Sensitive content
   time:
     formats:

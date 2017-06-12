@@ -15,6 +15,7 @@ ExceptionNotification.configure do |config|
     Pubsubhubbub::ConfirmationWorker
     Pubsubhubbub::DistributionWorker
     Pubsubhubbub::SubscribeWorker
+    HTTP::TimeoutError
   ].freeze
 
   config.ignore_if do |_exception, options|

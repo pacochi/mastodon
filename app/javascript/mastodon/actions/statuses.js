@@ -23,6 +23,14 @@ export const STATUS_UNMUTE_REQUEST = 'STATUS_UNMUTE_REQUEST';
 export const STATUS_UNMUTE_SUCCESS = 'STATUS_UNMUTE_SUCCESS';
 export const STATUS_UNMUTE_FAIL    = 'STATUS_UNMUTE_FAIL';
 
+export const STATUS_PIN_REQUEST = 'STATUS_PIN_REQUEST';
+export const STATUS_PIN_SUCCESS = 'STATUS_PIN_SUCCESS';
+export const STATUS_PIN_FAIL    = 'STATUS_PIN_FAIL';
+
+export const STATUS_UNPIN_REQUEST = 'STATUS_UNPIN_REQUEST';
+export const STATUS_UNPIN_SUCCESS = 'STATUS_UNPIN_SUCCESS';
+export const STATUS_UNPIN_FAIL    = 'STATUS_UNPIN_FAIL';
+
 export function fetchStatusRequest(id, skipLoading) {
   return {
     type: STATUS_FETCH_REQUEST,
@@ -211,6 +219,78 @@ export function unmuteStatusSuccess(id) {
 export function unmuteStatusFail(id, error) {
   return {
     type: STATUS_UNMUTE_FAIL,
+    id,
+    error,
+  };
+};
+
+export function pinStatus(id) {
+  return (dispatch, getState) => {
+    dispatch(pinStatusRequest(id));
+
+    api(getState).post(`/api/v1/statuses/${id}/pin`).then(response => {
+      dispatch(fetchStatusSuccess(response.data));
+      dispatch(pinStatusSuccess(id, response.data.account.id));
+    }).catch(error => {
+      dispatch(pinStatusFail(id, error));
+    });
+  };
+};
+
+export function pinStatusRequest(id) {
+  return {
+    type: STATUS_PIN_REQUEST,
+    id,
+  };
+};
+
+export function pinStatusSuccess(id, accountId) {
+  return {
+    type: STATUS_PIN_SUCCESS,
+    id,
+    accountId,
+  };
+};
+
+export function pinStatusFail(id, error) {
+  return {
+    type: STATUS_PIN_FAIL,
+    id,
+    error,
+  };
+};
+
+export function unpinStatus(id) {
+  return (dispatch, getState) => {
+    dispatch(unpinStatusRequest(id));
+
+    api(getState).delete(`/api/v1/statuses/${id}/pin`).then(() => {
+      const accountId = getState().getIn(['statuses', id, 'account']);
+      dispatch(unpinStatusSuccess(id, accountId));
+    }).catch(error => {
+      dispatch(unpinStatusFail(id, error));
+    });
+  };
+};
+
+export function unpinStatusRequest(id) {
+  return {
+    type: STATUS_UNPIN_REQUEST,
+    id,
+  };
+};
+
+export function unpinStatusSuccess(id, accountId) {
+  return {
+    type: STATUS_UNPIN_SUCCESS,
+    id,
+    accountId,
+  };
+};
+
+export function unpinStatusFail(id, error) {
+  return {
+    type: STATUS_UNPIN_FAIL,
     id,
     error,
   };
