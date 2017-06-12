@@ -13,7 +13,7 @@ class QueueItem
     YOUTUBE_API_KEY = ENV['YOUTUBE_API_KEY']
 
     def create_from_link(link, account)
-      return nil if link.blank?
+      return if link.blank?
       pawoo_link(link, account) || booth_link(link, account) || apollo_link(link, account) || youtube_link(link, account)
     end
 
@@ -21,13 +21,13 @@ class QueueItem
 
     def pawoo_link(link, account)
       status_id = find_status_id(link)
-      return nil unless status_id
+      return unless status_id
 
       cache = find_cache('pawoo-music', status_id)
       return set_uuid(cache) if cache
 
       video = MediaAttachment.find_by(status_id: status_id, type: MediaAttachment.types[:video])
-      return nil unless video&.music_info
+      return unless video&.music_info
 
       video_url = full_asset_url(video.file.url(:original))
 
@@ -59,14 +59,14 @@ class QueueItem
 
     def apollo_link(link, account)
       shop_id = find_apollo_shop_id(link)
-      return nil unless shop_id
+      return unless shop_id
 
       cache = find_cache('apollo', shop_id)
       return set_uuid(cache) if cache
 
       json = JSON.parse(http_client.get("https://api.booth.pm/pixiv/items/#{shop_id}").body.to_s)
 
-      return nil if json['body']['sound'].nil? || json['body']['adult']
+      return if json['body']['sound'].nil? || json['body']['adult']
 
       user_or_shop_name = json['body']['shop']['user']['nickname'] || json['body']['shop']['name']
       item = new(
@@ -87,14 +87,14 @@ class QueueItem
 
     def booth_link(link, account)
       shop_id = find_shop_id(link)
-      return nil unless shop_id
+      return unless shop_id
 
       cache = find_cache('booth', shop_id)
       return set_uuid(cache) if cache
 
       json = JSON.parse(http_client.get("https://api.booth.pm/pixiv/items/#{shop_id}").body.to_s)
 
-      return nil if json['body']['sound'].nil? || json['body']['adult']
+      return if json['body']['sound'].nil? || json['body']['adult']
 
       user_or_shop_name = json['body']['shop']['user']['nickname'] || json['body']['shop']['name']
       item = new(
@@ -120,13 +120,13 @@ class QueueItem
 
     def youtube_link(link, account)
       video_id = find_youtube_id(link)
-      return nil unless video_id
+      return unless video_id
 
       cache = find_cache('youtube', video_id)
       return set_uuid(cache) if cache
 
       title = fetch_youtube_title(link)
-      return nil unless title
+      return unless title
 
       duration_sec = fetch_youtube_duration(video_id)
 
@@ -148,11 +148,11 @@ class QueueItem
     def fetch_youtube_duration(video_id)
       url = "https://www.googleapis.com/youtube/v3/videos?key=#{YOUTUBE_API_KEY}&part=contentDetails&id=#{video_id}"
       json = JSON.parse(http_client.get(url).body.to_s)
-      return nil if json['items'].blank?
+      return if json['items'].blank?
       item = json['items'].first
       duration = item['contentDetails']['duration']
       matched = duration.match(%r{PT(\d+H)?(\d+M)?(\d+S)?})
-      return nil unless matched
+      return unless matched
 
       hour = matched[1]&.slice(/\d+/)&.to_i || 0
       minute = matched[2]&.slice(/\d+/)&.to_i || 0
@@ -164,7 +164,7 @@ class QueueItem
     def fetch_youtube_title(link)
       url = "https://www.youtube.com/oembed?url=#{link}"
       body = http_client.get(url).body.to_s
-      return nil if body == 'Unauthorized'
+      return if body == 'Unauthorized'
 
       json = JSON.parse(body)
       json['title']
