@@ -16,13 +16,13 @@ hr:
       unconfirmed: Moraš potvrditi svoju email adresu prije no što nastaviš.
     mailer:
       confirmation_instructions:
-        subject: 'Pawoo: Upute za potvrđivanje'
+        subject: 'Pawoo Music: Upute za potvrđivanje'
       password_change:
-        subject: 'Pawoo: Lozinka je promijenjena'
+        subject: 'Pawoo Music: Lozinka je promijenjena'
       reset_password_instructions:
-        subject: 'Pawoo: Upute za resetiranje lozinke'
+        subject: 'Pawoo Music: Upute za resetiranje lozinke'
       unlock_instructions:
-        subject: 'Pawoo: Upute za otključavanje'
+        subject: 'Pawoo Music: Upute za otključavanje'
     omniauth_callbacks:
       failure: Ne možemo te autentificirati sa %{kind} zbog "%{reason}".
       success: Uspješno autentificiran sa %{kind} računa.

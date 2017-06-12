@@ -17,13 +17,13 @@ ru:
       unconfirmed: Вам необходимо подтвердить ваш адрес e-mail для продолжения.
     mailer:
       confirmation_instructions:
-        subject: 'Pawoo: Инструкция по подтверждению'
+        subject: 'Pawoo Music: Инструкция по подтверждению'
       password_change:
-        subject: 'Pawoo: Пароль изменен'
+        subject: 'Pawoo Music: Пароль изменен'
       reset_password_instructions:
-        subject: 'Pawoo: Инструкция по сбросу пароля'
+        subject: 'Pawoo Music: Инструкция по сбросу пароля'
       unlock_instructions:
-        subject: 'Pawoo: Инструкция по разблокировке'
+        subject: 'Pawoo Music: Инструкция по разблокировке'
     omniauth_callbacks:
       failure: Не получилось аутентифицировать Вас с помощью %{kind} по следующей причине - "%{reason}".
       success: Аутентификация с помощью аккаунта %{kind} прошла успешно.

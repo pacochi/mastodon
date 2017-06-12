@@ -17,15 +17,15 @@ zh-CN:
       unconfirmed: 继续操作前请先确认您的帐号。
     mailer:
       confirmation_instructions:
-        subject: Pawoo 帐户确认信息
+        subject: Pawoo Music 帐户确认信息
       email_changed:
-        subject: Pawoo 电邮已被修改
+        subject: Pawoo Music 电邮已被修改
       password_change:
-        subject: Pawoo 密码已被重置
+        subject: Pawoo Music 密码已被重置
       reset_password_instructions:
-        subject: Pawoo 重置密码信息
+        subject: Pawoo Music 重置密码信息
       unlock_instructions:
-        subject: Pawoo 帐户解锁信息
+        subject: Pawoo Music 帐户解锁信息
     omniauth_callbacks:
       failure: 由于%{reason}，无法从%{kind}获得授权。
       success: 成功地从%{kind}获得授权。

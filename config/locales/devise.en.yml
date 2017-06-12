@@ -17,13 +17,13 @@ en:
       unconfirmed: You have to confirm your email address before continuing.
     mailer:
       confirmation_instructions:
-        subject: 'Pawoo: Confirmation instructions for %{instance}'
+        subject: 'Pawoo Music: Confirmation instructions for %{instance}'
       password_change:
-        subject: 'Pawoo: Password changed'
+        subject: 'Pawoo Music: Password changed'
       reset_password_instructions:
-        subject: 'Pawoo: Reset password instructions'
+        subject: 'Pawoo Music: Reset password instructions'
       unlock_instructions:
-        subject: 'Pawoo: Unlock instructions'
+        subject: 'Pawoo Music: Unlock instructions'
     omniauth_callbacks:
       failure: Could not authenticate you from %{kind} because "%{reason}".
       success: Successfully authenticated from %{kind} account.

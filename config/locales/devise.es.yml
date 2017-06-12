@@ -17,13 +17,13 @@ es:
       unconfirmed: Tiene que confirmar su correo electrónico antes de continuar.
     mailer:
       confirmation_instructions:
-        subject: 'Pawoo: Instrucciones de confirmación'
+        subject: 'Pawoo Music: Instrucciones de confirmación'
       password_change:
-        subject: 'Pawoo: Contraseña cambiada'
+        subject: 'Pawoo Music: Contraseña cambiada'
       reset_password_instructions:
-        subject: 'Pawoo: Instrucciones para reiniciar contraseña'
+        subject: 'Pawoo Music: Instrucciones para reiniciar contraseña'
       unlock_instructions:
-        subject: 'Pawoo: Instrucciones para desbloquear'
+        subject: 'Pawoo Music: Instrucciones para desbloquear'
     omniauth_callbacks:
       failure: No podemos autentificarle desde %{kind} debido a "%{reason}".
       success: Autentificado con éxito desde la cuenta %{kind} .

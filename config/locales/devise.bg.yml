@@ -17,9 +17,9 @@ bg:
       unconfirmed: Преди да продължиш, трябва да потвърдиш регистрацията си.
     mailer:
       confirmation_instructions:
-        subject: 'Pawoo: Инструкции за потвърждаване'
+        subject: 'Pawoo Music: Инструкции за потвърждаване'
       password_change:
-        subject: 'Pawoo: Паролата е променена'
+        subject: 'Pawoo Music: Паролата е променена'
       reset_password_instructions:
         subject: 'Инструкции за смяна на паролата'
       unlock_instructions:

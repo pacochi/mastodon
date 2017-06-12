@@ -17,13 +17,13 @@ fi:
       unconfirmed: Sinun tarvitsee varmentaa sähköpostisi jatkaaksesi.
     mailer:
       confirmation_instructions:
-        subject: 'Pawoo: Varmistus ohjeet'
+        subject: 'Pawoo Music: Varmistus ohjeet'
       password_change:
-        subject: 'Pawoo: Salasana vaihdettu'
+        subject: 'Pawoo Music: Salasana vaihdettu'
       reset_password_instructions:
-        subject: 'Pawoo: Salasanan vaihto ohjeet'
+        subject: 'Pawoo Music: Salasanan vaihto ohjeet'
       unlock_instructions:
-        subject: 'Pawoo: Avauksen ohjeet'
+        subject: 'Pawoo Music: Avauksen ohjeet'
     omniauth_callbacks:
       failure: Varmennus %{kind} epäonnistui koska "%{reason}".
       success: Onnistuneesti varmennettu %{kind} tilillä.
