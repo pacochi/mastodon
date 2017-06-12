@@ -57,31 +57,22 @@ RSpec.describe QueueItem do
         let!(:media_attachment) { Fabricate(:media_attachment, status: status, type: 'video', music_info: music_info) }
         let(:music_info) { { title: 'title', artist: 'artist', duration: 1 } }
 
-        it 'returns instance' do
-          expect(subject.link).to eq(url)
-          expect(subject.duration).to eq(music_info[:duration])
-          expect(subject.source_type).to eq('pawoo-music')
-          expect(subject.source_id).to eq(status.id.to_s)
-          expect(subject.account_id).to eq(account.id)
-          expect(subject.music_url).to be_nil
-          expect(subject.info).to eq("#{music_info[:title]} - #{music_info[:artist]}")
-          # expect(subject.video_url).to eq("#{music_info[:title]} - #{music_info[:artist]}")
+        it { is_expected.to be_present }
+
+        context 'status is unlisted' do
+          let(:status) { Fabricate(:status, account: account, visibility: 'unlisted') }
+          it { is_expected.to be_present }
         end
 
-        # context 'status is unlisted' do
-        #   let(:status) { Fabricate(:status, account: account, visibility: 'unlisted') }
-        #   it { is_expected.to be_present }
-        # end
-        #
-        # context 'status is direct' do
-        #   let(:status) { Fabricate(:status, account: account, visibility: 'direct') }
-        #   it { is_expected.to be_nil }
-        # end
-        #
-        # context 'status is private' do
-        #   let(:status) { Fabricate(:status, account: account, visibility: 'private') }
-        #   it { is_expected.to be_nil }
-        # end
+        context 'status is direct' do
+          let(:status) { Fabricate(:status, account: account, visibility: 'direct') }
+          it { is_expected.to be_nil }
+        end
+
+        context 'status is private' do
+          let(:status) { Fabricate(:status, account: account, visibility: 'private') }
+          it { is_expected.to be_nil }
+        end
       end
     end
 

@@ -26,7 +26,7 @@ class QueueItem
       cache = find_cache('pawoo-music', status_id)
       return set_uuid(cache) if cache
 
-      video = MediaAttachment.find_by(status_id: status_id, type: MediaAttachment.types[:video])
+      video = MediaAttachment.video.joins(:status).find_by(statuses: { id: status_id, visibility: [:public, :unlisted] })
       return unless video&.music_info
 
       video_url = full_asset_url(video.file.url(:original))
