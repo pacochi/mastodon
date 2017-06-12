@@ -23,19 +23,5 @@ RSpec.describe MaintenanceImage do
         expect(ids).to contain_exactly(*ids.uniq)
       end
     end
-
-    describe '.by_status' do
-      subject { described_class.by_status(status) }
-
-      context 'given 500' do
-        let(:status) { 500 }
-        it { is_expected.to be_all { |instance| instance.statuses.include?(500) } }
-      end
-
-      context 'given 404' do
-        let(:status) { 404 }
-        it { is_expected.to be_all { |instance| instance.statuses.include?(404) } }
-      end
-    end
   end
 end
