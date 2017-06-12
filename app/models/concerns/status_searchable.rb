@@ -4,7 +4,7 @@ module StatusSearchable
   included do
     include Elasticsearch::Model
 
-    index_name 'pawoo'
+    index_name 'pawoo_music'
     document_type 'status'
 
     status_search_es_settings = {

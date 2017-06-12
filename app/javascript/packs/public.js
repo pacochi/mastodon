@@ -112,7 +112,7 @@ function main() {
   delegate(document, '.omniauth-pixiv', 'click', (event) => {
     event.preventDefault();
 
-    window.pixivSignupSDK.start('index', 'pawoo', () => {
+    window.pixivSignupSDK.start('index', 'pawoo-music', () => {
       location.href = '/auth/oauth/pixiv';
     });
   });
