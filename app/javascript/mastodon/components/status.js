@@ -8,6 +8,7 @@ import RelativeTimestamp from './relative_timestamp';
 import DisplayName from './display_name';
 import MediaGallery from './media_gallery';
 import VideoPlayer from './video_player';
+import BoothWidget from './booth_widget';
 import AttachmentList from './attachment_list';
 import StatusContent from './status_content';
 import StatusActionBar from './status_action_bar';
@@ -171,6 +172,16 @@ class Status extends ImmutablePureComponent {
         media = <VideoPlayer media={attachments.first()} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
       } else {
         media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={squareMedia ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} squareMedia={squareMedia} />;
+      }
+    }
+
+    if (attachments.size === 0) {
+      // boothのウィジェット表示処理
+      const booth_pattern = /href="(https?:\/\/(?:[a-z0-9][a-z0-9\-]+[a-z0-9]\.)?booth\.pm\/(?:(?:zh-tw|zh-cn|ko|ja|en)\/)?items\/(\d+))/;
+      const apollo_pattern = /href="(https?:\/\/booth\.pm\/apollo\/a\d{2}\/item\?.*?id=(\d+))/;
+      const matches = status.get('content').match(booth_pattern) || status.get('content').match(apollo_pattern);
+      if (matches) {
+        media = <BoothWidget url={matches[1]} itemId={Number(matches[2])} />;
       }
     }
 

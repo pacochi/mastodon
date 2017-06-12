@@ -179,6 +179,7 @@ Rails.application.routes.draw do
       resources :firebase_cloud_messaging_tokens, only: [:create, :destroy], param: :platform
       resources :suggested_accounts, only: [:index]
       resources :oauth_authentications, only: [:show], param: :uid
+      resources :booth_items, only: [:show]
       resources :playlists, only: [:show], param: :deck do
         resources :deck_queues, only: [:create, :destroy]
       end
