@@ -105,13 +105,29 @@ class MusicModal extends React.PureComponent {
         </div>
 
         <div className='music-modal__action-bar'>
-          <div className="action-bar__checkarea">
-            <label>
-              <input type="checkbox" checked={this.state.isClickedWaring} onChange={this.handleChangeCheckbox} />
-              あなた自身が作成したコンテンツです
-            </label>
+          <div className='music-modal__upload'>
+            <input className='music-modal__checkbox-confirm' id="checkbox-confirm" type="checkbox" checked={this.state.isClickedWaring} onChange={this.handleChangeCheckbox} />
+            <div className='music-modal__checkbox-content'>
+              <label for="checkbox-confirm">
+                作品（画像、音源、楽曲、テキスト等を含む）のアップロードにおいて、下記の注意事項を守ることを誓います。
+              </label>
+            </div>
+            <div className='music-modal__submit-button'>
+              <Button disabled={!this.state.isClickedWaring || !this.state.imageURL} text="upload" onClick={this.handleUpload} />
+            </div>
           </div>
-          <Button disabled={!this.state.isClickedWaring || !this.state.imageURL} text="upload" onClick={this.handleUpload} />
+          <div className='music-modal__terms-of-use'>
+            １．この作品をインターネットで配信することが、第三者のいかなる権利も侵害しないこと。<br />
+            <br />
+            ２．マストドンというソフトウェアの仕様上、この作品が自動で他の様々なマストドンインスタンスにも複製され、配信されることに同意すること。<br />
+            （前提として、マストドンのソフトウェアの規約上、複製された作品を第三者が商用利用する行為は禁止されています。権利を侵害する行為は関連法令により罰せられることがあります。）<br />
+            <br />
+            ３．この楽曲のインターネットでの配信（インタラクティブ配信）に係る権利について、著作権等管理団体に管理委託または信託していないこと。<br />
+            <br />
+            ４．楽曲のアップロード後に、当該楽曲のインターネットでの配信（インタラクティブ配信）に係る権利の管理を第三者に委託した場合は、管理委託・信託契約の効力発生日前に、当サービスからアップロードした作品を削除すること。<br />
+            <br />
+            ５．他人の作品を許可なくアップロードしたことにより、当サービスまたは第三者に損害を与えたときは、当該アップロード者が一切の責任を負うものとし、当社はその一切の責任を負いません。
+          </div>
         </div>
       </div>
     );

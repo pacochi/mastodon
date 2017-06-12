@@ -3506,7 +3506,7 @@ button.icon-button.active i.fa-retweet {
   justify-content: space-between;
 }
 
-.music-modal__action-bar, .confirmation-modal__action-bar {
+.confirmation-modal__action-bar {
   display: flex;
   background: $ui-secondary-color;
   padding: 10px;
@@ -3522,6 +3522,53 @@ button.icon-button.active i.fa-retweet {
   .button {
     flex: 0 0 auto;
   }
+}
+
+.music-modal__action-bar {
+  background: $ui-secondary-color;
+  padding: 10px;
+  text-align: center;
+  font-size: 12px;
+
+  & > div {
+    margin: 10px 8px;
+  }
+}
+
+.music-modal__upload {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  text-align: center;
+}
+
+.music-modal__checkbox-confirm {
+  margin: 0 8px 0 0;
+  width: 10px;
+}
+
+.music-modal__checkbox-content {
+  flex: 1;
+  text-align: left;
+  font-size: 11px;
+  line-height: 1.4;
+  margin-right: 8px;
+}
+
+.music-modal__submit-button {
+  width: 85px;
+}
+
+.music-modal__terms-of-use {
+  border-radius: 4px;
+  height: 100px;
+  background-color: rgba(0, 0, 0, 0.1);
+  text-align: left;
+  line-height: 1.4;
+  font-size: 10px;
+  overflow-y: scroll;
+  padding: 16px;
 }
 
 .boost-modal,
