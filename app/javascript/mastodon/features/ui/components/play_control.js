@@ -98,7 +98,7 @@ class MusicPlayer extends React.PureComponent {
     }else{
       setTimeout(()=>{
         if(!this.ytControl) this.ytControl = YouTubePlayer('yt-player', {
-          playerVars: { 'controls': 0 }
+          playerVars: { 'controls': 0 },
         });
         this.ytControl.loadVideoById(deck.queues[0].source_id, 0);
         this.ytControl.playVideo();
@@ -137,8 +137,8 @@ class MusicPlayer extends React.PureComponent {
           offset_start_time: (new Date().getTime() / 1000) - response.data.deck.time_offset,
           offset_time: parseInt(response.data.deck.time_offset),
           offset_counter: interval,
-          isSeekbarActive: false
-        })
+          isSeekbarActive: false,
+        });
         setTimeout(()=>this.setState({isSeekbarActive:true}),0);
 
         if(this.isDeckInActive() || this.state.deck.queues[0].source_type !== 'youtube') {
@@ -285,17 +285,17 @@ class MusicPlayer extends React.PureComponent {
       };
       ytplayerStyle = {
         display: this.state.deck.queues[0].source_type === 'youtube' ? 'block' : 'none'
-      }
+      };
 
       if(this.state.isSeekbarActive){
         playerSeekBarStyle = {
           transition: `width ${this.state.isSeekbarActive ? (this.state.deck.queues[0].duration-this.state.offset_time) : '0'}s linear`,
-        }
+        };
       }else{
         playerSeekBarStyle = {
           transition: `width 0s linear`,
           width: `${this.state.deck.queues[0].duration ? (this.state.offset_time / this.state.deck.queues[0].duration) * 100 : 0}%`,
-        }
+        };
       }
     }
 
