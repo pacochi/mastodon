@@ -6,15 +6,14 @@ class Api::V1::BoothItemsController < ApiController
   respond_to :json
 
   def show
-    cashe_key = BOOTH_ITEMS_KEY_PREFIX + params[:id]
 
     # redisから取れるか確認
-    booth_item = redis.get(cashe_key)
+    booth_item = redis.get(params[:id])
 
     # 取れないならAPIを叩く
     unless booth_item
       booth_item = HTTP.get(BOOTH_API_ENDPOINT + params[:id]).body
-      redis.set(cashe_key, booth_item)
+      redis.set(params[:id], booth_item)
     end
 
     render json: JSON.parse(booth_item)
@@ -23,7 +22,6 @@ class Api::V1::BoothItemsController < ApiController
   private
 
   def redis
-    Redis.current
+    Redis::Namespace.new(BOOTH_ITEMS_KEY_PREFIX)
   end
-
 end

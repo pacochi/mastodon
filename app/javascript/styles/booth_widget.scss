@@ -120,11 +120,6 @@ $apollo-color: #38b6c5;
   transition: all 0.15s ease;
   font-size: 30px;
   cursor: pointer;
-  i{
-    &:before {
-      @extend .fa-play:before;
-    }
-  }
   &:hover {
     transform: translateX(-50%) translateY(-50%) scale(1.3);
   }
@@ -144,11 +139,6 @@ $apollo-color: #38b6c5;
     .booth-widget__viewer-btn {
       transform: translateX(-50%) translateY(-50%) scale(2);
       opacity: 0;
-      i {
-        &:before {
-          @extend .fa-pause:before;
-        }
-      }
     }
     .booth-widget__viewer:hover {
       .booth-widget__viewer-btn {
