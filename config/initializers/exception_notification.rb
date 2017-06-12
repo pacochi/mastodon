@@ -28,8 +28,8 @@ ExceptionNotification.configure do |config|
   if ENV['EXCEPTION_NOTIFICATION_EMAIL'] && ENV['LOCAL_DOMAIN']
     # Email notifier sends notifications by email.
     config.add_notifier :email,
-      email_prefix: '[pawoo-errors] ',
-      sender_address: %{"pawoo Errors" <errors@#{ENV['LOCAL_DOMAIN']}>},
+      email_prefix: '[pawoo-music-errors] ',
+      sender_address: %{"pawoo Music Errors" <errors@#{ENV['LOCAL_DOMAIN']}>},
       exception_recipients: ENV['EXCEPTION_NOTIFICATION_EMAIL'].split(',')
   end
 
