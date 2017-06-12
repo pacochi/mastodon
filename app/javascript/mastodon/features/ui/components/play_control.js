@@ -231,7 +231,7 @@ class MusicPlayer extends React.PureComponent {
     }
     this.setState({
       ytControl: event.target,
-    })
+    });
   }
 
   render () {
