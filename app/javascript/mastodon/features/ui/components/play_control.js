@@ -25,7 +25,7 @@ class MusicPlayer extends React.PureComponent {
       offset_counter: null,
       isSeekbarActive: false,
       isLoadingArtwork: true,
-      youtubeOpts: {}
+      youtubeOpts: {},
     };
 
     this.audioRef = null;
@@ -100,8 +100,8 @@ class MusicPlayer extends React.PureComponent {
         playerVars: {
           autoplay: 1,
           controls: 0,
-          start: deck.time_offset
-        }
+          start: deck.time_offset,
+        },
       } : {}
     });
 
@@ -110,7 +110,7 @@ class MusicPlayer extends React.PureComponent {
 
       this.setState({
         isSeekbarActive:true,
-        isLoadingArtwork: false
+        isLoadingArtwork: false,
       });
     }, 20);
   }
@@ -275,7 +275,7 @@ class MusicPlayer extends React.PureComponent {
                   if(this.state.isLoadingArtwork){
                     return (
                       <div className='loading' />
-                    )
+                    );
                   }
 
                   if(this.isDeckInActive() ) return null;
