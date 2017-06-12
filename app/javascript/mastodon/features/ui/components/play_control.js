@@ -112,6 +112,22 @@ class MusicPlayer extends React.PureComponent {
         isSeekbarActive:true,
         isLoadingArtwork: false,
       });
+
+      // video / audioタグがレンダリングされた後に時間をシフトするための遅延ロード
+      setTimeout(()=>{
+        if(!deck.queues.length) return;
+        switch (deck.queues[0].source_type) {
+          case 'pawoo-music': {
+            this.videoRef.currentTime = deck.time_offset;
+          }
+            break;
+          case 'booth':
+          case 'apollo': {
+            this.audioRef.currentTime = deck.time_offset;
+          }
+            break;
+        }
+      }, 0);
     }, 20);
   }
 
