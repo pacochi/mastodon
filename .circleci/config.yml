@@ -19,11 +19,13 @@ jobs:
       ELASTICSEARCH_HOST: 127.0.0.1
       LOCAL_DOMAIN: cb6e6126.ngrok.io
       LOCAL_HTTPS: true
+      PARALLEL_TEST_PROCESSORS: 2 # Set 2 explicitly or CircleCI container with 36 processors causes Errno::ENOMEM !
       PATH: /root/.rbenv/shims:/usr/local/node/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       RAILS_ENV: test
     working_directory: /app
     parallelism: 2
     steps:
+      - run: cat /proc/cpuinfo
       - checkout
       - run: ./.circleci/primary/setup.sh
       - run: mkdir -p tmp/circleci/db
@@ -86,14 +88,14 @@ jobs:
       - run:
           name: Create Database
           command: |
-            sql=tmp/circleci/db/$(cat tmp/circleci/master.hash).sql
+            sql=tmp/circleci/db/$(cat tmp/circleci/master.hash).$PARALLEL_TEST_PROCESSORS.sql
             if [ -f $sql ]; then
               psql -h $DB_HOST < $sql
             else
-              ./bin/rails db:create
+              ./bin/rails parallel:create
             fi
-      - run: ./bin/rails db:migrate
-      - run: pg_dump --create --host=$DB_HOST --file=tmp/circleci/db/$(cat tmp/circleci/master.hash).sql pawoo_test
+      - run: ./bin/rails parallel:migrate
+      - run: pg_dumpall --host=$DB_HOST --file=tmp/circleci/db/$(cat tmp/circleci/master.hash).$PARALLEL_TEST_PROCESSORS.sql
       - save_cache:
           key: db/{{ checksum "tmp/circleci/master.hash" }}/1
           paths:
@@ -132,7 +134,7 @@ jobs:
             - tmp/cache/assets
 
       # Run tests
-      - run: ./bin/rspec --profile -- $(circleci tests glob spec/**/*_spec.rb | circleci tests split --split-by=filesize)
+      - run: bundle exec parallel_test --group-by filesize --type rspec -- --profile -- $(circleci tests glob spec/**/*_spec.rb | circleci tests split --split-by=filesize)
       - run: if [ $CIRCLE_NODE_INDEX = 0 ]; then npm test; fi
 
       - run: ./bin/spring stop
