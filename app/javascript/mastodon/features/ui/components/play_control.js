@@ -4,7 +4,6 @@ import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import IconButton from '../../../components/icon_button';
 import api from '../../../api';
-import YouTubePlayer from 'youtube-player';
 import createStream from '../../../../mastodon/stream';
 import YouTube from 'react-youtube';
 
@@ -25,6 +24,7 @@ class MusicPlayer extends React.PureComponent {
       offset_counter: null,
       isSeekbarActive: false,
       isLoadingArtwork: true,
+      ytControl: null,
       youtubeOpts: {},
     };
 
@@ -42,6 +42,7 @@ class MusicPlayer extends React.PureComponent {
     this.handleClickOverlay = this.handleClickOverlay.bind(this);
     this.handleClickDeckTab = this.handleClickDeckTab.bind(this);
     this.handleSubmitAddForm = this.handleSubmitAddForm.bind(this);
+    this.onReadyYouTube = this.onReadyYouTube.bind(this);
 
     this.isDeckInActive = this.isDeckInActive.bind(this);
   }
@@ -116,6 +117,11 @@ class MusicPlayer extends React.PureComponent {
   }
 
   fetchDeck(id) {
+    if(this.state.ytControl){
+      this.state.ytControl.destroy();
+      this.state.ytControl = null;
+    }
+
     return new Promise((resolve, reject)=>{
       return api(this.getMockState).get(`/api/v1/playlists/${id}`)
       .then((response)=>{
@@ -173,6 +179,13 @@ class MusicPlayer extends React.PureComponent {
   }
 
   handleClickToggle () {
+    if(this.state.ytControl){
+      if(this.state.isPlaying){
+        this.state.ytControl.mute();
+      }else{
+        this.state.ytControl.unMute();
+      }
+    }
     this.setState({isPlaying: (!this.state.isPlaying)});
   }
 
@@ -208,6 +221,17 @@ class MusicPlayer extends React.PureComponent {
 
   isDeckInActive () {
     return !this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length);
+  }
+
+  onReadyYouTube(event) {
+    if(this.state.isPlaying){
+      event.target.unMute();
+    }else{
+      event.target.mute();
+    }
+    this.setState({
+      ytControl: event.target,
+    });
   }
 
   render () {
@@ -289,6 +313,7 @@ class MusicPlayer extends React.PureComponent {
                       <YouTube
                         videoId={this.state.deck.queues[0].source_id}
                         opts={this.state.youtubeOpts}
+                        onReady={this.onReadyYouTube}
                       />
                     );
                   }
