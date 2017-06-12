@@ -13,6 +13,8 @@ import {
   CONTEXT_FETCH_SUCCESS,
   STATUS_MUTE_SUCCESS,
   STATUS_UNMUTE_SUCCESS,
+  STATUS_PIN_SUCCESS,
+  STATUS_UNPIN_SUCCESS,
 } from '../actions/statuses';
 import {
   TIMELINE_REFRESH_SUCCESS,
@@ -26,6 +28,7 @@ import {
   ACCOUNT_MEDIA_TIMELINE_FETCH_SUCCESS,
   ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS,
   ACCOUNT_BLOCK_SUCCESS,
+  ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS,
 } from '../actions/accounts';
 import {
   STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
@@ -129,11 +132,16 @@ export default function statuses(state = initialState, action) {
   case SEARCH_FETCH_SUCCESS:
   case STATUS_SEARCH_TIMELINE_FETCH_SUCCESS:
   case STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS:
+  case ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS:
     return normalizeStatuses(state, action.statuses);
   case TIMELINE_DELETE:
     return deleteStatus(state, action.id, action.references);
   case ACCOUNT_BLOCK_SUCCESS:
     return filterStatuses(state, action.relationship);
+  case STATUS_PIN_SUCCESS:
+    return state.setIn([action.id, 'pinned'], true);
+  case STATUS_UNPIN_SUCCESS:
+    return state.setIn([action.id, 'pinned'], false);
   default:
     return state;
   }

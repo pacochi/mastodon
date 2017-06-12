@@ -5,19 +5,14 @@ RSpec.describe MediaAttachment, type: :model do
     let(:media) { MediaAttachment.create(account: Fabricate(:account), file: attachment_fixture('avatar.gif')) }
 
     it 'sets type to gifv' do
-      pending 'circle-ci avconv does not support faststart'
-
       expect(media.type).to eq 'gifv'
     end
 
     it 'converts original file to mp4' do
-      pending 'circle-ci avconv does not support faststart'
-
       expect(media.file_content_type).to eq 'video/mp4'
     end
 
     it 'sets meta' do
-      pending('circle-ci avconv does not support faststart' )
       expect(media.file.meta["original"]["width"]).to eq 128
       expect(media.file.meta["original"]["height"]).to eq 128
       expect(media.file.meta["original"]["aspect"]).to eq 1.0
