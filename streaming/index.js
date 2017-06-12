@@ -78,7 +78,7 @@ const startWorker = (workerId) => {
 
   const pgConfigs = {
     development: {
-      database: 'pawoo_development',
+      database: 'pawoo_music_development',
       host:     process.env.DB_HOST || '/var/run/postgresql',
       max:      10,
     },
