@@ -6,6 +6,7 @@ import IconButton from '../../../components/icon_button';
 import api from '../../../api';
 import YouTubePlayer from 'youtube-player';
 import createStream from '../../../../mastodon/stream';
+import YouTube from 'react-youtube';
 
 // FIXME: Old react style
 
@@ -23,9 +24,10 @@ class MusicPlayer extends React.PureComponent {
       offset_start_time: 0,
       offset_counter: null,
       isSeekbarActive: false,
+      isLoadingArtwork: true,
+      youtubeOpts: {},
     };
 
-    this.ytControl = null;
     this.audioRef = null;
     this.videoRef = null;
     this.subscription = null;
@@ -62,7 +64,7 @@ class MusicPlayer extends React.PureComponent {
             const deck = Object.assign({}, this.state.deck);
             deck.queues.push(payload);
             if(deck.queues.length === 1) {
-              this.playNextQueueItem(deck);
+              this.playNextQueueItem(deck, (new Date().getTime() / 1000));
             }
           }
           break;
@@ -71,7 +73,7 @@ class MusicPlayer extends React.PureComponent {
             const deck = Object.assign({}, this.state.deck);
             if(deck.queues.length >= 2) deck.queues.shift();
             deck.time_offset = 0;
-            this.playNextQueueItem(deck);
+            this.playNextQueueItem(deck, (new Date().getTime() / 1000));
           }
           break;
         case 'end':
@@ -87,101 +89,46 @@ class MusicPlayer extends React.PureComponent {
     });
   }
 
-  playNextQueueItem (deck) {
-    if(this.ytControl){
-      this.ytControl.stopVideo();
-    }
-
-    if(!deck || !("queues" in deck) || !(deck.queues.length) || deck.queues[0].source_type !== 'youtube') {
-      if(this.ytControl) this.ytControl.destroy();
-      this.ytControl = null;
-    }else{
-      setTimeout(()=>{
-        if(!this.ytControl) this.ytControl = YouTubePlayer('yt-player', {
-          playerVars: { 'controls': 0 },
-        });
-        this.ytControl.loadVideoById(deck.queues[0].source_id, 0);
-        this.ytControl.playVideo();
-
-        if(!this.state.isPlaying){
-          this.ytControl.mute();
-        }else{
-          this.ytControl.unMute();
-        }
-      }, 40);
-    }
-
+  playNextQueueItem (deck, offset_start_time) {
     this.setState({
       deck,
-      offset_start_time: (new Date().getTime() / 1000),
-      offset_time: 0,
       isSeekbarActive: false,
+      isLoadingArtwork: true,
+      offset_start_time,
+      offset_time: deck.time_offset,
+      youtubeOpts: (deck.queues.length && deck.queues[0].source_type === 'youtube') ? {
+        playerVars: {
+          autoplay: 1,
+          controls: 0,
+          start: deck.time_offset,
+        },
+      } : {},
     });
 
-    // アニメーション対応
-    // isSeekbarActiveを一度falseにしてシークをリセットした後に再度trueにして、曲の時間と同じ時間かかるtransitionを生成する
-    setTimeout(()=>this.setState({isSeekbarActive:true}), 0);
+    // YouTube / Animation用の遅延ローディング
+    setTimeout(()=>{
+
+      this.setState({
+        isSeekbarActive:true,
+        isLoadingArtwork: false,
+      });
+    }, 20);
   }
 
   fetchDeck(id) {
     return new Promise((resolve, reject)=>{
       return api(this.getMockState).get(`/api/v1/playlists/${id}`)
       .then((response)=>{
+        console.log(response.data.deck.time_offset);
         const interval = setInterval(()=>{
           this.setState({
             offset_time: parseInt(new Date().getTime() / 1000) - parseInt(this.state.offset_start_time),
           });
         }, 300);
         this.setState({
-          deck: response.data.deck,
-          offset_start_time: (new Date().getTime() / 1000) - response.data.deck.time_offset,
-          offset_time: parseInt(response.data.deck.time_offset),
           offset_counter: interval,
-          isSeekbarActive: false,
         });
-        setTimeout(()=>this.setState({isSeekbarActive:true}),0);
-
-        if(this.isDeckInActive() || this.state.deck.queues[0].source_type !== 'youtube') {
-          if(this.ytControl) this.ytControl.destroy();
-          this.ytControl = null;
-        }
-        if(this.isDeckInActive()){
-          resolve();
-          return;
-        }
-
-        // YouTubeのDOM操作の前に明示的にReactのレンダリングを行うために処理を遅延させる
-        // setTimeoutを利用することによって、無名関数内の処理を遅延させることができる
-        setTimeout(()=>{
-          const offset = this.state.offset_time;
-          switch (this.state.deck.queues[0].source_type) {
-          case 'youtube':
-            {
-              this.ytControl = YouTubePlayer('yt-player', {
-                playerVars: { 'controls': 0 },
-              });
-              this.ytControl.loadVideoById(this.state.deck.queues[0].source_id, offset);
-              this.ytControl.playVideo();
-
-              if(!this.state.isPlaying) {
-                this.ytControl.mute();
-              } else {
-                this.ytControl.unMute();
-              }
-            }
-            break;
-          case 'pawoo-music':
-            {
-              this.videoRef.currentTime = offset;
-            }
-            break;
-          case 'booth':
-            {
-              this.audioRef.currentTime = offset;
-            }
-            break;
-          }
-        }, 40);
+        this.playNextQueueItem(response.data.deck, (new Date().getTime() / 1000) - response.data.deck.time_offset);
       })
       .catch((error)=>{
         this.props.onError(error);
@@ -202,7 +149,11 @@ class MusicPlayer extends React.PureComponent {
     const index = Number(e.currentTarget.getAttribute('data-index'));
     if(index === this.state.targetDeck) return;
 
-    this.setState({targetDeck: index});
+    this.setState({
+      targetDeck: index,
+      isSeekbarActive: false,
+      isLoadingArtwork: true,
+    });
     this.fetchDeck(index);
     this.setSubscription(index);
   }
@@ -222,13 +173,6 @@ class MusicPlayer extends React.PureComponent {
   }
 
   handleClickToggle () {
-    if(this.ytControl) {
-      if(this.state.isPlaying) {
-        this.ytControl.mute();
-      }else{
-        this.ytControl.unMute();
-      }
-    }
     this.setState({isPlaying: (!this.state.isPlaying)});
   }
 
@@ -331,13 +275,21 @@ class MusicPlayer extends React.PureComponent {
             <div className="deck_queue-wrapper">
               <div className="queue-item__artwork" style={nowPlayingArtwork}>
                 {(()=>{
+
+                  if(this.state.isLoadingArtwork){
+                    return (
+                      <div className='loading' />
+                    );
+                  }
+
                   if(this.isDeckInActive() ) return null;
 
                   if(this.state.deck.queues[0].source_type === 'youtube'){
                     return (
-                      <div className='queue-item__ytplayer' style={ytplayerStyle}>
-                        <div id="yt-player" />
-                      </div>
+                      <YouTube
+                        videoId={this.state.deck.queues[0].source_id}
+                        opts={this.state.youtubeOpts}
+                      />
                     );
                   }
 
