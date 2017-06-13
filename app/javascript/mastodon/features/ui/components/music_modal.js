@@ -98,6 +98,7 @@ class MusicModal extends React.PureComponent {
               <input className="music-modal__title" placeholder="楽曲名を入力" ref={this.setTitleRef} defaultValue={title} />
             </div>
             <input className="music-modal__artist" placeholder="作者名を入力" ref={this.setArtistRef} defaultValue={artist} />
+            <span className="music-modal__info">※128文字以上は自動的にカットされます</span>
 
             <input type="file" name="music"   accept="audio/*" ref={this.setMusicRef} />
             <input type="file" name="image" accept="image/*" ref={this.setImageRef} onChange={this.handleOnSelectImage} />
@@ -108,7 +109,7 @@ class MusicModal extends React.PureComponent {
           <div className='music-modal__upload'>
             <input className='music-modal__checkbox-confirm' id="checkbox-confirm" type="checkbox" checked={this.state.isClickedWaring} onChange={this.handleChangeCheckbox} />
             <div className='music-modal__checkbox-content'>
-              <label for="checkbox-confirm">
+              <label htmlFor="checkbox-confirm">
                 作品（画像、音源、楽曲、テキスト等を含む）のアップロードにおいて、下記の注意事項を守ることを誓います。
               </label>
             </div>

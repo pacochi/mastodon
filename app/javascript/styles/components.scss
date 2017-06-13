@@ -3506,6 +3506,13 @@ button.icon-button.active i.fa-retweet {
   justify-content: space-between;
 }
 
+.music-modal__info {
+  display: block;
+  margin-top: 7px;
+  color: $ui-primary-color;
+  font-size: smaller;
+}
+
 .confirmation-modal__action-bar {
   display: flex;
   background: $ui-secondary-color;

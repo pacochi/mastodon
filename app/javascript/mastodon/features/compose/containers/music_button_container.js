@@ -17,8 +17,8 @@ const mapDispatchToProps = dispatch => ({
 
   onSelectFile (file, tag) {
     const tagSupport = tag.version[0] === '2';
-    const title = tagSupport ? tag.tags.title : '';
-    const artist = tagSupport ? tag.tags.artist : '';
+    const title = (tagSupport && typeof tag.tags.title !== "undefined") ? tag.tags.title.substr(0, 127) : '';
+    const artist = (tagSupport && typeof tag.tags.artist !== "undefined") ? tag.tags.artist.substr(0, 127) : '';
 
     dispatch(openModal('MUSIC', {
       title,
