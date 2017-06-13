@@ -3978,6 +3978,7 @@ button.icon-button.active i.fa-retweet {
       align-items: center;
 
       .control-bar__controller-toggle{
+        position: relative;
         width: 36px;
         height: 36px;
         display: flex;
@@ -3991,6 +3992,9 @@ button.icon-button.active i.fa-retweet {
           font-size: 19px;
           display: block;
         }
+        .fa-play{
+          margin-left: 3px;
+        }
 
         &.is-playing{
           background: #EF2463;
@@ -4003,9 +4007,47 @@ button.icon-button.active i.fa-retweet {
         }
 
         &.is-pause{
-          background: #AAA;
+          background: #666;
+          @keyframes plpopup {
+            0% {
+              transform: scale(1);
+            }
+            1% {
+              transform: scale(1.05);
+            }
+            30% {
+              transform: scale(1);
+            }
+          }
+          animation: plpopup 1.2s $easeOutQuint 0.0s infinite;
+
           &:hover{
-            background: #999;
+            background: #EF2463;
+          }
+
+          @keyframes plpalse {
+            0% {
+              opacity: 0;
+              padding: 18px;
+            }
+            20% {
+              opacity: 1;
+            }
+            100% {
+              opacity: 0;
+              padding: 26px;
+            }
+          }
+
+          &:after{
+            content: "";
+            position: absolute;
+            left: 50%;
+            top: 50%;
+            transform: translateX(-50%) translateY(-50%);
+            border-radius: 50%;
+            animation: plpalse 1.2s $easeOutQuint 0.0s infinite;
+            border: 2px solid #AAA;
           }
         }
 
