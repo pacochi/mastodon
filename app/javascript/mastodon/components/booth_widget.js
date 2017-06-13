@@ -27,6 +27,8 @@ class BoothWidget extends React.PureComponent {
       .then(response => {
         // FIXME: Reduxにするときによしなにしよう
         this.setState({item: response.data.body});
+      }).catch(() => {
+        // privateなBOOTHリンクなどは404が返ってくるので何もしない
       });
   }
 
