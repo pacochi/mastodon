@@ -4228,6 +4228,40 @@ button.icon-button.active i.fa-retweet {
         }
       }
 
+      .queue-item__restrictions{
+        margin: 25px;
+        width: 240px;
+        line-height: 1.4;
+        border-radius: 2px;
+        overflow: hidden;
+
+        .queue-item__restrictions-title{
+          padding: 10px;
+          background: #A7A7A7;
+          color: $white;
+          text-align: center;
+
+          i {
+            padding-right: 5px;
+          }
+        }
+
+        .queue-item__restrictions-list{
+          padding: 10px;
+          background: #F2F2F2;
+          font-size: smaller;
+          font-weight: normal;
+        }
+
+        ul li{
+          margin: 5px 0;
+
+          .queue-item__restrictions-num{
+            font-weight: bold;
+          }
+        }
+      }
+
       .deck__queue{
         flex: 1;
         align-items: flex-start;
@@ -4252,6 +4286,8 @@ button.icon-button.active i.fa-retweet {
               width: 60px;
               align-items: center;
               justify-content: center;
+              color: #EF2463;
+              font-weight: bold;
             }
 
             .deck__queue-add-form-help{
@@ -4343,6 +4379,11 @@ button.icon-button.active i.fa-retweet {
               }
 
               .deck__queue-add-form-help-icon{
+                display: flex;
+                width: 32px;
+                height: 32px;
+                align-items: center;
+                justify-content: center;
                 font-size: 22px;
                 color: #F21D61;
                 cursor: pointer;
