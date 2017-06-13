@@ -194,7 +194,7 @@ const startWorker = (workerId) => {
       return;
     }
 
-    if("originalUrl" in req && req.originalUrl.indexOf('playlist')+1){
+    if("path" in req && req.path === '/api/v1/streaming/playlist'){
       next();
       return;
     }
