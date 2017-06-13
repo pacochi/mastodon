@@ -4184,11 +4184,12 @@ button.icon-button.active i.fa-retweet {
         margin: 25px;
         width: 240px;
         line-height: 1.4;
+        border-radius: 2px;
+        overflow: hidden;
 
         .queue-item__restrictions-title{
-          border-radius: 8px 8px 0 0;
           padding: 10px;
-          background: #545454;
+          background: #A7A7A7;
           color: $white;
           text-align: center;
 
@@ -4198,12 +4199,8 @@ button.icon-button.active i.fa-retweet {
         }
 
         .queue-item__restrictions-list{
-          border-width: 0 1px 1px 1px;
-          border-color: #545454;
-          border-style: solid;
-          border-radius: 0 0 8px 8px;
           padding: 10px;
-          background: #EFEFEF;
+          background: #F2F2F2;
           font-size: smaller;
           font-weight: normal;
         }
