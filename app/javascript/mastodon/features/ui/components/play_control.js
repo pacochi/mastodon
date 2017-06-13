@@ -392,7 +392,7 @@ class MusicPlayer extends React.PureComponent {
                   })()}
                 </div>
                 {(()=>{
-                  if(!this.state.deck || !this.state.deck.max_add_count || !this.state.deck.max_skip_count) return null;
+                  if(!this.state.deck || !this.state.deck.max_queue_size || !this.state.deck.max_add_count || !this.state.deck.max_skip_count) return null;
                   return (
                     <div className="queue-item__restrictions">
                       <div className="queue-item__restrictions-title">
@@ -400,6 +400,7 @@ class MusicPlayer extends React.PureComponent {
                         <span>楽曲追加・SKIPについて</span>
                       </div>
                       <ul className="queue-item__restrictions-list">
+                        <li>各DECKに<span className="queue-item__restrictions-num">最大{this.state.deck.max_queue_size}曲</span>入ります</li>
                         <li>楽曲追加は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_add_count}回まで</span>です</li>
                         <li>SKIPの回数は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_skip_count}回まで</span>です</li>
                       </ul>
