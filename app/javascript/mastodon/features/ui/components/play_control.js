@@ -410,16 +410,16 @@ class MusicPlayer extends React.PureComponent {
               <ul className="deck__queue">
                 {(()=>{
                   if(this.isDeckInActive() ){
-                    return (
-                      <li className="deck__queue-item">
+                    return [0,1,2,3,4,5,6,7,8,9].map((_,index)=>(
+                      <li className="deck__queue-item" key={'empty-queue-item_'+index}>
                         <div className="queue-item__main">
                           <div className='queue-item__metadata'>
-                            プレイリストに曲がありません
+                            {!index ? 'プレイリストに曲がありません' : ''}
                           </div>
                         </div>
                         <div className='queue-item__datasource' />
                       </li>
-                    );
+                    ));
                   }
 
                   return this.state.deck.queues.map(queue_item=>(
@@ -436,6 +436,19 @@ class MusicPlayer extends React.PureComponent {
                     )
                   );
                 })()}
+
+                {(()=>{
+                  if(this.isDeckInActive()) return null;
+                  return (new Array(10-this.state.deck.queues.length)).fill(0).map((_,index)=>(
+                    <li className="deck__queue-item" key={'empty-track'+index}>
+                      <div className="queue-item__main">
+                        <div className='queue-item__metadata' />
+                      </div>
+                      <div className='queue-item__datasource' />
+                    </li>
+                  ));
+                })()}
+
                 {(()=>{
                   if(this.props.isTop) {
                     return null;
