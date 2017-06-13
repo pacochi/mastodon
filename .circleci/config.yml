@@ -60,8 +60,14 @@ jobs:
       - restore_cache:
           key: assets/{{ checksum "tmp/circleci/master.hash" }}/2
       - run:
-          # `rake assets:precompile error_page:generate` causes curious error: https://circleci.com/gh/pixiv/pawoo/2274
-          command: ./bin/rake assets:precompile && ./bin/rake error_page:generate && touch tmp/circleci/assets.done
+          command: |
+            # `rake assets:precompile error_page:generate` causes curious error: https://circleci.com/gh/pixiv/pawoo/2274
+            if ./bin/rake assets:precompile && ./bin/rake error_page:generate; then
+              touch tmp/circleci/assets.success
+            else
+              touch tmp/circleci/assets.failure
+              exit 1
+            fi
           background: true
 
       # Database schema
@@ -111,8 +117,10 @@ jobs:
           name: Wait for assets precompilation
           command: |
             for i in $(seq 120); do
-              if [ -f tmp/circleci/assets.done ]; then
+              if [ -f tmp/circleci/assets.success ]; then
                 exit 0
+              elif [ -f tmp/circleci/assets.failure ]; then
+                exit 1
               fi
               sleep 0.5;
             done
