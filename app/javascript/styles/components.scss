@@ -4337,6 +4337,11 @@ button.icon-button.active i.fa-retweet {
               }
 
               .deck__queue-add-form-help-icon{
+                display: flex;
+                width: 32px;
+                height: 32px;
+                align-items: center;
+                justify-content: center;
                 font-size: 22px;
                 color: #F21D61;
                 cursor: pointer;
