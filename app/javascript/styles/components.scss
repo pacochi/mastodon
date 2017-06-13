@@ -4126,6 +4126,10 @@ button.icon-button.active i.fa-retweet {
           pointer-events: none;
         }
 
+        iframe, .queue-item__ytplayer{
+          object-fit: fill;
+        }
+
         @keyframes plload {
         	0% {transform: rotate(0deg);}
         	100% {transform: rotate(360deg);}
