@@ -3476,7 +3476,7 @@ button.icon-button.active i.fa-retweet {
     display: flex;
     align-items: center;
     justify-content: center;
-  ｝
+  }
 
   .music-modal__artwork-exist{
     background-size: cover;
@@ -3519,6 +3519,11 @@ button.icon-button.active i.fa-retweet {
   margin-top: 7px;
   color: $ui-primary-color;
   font-size: smaller;
+}
+
+.music-modal__link-terms-of-use {
+  text-decoration: underline dotted;
+  color: $ui-highlight-color;
 }
 
 .confirmation-modal__action-bar {
