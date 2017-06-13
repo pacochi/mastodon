@@ -99,7 +99,7 @@ class MusicModal extends React.PureComponent {
               <input className="music-modal__title" placeholder="楽曲名を入力" ref={this.setTitleRef} defaultValue={title} />
             </div>
             <input className="music-modal__artist" placeholder="作者名を入力" ref={this.setArtistRef} defaultValue={artist} />
-            <span className="music-modal__info">※128文字以上は自動的にカットされます</span>
+            <span className="music-modal__info">※128文字を超える部分は自動的にカットされます</span>
 
             <input type="file" name="music"   accept="audio/*" ref={this.setMusicRef} />
             <input type="file" name="image" accept="image/*" ref={this.setImageRef} onChange={this.handleOnSelectImage} />
