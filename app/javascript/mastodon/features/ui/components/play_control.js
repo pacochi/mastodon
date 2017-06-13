@@ -43,6 +43,7 @@ class MusicPlayer extends React.PureComponent {
     this.handleClickDeckTab = this.handleClickDeckTab.bind(this);
     this.handleSubmitAddForm = this.handleSubmitAddForm.bind(this);
     this.onReadyYouTube = this.onReadyYouTube.bind(this);
+    this.onChangeYoutubeState = this.onChangeYoutubeState.bind(this);
 
     this.isDeckInActive = this.isDeckInActive.bind(this);
   }
@@ -81,7 +82,14 @@ class MusicPlayer extends React.PureComponent {
             const deck = Object.assign({}, this.state.deck);
             if(deck.queues.length <= 1) deck.queues = [];
             deck.time_offset = 0;
-            this.setState({deck});
+            if(this.state.ytControl){
+              this.state.ytControl.destroy();
+            }
+            this.setState({
+              deck,
+              ytControl: null,
+              isYoutubeLoadingDone: false,
+            });
           }
           break;
         }
@@ -103,6 +111,7 @@ class MusicPlayer extends React.PureComponent {
           start: deck.time_offset,
         },
       } : {},
+      isYoutubeLoadingDone: false,
     });
 
     // YouTube / Animation用の遅延ローディング
@@ -136,6 +145,7 @@ class MusicPlayer extends React.PureComponent {
       this.state.ytControl.destroy();
       this.setState({
         ytControl: null,
+        isYoutubeLoadingDone: false,
       });
     }
 
@@ -241,7 +251,7 @@ class MusicPlayer extends React.PureComponent {
   }
 
   isLoading () {
-    return (this.state.isLoadingArtwork || (!this.isDeckInActive() && this.state.deck.queues[0].source_type === "youtube" && !this.state.ytControl));
+    return (this.state.isLoadingArtwork || (!this.isDeckInActive() && this.state.deck.queues[0].source_type === "youtube" && !this.state.isYoutubeLoadingDone));
   }
 
   onReadyYouTube(event) {
@@ -253,6 +263,19 @@ class MusicPlayer extends React.PureComponent {
     this.setState({
       ytControl: event.target,
     });
+  }
+
+  // Youtubeの動画の読み込みが完了し、再生が始まると呼ばれる
+  onChangeYoutubeState(e) {
+    // さらにiframeにpostMessageが送られてくるまで2秒ほど待つ
+    // 2秒待たない間にコンポーネントが削除されると、デベロッパーコンソールが開く
+    setTimeout(() => {
+      if (!this.state.isYoutubeLoadingDone) {
+        this.setState({
+          isYoutubeLoadingDone: true,
+        });
+      }
+    }, 2000);
   }
 
   render () {
@@ -335,6 +358,7 @@ class MusicPlayer extends React.PureComponent {
                         videoId={this.state.deck.queues[0].source_id}
                         opts={this.state.youtubeOpts}
                         onReady={this.onReadyYouTube}
+                        onStateChange={this.onChangeYoutubeState}
                       />
                     );
                   }
