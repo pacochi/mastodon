@@ -140,6 +140,7 @@ class MusicPlayer extends React.PureComponent {
     return new Promise((resolve, reject)=>{
       return api(this.getMockState).get(`/api/v1/playlists/${id}`)
       .then((response)=>{
+        if(this.state.offset_counter) clearInterval(this.state.offset_counter);
         const interval = setInterval(()=>{
           this.setState({
             offset_time: parseInt(new Date().getTime() / 1000) - parseInt(this.state.offset_start_time),
