@@ -393,6 +393,42 @@ class MusicPlayer extends React.PureComponent {
                       <form onSubmit={this.handleSubmitAddForm}>
                         <span>曲を追加</span>
                         <input ref={this.setURLRef} type="text" placeholder="URLを入力(Pawoo Music, APOLLO(BOOTH) and YouTube URL)" required />
+                        <div className='deck__queue-add-form-help'>
+                          <i className='fa fa-question-circle deck__queue-add-form-help-icon' />
+                          <div className='deck__queue-add-form-help-popup'>
+                            <h3>対応プラットフォーム</h3>
+                            <ul>
+                              <li>
+                                <img src="/player/logos/pawoo-music.svg" />
+                                <div className='platform-info'>
+                                  <div className='platform-info__title'>Pawoo Music</div>
+                                  <div className='platform-info__url'>http://mastodon.dev/@[username]/[XXXXX…]</div>
+                                </div>
+                              </li>
+                              <li>
+                                <img src="/player/logos/youtube.svg" />
+                                <div className='platform-info'>
+                                  <div className='platform-info__title'>YouTube</div>
+                                  <div className='platform-info__url'>https://www.youtube.com/watch?v=[XXXXX...]</div>
+                                </div>
+                              </li>
+                              <li>
+                                <img src="/player/logos/booth.svg" />
+                                <div className='platform-info'>
+                                  <div className='platform-info__title'>BOOTH</div>
+                                  <div className='platform-info__url'>https://booth.pm/ja/items/[XXXXX...]</div>
+                                </div>
+                              </li>
+                              <li>
+                                <img src="/player/logos/apollo.png" />
+                                <div className='platform-info'>
+                                  <div className='platform-info__title'>APOLLO</div>
+                                  <div className='platform-info__url'>https://booth.pm/apollo/a06/item?id=[XXXXX...]</div>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
                         <input type="submit" />
                       </form>
                     </li>
