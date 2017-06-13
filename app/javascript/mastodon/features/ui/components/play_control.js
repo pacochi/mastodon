@@ -297,7 +297,7 @@ class MusicPlayer extends React.PureComponent {
                 <div className='control-bar__controller-skip' onClick={this.handleClickSkip}>
                   SKIP
                 </div>
-              )
+              );
             })()}
 
             {(()=>{
@@ -412,6 +412,7 @@ class MusicPlayer extends React.PureComponent {
 MusicPlayer.propTypes = {
   accessToken: PropTypes.string.isRequired,
   streamingAPIBaseURL: PropTypes.string.isRequired,
+  isTop: PropTypes.bool.isRequired,
   onError: PropTypes.func.isRequired,
 };
 
