@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Api::V1::BoothItemsController < ApiController
-  BOOTH_API_ENDPOINT = Addressable::Template.new('https://api.booth.pm/pixiv/items/{id}').freeze
-
   respond_to :json
 
   def show
