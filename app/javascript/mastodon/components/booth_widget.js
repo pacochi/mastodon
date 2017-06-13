@@ -67,7 +67,7 @@ class BoothWidget extends React.PureComponent {
       <div className={`booth-widget booth-widget--music ${this.state.isPlaying ? 'is-playing' : ''} ${this.state.apollo ? 'is-apollo' : ''}`}>
         <div className="booth-widget__viewer">
           <div className="booth-widget__viewer-btn" onClick={this.handlePlayerClick}>
-            <i className="fa ${this.state.isPlaying ? 'fa-pause' : 'fa-play'}" />
+            <i className={`fa ${this.state.isPlaying ? 'fa-pause' : 'fa-play'}`} />
           </div>
           <img className="booth-widget__image" src={this.state.item.primary_image.f_620.url} alt=""/>
         </div>
