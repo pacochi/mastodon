@@ -37,6 +37,8 @@ export const COMPOSE_LISTABILITY_CHANGE = 'COMPOSE_LISTABILITY_CHANGE';
 export const COMPOSE_EMOJI_INSERT = 'COMPOSE_EMOJI_INSERT';
 export const COMPOSE_TAG_INSERT = 'COMPOSE_TAG_INSERT';
 
+export const COMPOSE_FILE_KEY_RESET = 'COMPOSE_FILE_KEY_RESET';
+
 export function changeCompose(text) {
   return {
     type: COMPOSE_CHANGE,
@@ -371,5 +373,11 @@ export function insertTagCompose(tag) {
   return {
     type: COMPOSE_TAG_INSERT,
     tag,
+  };
+}
+
+export function resetFileKeyCompose() {
+  return {
+    type: COMPOSE_FILE_KEY_RESET,
   };
 }
