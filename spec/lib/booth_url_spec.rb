@@ -3,8 +3,8 @@ require 'rails_helper'
 RSpec.describe BoothUrl do
   let(:instance) { described_class.new(uri) }
 
-  describe '#to_img_pawoo_music_domain' do
-    subject { instance.to_img_pawoo_music_domain }
+  describe '#to_img_music_pawoo_domain' do
+    subject { instance.to_img_music_pawoo_domain }
 
     context 'given booth shop uri' do
       let(:uri) { 'https://booth.pm/ja/items/1' }

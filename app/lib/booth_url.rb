@@ -5,7 +5,7 @@ class BoothUrl
     @uri = uri
   end
 
-  def to_img_pawoo_music_domain
+  def to_img_music_pawoo_domain
     return @uri.to_s unless should_replace_domain?
 
     addressable_uri.dup.tap { |new_uri|
