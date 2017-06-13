@@ -120,7 +120,6 @@ jobs:
           key: assets/{{ checksum "tmp/circleci/master.hash" }}/1
           paths:
             - public/assets
-            - public/packs
             - tmp/cache/assets
 
       # Run tests
