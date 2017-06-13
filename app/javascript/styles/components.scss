@@ -3927,6 +3927,10 @@ button.icon-button.active i.fa-retweet {
   height: 56px;
   z-index: 5000000000000000;
 
+  @media screen and (max-width: 1024px) {
+    display: none;
+  }
+
   .player-seekbar{
     position: absolute;
     z-index: 10;
