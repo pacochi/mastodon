@@ -5,6 +5,11 @@
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+.notification-list{
+  transform: translate(0, 15px);
+  z-index: 200;
+}
+
 .button {
   background-color: darken($ui-highlight-color, 3%);
   border: 10px none;
@@ -3925,7 +3930,7 @@ button.icon-button.active i.fa-retweet {
   bottom: 0;
   width: 100%;
   height: 56px;
-  z-index: 5000000000000000;
+  z-index: 199;
 
   .player-seekbar{
     position: absolute;
