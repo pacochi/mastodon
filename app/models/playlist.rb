@@ -50,7 +50,7 @@ class Playlist
               link: link,
               info: queue_item.info,
             )
-            play_item(queue_item.id, queue_item.duration) if items.size == 1
+            play_item(queue_item.id, queue_item.duration, 0) if items.size == 1
             return queue_item
           end
         end
@@ -101,9 +101,9 @@ class Playlist
 
   private
 
-  def play_item(queue_item_id, duration)
+  def play_item(queue_item_id, duration, gap = 10)
     set_start_time
-    NextPlaylistWorker.perform_in(duration, deck, queue_item_id)
+    NextPlaylistWorker.perform_in(duration + gap, deck, queue_item_id)
     PushPlaylistWorker.perform_async(deck, 'play', { id: queue_item_id }.to_json)
     PlaylistLog.find_by(uuid: queue_item_id)&.update(started_at: Time.now)
   end
