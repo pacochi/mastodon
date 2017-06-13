@@ -26,6 +26,7 @@ import {
   COMPOSE_HASH_TAG_SELECT,
   COMPOSE_EMOJI_INSERT,
   COMPOSE_TAG_INSERT,
+  COMPOSE_FILE_KEY_RESET,
 } from '../actions/compose';
 import { TIMELINE_DELETE } from '../actions/timelines';
 import { STORE_HYDRATE } from '../actions/store';
@@ -257,6 +258,8 @@ export default function compose(state = initialState, action) {
     return insertEmoji(state, action.position, action.emoji);
   case COMPOSE_TAG_INSERT:
     return insertTag(state, action.tag);
+  case COMPOSE_FILE_KEY_RESET:
+    return state.set('resetFileKey', Math.floor((Math.random() * 0x10000)));
   default:
     return state;
   }

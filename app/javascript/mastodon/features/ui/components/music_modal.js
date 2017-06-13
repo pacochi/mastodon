@@ -16,6 +16,7 @@ class MusicModal extends React.PureComponent {
     music: PropTypes.object.isRequired,
     onUpload: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
+    onResetFileKey: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
   };
 
@@ -24,6 +25,10 @@ class MusicModal extends React.PureComponent {
     imageURL: null,
     isTermsOfUseOpen: false,
   };
+
+  componentWillUnmount() {
+    this.props.onResetFileKey();
+  }
 
   handleUpload = () => {
     this.props.onUpload({
