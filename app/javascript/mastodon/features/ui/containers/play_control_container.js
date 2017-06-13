@@ -5,7 +5,7 @@ import { miscFail } from '../../../actions/miscerrors';
 const mapStateToProps = state => ({
   accessToken: state.getIn(['meta', 'access_token']),
   streamingAPIBaseURL: state.getIn(['meta', 'streaming_api_base_url']),
-  isTop: false
+  isTop: false,
 });
 
 const mapDispatchToProps = dispatch => ({
