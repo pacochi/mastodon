@@ -14,6 +14,7 @@ function onDomContentLoaded(callback) {
 
 function main() {
   perf.start('main()');
+  const PlayControl = require('mastodon/features/ui/components/play_control').default;
   const Mastodon = require('mastodon/containers/mastodon').default;
   const React = require('react');
   const ReactDOM = require('react-dom');
@@ -22,9 +23,14 @@ function main() {
 
   onDomContentLoaded(() => {
     const mountNode = document.getElementById('mastodon');
+    const mountAboutPlayControl = document.getElementById('about-playcontrol');
+
+    const playControlInitialState = JSON.parse(document.getElementById('initial-state').innerHTML).meta;
+
     const props = JSON.parse(mountNode.getAttribute('data-props'));
 
     ReactDOM.render(<Mastodon {...props} />, mountNode);
+    ReactDOM.render(<PlayControl isTop={true} onError={()=>{}} streamingAPIBaseURL={playControlInitialState.streaming_api_base_url} accessToken={playControlInitialState.access_token} />, mountAboutPlayControl);
     perf.stop('main()');
   });
 }
