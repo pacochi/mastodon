@@ -194,6 +194,11 @@ const startWorker = (workerId) => {
       return;
     }
 
+    if("originalUrl" in req && req.originalUrl.indexOf('playlist')+1){
+      next();
+      return;
+    }
+
     const authorization = req.get('Authorization');
     const accessToken = req.query.access_token;
 
@@ -374,6 +379,16 @@ const startWorker = (workerId) => {
       ws.isAlive = true;
     });
 
+    if(location.query.stream === 'playlist') {
+      const deck = Number(location.query.deck);
+      if ([1, 2, 3].includes(deck)) {
+        streamFrom(`streaming:playlist:${deck}`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);
+      } else {
+        ws.close();
+      }
+      return;
+    }
+
     accountFromToken(token, req, err => {
       if (err) {
         log.error(req.requestId, err);
@@ -397,15 +412,6 @@ const startWorker = (workerId) => {
       case 'hashtag:local':
         streamFrom(`timeline:hashtag:${location.query.tag}:local`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);
         break;
-      case 'playlist': {
-        const deck = Number(location.query.deck);
-        if ([1, 2, 3].includes(deck)) {
-          streamFrom(`streaming:playlist:${deck}`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);
-        } else {
-          ws.close();
-        }
-        break;
-      }
       default:
         ws.close();
       }
