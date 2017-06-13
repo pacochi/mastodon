@@ -134,7 +134,9 @@ class MusicPlayer extends React.PureComponent {
   fetchDeck(id) {
     if(this.state.ytControl){
       this.state.ytControl.destroy();
-      this.state.ytControl = null;
+      this.setState({
+        ytControl: null,
+      });
     }
 
     return new Promise((resolve, reject)=>{
@@ -168,6 +170,7 @@ class MusicPlayer extends React.PureComponent {
   handleClickDeckTab (e) {
     const index = Number(e.currentTarget.getAttribute('data-index'));
     if(index === this.state.targetDeck) return;
+    if (this.isLoading()) return;
 
     this.setState({
       targetDeck: index,
@@ -235,6 +238,10 @@ class MusicPlayer extends React.PureComponent {
 
   isDeckInActive () {
     return !this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length);
+  }
+
+  isLoading () {
+    return (this.state.isLoadingArtwork || (!this.isDeckInActive() && this.state.deck.queues[0].source_type === "youtube" && !this.state.ytControl));
   }
 
   onReadyYouTube(event) {
@@ -305,7 +312,7 @@ class MusicPlayer extends React.PureComponent {
           <div className='control-bar__deck' onClick={this.handleClickDeck}>
             <ul className='control-bar__deck-selector' style={deckStyle}>
               {(()=>[1, 2, 3].map(index=>(
-                <li key={index} className={'deck-selector__selector-body'+(this.state.targetDeck === index ? ' active':'')} data-index={index} onClick={this.handleClickDeckTab}>
+                <li key={index} className={'deck-selector__selector-body'+(this.state.targetDeck === index ? ' active':'') + (this.isLoading() ? ' disabled' : '')} data-index={index} onClick={this.handleClickDeckTab}>
                   <img src="/player/pawoo-music-playlist-icon.svg" /><span>DECK{index}</span>
                 </li>
               )))()}
