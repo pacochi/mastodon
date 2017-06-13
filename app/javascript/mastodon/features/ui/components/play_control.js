@@ -43,6 +43,7 @@ class MusicPlayer extends React.PureComponent {
     this.handleClickDeckTab = this.handleClickDeckTab.bind(this);
     this.handleSubmitAddForm = this.handleSubmitAddForm.bind(this);
     this.onReadyYouTube = this.onReadyYouTube.bind(this);
+    this.onChangeYoutubeState = this.onChangeYoutubeState.bind(this);
 
     this.isDeckInActive = this.isDeckInActive.bind(this);
   }
@@ -81,7 +82,14 @@ class MusicPlayer extends React.PureComponent {
             const deck = Object.assign({}, this.state.deck);
             if(deck.queues.length <= 1) deck.queues = [];
             deck.time_offset = 0;
-            this.setState({deck});
+            if(this.state.ytControl){
+              this.state.ytControl.destroy();
+            }
+            this.setState({
+              deck,
+              ytControl: null,
+              isYoutubeLoadingDone: false,
+            });
           }
           break;
         }
@@ -103,6 +111,7 @@ class MusicPlayer extends React.PureComponent {
           start: deck.time_offset,
         },
       } : {},
+      isYoutubeLoadingDone: false,
     });
 
     // YouTube / Animation用の遅延ローディング
@@ -134,7 +143,10 @@ class MusicPlayer extends React.PureComponent {
   fetchDeck(id) {
     if(this.state.ytControl){
       this.state.ytControl.destroy();
-      this.state.ytControl = null;
+      this.setState({
+        ytControl: null,
+        isYoutubeLoadingDone: false,
+      });
     }
 
     return new Promise((resolve, reject)=>{
@@ -169,6 +181,7 @@ class MusicPlayer extends React.PureComponent {
   handleClickDeckTab (e) {
     const index = Number(e.currentTarget.getAttribute('data-index'));
     if(index === this.state.targetDeck) return;
+    if (this.isLoading()) return;
 
     this.setState({
       targetDeck: index,
@@ -238,6 +251,10 @@ class MusicPlayer extends React.PureComponent {
     return !this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length);
   }
 
+  isLoading () {
+    return (this.state.isLoadingArtwork || (!this.isDeckInActive() && this.state.deck.queues[0].source_type === "youtube" && !this.state.isYoutubeLoadingDone));
+  }
+
   onReadyYouTube(event) {
     if(this.state.isPlaying){
       event.target.unMute();
@@ -247,6 +264,19 @@ class MusicPlayer extends React.PureComponent {
     this.setState({
       ytControl: event.target,
     });
+  }
+
+  // Youtubeの動画の読み込みが完了し、再生が始まると呼ばれる
+  onChangeYoutubeState(e) {
+    // さらにiframeにpostMessageが送られてくるまで2秒ほど待つ
+    // 2秒待たない間にコンポーネントが削除されると、デベロッパーコンソールが開く
+    setTimeout(() => {
+      if (!this.state.isYoutubeLoadingDone) {
+        this.setState({
+          isYoutubeLoadingDone: true,
+        });
+      }
+    }, 2000);
   }
 
   render () {
@@ -315,7 +345,7 @@ class MusicPlayer extends React.PureComponent {
           <div className='control-bar__deck' onClick={this.handleClickDeck}>
             <ul className='control-bar__deck-selector'>
               {(()=>[1, 2, 3].map(index=>(
-                <li key={index} style={deckSelectorStyle} className={'deck-selector__selector-body'+(this.state.targetDeck === index ? ' active':'')} data-index={index} onClick={this.handleClickDeckTab}>
+                <li key={index} className={'deck-selector__selector-body'+(this.state.targetDeck === index ? ' active':'') + (this.isLoading() ? ' disabled' : '')} data-index={index} onClick={this.handleClickDeckTab} style={deckSelectorStyle}>
                   <img src="/player/pawoo-music-playlist-icon.svg" /><span>DECK{index}</span>
                 </li>
               )))()}
@@ -338,6 +368,7 @@ class MusicPlayer extends React.PureComponent {
                         videoId={this.state.deck.queues[0].source_id}
                         opts={this.state.youtubeOpts}
                         onReady={this.onReadyYouTube}
+                        onStateChange={this.onChangeYoutubeState}
                       />
                     );
                   }
@@ -393,6 +424,42 @@ class MusicPlayer extends React.PureComponent {
                       <form onSubmit={this.handleSubmitAddForm}>
                         <span>曲を追加</span>
                         <input ref={this.setURLRef} type="text" placeholder="URLを入力(Pawoo Music, APOLLO(BOOTH) and YouTube URL)" required />
+                        <div className='deck__queue-add-form-help'>
+                          <i className='fa fa-question-circle deck__queue-add-form-help-icon' />
+                          <div className='deck__queue-add-form-help-popup'>
+                            <h3>対応プラットフォーム</h3>
+                            <ul>
+                              <li>
+                                <img src="/player/logos/pawoo-music.svg" />
+                                <div className='platform-info'>
+                                  <div className='platform-info__title'>Pawoo Music</div>
+                                  <div className='platform-info__url'>https://music.pawoo.net/web/statuses/[XXXXX…]</div>
+                                </div>
+                              </li>
+                              <li>
+                                <img src="/player/logos/youtube.svg" />
+                                <div className='platform-info'>
+                                  <div className='platform-info__title'>YouTube</div>
+                                  <div className='platform-info__url'>https://www.youtube.com/watch?v=[XXXXX...]</div>
+                                </div>
+                              </li>
+                              <li>
+                                <img src="/player/logos/booth.svg" />
+                                <div className='platform-info'>
+                                  <div className='platform-info__title'>BOOTH</div>
+                                  <div className='platform-info__url'>https://booth.pm/ja/items/[XXXXX...]</div>
+                                </div>
+                              </li>
+                              <li>
+                                <img src="/player/logos/apollo.png" />
+                                <div className='platform-info'>
+                                  <div className='platform-info__title'>APOLLO</div>
+                                  <div className='platform-info__url'>https://booth.pm/apollo/a06/item?id=[XXXXX...]</div>
+                                </div>
+                              </li>
+                            </ul>
+                          </div>
+                        </div>
                         <input type="submit" />
                       </form>
                     </li>
