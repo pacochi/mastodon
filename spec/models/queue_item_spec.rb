@@ -3,6 +3,11 @@ require 'rails_helper'
 RSpec.describe QueueItem do
   describe '.create_from_link' do
     subject { described_class.create_from_link(url, account) }
+
+    before do
+      Redis.current.flushdb
+    end
+
     let(:account) { Fabricate(:account) }
 
     let(:booth_api_response) do
@@ -20,8 +25,8 @@ RSpec.describe QueueItem do
           "adult": false,
           "market_url": "https://booth.pm/zh-tw/items/1",
           "sound": {
-            "short_url": "https://s.booth.pm/short.mp3",
-            "long_url": "https://s.booth.pm/long.mp3",
+            "short_url": "https://s.booth.pm/XXXXXXXX-1234-1234-1234-XXXXXXXXXXXX/s/1/short/XXXXXXXX-1234-1234-1234-XXXXXXXXXXXX.mp3",
+            "long_url": "https://s.booth.pm/XXXXXXXX-1234-1234-1234-XXXXXXXXXXXX/s/1/full/XXXXXXXX-1234-1234-1234-XXXXXXXXXXXX.mp3",
             "duration": 91
           },
           "shop": {
@@ -38,6 +43,14 @@ RSpec.describe QueueItem do
           },
         }
       }
+    end
+
+    shared_examples_for 'instance from booth response' do
+      it { is_expected.to be_present }
+
+      it 'replaces s.booth.pm with img-music.pawoo.net' do
+        expect(subject.music_url).to start_with('https://img-music.pawoo.net/booth/')
+      end
     end
 
     context 'given pawoo link' do
@@ -88,17 +101,17 @@ RSpec.describe QueueItem do
 
       context 'market url' do
         let(:url) { 'https://booth.pm/ja/items/1' }
-        it { is_expected.to be_present }
+        it_behaves_like 'instance from booth response'
       end
 
       context 'shop url' do
         let(:url) { 'https://test.booth.pm/items/1' }
-        it { is_expected.to be_present }
+        it_behaves_like 'instance from booth response'
       end
 
       context 'localized url' do
         let(:url) { 'https://booth.pm/zh-tw/items/1' }
-        it { is_expected.to be_present }
+        it_behaves_like 'instance from booth response'
       end
     end
 
@@ -109,7 +122,7 @@ RSpec.describe QueueItem do
         stub_request(:get, 'https://api.booth.pm/pixiv/items/1').and_return(body: booth_api_response.to_json)
       end
 
-      it { is_expected.to be_present }
+      it_behaves_like 'instance from booth response'
     end
 
     context 'given youtube link' do
