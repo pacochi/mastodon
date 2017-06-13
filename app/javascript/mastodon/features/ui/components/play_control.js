@@ -13,6 +13,8 @@ class MusicPlayer extends React.PureComponent {
 
   constructor (props, context) {
     super(props, context);
+    const isSp = window.innerWidth < 1024;
+
     this.state = {
       isOpen: false,
       isPlaying: false,
@@ -26,7 +28,10 @@ class MusicPlayer extends React.PureComponent {
       isLoadingArtwork: true,
       ytControl: null,
       youtubeOpts: {},
+      isSp
     };
+
+    if(isSp) return;
 
     this.audioRef = null;
     this.videoRef = null;
@@ -280,6 +285,7 @@ class MusicPlayer extends React.PureComponent {
   }
 
   render () {
+    if(this.state.isSp) return null;
     const playerClass = `player-control${this.state.isOpen ? ' is-open':''}`;
     const iconClass = `fa fa-volume-${this.state.isPlaying?'up':'off'}`;
     const toggleClass = `control-bar__controller-toggle is-${this.state.isPlaying?'playing':'pause'}`;
