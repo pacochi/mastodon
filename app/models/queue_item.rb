@@ -118,67 +118,71 @@ class QueueItem
       matched ? matched[:item_id] : nil
     end
 
-    def youtube_link(link, account)
-      video_id = find_youtube_id(link)
-      return unless video_id
+    concerning :YoutubeLink do
+      private
 
-      cache = find_cache('youtube', video_id)
-      return set_uuid(cache) if cache
+      def youtube_link(link, account)
+        video_id = find_youtube_id(link)
+        return unless video_id
 
-      title = fetch_youtube_title(link)
-      return unless title
+        cache = find_cache('youtube', video_id)
+        return set_uuid(cache) if cache
 
-      duration_sec = fetch_youtube_duration(video_id)
+        title = fetch_youtube_title(link)
+        return unless title
 
-      item = new(
-        id: SecureRandom.uuid,
-        info: title,
-        thumbnail_url: nil,
-        music_url: nil,
-        video_url: link,
-        link: link,
-        duration: duration_sec,
-        source_type: 'youtube',
-        source_id: video_id,
-        account_id: account.id
-      )
-      cache_item('youtube', video_id, item)
-    end
+        duration_sec = fetch_youtube_duration(video_id)
 
-    def fetch_youtube_duration(video_id)
-      url = "https://www.googleapis.com/youtube/v3/videos?key=#{YOUTUBE_API_KEY}&part=contentDetails&id=#{video_id}"
-      json = JSON.parse(http_client.get(url).body.to_s)
-      return if json['items'].blank?
-      item = json['items'].first
-      duration = item['contentDetails']['duration']
-      matched = duration.match(%r{PT(\d+H)?(\d+M)?(\d+S)?})
-      return unless matched
-
-      hour = matched[1]&.slice(/\d+/)&.to_i || 0
-      minute = matched[2]&.slice(/\d+/)&.to_i || 0
-      second = matched[3]&.slice(/\d+/)&.to_i || 0
-
-      second + minute * 60 + hour * 60 * 60
-    end
-
-    def fetch_youtube_title(link)
-      url = "https://www.youtube.com/oembed?url=#{link}"
-      body = http_client.get(url).body.to_s
-      return if body == 'Unauthorized'
-
-      json = JSON.parse(body)
-      json['title']
-    end
-
-    def find_youtube_id(link)
-      matched = link.match(%r{https://www\.youtube\.com/watch\?(.*)})
-      params = matched ? matched[1] : nil
-      if params
-        matched = params.match(%r{v=([^&]+)})
-        return matched[1] if matched
+        item = new(
+          id: SecureRandom.uuid,
+          info: title,
+          thumbnail_url: nil,
+          music_url: nil,
+          video_url: link,
+          link: link,
+          duration: duration_sec,
+          source_type: 'youtube',
+          source_id: video_id,
+          account_id: account.id
+        )
+        cache_item('youtube', video_id, item)
       end
-      matched = link.match(%r{https://youtu\.be/([^/^?]+)})
-      matched ? matched[1] : nil
+
+      def fetch_youtube_duration(video_id)
+        url = "https://www.googleapis.com/youtube/v3/videos?key=#{YOUTUBE_API_KEY}&part=contentDetails&id=#{video_id}"
+        json = JSON.parse(http_client.get(url).body.to_s)
+        return if json['items'].blank?
+        item = json['items'].first
+        duration = item['contentDetails']['duration']
+        matched = duration.match(%r{PT(\d+H)?(\d+M)?(\d+S)?})
+        return unless matched
+
+        hour = matched[1]&.slice(/\d+/)&.to_i || 0
+        minute = matched[2]&.slice(/\d+/)&.to_i || 0
+        second = matched[3]&.slice(/\d+/)&.to_i || 0
+
+        second + minute * 60 + hour * 60 * 60
+      end
+
+      def fetch_youtube_title(link)
+        url = "https://www.youtube.com/oembed?url=#{link}"
+        body = http_client.get(url).body.to_s
+        return if body == 'Unauthorized'
+
+        json = JSON.parse(body)
+        json['title']
+      end
+
+      def find_youtube_id(link)
+        matched = link.match(%r{https://www\.youtube\.com/watch\?(.*)})
+        params = matched ? matched[1] : nil
+        if params
+          matched = params.match(%r{v=([^&]+)})
+          return matched[1] if matched
+        end
+        matched = link.match(%r{https://youtu\.be/([^/^?]+)})
+        matched ? matched[1] : nil
+      end
     end
 
     def set_uuid(item)
