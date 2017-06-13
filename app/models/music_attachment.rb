@@ -10,11 +10,11 @@ class MusicAttachment
   validates_with MusicValidator
 
   def title=(value)
-    @title = value.slice(0, [value.length, 128].min)
+    @title = value.slice(0, 128)
   end
 
   def artist=(value)
-    @artist = value.slice(0, [value.length, 128].min)
+    @artist = value.slice(0, 128)
   end
 
   def music=(value)
