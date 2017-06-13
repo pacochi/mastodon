@@ -20,11 +20,17 @@ class MusicModal extends React.PureComponent {
     intl: PropTypes.object.isRequired,
   };
 
-  state = {
-    isClickedWaring: false,
-    imageURL: null,
-    isTermsOfUseOpen: false,
-  };
+  constructor(props, context) {
+    super(props, context);
+
+    this.state = {
+      title: this.props.title,
+      artist: this.props.artist,
+      isClickedWaring: false,
+      imageURL: null,
+      isTermsOfUseOpen: false,
+    };
+  }
 
   componentWillUnmount() {
     this.props.onResetFileKey();
@@ -32,8 +38,8 @@ class MusicModal extends React.PureComponent {
 
   handleUpload = () => {
     this.props.onUpload({
-      title: this.titleElement.value,
-      artist: this.artistElement.value,
+      title: this.state.title,
+      artist: this.state.artist,
       image: this.imageFileElement.files[0],
       music: this.props.music,
     });
@@ -67,6 +73,16 @@ class MusicModal extends React.PureComponent {
     this.setState({isTermsOfUseOpen: !this.state.isTermsOfUseOpen});
   }
 
+  onChangeTitle = (event) => {
+    const title = event.currentTarget.value;
+    this.setState({ title: title });
+  }
+
+  onChangeArtist = (event) => {
+    const artist = event.currentTarget.value;
+    this.setState({ artist: artist });
+  }
+
   setMusicRef = (c) => {
     this.musicFileElement = c;
   }
@@ -75,16 +91,10 @@ class MusicModal extends React.PureComponent {
     this.imageFileElement = c;
   }
 
-  setTitleRef = (c) => {
-    this.titleElement = c;
-  }
-
-  setArtistRef = (c) => {
-    this.artistElement = c;
-  }
-
   render () {
-    const { title, artist, intl } = this.props;
+    const { intl } = this.props;
+    const { title, artist } = this.state;
+
     const enableUploadButton = this.state.isClickedWaring && this.state.imageURL;
 
     return (
@@ -108,12 +118,12 @@ class MusicModal extends React.PureComponent {
 
           <div className="music-modal__metabox">
             <div>
-              <input className="music-modal__title" placeholder="楽曲名を入力" ref={this.setTitleRef} defaultValue={title} />
+              <input className="music-modal__title" placeholder="楽曲名を入力" onChange={this.onChangeTitle} value={this.state.title} />
             </div>
-            <input className="music-modal__artist" placeholder="作者名を入力" ref={this.setArtistRef} defaultValue={artist} />
+            <input className="music-modal__artist" placeholder="作者名を入力" onChange={this.onChangeArtist} value={artist} />
             <span className="music-modal__info">※128文字を超える部分は自動的にカットされます</span>
 
-            <input type="file" name="music"   accept="audio/*" ref={this.setMusicRef} />
+            <input type="file" name="music" accept="audio/*" ref={this.setMusicRef} />
             <input type="file" name="image" accept="image/*" ref={this.setImageRef} onChange={this.handleOnSelectImage} />
           </div>
         </div>
