@@ -88,6 +88,7 @@ class MusicModal extends React.PureComponent {
               return (
                 <div className="music-modal__artwork-none icon-button" onClick={this.handleChooseImage} >
                   <i style={{ fontSize: '30px' }} className={`fa fa-fw fa-camera`} aria-hidden='true' />
+                  <span className="music-modal__artwork-info">画像を<br />アップロード<br />（必須）</span>
                 </div>
               );
             })()}

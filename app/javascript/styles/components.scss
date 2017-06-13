@@ -3476,14 +3476,22 @@ button.icon-button.active i.fa-retweet {
     display: flex;
     align-items: center;
     justify-content: center;
-  }
+  ｝
 
   .music-modal__artwork-exist{
     background-size: cover;
   }
 
   .music-modal__artwork-none{
+    flex-direction: column;
     background: rgba(0,0,0,0.1);
+  }
+
+  .music-modal__artwork-info{
+    padding-top: 5px;
+    text-align: center;
+    font-size: 9px;
+    line-height: 1.2;
   }
 
   .action-bar__checkarea{
