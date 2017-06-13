@@ -406,16 +406,16 @@ class MusicPlayer extends React.PureComponent {
               <ul className="deck__queue">
                 {(()=>{
                   if(this.isDeckInActive() ){
-                    return (
+                    return [0,1,2,3,4,5,6,7,8,9].map((_,index)=>(
                       <li className="deck__queue-item">
                         <div className="queue-item__main">
                           <div className='queue-item__metadata'>
-                            プレイリストに曲がありません
+                            {!index ? 'プレイリストに曲がありません' : ''}
                           </div>
                         </div>
                         <div className='queue-item__datasource' />
                       </li>
-                    );
+                    ));
                   }
 
                   return this.state.deck.queues.map(queue_item=>(
