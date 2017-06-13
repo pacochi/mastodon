@@ -30,7 +30,9 @@ function main() {
     const props = JSON.parse(mountNode.getAttribute('data-props'));
 
     ReactDOM.render(<Mastodon {...props} />, mountNode);
-    ReactDOM.render(<PlayControl isTop={true} onError={function(){}} streamingAPIBaseURL={playControlInitialState.streaming_api_base_url} accessToken={playControlInitialState.access_token} />, mountAboutPlayControl);
+    if (mountAboutPlayControl) {
+      ReactDOM.render(<PlayControl isTop={true} onError={function(){}} streamingAPIBaseURL={playControlInitialState.streaming_api_base_url} accessToken={playControlInitialState.access_token} />, mountAboutPlayControl);
+    }
     perf.stop('main()');
   });
 }
