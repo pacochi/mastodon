@@ -13,11 +13,17 @@ class QueueItem
     YOUTUBE_API_KEY = ENV['YOUTUBE_API_KEY']
 
     def create_from_link(link, account)
-      return if link.blank?
+      return if link.blank? || addressable_link(link).nil?
       pawoo_link(link, account) || booth_link(link, account) || apollo_link(link, account) || youtube_link(link, account)
     end
 
     private
+
+    def addressable_link(link)
+      Addressable::URI.parse(link)
+    rescue
+      nil
+    end
 
     def pawoo_link(link, account)
       status_id = find_status_id(link)
@@ -118,70 +124,66 @@ class QueueItem
       matched ? matched[:item_id] : nil
     end
 
-    concerning :YoutubeLink do
-      private
+    def youtube_link(link, account)
+      video_id = find_youtube_id(link)
+      return unless video_id
 
-      def youtube_link(link, account)
-        video_id = find_youtube_id(link)
-        return unless video_id
+      cache = find_cache('youtube', video_id)
+      return set_uuid(cache) if cache
 
-        cache = find_cache('youtube', video_id)
-        return set_uuid(cache) if cache
+      title = fetch_youtube_title(link)
+      return unless title
 
-        title = fetch_youtube_title(link)
-        return unless title
+      duration_sec = fetch_youtube_duration(video_id)
 
-        duration_sec = fetch_youtube_duration(video_id)
+      item = new(
+        id: SecureRandom.uuid,
+        info: title,
+        thumbnail_url: nil,
+        music_url: nil,
+        video_url: link,
+        link: link,
+        duration: duration_sec,
+        source_type: 'youtube',
+        source_id: video_id,
+        account_id: account.id
+      )
+      cache_item('youtube', video_id, item)
+    end
 
-        item = new(
-          id: SecureRandom.uuid,
-          info: title,
-          thumbnail_url: nil,
-          music_url: nil,
-          video_url: link,
-          link: link,
-          duration: duration_sec,
-          source_type: 'youtube',
-          source_id: video_id,
-          account_id: account.id
-        )
-        cache_item('youtube', video_id, item)
-      end
+    def fetch_youtube_duration(video_id)
+      url = "https://www.googleapis.com/youtube/v3/videos?key=#{YOUTUBE_API_KEY}&part=contentDetails&id=#{video_id}"
+      json = JSON.parse(http_client.get(url).body.to_s)
+      return if json['items'].blank?
+      item = json['items'].first
+      duration = item['contentDetails']['duration']
+      matched = duration.match(%r{PT(\d+H)?(\d+M)?(\d+S)?})
+      return unless matched
 
-      def fetch_youtube_duration(video_id)
-        url = "https://www.googleapis.com/youtube/v3/videos?key=#{YOUTUBE_API_KEY}&part=contentDetails&id=#{video_id}"
-        json = JSON.parse(http_client.get(url).body.to_s)
-        return if json['items'].blank?
-        item = json['items'].first
-        duration = item['contentDetails']['duration']
-        matched = duration.match(%r{PT(\d+H)?(\d+M)?(\d+S)?})
-        return unless matched
+      hour = matched[1]&.slice(/\d+/)&.to_i || 0
+      minute = matched[2]&.slice(/\d+/)&.to_i || 0
+      second = matched[3]&.slice(/\d+/)&.to_i || 0
 
-        hour = matched[1]&.slice(/\d+/)&.to_i || 0
-        minute = matched[2]&.slice(/\d+/)&.to_i || 0
-        second = matched[3]&.slice(/\d+/)&.to_i || 0
+      second + minute * 60 + hour * 60 * 60
+    end
 
-        second + minute * 60 + hour * 60 * 60
-      end
+    def fetch_youtube_title(link)
+      url = "https://www.youtube.com/oembed?url=#{link}"
+      response = http_client.get(url)
 
-      def fetch_youtube_title(link)
-        url = "https://www.youtube.com/oembed?url=#{link}"
-        body = http_client.get(url).body.to_s
-        return if body == 'Unauthorized'
+      return unless response.status == 200
 
-        json = JSON.parse(body)
-        json['title']
-      end
+      json = JSON.parse(response.body.to_s)
+      json['title']
+    end
 
-      def find_youtube_id(link)
-        matched = link.match(%r{https://www\.youtube\.com/watch\?(.*)})
-        params = matched ? matched[1] : nil
-        if params
-          matched = params.match(%r{v=([^&]+)})
-          return matched[1] if matched
-        end
-        matched = link.match(%r{https://youtu\.be/([^/^?]+)})
-        matched ? matched[1] : nil
+    def find_youtube_id(link)
+      addressable = addressable_link(link)
+
+      if addressable.hostname == 'www.youtube.com' && addressable.path == '/watch'
+        addressable.query_values['v']
+      elsif addressable.hostname == 'youtu.be' && addressable.path.match?(%r{\A/[^/^?]+})
+        addressable.path.remove(%r{\A/})
       end
     end
 
