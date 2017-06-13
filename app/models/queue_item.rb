@@ -64,25 +64,15 @@ class QueueItem
       cache = find_cache('apollo', shop_id)
       return set_uuid(cache) if cache
 
-      json = JSON.parse(http_client.get("https://api.booth.pm/pixiv/items/#{shop_id}").body.to_s)
+      if instance = from_booth_api(shop_id)
+        instance.assign_attributes(
+          link: link,
+          source_type: 'apollo',
+          account_id: account.id
+        )
 
-      return if json['body']['sound'].nil? || json['body']['adult']
-
-      user_or_shop_name = json['body']['shop']['user']['nickname'] || json['body']['shop']['name']
-      item = new(
-        id: SecureRandom.uuid,
-        info: "#{json['body']['name']} - #{user_or_shop_name}",
-        thumbnail_url: json['body']['primary_image']['url'],
-        music_url: BoothUrl.new(json['body']['sound']['long_url']).to_img_music_pawoo_domain,
-        video_url: nil,
-        duration: json['body']['sound']['duration'],
-        link: link,
-        source_type: 'apollo',
-        source_id: shop_id,
-        account_id: account.id,
-      )
-
-      cache_item('apollo', shop_id, item)
+        cache_item('apollo', shop_id, instance)
+      end
     end
 
     def booth_link(link, account)
@@ -92,25 +82,15 @@ class QueueItem
       cache = find_cache('booth', shop_id)
       return set_uuid(cache) if cache
 
-      json = JSON.parse(http_client.get("https://api.booth.pm/pixiv/items/#{shop_id}").body.to_s)
+      if instance = from_booth_api(shop_id)
+        instance.assign_attributes(
+          link: link,
+          source_type: 'booth',
+          account_id: account.id
+        )
 
-      return if json['body']['sound'].nil? || json['body']['adult']
-
-      user_or_shop_name = json['body']['shop']['user']['nickname'] || json['body']['shop']['name']
-      item = new(
-        id: SecureRandom.uuid,
-        info: "#{json['body']['name']} - #{user_or_shop_name}",
-        thumbnail_url: json['body']['primary_image']['url'],
-        music_url: BoothUrl.new(json['body']['sound']['long_url']).to_img_music_pawoo_domain,
-        video_url: nil,
-        duration: json['body']['sound']['duration'],
-        link: link,
-        source_type: 'booth',
-        source_id: shop_id,
-        account_id: account.id,
-      )
-
-      cache_item('booth', shop_id, item)
+        cache_item('booth', shop_id, instance)
+      end
     end
 
     def find_shop_id(link)
@@ -179,6 +159,23 @@ class QueueItem
       end
       matched = link.match(%r{https://youtu\.be/([^/^?]+)})
       matched ? matched[1] : nil
+    end
+
+    def from_booth_api(id)
+      code, json = BoothApiClient.new.item(id)
+      return if code != 200 || json.dig('body', 'sound').nil? || json.dig('body', 'adult')
+
+      user_or_shop_name = json.dig('body', 'shop', 'user', 'nickname') || json.dig('body', 'shop', 'name')
+
+      new(
+        id: SecureRandom.uuid,
+        info: "#{json.dig('body', 'name')} - #{user_or_shop_name}",
+        thumbnail_url: json.dig('body', 'primary_image', 'url'),
+        music_url: json.dig('body', 'sound', 'long_url'),
+        video_url: nil,
+        duration: json.dig('body', 'sound', 'duration'),
+        source_id: id,
+      )
     end
 
     def set_uuid(item)
