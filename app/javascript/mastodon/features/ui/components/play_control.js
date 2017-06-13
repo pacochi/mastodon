@@ -13,6 +13,8 @@ class MusicPlayer extends React.PureComponent {
 
   constructor (props, context) {
     super(props, context);
+    this.isSp = window.innerWidth < 1024;
+
     this.state = {
       isOpen: false,
       isPlaying: false,
@@ -49,6 +51,7 @@ class MusicPlayer extends React.PureComponent {
   }
 
   componentDidMount () {
+    if(this.isSp) return;
     this.fetchDeck(1);
     this.setSubscription(1);
   }
@@ -280,6 +283,7 @@ class MusicPlayer extends React.PureComponent {
   }
 
   render () {
+    if(this.isSp) return null;
     const playerClass = `player-control${this.state.isOpen ? ' is-open':''}`;
     const iconClass = `fa ${this.state.isPlaying?'fa-volume-up':'fa-play'}`;
     const toggleClass = `control-bar__controller-toggle is-${this.state.isPlaying?'playing':'pause'}`;
