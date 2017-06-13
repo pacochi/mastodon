@@ -288,9 +288,18 @@ class MusicPlayer extends React.PureComponent {
             <div className={toggleClass} onClick={this.handleClickToggle}>
               <i className={iconClass} />
             </div>
-            <div className='control-bar__controller-skip' onClick={this.handleClickSkip}>
-              SKIP
-            </div>
+
+            {(()=>{
+              if(this.props.isTop) {
+                return null;
+              }
+              return (
+                <div className='control-bar__controller-skip' onClick={this.handleClickSkip}>
+                  SKIP
+                </div>
+              );
+            })()}
+
             {(()=>{
               if(this.isDeckInActive() ) return null;
               return (
@@ -374,13 +383,20 @@ class MusicPlayer extends React.PureComponent {
                     )
                   );
                 })()}
-                <li className="deck__queue-add-form">
-                  <form onSubmit={this.handleSubmitAddForm}>
-                    <span>曲を追加</span>
-                    <input ref={this.setURLRef} type="text" placeholder="URLを入力(Pawoo Music, APOLLO(BOOTH) and YouTube URL)" required />
-                    <input type="submit" />
-                  </form>
-                </li>
+                {(()=>{
+                  if(this.props.isTop) {
+                    return null;
+                  }
+                  return (
+                    <li className="deck__queue-add-form">
+                      <form onSubmit={this.handleSubmitAddForm}>
+                        <span>曲を追加</span>
+                        <input ref={this.setURLRef} type="text" placeholder="URLを入力(Pawoo Music, APOLLO(BOOTH) and YouTube URL)" required />
+                        <input type="submit" />
+                      </form>
+                    </li>
+                  );
+                })()}
               </ul>
             </div>
           </div>
@@ -396,6 +412,7 @@ class MusicPlayer extends React.PureComponent {
 MusicPlayer.propTypes = {
   accessToken: PropTypes.string.isRequired,
   streamingAPIBaseURL: PropTypes.string.isRequired,
+  isTop: PropTypes.bool.isRequired,
   onError: PropTypes.func.isRequired,
 };
 
