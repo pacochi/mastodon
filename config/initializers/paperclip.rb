@@ -34,6 +34,12 @@ if ENV['S3_ENABLED'] == 'true'
     secret_access_key: ENV.fetch('AWS_SECRET_ACCESS_KEY'),
   }
 
+  # fixed #57
+  Paperclip.interpolates(:s3_domain_url) do |attachment, style|
+    # before: "#{attachment.s3_protocol(style, true)}//#{attachment.bucket_name}.#{attachment.s3_host_name}/#{attachment.path(style).sub(%r{\A/}, "".freeze)}"
+    "#{attachment.s3_protocol(style, true)}//#{attachment.bucket_name}/#{attachment.path(style).sub(%r{\A/}, '')}"
+  end
+
   unless ENV['S3_ENDPOINT'].blank?
     Paperclip::Attachment.default_options[:s3_options] = {
       endpoint: ENV['S3_ENDPOINT'],
