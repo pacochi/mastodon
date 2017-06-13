@@ -91,11 +91,17 @@ class MusicModal extends React.PureComponent {
     this.imageFileElement = c;
   }
 
+  isValidString(value) {
+    return value.replace(/\s/, '').length > 0;
+  }
+
   render () {
     const { intl } = this.props;
     const { title, artist } = this.state;
 
-    const enableUploadButton = this.state.isClickedWaring && this.state.imageURL;
+    const validTitle = this.isValidString(this.state.title);
+    const validArtist = this.isValidString(this.state.artist);
+    const enableUploadButton = this.state.isClickedWaring && this.state.imageURL && validTitle && validArtist;
 
     return (
       <div className='modal-root__modal music-modal'>
