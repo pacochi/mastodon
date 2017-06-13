@@ -12,10 +12,6 @@ import {
   ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS,
 } from '../actions/accounts';
 import {
-  SUGGESTED_ACCOUNTS_FETCH_SUCCESS,
-  SUGGESTED_ACCOUNTS_EXPAND_SUCCESS,
-} from '../actions/suggested_accounts';
-import {
   STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
   STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS,
 } from '../actions/search';
@@ -141,9 +137,6 @@ export default function accounts(state = initialState, action) {
   case TIMELINE_UPDATE:
   case STATUS_FETCH_SUCCESS:
     return normalizeAccountFromStatus(state, action.status);
-  case SUGGESTED_ACCOUNTS_FETCH_SUCCESS:
-  case SUGGESTED_ACCOUNTS_EXPAND_SUCCESS:
-    return normalizeAccounts(state, action.accounts);
   default:
     return state;
   }

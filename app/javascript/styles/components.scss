@@ -810,41 +810,6 @@
   margin-right: 12px;
 }
 
-.suggested_accounts__scrollable {
-  $button-height: 36px;
-
-  position: relative;
-
-  .suggested_accounts__local_timeline_button {
-    height: 30px;
-  }
-
-  .account__suggested_accounts_media {
-    padding-left: 13px;
-    $media-height: 90px;
-
-    .media-gallery {
-      max-height: $media-height;
-    }
-
-    .media-gallery__item {
-      max-height: $media-height;
-    }
-  }
-
-  .load-more {
-    margin-bottom: $button-height;
-  }
-
-  .button {
-    position: absolute;
-    bottom: 0;
-    width: 97%;
-    height: $button-height;
-    line-height: $button-height;
-  }
-}
-
 .account__avatar {
   @include avatar-radius();
   position: relative;

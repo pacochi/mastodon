@@ -26,7 +26,6 @@
   "column.mutes": "Muted users",
   "column.notifications": "Notifications",
   "column.public": "Federated timeline",
-  "column.suggested_accounts": "Active Accounts",
   "column.search_toots": "Search: \"{keyword}\"",
   "column_back_button.label": "Back",
   "column_subheading.navigation": "Navigation",
