@@ -13,6 +13,8 @@ class Api::V1::PlaylistsController < ApiController
         number: params[:deck],
         time_offset: items.blank? ? 0 : @playlist.current_time_sec,
         queues: items,
+        max_add_count: Playlist::MAX_ADD_COUNT,
+        max_skip_count: Playlist::MAX_SKIP_COUNT,
       },
     }
   end

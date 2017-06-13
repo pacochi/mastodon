@@ -321,38 +321,55 @@ class MusicPlayer extends React.PureComponent {
               )))()}
             </ul>
             <div className="deck_queue-wrapper">
-              <div className="queue-item__artwork" style={nowPlayingArtwork}>
+              <div className="deck_queue-column">
+                <div className="queue-item__artwork" style={nowPlayingArtwork}>
+                  {(()=>{
+
+                    if(this.state.isLoadingArtwork){
+                      return (
+                        <div className='loading' />
+                      );
+                    }
+
+                    if(this.isDeckInActive() ) return null;
+
+                    if(this.state.deck.queues[0].source_type === 'youtube'){
+                      return (
+                        <YouTube
+                          videoId={this.state.deck.queues[0].source_id}
+                          opts={this.state.youtubeOpts}
+                          onReady={this.onReadyYouTube}
+                        />
+                      );
+                    }
+
+                    if(this.state.deck.queues[0].video_url){
+                      return (
+                        <video ref={this.setVideoRef} autoPlay style={nowPlayingArtwork} muted={!this.state.isPlaying}>
+                          <source src={this.state.deck.queues[0].video_url}/>
+                        </video>
+                      );
+                    }else{
+                      return (
+                        <audio ref={this.setAudioRef} autoPlay src={this.state.deck.queues[0].music_url} muted={!this.state.isPlaying} />
+                      );
+                    }
+                  })()}
+                </div>
                 {(()=>{
-
-                  if(this.state.isLoadingArtwork){
-                    return (
-                      <div className='loading' />
-                    );
-                  }
-
-                  if(this.isDeckInActive() ) return null;
-
-                  if(this.state.deck.queues[0].source_type === 'youtube'){
-                    return (
-                      <YouTube
-                        videoId={this.state.deck.queues[0].source_id}
-                        opts={this.state.youtubeOpts}
-                        onReady={this.onReadyYouTube}
-                      />
-                    );
-                  }
-
-                  if(this.state.deck.queues[0].video_url){
-                    return (
-                      <video ref={this.setVideoRef} autoPlay style={nowPlayingArtwork} muted={!this.state.isPlaying}>
-                        <source src={this.state.deck.queues[0].video_url}/>
-                      </video>
-                    );
-                  }else{
-                    return (
-                      <audio ref={this.setAudioRef} autoPlay src={this.state.deck.queues[0].music_url} muted={!this.state.isPlaying} />
-                    );
-                  }
+                  if(!this.state.deck || !this.state.deck.max_add_count || !this.state.deck.max_skip_count) return null;
+                  return (
+                    <div className="queue-item__restrictions">
+                      <div className="queue-item__restrictions-title">
+                        <i className="fa fa-fw fa-info-circle" />
+                        <span>楽曲追加・SKIPについて</span>
+                      </div>
+                      <ul className="queue-item__restrictions-list">
+                        <li>プレイリストに楽曲を追加できる回数は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_add_count}回まで</span>です</li>
+                        <li>SKIPできる回数は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_skip_count}回まで</span>です</li>
+                      </ul>
+                    </div>
+                  );
                 })()}
               </div>
               <ul className="deck__queue">
@@ -392,8 +409,8 @@ class MusicPlayer extends React.PureComponent {
                     <li className="deck__queue-add-form">
                       <form onSubmit={this.handleSubmitAddForm}>
                         <span>曲を追加</span>
-                        <input ref={this.setURLRef} type="text" placeholder="URLを入力(Pawoo Music, APOLLO(BOOTH) and YouTube URL)" required />
-                        <input type="submit" />
+                        <input ref={this.setURLRef} type="text" placeholder="URLを入力 (Pawoo Music, APOLLO(BOOTH) and YouTube URL)" required />
+                        <input type="submit" value="追加" />
                       </form>
                     </li>
                   );

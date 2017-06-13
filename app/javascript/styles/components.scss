@@ -4180,6 +4180,43 @@ button.icon-button.active i.fa-retweet {
         }
       }
 
+      .queue-item__restrictions{
+        margin: 25px;
+        width: 240px;
+        line-height: 1.4;
+
+        .queue-item__restrictions-title{
+          border-radius: 8px 8px 0 0;
+          padding: 10px;
+          background: #545454;
+          color: $white;
+          text-align: center;
+
+          i {
+            padding-right: 5px;
+          }
+        }
+
+        .queue-item__restrictions-list{
+          border-width: 0 1px 1px 1px;
+          border-color: #545454;
+          border-style: solid;
+          border-radius: 0 0 8px 8px;
+          padding: 10px;
+          background: #EFEFEF;
+          font-size: smaller;
+          font-weight: normal;
+        }
+
+        ul li{
+          margin: 5px 0;
+
+          .queue-item__restrictions-num{
+            font-weight: bold;
+          }
+        }
+      }
+
       .deck__queue{
         flex: 1;
         align-items: flex-start;
@@ -4204,6 +4241,8 @@ button.icon-button.active i.fa-retweet {
               width: 60px;
               align-items: center;
               justify-content: center;
+              color: #EF2463;
+              font-weight: bold;
             }
 
             input[type="text"]{
