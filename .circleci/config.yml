@@ -60,7 +60,7 @@ jobs:
       - restore_cache:
           key: assets/{{ checksum "tmp/circleci/master.hash" }}/1
       - run:
-          command: ./bin/rake assets:precompile assets:clean && touch tmp/circleci/assets.done
+          command: ./bin/rake assets:precompile && touch tmp/circleci/assets.done
           background: true
 
       # Database schema
