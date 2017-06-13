@@ -3483,7 +3483,15 @@ button.icon-button.active i.fa-retweet {
   }
 
   .music-modal__artwork-none{
+    flex-direction: column;
     background: rgba(0,0,0,0.1);
+  }
+
+  .music-modal__artwork-info{
+    padding-top: 5px;
+    text-align: center;
+    font-size: 9px;
+    line-height: 1.2;
   }
 
   .action-bar__checkarea{
@@ -3504,6 +3512,18 @@ button.icon-button.active i.fa-retweet {
   padding: 10px;
   display: flex;
   justify-content: space-between;
+}
+
+.music-modal__info {
+  display: block;
+  margin-top: 7px;
+  color: $ui-primary-color;
+  font-size: smaller;
+}
+
+.music-modal__link-terms-of-use {
+  text-decoration: underline dotted;
+  color: $ui-highlight-color;
 }
 
 .confirmation-modal__action-bar {

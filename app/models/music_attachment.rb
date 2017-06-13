@@ -9,6 +9,14 @@ class MusicAttachment
   validates :image, presence: true
   validates_with MusicValidator
 
+  def title=(value)
+    @title = value.slice(0, 128)
+  end
+
+  def artist=(value)
+    @artist = value.slice(0, 128)
+  end
+
   def music=(value)
     @music = value
     # remove cover images if exist (to simplify mimetype decision)
