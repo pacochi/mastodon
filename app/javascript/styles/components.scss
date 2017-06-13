@@ -4324,7 +4324,7 @@ button.icon-button.active i.fa-retweet {
         }
 
         &.active,
-        &:hover{
+        &:not(.disabled):hover{
           color: #333;
           background: #fff;
           img{
@@ -4333,6 +4333,9 @@ button.icon-button.active i.fa-retweet {
               opacity: 0.8;
             }
           }
+        }
+        &.disabled{
+          cursor: default;
         }
 
         &.active{
