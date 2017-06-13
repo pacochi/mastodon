@@ -1,7 +1,5 @@
 import main from '../mastodon/main';
 
-console.log('hello world');
-
 const needsBasePolyfills = !(
   window.Intl &&
   Object.assign &&
