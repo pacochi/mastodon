@@ -50,16 +50,6 @@ module StatusSearchable
         {}
       end
     end
-
-    after_commit on: [:create] do
-      if postable_to_es?
-        PostStatusToESWorker.perform_async(id)
-      end
-    end
-
-    after_commit on: [:destroy] do
-      RemoveStatusFromESWorker.perform_async(__elasticsearch__.index_name, __elasticsearch__.document_type, id)
-    end
   end
 
   class_methods do
