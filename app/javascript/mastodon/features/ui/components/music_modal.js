@@ -117,7 +117,7 @@ class MusicModal extends React.PureComponent {
             <input className='music-modal__checkbox-confirm' id="checkbox-confirm" type="checkbox" checked={this.state.isClickedWaring} onChange={this.handleChangeCheckbox} />
             <div className='music-modal__checkbox-content'>
               <label htmlFor="checkbox-confirm">
-                作品（画像、音源、楽曲、テキスト等を含む）のアップロードにおいて、<span className='music-modal__link-terms-of-use' onClick={this.handleShowTermsOfUse}>注意事項</span>を守ることを誓います。
+                作品（画像、音源、楽曲、テキスト等を含む）のアップロードにおいて、<span className='music-modal__link-terms-of-use' onClick={this.handleShowTermsOfUse}>注意事項▼</span>を守ることを誓います。
               </label>
             </div>
             <div className='music-modal__submit-button'>
