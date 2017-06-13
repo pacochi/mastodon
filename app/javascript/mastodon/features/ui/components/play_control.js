@@ -119,11 +119,17 @@ class MusicPlayer extends React.PureComponent {
         switch (deck.queues[0].source_type) {
           case 'pawoo-music': {
             this.videoRef.currentTime = deck.time_offset;
+            this.videoRef.addEventListener("canplaythrough", ()=>{
+              this.videoRef.currentTime = deck.time_offset;
+            });
           }
             break;
           case 'booth':
           case 'apollo': {
             this.audioRef.currentTime = deck.time_offset;
+            this.audioRef.addEventListener("canplaythrough", ()=>{
+              this.audioRef.currentTime = deck.time_offset;
+            });
           }
             break;
         }
