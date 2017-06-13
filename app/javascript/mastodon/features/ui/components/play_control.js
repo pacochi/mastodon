@@ -402,7 +402,7 @@ class MusicPlayer extends React.PureComponent {
                                 <img src="/player/logos/pawoo-music.svg" />
                                 <div className='platform-info'>
                                   <div className='platform-info__title'>Pawoo Music</div>
-                                  <div className='platform-info__url'>http://pawoo.net/web/statuses/[XXXXX…]</div>
+                                  <div className='platform-info__url'>https://music.pawoo.net/web/statuses/[XXXXX…]</div>
                                 </div>
                               </li>
                               <li>
