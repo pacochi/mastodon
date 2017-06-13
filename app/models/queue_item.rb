@@ -13,11 +13,17 @@ class QueueItem
     YOUTUBE_API_KEY = ENV['YOUTUBE_API_KEY']
 
     def create_from_link(link, account)
-      return if link.blank?
+      return if link.blank? || addressable_link(link).nil?
       pawoo_link(link, account) || booth_link(link, account) || apollo_link(link, account) || youtube_link(link, account)
     end
 
     private
+
+    def addressable_link(link)
+      Addressable::URI.parse(link)
+    rescue
+      nil
+    end
 
     def pawoo_link(link, account)
       status_id = find_status_id(link)
@@ -143,22 +149,22 @@ class QueueItem
 
     def fetch_youtube_title(link)
       url = "https://www.youtube.com/oembed?url=#{link}"
-      body = http_client.get(url).body.to_s
-      return if body == 'Unauthorized'
+      response = http_client.get(url)
 
-      json = JSON.parse(body)
+      return unless response.status == 200
+
+      json = JSON.parse(response.body.to_s)
       json['title']
     end
 
     def find_youtube_id(link)
-      matched = link.match(%r{https://www\.youtube\.com/watch\?(.*)})
-      params = matched ? matched[1] : nil
-      if params
-        matched = params.match(%r{v=([^&]+)})
-        return matched[1] if matched
+      addressable = addressable_link(link)
+
+      if addressable.hostname == 'www.youtube.com' && addressable.path == '/watch'
+        addressable.query_values['v']
+      elsif addressable.hostname == 'youtu.be' && addressable.path.match?(%r{\A/[^/^?]+})
+        addressable.path.remove(%r{\A/})
       end
-      matched = link.match(%r{https://youtu\.be/([^/^?]+)})
-      matched ? matched[1] : nil
     end
 
     def from_booth_api(id)

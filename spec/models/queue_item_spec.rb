@@ -153,6 +153,8 @@ RSpec.describe QueueItem do
         }
       end
 
+      let(:oembed_status) { 200 }
+
       let(:youtube_oembed_response) do
         {
           "height": 270,
@@ -175,7 +177,7 @@ RSpec.describe QueueItem do
         stub_request(:get, api_url).and_return(body: youtube_api_response.to_json)
 
         oembed_url = "https://www.youtube.com/oembed?url=#{url}"
-        stub_request(:get, oembed_url).and_return(body: youtube_oembed_response.to_json)
+        stub_request(:get, oembed_url).and_return(status: oembed_status, body: youtube_oembed_response.to_json)
       end
 
       context 'long youtube link' do
@@ -186,6 +188,13 @@ RSpec.describe QueueItem do
       context 'short youtube link' do
         let(:url) { 'https://youtu.be/1' }
         it { is_expected.to be_present }
+      end
+
+      context 'not found' do
+        let(:url) { 'https://youtu.be/1' }
+        let(:youtube_oembed_status) { 404 }
+        let(:youtube_oembed_response) { 'Not Found' }
+        it { is_expected.to be_nil }
       end
     end
   end
