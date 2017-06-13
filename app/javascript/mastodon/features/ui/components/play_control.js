@@ -27,7 +27,7 @@ class MusicPlayer extends React.PureComponent {
       isSeekbarActive: false,
       isLoadingArtwork: true,
       ytControl: null,
-      youtubeOpts: {}
+      youtubeOpts: {},
     };
 
     this.audioRef = null;
