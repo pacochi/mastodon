@@ -4,6 +4,8 @@ import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import IconButton from '../../../components/icon_button';
 import Button from '../../../components/button';
 
+const storageKey = 'music_modal_clicked_warning';
+
 class MusicModal extends React.PureComponent {
 
   static contextTypes = {
@@ -23,10 +25,18 @@ class MusicModal extends React.PureComponent {
   constructor(props, context) {
     super(props, context);
 
+    let isClickedWaring = false;
+
+    try {
+      isClickedWaring = localStorage.getItem(storageKey) == '1';
+    } catch (e) {
+      // Do nothing for private safari
+    }
+
     this.state = {
       title: this.props.title,
       artist: this.props.artist,
-      isClickedWaring: false,
+      isClickedWaring: isClickedWaring,
       imageURL: null,
       isTermsOfUseOpen: false,
     };
@@ -64,13 +74,21 @@ class MusicModal extends React.PureComponent {
     });
   }
 
-  handleChangeCheckbox = (e) => {
-    this.setState({isClickedWaring: !this.state.isClickedWaring});
+  handleChangeCheckbox = () => {
+    const newValue = !this.state.isClickedWaring;
+
+    try {
+      localStorage.setItem(storageKey, newValue ? '1' : '0');
+    } catch (e) {
+      // Do nothing for private safari
+    }
+
+    this.setState({ isClickedWaring: newValue });
   }
 
   handleShowTermsOfUse = (e) => {
     e.preventDefault();
-    this.setState({isTermsOfUseOpen: !this.state.isTermsOfUseOpen});
+    this.setState({ isTermsOfUseOpen: !this.state.isTermsOfUseOpen });
   }
 
   onChangeTitle = (event) => {
