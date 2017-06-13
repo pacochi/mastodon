@@ -5,6 +5,11 @@
   -ms-overflow-style: -ms-autohiding-scrollbar;
 }
 
+.notification-list{
+  transform: translate(0, 15px);
+  z-index: 200;
+}
+
 .button {
   background-color: darken($ui-highlight-color, 3%);
   border: 10px none;
@@ -3925,7 +3930,7 @@ button.icon-button.active i.fa-retweet {
   bottom: 0;
   width: 100%;
   height: 56px;
-  z-index: 5000000000000000;
+  z-index: 199;
 
   .player-seekbar{
     position: absolute;
@@ -4068,7 +4073,6 @@ button.icon-button.active i.fa-retweet {
     font-size: 14px;
     font-weight: bold;
     letter-spacing: 1.0px;
-    overflow: hidden;
 
     background: #fff;
     transform: translate3d(0,0,0);
@@ -4093,6 +4097,7 @@ button.icon-button.active i.fa-retweet {
       justify-content: flex-start;
       transition: height 0.3s ease-out;
       background: #545454;
+      overflow-y: hidden;
 
       margin: 0;
       padding: 0;
@@ -4116,6 +4121,7 @@ button.icon-button.active i.fa-retweet {
         background: #fff;
         border-right: solid 1px #fff;
         transition: background 0.3s ease-out, border-right 0.3s ease-out;
+        margin-bottom: 0;
 
         img{
           width: 18px;
@@ -4242,6 +4248,101 @@ button.icon-button.active i.fa-retweet {
               font-weight: bold;
             }
 
+            .deck__queue-add-form-help{
+              width: 32px;
+              height: 32px;
+              overflow: visible;
+              position: relative;
+
+              &:hover{
+                .deck__queue-add-form-help-popup{
+                  pointer-events: auto;
+                  opacity: 1.0;
+                  transform: translate(0, 0px);
+                }
+              }
+
+              .deck__queue-add-form-help-popup{
+                opacity: 0.0;
+                pointer-events: none;
+
+                position: absolute;
+                left: -410px;
+                top: -355px;
+
+                width: 420px;
+                height: 330px;
+                background: #333;
+
+                transition: transform 0.3s ease-out, opacity 0.3s ease-out;
+                transform: translate(0, -10px);
+
+                &::after{
+                  position: absolute;
+                  right: 0;
+                  bottom: -20px;
+                  content: "";
+                  border: solid 20px transparent;
+                  display: block;
+                  border-right: solid 20px #333;
+                }
+
+                h3{
+                  padding: 10px;
+                  color: #fff;
+                  font-weight: normal;
+                  font-size: 14px;
+                  letter-spacing: 1.4px;
+                }
+
+                ul{
+
+                  li{
+                    display: flex;
+                    align-items: center;
+                    justify-content: flex-start;
+                    padding: 10px;
+                    width: calc(100% - 20px);
+
+                    img{
+                      width: 40px;
+                      height: 40px;
+                      margin: 5px 10px;
+                      background: #fff;
+                      border-radius: 50%;
+                    }
+
+                    .platform-info{
+                      flex: 1;
+
+                      .platform-info__title{
+                        display: block;
+                        margin: 0;
+                        padding: 0;
+                        color: #fff;
+                        font-size: 14px;
+                        margin-bottom: 4px;
+                      }
+
+                      .platform-info__url{
+                        margin: 0;
+                        padding: 0;
+                        font-size: 11px;
+                        color: #ccc;
+                      }
+                    }
+                  }
+
+                }
+              }
+
+              .deck__queue-add-form-help-icon{
+                font-size: 22px;
+                color: #F21D61;
+                cursor: pointer;
+              }
+            }
+
             input[type="text"]{
               flex: 1;
               margin: 0 10px;
@@ -4361,6 +4462,7 @@ button.icon-button.active i.fa-retweet {
 
     .control-bar__deck-selector{
       height: 550px;
+      overflow: hidden;
 
       .deck-selector__selector-body{
         color: #999;
@@ -4380,7 +4482,7 @@ button.icon-button.active i.fa-retweet {
         }
 
         &.active,
-        &:hover{
+        &:not(.disabled):hover{
           color: #333;
           background: #fff;
           img{
@@ -4389,6 +4491,9 @@ button.icon-button.active i.fa-retweet {
               opacity: 0.8;
             }
           }
+        }
+        &.disabled{
+          cursor: default;
         }
 
         &.active{
