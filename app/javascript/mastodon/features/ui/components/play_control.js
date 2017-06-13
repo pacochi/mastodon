@@ -288,7 +288,7 @@ class MusicPlayer extends React.PureComponent {
     let playerSeekBarStyle = {};
     let nowPlayingArtwork = {};
     let ytplayerStyle = {};
-    const deckStyle = {
+    const deckSelectorStyle = {
       transform: `translate(0, -${(!this.state.isOpen) ? (this.state.targetDeck-1)*56 : 0}px)`,
     };
 
@@ -343,9 +343,9 @@ class MusicPlayer extends React.PureComponent {
             })()}
           </div>
           <div className='control-bar__deck' onClick={this.handleClickDeck}>
-            <ul className='control-bar__deck-selector' style={deckStyle}>
+            <ul className='control-bar__deck-selector'>
               {(()=>[1, 2, 3].map(index=>(
-                <li key={index} className={'deck-selector__selector-body'+(this.state.targetDeck === index ? ' active':'') + (this.isLoading() ? ' disabled' : '')} data-index={index} onClick={this.handleClickDeckTab}>
+                <li key={index} className={'deck-selector__selector-body'+(this.state.targetDeck === index ? ' active':'') + (this.isLoading() ? ' disabled' : '')} data-index={index} onClick={this.handleClickDeckTab} style={deckSelectorStyle}>
                   <img src="/player/pawoo-music-playlist-icon.svg" /><span>DECK{index}</span>
                 </li>
               )))()}
