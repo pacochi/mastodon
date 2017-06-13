@@ -56,7 +56,7 @@ jobs:
             - ~/.cache/.yarn
             - node_modules
 
-      # Start assets precompilation
+      # Start assets precompilation. It wastes about 60 seconds, so that runs on background.
       - restore_cache:
           key: assets/{{ checksum "tmp/circleci/master.hash" }}/2
       - run:
