@@ -31,8 +31,6 @@ class MusicPlayer extends React.PureComponent {
       isSp
     };
 
-    if(isSp) return;
-
     this.audioRef = null;
     this.videoRef = null;
     this.subscription = null;
@@ -54,6 +52,7 @@ class MusicPlayer extends React.PureComponent {
   }
 
   componentDidMount () {
+    if(isSp) return;
     this.fetchDeck(1);
     this.setSubscription(1);
   }
