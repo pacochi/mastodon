@@ -388,7 +388,7 @@ class MusicPlayer extends React.PureComponent {
                   })()}
                 </div>
                 {(()=>{
-                  if(!this.state.deck || !this.state.deck.max_add_count || !this.state.deck.max_skip_count) return null;
+                  if(!this.state.deck || !this.state.deck.max_queue_size || !this.state.deck.max_add_count || !this.state.deck.max_skip_count) return null;
                   return (
                     <div className="queue-item__restrictions">
                       <div className="queue-item__restrictions-title">
