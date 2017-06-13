@@ -396,8 +396,8 @@ class MusicPlayer extends React.PureComponent {
                         <span>楽曲追加・SKIPについて</span>
                       </div>
                       <ul className="queue-item__restrictions-list">
-                        <li>プレイリストに楽曲を追加できる回数は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_add_count}回まで</span>です</li>
-                        <li>SKIPできる回数は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_skip_count}回まで</span>です</li>
+                        <li>楽曲追加は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_add_count}回まで</span>です</li>
+                        <li>SKIPの回数は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_skip_count}回まで</span>です</li>
                       </ul>
                     </div>
                   );
