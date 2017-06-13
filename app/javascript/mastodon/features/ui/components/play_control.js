@@ -281,7 +281,7 @@ class MusicPlayer extends React.PureComponent {
 
   render () {
     const playerClass = `player-control${this.state.isOpen ? ' is-open':''}`;
-    const iconClass = `fa fa-volume-${this.state.isPlaying?'up':'off'}`;
+    const iconClass = `fa ${this.state.isPlaying?'fa-volume-up':'fa-play'}`;
     const toggleClass = `control-bar__controller-toggle is-${this.state.isPlaying?'playing':'pause'}`;
     const seekbarClass = `player-seekbar ${this.state.isSeekbarActive?'active':''}`;
 
