@@ -2,7 +2,7 @@
 
 namespace :error_page do
   desc 'Generate static error pages'
-  task generate: [:environment, 'webpacker:compile'] do
+  task generate: :environment do
     ErrorPageGenerator.new(
       status_codes: [403, 410, 422, 500, 503],
       locales: I18n.available_locales,
