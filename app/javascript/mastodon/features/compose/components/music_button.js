@@ -3,8 +3,6 @@ import IconButton from '../../../components/icon_button';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 
-import jsmediatags from 'jsmediatags/dist/jsmediatags';
-
 const messages = defineMessages({
   music: { id: 'music_button.label', defaultMessage: 'Add Your Music' },
 });
@@ -19,27 +17,16 @@ class MusicButton extends React.PureComponent {
 
   static propTypes = {
     disabled: PropTypes.bool,
-    onSelectFile: PropTypes.func.isRequired,
-    style: PropTypes.object,
+    onSelectMusicFile: PropTypes.func.isRequired,
     resetFileKey: PropTypes.number,
+    style: PropTypes.object,
     intl: PropTypes.object.isRequired,
   };
 
   handleChange = (e) => {
     if (!e.target.files.length) return;
     const file = e.target.files[0];
-
-    jsmediatags.read(
-      file,
-      {
-        onSuccess: (tag) => {
-          this.props.onSelectFile(file, tag);
-        },
-        onError: (error) => {
-          console.log(':(', error.type, error.info); // eslint-disable-line no-console
-        },
-      }
-    );
+    this.props.onSelectMusicFile(file);
   }
 
   handleClick = () => {
