@@ -3478,6 +3478,10 @@ button.icon-button.active i.fa-retweet {
   input[type="file"]{
     display: none;
   }
+
+  .warning {
+    background: $warning-red;
+  }
 }
 
 .music-modal__container {

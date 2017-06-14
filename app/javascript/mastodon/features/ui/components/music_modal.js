@@ -5,6 +5,7 @@ import IconButton from '../../../components/icon_button';
 import Button from '../../../components/button';
 
 const storageKey = 'music_modal_clicked_warning';
+const warningClass = 'warning';
 
 class MusicModal extends React.PureComponent {
 
@@ -28,6 +29,7 @@ class MusicModal extends React.PureComponent {
     let isClickedWaring = false;
 
     try {
+      // すでにチェックしたことがあれば、その値を利用する
       isClickedWaring = localStorage.getItem(storageKey) == '1';
     } catch (e) {
       // Do nothing for private safari
@@ -39,11 +41,19 @@ class MusicModal extends React.PureComponent {
       isClickedWaring: isClickedWaring,
       imageURL: null,
       isTermsOfUseOpen: false,
+      onMouseInUploadButton: false,
     };
+  }
+
+  componentDidMount() {
+    this.uploadButtonElement.addEventListener('mouseenter', this.onMouseEnterUploadButton, true);
+    this.uploadButtonElement.addEventListener('mouseleave', this.onMouseLeaveUploadButton, true);
   }
 
   componentWillUnmount() {
     this.props.onResetFileKey();
+    this.uploadButtonElement.removeEventListener('mouseenter', this.onMouseEnterUploadButton, true);
+    this.uploadButtonElement.removeEventListener('mouseleave', this.onMouseLeaveUploadButton, true);
   }
 
   handleUpload = () => {
@@ -101,15 +111,28 @@ class MusicModal extends React.PureComponent {
     this.setState({ artist: artist });
   }
 
-  setMusicRef = (c) => {
-    this.musicFileElement = c;
+  setMusicRef = (element) => {
+    this.musicFileElement = element;
   }
 
-  setImageRef = (c) => {
-    this.imageFileElement = c;
+  setImageRef = (element) => {
+    this.imageFileElement = element;
+  }
+
+  setUploadButtonRef = (element) => {
+    this.uploadButtonElement = element;
+  }
+
+  onMouseEnterUploadButton = () => {
+    this.setState({ onMouseInUploadButton: true });
+  }
+
+  onMouseLeaveUploadButton = () => {
+    this.setState({ onMouseInUploadButton: false });
   }
 
   isValidString(value) {
+    // validates ..., presence: true の条件に合わせる
     return value.replace(/\s/, '').length > 0;
   }
 
@@ -125,26 +148,31 @@ class MusicModal extends React.PureComponent {
       <div className='modal-root__modal music-modal'>
         <div className='music-modal__container'>
           <div className="music-modal__artwork">
-            {(()=>{
+            {(() => {
               if(this.state.imageURL) {
                 return (
                   <div className="music-modal__artwork-exist" style={{backgroundImage: this.state.imageURL}} onClick={this.handleChooseImage} />
                 );
+              } else {
+                const klass = this.state.onMouseInUploadButton ? warningClass : '';
+
+                return (
+                  <div className={`music-modal__artwork-none icon-button ${klass}`} onClick={this.handleChooseImage} >
+                    <i style={{ fontSize: '30px' }} className='fa fa-fw fa-camera' aria-hidden='true' />
+                    <span className="music-modal__artwork-info">画像を<br />アップロード<br />（必須）</span>
+                  </div>
+                );
               }
-              return (
-                <div className="music-modal__artwork-none icon-button" onClick={this.handleChooseImage} >
-                  <i style={{ fontSize: '30px' }} className={`fa fa-fw fa-camera`} aria-hidden='true' />
-                  <span className="music-modal__artwork-info">画像を<br />アップロード<br />（必須）</span>
-                </div>
-              );
             })()}
           </div>
 
           <div className="music-modal__metabox">
             <div>
-              <input className="music-modal__title" placeholder="楽曲名を入力" onChange={this.onChangeTitle} value={this.state.title} />
+              <input className={`music-modal__title ${(this.state.onMouseInUploadButton && !validTitle) ? warningClass : ''}`} placeholder="楽曲名を入力" onChange={this.onChangeTitle} value={this.state.title} />
             </div>
-            <input className="music-modal__artist" placeholder="作者名を入力" onChange={this.onChangeArtist} value={artist} />
+            <div>
+              <input className={`music-modal__artist ${(this.state.onMouseInUploadButton && !validArtist) ? warningClass : ''}`} placeholder="作者名を入力" onChange={this.onChangeArtist} value={artist} />
+            </div>
             <span className="music-modal__info">※128文字を超える部分は自動的にカットされます</span>
 
             <input type="file" name="music" accept="audio/*" ref={this.setMusicRef} />
@@ -160,7 +188,7 @@ class MusicModal extends React.PureComponent {
                 作品（画像、音源、楽曲、テキスト等を含む）のアップロードにおいて、<span className='music-modal__link-terms-of-use' onClick={this.handleShowTermsOfUse}>注意事項▼</span>を守ることを誓います。
               </label>
             </div>
-            <div className='music-modal__submit-button'>
+            <div ref={this.setUploadButtonRef} className='music-modal__submit-button'>
               <Button disabled={!enableUploadButton} text="upload" onClick={this.handleUpload} />
             </div>
           </div>
