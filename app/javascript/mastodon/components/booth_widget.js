@@ -12,14 +12,13 @@ class BoothWidget extends React.PureComponent {
       isPlaying: false,
       currentTime: 0,
     };
+
     this.audio = new Audio();
-    this.audio.addEventListener('timeupdate', () => {
-      const currentTime = this.audio.currentTime;
-      this.setState({ currentTime });
-    }, true);
   }
 
   componentDidMount () {
+    this.audio.addEventListener('timeupdate', this.onTimeupdate, true);
+
     // FIXME: Reduxにするときによしなにしよう
     axios.get(`/api/v1/booth_items/${this.props.itemId}`)
       .then(response => {
@@ -28,6 +27,15 @@ class BoothWidget extends React.PureComponent {
       }).catch(() => {
         // privateなBOOTHリンクなどは404が返ってくるので何もしない
       });
+  }
+
+  componentWillUnmount() {
+    this.audio.removeEventListener('timeupdate', this.onTimeupdate, true);
+  }
+
+  onTimeupdate = () => {
+    const currentTime = this.audio.currentTime;
+    this.setState({ currentTime });
   }
 
   handleSeekbarClick = (e) => {
