@@ -42,7 +42,7 @@ const makeMapStateToProps = () => {
     const status = getStatus(state, props.id);
 
     return {
-      status: status,
+      status,
       me: state.getIn(['meta', 'me']),
       boostModal: state.getIn(['meta', 'boost_modal']),
       deleteModal: state.getIn(['meta', 'delete_modal']),
