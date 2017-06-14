@@ -415,7 +415,7 @@ class PlayControl extends React.PureComponent {
                       <li className="deck__queue-item" key={'empty-queue-item_'+index}>
                         <div className="queue-item__main">
                           <div className='queue-item__metadata'>
-                            {!index ? 'プレイリストに曲がありません' : ''}
+                            {!index ? 'プレイリストに好きな曲を入れてね！' : ''}
                           </div>
                         </div>
                         <div className='queue-item__datasource' />
