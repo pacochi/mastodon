@@ -36,9 +36,9 @@ class MusicModal extends React.PureComponent {
     }
 
     this.state = {
-      title: this.props.title,
-      artist: this.props.artist,
-      isClickedWaring: isClickedWaring,
+      isClickedWaring,
+      title: props.title,
+      artist: props.artist,
       imageURL: null,
       isTermsOfUseOpen: false,
       onMouseInUploadButton: false,
@@ -103,12 +103,12 @@ class MusicModal extends React.PureComponent {
 
   onChangeTitle = (event) => {
     const title = event.currentTarget.value;
-    this.setState({ title: title });
+    this.setState({ title });
   }
 
   onChangeArtist = (event) => {
     const artist = event.currentTarget.value;
-    this.setState({ artist: artist });
+    this.setState({ artist });
   }
 
   setMusicRef = (element) => {
@@ -138,10 +138,10 @@ class MusicModal extends React.PureComponent {
 
   render () {
     const { intl } = this.props;
-    const { title, artist } = this.state;
+    const { title, artist, onMouseInUploadButton } = this.state;
 
-    const validTitle = this.isValidString(this.state.title);
-    const validArtist = this.isValidString(this.state.artist);
+    const validTitle = this.isValidString(title);
+    const validArtist = this.isValidString(artist);
     const enableUploadButton = this.state.isClickedWaring && this.state.imageURL && validTitle && validArtist;
 
     return (
@@ -154,7 +154,7 @@ class MusicModal extends React.PureComponent {
                   <div className="music-modal__artwork-exist" style={{backgroundImage: this.state.imageURL}} onClick={this.handleChooseImage} />
                 );
               } else {
-                const klass = this.state.onMouseInUploadButton ? warningClass : '';
+                const klass = onMouseInUploadButton ? warningClass : '';
 
                 return (
                   <div className={`music-modal__artwork-none icon-button ${klass}`} onClick={this.handleChooseImage} >
@@ -168,10 +168,10 @@ class MusicModal extends React.PureComponent {
 
           <div className="music-modal__metabox">
             <div>
-              <input className={`music-modal__title ${(this.state.onMouseInUploadButton && !validTitle) ? warningClass : ''}`} placeholder="楽曲名を入力" onChange={this.onChangeTitle} value={this.state.title} />
+              <input className={`music-modal__title ${(onMouseInUploadButton && !validTitle) ? warningClass : ''}`} placeholder="楽曲名を入力" onChange={this.onChangeTitle} value={title} />
             </div>
             <div>
-              <input className={`music-modal__artist ${(this.state.onMouseInUploadButton && !validArtist) ? warningClass : ''}`} placeholder="作者名を入力" onChange={this.onChangeArtist} value={artist} />
+              <input className={`music-modal__artist ${(onMouseInUploadButton && !validArtist) ? warningClass : ''}`} placeholder="作者名を入力" onChange={this.onChangeArtist} value={artist} />
             </div>
             <span className="music-modal__info">※128文字を超える部分は自動的にカットされます</span>
 
