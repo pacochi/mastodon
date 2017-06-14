@@ -12,8 +12,6 @@ class BoothWidget extends React.PureComponent {
       isPlaying: false,
       currentTime: 0,
     };
-    this.handlePlayerClick = this.handlePlayerClick.bind(this);
-    this.handleSeekbarClick = this.handleSeekbarClick.bind(this);
     this.audio = new Audio();
     this.audio.addEventListener('timeupdate', () => {
       const currentTime = this.audio.currentTime;
@@ -32,7 +30,7 @@ class BoothWidget extends React.PureComponent {
       });
   }
 
-  handleSeekbarClick (e) {
+  handleSeekbarClick = (e) => {
     e.preventDefault();
     const seekPoint = e.nativeEvent.layerX;
     const targetWidth = document.querySelector('.booth-widget__seekbar').clientWidth;
@@ -52,7 +50,7 @@ class BoothWidget extends React.PureComponent {
     this.audio.pause();
   }
 
-  handlePlayerClick () {
+  handlePlayerClick = () => {
     if (!this.state.isPlaying) {
       this.play();
     } else {
