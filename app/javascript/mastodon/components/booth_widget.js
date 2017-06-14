@@ -17,19 +17,24 @@ class BoothWidget extends React.PureComponent {
   }
 
   componentDidMount () {
+    this.componentIsMounted = true;
+
     this.audio.addEventListener('timeupdate', this.onTimeupdate, true);
 
-    // FIXME: Reduxにするときによしなにしよう
+    // TODO: Reduxにするときによしなにする
     axios.get(`/api/v1/booth_items/${this.props.itemId}`)
       .then(response => {
-        // FIXME: Reduxにするときによしなにしよう
-        this.setState({item: response.data.body});
+        if (this.componentIsMounted) {
+          this.setState({item: response.data.body});
+        }
       }).catch(() => {
         // privateなBOOTHリンクなどは404が返ってくるので何もしない
       });
   }
 
   componentWillUnmount() {
+    this.componentIsMounted = false;
+
     this.audio.removeEventListener('timeupdate', this.onTimeupdate, true);
 
     if (this.state.isPlaying) {
