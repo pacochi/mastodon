@@ -60,7 +60,8 @@ jobs:
       - restore_cache:
           key: assets/{{ checksum "tmp/circleci/master.hash" }}/2
       - run:
-          command: ./bin/rake assets:precompile && touch tmp/circleci/assets.done
+          # `rake assets:precompile error_page:generate` causes curious error: https://circleci.com/gh/pixiv/pawoo/2274
+          command: ./bin/rake assets:precompile && ./bin/rake error_page:generate && touch tmp/circleci/assets.done
           background: true
 
       # Database schema
