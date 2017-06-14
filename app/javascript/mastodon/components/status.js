@@ -63,6 +63,7 @@ class Status extends ImmutablePureComponent {
     'boostModal',
     'autoPlayGif',
     'muted',
+    'boothItem',
   ]
 
   updateOnStates = []
@@ -70,25 +71,25 @@ class Status extends ImmutablePureComponent {
   componentDidMount() {
     const boothItemId = this.props.status.get('booth_item_id');
 
-    if (boothItemId) {
+    if (!this.props.boothItem && boothItemId) {
       this.props.fetchBoothItem(boothItemId);
     }
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    return true
-    // if (nextProps.isIntersecting === false && nextState.isHidden) {
-    //   // It's only if we're not intersecting (i.e. offscreen) and isHidden is true
-    //   // that either "isIntersecting" or "isHidden" matter, and then they're
-    //   // the only things that matter.
-    //   return this.props.isIntersecting !== false || !this.state.isHidden;
-    // } else if (nextProps.isIntersecting !== false && this.props.isIntersecting === false) {
-    //   // If we're going from a non-intersecting state to an intersecting state,
-    //   // (i.e. offscreen to onscreen), then we definitely need to re-render
-    //   return true;
-    // }
-    // // Otherwise, diff based on "updateOnProps" and "updateOnStates"
-    // return super.shouldComponentUpdate(nextProps, nextState);
+    if (nextProps.isIntersecting === false && nextState.isHidden) {
+      // It's only if we're not intersecting (i.e. offscreen) and isHidden is true
+      // that either "isIntersecting" or "isHidden" matter, and then they're
+      // the only things that matter.
+      return this.props.isIntersecting !== false || !this.state.isHidden;
+    } else if (nextProps.isIntersecting !== false && this.props.isIntersecting === false) {
+      // If we're going from a non-intersecting state to an intersecting state,
+      // (i.e. offscreen to onscreen), then we definitely need to re-render
+      return true;
+    }
+
+    // Otherwise, diff based on "updateOnProps" and "updateOnStates"
+    return super.shouldComponentUpdate(nextProps, nextState);
   }
 
   componentWillReceiveProps (nextProps) {

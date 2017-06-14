@@ -17,7 +17,7 @@ import {
   muteAccount,
 } from '../actions/accounts';
 import {
-  fetchBoothItem
+  fetchBoothItem,
 } from '../actions/booth_items';
 import { muteStatus, unmuteStatus, deleteStatus, pinStatus, unpinStatus } from '../actions/statuses';
 import { initReport } from '../actions/reports';
@@ -150,7 +150,7 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
 
   fetchBoothItem(id) {
     dispatch(fetchBoothItem(id));
-  }
+  },
 
 });
 
