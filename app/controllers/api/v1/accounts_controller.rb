@@ -56,7 +56,7 @@ class Api::V1::AccountsController < ApiController
 
   def statuses
     @statuses = @account.statuses.permitted_for(@account, current_account).paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
-    @statuses = @statuses.where(id: MediaAttachment.where(account: @account).where.not(status_id: nil).reorder('').select('distinct status_id')) if params[:only_media]
+    @statuses = @statuses.where(id: MediaAttachment.where(account: @account, type: :video).where.not(status_id: nil).reorder('').select('distinct status_id')) if params[:only_media]
     @statuses = @statuses.without_replies if params[:exclude_replies]
     @statuses = cache_collection(@statuses, Status)
 
