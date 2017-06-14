@@ -28,10 +28,6 @@ class BoothWidget extends React.PureComponent {
 
   componentWillUnmount() {
     this.audio.removeEventListener('timeupdate', this.onTimeupdate, true);
-
-    if (this.state.isPlaying) {
-      this.pause();
-    }
   }
 
   onTimeupdate = () => {
