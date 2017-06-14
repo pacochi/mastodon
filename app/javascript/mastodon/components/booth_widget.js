@@ -1,14 +1,20 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import axios from 'axios';
+import ImmutablePropTypes from 'react-immutable-proptypes';
 
 class BoothWidget extends React.PureComponent {
 
+  static propTypes = {
+    itemId: PropTypes.number.isRequired,
+    url: PropTypes.string.isRequired,
+    boothItem: ImmutablePropTypes.map.isRequired,
+  };
+
   constructor (props, context) {
     super(props, context);
+
     this.state = {
       apollo: /https?:\/\/booth\.pm\/apollo/.test(props.url),
-      item: null,
       isPlaying: false,
       currentTime: 0,
     };
@@ -17,24 +23,10 @@ class BoothWidget extends React.PureComponent {
   }
 
   componentDidMount () {
-    this.componentIsMounted = true;
-
     this.audio.addEventListener('timeupdate', this.onTimeupdate, true);
-
-    // TODO: Reduxにするときによしなにする
-    axios.get(`/api/v1/booth_items/${this.props.itemId}`)
-      .then(response => {
-        if (this.componentIsMounted) {
-          this.setState({item: response.data.body});
-        }
-      }).catch(() => {
-        // privateなBOOTHリンクなどは404が返ってくるので何もしない
-      });
   }
 
   componentWillUnmount() {
-    this.componentIsMounted = false;
-
     this.audio.removeEventListener('timeupdate', this.onTimeupdate, true);
 
     if (this.state.isPlaying) {
@@ -49,16 +41,19 @@ class BoothWidget extends React.PureComponent {
 
   handleSeekbarClick = (e) => {
     e.preventDefault();
+
+    const { boothItem } = this.props;
+
     const seekPoint = e.nativeEvent.layerX;
     const targetWidth = document.querySelector('.booth-widget__seekbar').clientWidth;
-    const currentTime = (seekPoint / targetWidth * this.state.item.sound.duration);
+    const currentTime = (seekPoint / targetWidth * boothItem.getIn(['sound', 'duration']));
+
     this.audio.currentTime = currentTime;
     this.setState({ currentTime });
   }
 
   play () {
-    const sound = this.state.item.sound;
-    this.audio.src = sound.long_url;
+    this.audio.src = this.props.boothItem.getIn(['sound', 'long_url']);
     this.audio.currentTime = this.state.currentTime;
     this.audio.play();
   }
@@ -73,38 +68,42 @@ class BoothWidget extends React.PureComponent {
     } else {
       this.pause();
     }
-    this.setState({isPlaying: !this.state.isPlaying});
+
+    this.setState({ isPlaying: !this.state.isPlaying });
   }
 
   renderMusic () {
+    const { boothItem } = this.props;
+
     const seekBarProgressStyle = {
-      width: Math.round(this.state.currentTime / this.state.item.sound.duration * 10000) / 100 + '%',
+      width: `${Math.round(this.state.currentTime / boothItem.getIn(['sound', 'duration']) * 10000) / 100}%`,
     };
+
     return (
       <div className={`booth-widget booth-widget--music ${this.state.isPlaying ? 'is-playing' : ''} ${this.state.apollo ? 'is-apollo' : ''}`}>
         <div className="booth-widget__viewer">
           <div className="booth-widget__viewer-btn" onClick={this.handlePlayerClick}>
             <i className={`fa ${this.state.isPlaying ? 'fa-pause' : 'fa-play'}`} />
           </div>
-          <img className="booth-widget__image" src={this.state.item.primary_image.f_620.url} alt=""/>
+          <img className="booth-widget__image" src={boothItem.getIn(['primary_image', 'f_620', 'url'])} alt=""/>
         </div>
         <div className="booth-widget__seekbar" onClick={this.handleSeekbarClick}>
           <div className="booth-widget__seekbar-process" style={seekBarProgressStyle} />
         </div>
         <div className="booth-widget__text">
           <div className="booth-widget__seekbar-time">
-            {parseInt((this.state.item.sound.duration - Math.round(this.state.currentTime))/60)}:{("0"+(this.state.item.sound.duration - Math.round(this.state.currentTime))%60).slice(-2)}
+            {parseInt((boothItem.getIn(['sound', 'duration']) - Math.round(this.state.currentTime))/60)}:{("0"+(boothItem.getIn(['sound', 'duration']) - Math.round(this.state.currentTime))%60).slice(-2)}
           </div>
-          <a className="booth-widget__shop" href={this.state.item.shop.url} target="_blank">
-            <div className="booth-widget__shop-name">{this.state.item.shop.name}</div>
+          <a className="booth-widget__shop" href={boothItem.getIn(['shop', 'url'])} target="_blank">
+            <div className="booth-widget__shop-name">{boothItem.getIn(['shop', 'name'])}</div>
           </a>
           <a className="booth-widget__name" href={this.props.url} target="_blank">
-            {this.state.item.name}
+            {boothItem.get('name')}
           </a>
         </div>
         <div className="booth-widget__footer">
           <div className="booth-widget__price">
-            {this.state.item.price_str}
+            {boothItem.get('price_str')}
           </div>
           <a className="booth-widget__logo" href={this.props.url} target="_blank" />
         </div>
@@ -113,24 +112,26 @@ class BoothWidget extends React.PureComponent {
   }
 
   renderNormal () {
+    const { boothItem } = this.props;
+
     return (
       <div className="booth-widget">
         <div className="booth-widget__viewer">
           <a href={this.props.url} target="_blank">
-            <img className="booth-widget__image" src={this.state.item.primary_image.f_620.url} alt=""/>
+            <img className="booth-widget__image" src={boothItem.getIn(['primary_image', 'f_620', 'url'])} alt=""/>
           </a>
         </div>
         <div className="booth-widget__text">
-          <a className="booth-widget__shop" href={this.state.item.shop.url} target="_blank">
-            <div className="booth-widget__shop-name">{this.state.item.shop.name}</div>
+          <a className="booth-widget__shop" href={boothItem.getIn(['shop', 'url'])} target="_blank">
+            <div className="booth-widget__shop-name">{boothItem.getIn(['shop', 'name'])}</div>
           </a>
           <a className="booth-widget__name" href={this.props.url} target="_blank">
-            {this.state.item.name}
+            {boothItem.get('name')}
           </a>
         </div>
         <div className="booth-widget__footer">
           <div className="booth-widget__price">
-            {this.state.item.price_str}
+            {boothItem.get('price_str')}
           </div>
           <a className="booth-widget__logo" href={this.props.url} target="_blank" />
         </div>
@@ -139,20 +140,15 @@ class BoothWidget extends React.PureComponent {
   }
 
   render () {
-    if (!this.state.item) {
-      return null;
-    }
-    if (this.state.item.sound) {
+    const { boothItem } = this.props;
+
+    if (boothItem.get('sound')) {
       return this.renderMusic();
+    } else {
+      return this.renderNormal();
     }
-    return this.renderNormal();
   }
 
 }
-
-BoothWidget.propTypes = {
-  itemId: PropTypes.number.isRequired,
-  url: PropTypes.string.isRequired,
-};
 
 export default BoothWidget;

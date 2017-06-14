@@ -45,6 +45,8 @@ class Status extends ImmutablePureComponent {
     standalone: PropTypes.bool,
     onPin: PropTypes.func,
     displayPinned: PropTypes.bool,
+    fetchBoothItem: PropTypes.func,
+    boothItem: ImmutablePropTypes.map,
   };
 
   state = {
@@ -65,19 +67,28 @@ class Status extends ImmutablePureComponent {
 
   updateOnStates = []
 
-  shouldComponentUpdate (nextProps, nextState) {
-    if (nextProps.isIntersecting === false && nextState.isHidden) {
-      // It's only if we're not intersecting (i.e. offscreen) and isHidden is true
-      // that either "isIntersecting" or "isHidden" matter, and then they're
-      // the only things that matter.
-      return this.props.isIntersecting !== false || !this.state.isHidden;
-    } else if (nextProps.isIntersecting !== false && this.props.isIntersecting === false) {
-      // If we're going from a non-intersecting state to an intersecting state,
-      // (i.e. offscreen to onscreen), then we definitely need to re-render
-      return true;
+  componentDidMount() {
+    const boothItemId = this.props.status.get('booth_item_id');
+
+    if (boothItemId) {
+      this.props.fetchBoothItem(boothItemId);
     }
-    // Otherwise, diff based on "updateOnProps" and "updateOnStates"
-    return super.shouldComponentUpdate(nextProps, nextState);
+  }
+
+  shouldComponentUpdate (nextProps, nextState) {
+    return true
+    // if (nextProps.isIntersecting === false && nextState.isHidden) {
+    //   // It's only if we're not intersecting (i.e. offscreen) and isHidden is true
+    //   // that either "isIntersecting" or "isHidden" matter, and then they're
+    //   // the only things that matter.
+    //   return this.props.isIntersecting !== false || !this.state.isHidden;
+    // } else if (nextProps.isIntersecting !== false && this.props.isIntersecting === false) {
+    //   // If we're going from a non-intersecting state to an intersecting state,
+    //   // (i.e. offscreen to onscreen), then we definitely need to re-render
+    //   return true;
+    // }
+    // // Otherwise, diff based on "updateOnProps" and "updateOnStates"
+    // return super.shouldComponentUpdate(nextProps, nextState);
   }
 
   componentWillReceiveProps (nextProps) {
@@ -193,14 +204,11 @@ class Status extends ImmutablePureComponent {
       }
     }
 
-    if (attachments.size === 0) {
-      // boothのウィジェット表示処理
-      const booth_pattern = /href="(https?:\/\/(?:[a-z0-9][a-z0-9\-]+[a-z0-9]\.)?booth\.pm\/(?:(?:zh-tw|zh-cn|ko|ja|en)\/)?items\/(\d+))/;
-      const apollo_pattern = /href="(https?:\/\/booth\.pm\/apollo\/a\d{2}\/item\?.*?id=(\d+))/;
-      const matches = status.get('content').match(booth_pattern) || status.get('content').match(apollo_pattern);
-      if (matches) {
-        media = <BoothWidget url={matches[1]} itemId={Number(matches[2])} />;
-      }
+    if (attachments.size === 0 && this.props.boothItem) {
+      const boothItemUrl = status.get('booth_item_url');
+      const boothItemId = status.get('booth_item_id');
+
+      media = <BoothWidget url={boothItemUrl} itemId={boothItemId} boothItem={this.props.boothItem} />;
     }
 
     if (account === undefined || account === null) {
