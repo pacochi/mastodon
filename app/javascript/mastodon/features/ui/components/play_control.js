@@ -152,8 +152,7 @@ class PlayControl extends React.PureComponent {
       });
     }
 
-    return new Promise((resolve, reject)=>{
-      return api(this.getMockState).get(`/api/v1/playlists/${id}`)
+    return api(this.getMockState).get(`/api/v1/playlists/${id}`)
       .then((response)=>{
         if(this.state.offset_counter) clearInterval(this.state.offset_counter);
         const interval = setInterval(()=>{
@@ -168,9 +167,7 @@ class PlayControl extends React.PureComponent {
       })
       .catch((error)=>{
         this.props.onError(error);
-        return reject(error);
       });
-    });
   }
 
   handleClickDeck () {
@@ -197,16 +194,13 @@ class PlayControl extends React.PureComponent {
 
   handleSubmitAddForm (e) {
     e.preventDefault();
-    return new Promise((resolve, reject)=>{
-      api(this.getMockState).post(`/api/v1/playlists/${this.state.targetDeck}/deck_queues`, {link: this.urlRef.value})
+    return api(this.getMockState).post(`/api/v1/playlists/${this.state.targetDeck}/deck_queues`, {link: this.urlRef.value})
       .then((response)=>{
         this.urlRef.value = "";
       })
       .catch((error)=>{
         this.props.onError(error);
-        return reject(error);
       });
-    });
   }
 
   handleClickToggle () {
