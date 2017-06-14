@@ -10,6 +10,10 @@ end
 environment ENV.fetch('RAILS_ENV') { 'development' }
 workers     ENV.fetch('WEB_CONCURRENCY') { 2 }
 
+if @options[:environment] == 'production'
+  directory "#{ENV["HOME"]}/live/current"
+end
+
 app_root = File.expand_path('../../', __FILE__)
 stdout_redirect(nil, "#{app_root}/log/puma_stderr", true)
 
