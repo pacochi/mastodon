@@ -30,7 +30,7 @@ class MusicModal extends React.PureComponent {
 
     try {
       // すでにチェックしたことがあれば、その値を利用する
-      isClickedWaring = localStorage.getItem(storageKey) == '1';
+      isClickedWaring = localStorage.getItem(storageKey) === '1';
     } catch (e) {
       // Do nothing for private safari
     }
