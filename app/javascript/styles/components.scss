@@ -1328,6 +1328,9 @@
   width: 100%;
   height: calc(100% - 56px);
   background: darken($ui-base-color, 7%);
+  @media screen and (max-width: 1024px) {
+    height: 100%;
+  }
 }
 
 .drawer {
