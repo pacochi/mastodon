@@ -24,12 +24,29 @@ $apollo-color: #38b6c5;
   user-select: none;
 }
 
+.booth-widget__seekbar-wrapper {
+  position: relative;
+}
+
 .booth-widget__seekbar {
+  position: absolute;
+  top: 0px;
   height: 3px;
   width: 100%;
   background-color: #F1F5F8;
   user-select: none;
   cursor: pointer;
+  transition: height 0.15s ease;
+
+  &:hover {
+    height: 5px;
+    background-color: lighten(#F1F5F8, 10%);
+
+    .booth-widget__seekbar-process {
+      height: 5px;
+      background-color: lighten($booth-color, 10%);
+    }
+  }
 }
 
 .booth-widget__seekbar-process {
@@ -37,12 +54,14 @@ $apollo-color: #38b6c5;
   width: 20%;
   background-color: $booth-color;
   user-select: none;
+  transition: height 0.15s ease;
 }
 
 .booth-widget__text {
   position: relative;
   box-sizing: border-box;
   padding: 4px 8px;
+  padding-top: 7px;
   background-color: #FFF;
 }
 
@@ -162,6 +181,14 @@ $apollo-color: #38b6c5;
     }
     .booth-widget__seekbar {
       background-color: #222222;
+
+      &:hover {
+        background-color: lighten(#222222, 10%);
+
+        .booth-widget__seekbar-process {
+          background-color: lighten($apollo-color, 10%);
+        }
+      }
     }
     .booth-widget__seekbar-process {
       background-color: $apollo-color;

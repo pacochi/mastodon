@@ -83,19 +83,21 @@ class BoothWidget extends React.PureComponent {
           </div>
           <img className="booth-widget__image" src={boothItem.getIn(['primary_image', 'f_620', 'url'])} alt=""/>
         </div>
-        <div className="booth-widget__seekbar" onClick={this.handleSeekbarClick}>
-          <div className="booth-widget__seekbar-process" style={seekBarProgressStyle} />
-        </div>
-        <div className="booth-widget__text">
-          <div className="booth-widget__seekbar-time">
-            {parseInt((boothItem.getIn(['sound', 'duration']) - Math.round(this.state.currentTime))/60)}:{("0"+(boothItem.getIn(['sound', 'duration']) - Math.round(this.state.currentTime))%60).slice(-2)}
+        <div className="booth-widget__seekbar-wrapper">
+          <div className="booth-widget__text">
+            <div className="booth-widget__seekbar-time">
+              {parseInt((boothItem.getIn(['sound', 'duration']) - Math.round(this.state.currentTime))/60)}:{("0"+(boothItem.getIn(['sound', 'duration']) - Math.round(this.state.currentTime))%60).slice(-2)}
+            </div>
+            <a className="booth-widget__shop" href={boothItem.getIn(['shop', 'url'])} target="_blank">
+              <div className="booth-widget__shop-name">{boothItem.getIn(['shop', 'name'])}</div>
+            </a>
+            <a className="booth-widget__name" href={this.props.url} target="_blank">
+              {boothItem.get('name')}
+            </a>
           </div>
-          <a className="booth-widget__shop" href={boothItem.getIn(['shop', 'url'])} target="_blank">
-            <div className="booth-widget__shop-name">{boothItem.getIn(['shop', 'name'])}</div>
-          </a>
-          <a className="booth-widget__name" href={this.props.url} target="_blank">
-            {boothItem.get('name')}
-          </a>
+          <div className="booth-widget__seekbar" onClick={this.handleSeekbarClick}>
+            <div className="booth-widget__seekbar-process" style={seekBarProgressStyle} />
+          </div>
         </div>
         <div className="booth-widget__footer">
           <div className="booth-widget__price">
