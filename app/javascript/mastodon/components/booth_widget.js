@@ -23,14 +23,14 @@ class BoothWidget extends React.PureComponent {
   }
 
   componentDidMount () {
-    this.audio.addEventListener('timeupdate', this.onTimeupdate, true);
+    this.audio.addEventListener('timeupdate', this.onTimeUpdate, true);
   }
 
   componentWillUnmount() {
-    this.audio.removeEventListener('timeupdate', this.onTimeupdate, true);
+    this.audio.removeEventListener('timeupdate', this.onTimeUpdate, true);
   }
 
-  onTimeupdate = () => {
+  onTimeUpdate = () => {
     const currentTime = this.audio.currentTime;
     this.setState({ currentTime });
   }
