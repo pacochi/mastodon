@@ -58,7 +58,7 @@ jobs:
 
       # Start assets precompilation
       - restore_cache:
-          key: assets/{{ checksum "tmp/circleci/master.hash" }}/1
+          key: assets/{{ checksum "tmp/circleci/master.hash" }}/2
       - run:
           command: ./bin/rake assets:precompile && touch tmp/circleci/assets.done
           background: true
@@ -117,7 +117,7 @@ jobs:
             done
             exit 1
       - save_cache:
-          key: assets/{{ checksum "tmp/circleci/master.hash" }}/1
+          key: assets/{{ checksum "tmp/circleci/master.hash" }}/2
           paths:
             - public/assets
             - tmp/cache/assets
