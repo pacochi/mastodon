@@ -44,6 +44,7 @@ class PlayControl extends React.PureComponent {
     this.handleClickOverlay = this.handleClickOverlay.bind(this);
     this.handleClickDeckTab = this.handleClickDeckTab.bind(this);
     this.handleSubmitAddForm = this.handleSubmitAddForm.bind(this);
+    this.handleClickItemLink = this.handleClickItemLink.bind(this);
     this.onReadyYouTube = this.onReadyYouTube.bind(this);
     this.onChangeYoutubeState = this.onChangeYoutubeState.bind(this);
 
@@ -223,6 +224,11 @@ class PlayControl extends React.PureComponent {
       this.props.onError(error);
       return error;
     });
+  }
+
+  handleClickItemLink (e) {
+    // クリック時にDeckが開かないように
+    e.stopPropagation();
   }
 
   setURLRef (c) {
@@ -425,7 +431,9 @@ class PlayControl extends React.PureComponent {
                           </div>
                         </div>
                         <div className='queue-item__datasource'>
-                          <a href={queue_item.link} target="_blank"><img src={`/player/logos/${queue_item.source_type}.${queue_item.source_type === 'apollo' ? 'png' : 'svg'}`} /></a>
+                          <a href={queue_item.link} target="_blank" onClick={this.handleClickItemLink}>
+                            <img src={`/player/logos/${queue_item.source_type}.${queue_item.source_type === 'apollo' ? 'png' : 'svg'}`} />
+                          </a>
                         </div>
                       </li>
                     )
