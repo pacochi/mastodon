@@ -175,6 +175,10 @@ export function requestImageCache(url) {
 }
 
 export function uploadCompose(files) {
+  if (files.length === 1 && files[0].type === 'audio/mp3') {
+    return selectMusicFile(files[0]);
+  }
+
   return function (dispatch, getState) {
     if (getState().getIn(['compose', 'media_attachments']).size > 3) {
       return;
@@ -400,8 +404,8 @@ export function selectMusicFile(file) {
             title,
             artist,
             music: file,
-            onUpload: () => { dispatch(uploadMusicCompose(payload)); },
-            onResetFileKey: () => { dispatch(resetFileKeyCompose()); },
+            onUpload(payload) { dispatch(uploadMusicCompose(payload)); },
+            onResetFileKey() { dispatch(resetFileKeyCompose()); },
           }));
         },
         onError(error) {
