@@ -1,11 +1,5 @@
 import main from '../mastodon/main';
 
-function helloWorld() {
-  const helloWorld = 'hello_world';
-  console.error(helloWorld);
-}
-helloWorld();
-
 const needsBasePolyfills = !(
   window.Intl &&
   Object.assign &&
