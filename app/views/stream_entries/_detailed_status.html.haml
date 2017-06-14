@@ -19,7 +19,7 @@
       .video-player
         - if status.sensitive?
           = render partial: 'stream_entries/content_spoiler'
-        %video.u-video{ src: status.media_attachments.first.file.url(:original), loop: true }
+        %video.u-video{ src: status.media_attachments.first.file.url(:original), loop: true , controls: true}
     - else
       .detailed-status__attachments
         - if status.sensitive?
