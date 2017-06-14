@@ -9,7 +9,7 @@ import YouTube from 'react-youtube';
 
 // FIXME: Old react style
 
-class MusicPlayer extends React.PureComponent {
+class PlayControl extends React.PureComponent {
 
   constructor (props, context) {
     super(props, context);
@@ -512,11 +512,11 @@ class MusicPlayer extends React.PureComponent {
 
 }
 
-MusicPlayer.propTypes = {
+PlayControl.propTypes = {
   accessToken: PropTypes.string.isRequired,
   streamingAPIBaseURL: PropTypes.string.isRequired,
   isTop: PropTypes.bool.isRequired,
   onError: PropTypes.func.isRequired,
 };
 
-export default MusicPlayer;
+export default PlayControl;
