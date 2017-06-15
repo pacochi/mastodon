@@ -7,8 +7,8 @@ class QueueItem
   attr_accessor :id, :info, :thumbnail_url, :music_url, :video_url, :duration, :link, :source_type, :source_id, :account_id
 
   # status_idは文字列とする
-  def source_id
-    ActiveModel::Type.lookup(:string).cast(@source_id)
+  def source_id=(value)
+    @source_id = ActiveModel::Type.lookup(:string).cast(value)
   end
 
   # URL以外を除外する
@@ -70,7 +70,7 @@ class QueueItem
     end
 
     def apollo_link(link, account)
-      shop_id = BoothUrl.extract_booth_item_id(link)
+      shop_id = BoothUrl.extract_apollo_item_id(link)
       return unless shop_id
 
       cache = find_cache('apollo', shop_id)
