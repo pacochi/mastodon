@@ -10,8 +10,11 @@ node(:reblogs_count)    { |status| defined?(@reblogs_counts_map)    ? (@reblogs_
 node(:favourites_count) { |status| defined?(@favourites_counts_map) ? (@favourites_counts_map[status.id] || 0) : status.favourites_count }
 node(:pixiv_cards)      { |status| status.pixiv_cards.select(&:image_url?).map { |record| record.slice(:url, :image_url) }.compact }
 node(:pinned)           { |status| status.pinned_status.present? }
-node(:booth_item_id)    { |status| BoothUrl.extract_booth_item_id(Formatter.instance.plaintext(status)) }
 node(:booth_item_url)   { |status| BoothUrl.extract_booth_item_url(Formatter.instance.plaintext(status)) }
+node(:booth_item_id) do |status|
+  text = Formatter.instance.plaintext(status)
+  BoothUrl.extract_booth_item_id(text) || BoothUrl.extract_apollo_item_id(text)
+end
 
 child :application do
   extends 'api/v1/apps/show'

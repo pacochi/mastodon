@@ -11,11 +11,29 @@ class BoothUrl
   end
 
   def self.extract_booth_item_id(text)
-    url = extract_booth_item_url(text)
-    return unless url
+    entities = Extractor.extract_entities_with_indices(text, extract_url_without_protocol: false)
+    urls = entities.map { |entry| entry[:url] }.compact
 
-    id = url.match(APOLLO_URL).try(:[], :item_id) || url.match(BOOTH_URL).try(:[], :item_id)
-    id.to_i if id
+    urls.each do |url|
+      url.match?(BOOTH_URL)
+      id = url.match(BOOTH_URL).try(:[], :item_id)
+      return id.to_i if id
+    end
+
+    nil
+  end
+
+  def self.extract_apollo_item_id(text)
+    entities = Extractor.extract_entities_with_indices(text, extract_url_without_protocol: false)
+    urls = entities.map { |entry| entry[:url] }.compact
+
+    urls.each do |url|
+      url.match?(APOLLO_URL)
+      id = url.match(APOLLO_URL).try(:[], :item_id)
+      return id.to_i if id
+    end
+
+    nil
   end
 
   def initialize(uri)
