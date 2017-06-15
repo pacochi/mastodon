@@ -138,11 +138,11 @@ class MusicModal extends React.PureComponent {
 
   render () {
     const { intl } = this.props;
-    const { title, artist, onMouseInUploadButton } = this.state;
+    const { title, artist, onMouseInUploadButton, isClickedWaring } = this.state;
 
     const validTitle = this.isValidString(title);
     const validArtist = this.isValidString(artist);
-    const enableUploadButton = this.state.isClickedWaring && this.state.imageURL && validTitle && validArtist;
+    const enableUploadButton = isClickedWaring && this.state.imageURL && validTitle && validArtist;
 
     return (
       <div className='modal-root__modal music-modal'>
@@ -173,7 +173,10 @@ class MusicModal extends React.PureComponent {
             <div>
               <input className={`music-modal__artist ${(onMouseInUploadButton && !validArtist) ? warningClass : ''}`} placeholder="作者名を入力" onChange={this.onChangeArtist} value={artist} />
             </div>
-            <span className="music-modal__info">※128文字を超える部分は自動的にカットされます</span>
+            <div className="music-modal__info">
+              <div>※128文字を超える部分は自動的にカットされます</div>
+              <div>※アップロードできる音楽と画像のサイズは合計7MBまでです</div>
+            </div>
 
             <input type="file" name="music" accept="audio/*" ref={this.setMusicRef} />
             <input type="file" name="image" accept="image/*" ref={this.setImageRef} onChange={this.handleOnSelectImage} />
@@ -182,9 +185,9 @@ class MusicModal extends React.PureComponent {
 
         <div className='music-modal__action-bar'>
           <div className='music-modal__upload'>
-            <input className='music-modal__checkbox-confirm' id="checkbox-confirm" type="checkbox" checked={this.state.isClickedWaring} onChange={this.handleChangeCheckbox} />
+            <input className='music-modal__checkbox-confirm' id="checkbox-confirm" type="checkbox" checked={isClickedWaring} onChange={this.handleChangeCheckbox} />
             <div className='music-modal__checkbox-content'>
-              <label htmlFor="checkbox-confirm">
+              <label htmlFor="checkbox-confirm" className={`${(onMouseInUploadButton && !isClickedWaring) ? warningClass : ''}`}>
                 作品（画像、音源、楽曲、テキスト等を含む）のアップロードにおいて、<span className='music-modal__link-terms-of-use' onClick={this.handleShowTermsOfUse}>注意事項▼</span>を守ることを誓います。
               </label>
             </div>

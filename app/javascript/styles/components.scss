@@ -3554,6 +3554,10 @@ button.icon-button.active i.fa-retweet {
   font-size: 11px;
   line-height: 1.4;
   margin-right: 8px;
+
+  label {
+    display: block;
+  }
 }
 
 .music-modal__submit-button {
