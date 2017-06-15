@@ -219,7 +219,7 @@ class PlayControl extends React.PureComponent {
 
   handleClickSkip () {
     if(this.isDeckInActive()) return;
-    this.props.confirmSkip();
+    this.props.onSkip(this.state.targetDeck, this.state.deck.queues[0].id);
   }
 
   handleClickItemLink (e) {
@@ -542,7 +542,7 @@ PlayControl.propTypes = {
   streamingAPIBaseURL: PropTypes.string.isRequired,
   isTop: PropTypes.bool.isRequired,
   onError: PropTypes.func.isRequired,
-  confirmSkip: PropTypes.func.isRequired,
+  onSkip: PropTypes.func.isRequired,
 };
 
 export default PlayControl;
