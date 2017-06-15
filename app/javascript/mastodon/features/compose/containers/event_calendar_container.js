@@ -8,7 +8,7 @@ const mapStateToProps = (state, props) => {
       {
         date: new Date('2017/6/17'),
         name: 'APOLLO06',
-        duration: 2,
+        duration: 3,
       },
       {
         date: new Date('2017/8/11'),
