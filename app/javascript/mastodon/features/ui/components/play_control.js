@@ -251,7 +251,7 @@ class PlayControl extends React.PureComponent {
 
   setAudioRef (c) {
     this.audioRef = c;
-    if(this.audioRef) this.audioRef.volume = 1;
+    if(this.audioRef) this.audioRef.volume = 0.8;
   }
 
   isDeckInActive () {
