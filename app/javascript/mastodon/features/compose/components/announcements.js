@@ -30,27 +30,27 @@ class Announcements extends React.PureComponent {
 
     const announcements = [];
 
-    announcements.push(
-      {
-        id: 1,
-        icon: '/announcements/icon_2x_360.png',
-        body: 'PawooのiOS・Android版アプリをリリースしました！！',
-        link: [
-          {
-            reactRouter: false,
-            inline: true,
-            href: 'https://itunes.apple.com/us/app/%E3%83%9E%E3%82%B9%E3%83%88%E3%83%89%E3%83%B3%E3%82%A2%E3%83%97%E3%83%AA-pawoo/id1229070679?l=ja&ls=1&mt=8',
-            body: 'Appストア',
-          }, {
-            reactRouter: false,
-            inline: true,
-            href: 'https://play.google.com/store/apps/details?id=jp.pxv.pawoo&hl=ja',
-            body: 'Google Playストア',
-          },
-        ],
-      },
-      // NOTE: id: 8 まで使用した
-    );
+    // announcements.push(
+    //   {
+    //     id: 1,
+    //     icon: '/announcements/icon_2x_360.png',
+    //     body: 'PawooのiOS・Android版アプリをリリースしました！！',
+    //     link: [
+    //       {
+    //         reactRouter: false,
+    //         inline: true,
+    //         href: 'https://itunes.apple.com/us/app/%E3%83%9E%E3%82%B9%E3%83%88%E3%83%89%E3%83%B3%E3%82%A2%E3%83%97%E3%83%AA-pawoo/id1229070679?l=ja&ls=1&mt=8',
+    //         body: 'Appストア',
+    //       }, {
+    //         reactRouter: false,
+    //         inline: true,
+    //         href: 'https://play.google.com/store/apps/details?id=jp.pxv.pawoo&hl=ja',
+    //         body: 'Google Playストア',
+    //       },
+    //     ],
+    //   },
+    //   // NOTE: id: 8 まで使用した
+    // );
 
     this.announcements = Immutable.fromJS(announcements);
   }
