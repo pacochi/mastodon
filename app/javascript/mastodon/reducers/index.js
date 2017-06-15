@@ -17,12 +17,9 @@ import settings from './settings';
 import status_lists from './status_lists';
 import cards from './cards';
 import reports from './reports';
-<<<<<<< HEAD
 import suggested_accounts from './suggested_accounts';
 import trend_tags from './trend_tags';
-=======
 import contexts from './contexts';
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
 
 export default combineReducers({
   timelines,
@@ -43,10 +40,7 @@ export default combineReducers({
   settings,
   cards,
   reports,
-<<<<<<< HEAD
+  contexts,
   suggested_accounts,
   trend_tags,
-=======
-  contexts,
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
 });
