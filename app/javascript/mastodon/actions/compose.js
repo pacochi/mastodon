@@ -1,5 +1,7 @@
+import jsmediatags from 'jsmediatags/dist/jsmediatags';
 import api from '../api';
 
+import { openModal } from './modal';
 import { updateTimeline } from './timelines';
 
 import * as emojione from 'emojione';
@@ -38,6 +40,8 @@ export const COMPOSE_EMOJI_INSERT = 'COMPOSE_EMOJI_INSERT';
 export const COMPOSE_TAG_INSERT = 'COMPOSE_TAG_INSERT';
 
 export const COMPOSE_FILE_KEY_RESET = 'COMPOSE_FILE_KEY_RESET';
+
+export const SELECT_MUSIC_FILE_FAIL = 'SELECT_MUSIC_FILE_FAIL';
 
 export function changeCompose(text) {
   return {
@@ -171,6 +175,10 @@ export function requestImageCache(url) {
 }
 
 export function uploadCompose(files) {
+  if (files.length === 1 && files[0].type === 'audio/mp3') {
+    return selectMusicFile(files[0]);
+  }
+
   return function (dispatch, getState) {
     if (getState().getIn(['compose', 'media_attachments']).size > 3) {
       return;
@@ -381,3 +389,36 @@ export function resetFileKeyCompose() {
     type: COMPOSE_FILE_KEY_RESET,
   };
 }
+
+export function selectMusicFile(file) {
+  return (dispatch, getState) => {
+    jsmediatags.read(
+      file,
+      {
+        onSuccess(tag) {
+          const tagSupport = tag.version[0] === '2';
+          const title = (tagSupport && tag.tags.title) ? tag.tags.title.substr(0, 128) : '';
+          const artist = (tagSupport && tag.tags.artist) ? tag.tags.artist.substr(0, 128) : '';
+
+          dispatch(openModal('MUSIC', {
+            title,
+            artist,
+            music: file,
+            onUpload(payload) { dispatch(uploadMusicCompose(payload)); },
+            onResetFileKey() { dispatch(resetFileKeyCompose()); },
+          }));
+        },
+        onError(error) {
+          dispatch(selectMusicFileFail(error.info));
+        },
+      }
+    );
+  };
+};
+
+export function selectMusicFileFail(error) {
+  return {
+    type: SELECT_MUSIC_FILE_FAIL,
+    error: error,
+  };
+};

@@ -1,7 +1,7 @@
 import { connect } from 'react-redux';
 import MusicButton from '../components/music_button';
 
-import { uploadMusicCompose, resetFileKeyCompose } from '../../../actions/compose';
+import { selectMusicFile } from '../../../actions/compose';
 import { openModal } from '../../../actions/modal';
 
 const mapStateToProps = state => ({
@@ -11,26 +11,8 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch => ({
 
-  onUpload (payload) {
-    dispatch(uploadMusicCompose(payload));
-  },
-
-  onResetFileKey () {
-    dispatch(resetFileKeyCompose());
-  },
-
-  onSelectFile (file, tag) {
-    const tagSupport = tag.version[0] === '2';
-    const title = (tagSupport && tag.tags.title) ? tag.tags.title.substr(0, 128) : '';
-    const artist = (tagSupport && tag.tags.artist) ? tag.tags.artist.substr(0, 128) : '';
-
-    dispatch(openModal('MUSIC', {
-      title,
-      artist,
-      music: file,
-      onUpload: this.onUpload,
-      onResetFileKey: this.onResetFileKey,
-    }));
+  onSelectMusicFile (file) {
+    dispatch(selectMusicFile(file));
   },
 
 });
