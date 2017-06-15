@@ -55,7 +55,6 @@ class Compose extends React.PureComponent {
   }
 
   render () {
-<<<<<<< HEAD
     if (this.props.intent) {
       return (
         <div className='compose-form__intent'>
@@ -67,10 +66,7 @@ class Compose extends React.PureComponent {
       );
     }
 
-    const { withHeader, showSearch, intl } = this.props;
-=======
     const { multiColumn, showSearch, intl } = this.props;
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
 
     let header = '';
 
