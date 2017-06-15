@@ -1,0 +1,49 @@
+.event_calendar {
+  background: #98425d;
+}
+.event_calendar__header {
+  display: flex;
+  align-items: center;
+  padding: 15px;
+  background: #ca426c;
+  font-size: 16px;
+}
+.event_calendar__header__icon {
+  width: 20px;
+  margin-right: 7px;
+}
+.event_calendar__header__name{
+  flex: 1;
+}
+.event_calendar__body li{
+  padding: 8px 10px
+}
+.event_calendar__row{
+  display: flex;
+  align-items: center;
+}
+.event_calendar__date{
+  width: 90px;
+  font-size: 12px;
+}
+.event_calendar__name {
+  font-size: 14px;
+  color: #FFF;
+  text-decoration: none;
+  &:hover{
+    color: rgba(#FFF, 0.9);
+    text-decoration: underline;
+  }
+}
+.event_calendar__text {
+  flex: 1;
+}
+.event_calendar__description {
+  margin-left: 8px;
+  font-size: 10px;
+  color: rgba(#FFF, 0.5);
+  &.is-remaining-days{
+    width: 50px;
+    text-align: right;
+  }
+}
