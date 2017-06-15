@@ -220,7 +220,7 @@ class PlayControl extends React.PureComponent {
 
   handleClickSkip () {
     if(this.isDeckInActive()) return;
-    if(!confirm("この曲は、いまこのサイトにいるみんなで一緒に同時に聞いています。\n本当にこの曲をスキップしてよろしいですか？")) return;
+    if(!confirm("この曲は、いまこのサイトにいるみんなで一緒に同時に聞いています。\nスキップをすると聞いている全員に影響がありますが、よろしいですか？")) return;
     api(this.getMockState).delete(`/api/v1/playlists/${this.state.targetDeck}/deck_queues/${this.state.deck.queues[0].id}`)
     .then((response)=>{
     })

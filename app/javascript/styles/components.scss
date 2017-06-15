@@ -4120,7 +4120,7 @@ button.icon-button.active i.fa-retweet {
       .control-bar__controller-info{
         color: #333;
         font-size: 15px;
-        margin-left: 8px;
+        margin: 0 8px;
         text-align: right;
 
         .control-bar__controller-now{
@@ -4629,7 +4629,7 @@ button.icon-button.active i.fa-retweet {
   }
 
   &.is-open .deck__queue-caption{
-    margin-top: 8px;
+    margin-top: 10px;
     margin-left: 10px;
   }
 }
