@@ -113,6 +113,18 @@ RSpec.describe QueueItem do
         let(:url) { 'https://booth.pm/zh-tw/items/1' }
         it_behaves_like 'instance from booth response'
       end
+
+      describe '#link' do
+        context 'given url and text' do
+          let(:url) { 'https://booth.pm/ja/items/1 aaa' }
+          it { expect(subject.link).to eq('https://booth.pm/ja/items/1') }
+        end
+      end
+
+      describe '#source_type' do
+        let(:url) { 'https://booth.pm/ja/items/1' }
+        it { expect(subject.source_type).to eq('booth') }
+      end
     end
 
     context 'given apollo link' do
@@ -123,6 +135,10 @@ RSpec.describe QueueItem do
       end
 
       it_behaves_like 'instance from booth response'
+
+      describe '#source_type' do
+        it { expect(subject.source_type).to eq('apollo') }
+      end
     end
 
     context 'given youtube link' do

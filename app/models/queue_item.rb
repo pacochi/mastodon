@@ -6,9 +6,9 @@ class QueueItem
 
   attr_accessor :id, :info, :thumbnail_url, :music_url, :video_url, :duration, :link, :source_type, :source_id, :account_id
 
-  # status_idは文字列とする
-  def source_id
-    ActiveModel::Type.lookup(:string).cast(@source_id)
+  # source_idは文字列とする
+  def source_id=(value)
+    @source_id = ActiveModel::Type.lookup(:string).cast(value)
   end
 
   class << self
@@ -18,7 +18,10 @@ class QueueItem
     YOUTUBE_API_KEY = ENV['YOUTUBE_API_KEY']
 
     def create_from_link(link, account)
+      entities = Extractor.extract_entities_with_indices(link, extract_url_without_protocol: false)
+      link = entities.map { |entry| entry[:url] }.compact.first
       return if link.blank? || addressable_link(link).nil?
+
       pawoo_link(link, account) || booth_link(link, account) || apollo_link(link, account) || youtube_link(link, account)
     end
 
@@ -64,7 +67,7 @@ class QueueItem
     end
 
     def apollo_link(link, account)
-      shop_id = BoothUrl.extract_booth_item_id(link)
+      shop_id = BoothUrl.extract_apollo_item_id(link)
       return unless shop_id
 
       cache = find_cache('apollo', shop_id)
