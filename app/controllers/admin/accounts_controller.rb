@@ -9,12 +9,9 @@ module Admin
       @accounts = filtered_accounts.page(params[:page])
     end
 
-<<<<<<< HEAD
     def show
-      @account = Account.find(params[:id])
       @oauth_authentication = @account.oauth_authentications.find_by(provider: :pixiv)
-=======
-    def show; end
+    end
 
     def subscribe
       Pubsubhubbub::SubscribeWorker.perform_async(@account.id)
@@ -32,7 +29,6 @@ module Admin
       @account.save!
 
       redirect_to admin_account_path(@account.id)
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
     end
 
     private
