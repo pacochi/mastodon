@@ -114,6 +114,13 @@ RSpec.describe QueueItem do
         it_behaves_like 'instance from booth response'
       end
 
+      describe '#link' do
+        context 'given url and text' do
+          let(:url) { 'https://booth.pm/ja/items/1 aaa' }
+          it { expect(subject.link).to eq('https://booth.pm/ja/items/1') }
+        end
+      end
+
       describe '#source_type' do
         let(:url) { 'https://booth.pm/ja/items/1' }
         it { expect(subject.source_type).to eq('booth') }
@@ -205,28 +212,6 @@ RSpec.describe QueueItem do
         let(:youtube_oembed_response) { 'Not Found' }
         it { is_expected.to be_nil }
       end
-    end
-  end
-
-  describe '#link=' do
-    subject do
-      instance = described_class.new(link: link)
-      instance.link
-    end
-
-    context 'given invalid link' do
-      let(:link) { 'https://booth.pm/apollo/a06/item?id=159897 aaaa' }
-      it { is_expected.to eq('https://booth.pm/apollo/a06/item?id=159897') }
-    end
-
-    context 'given string' do
-      let(:link) { 'hello' }
-      it { is_expected.to be_nil }
-    end
-
-    context 'given nil' do
-      let(:link) { nil }
-      it { is_expected.to be_nil }
     end
   end
 end
