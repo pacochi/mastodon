@@ -47,7 +47,7 @@ const PageTwo = ({ me }) => (
         <NavigationBar account={me} />
       </div>
       <ComposeForm
-        text='Awoo! #introductions'
+        text='こんにちは！ #introductions'
         suggestions={Immutable.List()}
         mentionedDomains={[]}
         spoiler={false}
@@ -164,6 +164,18 @@ PageSix.propTypes = {
   domain: PropTypes.string.isRequired,
 };
 
+const MusicPageOne = () => (
+  <div className='onboarding-modal__page onboarding-modal-music__page-one'>
+    <div className='onboarding-modal-music__page-one__image' />
+  </div>
+);
+
+const MusicPageTwo = () => (
+  <div className='onboarding-modal__page onboarding-modal-music__page-two'>
+    <div className='onboarding-modal-music__page-two__image' />
+  </div>
+);
+
 const mapStateToProps = state => ({
   me: state.getIn(['accounts', state.getIn(['meta', 'me'])]),
   admin: state.getIn(['accounts', state.getIn(['meta', 'admin'])]),
@@ -187,6 +199,11 @@ class OnboardingModal extends React.PureComponent {
   state = {
     currentIndex: 0,
   };
+
+  constructor(props, context) {
+    super(props, context);
+    this.isSp = window.innerWidth < 1024;
+  }
 
   handleSkip = (e) => {
     e.preventDefault();
@@ -212,12 +229,15 @@ class OnboardingModal extends React.PureComponent {
   render () {
     const { me, admin, domain, intl } = this.props;
 
-    const pages = [
+    const pages = this.isSp ? [
       <PageOne acct={me.get('acct')} domain={domain} />,
       <PageTwo me={me} />,
       <PageThree me={me} domain={domain} />,
       <PageFour domain={domain} intl={intl} />,
       <PageSix admin={admin} domain={domain} />,
+    ] : [
+      <MusicPageOne />,
+      <MusicPageTwo />,
     ];
 
     const { currentIndex } = this.state;
@@ -248,7 +268,7 @@ class OnboardingModal extends React.PureComponent {
       <div className='modal-root__modal onboarding-modal'>
         <TransitionMotion styles={styles}>
           {interpolatedStyles =>
-            <div className='onboarding-modal__pager'>
+            <div className={`onboarding-modal${this.isSp ? '' : '-music'}__pager`}>
               {pages.map((page, i) =>
                 <div key={`page-${i}`} style={{ opacity: interpolatedStyles[i].style.opacity, pointerEvents: i === currentIndex ? 'auto' : 'none' }}>{page}</div>
               )}
@@ -257,14 +277,14 @@ class OnboardingModal extends React.PureComponent {
         </TransitionMotion>
 
         <div className='onboarding-modal__paginator'>
-          <div>
+          {this.isSp ? (<div>
             <button
               onClick={this.handleSkip}
               className='onboarding-modal__nav onboarding-modal__skip'
             >
               <FormattedMessage id='onboarding.skip' defaultMessage='Skip' />
             </button>
-          </div>
+          </div>) : null}
 
           <div className='onboarding-modal__dots'>
             {pages.map((_, i) => <div key={i} role='button' tabIndex='0' data-index={i} onClick={this.handleDot} className={`onboarding-modal__dot ${i === currentIndex ? 'active' : ''}`} />)}
