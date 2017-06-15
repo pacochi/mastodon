@@ -3992,6 +3992,27 @@ button.icon-button.active i.fa-retweet {
 }
 /* End Video Player */
 
+#about-playcontrol{
+  li {
+    font: 14px/18px sans-serif;
+    margin-bottom: 0;
+  }
+  ul {
+    list-style: none;
+    margin-left: 0;
+  }
+  .deck-selector__selector-body{
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .queue-item__restrictions-list{
+    li {
+      font-size: 12px;
+      line-height: 14px;
+    }
+  }
+}
+
 .player-control{
   position: fixed;
   left: 0;
