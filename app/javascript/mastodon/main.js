@@ -2,7 +2,11 @@ const perf = require('./performance');
 
 // import default stylesheet with variables
 require('font-awesome/css/font-awesome.css');
+<<<<<<< HEAD
 require('../styles/custom.scss');
+=======
+require('mastodon-application-style');
+>>>>>>> 947887f261f74f84312327a5265553e8f16655fe
 
 function onDomContentLoaded(callback) {
   if (document.readyState !== 'loading') {

@@ -40,7 +40,11 @@ const makeMapStateToProps = () => {
     me: state.getIn(['meta', 'me']),
     boostModal: state.getIn(['meta', 'boost_modal']),
     deleteModal: state.getIn(['meta', 'delete_modal']),
+<<<<<<< HEAD
     autoPlayGif: state.getIn(['meta', 'auto_play_gif']) || false,
+=======
+    autoPlayGif: state.getIn(['meta', 'auto_play_gif']),
+>>>>>>> 947887f261f74f84312327a5265553e8f16655fe
   });
 
   return mapStateToProps;
@@ -77,11 +81,15 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
   },
 
   onDelete (status) {
-    dispatch(openModal('CONFIRM', {
-      message: intl.formatMessage(messages.deleteMessage),
-      confirm: intl.formatMessage(messages.deleteConfirm),
-      onConfirm: () => dispatch(deleteStatus(status.get('id'))),
-    }));
+    if (!this.deleteModal) {
+      dispatch(deleteStatus(status.get('id')));
+    } else {
+      dispatch(openModal('CONFIRM', {
+        message: intl.formatMessage(messages.deleteMessage),
+        confirm: intl.formatMessage(messages.deleteConfirm),
+        onConfirm: () => dispatch(deleteStatus(status.get('id'))),
+      }));
+    }
   },
 
   onMention (account, router) {

@@ -93,6 +93,7 @@ class Item extends React.PureComponent {
     let thumbnail = '';
 
     if (attachment.get('type') === 'image') {
+<<<<<<< HEAD
       if (expandMedia) {
         thumbnail = (
           <a
@@ -114,6 +115,17 @@ class Item extends React.PureComponent {
           />
         );
       }
+=======
+      thumbnail = (
+        <a // eslint-disable-line jsx-a11y/anchor-has-content
+          className='media-gallery__item-thumbnail'
+          href={attachment.get('remote_url') || attachment.get('url')}
+          onClick={this.handleClick}
+          target='_blank'
+          style={{ backgroundImage: `url(${attachment.get('preview_url')})` }}
+        />
+      );
+>>>>>>> 947887f261f74f84312327a5265553e8f16655fe
     } else if (attachment.get('type') === 'gifv') {
       const autoPlay = !isIOS() && this.props.autoPlayGif;
 
@@ -125,8 +137,8 @@ class Item extends React.PureComponent {
             src={attachment.get('url')}
             onClick={this.handleClick}
             autoPlay={autoPlay}
-            loop={true}
-            muted={true}
+            loop
+            muted
           />
 
           <span className='media-gallery__gifv__label'>GIF</span>

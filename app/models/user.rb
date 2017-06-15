@@ -51,7 +51,7 @@ class User < ApplicationRecord
   accepts_nested_attributes_for :account
 
   validates :locale, inclusion: I18n.available_locales.map(&:to_s), if: :locale?
-  validates :email, email: true
+  validates_with BlacklistedEmailValidator, if: :email_changed?
 
   scope :recent,    -> { order(id: :desc) }
   scope :admins,    -> { where(admin: true) }
@@ -62,7 +62,14 @@ class User < ApplicationRecord
 
   before_validation :sanitize_languages
 
+<<<<<<< HEAD
   after_update :delete_initial_password_usage, if: :encrypted_password_changed?
+=======
+  # This avoids a deprecation warning from Rails 5.1
+  # It seems possible that a future release of devise-two-factor will
+  # handle this itself, and this can be removed from our User class.
+  attribute :otp_secret
+>>>>>>> 947887f261f74f84312327a5265553e8f16655fe
 
   def confirmed?
     confirmed_at.present?
@@ -74,10 +81,6 @@ class User < ApplicationRecord
     save!
   end
 
-  def send_devise_notification(notification, *args)
-    devise_mailer.send(notification, self, *args).deliver_later
-  end
-
   def setting_default_privacy
     settings.default_privacy || (account.locked? ? 'private' : 'public')
   end
@@ -86,8 +89,18 @@ class User < ApplicationRecord
     settings.boost_modal
   end
 
+  def setting_delete_modal
+    settings.delete_modal
+  end
+
   def setting_auto_play_gif
     settings.auto_play_gif
+  end
+
+  protected
+
+  def send_devise_notification(notification, *args)
+    devise_mailer.send(notification, self, *args).deliver_later
   end
 
   private

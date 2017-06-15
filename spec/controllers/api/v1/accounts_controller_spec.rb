@@ -17,6 +17,7 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
     end
   end
 
+<<<<<<< HEAD
   describe 'GET #search' do
     it 'returns http success' do
       get :search, params: { q: 'query' }
@@ -98,6 +99,8 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
     end
   end
 
+=======
+>>>>>>> 947887f261f74f84312327a5265553e8f16655fe
   describe 'POST #follow' do
     let(:other_account) { Fabricate(:user, email: 'bob@example.com', account: Fabricate(:account, username: 'bob')).account }
 
@@ -204,63 +207,6 @@ RSpec.describe Api::V1::AccountsController, type: :controller do
 
     it 'removes the muting relation between user and target user' do
       expect(user.account.muting?(other_account)).to be false
-    end
-  end
-
-  describe 'GET #relationships' do
-    let(:simon) { Fabricate(:user, email: 'simon@example.com', account: Fabricate(:account, username: 'simon')).account }
-    let(:lewis) { Fabricate(:user, email: 'lewis@example.com', account: Fabricate(:account, username: 'lewis')).account }
-
-    before do
-      user.account.follow!(simon)
-      lewis.follow!(user.account)
-    end
-
-    context 'provided only one ID' do
-      before do
-        get :relationships, params: { id: simon.id }
-      end
-
-      it 'returns http success' do
-        expect(response).to have_http_status(:success)
-      end
-
-      it 'returns JSON with correct data' do
-        json = body_as_json
-
-        expect(json).to be_a Enumerable
-        expect(json.first[:following]).to be true
-        expect(json.first[:followed_by]).to be false
-      end
-    end
-
-    context 'provided multiple IDs' do
-      before do
-        get :relationships, params: { id: [simon.id, lewis.id] }
-      end
-
-      it 'returns http success' do
-        expect(response).to have_http_status(:success)
-      end
-
-      it 'returns JSON with correct data' do
-        json = body_as_json
-
-        expect(json).to be_a Enumerable
-        expect(json.first[:id]).to be simon.id
-        expect(json.first[:following]).to be true
-        expect(json.first[:followed_by]).to be false
-        expect(json.first[:muting]).to be false
-        expect(json.first[:requested]).to be false
-        expect(json.first[:domain_blocking]).to be false
-
-        expect(json.second[:id]).to be lewis.id
-        expect(json.second[:following]).to be false
-        expect(json.second[:followed_by]).to be true
-        expect(json.second[:muting]).to be false
-        expect(json.second[:requested]).to be false
-        expect(json.second[:domain_blocking]).to be false
-      end
     end
   end
 end

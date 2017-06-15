@@ -2,12 +2,17 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
+<<<<<<< HEAD
 import {
   fetchAccount,
   fetchAccountTimeline,
   expandAccountTimeline,
   fetchAccountPinnedStatuses,
 } from '../../actions/accounts';
+=======
+import { fetchAccount } from '../../actions/accounts';
+import { refreshAccountTimeline, expandAccountTimeline } from '../../actions/timelines';
+>>>>>>> 947887f261f74f84312327a5265553e8f16655fe
 import StatusList from '../../components/status_list';
 import LoadingIndicator from '../../components/loading_indicator';
 import Column from '../ui/components/column';
@@ -17,9 +22,9 @@ import Immutable from 'immutable';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
 const mapStateToProps = (state, props) => ({
-  statusIds: state.getIn(['timelines', 'accounts_timelines', Number(props.params.accountId), 'items'], Immutable.List()),
-  isLoading: state.getIn(['timelines', 'accounts_timelines', Number(props.params.accountId), 'isLoading']),
-  hasMore: !!state.getIn(['timelines', 'accounts_timelines', Number(props.params.accountId), 'next']),
+  statusIds: state.getIn(['timelines', `account:${Number(props.params.accountId)}`, 'items'], Immutable.List()),
+  isLoading: state.getIn(['timelines', `account:${Number(props.params.accountId)}`, 'isLoading']),
+  hasMore: !!state.getIn(['timelines', `account:${Number(props.params.accountId)}`, 'next']),
   me: state.getIn(['meta', 'me']),
   pinnedStatusIds: state.getIn(['timelines', 'accounts_pinned_statuses', Number(props.params.accountId), 'items'], Immutable.List()),
 });
@@ -38,15 +43,23 @@ class AccountTimeline extends ImmutablePureComponent {
 
   componentWillMount () {
     this.props.dispatch(fetchAccount(Number(this.props.params.accountId)));
+<<<<<<< HEAD
     this.props.dispatch(fetchAccountPinnedStatuses(Number(this.props.params.accountId)));
     this.props.dispatch(fetchAccountTimeline(Number(this.props.params.accountId)));
+=======
+    this.props.dispatch(refreshAccountTimeline(Number(this.props.params.accountId)));
+>>>>>>> 947887f261f74f84312327a5265553e8f16655fe
   }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.params.accountId !== this.props.params.accountId && nextProps.params.accountId) {
       this.props.dispatch(fetchAccount(Number(nextProps.params.accountId)));
+<<<<<<< HEAD
       this.props.dispatch(fetchAccountPinnedStatuses(Number(nextProps.params.accountId)));
       this.props.dispatch(fetchAccountTimeline(Number(nextProps.params.accountId)));
+=======
+      this.props.dispatch(refreshAccountTimeline(Number(nextProps.params.accountId)));
+>>>>>>> 947887f261f74f84312327a5265553e8f16655fe
     }
   }
 

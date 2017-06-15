@@ -14,5 +14,15 @@
     = f.input :password_confirmation, autocomplete: "off", placeholder: t('simple_form.labels.defaults.confirm_new_password'), input_html: { 'aria-label' => t('simple_form.labels.defaults.confirm_new_password') }
     = f.input :current_password, autocomplete: "off", placeholder: t('simple_form.labels.defaults.current_password'), input_html: { 'aria-label' => t('simple_form.labels.defaults.current_password') }
 
+<<<<<<< HEAD
     .actions
       = f.button :button, t('generic.save_changes'), type: :submit
+=======
+  .actions
+    = f.button :button, t('generic.save_changes'), type: :submit
+
+%hr/
+
+%h6= t('auth.delete_account')
+%p.muted-hint= t('auth.delete_account_html', path: settings_delete_path)
+>>>>>>> 947887f261f74f84312327a5265553e8f16655fe

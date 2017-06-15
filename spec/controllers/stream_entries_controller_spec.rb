@@ -72,7 +72,14 @@ RSpec.describe StreamEntriesController, type: :controller do
       descendant = Fabricate(:status, in_reply_to_id: status.id)
 
       get :show, params: { account_username: status.account.username, id: status.stream_entry.id }
+<<<<<<< HEAD
       expect(response).to have_http_status(:redirect)
+=======
+
+      expect(assigns(:ancestors)).to eq [ancestor]
+      expect(assigns(:descendants)).to eq [descendant]
+      expect(response).to have_http_status(:success)
+>>>>>>> 947887f261f74f84312327a5265553e8f16655fe
     end
 
     it 'returns http success with Atom' do

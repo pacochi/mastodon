@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'sidekiq-bulk'
+
 class FanOutOnWriteService < BaseService
   # Push a status into home and mentions feeds
   # @param [Status] status
@@ -34,6 +36,7 @@ class FanOutOnWriteService < BaseService
   def deliver_to_followers(status)
     Rails.logger.debug "Delivering status #{status.id} to followers"
 
+<<<<<<< HEAD
     followers = status.account.followers.where(domain: nil).joins(:user).where('users.current_sign_in_at > ?', 14.days.ago).select(:id).reorder(nil)
 
     batch_size = Rails.configuration.x.fan_out_job_batch_size
@@ -46,6 +49,11 @@ class FanOutOnWriteService < BaseService
     else
       followers.find_each do |follower|
         FeedInsertWorker.perform_async(status.id, follower.id)
+=======
+    status.account.followers.where(domain: nil).joins(:user).where('users.current_sign_in_at > ?', 14.days.ago).select(:id).reorder(nil).find_in_batches do |followers|
+      FeedInsertWorker.push_bulk(followers) do |follower|
+        [status.id, follower.id]
+>>>>>>> 947887f261f74f84312327a5265553e8f16655fe
       end
     end
   end

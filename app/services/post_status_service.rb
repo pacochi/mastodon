@@ -36,8 +36,12 @@ class PostStatusService < BaseService
     process_hashtags_service.call(status)
     process_mentions_service.call(status)
 
+<<<<<<< HEAD
     PixivCardUpdateWorker.perform_async(status.id) if status.pixiv_cards.any?
     LinkCrawlWorker.perform_async(status.id) unless status.spoiler_text.present?
+=======
+    LinkCrawlWorker.perform_async(status.id) unless status.spoiler_text?
+>>>>>>> 947887f261f74f84312327a5265553e8f16655fe
     DistributionWorker.perform_async(status.id)
     Pubsubhubbub::DistributionWorker.perform_async(status.stream_entry.id)
 

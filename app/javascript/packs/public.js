@@ -3,13 +3,17 @@ import IntlRelativeFormat from 'intl-relativeformat';
 import { delegate } from 'rails-ujs';
 import emojify from '../mastodon/emoji';
 import { getLocale } from '../mastodon/locales';
+<<<<<<< HEAD
+=======
+import loadPolyfills from '../mastodon/load_polyfills';
+>>>>>>> 947887f261f74f84312327a5265553e8f16655fe
 
 require.context('../images/', true);
 
 const { localeData } = getLocale();
 localeData.forEach(IntlRelativeFormat.__addLocaleData);
 
-function main() {
+function loaded() {
   const locale = document.documentElement.lang;
   const dateTimeFormat = new Intl.DateTimeFormat(locale, {
     year: 'numeric',
@@ -20,18 +24,18 @@ function main() {
   });
   const relativeFormat = new IntlRelativeFormat(locale);
 
-  document.addEventListener('DOMContentLoaded', () => {
-    [].forEach.call(document.querySelectorAll('.emojify'), (content) => {
-      content.innerHTML = emojify(content.innerHTML);
-    });
+  [].forEach.call(document.querySelectorAll('.emojify'), (content) => {
+    content.innerHTML = emojify(content.innerHTML);
+  });
 
-    [].forEach.call(document.querySelectorAll('time.formatted'), (content) => {
-      const datetime = new Date(content.getAttribute('datetime'));
-      const formattedDate = dateTimeFormat.format(datetime);
-      content.title = formattedDate;
-      content.textContent = formattedDate;
-    });
+  [].forEach.call(document.querySelectorAll('time.formatted'), (content) => {
+    const datetime = new Date(content.getAttribute('datetime'));
+    const formattedDate = dateTimeFormat.format(datetime);
+    content.title = formattedDate;
+    content.textContent = formattedDate;
+  });
 
+<<<<<<< HEAD
     [].forEach.call(document.querySelectorAll('time.time-ago'), (content) => {
       const datetime = new Date(content.getAttribute('datetime'));
       content.textContent = relativeFormat.format(datetime);;
@@ -61,7 +65,20 @@ function main() {
         });
       }, 200);
     }
+=======
+  [].forEach.call(document.querySelectorAll('time.time-ago'), (content) => {
+    const datetime = new Date(content.getAttribute('datetime'));
+    content.textContent = relativeFormat.format(datetime);;
+>>>>>>> 947887f261f74f84312327a5265553e8f16655fe
   });
+}
+
+function main() {
+  if (['interactive', 'complete'].includes(document.readyState)) {
+    loaded();
+  } else {
+    document.addEventListener('DOMContentLoaded', loaded);
+  }
 
   delegate(document, '.video-player video', 'click', ({ target }) => {
     if (target.paused) {
@@ -118,12 +135,6 @@ function main() {
   });
 }
 
-if (!window.Intl) {
-  import(/* webpackChunkName: "base_polyfills" */ 'mastodon/base_polyfills').then(() => {
-    main();
-  }).catch(error => {
-    console.log(error); // eslint-disable-line no-console
-  });
-} else {
-  main();
-}
+loadPolyfills().then(main).catch(error => {
+  console.error(error);
+});
