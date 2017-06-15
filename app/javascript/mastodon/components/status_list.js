@@ -96,12 +96,7 @@ class StatusList extends ImmutablePureComponent {
   }
 
   render () {
-<<<<<<< HEAD
-    const { statusIds, onScrollToBottom, scrollKey, shouldUpdateScroll, isLoading, isUnread, hasMore, prepend, emptyMessage, squareMedia, expandMedia, standalone, displayPinned } = this.props;
-    const { isIntersecting } = this.state;
-=======
-    const { statusIds, onScrollToBottom, scrollKey, trackScroll, shouldUpdateScroll, isLoading, hasMore, prepend, emptyMessage } = this.props;
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
+    const { statusIds, onScrollToBottom, scrollKey, trackScroll, shouldUpdateScroll, isLoading, hasMore, prepend, emptyMessage, squareMedia, expandMedia, standalone, displayPinned } = this.props;
 
     let loadMore       = null;
     let scrollableArea = null;
@@ -117,11 +112,7 @@ class StatusList extends ImmutablePureComponent {
             {prepend}
 
             {statusIds.map((statusId) => {
-<<<<<<< HEAD
-              return <StatusContainer key={statusId} id={statusId} isIntersecting={isIntersecting[statusId]} onRef={this.handleStatusRef} squareMedia={squareMedia} expandMedia={expandMedia} standalone={standalone} displayPinned={displayPinned} />;
-=======
-              return <StatusContainer key={statusId} id={statusId} intersectionObserverWrapper={this.intersectionObserverWrapper} />;
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
+              return <StatusContainer key={statusId} id={statusId} intersectionObserverWrapper={this.intersectionObserverWrapper} squareMedia={squareMedia} expandMedia={expandMedia} standalone={standalone} displayPinned={displayPinned} />;
             })}
 
             {loadMore}
