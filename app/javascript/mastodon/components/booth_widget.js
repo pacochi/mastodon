@@ -24,10 +24,12 @@ class BoothWidget extends React.PureComponent {
 
   componentDidMount () {
     this.audio.addEventListener('timeupdate', this.onTimeUpdate, true);
+    this.audio.addEventListener('ended', this.onEnd, true);
   }
 
   componentWillUnmount() {
     this.audio.removeEventListener('timeupdate', this.onTimeUpdate, true);
+    this.audio.removeEventListener('ended', this.onEnd, true);
   }
 
   onTimeUpdate = () => {
@@ -35,6 +37,13 @@ class BoothWidget extends React.PureComponent {
     const currentTime = Math.min(this.audio.currentTime, boothItem.getIn(['sound', 'duration']));
 
     this.setState({ currentTime });
+  }
+
+  onEnd = () => {
+    this.setState({
+      isPlaying: false,
+      currentTime: 0,
+    });
   }
 
   handleSeekbarClick = (e) => {
