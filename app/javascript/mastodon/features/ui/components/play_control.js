@@ -394,6 +394,7 @@ class PlayControl extends React.PureComponent {
                 </div>
                 {(()=>{
                   if(!this.state.deck || !this.state.deck.max_queue_size || !this.state.deck.max_add_count || !this.state.deck.max_skip_count) return null;
+                  if(!this.state.isOpen) return null;
                   return (
                     <div className="queue-item__restrictions">
                       <div className="queue-item__restrictions-title">
@@ -409,101 +410,127 @@ class PlayControl extends React.PureComponent {
                   );
                 })()}
               </div>
-              <ul className="deck__queue">
+              <div className="deck_queue-column deck__queue-column-list">
                 {(()=>{
-                  if(this.isDeckInActive() ){
-                    return [0,1,2,3,4,5,6,7,8,9].map((_,index)=>(
-                      <li className="deck__queue-item" key={'empty-queue-item_'+index}>
-                        <div className="queue-item__main">
-                          <div className='queue-item__metadata'>
-                            {!index ? 'プレイリストに好きな曲を入れてね！' : ''}
+                  if(!this.state.isOpen) return null;
+                  return(<div className="deck__queue-caption">- いまみんなで一緒に聞いているプレイリスト -</div>);
+                })()}
+                <ul className="deck__queue">
+                  {(()=>{
+                    if(this.isDeckInActive() ){
+                      return [0,1,2,3,4,5,6,7,8,9].map((_,index)=>(
+                        <li className="deck__queue-item" key={'empty-queue-item_'+index}>
+                          <div className="queue-item__main">
+                            <div>
+                              {(()=>{
+                                if(!this.state.isOpen && !index) {
+                                  return (
+                                    <div className="deck__queue-caption">- いまみんなで一緒に聞いている曲 -</div>
+                                  );
+                                }
+                                return null;
+                              })()}
+                              <div className='queue-item__metadata'>
+                                {!index ? 'プレイリストに好きな曲を入れてね！' : ''}
+                              </div>
+                            </div>
                           </div>
+                          <div className='queue-item__datasource' />
+                        </li>
+                      ));
+                    }
+
+                    return this.state.deck.queues.map((queue_item, i) =>(
+                        <li key={queue_item.id} className="deck__queue-item">
+                          <div className="queue-item__main">
+                            <div>
+                              {(()=>{
+                                if(!this.state.isOpen && i === 0) {
+                                  return (
+                                    <div className="deck__queue-caption">- いまみんなで一緒に聞いている曲 -</div>
+                                  );
+                                }
+                                return null;
+                              })()}
+                              <div className='queue-item__metadata'>
+                                <span className='queue-item__metadata-title'>{queue_item.info.length > 40 ? `${queue_item.info.slice(0, 40)}……` : queue_item.info}</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div className='queue-item__datasource'>
+                            <a href={queue_item.link} target="_blank" onClick={this.handleClickItemLink}>
+                              <img src={`/player/logos/${queue_item.source_type}.${queue_item.source_type === 'apollo' ? 'png' : 'svg'}`} />
+                            </a>
+                          </div>
+                        </li>
+                      )
+                    );
+                  })()}
+
+                  {(()=>{
+                    if(this.isDeckInActive()) return null;
+                    return (new Array(10-this.state.deck.queues.length)).fill(0).map((_,index)=>(
+                      <li className="deck__queue-item" key={'empty-track'+index}>
+                        <div className="queue-item__main">
+                          <div className='queue-item__metadata' />
                         </div>
                         <div className='queue-item__datasource' />
                       </li>
                     ));
-                  }
+                  })()}
 
-                  return this.state.deck.queues.map(queue_item=>(
-                      <li key={queue_item.id} className="deck__queue-item">
-                        <div className="queue-item__main">
-                          <div className='queue-item__metadata'>
-                            <span className='queue-item__metadata-title'>{queue_item.info.length > 40 ? `${queue_item.info.slice(0, 40)}……` : queue_item.info}</span>
+                  {(()=>{
+                    if(this.props.isTop) {
+                      return null;
+                    }
+                    return (
+                      <li className="deck__queue-add-form">
+                        <form onSubmit={this.handleSubmitAddForm}>
+                          <span>曲を追加</span>
+                          <input ref={this.setURLRef} type="text" placeholder="URLを入力 (Pawoo Music, APOLLO(BOOTH) and YouTube URL)" required />
+                          <div className='deck__queue-add-form-help'>
+                            <i className='fa fa-question-circle deck__queue-add-form-help-icon' />
+                            <div className='deck__queue-add-form-help-popup'>
+                              <h3>対応プラットフォーム</h3>
+                              <ul>
+                                <li>
+                                  <img src="/player/logos/pawoo-music.svg" />
+                                  <div className='platform-info'>
+                                    <div className='platform-info__title'>Pawoo Music</div>
+                                    <div className='platform-info__url'>https://music.pawoo.net/web/statuses/[XXXXX…]</div>
+                                  </div>
+                                </li>
+                                <li>
+                                  <img src="/player/logos/youtube.svg" />
+                                  <div className='platform-info'>
+                                    <div className='platform-info__title'>YouTube</div>
+                                    <div className='platform-info__url'>https://www.youtube.com/watch?v=[XXXXX...]</div>
+                                  </div>
+                                </li>
+                                <li>
+                                  <img src="/player/logos/booth.svg" />
+                                  <div className='platform-info'>
+                                    <div className='platform-info__title'>BOOTH</div>
+                                    <div className='platform-info__url'>https://booth.pm/ja/items/[XXXXX...]</div>
+                                  </div>
+                                </li>
+                                <li>
+                                  <img src="/player/logos/apollo.png" />
+                                  <div className='platform-info'>
+                                    <div className='platform-info__title'>APOLLO</div>
+                                    <div className='platform-info__url'>https://booth.pm/apollo/a06/item?id=[XXXXX...]</div>
+                                  </div>
+                                </li>
+                              </ul>
+                            </div>
                           </div>
-                        </div>
-                        <div className='queue-item__datasource'>
-                          <a href={queue_item.link} target="_blank" onClick={this.handleClickItemLink}>
-                            <img src={`/player/logos/${queue_item.source_type}.${queue_item.source_type === 'apollo' ? 'png' : 'svg'}`} />
-                          </a>
-                        </div>
+                          <input type="submit" value="追加" />
+                        </form>
                       </li>
-                    )
-                  );
-                })()}
-
-                {(()=>{
-                  if(this.isDeckInActive()) return null;
-                  return (new Array(10-this.state.deck.queues.length)).fill(0).map((_,index)=>(
-                    <li className="deck__queue-item" key={'empty-track'+index}>
-                      <div className="queue-item__main">
-                        <div className='queue-item__metadata' />
-                      </div>
-                      <div className='queue-item__datasource' />
-                    </li>
-                  ));
-                })()}
-
-                {(()=>{
-                  if(this.props.isTop) {
-                    return null;
-                  }
-                  return (
-                    <li className="deck__queue-add-form">
-                      <form onSubmit={this.handleSubmitAddForm}>
-                        <span>曲を追加</span>
-                        <input ref={this.setURLRef} type="text" placeholder="URLを入力 (Pawoo Music, APOLLO(BOOTH) and YouTube URL)" required />
-                        <div className='deck__queue-add-form-help'>
-                          <i className='fa fa-question-circle deck__queue-add-form-help-icon' />
-                          <div className='deck__queue-add-form-help-popup'>
-                            <h3>対応プラットフォーム</h3>
-                            <ul>
-                              <li>
-                                <img src="/player/logos/pawoo-music.svg" />
-                                <div className='platform-info'>
-                                  <div className='platform-info__title'>Pawoo Music</div>
-                                  <div className='platform-info__url'>https://music.pawoo.net/web/statuses/[XXXXX…]</div>
-                                </div>
-                              </li>
-                              <li>
-                                <img src="/player/logos/youtube.svg" />
-                                <div className='platform-info'>
-                                  <div className='platform-info__title'>YouTube</div>
-                                  <div className='platform-info__url'>https://www.youtube.com/watch?v=[XXXXX...]</div>
-                                </div>
-                              </li>
-                              <li>
-                                <img src="/player/logos/booth.svg" />
-                                <div className='platform-info'>
-                                  <div className='platform-info__title'>BOOTH</div>
-                                  <div className='platform-info__url'>https://booth.pm/ja/items/[XXXXX...]</div>
-                                </div>
-                              </li>
-                              <li>
-                                <img src="/player/logos/apollo.png" />
-                                <div className='platform-info'>
-                                  <div className='platform-info__title'>APOLLO</div>
-                                  <div className='platform-info__url'>https://booth.pm/apollo/a06/item?id=[XXXXX...]</div>
-                                </div>
-                              </li>
-                            </ul>
-                          </div>
-                        </div>
-                        <input type="submit" value="追加" />
-                      </form>
-                    </li>
-                  );
-                })()}
-              </ul>
+                    );
+                  })()}
+                </ul>
+              </div>
             </div>
           </div>
         </div>
