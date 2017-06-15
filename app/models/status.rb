@@ -28,11 +28,8 @@ class Status < ApplicationRecord
   include Paginable
   include Streamable
   include Cacheable
-<<<<<<< HEAD
-  include StatusSearchable
-=======
   include StatusThreadingConcern
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
+  include StatusSearchable
 
   enum visibility: [:public, :unlisted, :private, :direct], _suffix: :visibility
 
