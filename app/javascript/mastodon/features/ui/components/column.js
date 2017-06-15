@@ -42,13 +42,9 @@ class Column extends React.PureComponent {
 
     if (typeof heading === 'string') {
       columnHeaderId = heading.replace(/ /g, '-');
-<<<<<<< HEAD
       header = <ColumnHeader icon={icon} active={active} type={heading} onClick={this.handleHeaderClick} hideOnMobile={hideHeadingOnMobile} columnHeaderId={columnHeaderId}/>;
     } else if (heading) {
-      header = <ColumnHeader icon={icon} active={active} type={heading} onClick={this.handleHeaderClick} />;
-=======
       header = <ColumnHeader icon={icon} active={active} type={heading} onClick={this.handleHeaderClick} hideOnMobile={hideHeadingOnMobile} columnHeaderId={columnHeaderId} />;
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
     }
     return (
       <div
