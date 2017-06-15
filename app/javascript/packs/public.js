@@ -3,10 +3,7 @@ import IntlRelativeFormat from 'intl-relativeformat';
 import { delegate } from 'rails-ujs';
 import emojify from '../mastodon/emoji';
 import { getLocale } from '../mastodon/locales';
-<<<<<<< HEAD
-=======
 import loadPolyfills from '../mastodon/load_polyfills';
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
 
 require.context('../images/', true);
 
@@ -35,42 +32,35 @@ function loaded() {
     content.textContent = formattedDate;
   });
 
-<<<<<<< HEAD
-    [].forEach.call(document.querySelectorAll('time.time-ago'), (content) => {
-      const datetime = new Date(content.getAttribute('datetime'));
-      content.textContent = relativeFormat.format(datetime);;
-    });
-
-    (() => {
-      // MSIE(IE11のみUAにMSIEを含まないのでTridentで検出)
-      const userAgent = window.navigator.userAgent.toLowerCase();
-      const isMSIE = /MSIE/i.test(userAgent) || /Trident/i.test(userAgent);
-
-      if (isMSIE) {
-        alert('お使いのブラウザはサポートされていません。Microsoft Edge、Google Chromeなどをお試しください。');
-      }
-    })();
-
-    // タイムラインが伸びすぎないようにする
-    if (location.pathname === '/about') {
-      // Reactのレンダリングを待つ必要がある？
-      setTimeout(() => {
-        const timeline = document.getElementsByClassName('about-col main')[0];
-        if (!timeline) return;
-
-        [].forEach.call(document.getElementsByClassName('about-timeline-container'), (content) => {
-          [].forEach.call(content.getElementsByClassName('column'), (column) => {
-            column.style.height = `${timeline.clientHeight}px`;
-          });
-        });
-      }, 200);
-    }
-=======
   [].forEach.call(document.querySelectorAll('time.time-ago'), (content) => {
     const datetime = new Date(content.getAttribute('datetime'));
     content.textContent = relativeFormat.format(datetime);;
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
   });
+
+  (() => {
+    // MSIE(IE11のみUAにMSIEを含まないのでTridentで検出)
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    const isMSIE = /MSIE/i.test(userAgent) || /Trident/i.test(userAgent);
+
+    if (isMSIE) {
+      alert('お使いのブラウザはサポートされていません。Microsoft Edge、Google Chromeなどをお試しください。');
+    }
+  })();
+
+  // タイムラインが伸びすぎないようにする
+  if (location.pathname === '/about') {
+    // Reactのレンダリングを待つ必要がある？
+    setTimeout(() => {
+      const timeline = document.getElementsByClassName('about-col main')[0];
+      if (!timeline) return;
+
+      [].forEach.call(document.getElementsByClassName('about-timeline-container'), (content) => {
+        [].forEach.call(content.getElementsByClassName('column'), (column) => {
+          column.style.height = `${timeline.clientHeight}px`;
+        });
+      });
+    }, 200);
+  }
 }
 
 function main() {
