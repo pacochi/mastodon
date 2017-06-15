@@ -62,14 +62,12 @@ class User < ApplicationRecord
 
   before_validation :sanitize_languages
 
-<<<<<<< HEAD
   after_update :delete_initial_password_usage, if: :encrypted_password_changed?
-=======
+
   # This avoids a deprecation warning from Rails 5.1
   # It seems possible that a future release of devise-two-factor will
   # handle this itself, and this can be removed from our User class.
   attribute :otp_secret
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
 
   def confirmed?
     confirmed_at.present?
