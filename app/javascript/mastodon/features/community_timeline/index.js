@@ -37,15 +37,12 @@ class CommunityTimeline extends React.PureComponent {
     streamingAPIBaseURL: PropTypes.string.isRequired,
     accessToken: PropTypes.string.isRequired,
     hasUnread: PropTypes.bool,
-<<<<<<< HEAD
+    multiColumn: PropTypes.bool,
     standalone: PropTypes.bool,
   };
 
   static defaultProps = {
     standalone: false,
-=======
-    multiColumn: PropTypes.bool,
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
   };
 
   handlePin = () => {
@@ -76,9 +73,8 @@ class CommunityTimeline extends React.PureComponent {
       return;
     }
 
-<<<<<<< HEAD
     if (!standalone) {
-      subscription = createStream(streamingAPIBaseURL, accessToken, 'public:local', {
+      this._subscription = createStream(streamingAPIBaseURL, accessToken, 'public:local', {
 
         connected () {
           dispatch(connectTimeline('community'));
@@ -102,6 +98,7 @@ class CommunityTimeline extends React.PureComponent {
             break;
           }
         },
+
       });
     } else {
       this.interval = setInterval(() => {
@@ -111,16 +108,26 @@ class CommunityTimeline extends React.PureComponent {
   }
 
   componentWillUnmount () {
-    // if (typeof subscription !== 'undefined') {
-    //   subscription.close();
-    //   subscription = null;
-    // }
+    if (typeof this._subscription !== 'undefined') {
+      this._subscription.close();
+      this._subscription = null;
+    }
+
     clearInterval(this.interval);
+  }
+
+  setRef = c => {
+    this.column = c;
+  }
+
+  handleLoadMore = () => {
+    this.props.dispatch(expandCommunityTimeline());
   }
 
   render () {
     let heading;
-    const { intl, hasUnread, standalone } = this.props;
+    const { intl, hasUnread, columnId, multiColumn, standalone } = this.props;
+    const pinned = !!columnId;
 
     if (standalone) {
       heading = (
@@ -134,59 +141,6 @@ class CommunityTimeline extends React.PureComponent {
     }
 
     return (
-      <Column icon='users' active={hasUnread} heading={heading}>
-        {!standalone && <ColumnBackButtonSlim />}
-
-        <StatusListContainer {...this.props} scrollKey='community_timeline' type='community' emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />} />
-=======
-    this._subscription = createStream(streamingAPIBaseURL, accessToken, 'public:local', {
-
-      connected () {
-        dispatch(connectTimeline('community'));
-      },
-
-      reconnected () {
-        dispatch(connectTimeline('community'));
-      },
-
-      disconnected () {
-        dispatch(disconnectTimeline('community'));
-      },
-
-      received (data) {
-        switch(data.event) {
-        case 'update':
-          dispatch(updateTimeline('community', JSON.parse(data.payload)));
-          break;
-        case 'delete':
-          dispatch(deleteFromTimelines(data.payload));
-          break;
-        }
-      },
-
-    });
-  }
-
-  componentWillUnmount () {
-    if (typeof this._subscription !== 'undefined') {
-      this._subscription.close();
-      this._subscription = null;
-    }
-  }
-
-  setRef = c => {
-    this.column = c;
-  }
-
-  handleLoadMore = () => {
-    this.props.dispatch(expandCommunityTimeline());
-  }
-
-  render () {
-    const { intl, hasUnread, columnId, multiColumn } = this.props;
-    const pinned = !!columnId;
-
-    return (
       <Column ref={this.setRef}>
         <ColumnHeader
           icon='users'
@@ -197,6 +151,7 @@ class CommunityTimeline extends React.PureComponent {
           onClick={this.handleHeaderClick}
           pinned={pinned}
           multiColumn={multiColumn}
+          showBackButton={!standalone}
         >
           <ColumnSettingsContainer />
         </ColumnHeader>
@@ -208,7 +163,6 @@ class CommunityTimeline extends React.PureComponent {
           loadMore={this.handleLoadMore}
           emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />}
         />
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
       </Column>
     );
   }
