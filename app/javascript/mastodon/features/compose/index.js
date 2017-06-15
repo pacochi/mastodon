@@ -4,6 +4,7 @@ import UploadFormContainer from './containers/upload_form_container';
 import NavigationContainer from './containers/navigation_container';
 import TrendTagsContainer from './containers/trend_tags_container';
 import AnnouncementsContainer from './containers/announcements_container';
+import EventCalendarContainer from './containers/event_calendar_container';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { mountCompose, unmountCompose } from '../../actions/compose';
@@ -95,6 +96,9 @@ class Compose extends React.PureComponent {
               <ComposeFormContainer />
             </div>
             <AnnouncementsContainer />
+            <div className="drawer__block">
+              <EventCalendarContainer />
+            </div>
             <div className="drawer__block">
               <TrendTagsContainer />
             </div>
