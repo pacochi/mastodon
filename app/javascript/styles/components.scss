@@ -3136,7 +3136,10 @@ button.icon-button.active i.fa-retweet {
   max-width: 520px;
   max-height: 420px;
   position: relative;
+}
 
+.onboarding-modal-music__pager,
+.onboarding-modal__pager {
   & > div {
     position: absolute;
     top: 0;
@@ -3391,6 +3394,31 @@ button.icon-button.active i.fa-retweet {
   margin: auto;
   margin-bottom: 20px;
 }
+
+.onboarding-modal-music__pager {
+  height: 460px;
+  width: 820px;
+  position: relative;
+}
+
+.onboarding-modal-music__page-one,
+.onboarding-modal-music__page-two {
+  display: flex;
+  align-items: center;
+}
+
+.onboarding-modal-music__page-one__image {
+  background: url('../images/onboarding/first.png') no-repeat center center / contain;
+  width: 804px;
+  height: 440px;
+}
+
+.onboarding-modal-music__page-two__image {
+  background: url('../images/onboarding/second.png') no-repeat center center / contain;
+  width: 804px;
+  height: 440px;
+}
+
 
 .onboard-sliders {
   display: inline-block;
