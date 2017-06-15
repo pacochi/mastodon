@@ -40,11 +40,11 @@ $apollo-color: #38b6c5;
 
   &:hover {
     height: 5px;
-    background-color: lighten(#F1F5F8, 10%);
+    background-color: darken(#F1F5F8, 10%);
 
     .booth-widget__seekbar-process {
       height: 5px;
-      background-color: lighten($booth-color, 10%);
+      background-color: darken($booth-color, 10%);
     }
   }
 }

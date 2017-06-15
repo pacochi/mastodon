@@ -24,15 +24,26 @@ class BoothWidget extends React.PureComponent {
 
   componentDidMount () {
     this.audio.addEventListener('timeupdate', this.onTimeUpdate, true);
+    this.audio.addEventListener('ended', this.onEnd, true);
   }
 
   componentWillUnmount() {
     this.audio.removeEventListener('timeupdate', this.onTimeUpdate, true);
+    this.audio.removeEventListener('ended', this.onEnd, true);
   }
 
   onTimeUpdate = () => {
-    const currentTime = this.audio.currentTime;
+    const { boothItem } = this.props;
+    const currentTime = Math.min(this.audio.currentTime, boothItem.getIn(['sound', 'duration']));
+
     this.setState({ currentTime });
+  }
+
+  onEnd = () => {
+    this.setState({
+      isPlaying: false,
+      currentTime: 0,
+    });
   }
 
   handleSeekbarClick = (e) => {
@@ -75,6 +86,9 @@ class BoothWidget extends React.PureComponent {
       width: `${Math.round(this.state.currentTime / boothItem.getIn(['sound', 'duration']) * 10000) / 100}%`,
     };
 
+    const seekbarMinutes = parseInt((boothItem.getIn(['sound', 'duration']) - Math.round(this.state.currentTime)) / 60);
+    const seekbarSeconds = (boothItem.getIn(['sound', 'duration']) - Math.round(this.state.currentTime)) % 60;
+
     return (
       <div className={`booth-widget booth-widget--music ${this.state.isPlaying ? 'is-playing' : ''} ${this.state.apollo ? 'is-apollo' : ''}`}>
         <div className="booth-widget__viewer">
@@ -86,7 +100,7 @@ class BoothWidget extends React.PureComponent {
         <div className="booth-widget__seekbar-wrapper">
           <div className="booth-widget__text">
             <div className="booth-widget__seekbar-time">
-              {parseInt((boothItem.getIn(['sound', 'duration']) - Math.round(this.state.currentTime))/60)}:{("0"+(boothItem.getIn(['sound', 'duration']) - Math.round(this.state.currentTime))%60).slice(-2)}
+              {seekbarMinutes}:{(`0${seekbarSeconds}`).slice(-2)}
             </div>
             <a className="booth-widget__shop" href={boothItem.getIn(['shop', 'url'])} target="_blank">
               <div className="booth-widget__shop-name">{boothItem.getIn(['shop', 'name'])}</div>
