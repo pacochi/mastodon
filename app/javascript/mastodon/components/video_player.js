@@ -34,6 +34,7 @@ class VideoPlayer extends React.PureComponent {
     muted: false,
     hasAudio: true,
     videoError: false,
+    paused: false,
   };
 
   handleClick = () => {
@@ -47,8 +48,10 @@ class VideoPlayer extends React.PureComponent {
 
     if (node.paused) {
       node.play();
+      this.setState({ paused: false });
     } else {
       node.pause();
+      this.setState({ paused: true });
     }
   }
 
@@ -63,7 +66,8 @@ class VideoPlayer extends React.PureComponent {
     });
   }
 
-  handleExpand = () => {
+  handleExpand = (e) => {
+    e.stopPropagation();
     this.video.pause();
     this.props.onOpenVideo(this.props.media, this.video.currentTime);
   }
@@ -73,7 +77,7 @@ class VideoPlayer extends React.PureComponent {
   }
 
   handleLoadedData = () => {
-    if (('WebkitAppearance' in document.documentElement.style && this.video.audioTracks.length === 0) || this.video.mozHasAudio === false) {
+    if (('WebkitAppearance' in document.documentElement.style && this.video.audioTracks && this.video.audioTracks.length === 0) || this.video.mozHasAudio === false) {
       this.setState({ hasAudio: false });
     }
   }
@@ -168,8 +172,31 @@ class VideoPlayer extends React.PureComponent {
       );
     }
 
+    let videoOverlayElement = '';
+    if (this.video && this.state.paused) {
+      // ポーズ中
+      videoOverlayElement = (
+        <div className='video-overlay'>
+          <div className='video-overlay-icon'>
+            <i className='fa fa-play' />
+          </div>
+        </div>
+      );
+    } else {
+      // 再生中
+      videoOverlayElement = (
+        <div className='video-overlay'>
+          <div className='video-overlay-icon'>
+            <i className='fa fa-pause' />
+          </div>
+        </div>
+      );
+    }
+
     return (
-      <div className='status__video-player' style={{ width: `${width}px`, height: `${height}px` }}>
+      <div className={`status__video-player ${this.video && this.state.paused ? ' is-paused' : ''}`} style={{ width: `${width}px`, height: `${height}px` }} onClick={this.handleVideoClick}>
+        {expandButton}
+        {videoOverlayElement}
         <video
           className='status__video-player-video'
           role='button'
@@ -179,7 +206,6 @@ class VideoPlayer extends React.PureComponent {
           autoPlay={!isIOS()}
           loop={true}
           muted={this.state.muted}
-          onClick={this.handleVideoClick}
         />
       </div>
     );
