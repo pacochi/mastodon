@@ -4040,28 +4040,31 @@ button.icon-button.active i.fa-retweet {
       .control-bar__controller-skip{
         flex: 1;
         height: 100%;
-
-        color: #999;
-        font-size: 16px;
-        font-weight: bold;
-        letter-spacing: 1.0px;
         align-items: center;
         justify-content: center;
         text-align: center;
         display: flex;
 
-        cursor: pointer;
+        span {
+          padding: 4px 12px;
+          border-radius: 4px;
+          background-color: #AAA;
+          color: #FFF;
+          cursor: pointer;
+          font-size: 12px;
+          letter-spacing: 1.0px;
 
-        transition: color 0.2s ease-out;
-        &:hover{
-          color: #333;
+          transition: background-color 0.2s ease-out;
+          &:hover{
+            background-color: #666;
+          }
         }
       }
 
       .control-bar__controller-info{
         color: #333;
         font-size: 15px;
-        margin-right: 8px;
+        margin-left: 8px;
         text-align: right;
 
         .control-bar__controller-now{

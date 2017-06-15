@@ -217,6 +217,7 @@ class PlayControl extends React.PureComponent {
 
   handleClickSkip () {
     if(this.isDeckInActive()) return;
+    if(!confirm("この曲は、いまこのサイトにいるみんなで一緒に同時に聞いています。\n本当にこの曲をスキップしてよろしいですか？")) return;
     api(this.getMockState).delete(`/api/v1/playlists/${this.state.targetDeck}/deck_queues/${this.state.deck.queues[0].id}`)
     .then((response)=>{
     })
@@ -329,8 +330,8 @@ class PlayControl extends React.PureComponent {
                 return null;
               }
               return (
-                <div className='control-bar__controller-skip' onClick={this.handleClickSkip}>
-                  SKIP
+                <div className='control-bar__controller-skip'>
+                  <span onClick={this.handleClickSkip}>SKIP</span>
                 </div>
               );
             })()}
