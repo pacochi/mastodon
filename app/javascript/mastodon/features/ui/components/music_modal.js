@@ -173,7 +173,10 @@ class MusicModal extends React.PureComponent {
             <div>
               <input className={`music-modal__artist ${(onMouseInUploadButton && !validArtist) ? warningClass : ''}`} placeholder="作者名を入力" onChange={this.onChangeArtist} value={artist} />
             </div>
-            <span className="music-modal__info">※128文字を超える部分は自動的にカットされます</span>
+            <div className="music-modal__info">
+              <div>※128文字を超える部分は自動的にカットされます</div>
+              <div>※アップロードできる音楽と画像のサイズは合計7MBまでです</div>
+            </div>
 
             <input type="file" name="music" accept="audio/*" ref={this.setMusicRef} />
             <input type="file" name="image" accept="image/*" ref={this.setImageRef} onChange={this.handleOnSelectImage} />
