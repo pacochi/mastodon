@@ -38,15 +38,12 @@ class Status extends ImmutablePureComponent {
     boostModal: PropTypes.bool,
     autoPlayGif: PropTypes.bool,
     muted: PropTypes.bool,
-<<<<<<< HEAD
     expandMedia: PropTypes.bool,
     squareMedia: PropTypes.bool,
     standalone: PropTypes.bool,
     onPin: PropTypes.func,
     displayPinned: PropTypes.bool,
-=======
     intersectionObserverWrapper: PropTypes.object,
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
   };
 
   state = {
@@ -155,13 +152,8 @@ class Status extends ImmutablePureComponent {
   render () {
     let media = null;
     let statusAvatar;
-<<<<<<< HEAD
-    const { status, account, isIntersecting, onRef, expandMedia, squareMedia, standalone, ...other } = this.props;
-    const { isHidden } = this.state;
-=======
-    const { status, account, ...other } = this.props;
+    const { status, account, expandMedia, squareMedia, standalone, ...other } = this.props;
     const { isExpanded, isIntersecting, isHidden } = this.state;
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
 
     if (status === null) {
       return null;
@@ -177,8 +169,7 @@ class Status extends ImmutablePureComponent {
     }
 
     if (this.props.displayPinned && status.get('pinned')) {
-      // onRefは要素の高さが変わらない場合のみ使用する
-      const { displayPinned, onRef, ...otherProps } = this.props;
+      const { displayPinned, ...otherProps } = this.props;
 
       return (
         <div className='status__wrapper pinned' ref={this.handleRef} data-id={status.get('id')} >
@@ -208,11 +199,7 @@ class Status extends ImmutablePureComponent {
             <FormattedMessage id='status.reblogged_by' defaultMessage='{name} boosted' values={{ name: <a onClick={this.handleAccountClick} data-id={status.getIn(['account', 'id'])} href={status.getIn(['account', 'url'])} className='status__display-name muted'><strong dangerouslySetInnerHTML={displayNameHTML} /></a> }} />
           </div>
 
-<<<<<<< HEAD
-          <Status {...other} wrapped={true} status={status.get('reblog')} account={status.get('account')} displayPinned={false} />
-=======
-          <Status {...other} wrapped status={status.get('reblog')} account={status.get('account')} />
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
+          <Status {...other} wrapped status={status.get('reblog')} account={status.get('account')} displayPinned={false} />
         </div>
       );
     }
@@ -242,13 +229,8 @@ class Status extends ImmutablePureComponent {
     }
 
     if (account === undefined || account === null) {
-<<<<<<< HEAD
-      statusAvatar = <Avatar src={status.getIn(['account', 'avatar'])} staticSrc={status.getIn(['account', 'avatar_static'])} size={48}/>;
-    } else {
-=======
       statusAvatar = <Avatar src={status.getIn(['account', 'avatar'])} staticSrc={status.getIn(['account', 'avatar_static'])} size={48} />;
-    }else{
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
+    } else {
       statusAvatar = <AvatarOverlay staticSrc={status.getIn(['account', 'avatar_static'])} overlaySrc={account.get('avatar_static')} />;
     }
 
@@ -267,11 +249,7 @@ class Status extends ImmutablePureComponent {
           </a>
         </div>
 
-<<<<<<< HEAD
-        <StatusContent status={status} onClick={this.handleClick} standalone />
-=======
-        <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} onHeightUpdate={this.saveHeight} />
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
+        <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} onHeightUpdate={this.saveHeight} standalone />
 
         {media}
 
