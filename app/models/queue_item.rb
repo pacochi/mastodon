@@ -11,6 +11,12 @@ class QueueItem
     ActiveModel::Type.lookup(:string).cast(@source_id)
   end
 
+  # URL以外を除外する
+  def link=(value)
+    entities = Extractor.extract_entities_with_indices(value, extract_url_without_protocol: false)
+    @link = entities.map { |entry| entry[:url] }.compact.first
+  end
+
   class << self
     include RoutingHelper
     include HttpHelper

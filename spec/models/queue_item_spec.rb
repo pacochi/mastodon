@@ -198,4 +198,26 @@ RSpec.describe QueueItem do
       end
     end
   end
+
+  describe '#link=' do
+    subject do
+      instance = described_class.new(link: link)
+      instance.link
+    end
+
+    context 'given invalid link' do
+      let(:link) { 'https://booth.pm/apollo/a06/item?id=159897 aaaa' }
+      it { is_expected.to eq('https://booth.pm/apollo/a06/item?id=159897') }
+    end
+
+    context 'given string' do
+      let(:link) { 'hello' }
+      it { is_expected.to be_nil }
+    end
+
+    context 'given nil' do
+      let(:link) { nil }
+      it { is_expected.to be_nil }
+    end
+  end
 end
