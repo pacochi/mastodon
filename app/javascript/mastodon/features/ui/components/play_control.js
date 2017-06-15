@@ -133,13 +133,15 @@ class PlayControl extends React.PureComponent {
         case 'pawoo-music':
           if (this.videoRef) {
             this.videoRef.currentTime = deck.time_offset;
+            this.videoRef.play();
           }
           break;
 
         case 'booth':
         case 'apollo':
-          if (this.videoRef) {
+          if (this.audioRef) {
             this.audioRef.currentTime = deck.time_offset;
+            this.audioRef.play();
           }
           break;
         }
@@ -384,13 +386,13 @@ class PlayControl extends React.PureComponent {
 
                     if(this.state.deck.queues[0].video_url){
                       return (
-                        <video ref={this.setVideoRef} autoPlay style={nowPlayingArtwork} muted={!this.state.isPlaying}>
+                        <video ref={this.setVideoRef} style={nowPlayingArtwork} muted={!this.state.isPlaying}>
                           <source src={this.state.deck.queues[0].video_url}/>
                         </video>
                       );
                     }else{
                       return (
-                        <audio ref={this.setAudioRef} autoPlay src={this.state.deck.queues[0].music_url} muted={!this.state.isPlaying} />
+                        <audio ref={this.setAudioRef} src={this.state.deck.queues[0].music_url} muted={!this.state.isPlaying} />
                       );
                     }
                   })()}
