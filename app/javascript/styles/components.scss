@@ -1819,7 +1819,7 @@
 
 .character-counter__wrapper {
   line-height: 36px;
-  margin-right: 16px;
+  margin: 0 8px;
   padding-top: 10px;
 }
 
@@ -3415,6 +3415,7 @@ button.icon-button.active i.fa-retweet {
   }
 
   .music-modal__artwork {
+    overflow: hidden;
     width: 80px;
     height: 80px;
     background: #fff;
@@ -3429,11 +3430,20 @@ button.icon-button.active i.fa-retweet {
     border-bottom: solid 1px #d9e1e8;
     font-size: 16px;
     margin-bottom: 10px;
+    &:focus{
+      outline: none;
+      border-bottom: 1px solid #00bcd4;
+    }
   }
 
   .music-modal__artist {
     background: transparent;
     border: 0;
+    padding: 2px 5px;
+    &:focus{
+      outline: none;
+      border-bottom: 1px solid #00bcd4;
+    }
   }
 
   .music-modal__title, .music-modal__artist {
@@ -3483,7 +3493,7 @@ button.icon-button.active i.fa-retweet {
   }
 
   .warning {
-    background: $warning-red;
+    background: #ffd6d3;
   }
 }
 
@@ -4005,12 +4015,8 @@ button.icon-button.active i.fa-retweet {
           }
           animation: plpopup 1.2s $easeOutQuint 0.0s infinite;
 
-          &:hover{
-            background: #EF2463;
-          }
-
           @keyframes plpalse {
-            0% {
+            1% {
               opacity: 0;
               padding: 18px;
             }
@@ -4033,6 +4039,14 @@ button.icon-button.active i.fa-retweet {
             animation: plpalse 1.2s $easeOutQuint 0.0s infinite;
             border: 2px solid #AAA;
           }
+
+          &:hover{
+            background: #EF2463;
+            &:after{
+              border-color: #EF2463;
+            }
+          }
+
         }
 
       }
@@ -4165,6 +4179,7 @@ button.icon-button.active i.fa-retweet {
         transition: width 0.2s ease-out 0.2s, height 0.2s ease-out 0.2s, margin 0.2s ease-out 0.2s;
         position: relative;
         overflow: hidden;
+        background-color: #F2F2F2;
 
         video, iframe, .queue-item__ytplayer{
           object-fit: cover;
