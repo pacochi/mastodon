@@ -18,6 +18,7 @@ import status_lists from './status_lists';
 import cards from './cards';
 import reports from './reports';
 import trend_tags from './trend_tags';
+import booth_items from './booth_items';
 
 export default combineReducers({
   timelines,
@@ -39,4 +40,5 @@ export default combineReducers({
   cards,
   reports,
   trend_tags,
+  booth_items,
 });

@@ -1,6 +1,23 @@
 # frozen_string_literal: true
 
 class BoothUrl
+  APOLLO_URL = %r{https?://booth\.pm/apollo/a\d+/item\?.*id=(?<item_id>\d+)}
+  BOOTH_URL = %r{https://(?:[a-z0-9][a-z0-9\-]+[a-z0-9]\.booth\.pm|booth\.pm/(?:zh-tw|zh-cn|ko|ja|en))/items/(?<item_id>\d+)}
+
+  def self.extract_booth_item_url(text)
+    entities = Extractor.extract_entities_with_indices(text, extract_url_without_protocol: false)
+    urls = entities.map { |entry| entry[:url] }.compact
+    urls.find { |url| url.match?(APOLLO_URL) || url.match?(BOOTH_URL) }
+  end
+
+  def self.extract_booth_item_id(text)
+    url = extract_booth_item_url(text)
+    return unless url
+
+    id = url.match(APOLLO_URL).try(:[], :item_id) || url.match(BOOTH_URL).try(:[], :item_id)
+    id.to_i if id
+  end
+
   def initialize(uri)
     @uri = uri
   end

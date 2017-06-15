@@ -1,6 +1,30 @@
 require 'rails_helper'
 
 RSpec.describe BoothUrl do
+  describe '.extract_booth_item_id' do
+    subject { described_class.extract_booth_item_id(text) }
+
+    context 'given shop url' do
+      let(:text) { 'hello https://test.booth.pm/items/1' }
+      it { is_expected.to eq(1) }
+    end
+
+    context 'given apollo url' do
+      let(:text) { 'hello https://booth.pm/apollo/a06/item?id=1' }
+      it { is_expected.to eq(1) }
+    end
+
+    context 'given market url' do
+      let(:text) { 'hello https://booth.pm/zh-tw/items/1' }
+      it { is_expected.to eq(1) }
+    end
+
+    context 'given text' do
+      let(:text) { 'hello' }
+      it { is_expected.to be_nil }
+    end
+  end
+
   let(:instance) { described_class.new(uri) }
 
   describe '#to_img_music_pawoo_domain' do

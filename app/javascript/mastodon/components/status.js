@@ -45,6 +45,8 @@ class Status extends ImmutablePureComponent {
     standalone: PropTypes.bool,
     onPin: PropTypes.func,
     displayPinned: PropTypes.bool,
+    fetchBoothItem: PropTypes.func,
+    boothItem: ImmutablePropTypes.map,
   };
 
   state = {
@@ -61,9 +63,18 @@ class Status extends ImmutablePureComponent {
     'boostModal',
     'autoPlayGif',
     'muted',
+    'boothItem',
   ]
 
   updateOnStates = []
+
+  componentDidMount() {
+    const boothItemId = this.props.status.get('booth_item_id');
+
+    if (!this.props.boothItem && boothItemId) {
+      this.props.fetchBoothItem(boothItemId);
+    }
+  }
 
   shouldComponentUpdate (nextProps, nextState) {
     if (nextProps.isIntersecting === false && nextState.isHidden) {
@@ -76,6 +87,7 @@ class Status extends ImmutablePureComponent {
       // (i.e. offscreen to onscreen), then we definitely need to re-render
       return true;
     }
+
     // Otherwise, diff based on "updateOnProps" and "updateOnStates"
     return super.shouldComponentUpdate(nextProps, nextState);
   }
@@ -193,14 +205,11 @@ class Status extends ImmutablePureComponent {
       }
     }
 
-    if (attachments.size === 0) {
-      // boothのウィジェット表示処理
-      const booth_pattern = /href="(https?:\/\/(?:[a-z0-9][a-z0-9\-]+[a-z0-9]\.)?booth\.pm\/(?:(?:zh-tw|zh-cn|ko|ja|en)\/)?items\/(\d+))/;
-      const apollo_pattern = /href="(https?:\/\/booth\.pm\/apollo\/a\d{2}\/item\?.*?id=(\d+))/;
-      const matches = status.get('content').match(booth_pattern) || status.get('content').match(apollo_pattern);
-      if (matches) {
-        media = <BoothWidget url={matches[1]} itemId={Number(matches[2])} />;
-      }
+    if (attachments.size === 0 && this.props.boothItem) {
+      const boothItemUrl = status.get('booth_item_url');
+      const boothItemId = status.get('booth_item_id');
+
+      media = <BoothWidget url={boothItemUrl} itemId={boothItemId} boothItem={this.props.boothItem} />;
     }
 
     if (account === undefined || account === null) {

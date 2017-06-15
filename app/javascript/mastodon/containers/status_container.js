@@ -16,6 +16,9 @@ import {
   blockAccount,
   muteAccount,
 } from '../actions/accounts';
+import {
+  fetchBoothItem,
+} from '../actions/booth_items';
 import { muteStatus, unmuteStatus, deleteStatus, pinStatus, unpinStatus } from '../actions/statuses';
 import { initReport } from '../actions/reports';
 import { openModal } from '../actions/modal';
@@ -35,13 +38,18 @@ const messages = defineMessages({
 const makeMapStateToProps = () => {
   const getStatus = makeGetStatus();
 
-  const mapStateToProps = (state, props) => ({
-    status: getStatus(state, props.id),
-    me: state.getIn(['meta', 'me']),
-    boostModal: state.getIn(['meta', 'boost_modal']),
-    deleteModal: state.getIn(['meta', 'delete_modal']),
-    autoPlayGif: state.getIn(['meta', 'auto_play_gif']) || false,
-  });
+  const mapStateToProps = (state, props) => {
+    const status = getStatus(state, props.id);
+
+    return {
+      status,
+      me: state.getIn(['meta', 'me']),
+      boostModal: state.getIn(['meta', 'boost_modal']),
+      deleteModal: state.getIn(['meta', 'delete_modal']),
+      autoPlayGif: state.getIn(['meta', 'auto_play_gif']) || false,
+      boothItem: state.getIn(['booth_items', status.get('booth_item_id')]),
+    };
+  };
 
   return mapStateToProps;
 };
@@ -138,6 +146,10 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
         onConfirm: () => dispatch(pinStatus(status.get('id'))),
       }));
     }
+  },
+
+  fetchBoothItem(id) {
+    dispatch(fetchBoothItem(id));
   },
 
 });

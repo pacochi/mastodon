@@ -6,6 +6,11 @@ class QueueItem
 
   attr_accessor :id, :info, :thumbnail_url, :music_url, :video_url, :duration, :link, :source_type, :source_id, :account_id
 
+  # status_idは文字列とする
+  def source_id
+    ActiveModel::Type.lookup(:string).cast(@source_id)
+  end
+
   class << self
     include RoutingHelper
     include HttpHelper
@@ -58,13 +63,8 @@ class QueueItem
       matched ? matched[:status_id] : nil
     end
 
-    def find_apollo_shop_id(link)
-      matched = link.match(%r{https?://booth\.pm/apollo/a\d+/item\?.*id=(?<shop_id>\d+)})
-      matched ? matched[:shop_id] : nil
-    end
-
     def apollo_link(link, account)
-      shop_id = find_apollo_shop_id(link)
+      shop_id = BoothUrl.extract_booth_item_id(link)
       return unless shop_id
 
       cache = find_cache('apollo', shop_id)
@@ -82,7 +82,7 @@ class QueueItem
     end
 
     def booth_link(link, account)
-      shop_id = find_shop_id(link)
+      shop_id = BoothUrl.extract_booth_item_id(link)
       return unless shop_id
 
       cache = find_cache('booth', shop_id)
@@ -97,11 +97,6 @@ class QueueItem
 
         cache_item('booth', shop_id, instance)
       end
-    end
-
-    def find_shop_id(link)
-      matched = link.match(%r{https://([a-z0-9][a-z0-9\-]+[a-z0-9]\.booth\.pm|booth\.pm/(zh-tw|zh-cn|ko|ja|en))/items/(?<item_id>\d+)})
-      matched ? matched[:item_id] : nil
     end
 
     def youtube_link(link, account)
