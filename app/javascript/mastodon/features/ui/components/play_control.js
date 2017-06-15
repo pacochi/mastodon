@@ -130,15 +130,18 @@ class PlayControl extends React.PureComponent {
       setTimeout(()=>{
         if(!deck.queues.length) return;
         switch (deck.queues[0].source_type) {
-          case 'pawoo-music': {
+        case 'pawoo-music':
+          if (this.videoRef) {
             this.videoRef.currentTime = deck.time_offset;
           }
-            break;
-          case 'booth':
-          case 'apollo': {
+          break;
+
+        case 'booth':
+        case 'apollo':
+          if (this.videoRef) {
             this.audioRef.currentTime = deck.time_offset;
           }
-            break;
+          break;
         }
       }, 400);
     }, 20);
