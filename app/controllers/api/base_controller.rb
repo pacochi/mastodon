@@ -43,22 +43,6 @@ class Api::BaseController < ApplicationController
 
   protected
 
-<<<<<<< HEAD:app/controllers/api_controller.rb
-  def set_rate_limit_headers
-    return if request.env['rack.attack.throttle_data'].nil?
-
-    now        = Time.now.utc
-    request.env['rack.attack.throttle_data'].keys.grep(/\Aapi/).each do |api_key|
-      match_data = request.env['rack.attack.throttle_data'][api_key]
-
-      response.headers['X-RateLimit-Limit']     = match_data[:limit].to_s
-      response.headers['X-RateLimit-Remaining'] = (match_data[:limit] - match_data[:count]).to_s
-      response.headers['X-RateLimit-Reset']     = (now + (match_data[:period] - now.to_i % match_data[:period])).iso8601(6)
-    end
-  end
-
-=======
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe:app/controllers/api/base_controller.rb
   def set_pagination_headers(next_path = nil, prev_path = nil)
     links = []
     links << [next_path, [%w(rel next)]] if next_path
