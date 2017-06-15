@@ -100,15 +100,10 @@ class UI extends React.PureComponent {
     document.addEventListener('dragleave', this.handleDragLeave, false);
     document.addEventListener('dragend', this.handleDragEnd, false);
 
-<<<<<<< HEAD
     if (!this.props.intent) {
-      this.props.dispatch(refreshTimeline('home'));
+      this.props.dispatch(refreshHomeTimeline());
       this.props.dispatch(refreshNotifications());
     }
-=======
-    this.props.dispatch(refreshHomeTimeline());
-    this.props.dispatch(refreshNotifications());
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
   }
 
   componentWillUnmount () {
