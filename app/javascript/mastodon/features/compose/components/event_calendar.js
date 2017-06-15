@@ -15,7 +15,7 @@ class EventCalender extends React.PureComponent {
     const diffTime = date.getTime() - nowTime;
     const dateUnix = 24 * 60 * 60 * 1000;
 
-    const remainingDays = Math.floor(diffTime / dateUnix);
+    const remainingDays = Math.ceil(diffTime / dateUnix);
     if (remainingDays < 0) return '';
     if (remainingDays === 0) return '当日';
     return `残り${remainingDays}日`;
