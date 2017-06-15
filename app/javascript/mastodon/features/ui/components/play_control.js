@@ -411,10 +411,9 @@ class PlayControl extends React.PureComponent {
                 })()}
               </div>
               <div className="deck_queue-column deck__queue-column-list">
-                {(()=> {
-                  if(this.state.isOpen) {
-                    return(<div className="deck__queue-caption">- いまみんなで一緒に聞いているプレイリスト -</div>);
-                  }
+                {(()=>{
+                  if(!this.state.isOpen) return null;
+                  return(<div className="deck__queue-caption">- いまみんなで一緒に聞いているプレイリスト -</div>);
                 })()}
                 <ul className="deck__queue">
                   {(()=>{
@@ -429,6 +428,7 @@ class PlayControl extends React.PureComponent {
                                     <div className="deck__queue-caption">- いまみんなで一緒に聞いている曲 -</div>
                                   );
                                 }
+                                return null;
                               })()}
                               <div className='queue-item__metadata'>
                                 {!index ? 'プレイリストに好きな曲を入れてね！' : ''}
@@ -450,6 +450,7 @@ class PlayControl extends React.PureComponent {
                                     <div className="deck__queue-caption">- いまみんなで一緒に聞いている曲 -</div>
                                   );
                                 }
+                                return null;
                               })()}
                               <div className='queue-item__metadata'>
                                 <span className='queue-item__metadata-title'>{queue_item.info.length > 40 ? `${queue_item.info.slice(0, 40)}……` : queue_item.info}</span>
