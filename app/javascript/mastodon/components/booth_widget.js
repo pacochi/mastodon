@@ -86,8 +86,8 @@ class BoothWidget extends React.PureComponent {
       width: `${Math.round(this.state.currentTime / boothItem.getIn(['sound', 'duration']) * 10000) / 100}%`,
     };
 
-    const seekbarMinutes = parseInt((boothItem.getIn(['sound', 'duration']) - Math.round(this.state.currentTime))/60);
-    const seekbarSeconds = (boothItem.getIn(['sound', 'duration']) - Math.round(this.state.currentTime)) % 60
+    const seekbarMinutes = parseInt((boothItem.getIn(['sound', 'duration']) - Math.round(this.state.currentTime)) / 60);
+    const seekbarSeconds = (boothItem.getIn(['sound', 'duration']) - Math.round(this.state.currentTime)) % 60;
 
     return (
       <div className={`booth-widget booth-widget--music ${this.state.isPlaying ? 'is-playing' : ''} ${this.state.apollo ? 'is-apollo' : ''}`}>
