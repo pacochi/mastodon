@@ -14,8 +14,6 @@ class MusicModal extends React.PureComponent {
   };
 
   static propTypes = {
-    title: PropTypes.string.isRequired,
-    artist: PropTypes.string.isRequired,
     music: PropTypes.object.isRequired,
     onUpload: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
@@ -37,8 +35,8 @@ class MusicModal extends React.PureComponent {
 
     this.state = {
       isClickedWaring,
-      title: props.title,
-      artist: props.artist,
+      title: '',
+      artist: '',
       imageURL: null,
       onMouseInUploadButton: false,
     };
@@ -105,10 +103,6 @@ class MusicModal extends React.PureComponent {
     this.setState({ artist });
   }
 
-  setMusicRef = (element) => {
-    this.musicFileElement = element;
-  }
-
   setImageRef = (element) => {
     this.imageFileElement = element;
   }
@@ -172,7 +166,6 @@ class MusicModal extends React.PureComponent {
               <div>※アップロードできる音楽と画像のサイズは合計7MBまでです</div>
             </div>
 
-            <input type="file" name="music" accept="audio/*" ref={this.setMusicRef} />
             <input type="file" name="image" accept="image/*" ref={this.setImageRef} onChange={this.handleOnSelectImage} />
           </div>
         </div>
