@@ -29,11 +29,13 @@ class Api::V1::DeckQueuesController < ApiController
     else
       render json: { error: '不明なエラーが発生しました。' }, status: :service_unavailable
     end
-  rescue Mastodon::PlayerControlLimitError => _
+  rescue Mastodon::PlayerControlLimitError
     render json: { error: "１時間にスキップできる回数は#{Playlist::MAX_SKIP_COUNT}回までです。" }, status: :too_many_requests
-  rescue Mastodon::PlaylistEmptyError => _
+  rescue Mastodon::PlayerControlSkipLimitTimeError
+    render json: { error: "SKIPボタンは、楽曲が始まってから#{Playlist::SKIP_LIMT_TIME}秒後に押せるようになります" }, status: :bad_request
+  rescue Mastodon::PlaylistEmptyError
     render json: { error: 'スキップに失敗しました。' }, status: :bad_request
-  rescue Mastodon::RedisMaxRetryError => _
+  rescue Mastodon::RedisMaxRetryError
     render json: { error: '不明なエラーが発生しました。' }, status: :service_unavailable
   end
 
