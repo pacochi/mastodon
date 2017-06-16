@@ -47,7 +47,7 @@ class QueueItem
 
       item = new(
         id: SecureRandom.uuid,
-        info: "#{video.music_info['title']} - #{video.music_info['artist']}",
+        info: "#{video.music_info['artist']} - #{video.music_info['title']}",
         thumbnail_url: nil,
         music_url: nil,
         video_url: video_url,
@@ -174,7 +174,7 @@ class QueueItem
 
       new(
         id: SecureRandom.uuid,
-        info: "#{json.dig('body', 'name')} - #{user_or_shop_name}",
+        info: "#{user_or_shop_name} - #{json.dig('body', 'name')}",
         thumbnail_url: json.dig('body', 'primary_image', 'url'),
         music_url: json.dig('body', 'sound', 'long_url'),
         video_url: nil,
@@ -231,10 +231,10 @@ class QueueItem
     end
 
     def find_soundcloud_duration(embed)
-      embed_src_pattern = %r{(https://w\.soundcloud\.com/player/\?.+?&?url=https%3A%2F%2Fapi\.soundcloud\.com%2Ftracks%2F\d+(?:&show_artwork=true)?)}
-      url = embed.match(embed_src_pattern)
+      embed_src_pattern = %r{(?<url>https://w\.soundcloud\.com/player/\?.+?&?url=https%3A%2F%2Fapi\.soundcloud\.com%2Ftracks%2F\d+(?:&show_artwork=true)?)}
+      url = embed.match(embed_src_pattern).try(:[], :url)
       response = http_client.get(url)
-      return unless response.status == 200
+      raise Mastodon::MusicSourceNotFoundError unless response.status == 200
 
       duration_pattern = %r{full_duration.+?(?<duration>\d+)}
       (response.body.to_s.match(duration_pattern).try(:[], :duration).to_i/1000).ceil
