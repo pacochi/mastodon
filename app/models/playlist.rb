@@ -4,7 +4,7 @@ class Playlist
 
   MAX_QUEUE_SIZE = 10
   MAX_ADD_COUNT = 5
-  MAX_SKIP_COUNT = 5
+  MAX_SKIP_COUNT = 1
   attr_accessor :deck
 
   def initialize(deck)
