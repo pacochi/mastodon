@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::OauthAuthenticationsController < ApiController
+class Api::V1::OauthAuthenticationsController < Api::BaseController
   before_action -> { doorkeeper_authorize! :read }
   before_action :set_account
 

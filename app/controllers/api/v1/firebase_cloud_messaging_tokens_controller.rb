@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::FirebaseCloudMessagingTokensController < ApiController
+class Api::V1::FirebaseCloudMessagingTokensController < Api::BaseController
   before_action -> { doorkeeper_authorize! :write }, only:  [:create]
   before_action :require_user!
 
