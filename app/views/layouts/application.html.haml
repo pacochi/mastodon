@@ -32,8 +32,8 @@
 
   :javascript
     window.pixivSignupSDKSettings = {
-      origin: '#{Rails.application.secrets.pixiv_sdk['sdk_origin']}',
-      urlBase: '#{Rails.application.secrets.pixiv_sdk['sdk_base']}',
+      origin: '#{Rails.application.secrets.pixiv_sdk[:sdk_origin]}',
+      urlBase: '#{Rails.application.secrets.pixiv_sdk[:sdk_base]}',
     };
 
   %script{ src: '//source.pixiv.net/common/accounts-sdk/sdk.1.0.1.js?201704210000' }
