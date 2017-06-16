@@ -4265,9 +4265,26 @@ button.icon-button.active i.fa-retweet {
         transition: background 0.3s ease-out, border-right 0.3s ease-out;
         margin-bottom: 0;
 
+        &.apollo{
+          background-color: #EF2463;
+          font-size: 14px;
+          color: #FFF;
+        }
+
         img{
           width: 18px;
           margin-right: 2px;
+        }
+      }
+    }
+
+    &:not(.is-open){
+      .deck-selector__selector-body{
+        &.apollo{
+          background: #ffd8eb;
+          &.active{
+            background-color: #EF2463;
+          }
         }
       }
     }
