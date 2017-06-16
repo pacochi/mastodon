@@ -152,8 +152,8 @@ class PlayControl extends React.PureComponent {
           case 'soundcloud': {
             const widgetIframe = document.getElementById('sc-widget');
             this.setState({
-              scControl: SC.Widget(widgetIframe)
-            })
+              scControl: SC.Widget(widgetIframe),
+            });
 
             this.state.scControl.bind(SC.Widget.Events.READY, ()=>{
               this.state.scControl.bind(SC.Widget.Events.PLAY, ()=>{
@@ -427,7 +427,7 @@ class PlayControl extends React.PureComponent {
                             `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${this.state.deck.queues[0].source_id}&auto_play=true&show_playcount=false&show_bpm=false&sharing=false&buying=false&show_artwork=true&show_playcount=false&show_bpm=false&show_comments=false&visual=true`
                           }
                         />
-                      )
+                      );
                     }
 
                     if(this.state.deck.queues[0].video_url){
