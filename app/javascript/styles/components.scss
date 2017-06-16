@@ -4633,6 +4633,11 @@ button.icon-button.active i.fa-retweet {
           }
         }
 
+        &.apollo {
+          background: #ffd8eb;
+          font-size: 14px;
+        }
+
         &.active,
         &:not(.disabled):hover{
           color: #333;
@@ -4642,6 +4647,10 @@ button.icon-button.active i.fa-retweet {
             &:hover{
               opacity: 0.8;
             }
+          }
+          &.apollo {
+            color: #FFF;
+            background-color: #EF2463;
           }
         }
         &.disabled{

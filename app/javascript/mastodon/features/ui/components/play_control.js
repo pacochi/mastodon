@@ -354,9 +354,10 @@ class PlayControl extends React.PureComponent {
           </div>
           <div className='control-bar__deck' onClick={this.handleClickDeck}>
             <ul className='control-bar__deck-selector'>
-              {(()=>[1, 2, 3].map(index=>(
-                <li key={index} className={'deck-selector__selector-body'+(this.state.targetDeck === index ? ' active':'') + (this.isLoading() ? ' disabled' : '')} data-index={index} onClick={this.handleClickDeckTab} style={deckSelectorStyle}>
-                  <img src="/player/pawoo-music-playlist-icon.svg" /><span>DECK{index}</span>
+              {(()=>[1, 2, 3, 4, 5, 6].map(index=>(
+                <li key={index} className={'deck-selector__selector-body'+(this.state.targetDeck === index ? ' active':'') + (index === 2 ? ' apollo':'') + (this.isLoading() ? ' disabled' : '')} data-index={index} onClick={this.handleClickDeckTab} style={deckSelectorStyle}>
+                  <img src={index === 2 ? '/player/pawoo-music-playlist-apollo-icon.png' : '/player/pawoo-music-playlist-icon.svg'} />
+                  <span>{index === 2 ? 'APOLLO' : 'DECK' + index}</span>
                 </li>
               )))()}
             </ul>
