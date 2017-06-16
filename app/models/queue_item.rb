@@ -193,11 +193,10 @@ class QueueItem
         instance.assign_attributes(
           link: link,
           source_type: 'soundcloud',
-          source_id: source_link,
           account_id: account.id,
         )
 
-        cache_item('soundcloud', source_link, instance)
+        cache_item('soundcloud', instance.source_id, instance)
       end
     end
 
@@ -214,16 +213,18 @@ class QueueItem
       return unless response.status == 200
 
       json = JSON.parse(response.body.to_s)
-      duration_sec = find_soundcloud_duration(json['html'])
       title = "#{json['author_name']} - #{json['title'].remove(%r{\sby\s.+?$})}"
+      source_id = json['html'].match(%r{https%3A%2F%2Fapi\.soundcloud\.com%2Ftracks%2F(?<id>\d+)}).try(:[], :id)
+      duration_sec = find_soundcloud_duration(json['html'])
 
       item = new(
         id: SecureRandom.uuid,
         info: title,
         thumbnail_url: json['thumbnail_url'],
         music_url: nil,
-        video_url: link,
+        video_url: nil,
         duration: duration_sec,
+        source_id: source_id,
       )
     end
 
