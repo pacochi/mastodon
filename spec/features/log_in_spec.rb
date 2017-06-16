@@ -1,23 +1,12 @@
 require "rails_helper"
 
 feature "Log in" do
-<<<<<<< HEAD
-  given(:email)    { "test@examle.com" }
-  given(:password) { "password" }
-
-  background do
-    Fabricate(:user, email: email, password: password)
-  end
-
-  scenario "A valid email and password user is able to log in" do
-=======
   given(:email)        { "test@examle.com" }
   given(:password)     { "password" }
   given(:confirmed_at) { Time.now }
 
   background do
     Fabricate(:user, email: email, password: password, confirmed_at: confirmed_at)
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
     visit new_user_session_path
   end
 
