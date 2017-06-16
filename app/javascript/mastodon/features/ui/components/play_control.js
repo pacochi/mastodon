@@ -409,7 +409,7 @@ class PlayControl extends React.PureComponent {
                     <div className="queue-item__restrictions">
                       <div className="queue-item__restrictions-title">
                         <i className="fa fa-fw fa-info-circle" />
-                        <span>楽曲追加・SKIPについて</span>
+                        <span>楽曲追加・SKIPについて（実験中）</span>
                       </div>
                       <ul className="queue-item__restrictions-list">
                         <li>各DECKに<span className="queue-item__restrictions-num">最大{this.state.deck.max_queue_size}曲</span>入ります</li>
