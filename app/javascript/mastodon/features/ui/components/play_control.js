@@ -27,13 +27,17 @@ class PlayControl extends React.PureComponent {
       isSeekbarActive: false,
       isLoadingArtwork: true,
       ytControl: null,
+      scControl: null,
       youtubeOpts: {},
     };
 
+    this.scRef = null;
     this.audioRef = null;
     this.videoRef = null;
+
     this.subscription = null;
 
+    this.setSCRef  = this.setSCRef.bind(this);
     this.setURLRef = this.setURLRef.bind(this);
     this.setVideoRef = this.setVideoRef.bind(this);
     this.setAudioRef = this.setAudioRef.bind(this);
@@ -144,6 +148,24 @@ class PlayControl extends React.PureComponent {
             this.audioRef.play();
           }
           break;
+
+          case 'soundcloud': {
+            const widgetIframe = document.getElementById('sc-widget');
+            this.setState({
+              scControl: SC.Widget(widgetIframe),
+            });
+
+            this.state.scControl.bind(SC.Widget.Events.READY, ()=>{
+              this.state.scControl.bind(SC.Widget.Events.PLAY, ()=>{
+                this.state.scControl.getCurrentSound((currentSound)=>{
+                  // SoundCloudはmilisecondsで、だいたいちょっと遅延するので+2ぐらいしとく
+                  this.state.scControl.setVolume(this.state.isPlaying ? 1 : 0);
+                  this.state.scControl.seekTo( (deck.time_offset+2) * 1000);
+                });
+              });
+            });
+            break;
+          }
         }
       }, 400);
     }, 20);
@@ -217,6 +239,11 @@ class PlayControl extends React.PureComponent {
         this.state.ytControl.unMute();
       }
     }
+
+    if(this.state.scControl){
+      this.state.scControl.setVolume(this.state.isPlaying ? 0 : 1);
+    }
+
     this.setState({isPlaying: (!this.state.isPlaying)});
   }
 
@@ -237,14 +264,18 @@ class PlayControl extends React.PureComponent {
     e.stopPropagation();
   }
 
-  setURLRef (c) {
-    this.urlRef = c;
-  }
-
   getMockState () {
     return {
       getIn: () => this.props.accessToken,
     };
+  }
+
+  setSCRef (c) {
+    this.scRef = c;
+  }
+
+  setURLRef (c) {
+    this.urlRef = c;
   }
 
   setVideoRef (c) {
@@ -389,6 +420,21 @@ class PlayControl extends React.PureComponent {
                         />
                       );
                     }
+                    if(this.state.deck.queues[0].source_type === 'soundcloud'){
+                      return (
+                        <iframe
+                          ref={this.setSCRef}
+                          id="sc-widget"
+                          width="250"
+                          height="250"
+                          scrolling="no"
+                          frameBorder="no"
+                          src={
+                            `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${this.state.deck.queues[0].source_id}&auto_play=true&liking=false&show_playcount=false&show_bpm=false&sharing=false&buying=false&show_artwork=true&show_playcount=false&show_bpm=false&show_comments=false&visual=true`
+                          }
+                        />
+                      );
+                    }
 
                     if(this.state.deck.queues[0].video_url){
                       return (
@@ -499,7 +545,7 @@ class PlayControl extends React.PureComponent {
                       <li className="deck__queue-add-form">
                         <form onSubmit={this.handleSubmitAddForm}>
                           <span>曲を追加</span>
-                          <input ref={this.setURLRef} type="text" placeholder="URLを入力 (Pawoo Music, APOLLO(BOOTH) and YouTube URL)" required />
+                          <input ref={this.setURLRef} type="text" placeholder="URLを入力 (Pawoo Music, APOLLO(BOOTH), YouTube and SoundCloud URL)" required />
                           <div className='deck__queue-add-form-help'>
                             <i className='fa fa-question-circle deck__queue-add-form-help-icon' />
                             <div className='deck__queue-add-form-help-popup'>
@@ -516,21 +562,28 @@ class PlayControl extends React.PureComponent {
                                   <img src="/player/logos/youtube.svg" />
                                   <div className='platform-info'>
                                     <div className='platform-info__title'>YouTube</div>
-                                    <div className='platform-info__url'>https://www.youtube.com/watch?v=[XXXXX...]</div>
+                                    <div className='platform-info__url'>https://www.youtube.com/watch?v=[XXXXX……]</div>
                                   </div>
                                 </li>
                                 <li>
                                   <img src="/player/logos/booth.svg" />
                                   <div className='platform-info'>
                                     <div className='platform-info__title'>BOOTH</div>
-                                    <div className='platform-info__url'>https://booth.pm/ja/items/[XXXXX...]</div>
+                                    <div className='platform-info__url'>https://booth.pm/ja/items/[XXXXX……]</div>
                                   </div>
                                 </li>
                                 <li>
                                   <img src="/player/logos/apollo.png" />
                                   <div className='platform-info'>
                                     <div className='platform-info__title'>APOLLO</div>
-                                    <div className='platform-info__url'>https://booth.pm/apollo/a06/item?id=[XXXXX...]</div>
+                                    <div className='platform-info__url'>https://booth.pm/apollo/a06/item?id=[XXXXX……]</div>
+                                  </div>
+                                </li>
+                                <li>
+                                  <img src="/player/logos/soundcloud.svg" />
+                                  <div className='platform-info'>
+                                    <div className='platform-info__title'>SoundCloud</div>
+                                    <div className='platform-info__url'>https://soundcloud.com/[username]/[trackname]</div>
                                   </div>
                                 </li>
                               </ul>

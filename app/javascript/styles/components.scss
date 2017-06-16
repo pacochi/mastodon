@@ -4303,6 +4303,17 @@ button.icon-button.active i.fa-retweet {
         overflow: hidden;
         background-color: #F2F2F2;
 
+        &::before{
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 1000;
+          content: "";
+        }
+
         video, iframe, .queue-item__ytplayer{
           object-fit: cover;
           width: 100%;
@@ -4313,7 +4324,6 @@ button.icon-button.active i.fa-retweet {
         iframe, .queue-item__ytplayer{
           object-fit: fill;
         }
-
         @keyframes plload {
           0% {transform: rotate(0deg);}
           100% {transform: rotate(360deg);}
@@ -4428,10 +4438,10 @@ button.icon-button.active i.fa-retweet {
 
                   position: absolute;
                   left: -410px;
-                  top: -355px;
+                  top: -425px;
 
                   width: 420px;
-                  height: 330px;
+                  height: 400px;
                   background: #333;
 
                   transition: transform 0.3s ease-out, opacity 0.3s ease-out;

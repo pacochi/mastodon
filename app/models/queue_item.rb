@@ -22,7 +22,7 @@ class QueueItem
       link = entities.map { |entry| entry[:url] }.compact.first
       return if link.blank? || addressable_link(link).nil?
 
-      pawoo_link(link, account) || booth_link(link, account) || apollo_link(link, account) || youtube_link(link, account)
+      pawoo_link(link, account) || booth_link(link, account) || apollo_link(link, account) || youtube_link(link, account) || soundcloud_link(link, account)
     end
 
     private
@@ -47,7 +47,7 @@ class QueueItem
 
       item = new(
         id: SecureRandom.uuid,
-        info: "#{video.music_info['title']} - #{video.music_info['artist']}",
+        info: "#{video.music_info['artist']} - #{video.music_info['title']}",
         thumbnail_url: nil,
         music_url: nil,
         video_url: video_url,
@@ -149,6 +149,7 @@ class QueueItem
       url = "https://www.youtube.com/oembed?url=#{link}"
       response = http_client.get(url)
 
+      raise Mastodon::MusicSourceForbidden if response.status == 401
       return unless response.status == 200
 
       json = JSON.parse(response.body.to_s)
@@ -173,13 +174,70 @@ class QueueItem
 
       new(
         id: SecureRandom.uuid,
-        info: "#{json.dig('body', 'name')} - #{user_or_shop_name}",
+        info: "#{user_or_shop_name} - #{json.dig('body', 'name')}",
         thumbnail_url: json.dig('body', 'primary_image', 'url'),
         music_url: json.dig('body', 'sound', 'long_url'),
         video_url: nil,
         duration: json.dig('body', 'sound', 'duration'),
         source_id: id,
       )
+    end
+
+    def soundcloud_link(link, account)
+      source_link = find_soundcloud_link(link)
+      return unless source_link
+
+      cache = find_cache('soundcloud', source_link)
+      return set_uuid(cache) if cache
+
+      if instance = from_soundcloud_api(link)
+        instance.assign_attributes(
+          link: link,
+          source_type: 'soundcloud',
+          account_id: account.id,
+        )
+
+        cache_item('soundcloud', instance.source_id, instance)
+      end
+    end
+
+    def find_soundcloud_link(link)
+      addressable = addressable_link(link)
+      if addressable.hostname == 'soundcloud.com'
+        link.remove(%r{\?\Z})
+      end
+    end
+
+    def from_soundcloud_api(link)
+      url = "https://soundcloud.com/oembed?format=json&url=#{link}"
+      response = http_client.get(url)
+      raise Mastodon::MusicSourceForbidden if response.status == 403
+      return unless response.status == 200
+
+      json = JSON.parse(response.body.to_s)
+      title = "#{json['author_name']} - #{json['title'].remove(%r{\sby\s.+?$})}"
+      source_id = json['html'].match(%r{https%3A%2F%2Fapi\.soundcloud\.com%2Ftracks%2F(?<id>\d+)}).try(:[], :id)
+      duration_sec = find_soundcloud_duration(json['html'])
+
+      item = new(
+        id: SecureRandom.uuid,
+        info: title,
+        thumbnail_url: json['thumbnail_url'],
+        music_url: nil,
+        video_url: nil,
+        duration: duration_sec,
+        source_id: source_id,
+      )
+    end
+
+    def find_soundcloud_duration(embed)
+      embed_src_pattern = %r{(?<url>https://w\.soundcloud\.com/player/\?.+?&?url=https%3A%2F%2Fapi\.soundcloud\.com%2Ftracks%2F\d+(?:&show_artwork=true)?)}
+      url = embed.match(embed_src_pattern).try(:[], :url)
+      response = http_client.get(url)
+      raise Mastodon::MusicSourceNotFoundError unless response.status == 200
+
+      duration_pattern = %r{full_duration.+?(?<duration>\d+)}
+      (response.body.to_s.match(duration_pattern).try(:[], :duration).to_i/1000).ceil
     end
 
     def set_uuid(item)
