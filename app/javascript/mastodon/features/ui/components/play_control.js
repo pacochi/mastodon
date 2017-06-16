@@ -221,7 +221,7 @@ class PlayControl extends React.PureComponent {
   }
 
   handleClickSkip () {
-    if(this.isDeckInActive()) return;
+    if(this.isDeckInActive() || !this.isSkipEnable()) return;
     if(!confirm("この曲は、いまこのサイトにいるみんなで一緒に同時に聞いています。\nスキップをすると聞いている全員に影響がありますが、よろしいですか？")) return;
     api(this.getMockState).delete(`/api/v1/playlists/${this.state.targetDeck}/deck_queues/${this.state.deck.queues[0].id}`)
     .then((response)=>{
@@ -262,6 +262,11 @@ class PlayControl extends React.PureComponent {
 
   isLoading () {
     return (this.state.isLoadingArtwork || (!this.isDeckInActive() && this.state.deck.queues[0].source_type === "youtube" && !this.state.isYoutubeLoadingDone));
+  }
+
+  isSkipEnable () {
+    const skip_limit_time = this.state.deck && this.state.deck.skip_limit_time;
+    return skip_limit_time && this.state.offset_time > skip_limit_time;
   }
 
   onReadyYouTube(event) {
@@ -336,7 +341,7 @@ class PlayControl extends React.PureComponent {
               }
               return (
                 <div className='control-bar__controller-skip'>
-                  <span onClick={this.handleClickSkip}>SKIP</span>
+                  <span className={this.isSkipEnable() ? '' : 'disabled'} onClick={this.handleClickSkip}>SKIP</span>
                 </div>
               );
             })()}
@@ -399,18 +404,19 @@ class PlayControl extends React.PureComponent {
                   })()}
                 </div>
                 {(()=>{
-                  if(!this.state.deck || !this.state.deck.max_queue_size || !this.state.deck.max_add_count || !this.state.deck.max_skip_count) return null;
+                  if(!this.state.deck || !this.state.deck.max_queue_size || !this.state.deck.max_add_count || !this.state.deck.max_skip_count || !this.state.deck.skip_limit_time) return null;
                   if(!this.state.isOpen) return null;
                   return (
                     <div className="queue-item__restrictions">
                       <div className="queue-item__restrictions-title">
                         <i className="fa fa-fw fa-info-circle" />
-                        <span>楽曲追加・SKIPについて</span>
+                        <span>楽曲追加・SKIPについて（実験中）</span>
                       </div>
                       <ul className="queue-item__restrictions-list">
                         <li>各DECKに<span className="queue-item__restrictions-num">最大{this.state.deck.max_queue_size}曲</span>入ります</li>
                         <li>楽曲追加は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_add_count}回まで</span>です</li>
                         <li>SKIPの回数は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_skip_count}回まで</span>です</li>
+                        <li>SKIPボタンは、<span className="queue-item__restrictions-num">楽曲が始まってから<br />{this.state.deck.skip_limit_time}秒後</span>に押せるようになります</li>
                       </ul>
                     </div>
                   );

@@ -4168,8 +4168,11 @@ button.icon-button.active i.fa-retweet {
           letter-spacing: 1.0px;
 
           transition: background-color 0.2s ease-out;
-          &:hover{
+          &:not(.disabled):hover{
             background-color: #666;
+          }
+          &.disabled{
+            cursor: default;
           }
         }
       }
