@@ -61,14 +61,11 @@ const PageTwo = ({ me }) => (
         onClearSuggestions={noop}
         onFetchSuggestions={noop}
         onSuggestionSelected={noop}
-<<<<<<< HEAD
+        showSearch
         onHashTagSuggestionsClearRequested={noop}
         onHashTagSuggestionsFetchRequested={noop}
         onHashTagSuggestionsSelected={noop}
         onSelectTimeLimit={noop}
-=======
-        showSearch
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
       />
     </div>
 
@@ -194,11 +191,6 @@ class OnboardingModal extends React.PureComponent {
     currentIndex: 0,
   };
 
-<<<<<<< HEAD
-  componentWillUnmount () {
-    const path = '/suggested_accounts';
-    this.context.router.push(path);
-=======
   componentWillMount() {
     const { me, admin, domain, intl } = this.props;
     this.pages = [
@@ -216,7 +208,10 @@ class OnboardingModal extends React.PureComponent {
 
   componentWillUnmount() {
     window.addEventListener('keyup', this.handleKeyUp);
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
+
+    // モーダルを閉じた時に、おすすめアカウントへ飛ばす
+    const path = '/suggested_accounts';
+    this.context.router.push(path);
   }
 
   handleSkip = (e) => {
