@@ -137,6 +137,12 @@ RSpec.describe FeedManager do
     let(:status) { Fabricate(:status) }
     let(:instance) { FeedManager.instance }
 
+    before do
+      accounts.each do |account|
+        Redis.current.setex("subscribed:timeline:#{account.id}", 10, '1')
+      end
+    end
+
     it 'performs pushing updates into home timelines' do
       expect(PushUpdateWorker).to receive(:perform_async).with(accounts.map(&:id), status.id)
 
