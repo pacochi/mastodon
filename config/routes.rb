@@ -221,16 +221,9 @@ Rails.application.routes.draw do
         resources :statuses, only: :index, controller: 'accounts/statuses'
         resources :followers, only: :index, controller: 'accounts/follower_accounts'
         resources :following, only: :index, controller: 'accounts/following_accounts'
+        resources :pinned_statuses, only: :index, controller: 'accounts/pinned_statuses'
 
         member do
-<<<<<<< HEAD
-          get :statuses
-          get :followers
-          get :following
-          get :pinned_statuses
-
-=======
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
           post :follow
           post :unfollow
           post :block
