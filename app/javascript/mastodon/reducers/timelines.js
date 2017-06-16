@@ -23,7 +23,6 @@ import {
   ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS,
   ACCOUNT_PINNED_STATUSES_EXPAND_SUCCESS,
 } from '../actions/accounts';
-<<<<<<< HEAD
 import {
   STATUS_SEARCH_TIMELINE_FETCH_REQUEST,
   STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
@@ -37,43 +36,10 @@ import {
   STATUS_UNPIN_SUCCESS,
   CONTEXT_FETCH_SUCCESS,
 } from '../actions/statuses';
-=======
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
 import Immutable from 'immutable';
 
 const initialState = Immutable.Map();
 
-<<<<<<< HEAD
-  media: Immutable.Map({
-    path: () => '/api/v1/timelines/public',
-    next: null,
-    params: { local: true, media: true },
-    isLoading: false,
-    online: false,
-    loaded: false,
-    top: true,
-    unread: 0,
-    items: Immutable.List(),
-  }),
-
-  tag: Immutable.Map({
-    path: (id) => `/api/v1/timelines/tag/${id}`,
-    next: null,
-    isLoading: false,
-    id: null,
-    loaded: false,
-    top: true,
-    unread: 0,
-    items: Immutable.List(),
-  }),
-
-  accounts_timelines: Immutable.Map(),
-  status_search_timelines: Immutable.Map(),
-  accounts_media_timelines: Immutable.Map(),
-  ancestors: Immutable.Map(),
-  descendants: Immutable.Map(),
-  accounts_pinned_statuses: Immutable.Map(),
-=======
 const initialTimeline = Immutable.Map({
   unread: 0,
   online: false,
@@ -82,7 +48,6 @@ const initialTimeline = Immutable.Map({
   isLoading: false,
   next: false,
   items: Immutable.List(),
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
 });
 
 const normalizeTimeline = (state, timeline, statuses, next) => {
@@ -164,16 +129,6 @@ const updateTimeline = (state, timeline, status, references) => {
 };
 
 const deleteStatus = (state, id, accountId, references, reblogOf) => {
-<<<<<<< HEAD
-  if (reblogOf) {
-    // If we are deleting a reblog, just replace reblog with its original
-    return state.updateIn(['home', 'items'], list => list.map(item => item === id ? reblogOf : item));
-  }
-
-  // Remove references from timelines
-  ['home', 'media', 'public', 'community', 'tag'].forEach(function (timeline) {
-    state = state.updateIn([timeline, 'items'], list => list.filterNot(item => item === id));
-=======
   state.keySeq().forEach(timeline => {
     state = state.updateIn([timeline, 'items'], list => {
       if (reblogOf && !list.includes(reblogOf)) {
@@ -182,7 +137,6 @@ const deleteStatus = (state, id, accountId, references, reblogOf) => {
         return list.filterNot(item => item === id);
       }
     });
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
   });
 
   // Remove reblogs of deleted status
@@ -245,41 +199,16 @@ export default function timelines(state = initialState, action) {
     return updateTimeline(state, action.timeline, Immutable.fromJS(action.status), action.references);
   case TIMELINE_DELETE:
     return deleteStatus(state, action.id, action.accountId, action.references, action.reblogOf);
-<<<<<<< HEAD
-  case CONTEXT_FETCH_SUCCESS:
-    return normalizeContext(state, action.id, Immutable.fromJS(action.ancestors), Immutable.fromJS(action.descendants));
-  case ACCOUNT_TIMELINE_FETCH_REQUEST:
-  case ACCOUNT_TIMELINE_EXPAND_REQUEST:
-    return state.updateIn(['accounts_timelines', action.id], Immutable.Map(), map => map.set('isLoading', true));
-  case ACCOUNT_TIMELINE_FETCH_FAIL:
-  case ACCOUNT_TIMELINE_EXPAND_FAIL:
-    return state.updateIn(['accounts_timelines', action.id], Immutable.Map(), map => map.set('isLoading', false));
-  case ACCOUNT_TIMELINE_FETCH_SUCCESS:
-    return normalizeAccountTimeline(state, action.id, Immutable.fromJS(action.statuses), action.replace, action.next);
-  case ACCOUNT_TIMELINE_EXPAND_SUCCESS:
-    return appendNormalizedAccountTimeline(state, action.id, Immutable.fromJS(action.statuses), action.next);
-  case ACCOUNT_MEDIA_TIMELINE_FETCH_REQUEST:
-  case ACCOUNT_MEDIA_TIMELINE_EXPAND_REQUEST:
-    return state.updateIn(['accounts_media_timelines', action.id], Immutable.Map(), map => map.set('isLoading', true));
-  case ACCOUNT_MEDIA_TIMELINE_FETCH_FAIL:
-  case ACCOUNT_MEDIA_TIMELINE_EXPAND_FAIL:
-    return state.updateIn(['accounts_media_timelines', action.id], Immutable.Map(), map => map.set('isLoading', false));
-  case ACCOUNT_MEDIA_TIMELINE_FETCH_SUCCESS:
-    return normalizeAccountMediaTimeline(state, action.id, Immutable.fromJS(action.statuses), action.replace, action.next);
-  case ACCOUNT_MEDIA_TIMELINE_EXPAND_SUCCESS:
-    return appendNormalizedAccountMediaTimeline(state, action.id, Immutable.fromJS(action.statuses), action.next);
-  case STATUS_SEARCH_TIMELINE_FETCH_REQUEST:
-  case STATUS_SEARCH_TIMELINE_EXPAND_REQUEST:
-    return state.updateIn(['status_search_timelines', action.keyword], Immutable.Map(), map => map.set('isLoading', true));
-  case STATUS_SEARCH_TIMELINE_FETCH_FAIL:
-  case STATUS_SEARCH_TIMELINE_EXPAND_FAIL:
-    return state.updateIn(['status_search_timelines', action.keyword], Immutable.Map(), map => map.set('isLoading', false));
-  case STATUS_SEARCH_TIMELINE_FETCH_SUCCESS:
-    return normalizeStatusSearchTimeline(state, action.keyword, Immutable.fromJS(action.statuses), action.hasMore, action.hitsTotal, action.page+1);
-  case STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS:
-    return appendNormalizedStatusSearchTimeline(state, action.keyword, Immutable.fromJS(action.statuses), action.hasMore, action.page+1);
-=======
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
+  // case STATUS_SEARCH_TIMELINE_FETCH_REQUEST:
+  // case STATUS_SEARCH_TIMELINE_EXPAND_REQUEST:
+  //   return state.updateIn(['status_search_timelines', action.keyword], Immutable.Map(), map => map.set('isLoading', true));
+  // case STATUS_SEARCH_TIMELINE_FETCH_FAIL:
+  // case STATUS_SEARCH_TIMELINE_EXPAND_FAIL:
+  //   return state.updateIn(['status_search_timelines', action.keyword], Immutable.Map(), map => map.set('isLoading', false));
+  // case STATUS_SEARCH_TIMELINE_FETCH_SUCCESS:
+  //   return normalizeStatusSearchTimeline(state, action.keyword, Immutable.fromJS(action.statuses), action.hasMore, action.hitsTotal, action.page+1);
+  // case STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS:
+  //   return appendNormalizedStatusSearchTimeline(state, action.keyword, Immutable.fromJS(action.statuses), action.hasMore, action.page+1);
   case ACCOUNT_BLOCK_SUCCESS:
   case ACCOUNT_MUTE_SUCCESS:
     return filterTimelines(state, action.relationship, action.statuses);
@@ -288,8 +217,7 @@ export default function timelines(state = initialState, action) {
   case TIMELINE_CONNECT:
     return state.update(action.timeline, initialTimeline, map => map.set('online', true));
   case TIMELINE_DISCONNECT:
-<<<<<<< HEAD
-    return state.setIn([action.timeline, 'online'], false);
+    return state.update(action.timeline, initialTimeline, map => map.set('online', false));
   case ACCOUNT_PINNED_STATUSES_FETCH_SUCCESS:
   case ACCOUNT_PINNED_STATUSES_EXPAND_SUCCESS:
     return normalizeAccountPinnedStatuses(state, action.id, action.statuses, action.next);
@@ -299,9 +227,6 @@ export default function timelines(state = initialState, action) {
   case STATUS_UNPIN_SUCCESS:
     return state.updateIn(['accounts_pinned_statuses', action.accountId], Immutable.Map(), map => map
       .update('items', Immutable.List(), list => list.filter((id) => id !== action.id)));
-=======
-    return state.update(action.timeline, initialTimeline, map => map.set('online', false));
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
   default:
     return state;
   }
