@@ -21,6 +21,8 @@ class Api::V1::DeckQueuesController < ApiController
     render json: { error: 'プレイリストにこれ以上曲を追加できません。' }, status: :bad_request
   rescue Mastodon::RedisMaxRetryError => _
     render json: { error: '不明なエラーが発生しました。' }, status: :service_unavailable
+  rescue Mastodon::MusicSourceForbidden => _
+    render json: { error: 'この楽曲は外部への埋め込みが禁止されています。' }, status: :forbidden
   end
 
   def destroy

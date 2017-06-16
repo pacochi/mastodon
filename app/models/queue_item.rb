@@ -149,6 +149,7 @@ class QueueItem
       url = "https://www.youtube.com/oembed?url=#{link}"
       response = http_client.get(url)
 
+      raise Mastodon::MusicSourceForbidden if response.status == 401
       return unless response.status == 200
 
       json = JSON.parse(response.body.to_s)
@@ -202,7 +203,7 @@ class QueueItem
 
     def find_soundcloud_link(link)
       addressable = addressable_link(link)
-      if addressable.hostname = 'soundcloud.com'
+      if addressable.hostname == 'soundcloud.com'
         link.remove(%r{\?\Z})
       end
     end
@@ -210,6 +211,7 @@ class QueueItem
     def from_soundcloud_api(link)
       url = "https://soundcloud.com/oembed?format=json&url=#{link}"
       response = http_client.get(url)
+      raise Mastodon::MusicSourceForbidden if response.status == 403
       return unless response.status == 200
 
       json = JSON.parse(response.body.to_s)
