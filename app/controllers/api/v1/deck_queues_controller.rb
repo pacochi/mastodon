@@ -40,7 +40,7 @@ class Api::V1::DeckQueuesController < ApiController
   private
 
   def set_playlist
-    raise ActiveRecord::RecordNotFound unless [1, 2, 3].include?(params[:playlist_deck].to_i)
+    raise ActiveRecord::RecordNotFound unless [1, 2, 3, 4, 5, 6].include?(params[:playlist_deck].to_i)
 
     @playlist = Playlist.new(params[:playlist_deck])
   end
