@@ -4299,6 +4299,11 @@ button.icon-button.active i.fa-retweet {
           object-fit: fill;
         }
 
+        #sc-widget{
+          opacity: 0.0;
+          pointer-events: none;
+        }
+
         @keyframes plload {
           0% {transform: rotate(0deg);}
           100% {transform: rotate(360deg);}
