@@ -144,20 +144,10 @@ en:
       account_count: Known accounts
       domain_name: Domain
       title: Known Instances
-<<<<<<< HEAD
     oauth_authentications:
       linked: Linked
       not_linked: Not linked
       unlink_forcibly: Unlink forcibly
-    pubsubhubbub:
-      callback_url: Callback URL
-      confirmed: Confirmed
-      expires_in: Expires in
-      last_delivery: Last delivery
-      title: PubSubHubbub
-      topic: Topic
-=======
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
     reports:
       action_taken_by: Action taken by
       are_you_sure: Are you sure?
@@ -273,12 +263,9 @@ en:
       content: Security verification failed. Are you blocking cookies?
       title: Security verification failed
     '429': Throttled
-<<<<<<< HEAD
     '500': Error occurred
     '503': Sorry, we're down for maincenance
-=======
-    noscript: To use Mastodon, please enable JavaScript.
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
+    noscript: To use Pawoo, please enable JavaScript.
   exports:
     blocks: You block
     csv: CSV
@@ -312,12 +299,8 @@ en:
       following: Following list
       muting: Muting list
     upload: Upload
-<<<<<<< HEAD
-  landing_strip_html: <strong>%{name}</strong> is a user on %{link_to_root_path}. You can follow them or interact with them if you have an account anywhere in the fediverse. If you don't, you can <a href="%{sign_up_path}">sign up here</a>.
-  landing_strip_tag_html: There are tagged with <strong>#%{name}</strong>. You can interact with them if you have an account anywhere in the fediverse. If you don't, you can <a href="%{sign_up_path}">sign up here</a>.
-=======
   landing_strip_html: "<strong>%{name}</strong> is a user on %{link_to_root_path}. You can follow them or interact with them if you have an account anywhere in the fediverse."
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
+  landing_strip_tag_html: There are tagged with <strong>#%{name}</strong>. You can interact with them if you have an account anywhere in the fediverse. If you don't, you can <a href="%{sign_up_path}">sign up here</a>.
   landing_strip_signup_html: If you don't, you can <a href="%{sign_up_path}">sign up here</a>.
   media_attachments:
     validations:
