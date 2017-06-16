@@ -1,4 +1,3 @@
-import jsmediatags from 'jsmediatags/dist/jsmediatags';
 import api from '../api';
 
 import { openModal } from './modal';
@@ -392,27 +391,15 @@ export function resetFileKeyCompose() {
 
 export function selectMusicFile(file) {
   return (dispatch, getState) => {
-    jsmediatags.read(
-      file,
-      {
-        onSuccess(tag) {
-          const tagSupport = tag.version[0] === '2';
-          const title = (tagSupport && tag.tags.title) ? tag.tags.title.substr(0, 128) : '';
-          const artist = (tagSupport && tag.tags.artist) ? tag.tags.artist.substr(0, 128) : '';
-
-          dispatch(openModal('MUSIC', {
-            title,
-            artist,
-            music: file,
-            onUpload(payload) { dispatch(uploadMusicCompose(payload)); },
-            onResetFileKey() { dispatch(resetFileKeyCompose()); },
-          }));
-        },
-        onError(error) {
-          dispatch(selectMusicFileFail(error.info));
-        },
-      }
-    );
+    dispatch(openModal('MUSIC', {
+      music: file,
+      onUpload(payload) {
+        dispatch(uploadMusicCompose(payload));
+      },
+      onResetFileKey() {
+        dispatch(resetFileKeyCompose());
+      },
+    }));
   };
 };
 
