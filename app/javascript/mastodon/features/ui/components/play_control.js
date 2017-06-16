@@ -15,10 +15,13 @@ class PlayControl extends React.PureComponent {
     super(props, context);
     this.isSp = window.innerWidth < 1024;
 
+    let targetDeck = 1;
+    try { targetDeck = localStorage.getItem('LATEST_DECK') || 1; } catch (err) {}
+
     this.state = {
       isOpen: false,
       isPlaying: false,
-      targetDeck: 1,
+      targetDeck,
       deck: null,
       player: null,
       offset_time: 0,
@@ -210,6 +213,8 @@ class PlayControl extends React.PureComponent {
     const index = Number(e.currentTarget.getAttribute('data-index'));
     if(index === this.state.targetDeck) return;
     if (this.isLoading()) return;
+
+    try { localStorage.setItem('LATEST_DECK', index); } catch (err) {}
 
     this.setState({
       targetDeck: index,
