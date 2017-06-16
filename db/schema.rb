@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
-ActiveRecord::Schema.define(version: 20170607055007) do
-=======
 ActiveRecord::Schema.define(version: 20170609145826) do
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -106,30 +102,13 @@ ActiveRecord::Schema.define(version: 20170609145826) do
     t.index ["status_id"], name: "index_favourites_on_status_id"
   end
 
-<<<<<<< HEAD
-  create_table "firebase_cloud_messaging_tokens", force: :cascade do |t|
-    t.integer "user_id",  null: false
+  create_table "firebase_cloud_messaging_tokens", id: :serial, force: :cascade do |t|
+    t.integer "user_id", null: false
     t.integer "platform", null: false
-    t.string  "token",    null: false
-    t.index ["user_id", "token"], name: "index_firebase_cloud_messaging_tokens_on_user_id_and_token", unique: true, using: :btree
+    t.string "token", null: false
+    t.index ["user_id", "token"], name: "index_firebase_cloud_messaging_tokens_on_user_id_and_token", unique: true
   end
 
-  create_table "follow_requests", force: :cascade do |t|
-    t.integer  "account_id",        null: false
-    t.integer  "target_account_id", null: false
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.index ["account_id", "target_account_id"], name: "index_follow_requests_on_account_id_and_target_account_id", unique: true, using: :btree
-  end
-
-  create_table "follows", force: :cascade do |t|
-    t.integer  "account_id",        null: false
-    t.integer  "target_account_id", null: false
-    t.datetime "created_at",        null: false
-    t.datetime "updated_at",        null: false
-    t.index ["account_id", "target_account_id"], name: "index_follows_on_account_id_and_target_account_id", unique: true, using: :btree
-    t.index ["target_account_id"], name: "index_follows_on_target_account_id", using: :btree
-=======
   create_table "follow_requests", id: :serial, force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "target_account_id", null: false
@@ -144,7 +123,7 @@ ActiveRecord::Schema.define(version: 20170609145826) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id", "target_account_id"], name: "index_follows_on_account_id_and_target_account_id", unique: true
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
+    t.index ["target_account_id"], name: "index_follows_on_target_account_id"
   end
 
   create_table "imports", id: :serial, force: :cascade do |t|
@@ -159,29 +138,11 @@ ActiveRecord::Schema.define(version: 20170609145826) do
     t.datetime "data_updated_at"
   end
 
-<<<<<<< HEAD
-  create_table "initial_password_usages", force: :cascade do |t|
+  create_table "initial_password_usages", id: :serial, force: :cascade do |t|
     t.integer "user_id", null: false
-    t.index ["user_id"], name: "index_initial_password_usages_on_user_id", unique: true, using: :btree
+    t.index ["user_id"], name: "index_initial_password_usages_on_user_id", unique: true
   end
 
-  create_table "media_attachments", force: :cascade do |t|
-    t.bigint   "status_id"
-    t.string   "file_file_name"
-    t.string   "file_content_type"
-    t.integer  "file_file_size"
-    t.datetime "file_updated_at"
-    t.string   "remote_url",        default: "", null: false
-    t.integer  "account_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.string   "shortcode"
-    t.integer  "type",              default: 0,  null: false
-    t.json     "file_meta"
-    t.index ["account_id"], name: "index_media_attachments_on_account_id", using: :btree
-    t.index ["shortcode"], name: "index_media_attachments_on_shortcode", unique: true, using: :btree
-    t.index ["status_id"], name: "index_media_attachments_on_status_id", using: :btree
-=======
   create_table "media_attachments", id: :serial, force: :cascade do |t|
     t.bigint "status_id"
     t.string "file_file_name"
@@ -198,7 +159,6 @@ ActiveRecord::Schema.define(version: 20170609145826) do
     t.index ["account_id"], name: "index_media_attachments_on_account_id"
     t.index ["shortcode"], name: "index_media_attachments_on_shortcode", unique: true
     t.index ["status_id"], name: "index_media_attachments_on_status_id"
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
   end
 
   create_table "mentions", id: :serial, force: :cascade do |t|
@@ -268,50 +228,40 @@ ActiveRecord::Schema.define(version: 20170609145826) do
     t.index ["uid"], name: "index_oauth_applications_on_uid", unique: true
   end
 
-<<<<<<< HEAD
-  create_table "oauth_authentications", force: :cascade do |t|
-    t.integer  "user_id",    null: false
-    t.string   "provider",   null: false
-    t.string   "uid",        null: false
+  create_table "oauth_authentications", id: :serial, force: :cascade do |t|
+    t.integer "user_id", null: false
+    t.string "provider", null: false
+    t.string "uid", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["provider", "uid"], name: "index_oauth_authentications_on_provider_and_uid", unique: true, using: :btree
-    t.index ["user_id", "provider"], name: "index_oauth_authentications_on_user_id_and_provider", unique: true, using: :btree
+    t.index ["provider", "uid"], name: "index_oauth_authentications_on_provider_and_uid", unique: true
+    t.index ["user_id", "provider"], name: "index_oauth_authentications_on_user_id_and_provider", unique: true
   end
 
-  create_table "pinned_statuses", force: :cascade do |t|
-    t.integer  "account_id", null: false
-    t.bigint   "status_id",  null: false
+  create_table "pinned_statuses", id: :serial, force: :cascade do |t|
+    t.integer "account_id", null: false
+    t.bigint "status_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["account_id", "status_id"], name: "index_pinned_statuses_on_account_id_and_status_id", unique: true, using: :btree
-    t.index ["status_id"], name: "index_pinned_statuses_on_status_id", using: :btree
+    t.index ["account_id", "status_id"], name: "index_pinned_statuses_on_account_id_and_status_id", unique: true
+    t.index ["status_id"], name: "index_pinned_statuses_on_status_id"
   end
 
-  create_table "pixiv_cards", force: :cascade do |t|
+  create_table "pixiv_cards", id: :serial, force: :cascade do |t|
     t.integer "status_id", null: false
-    t.string  "url",       null: false
-    t.string  "image_url"
-    t.index ["status_id"], name: "index_pixiv_cards_on_status_id", using: :btree
+    t.string "url", null: false
+    t.string "image_url"
+    t.index ["status_id"], name: "index_pixiv_cards_on_status_id"
   end
 
-  create_table "pixiv_follows", force: :cascade do |t|
-    t.integer  "oauth_authentication_id", null: false
-    t.integer  "target_pixiv_uid",        null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.index ["oauth_authentication_id", "target_pixiv_uid"], name: "index_pixiv_follows_on_oauth_authentication_id", unique: true, using: :btree
+  create_table "pixiv_follows", id: :serial, force: :cascade do |t|
+    t.integer "oauth_authentication_id", null: false
+    t.integer "target_pixiv_uid", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["oauth_authentication_id", "target_pixiv_uid"], name: "index_pixiv_follows_on_oauth_authentication_id", unique: true
   end
 
-  create_table "preview_cards", force: :cascade do |t|
-    t.bigint   "status_id"
-    t.string   "url",                default: "", null: false
-    t.string   "title"
-    t.string   "description"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-=======
   create_table "preview_cards", id: :serial, force: :cascade do |t|
     t.bigint "status_id"
     t.string "url", default: "", null: false
@@ -320,7 +270,6 @@ ActiveRecord::Schema.define(version: 20170609145826) do
     t.string "image_file_name"
     t.string "image_content_type"
     t.integer "image_file_size"
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
     t.datetime "image_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -414,46 +363,29 @@ ActiveRecord::Schema.define(version: 20170609145826) do
     t.index ["account_id", "callback_url"], name: "index_subscriptions_on_account_id_and_callback_url", unique: true
   end
 
-<<<<<<< HEAD
-  create_table "suggestion_tags", force: :cascade do |t|
-    t.integer  "tag_id",                   null: false
-    t.integer  "order",       default: 1,  null: false
-    t.string   "description", default: "", null: false
-    t.datetime "created_at",               null: false
-    t.datetime "updated_at",               null: false
-    t.index ["tag_id"], name: "index_suggestion_tags_on_tag_id", unique: true, using: :btree
+  create_table "suggestion_tags", id: :serial, force: :cascade do |t|
+    t.integer "tag_id", null: false
+    t.integer "order", default: 1, null: false
+    t.string "description", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["tag_id"], name: "index_suggestion_tags_on_tag_id", unique: true
   end
 
-  create_table "tags", force: :cascade do |t|
-    t.string   "name",       default: "", null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.index "to_tsvector('simple'::regconfig, (name)::text)", name: "hashtag_search_index", using: :gin
-    t.index ["name"], name: "index_tags_on_name", unique: true, using: :btree
-  end
-
-  create_table "trend_ng_words", force: :cascade do |t|
-    t.string   "word",       default: "", null: false
-    t.string   "memo",       default: "", null: false
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
-    t.index ["word"], name: "index_trend_ng_words_on_word", unique: true, using: :btree
-  end
-
-  create_table "users", force: :cascade do |t|
-    t.string   "email",                     default: "",    null: false
-    t.integer  "account_id",                                null: false
-    t.datetime "created_at",                                null: false
-    t.datetime "updated_at",                                null: false
-    t.string   "encrypted_password",        default: "",    null: false
-    t.string   "reset_password_token"
-=======
   create_table "tags", id: :serial, force: :cascade do |t|
     t.string "name", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index "name text_pattern_ops", name: "hashtag_search_index"
     t.index ["name"], name: "index_tags_on_name", unique: true
+  end
+
+  create_table "trend_ng_words", id: :serial, force: :cascade do |t|
+    t.string "word", default: "", null: false
+    t.string "memo", default: "", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["word"], name: "index_trend_ng_words_on_word", unique: true
   end
 
   create_table "users", id: :serial, force: :cascade do |t|
@@ -463,7 +395,6 @@ ActiveRecord::Schema.define(version: 20170609145826) do
     t.datetime "updated_at", null: false
     t.string "encrypted_password", default: "", null: false
     t.string "reset_password_token"
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
     t.datetime "reset_password_sent_at"
     t.datetime "remember_created_at"
     t.integer "sign_in_count", default: 0, null: false
@@ -500,10 +431,6 @@ ActiveRecord::Schema.define(version: 20170609145826) do
     t.index ["user_id"], name: "index_web_settings_on_user_id", unique: true
   end
 
-<<<<<<< HEAD
-  add_foreign_key "pinned_statuses", "accounts"
-  add_foreign_key "pinned_statuses", "statuses"
-=======
   add_foreign_key "account_domain_blocks", "accounts", on_delete: :cascade
   add_foreign_key "blocks", "accounts", column: "target_account_id", on_delete: :cascade
   add_foreign_key "blocks", "accounts", on_delete: :cascade
@@ -528,6 +455,8 @@ ActiveRecord::Schema.define(version: 20170609145826) do
   add_foreign_key "oauth_access_grants", "users", column: "resource_owner_id", on_delete: :cascade
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id", on_delete: :cascade
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id", on_delete: :cascade
+  add_foreign_key "pinned_statuses", "accounts"
+  add_foreign_key "pinned_statuses", "statuses"
   add_foreign_key "preview_cards", "statuses", on_delete: :cascade
   add_foreign_key "reports", "accounts", column: "action_taken_by_account_id", on_delete: :nullify
   add_foreign_key "reports", "accounts", column: "target_account_id", on_delete: :cascade
@@ -535,7 +464,6 @@ ActiveRecord::Schema.define(version: 20170609145826) do
   add_foreign_key "statuses", "accounts", column: "in_reply_to_account_id", on_delete: :nullify
   add_foreign_key "statuses", "accounts", on_delete: :cascade
   add_foreign_key "statuses", "statuses", column: "in_reply_to_id", on_delete: :nullify
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
   add_foreign_key "statuses", "statuses", column: "reblog_of_id", on_delete: :cascade
   add_foreign_key "statuses_tags", "statuses", on_delete: :cascade
   add_foreign_key "statuses_tags", "tags", on_delete: :cascade
