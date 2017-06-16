@@ -4,21 +4,12 @@
 .report-accounts
   .report-accounts__item
     %strong= t('admin.reports.reported_account')
-<<<<<<< HEAD
-    = render partial: 'authorize_follows/card', locals: { account: @report.target_account, admin: true }
-    = render partial: 'admin/accounts/card', locals: { account: @report.target_account }
-  .report-accounts__item
-    %strong= t('admin.reports.reported_by')
-    = render partial: 'authorize_follows/card', locals: { account: @report.account, admin: true }
-    = render partial: 'admin/accounts/card', locals: { account: @report.account }
-=======
-    = render 'authorize_follows/card', account: @report.target_account
+    = render 'authorize_follows/card', account: @report.target_account, admin: true
     = render 'admin/accounts/card', account: @report.target_account
   .report-accounts__item
     %strong= t('admin.reports.reported_by')
-    = render 'authorize_follows/card', account: @report.account
+    = render 'authorize_follows/card', account: @report.account, admin: true
     = render 'admin/accounts/card', account: @report.account
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
 
 %p
   %strong= t('admin.reports.comment.label')
@@ -31,11 +22,7 @@
   - @report.statuses.each do |status|
     .report-status
       .activity-stream.activity-stream-headless
-<<<<<<< HEAD
-        .entry= render partial: 'stream_entries/simple_status', locals: { status: status, expand_media: false }
-=======
-        .entry= render 'stream_entries/simple_status', status: status
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
+        .entry= render 'stream_entries/simple_status', status: status, expand_media: false
       .report-status__actions
         - unless status.media_attachments.empty?
           = link_to admin_report_reported_status_path(@report, status, status: { sensitive: !status.sensitive }), method: :patch, class: 'icon-button nsfw-button', title: t("admin.reports.nsfw.#{!status.sensitive}") do
