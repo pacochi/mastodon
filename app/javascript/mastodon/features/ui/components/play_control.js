@@ -96,6 +96,7 @@ class PlayControl extends React.PureComponent {
             this.setState({
               deck,
               ytControl: null,
+              scControl: null,
               isYoutubeLoadingDone: false,
             });
           }
@@ -172,13 +173,24 @@ class PlayControl extends React.PureComponent {
   }
 
   fetchDeck(id) {
+    const newState = {};
     if(this.state.ytControl){
       this.state.ytControl.destroy();
-      this.setState({
+      Object.assign(newState, {
         ytControl: null,
         isYoutubeLoadingDone: false,
       });
     }
+    if (this.state.scControl) {
+      Object.assign(newState, {
+        scControl: null,
+      });
+    }
+
+    if(Object.keys(newState).length) {
+      this.setState(newState);
+    }
+
 
     return api(this.getMockState).get(`/api/v1/playlists/${id}`)
       .then((response)=>{
