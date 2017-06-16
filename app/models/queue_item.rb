@@ -22,7 +22,7 @@ class QueueItem
       link = entities.map { |entry| entry[:url] }.compact.first
       return if link.blank? || addressable_link(link).nil?
 
-      pawoo_link(link, account) || booth_link(link, account) || apollo_link(link, account) || youtube_link(link, account)
+      pawoo_link(link, account) || booth_link(link, account) || apollo_link(link, account) || youtube_link(link, account) || soundcloud_link(link, account)
     end
 
     private
@@ -180,6 +180,61 @@ class QueueItem
         duration: json.dig('body', 'sound', 'duration'),
         source_id: id,
       )
+    end
+
+    def soundcloud_link(link, account)
+      source_link = find_soundcloud_link(link)
+      return unless source_link
+
+      cache = find_cache('soundcloud', source_link)
+      return set_uuid(cache) if cache
+
+      if instance = from_soundcloud_api(link)
+        instance.assign_attributes(
+          link: link,
+          source_type: 'soundcloud',
+          source_id: source_link,
+          account_id: account.id,
+        )
+
+        cache_item('soundcloud', source_link, instance)
+      end
+    end
+
+    def find_soundcloud_link(link)
+      addressable = addressable_link(link)
+      if addressable.hostname = 'soundcloud.com'
+        link.remove(%r{\?\Z})
+      end
+    end
+
+    def from_soundcloud_api(link)
+      url = "https://soundcloud.com/oembed?format=json&url=#{link}"
+      response = http_client.get(url)
+      return unless response.status == 200
+
+      json = JSON.parse(response.body.to_s)
+      duration_sec = find_soundcloud_duration(json['html'])
+      title = "#{json['author_name']} - #{json['title'].remove(%r{\sby\s.+?$})}"
+
+      item = new(
+        id: SecureRandom.uuid,
+        info: title,
+        thumbnail_url: json['thumbnail_url'],
+        music_url: nil,
+        video_url: link,
+        duration: duration_sec,
+      )
+    end
+
+    def find_soundcloud_duration(embed)
+      embed_src_pattern = %r{(https://w\.soundcloud\.com/player/\?.+?&?url=https%3A%2F%2Fapi\.soundcloud\.com%2Ftracks%2F\d+(?:&show_artwork=true)?)}
+      url = embed.match(embed_src_pattern)
+      response = http_client.get(url)
+      return unless response.status == 200
+
+      duration_pattern = %r{full_duration.+?(?<duration>\d+)}
+      (response.body.to_s.match(duration_pattern).try(:[], :duration).to_i/1000).ceil
     end
 
     def set_uuid(item)
