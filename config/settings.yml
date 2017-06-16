@@ -7,11 +7,7 @@
 # For more information, see docs/Running-Mastodon/Administration-guide.md
 #
 defaults: &defaults
-<<<<<<< HEAD
   site_title: Pawoo
-=======
-  site_title: Mastodon
->>>>>>> 947887f261f74f84312327a5265553e8f16655fe
   site_description: ''
   site_extended_description: ''
   site_contact_username: ''
