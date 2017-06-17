@@ -220,13 +220,15 @@ class Status extends ImmutablePureComponent {
       statusAvatar = <AvatarOverlay staticSrc={status.getIn(['account', 'avatar_static'])} overlaySrc={account.get('avatar_static')} />;
     }
 
-    if(media === null && status.get('content').match(/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/)){
-      const videoId = status.get('content').match(/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/)[1];
+    const youtube_pattern = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/;
+    if(media === null && status.get('content').match(youtube_pattern)){
+      const videoId = status.get('content').match(youtube_pattern)[1];
       media = <YTWidget videoId={videoId} />;
     }
 
-    if(media === null && status.get('content').match(/soundcloud\.com\/([a-zA-Z0-9_]+)\/([a-zA-Z0-9]+)(|\/)/)){
-      const url = status.get('content').match(/soundcloud\.com\/([a-zA-Z0-9_]+)\/([a-zA-Z0-9]+)(|\/)/)[0];
+    const soundcloud_pattern = /soundcloud\.com\/([a-zA-Z0-9\-\_\.]+)\/([a-zA-Z0-9\-\_\.]+)(|\/)/;
+    if(media === null && status.get('content').match(soundcloud_pattern)){
+      const url = status.get('content').match(soundcloud_pattern)[0];
       media = <SCWidget url={url} />;
     }
 
