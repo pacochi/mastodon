@@ -32,7 +32,7 @@ class Announcements extends React.PureComponent {
 
     announcements.push(
       {
-        id: 1,
+        id: 9,
         icon: '/announcements/icon_2x_360.png',
         body: 'PawooのAndroid版アプリをリリースしました！！',
         link: [
@@ -52,7 +52,7 @@ class Announcements extends React.PureComponent {
           },
         ],
       },
-      // NOTE: id: 8 まで使用した
+      // NOTE: id: 9 まで使用した
     );
 
     this.announcements = Immutable.fromJS(announcements);
