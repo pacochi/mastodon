@@ -24,7 +24,7 @@ class PlayControl extends React.PureComponent {
     ];
 
     let targetDeck = 1;
-    try { targetDeck = localStorage.getItem('LATEST_DECK') || 1; } catch (err) {}
+    try { targetDeck = Number(localStorage.getItem('LATEST_DECK')) || 1; } catch (err) {}
 
     this.state = {
       isOpen: false,
@@ -377,7 +377,7 @@ class PlayControl extends React.PureComponent {
     }
 
     return (
-      <div className={playerClass}>
+      <div className={playerClass + (this.CONST_DECKS.find(d => (d.index === this.state.targetDeck && d.type === 'APOLLO')) ? ' is-apollo':'')}>
         <div className='player-control__control-bar'>
           <div className='control-bar__controller'>
             <div className={toggleClass} onClick={this.handleClickToggle}>
@@ -414,7 +414,7 @@ class PlayControl extends React.PureComponent {
                     [
                       'deck-selector__selector-body',
                       SINGLE_DECK.index === this.state.targetDeck ? 'active'   : '',
-                      SINGLE_DECK.type  === 'APOLLO'              ? 'apollo'   : '',
+                      SINGLE_DECK.type  === 'APOLLO'              ? 'is-apollo'   : '',
                       this.isLoading()                            ? 'disabled' : '',
                     ].join(' ')
                   }
@@ -427,7 +427,7 @@ class PlayControl extends React.PureComponent {
                 </li>
               )))()}
             </ul>
-            <div className="deck_queue-wrapper">
+            <div className={'deck_queue-wrapper'+(this.CONST_DECKS.find(d => (d.index === this.state.targetDeck && d.type === 'APOLLO')) ? ' is-apollo':'')}>
               <div className="deck_queue-column">
                 <div className="queue-item__artwork" style={nowPlayingArtwork}>
                   {(()=>{
