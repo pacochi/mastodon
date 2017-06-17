@@ -221,7 +221,7 @@ class Status extends ImmutablePureComponent {
 
     if(media === null && status.get('content').match(/soundcloud\.com\/([a-zA-Z0-9_]+)\/([a-zA-Z0-9]+)(|\/)/)){
       const url = status.get('content').match(/soundcloud\.com\/([a-zA-Z0-9_]+)\/([a-zA-Z0-9]+)(|\/)/)[0];
-      media = <SCWidget url={url} />
+      media = <SCWidget url={url} />;
     }
 
     return (
