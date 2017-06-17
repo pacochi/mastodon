@@ -18,9 +18,9 @@ class PlayControl extends React.PureComponent {
       {index: 1, type: 'DECK'  , name: 'DECK1'     , icon: '/player/pawoo-music-playlist-icon.svg'       ,},
       {index: 2, type: 'APOLLO', name: 'APOLLO A'  , icon: '/player/pawoo-music-playlist-apollo-icon.png',},
       {index: 3, type: 'APOLLO', name: 'APOLLO B'  , icon: '/player/pawoo-music-playlist-apollo-icon.png',},
-      {index: 4, type: 'DECK'  , name: 'DECK1'     , icon: '/player/pawoo-music-playlist-icon.svg'       ,},
-      {index: 5, type: 'DECK'  , name: 'DECK1'     , icon: '/player/pawoo-music-playlist-icon.svg'       ,},
-      {index: 6, type: 'DECK'  , name: 'DECK1'     , icon: '/player/pawoo-music-playlist-icon.svg'       ,},
+      {index: 4, type: 'DECK'  , name: 'DECK4'     , icon: '/player/pawoo-music-playlist-icon.svg'       ,},
+      {index: 5, type: 'DECK'  , name: 'DECK5'     , icon: '/player/pawoo-music-playlist-icon.svg'       ,},
+      {index: 6, type: 'DECK'  , name: 'DECK6'     , icon: '/player/pawoo-music-playlist-icon.svg'       ,},
     ]
 
     let targetDeck = 1;
