@@ -4,7 +4,8 @@ class Playlist
 
   MAX_QUEUE_SIZE = 10
   MAX_ADD_COUNT = 5
-  MAX_SKIP_COUNT = 5
+  MAX_SKIP_COUNT = 2
+  SKIP_LIMT_TIME = 90
   attr_accessor :deck
 
   def initialize(deck)
@@ -63,14 +64,27 @@ class Playlist
   end
 
   def skip(id, account)
-    count = redis.get(music_skip_count_key(account))&.to_i || 0
-    raise Mastodon::PlayerControlLimitError unless count < MAX_SKIP_COUNT
-    ret = self.next(id)
-    if ret
-      check_count(music_skip_count_key(account), MAX_SKIP_COUNT, account)
-      PlaylistLog.find_by(uuid: id)&.update(skipped_at: Time.now, skipped_account_id: account.id)
+    skip_count_key = music_skip_count_key(account)
+    count = redis.get(skip_count_key)&.to_i || 0
+
+    unless account&.user.admin
+      raise Mastodon::PlayerControlSkipLimitTimeError if current_time_sec < SKIP_LIMT_TIME
+      raise Mastodon::PlayerControlLimitError unless count < MAX_SKIP_COUNT
     end
-    ret
+
+    ret = self.next(id)
+    return false unless ret
+
+    PlaylistLog.find_by(uuid: id)&.update(skipped_at: Time.now, skipped_account: account)
+
+    ttl = redis.ttl(skip_count_key)
+    ttl = 60 * 60 if ttl <= 0
+
+    redis.multi do |m|
+      m.incr(skip_count_key)
+      m.expire(skip_count_key, ttl)
+    end
+    true
   end
 
   def next(id)
@@ -167,32 +181,6 @@ class Playlist
 
   def music_skip_count_key(account)
     "music:playlist:skip-count:#{account.id}"
-  end
-
-  def check_count(key, max_control_limit, account)
-    return true if User.find_by(account: account)&.admin
-
-    retry_count = 3
-    while retry_count.positive?
-      begin
-        redis.watch(key) do
-          count = redis.get(key)&.to_i || 0
-          ttl = redis.ttl(key)
-          ttl = 60 * 60 if ttl <= 0
-
-          raise Mastodon::PlayerControlLimitError unless count < max_control_limit
-
-          result = redis.multi do |m|
-            m.setex(key, ttl, count + 1)
-          end
-          return true if result
-        end
-      ensure
-        redis.unwatch
-        retry_count -= 1
-      end
-    end
-    raise Mastodon::RedisMaxRetryError
   end
 
   def redis

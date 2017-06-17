@@ -21,6 +21,8 @@ class Api::V1::DeckQueuesController < ApiController
     render json: { error: 'プレイリストにこれ以上曲を追加できません。' }, status: :bad_request
   rescue Mastodon::RedisMaxRetryError => _
     render json: { error: '不明なエラーが発生しました。' }, status: :service_unavailable
+  rescue Mastodon::MusicSourceForbidden => _
+    render json: { error: 'この楽曲は外部への埋め込みが禁止されています。' }, status: :forbidden
   end
 
   def destroy
@@ -29,18 +31,20 @@ class Api::V1::DeckQueuesController < ApiController
     else
       render json: { error: '不明なエラーが発生しました。' }, status: :service_unavailable
     end
-  rescue Mastodon::PlayerControlLimitError => _
+  rescue Mastodon::PlayerControlLimitError
     render json: { error: "１時間にスキップできる回数は#{Playlist::MAX_SKIP_COUNT}回までです。" }, status: :too_many_requests
-  rescue Mastodon::PlaylistEmptyError => _
+  rescue Mastodon::PlayerControlSkipLimitTimeError
+    render json: { error: "SKIPボタンは、楽曲が始まってから#{Playlist::SKIP_LIMT_TIME}秒後に押せるようになります" }, status: :bad_request
+  rescue Mastodon::PlaylistEmptyError
     render json: { error: 'スキップに失敗しました。' }, status: :bad_request
-  rescue Mastodon::RedisMaxRetryError => _
+  rescue Mastodon::RedisMaxRetryError
     render json: { error: '不明なエラーが発生しました。' }, status: :service_unavailable
   end
 
   private
 
   def set_playlist
-    raise ActiveRecord::RecordNotFound unless [1, 2, 3].include?(params[:playlist_deck].to_i)
+    raise ActiveRecord::RecordNotFound unless [1, 2, 3, 4, 5, 6].include?(params[:playlist_deck].to_i)
 
     @playlist = Playlist.new(params[:playlist_deck])
   end

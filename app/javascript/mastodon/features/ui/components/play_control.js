@@ -14,10 +14,13 @@ class PlayControl extends React.PureComponent {
     super(props, context);
     this.isSp = window.innerWidth < 1024;
 
+    let targetDeck = 1;
+    try { targetDeck = localStorage.getItem('LATEST_DECK') || 1; } catch (err) {}
+
     this.state = {
       isOpen: false,
       isPlaying: false,
-      targetDeck: 1,
+      targetDeck,
       deck: null,
       player: null,
       offset_time: 0,
@@ -26,13 +29,17 @@ class PlayControl extends React.PureComponent {
       isSeekbarActive: false,
       isLoadingArtwork: true,
       ytControl: null,
+      scControl: null,
       youtubeOpts: {},
     };
 
+    this.scRef = null;
     this.audioRef = null;
     this.videoRef = null;
+
     this.subscription = null;
 
+    this.setSCRef  = this.setSCRef.bind(this);
     this.setURLRef = this.setURLRef.bind(this);
     this.setVideoRef = this.setVideoRef.bind(this);
     this.setAudioRef = this.setAudioRef.bind(this);
@@ -52,8 +59,8 @@ class PlayControl extends React.PureComponent {
 
   componentDidMount () {
     if(this.isSp) return;
-    this.fetchDeck(1);
-    this.setSubscription(1);
+    this.fetchDeck(this.state.targetDeck);
+    this.setSubscription(this.state.targetDeck);
   }
 
   setSubscription (target) {
@@ -91,6 +98,7 @@ class PlayControl extends React.PureComponent {
             this.setState({
               deck,
               ytControl: null,
+              scControl: null,
               isYoutubeLoadingDone: false,
             });
           }
@@ -132,28 +140,59 @@ class PlayControl extends React.PureComponent {
         case 'pawoo-music':
           if (this.videoRef) {
             this.videoRef.currentTime = deck.time_offset;
+            this.videoRef.play();
           }
           break;
 
         case 'booth':
         case 'apollo':
-          if (this.videoRef) {
+          if (this.audioRef) {
             this.audioRef.currentTime = deck.time_offset;
+            this.audioRef.play();
           }
           break;
+
+          case 'soundcloud': {
+            const widgetIframe = document.getElementById('sc-widget');
+            this.setState({
+              scControl: SC.Widget(widgetIframe),
+            });
+
+            this.state.scControl.bind(SC.Widget.Events.READY, ()=>{
+              this.state.scControl.bind(SC.Widget.Events.PLAY, ()=>{
+                this.state.scControl.getCurrentSound((currentSound)=>{
+                  // SoundCloudはmilisecondsで、だいたいちょっと遅延するので+2ぐらいしとく
+                  this.state.scControl.setVolume(this.state.isPlaying ? 1 : 0);
+                  this.state.scControl.seekTo( (deck.time_offset+2) * 1000);
+                });
+              });
+            });
+            break;
+          }
         }
       }, 400);
     }, 20);
   }
 
   fetchDeck(id) {
+    const newState = {};
     if(this.state.ytControl){
       this.state.ytControl.destroy();
-      this.setState({
+      Object.assign(newState, {
         ytControl: null,
         isYoutubeLoadingDone: false,
       });
     }
+    if (this.state.scControl) {
+      Object.assign(newState, {
+        scControl: null,
+      });
+    }
+
+    if(Object.keys(newState).length) {
+      this.setState(newState);
+    }
+
 
     return api(this.getMockState).get(`/api/v1/playlists/${id}`)
       .then((response)=>{
@@ -186,6 +225,8 @@ class PlayControl extends React.PureComponent {
     if(index === this.state.targetDeck) return;
     if (this.isLoading()) return;
 
+    try { localStorage.setItem('LATEST_DECK', index); } catch (err) {}
+
     this.setState({
       targetDeck: index,
       isSeekbarActive: false,
@@ -214,11 +255,16 @@ class PlayControl extends React.PureComponent {
         this.state.ytControl.unMute();
       }
     }
+
+    if(this.state.scControl){
+      this.state.scControl.setVolume(this.state.isPlaying ? 0 : 1);
+    }
+
     this.setState({isPlaying: (!this.state.isPlaying)});
   }
 
   handleClickSkip () {
-    if(this.isDeckInActive()) return;
+    if(this.isDeckInActive() || !this.isSkipEnable()) return;
     this.props.onSkip(this.state.targetDeck, this.state.deck.queues[0].id);
   }
 
@@ -227,14 +273,18 @@ class PlayControl extends React.PureComponent {
     e.stopPropagation();
   }
 
-  setURLRef (c) {
-    this.urlRef = c;
-  }
-
   getMockState () {
     return {
       getIn: () => this.props.accessToken,
     };
+  }
+
+  setSCRef (c) {
+    this.scRef = c;
+  }
+
+  setURLRef (c) {
+    this.urlRef = c;
   }
 
   setVideoRef (c) {
@@ -243,7 +293,7 @@ class PlayControl extends React.PureComponent {
 
   setAudioRef (c) {
     this.audioRef = c;
-    if(this.audioRef) this.audioRef.volume = 1;
+    if(this.audioRef) this.audioRef.volume = 0.8;
   }
 
   isDeckInActive () {
@@ -252,6 +302,11 @@ class PlayControl extends React.PureComponent {
 
   isLoading () {
     return (this.state.isLoadingArtwork || (!this.isDeckInActive() && this.state.deck.queues[0].source_type === "youtube" && !this.state.isYoutubeLoadingDone));
+  }
+
+  isSkipEnable () {
+    const skip_limit_time = this.state.deck && this.state.deck.skip_limit_time;
+    return skip_limit_time && this.state.offset_time > skip_limit_time;
   }
 
   onReadyYouTube(event) {
@@ -326,7 +381,7 @@ class PlayControl extends React.PureComponent {
               }
               return (
                 <div className='control-bar__controller-skip'>
-                  <span onClick={this.handleClickSkip}>SKIP</span>
+                  <span className={this.isSkipEnable() ? '' : 'disabled'} onClick={this.handleClickSkip}>SKIP</span>
                 </div>
               );
             })()}
@@ -344,9 +399,10 @@ class PlayControl extends React.PureComponent {
           </div>
           <div className='control-bar__deck' onClick={this.handleClickDeck}>
             <ul className='control-bar__deck-selector'>
-              {(()=>[1, 2, 3].map(index=>(
-                <li key={index} className={'deck-selector__selector-body'+(this.state.targetDeck === index ? ' active':'') + (this.isLoading() ? ' disabled' : '')} data-index={index} onClick={this.handleClickDeckTab} style={deckSelectorStyle}>
-                  <img src="/player/pawoo-music-playlist-icon.svg" /><span>DECK{index}</span>
+              {(()=>[1, 2, 3, 4, 5, 6].map(index=>(
+                <li key={index} className={'deck-selector__selector-body'+(this.state.targetDeck === index ? ' active':'') + (index === 2 ? ' apollo':'') + (this.isLoading() ? ' disabled' : '')} data-index={index} onClick={this.handleClickDeckTab} style={deckSelectorStyle}>
+                  <img src={index === 2 ? '/player/pawoo-music-playlist-apollo-icon.png' : '/player/pawoo-music-playlist-icon.svg'} />
+                  <span>{index === 2 ? 'APOLLO' : 'DECK' + index}</span>
                 </li>
               )))()}
             </ul>
@@ -373,33 +429,49 @@ class PlayControl extends React.PureComponent {
                         />
                       );
                     }
+                    if(this.state.deck.queues[0].source_type === 'soundcloud'){
+                      return (
+                        <iframe
+                          ref={this.setSCRef}
+                          id="sc-widget"
+                          width="250"
+                          height="250"
+                          scrolling="no"
+                          frameBorder="no"
+                          src={
+                            `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${this.state.deck.queues[0].source_id}&auto_play=true&liking=false&show_playcount=false&show_bpm=false&sharing=false&buying=false&show_artwork=true&show_playcount=false&show_bpm=false&show_comments=false&visual=true`
+                          }
+                        />
+                      );
+                    }
 
                     if(this.state.deck.queues[0].video_url){
                       return (
-                        <video ref={this.setVideoRef} autoPlay style={nowPlayingArtwork} muted={!this.state.isPlaying}>
+                        <video ref={this.setVideoRef} style={nowPlayingArtwork} muted={!this.state.isPlaying}>
                           <source src={this.state.deck.queues[0].video_url}/>
                         </video>
                       );
                     }else{
                       return (
-                        <audio ref={this.setAudioRef} autoPlay src={this.state.deck.queues[0].music_url} muted={!this.state.isPlaying} />
+                        <audio ref={this.setAudioRef} src={this.state.deck.queues[0].music_url} muted={!this.state.isPlaying} />
                       );
                     }
                   })()}
                 </div>
                 {(()=>{
-                  if(!this.state.deck || !this.state.deck.max_queue_size || !this.state.deck.max_add_count || !this.state.deck.max_skip_count) return null;
+                  if(!this.state.deck || !this.state.deck.max_queue_size || !this.state.deck.max_add_count || !this.state.deck.max_skip_count || !this.state.deck.skip_limit_time) return null;
                   if(!this.state.isOpen) return null;
                   return (
                     <div className="queue-item__restrictions">
                       <div className="queue-item__restrictions-title">
                         <i className="fa fa-fw fa-info-circle" />
-                        <span>楽曲追加・SKIPについて</span>
+                        <span>楽曲追加・SKIPについて（実験中）</span>
                       </div>
                       <ul className="queue-item__restrictions-list">
                         <li>各DECKに<span className="queue-item__restrictions-num">最大{this.state.deck.max_queue_size}曲</span>入ります</li>
                         <li>楽曲追加は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_add_count}回まで</span>です</li>
                         <li>SKIPの回数は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_skip_count}回まで</span>です</li>
+                        <li>SKIPボタンは、<span className="queue-item__restrictions-num">楽曲が始まってから<br />{this.state.deck.skip_limit_time}秒後</span>に押せるようになります</li>
                       </ul>
                     </div>
                   );
@@ -482,7 +554,7 @@ class PlayControl extends React.PureComponent {
                       <li className="deck__queue-add-form">
                         <form onSubmit={this.handleSubmitAddForm}>
                           <span>曲を追加</span>
-                          <input ref={this.setURLRef} type="text" placeholder="URLを入力 (Pawoo Music, APOLLO(BOOTH) and YouTube URL)" required />
+                          <input ref={this.setURLRef} type="text" placeholder="URLを入力 (Pawoo Music, APOLLO(BOOTH), YouTube and SoundCloud URL)" required />
                           <div className='deck__queue-add-form-help'>
                             <i className='fa fa-question-circle deck__queue-add-form-help-icon' />
                             <div className='deck__queue-add-form-help-popup'>
@@ -499,21 +571,28 @@ class PlayControl extends React.PureComponent {
                                   <img src="/player/logos/youtube.svg" />
                                   <div className='platform-info'>
                                     <div className='platform-info__title'>YouTube</div>
-                                    <div className='platform-info__url'>https://www.youtube.com/watch?v=[XXXXX...]</div>
+                                    <div className='platform-info__url'>https://www.youtube.com/watch?v=[XXXXX……]</div>
                                   </div>
                                 </li>
                                 <li>
                                   <img src="/player/logos/booth.svg" />
                                   <div className='platform-info'>
                                     <div className='platform-info__title'>BOOTH</div>
-                                    <div className='platform-info__url'>https://booth.pm/ja/items/[XXXXX...]</div>
+                                    <div className='platform-info__url'>https://booth.pm/ja/items/[XXXXX……]</div>
                                   </div>
                                 </li>
                                 <li>
                                   <img src="/player/logos/apollo.png" />
                                   <div className='platform-info'>
                                     <div className='platform-info__title'>APOLLO</div>
-                                    <div className='platform-info__url'>https://booth.pm/apollo/a06/item?id=[XXXXX...]</div>
+                                    <div className='platform-info__url'>https://booth.pm/apollo/a06/item?id=[XXXXX……]</div>
+                                  </div>
+                                </li>
+                                <li>
+                                  <img src="/player/logos/soundcloud.svg" />
+                                  <div className='platform-info'>
+                                    <div className='platform-info__title'>SoundCloud</div>
+                                    <div className='platform-info__url'>https://soundcloud.com/[username]/[trackname]</div>
                                   </div>
                                 </li>
                               </ul>

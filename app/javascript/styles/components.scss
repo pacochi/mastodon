@@ -3538,11 +3538,6 @@ button.icon-button.active i.fa-retweet {
   font-size: smaller;
 }
 
-.music-modal__link-terms-of-use {
-  text-decoration: underline dotted;
-  color: $ui-highlight-color;
-}
-
 .confirmation-modal__action-bar {
   display: flex;
   background: $ui-secondary-color;
@@ -3980,7 +3975,7 @@ button.icon-button.active i.fa-retweet {
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  z-index: 200;
+  z-index: 198;
 
   padding: 19px 18px 19px 23px;
   display: flex;
@@ -3993,6 +3988,27 @@ button.icon-button.active i.fa-retweet {
   }
 }
 /* End Video Player */
+
+#about-playcontrol{
+  li {
+    font: 14px/18px sans-serif;
+    margin-bottom: 0;
+  }
+  ul {
+    list-style: none;
+    margin-left: 0;
+  }
+  .deck-selector__selector-body{
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .queue-item__restrictions-list{
+    li {
+      font-size: 12px;
+      line-height: 14px;
+    }
+  }
+}
 
 .player-control{
   position: fixed;
@@ -4048,7 +4064,7 @@ button.icon-button.active i.fa-retweet {
     position: relative;
 
     .control-bar__controller{
-      width: 200px;
+      width: 220px;
       height: 56px;
       background: #fff;
       border-right: solid 1px #f2f2f2;
@@ -4154,8 +4170,11 @@ button.icon-button.active i.fa-retweet {
           letter-spacing: 1.0px;
 
           transition: background-color 0.2s ease-out;
-          &:hover{
+          &:not(.disabled):hover{
             background-color: #666;
+          }
+          &.disabled{
+            cursor: default;
           }
         }
       }
@@ -4246,9 +4265,26 @@ button.icon-button.active i.fa-retweet {
         transition: background 0.3s ease-out, border-right 0.3s ease-out;
         margin-bottom: 0;
 
+        &.apollo{
+          background-color: #EF2463;
+          font-size: 14px;
+          color: #FFF;
+        }
+
         img{
           width: 18px;
           margin-right: 2px;
+        }
+      }
+    }
+
+    &:not(.is-open){
+      .deck-selector__selector-body{
+        &.apollo{
+          background: #ffd8eb;
+          &.active{
+            background-color: #EF2463;
+          }
         }
       }
     }
@@ -4269,6 +4305,17 @@ button.icon-button.active i.fa-retweet {
         overflow: hidden;
         background-color: #F2F2F2;
 
+        &::before{
+          display: block;
+          position: absolute;
+          top: 0;
+          left: 0;
+          width: 100%;
+          height: 100%;
+          z-index: 1000;
+          content: "";
+        }
+
         video, iframe, .queue-item__ytplayer{
           object-fit: cover;
           width: 100%;
@@ -4279,7 +4326,6 @@ button.icon-button.active i.fa-retweet {
         iframe, .queue-item__ytplayer{
           object-fit: fill;
         }
-
         @keyframes plload {
           0% {transform: rotate(0deg);}
           100% {transform: rotate(360deg);}
@@ -4394,10 +4440,10 @@ button.icon-button.active i.fa-retweet {
 
                   position: absolute;
                   left: -410px;
-                  top: -355px;
+                  top: -425px;
 
                   width: 420px;
-                  height: 330px;
+                  height: 400px;
                   background: #333;
 
                   transition: transform 0.3s ease-out, opacity 0.3s ease-out;
@@ -4614,6 +4660,11 @@ button.icon-button.active i.fa-retweet {
           }
         }
 
+        &.apollo {
+          background: #ffd8eb;
+          font-size: 14px;
+        }
+
         &.active,
         &:not(.disabled):hover{
           color: #333;
@@ -4623,6 +4674,10 @@ button.icon-button.active i.fa-retweet {
             &:hover{
               opacity: 0.8;
             }
+          }
+          &.apollo {
+            color: #FFF;
+            background-color: #EF2463;
           }
         }
         &.disabled{

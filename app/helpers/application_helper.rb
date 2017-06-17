@@ -36,7 +36,7 @@ module ApplicationHelper
   private
 
   def is_staging?
-    Rails.env.production? && Socket.gethostname == 'ap-staging'
+    Rails.env.production? && Socket.gethostname == 'ma099'
   rescue
     # FIXME: Socket.gethostname あんまり使わないから。。rescueいらないと思うねんけどね。
     false

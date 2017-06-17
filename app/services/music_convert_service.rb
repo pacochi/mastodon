@@ -17,7 +17,7 @@ class MusicConvertService < BaseService
 
     options = [
       '-vf', 'format=yuv420p,scale=trunc(iw/2)*2:trunc(ih/2)*2', '-c:v', 'libx264', '-tune', 'stillimage',
-      '-c:a', 'copy',
+      '-ac', '2', '-ar', '44100', '-b:a', "#{bitrate}k", '-c:a', 'libfdk_aac', '-afterburner', '1',
       '-shortest', '-t', "#{music_length}",
       '-metadata', "title=#{music.title}", '-metadata', "artist=#{music.artist}",
     ]

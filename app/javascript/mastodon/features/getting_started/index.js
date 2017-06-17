@@ -50,7 +50,7 @@ class GettingStarted extends ImmutablePureComponent {
         <div className='getting-started__wrapper'>
           <ColumnSubheading text={intl.formatMessage(messages.navigation_subheading)}/>
           <ColumnLink icon='users' hideOnMobile={true} text={intl.formatMessage(messages.community_timeline)} to='/timelines/public/local' />
-          <ColumnLink icon='image' text={intl.formatMessage(messages.media_timeline)} to='/timelines/public/media' />
+          <ColumnLink icon='music' text={intl.formatMessage(messages.media_timeline)} to='/timelines/public/media' />
           <ColumnLink icon='globe' hideOnMobile={true} text={intl.formatMessage(messages.public_timeline)} to='/timelines/public' />
           <ColumnLink icon='star' text={intl.formatMessage(messages.favourites)} to='/favourites' />
           {followRequests}
@@ -79,7 +79,7 @@ class GettingStarted extends ImmutablePureComponent {
               <FormattedMessage
                 id='getting_started.open_source_notice'
                 defaultMessage='Mastodon is open source software. You can contribute or report issues on GitHub at {github}.'
-                values={{ github: <a href="https://github.com/pixiv/mastodon" rel="noopener" target="_blank">pixiv/mastodon (pawoo)</a> }}
+                values={{ github: <a href="https://github.com/pixiv/mastodon/tree/pawoo-music" rel="noopener" target="_blank">pixiv/mastodon (pawoo)</a> }}
               />
             </p>
           </div>
