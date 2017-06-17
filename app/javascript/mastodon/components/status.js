@@ -9,6 +9,7 @@ import DisplayName from './display_name';
 import MediaGallery from './media_gallery';
 import VideoPlayer from './video_player';
 import BoothWidget from './booth_widget';
+import SCWidget from './sc_widget';
 import YTWidget from './yt_widget';
 import AttachmentList from './attachment_list';
 import StatusContent from './status_content';
@@ -213,15 +214,20 @@ class Status extends ImmutablePureComponent {
       media = <BoothWidget url={boothItemUrl} itemId={boothItemId} boothItem={this.props.boothItem} />;
     }
 
+    if (account === undefined || account === null) {
+      statusAvatar = <Avatar src={status.getIn(['account', 'avatar'])} staticSrc={status.getIn(['account', 'avatar_static'])} size={48}/>;
+    } else {
+      statusAvatar = <AvatarOverlay staticSrc={status.getIn(['account', 'avatar_static'])} overlaySrc={account.get('avatar_static')} />;
+    }
+
     if(media === null && status.get('content').match(/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/)){
       const videoId = status.get('content').match(/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/)[1];
       media = <YTWidget videoId={videoId} />;
     }
 
-    if (account === undefined || account === null) {
-      statusAvatar = <Avatar src={status.getIn(['account', 'avatar'])} staticSrc={status.getIn(['account', 'avatar_static'])} size={48}/>;
-    } else {
-      statusAvatar = <AvatarOverlay staticSrc={status.getIn(['account', 'avatar_static'])} overlaySrc={account.get('avatar_static')} />;
+    if(media === null && status.get('content').match(/soundcloud\.com\/([a-zA-Z0-9_]+)\/([a-zA-Z0-9]+)(|\/)/)){
+      const url = status.get('content').match(/soundcloud\.com\/([a-zA-Z0-9_]+)\/([a-zA-Z0-9]+)(|\/)/)[0];
+      media = <SCWidget url={url} />;
     }
 
     return (
