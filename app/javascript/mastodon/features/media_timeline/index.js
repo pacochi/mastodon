@@ -80,7 +80,7 @@ class MediaTimeline extends React.PureComponent {
     const {intl, hasUnread} = this.props;
 
     return (
-      <Column icon='globe' active={hasUnread} heading={intl.formatMessage(messages.title)}>
+      <Column icon='music' active={hasUnread} heading={intl.formatMessage(messages.title)}>
         <ColumnBackButtonSlim />
         <StatusListContainer
           type='media'
