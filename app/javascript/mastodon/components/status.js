@@ -9,6 +9,7 @@ import DisplayName from './display_name';
 import MediaGallery from './media_gallery';
 import VideoPlayer from './video_player';
 import BoothWidget from './booth_widget';
+import YTWidget from './yt_widget';
 import AttachmentList from './attachment_list';
 import StatusContent from './status_content';
 import StatusActionBar from './status_action_bar';
@@ -210,6 +211,11 @@ class Status extends ImmutablePureComponent {
       const boothItemId = status.get('booth_item_id');
 
       media = <BoothWidget url={boothItemUrl} itemId={boothItemId} boothItem={this.props.boothItem} />;
+    }
+
+    if(media === null && status.get('content').match(/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/)){
+      const videoId = status.get('content').match(/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/)[1];
+      media = <YTWidget videoId={videoId} />;
     }
 
     if (account === undefined || account === null) {
