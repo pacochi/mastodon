@@ -4230,7 +4230,7 @@ button.icon-button.active i.fa-retweet {
     }
 
     .control-bar__deck-selector{
-      width: 110px;
+      width: 120px;
       height: 550px;
       display: flex;
       align-items: flex-start;
@@ -4255,13 +4255,15 @@ button.icon-button.active i.fa-retweet {
         font-weight: bold;
         letter-spacing: 0.5px;
 
-        width: 79px;
+        width: 89px;
         height: 40px;
         padding: 8px 15px;
         background: #fff;
         border-right: solid 1px #fff;
         transition: background 0.3s ease-out, border-right 0.3s ease-out;
         margin-bottom: 0;
+        user-select: none;
+        white-space: nowrap;
 
         &.apollo{
           background-color: #EF2463;
