@@ -9,6 +9,7 @@ import DisplayName from './display_name';
 import MediaGallery from './media_gallery';
 import VideoPlayer from './video_player';
 import BoothWidget from './booth_widget';
+import SCWidget from './sc_widget';
 import AttachmentList from './attachment_list';
 import StatusContent from './status_content';
 import StatusActionBar from './status_action_bar';
@@ -216,6 +217,11 @@ class Status extends ImmutablePureComponent {
       statusAvatar = <Avatar src={status.getIn(['account', 'avatar'])} staticSrc={status.getIn(['account', 'avatar_static'])} size={48}/>;
     } else {
       statusAvatar = <AvatarOverlay staticSrc={status.getIn(['account', 'avatar_static'])} overlaySrc={account.get('avatar_static')} />;
+    }
+
+    if(media === null && status.get('content').match(/soundcloud\.com\/([a-zA-Z0-9_]+)\/([a-zA-Z0-9]+)(|\/)/)){
+      const url = status.get('content').match(/soundcloud\.com\/([a-zA-Z0-9_]+)\/([a-zA-Z0-9]+)(|\/)/)[0];
+      media = <SCWidget url={url} />
     }
 
     return (
