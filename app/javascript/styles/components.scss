@@ -4271,6 +4271,12 @@ button.icon-button.active i.fa-retweet {
           background-color: #EF2463;
           font-size: 14px;
           color: #FFF;
+
+          span{
+            font-size: 12px;
+            display: block;
+            margin-left: 2px;
+          }
         }
 
         img{
