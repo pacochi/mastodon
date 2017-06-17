@@ -14,17 +14,12 @@ class SCWidget extends React.PureComponent {
 
     this.state = {
       iframe: null,
-      widget: null,
     }
   }
 
   componentDidMount () {
     axios.get(`https://soundcloud.com/oembed?format=json&maxwidth=234&maxheight=234&url=https://${this.props.url}`)
     .then(res => this.setState({iframe: res.data.html}) );
-  }
-
-  setWidgetRef = (el) => {
-    this.widgetRef = el;
   }
 
   getEmbed = () => {
