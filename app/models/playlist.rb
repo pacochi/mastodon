@@ -8,15 +8,15 @@ class Playlist
   SKIP_LIMT_TIME = 90
   attr_accessor :deck
 
+  MEDIA_TL_DECK_ID = 346
+
   def initialize(deck)
     @deck = deck
   end
 
-  def add(link, account)
+  def add(link, account, force = false)
     count = redis.get(music_add_count_key(account))&.to_i || 0
-    if MAX_ADD_COUNT <= count && !account.user.admin
-      raise Mastodon::PlayerControlLimitError
-    end
+    raise Mastodon::PlayerControlLimitError if control_limit?(count, account, force)
 
     queue_item = QueueItem.create_from_link(link, account)
     raise Mastodon::MusicSourceNotFoundError if queue_item.nil?
@@ -27,9 +27,7 @@ class Playlist
       begin
         redis.watch(playlist_key, add_count_key) do
           count = redis.get(music_add_count_key(account))&.to_i || 0
-          if MAX_ADD_COUNT <= count && !account.user.admin
-            raise Mastodon::PlayerControlLimitError
-          end
+          raise Mastodon::PlayerControlLimitError if control_limit?(count, account, force)
 
           items = queue_items
           raise Mastodon::PlaylistSizeOverError unless items.size < MAX_QUEUE_SIZE
@@ -114,6 +112,10 @@ class Playlist
   end
 
   private
+
+  def control_limit?(count, account, force)
+    MAX_ADD_COUNT <= count && (!account.user.admin || !force)
+  end
 
   def play_item(queue_item_id, duration, gap = 10)
     set_start_time

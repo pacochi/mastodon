@@ -33,6 +33,15 @@ class PostStatusService < BaseService
       attach_pixiv_cards(status)
     end
 
+    if status&.media_attachments&.any? { |m| m.music_info.present? }
+      begin
+        link = "https://#{Rails.configuration.x.local_domain}/web/statuses/#{status.id}"
+        Playlist.new(Playlist::MEDIA_TL_DECK_ID).add(link, account, true)
+      rescue StandardError => e
+        #とりあえずPlaylistに突っ込んでみて、例外はいたら握りつぶす
+      end
+    end
+
     process_hashtags_service.call(status)
     process_mentions_service.call(status)
 

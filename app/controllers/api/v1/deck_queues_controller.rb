@@ -44,6 +44,7 @@ class Api::V1::DeckQueuesController < ApiController
   private
 
   def set_playlist
+    #deck346はreadonlyなので入れないでね
     raise ActiveRecord::RecordNotFound unless [1, 2, 3, 4, 5, 6].include?(params[:playlist_deck].to_i)
 
     @playlist = Playlist.new(params[:playlist_deck])
