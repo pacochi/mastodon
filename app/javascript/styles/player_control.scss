@@ -1,3 +1,6 @@
+$player-main-color:#EF2463;
+$player-apollo-color:#38b6c5;
+
 .player-control {
   position: fixed;
   left: 0;
@@ -14,7 +17,7 @@
     z-index: 10;
     width: 0;
     height: 2px;
-    background: #EF2463;
+    background: $player-main-color;
     left: 0;
     top: -2px;
     box-shadow: 0 0 10px rgba(239,36,99, 0.6);
@@ -76,7 +79,7 @@
     }
 
     &.is-playing {
-      background: #EF2463;
+      background: $player-main-color;
 
       .fa {
         margin-left: 3px;
@@ -103,10 +106,10 @@
       }
 
       &:hover {
-        background: #EF2463;
+        background: $player-main-color;
 
         &:after {
-          border-color: #EF2463;
+          border-color: $player-main-color;
         }
       }
     }
@@ -298,7 +301,7 @@
     &::before {
       content: "";
       display: block;
-      border: solid #ef2463;
+      border: solid $player-main-color;
       border-right: solid rgba(0,0,0,0.0);
       border-radius: 50%;
       animation: plload 0.6s linear 0.0s infinite;
@@ -371,7 +374,7 @@
       width: 60px;
       align-items: center;
       justify-content: center;
-      color: #EF2463;
+      color: $player-main-color;
       font-weight: bold;
     }
 
@@ -391,7 +394,7 @@
       height: 32px;
       display: block;
       -webkit-appearance: none;
-      background: #EF2463;
+      background: $player-main-color;
       border: 0;
       border-radius: 5px;
       color: #fff;
@@ -402,7 +405,7 @@
       cursor: pointer;
 
       &:hover {
-        background: #df1152;
+        background: darken($player-main-color, 10);
       }
     }
   }
@@ -496,7 +499,7 @@
     align-items: center;
     justify-content: center;
     font-size: 22px;
-    color: #F21D61;
+    color: $player-main-color;
     cursor: pointer;
   }
 
@@ -520,7 +523,7 @@
         border-radius: 50%;
         width: 0;
         margin: 0;
-        background: -webkit-radial-gradient(center center, circle closest-side, #EF1B62 0%, #EF1B62 3px, rgba(255,255,255,0) 3px, rgba(255,255,255,0) 8px, #EF1B62 8px);
+        background: -webkit-radial-gradient(center center, circle closest-side, $player-main-color 0%, $player-main-color 3px, rgba(255,255,255,0) 3px, rgba(255,255,255,0) 8px, $player-main-color 8px);
         opacity: 0.0;
         transition: opacity 0.3s;
       }
@@ -573,7 +576,7 @@
 
   .deck__queue-caption {
     font-weight: bold;
-    color: #EF2463;
+    color: $player-main-color;
   }
 }
 
@@ -702,14 +705,14 @@
   .deck__queue-add-form form span,
   .deck__queue-add-form-help-icon,
   .deck__queue-caption {
-    color: #38b6c5;
+    color: $player-apollo-color;
   }
 
   .deck__queue-add-form input[type="submit"] {
-    background-color: #38b6c5;
+    background-color: $player-apollo-color;
 
     &:hover {
-      background-color: #38b6c5;
+      background-color: $player-apollo-color;
     }
   }
 
@@ -725,7 +728,7 @@
 
   .deck__queue-item:first-child {
     .queue-item__metadata::before {
-      background: -webkit-radial-gradient(center center, circle closest-side, #38b6c5 0%, #38b6c5 3px, rgba(255,255,255,0) 3px, rgba(255,255,255,0) 8px, #38b6c5 8px);
+      background: -webkit-radial-gradient(center center, circle closest-side, $player-apollo-color 0%, $player-apollo-color 3px, rgba(255,255,255,0) 3px, rgba(255,255,255,0) 8px, $player-apollo-color 8px);
     }
   }
 
@@ -738,23 +741,23 @@
   }
 
   .player-seekbar {
-    background-color: #38b6c5;
+    background-color: $player-apollo-color;
   }
 
   .control-bar__controller-toggle {
     &:hover {
-      background: #38b6c5;
+      background: $player-apollo-color;
 
       &:after {
-        border-color: #38b6c5;
+        border-color: $player-apollo-color;
       }
     }
 
     &.is-playing {
-      background: #38b6c5;
+      background: $player-apollo-color;
 
       &:hover {
-        background: #38b6c5;
+        background: $player-apollo-color;
       }
     }
   }
@@ -767,7 +770,7 @@
   }
 
   .loading::before {
-    border-color: #38b6c5;
+    border-color: $player-apollo-color;
     border-right: solid rgba(0,0,0,0.0);
   }
 }
