@@ -215,7 +215,6 @@ class Status extends ImmutablePureComponent {
 
     if(media === null && status.get('content').match(/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/)){
       const videoId = status.get('content').match(/(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/)[1];
-      console.log(videoId);
       media = <YTWidget videoId={videoId} />;
     }
 
