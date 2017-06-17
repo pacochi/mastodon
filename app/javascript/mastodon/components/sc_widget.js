@@ -14,7 +14,7 @@ class SCWidget extends React.PureComponent {
 
     this.state = {
       iframe: null,
-    }
+    };
   }
 
   componentDidMount () {
@@ -39,6 +39,7 @@ class SCWidget extends React.PureComponent {
       </div>
     );
   }
+
 }
 
 export default SCWidget;
