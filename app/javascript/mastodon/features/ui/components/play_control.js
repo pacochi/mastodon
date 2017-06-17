@@ -60,8 +60,8 @@ class PlayControl extends React.PureComponent {
 
   componentDidMount () {
     if(this.isSp) return;
-    this.fetchDeck(1);
-    this.setSubscription(1);
+    this.fetchDeck(this.state.targetDeck);
+    this.setSubscription(this.state.targetDeck);
   }
 
   setSubscription (target) {
