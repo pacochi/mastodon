@@ -1,9 +1,9 @@
 import { connect } from 'react-redux';
 import PlayControl from '../components/play_control';
 import { miscFail } from '../../../actions/miscerrors';
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import { openModal } from '../../../actions/modal';
-import { skipMusicItem } from '../actions/play_control';
+import { skipMusicItem } from '../../../actions/play_control';
 
 const messages = defineMessages({
   skipMessage: { id: 'playlist.skip.message', defaultMessage: 'Are you sure you want to skip this music?\nThis action will affect ALL the other users listening!' },
@@ -20,11 +20,11 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
   onError(e){
     dispatch(miscFail(e));
   },
-  onSkip(e, targetDeck, id){
+  onSkip(targetDeck, id){
     dispatch(openModal('CONFIRM', {
       message: intl.formatMessage(messages.skipMessage),
       confirm: intl.formatMessage(messages.skipConfirm),
-      onConfirm: () => dispatch(skipMusicItem(e, targetDeck, id)),
+      onConfirm: () => dispatch(skipMusicItem(targetDeck, id)),
     }));
   },
 });

@@ -31,7 +31,7 @@ function main() {
 
     ReactDOM.render(<Mastodon {...props} />, mountNode);
     if (mountAboutPlayControl) {
-      ReactDOM.render(<PlayControl isTop={true} onError={function(){}} streamingAPIBaseURL={playControlInitialState.streaming_api_base_url} accessToken={playControlInitialState.access_token} />, mountAboutPlayControl);
+      ReactDOM.render(<PlayControl isTop={true} onError={function(){}} onSkip={function(){}} streamingAPIBaseURL={playControlInitialState.streaming_api_base_url} accessToken={playControlInitialState.access_token} />, mountAboutPlayControl);
     }
     perf.stop('main()');
   });
