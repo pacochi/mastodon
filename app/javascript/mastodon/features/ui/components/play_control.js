@@ -1,6 +1,5 @@
 import React from 'react';
 import { Link } from 'react-router';
-import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 import IconButton from '../../../components/icon_button';
 import api from '../../../api';
@@ -266,14 +265,7 @@ class PlayControl extends React.PureComponent {
 
   handleClickSkip () {
     if(this.isDeckInActive() || !this.isSkipEnable()) return;
-    if(!confirm("この曲は、いまこのサイトにいるみんなで一緒に同時に聞いています。\nスキップをすると聞いている全員に影響がありますが、よろしいですか？")) return;
-    api(this.getMockState).delete(`/api/v1/playlists/${this.state.targetDeck}/deck_queues/${this.state.deck.queues[0].id}`)
-    .then((response)=>{
-    })
-    .catch((error)=>{
-      this.props.onError(error);
-      return error;
-    });
+    this.props.onSkip(this.state.targetDeck, this.state.deck.queues[0].id);
   }
 
   handleClickItemLink (e) {
@@ -629,6 +621,7 @@ PlayControl.propTypes = {
   streamingAPIBaseURL: PropTypes.string.isRequired,
   isTop: PropTypes.bool.isRequired,
   onError: PropTypes.func.isRequired,
+  onSkip: PropTypes.func.isRequired,
 };
 
 export default PlayControl;
