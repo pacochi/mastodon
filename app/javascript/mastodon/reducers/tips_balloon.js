@@ -17,7 +17,6 @@ export default function tipsBallon(state = initialState, action) {
   case TIPS_BALLOON_DISMISS:
     const newSate = state.add(action.id);
     try {
-      console.log(JSON.stringify(newSate.toJS()));
       localStorage.setItem(storageKey, JSON.stringify(newSate.toJS()));
     } catch (e) {}
     return newSate;
