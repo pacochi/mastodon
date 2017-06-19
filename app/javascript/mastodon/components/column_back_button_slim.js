@@ -9,7 +9,7 @@ class ColumnBackButtonSlim extends React.PureComponent {
   };
 
   handleClick = () => {
-    this.context.router.push('/');
+    this.context.router.push('/getting-started');
   }
 
   render () {

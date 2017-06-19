@@ -9,7 +9,7 @@ class ColumnBackButton extends React.PureComponent {
   };
 
   handleClick = () => {
-    if (window.history && window.history.length === 1) this.context.router.push("/");
+    if (window.history && window.history.length === 1) this.context.router.push("/getting-started");
     else this.context.router.goBack();
   }
 
