@@ -10,7 +10,7 @@ class ColumnHeader extends React.PureComponent {
   };
 
   static propTypes = {
-    title: PropTypes.string.isRequired,
+    title: PropTypes.oneOfType([PropTypes.string.isRequired, PropTypes.node]).isRequired,
     icon: PropTypes.string.isRequired,
     active: PropTypes.bool,
     multiColumn: PropTypes.bool,

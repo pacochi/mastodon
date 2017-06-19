@@ -102,7 +102,7 @@ class CommunityTimeline extends React.PureComponent {
       });
     } else {
       this.interval = setInterval(() => {
-        dispatch(refreshTimeline('community'));
+        dispatch(refreshCommunityTimeline());
       }, 2000);
     }
   }
@@ -145,7 +145,7 @@ class CommunityTimeline extends React.PureComponent {
         <ColumnHeader
           icon='users'
           active={hasUnread}
-          title={intl.formatMessage(messages.title)}
+          title={heading}
           onPin={this.handlePin}
           onMove={this.handleMove}
           onClick={this.handleHeaderClick}
@@ -153,7 +153,7 @@ class CommunityTimeline extends React.PureComponent {
           multiColumn={multiColumn}
           showBackButton={!standalone}
         >
-          <ColumnSettingsContainer />
+          {!standalone && <ColumnSettingsContainer />}
         </ColumnHeader>
 
         <StatusListContainer
@@ -162,6 +162,7 @@ class CommunityTimeline extends React.PureComponent {
           timelineId='community'
           loadMore={this.handleLoadMore}
           emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />}
+          standalone={standalone}
         />
       </Column>
     );
