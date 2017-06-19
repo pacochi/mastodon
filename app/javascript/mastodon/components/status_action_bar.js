@@ -41,7 +41,7 @@ class StatusActionBar extends ImmutablePureComponent {
     onBlock: PropTypes.func,
     onReport: PropTypes.func,
     onMuteConversation: PropTypes.func,
-    me: PropTypes.number.isRequired,
+    me: PropTypes.number,
     withDismiss: PropTypes.bool,
     intl: PropTypes.object.isRequired,
     onPin: PropTypes.func,
