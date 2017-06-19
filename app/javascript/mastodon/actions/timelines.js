@@ -86,6 +86,9 @@ export function refreshTimeline(timelineId, path, params = {}) {
     api(getState).get(path, { params }).then(response => {
       const next = getLinks(response).refs.find(link => link.rel === 'next');
       dispatch(refreshTimelineSuccess(timelineId, response.data, skipLoading, next ? next.uri : null));
+
+      // PinnedStatusは表示のために例外的に全件取得する
+      dispatchNextPinnedStatusesTimeline(dispatch, timelineId, next);
     }).catch(error => {
       dispatch(refreshTimelineFail(timelineId, error, skipLoading));
     });
@@ -99,11 +102,9 @@ export const refreshMediaTimeline        = () => refreshTimeline('media', '/api/
 export const refreshAccountTimeline      = accountId => refreshTimeline(`account:${accountId}`, `/api/v1/accounts/${accountId}/statuses`);
 export const refreshAccountMediaTimeline = accountId => refreshTimeline(`account:${accountId}:media`, `/api/v1/accounts/${accountId}/statuses`, { only_media: true });
 export const refreshHashtagTimeline      = hashtag => refreshTimeline(`hashtag:${hashtag}`, `/api/v1/timelines/tag/${hashtag}`);
+export const refreshPinnedStatusTimeline = accountId => refreshTimeline(`account:${accountId}:pinned_status`, `/api/v1/accounts/${accountId}/pinned_statuses`);
 
 export function refreshTimelineFail(timeline, error, skipLoading) {
-  console.log(timeline);
-  console.log(error);
-
   return {
     type: TIMELINE_REFRESH_FAIL,
     timeline,
@@ -122,14 +123,26 @@ export function expandTimeline(timelineId, path, params = {}) {
       return;
     }
 
-    params.max_id = ids.last();
-    params.limit  = 10;
+    // pinned_statusはソートがID順ではないので、nextを使う
+    if (/account:\d+:pinned_status/.test(timelineId)) {
+      const nextUrl = timeline.get('next');
+
+      if (nextUrl) {
+        path = nextUrl;
+      }
+    } else {
+      params.max_id = ids.last();
+      params.limit  = 10;
+    }
 
     dispatch(expandTimelineRequest(timelineId));
 
     api(getState).get(path, { params }).then(response => {
       const next = getLinks(response).refs.find(link => link.rel === 'next');
       dispatch(expandTimelineSuccess(timelineId, response.data, next ? next.uri : null));
+
+      // PinnedStatusは表示のために例外的に全件取得する
+      dispatchNextPinnedStatusesTimeline(dispatch, timelineId, next);
     }).catch(error => {
       dispatch(expandTimelineFail(timelineId, error));
     });
@@ -143,6 +156,7 @@ export const expandMediaTimeline        = () => expandTimeline('media', '/api/v1
 export const expandAccountTimeline      = accountId => expandTimeline(`account:${accountId}`, `/api/v1/accounts/${accountId}/statuses`);
 export const expandAccountMediaTimeline = accountId => expandTimeline(`account:${accountId}:media`, `/api/v1/accounts/${accountId}/statuses`, { only_media: true });
 export const expandHashtagTimeline      = hashtag => expandTimeline(`hashtag:${hashtag}`, `/api/v1/timelines/tag/${hashtag}`);
+export const expandPinnedStatusesTimeline = accountId => expandTimeline(`account:${accountId}:pinned_status`, `/api/v1/accounts/${accountId}/pinned_statuses`);
 
 export function expandTimelineRequest(timeline) {
   return {
@@ -189,3 +203,15 @@ export function disconnectTimeline(timeline) {
     timeline,
   };
 };
+
+// PinnedStatusは表示のために例外的に全件取得する
+// 数件のpinしか存在しないユーザーなら、1度目のリクエストで完了している。
+// 今後、アクセスが多いかつ大量のPinnedStatusをもつアカウントが現れたら、実装方法を変えるかもしれない
+function dispatchNextPinnedStatusesTimeline(dispatch, timelineId, next) {
+  let matched = timelineId.match(/^account:(\d+):pinned_status$/);
+
+  if (matched && next) {
+    const accountId = matched[1];
+    setTimeout(() => dispatch(expandPinnedStatusesTimeline(accountId)), 300);
+  }
+}

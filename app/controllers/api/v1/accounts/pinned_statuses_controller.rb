@@ -7,19 +7,20 @@ class Api::V1::Accounts::PinnedStatusesController < Api::BaseController
   respond_to :json
 
   def index
-    pinned_statuses = PinnedStatus.where(account: @account).recent
-    paginated_pinned_statuses = pinned_statuses.paginate_by_max_id(limit_param(DEFAULT_STATUSES_LIMIT), params[:max_id], params[:since_id])
+    limit = limit_param(DEFAULT_STATUSES_LIMIT)
 
     statuses = Status.permitted_for(@account, current_account)
-      .where(id: pinned_statuses.pluck(:status_id))
+      .where(account: @account)
       .joins(:pinned_status)
-      .merge(PinnedStatus.recent)
+      .reorder(nil)
+      .merge(PinnedStatus.recent.paginate_by_max_id(limit, params[:max_id], params[:since_id]))
+      .preload(:pinned_status)
 
     @statuses = cache_collection(statuses, Status)
     set_maps(@statuses)
 
-    next_path = api_v1_account_pinned_statuses_url(pagination_params(max_id: paginated_pinned_statuses.last.id))    if paginated_pinned_statuses.size == limit_param(DEFAULT_STATUSES_LIMIT)
-    prev_path = api_v1_account_pinned_statuses_url(pagination_params(since_id: paginated_pinned_statuses.first.id)) unless paginated_pinned_statuses.empty?
+    next_path = api_v1_account_pinned_statuses_url(pagination_params(max_id: statuses.last.pinned_status.id))  if @statuses.size == limit
+    prev_path = api_v1_account_pinned_statuses_url(pagination_params(since_id: statuses.first.pinned_status.id)) unless @statuses.empty?
 
     set_pagination_headers(next_path, prev_path)
 
