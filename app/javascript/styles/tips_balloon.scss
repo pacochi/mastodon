@@ -1,0 +1,29 @@
+.tips-balloon {
+  position: absolute;
+  display: flex;
+  top: -50px;
+  left: 5px;
+  background: #ca426c;
+  border-radius: 5px;
+  padding: 10px;
+  font-weight: bold;
+  font-size: 15px;
+  color: white;
+}
+
+.tips-balloon:after {
+  border-top: 20px solid #ca426c;
+  border-right: 12px solid transparent;
+  border-left: 12px solid transparent;
+  content: '';
+  position: absolute;
+  bottom: -18px;
+  left: 10px;
+}
+
+.tips-balloon__dismiss {
+  margin: -8px -8px 0 2px;
+  .icon-button {
+    color: #98425d;
+  }
+}
