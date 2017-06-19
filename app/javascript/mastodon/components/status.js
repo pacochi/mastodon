@@ -92,6 +92,8 @@ class Status extends ImmutablePureComponent {
       this.node,
       this.handleIntersection
     );
+
+    this.componentMounted = true;
   }
 
   componentWillUnmount () {
@@ -102,6 +104,8 @@ class Status extends ImmutablePureComponent {
     }
 
     this.props.intersectionObserverWrapper.unobserve(this.props.id, this.node);
+
+    this.componentMounted = false;
   }
 
   handleIntersection = (entry) => {
@@ -122,6 +126,10 @@ class Status extends ImmutablePureComponent {
   }
 
   hideIfNotIntersecting = () => {
+    if (!this.componentMounted) {
+      return;
+    }
+
     // When the browser gets a chance, test if we're still not intersecting,
     // and if so, set our isHidden to true to trigger an unrender. The point of
     // this is to save DOM nodes and avoid using up too much memory.
