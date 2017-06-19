@@ -173,7 +173,7 @@ class Mastodon extends React.PureComponent {
           <Provider store={store}>
             <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
               <Route path='/' component={UI}>
-                <IndexRedirect to='/getting-started' />
+                <IndexRedirect to='/timelines/public/local' />
                 <Route path='getting-started' component={GettingStarted} />
                 <Route path='timelines/home' component={HomeTimeline} />
                 <Route path='timelines/public' component={PublicTimeline} />
