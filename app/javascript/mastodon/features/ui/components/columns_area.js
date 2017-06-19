@@ -8,6 +8,7 @@ import PublicTimeline from '../../public_timeline';
 import CommunityTimeline from '../../community_timeline';
 import HashtagTimeline from '../../hashtag_timeline';
 import Compose from '../../compose';
+import MediaTimeline from '../../media_timeline';
 
 const componentMap = {
   'COMPOSE': Compose,
@@ -16,6 +17,7 @@ const componentMap = {
   'PUBLIC': PublicTimeline,
   'COMMUNITY': CommunityTimeline,
   'HASHTAG': HashtagTimeline,
+  'MEDIA': MediaTimeline,
 };
 
 class ColumnsArea extends ImmutablePureComponent {

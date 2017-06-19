@@ -95,11 +95,15 @@ export function refreshTimeline(timelineId, path, params = {}) {
 export const refreshHomeTimeline         = () => refreshTimeline('home', '/api/v1/timelines/home');
 export const refreshPublicTimeline       = () => refreshTimeline('public', '/api/v1/timelines/public');
 export const refreshCommunityTimeline    = () => refreshTimeline('community', '/api/v1/timelines/public', { local: true });
+export const refreshMediaTimeline        = () => refreshTimeline('media', '/api/v1/timelines/public', { local: true, media: true });
 export const refreshAccountTimeline      = accountId => refreshTimeline(`account:${accountId}`, `/api/v1/accounts/${accountId}/statuses`);
 export const refreshAccountMediaTimeline = accountId => refreshTimeline(`account:${accountId}:media`, `/api/v1/accounts/${accountId}/statuses`, { only_media: true });
 export const refreshHashtagTimeline      = hashtag => refreshTimeline(`hashtag:${hashtag}`, `/api/v1/timelines/tag/${hashtag}`);
 
 export function refreshTimelineFail(timeline, error, skipLoading) {
+  console.log(timeline);
+  console.log(error);
+
   return {
     type: TIMELINE_REFRESH_FAIL,
     timeline,
@@ -135,6 +139,7 @@ export function expandTimeline(timelineId, path, params = {}) {
 export const expandHomeTimeline         = () => expandTimeline('home', '/api/v1/timelines/home');
 export const expandPublicTimeline       = () => expandTimeline('public', '/api/v1/timelines/public');
 export const expandCommunityTimeline    = () => expandTimeline('community', '/api/v1/timelines/public', { local: true });
+export const expandMediaTimeline        = () => expandTimeline('media', '/api/v1/timelines/public', { local: true, media: true });
 export const expandAccountTimeline      = accountId => expandTimeline(`account:${accountId}`, `/api/v1/accounts/${accountId}/statuses`);
 export const expandAccountMediaTimeline = accountId => expandTimeline(`account:${accountId}:media`, `/api/v1/accounts/${accountId}/statuses`, { only_media: true });
 export const expandHashtagTimeline      = hashtag => expandTimeline(`hashtag:${hashtag}`, `/api/v1/timelines/tag/${hashtag}`);
