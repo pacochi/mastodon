@@ -12,7 +12,6 @@ class PlayControl extends React.PureComponent {
 
   constructor (props, context) {
     super(props, context);
-    this.isSp = window.innerWidth < 1024;
 
     this.CONST_DECKS = [
       {index: 1, type: 'DECK'  , name: 'DECK1'     , icon: '/player/pawoo-music-playlist-icon.svg'       },
@@ -29,6 +28,7 @@ class PlayControl extends React.PureComponent {
     this.state = {
       isOpen: false,
       isPlaying: false,
+      isSp: window.innerWidth < 1024,
       targetDeck,
       deck: null,
       player: null,
@@ -60,6 +60,7 @@ class PlayControl extends React.PureComponent {
     this.handleClickDeckTab = this.handleClickDeckTab.bind(this);
     this.handleSubmitAddForm = this.handleSubmitAddForm.bind(this);
     this.handleClickItemLink = this.handleClickItemLink.bind(this);
+    this.handleResizeWindow = this.handleResizeWindow.bind(this);
     this.onReadyYouTube = this.onReadyYouTube.bind(this);
     this.onChangeYoutubeState = this.onChangeYoutubeState.bind(this);
 
@@ -67,9 +68,15 @@ class PlayControl extends React.PureComponent {
   }
 
   componentDidMount () {
+    window.addEventListener('resize', this.handleResizeWindow);
+
     if(this.isSp) return;
     this.fetchDeck(this.state.targetDeck);
     this.setSubscription(this.state.targetDeck);
+  }
+
+  componentWillUnmount () {
+    window.removeEventListener('resize', this.handleResizeWindow);
   }
 
   setSubscription (target) {
@@ -280,6 +287,13 @@ class PlayControl extends React.PureComponent {
   handleClickItemLink (e) {
     // クリック時にDeckが開かないように
     e.stopPropagation();
+  }
+
+  handleResizeWindow (e) {
+    const isSp = window.innerWidth < 1024;
+    if (this.state.isSp !== isSp) {
+      this.setState({ isSp });
+    }
   }
 
   getMockState () {
