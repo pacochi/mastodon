@@ -359,6 +359,7 @@ class PlayControl extends React.PureComponent {
 
   render () {
     if(this.isSp) return null;
+    const { isTop } = this.props;
     const playerClass = `player-control${this.state.isOpen ? ' is-open':''}`;
     const iconClass = `fa ${this.state.isPlaying?'fa-volume-up':'fa-play'}`;
     const toggleClass = `control-bar__controller-toggle is-${this.state.isPlaying?'playing':'pause'}`;
@@ -398,12 +399,12 @@ class PlayControl extends React.PureComponent {
             <div className={toggleClass} onClick={this.handleClickToggle}>
               <i className={iconClass} />
             </div>
-            <TipsBalloonContainer id={1}>
+            {!isTop && <TipsBalloonContainer id={1}>
               音楽を再生！
-            </TipsBalloonContainer>
+            </TipsBalloonContainer>}
 
             {(()=>{
-              if(this.props.isTop) {
+              if(isTop) {
                 return null;
               }
               return (
@@ -507,7 +508,6 @@ class PlayControl extends React.PureComponent {
                         <span>楽曲追加・SKIPについて（実験中）</span>
                       </div>
                       <ul className="queue-item__restrictions-list">
-                        <li>各DECKに<span className="queue-item__restrictions-num">最大{this.state.deck.max_queue_size}曲</span>入ります</li>
                         <li>楽曲追加は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_add_count}回まで</span>です</li>
                         <li>SKIPの回数は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_skip_count}回まで</span>です</li>
                         <li>SKIPボタンは、<span className="queue-item__restrictions-num">楽曲が始まってから<br />{this.state.deck.skip_limit_time}秒後</span>に押せるようになります</li>
@@ -586,7 +586,7 @@ class PlayControl extends React.PureComponent {
                   })()}
 
                   {(()=>{
-                    if(this.props.isTop) {
+                    if(isTop) {
                       return null;
                     }
                     return (
@@ -646,9 +646,9 @@ class PlayControl extends React.PureComponent {
               </div>
             </div>
           </div>
-          <TipsBalloonContainer id={2} style={{ left: '250px' }}>
-            プレイリスト（DECK）の切り替え
-          </TipsBalloonContainer>
+          {!isTop && <TipsBalloonContainer id={2} style={{ left: '250px' }}>
+            再生する共有チャンネルの切り替え
+          </TipsBalloonContainer>}
         </div>
         <div className={seekbarClass} style={playerSeekBarStyle} />
         <div className='player-control__overlay' onClick={this.handleClickOverlay} />
