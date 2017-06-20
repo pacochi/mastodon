@@ -37,7 +37,7 @@ class AccountMediaTimeline extends React.PureComponent {
   componentWillReceiveProps(nextProps) {
     if (nextProps.params.accountId !== this.props.params.accountId && nextProps.params.accountId) {
       this.props.dispatch(fetchAccount(Number(nextProps.params.accountId)));
-      this.props.dispatch(refreshAccountMediaTimeline(Number(this.props.params.accountId)));
+      this.props.dispatch(refreshAccountMediaTimeline(Number(nextProps.params.accountId)));
     }
   }
 
