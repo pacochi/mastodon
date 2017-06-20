@@ -135,7 +135,7 @@ class AutosuggestTextarea extends ImmutablePureComponent {
 
       if (hash_tag_suggestions.size > 0 && !hashTagSuggestionsHidden) {
         e.preventDefault();
-        this.setState({ selectedHashTagSuggestion: Math.min(selectedHashTagSuggestion + 1, hash_tag_suggestions.size - 1)});
+        this.setState({ selectedHashTagSuggestion: Math.min(selectedHashTagSuggestion + 1, hash_tag_suggestions.size - 1) });
       }
 
       break;
@@ -147,7 +147,7 @@ class AutosuggestTextarea extends ImmutablePureComponent {
 
       if (hash_tag_suggestions.size > 0 && !hashTagSuggestionsHidden) {
         e.preventDefault();
-        this.setState({ selectedHashTagSuggestion: Math.max(selectedHashTagSuggestion -1, 0)});
+        this.setState({ selectedHashTagSuggestion: Math.max(selectedHashTagSuggestion -1, 0) });
       }
 
       break;
@@ -222,7 +222,7 @@ class AutosuggestTextarea extends ImmutablePureComponent {
   }
 
   renderHashTagSuggestion = (tag, i) => {
-    const { selectedHashTagSuggestion} = this.state;
+    const { selectedHashTagSuggestion } = this.state;
 
     return (
       <div

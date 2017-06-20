@@ -23,7 +23,7 @@ const messages = defineMessages({
   favourites: { id: 'navigation_bar.favourites', defaultMessage: 'Favourites' },
   blocks: { id: 'navigation_bar.blocks', defaultMessage: 'Blocked users' },
   mutes: { id: 'navigation_bar.mutes', defaultMessage: 'Muted users' },
-  help: { id: 'navigation_bar.help', defaultMessage: 'Pawoo Help'},
+  help: { id: 'navigation_bar.help', defaultMessage: 'Pawoo Help' },
   info: { id: 'navigation_bar.info', defaultMessage: 'Extended information' },
   suggested_accounts: { id: 'navigation_bar.suggested_accounts', defaultMessage: 'Active Accounts' },
   media_timeline: { id: 'navigation_bar.media_timeline', defaultMessage: 'Media timeline' },

@@ -10,7 +10,7 @@ import {
   expandSuggestedAccounts,
 } from '../../actions/suggested_accounts';
 import { ScrollContainer } from 'react-router-scroll';
-import {defineMessages, injectIntl, FormattedMessage} from 'react-intl';
+import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import SuggestedAccountContainer from '../../containers/suggested_account_container';
 import Column from '../ui/components/column';
 import HeaderContainer from '../account_timeline/containers/header_container';
