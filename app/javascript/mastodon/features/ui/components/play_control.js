@@ -71,7 +71,7 @@ class PlayControl extends React.PureComponent {
   componentDidMount () {
     window.addEventListener('resize', this.handleResizeWindow);
 
-    if(this.isSp) return;
+    if(this.state.isSp) return;
     this.fetchDeck(this.state.targetDeck);
     this.setSubscription(this.state.targetDeck);
   }
@@ -358,7 +358,7 @@ class PlayControl extends React.PureComponent {
   }
 
   render () {
-    if(this.isSp) return null;
+    if(this.state.isSp) return null;
     const playerClass = `player-control${this.state.isOpen ? ' is-open':''}`;
     const iconClass = `fa ${this.state.isPlaying?'fa-volume-up':'fa-play'}`;
     const toggleClass = `control-bar__controller-toggle is-${this.state.isPlaying?'playing':'pause'}`;
