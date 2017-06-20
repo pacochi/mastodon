@@ -33,6 +33,10 @@ module ApplicationHelper
     end
   end
 
+  def fa_icon(icon)
+    content_tag(:i, nil, class: 'fa ' + icon.split(' ').map { |cl| "fa-#{cl}" }.join(' '))
+  end
+
   private
 
   def is_staging?
@@ -40,9 +44,5 @@ module ApplicationHelper
   rescue
     # FIXME: Socket.gethostname あんまり使わないから。。rescueいらないと思うねんけどね。
     false
-  end
-
-  def fa_icon(icon)
-    content_tag(:i, nil, class: 'fa ' + icon.split(' ').map { |cl| "fa-#{cl}" }.join(' '))
   end
 end
