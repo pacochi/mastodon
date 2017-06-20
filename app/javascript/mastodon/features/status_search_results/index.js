@@ -81,8 +81,7 @@ class StatusSearchResults extends React.PureComponent {
           pinned={false}
           multiColumn={false}
           showBackButton
-        >
-        </ColumnHeader>
+        />
 
         <StatusList
           scrollKey='status_search_results'
