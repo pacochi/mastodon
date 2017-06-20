@@ -90,12 +90,12 @@ class Compose extends React.PureComponent {
 
         <div className='drawer__pager'>
           <div className='drawer__inner'>
-            <div className="drawer__block">
+            <div className='drawer__block'>
               <NavigationContainer />
               <ComposeFormContainer />
             </div>
             <AnnouncementsContainer />
-            <div className="drawer__block">
+            <div className='drawer__block'>
               <TrendTagsContainer />
             </div>
           </div>
