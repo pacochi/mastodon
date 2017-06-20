@@ -134,7 +134,6 @@ class MediaTimeline extends React.PureComponent {
         >
           <ColumnSettingsContainer />
         </ColumnHeader>
-
         <StatusListContainer
           timelineId='media'
           loadMore={this.handleLoadMore}
