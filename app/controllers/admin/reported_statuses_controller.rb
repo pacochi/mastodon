@@ -15,7 +15,7 @@ module Admin
     def destroy
       authorize @status, :destroy?
       RemovalWorker.perform_async(@status.id)
-      redirect_to admin_report_path(@report)
+      render json: @status
     end
 
     private

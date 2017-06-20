@@ -5,18 +5,21 @@ module Admin
     before_action :set_account
     before_action :set_status, only: [:update, :destroy]
 
+    PAGE_PAR_NUM = 20
+
     def index
-      @statuses = @account.statuses.page(params[:page]).per(20).preload(:media_attachments, :pixiv_cards)
+      @statuses = @account.statuses.page(params[:page]).per(PAGE_PAR_NUM).preload(:media_attachments, :pixiv_cards)
     end
 
     def update
       @status.update(status_params)
-      redirect_to admin_account_statuses_path(@account.id)
+      page = (@account.statuses.where(Status.arel_table[:id].gt(@status.id)).size.to_f / PAGE_PAR_NUM).ceil
+      redirect_to admin_account_statuses_path(@account.id, page: page)
     end
 
     def destroy
       RemovalWorker.perform_async(@status.id)
-      redirect_to admin_account_statuses_path(@account.id)
+      render json: @status
     end
 
     private

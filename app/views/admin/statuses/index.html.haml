@@ -1,3 +1,6 @@
+- content_for :header_tags do
+  = javascript_pack_tag 'admin', integrity: true, async: true, crossorigin: 'anonymous'
+
 - content_for :page_title do
   = display_name(@account)
 
@@ -8,11 +11,11 @@
     = render 'accounts/nothing_here'
 - else
   - @statuses.each do |status|
-    .account-status
+    .account-status{ data: { id: status.id } }
       .activity-stream.activity-stream-headless
         .entry= render partial: 'stream_entries/simple_status', locals: { status: status, expand_media: false }
       .account-status__actions
-        = link_to admin_account_status_path(@account.id, status), method: :delete, class: 'icon-button', style: 'font-size: 24px; width: 24px; height: 24px; display: block', title: t('admin.reports.delete'), data: { confirm: t('admin.accounts.are_you_sure') } do
+        = link_to admin_account_status_path(@account.id, status), method: :delete, class: 'icon-button trash-button', style: 'font-size: 24px; width: 24px; height: 24px; display: block', title: t('admin.reports.delete'), data: { confirm: t('admin.accounts.are_you_sure') }, remote: true do
           = fa_icon 'trash'
         - unless status.media_attachments.empty?
           = link_to admin_account_status_path(@account.id, status, status: { sensitive: !status.sensitive }), method: :patch, style: 'color: white; font-size: 11px; width: 11px; height: 11px; margin-top: 15px; display: block;', title: t("admin.reports.nsfw.#{!status.sensitive}") do
