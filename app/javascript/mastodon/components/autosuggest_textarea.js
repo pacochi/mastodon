@@ -231,7 +231,8 @@ class AutosuggestTextarea extends ImmutablePureComponent {
         key={tag}
         className={`autosuggest-textarea__suggestions__item ${i === selectedHashTagSuggestion ? 'selected' : ''}`}
         data-tag={tag}
-        onClick={this.onHashTagSuggestionClick}>
+        onClick={this.onHashTagSuggestionClick}
+      >
         #{tag}
       </div>
     );
