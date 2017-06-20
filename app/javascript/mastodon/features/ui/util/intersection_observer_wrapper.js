@@ -39,7 +39,7 @@ class IntersectionObserverWrapper {
 
   unobserve (id, node) {
     if (this.observer) {
-      delete this.callbacks[id]
+      delete this.callbacks[id];
       this.observer.unobserve(node);
     }
   }
