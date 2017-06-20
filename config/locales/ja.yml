@@ -262,7 +262,7 @@ ja:
     '429': リクエストの制限に達しました。
     '500': エラーが発生しました。
     '503': ただいまメンテナンスを行なっております。
-    noscript: Mastodonを利用する場合はJavaScriptを有効にしてください。
+    noscript: Pawooを利用する場合はJavaScriptを有効にしてください。
   exports:
     blocks: ブロック
     csv: CSV
