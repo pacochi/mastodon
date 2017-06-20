@@ -17,7 +17,8 @@
     .actions
       = f.button :button, t('generic.save_changes'), type: :submit
 
-%hr/
+- unless current_user.initial_password_usage
+  %hr/
 
-%h6= t('auth.delete_account')
-%p.muted-hint= t('auth.delete_account_html', path: settings_delete_path)
+  %h6= t('auth.delete_account')
+  %p.muted-hint= t('auth.delete_account_html', path: settings_delete_path)

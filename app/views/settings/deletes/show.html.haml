@@ -1,16 +1,22 @@
 - content_for :page_title do
   = t('settings.delete')
 
-= simple_form_for @confirmation, url: settings_delete_path, method: :delete do |f|
-  .warning
-    %strong
-      = fa_icon('warning')
-      = t('deletes.warning_title')
-    = t('deletes.warning_html')
+- if current_user.initial_password_usage
+  = simple_form_for(current_user, url: registration_path(:user), html: { method: :put }) do |f|
+    = render 'shared/error_messages', object: f.object
+    %p.hint= t('deletes.exists_initial_password_usage')
 
-  %p.hint= t('deletes.description_html')
+- else
+  = simple_form_for @confirmation, url: settings_delete_path, method: :delete do |f|
+    .warning
+      %strong
+        = fa_icon('warning')
+        = t('deletes.warning_title')
+      = t('deletes.warning_html')
 
-  = f.input :password, autocomplete: 'off', placeholder: t('simple_form.labels.defaults.current_password'), input_html: { 'aria-label' => t('simple_form.labels.defaults.current_password') }, hint: t('deletes.confirm_password')
+    %p.hint= t('deletes.description_html')
 
-  .actions
-    = f.button :button, t('deletes.proceed'), type: :submit, class: 'negative'
+    = f.input :password, autocomplete: 'off', placeholder: t('simple_form.labels.defaults.current_password'), input_html: { 'aria-label' => t('simple_form.labels.defaults.current_password') }, hint: t('deletes.confirm_password')
+
+    .actions
+      = f.button :button, t('deletes.proceed'), type: :submit, class: 'negative'
