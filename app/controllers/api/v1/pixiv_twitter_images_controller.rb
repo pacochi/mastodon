@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::PixivTwitterImagesController < ApiController
+class Api::V1::PixivTwitterImagesController < Api::BaseController
   def create
     url = params[:url].to_s
 

@@ -50,7 +50,7 @@ class SuggestedAccount extends React.PureComponent {
       } else if (attachments.first().get('type') === 'video') {
         media = <VideoPlayer media={attachments.first()} onOpenVideo={this.props.onOpenVideo} />;
       } else {
-        media = <MediaGallery media={attachments} height={132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={false} expandMedia={false} squareMedia={false} lineMedia={true} />;
+        media = <MediaGallery media={attachments} height={132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={false} expandMedia={false} squareMedia={false} lineMedia />;
       }
 
       media = (<div className='account__suggested_accounts_media'>{media}</div>);
@@ -64,11 +64,11 @@ class SuggestedAccount extends React.PureComponent {
 
       // NOTE: blocking/mutingはそもそもロードされないはず
       if (requested) {
-        buttons = <IconButton disabled={true} icon='hourglass' title={intl.formatMessage(messages.requested)} />;
+        buttons = <IconButton disabled icon='hourglass' title={intl.formatMessage(messages.requested)} />;
       } else if (blocking) {
-        buttons = <IconButton active={true} icon='unlock-alt' title={intl.formatMessage(messages.unblock, { name: account.get('username') })} onClick={this.handleBlock} />;
+        buttons = <IconButton active icon='unlock-alt' title={intl.formatMessage(messages.unblock, { name: account.get('username') })} onClick={this.handleBlock} />;
       } else if (muting) {
-        buttons = <IconButton active={true} icon='volume-up' title={intl.formatMessage(messages.unmute, { name: account.get('username') })} onClick={this.handleMute} />;
+        buttons = <IconButton active icon='volume-up' title={intl.formatMessage(messages.unmute, { name: account.get('username') })} onClick={this.handleMute} />;
       } else {
         buttons = <IconButton icon={following ? 'user-times' : 'user-plus'} title={intl.formatMessage(following ? messages.unfollow : messages.follow)} onClick={this.handleFollow} active={following} />;
       }

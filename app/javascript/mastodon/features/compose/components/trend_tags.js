@@ -34,18 +34,18 @@ class TrendTags extends React.PureComponent {
 
     const { intl } = this.props;
     return (
-      <div className="trend-tags">
-        <div className="trend-tags__header">
-          <i className="fa fa-line-chart trend-tags__header__icon" aria-hidden="true" />
-          <div className="trend-tags__header__name">
+      <div className='trend-tags'>
+        <div className='trend-tags__header'>
+          <i className='fa fa-line-chart trend-tags__header__icon' aria-hidden='true' />
+          <div className='trend-tags__header__name'>
             {intl.formatMessage(messages.title)}
           </div>
         </div>
-        <div className="trend-tags__body">
+        <div className='trend-tags__body'>
           <ul>
             {this.props.tags.map(tag => (
               <li key={tag.get('name')}>
-                <Link className="trend-tags__name" to={`/timelines/tag/${tag.get('name')}`}>
+                <Link className='trend-tags__name' to={`/timelines/tag/${tag.get('name')}`}>
                   #{tag.get('name')}
                 </Link>
                 <div className={`trend-tags__description ${tag.get('type') === 'suggestion' ? 'suggestion' : ''}`}>{tag.get('description')}</div>

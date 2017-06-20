@@ -2,12 +2,8 @@ import React from 'react';
 import { connect } from 'react-redux';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import {
-  fetchAccount,
-  fetchAccountTimeline,
-  expandAccountTimeline,
-  fetchAccountPinnedStatuses,
-} from '../../actions/accounts';
+import { fetchAccount } from '../../actions/accounts';
+import { refreshAccountTimeline, expandAccountTimeline, refreshPinnedStatusTimeline } from '../../actions/timelines';
 import StatusList from '../../components/status_list';
 import LoadingIndicator from '../../components/loading_indicator';
 import Column from '../ui/components/column';
@@ -17,11 +13,11 @@ import Immutable from 'immutable';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
 const mapStateToProps = (state, props) => ({
-  statusIds: state.getIn(['timelines', 'accounts_timelines', Number(props.params.accountId), 'items'], Immutable.List()),
-  isLoading: state.getIn(['timelines', 'accounts_timelines', Number(props.params.accountId), 'isLoading']),
-  hasMore: !!state.getIn(['timelines', 'accounts_timelines', Number(props.params.accountId), 'next']),
+  statusIds: state.getIn(['timelines', `account:${Number(props.params.accountId)}`, 'items'], Immutable.List()),
+  isLoading: state.getIn(['timelines', `account:${Number(props.params.accountId)}`, 'isLoading']),
+  hasMore: !!state.getIn(['timelines', `account:${Number(props.params.accountId)}`, 'next']),
   me: state.getIn(['meta', 'me']),
-  pinnedStatusIds: state.getIn(['timelines', 'accounts_pinned_statuses', Number(props.params.accountId), 'items'], Immutable.List()),
+  pinnedStatusIds: state.getIn(['timelines', `account:${Number(props.params.accountId)}:pinned_status`, 'items'], Immutable.List()),
 });
 
 class AccountTimeline extends ImmutablePureComponent {
@@ -38,15 +34,15 @@ class AccountTimeline extends ImmutablePureComponent {
 
   componentWillMount () {
     this.props.dispatch(fetchAccount(Number(this.props.params.accountId)));
-    this.props.dispatch(fetchAccountPinnedStatuses(Number(this.props.params.accountId)));
-    this.props.dispatch(fetchAccountTimeline(Number(this.props.params.accountId)));
+    this.props.dispatch(refreshPinnedStatusTimeline(Number(this.props.params.accountId)));
+    this.props.dispatch(refreshAccountTimeline(Number(this.props.params.accountId)));
   }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.params.accountId !== this.props.params.accountId && nextProps.params.accountId) {
       this.props.dispatch(fetchAccount(Number(nextProps.params.accountId)));
-      this.props.dispatch(fetchAccountPinnedStatuses(Number(nextProps.params.accountId)));
-      this.props.dispatch(fetchAccountTimeline(Number(nextProps.params.accountId)));
+      this.props.dispatch(refreshPinnedStatusTimeline(Number(nextProps.params.accountId)));
+      this.props.dispatch(refreshAccountTimeline(Number(nextProps.params.accountId)));
     }
   }
 
@@ -81,7 +77,7 @@ class AccountTimeline extends ImmutablePureComponent {
           hasMore={hasMore}
           me={me}
           onScrollToBottom={this.handleScrollToBottom}
-          displayPinned={true}
+          displayPinned
         />
       </Column>
     );

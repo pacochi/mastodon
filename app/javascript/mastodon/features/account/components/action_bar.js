@@ -92,7 +92,7 @@ class ActionBar extends React.PureComponent {
     return (
       <div className='account__action-bar'>
         <div className='account__action-bar-dropdown'>
-          <DropdownMenu items={menu} icon='bars' size={24} direction="right" />
+          <DropdownMenu items={menu} icon='bars' size={24} direction='right' />
         </div>
 
         <div className='account__action-bar-links'>
@@ -103,7 +103,7 @@ class ActionBar extends React.PureComponent {
 
           <Link className='account__action-bar__tab' to={`/accounts/${account.get('id')}/media`}>
             <span><FormattedMessage id='account.media' defaultMessage='Media' /></span>
-            <strong/>
+            <strong />
           </Link>
 
           <Link className='account__action-bar__tab' to={`/accounts/${account.get('id')}/following`}>

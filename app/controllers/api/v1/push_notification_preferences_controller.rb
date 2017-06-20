@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::PushNotificationPreferencesController < ApiController
+class Api::V1::PushNotificationPreferencesController < Api::BaseController
   layout 'admin'
   respond_to :json
 

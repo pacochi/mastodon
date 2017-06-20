@@ -10,7 +10,7 @@ gem 'pixiv_api', git: 'https://github.com/pixiv/pixiv-api-ruby-public.git'
 gem 'pkg-config', '~> 1.2'
 
 gem 'puma', '~> 3.8'
-gem 'rails', '~> 5.0'
+gem 'rails', '~> 5.1.0'
 gem 'uglifier', '~> 3.2'
 
 gem 'hamlit-rails', '~> 0.2'
@@ -23,7 +23,7 @@ gem 'paperclip', '~> 5.1'
 gem 'paperclip-av-transcoder', '~> 0.6'
 
 gem 'addressable', '~> 2.5'
-gem 'bootsnap', '~> 0.3'
+gem 'bootsnap'
 gem 'cld3', '~> 3.1'
 gem 'devise', '~> 4.2'
 gem 'devise-two-factor', '~> 3.0'
@@ -42,6 +42,7 @@ gem 'nokogiri', '~> 1.7'
 gem 'oj', '~> 3.0'
 gem 'ostatus2', '~> 2.0'
 gem 'ox', '~> 2.5'
+gem 'pundit', '~> 1.1'
 gem 'rabl', '~> 0.13'
 gem 'rack-attack', '~> 5.0'
 gem 'rack-cors', '~> 0.4', require: 'rack/cors'
@@ -55,6 +56,7 @@ gem 'sanitize', '~> 4.4'
 gem 'sidekiq', '~> 5.0'
 gem 'sidekiq-scheduler', '~> 2.1'
 gem 'sidekiq-unique-jobs', '~> 5.0'
+gem 'sidekiq-bulk', '~>0.1.1'
 gem 'simple-navigation', '~> 4.0'
 gem 'simple_form', '~> 3.4'
 gem 'sprockets-rails', '~> 3.2', require: 'sprockets/railtie'
@@ -102,7 +104,7 @@ group :development do
   gem 'bullet', '~> 5.5'
   gem 'letter_opener', '~> 1.4'
   gem 'letter_opener_web', '~> 1.3'
-  gem 'rubocop', '~> 0.48', require: false
+  gem 'rubocop', require: false
   gem 'brakeman', '~> 3.6', require: false
   gem 'bundler-audit', '~> 0.5', require: false
   gem 'scss_lint', '~> 0.53', require: false

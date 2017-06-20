@@ -135,7 +135,7 @@ class AutosuggestTextarea extends ImmutablePureComponent {
 
       if (hash_tag_suggestions.size > 0 && !hashTagSuggestionsHidden) {
         e.preventDefault();
-        this.setState({ selectedHashTagSuggestion: Math.min(selectedHashTagSuggestion + 1, hash_tag_suggestions.size - 1)});
+        this.setState({ selectedHashTagSuggestion: Math.min(selectedHashTagSuggestion + 1, hash_tag_suggestions.size - 1) });
       }
 
       break;
@@ -147,7 +147,7 @@ class AutosuggestTextarea extends ImmutablePureComponent {
 
       if (hash_tag_suggestions.size > 0 && !hashTagSuggestionsHidden) {
         e.preventDefault();
-        this.setState({ selectedHashTagSuggestion: Math.max(selectedHashTagSuggestion -1, 0)});
+        this.setState({ selectedHashTagSuggestion: Math.max(selectedHashTagSuggestion -1, 0) });
       }
 
       break;
@@ -182,13 +182,7 @@ class AutosuggestTextarea extends ImmutablePureComponent {
   }
 
   onBlur = () => {
-    // If we hide the suggestions immediately, then this will prevent the
-    // onClick for the suggestions themselves from firing.
-    // Setting a short window for that to take place before hiding the
-    // suggestions ensures that can't happen.
-    setTimeout(() => {
-      this.setState({ suggestionsHidden: true });
-    }, 100);
+    this.setState({ suggestionsHidden: true });
   }
 
   onSuggestionClick = (e) => {
@@ -228,7 +222,7 @@ class AutosuggestTextarea extends ImmutablePureComponent {
   }
 
   renderHashTagSuggestion = (tag, i) => {
-    const { selectedHashTagSuggestion} = this.state;
+    const { selectedHashTagSuggestion } = this.state;
 
     return (
       <div
@@ -237,7 +231,8 @@ class AutosuggestTextarea extends ImmutablePureComponent {
         key={tag}
         className={`autosuggest-textarea__suggestions__item ${i === selectedHashTagSuggestion ? 'selected' : ''}`}
         data-tag={tag}
-        onClick={this.onHashTagSuggestionClick}>
+        onClick={this.onHashTagSuggestionClick}
+      >
         #{tag}
       </div>
     );
@@ -277,7 +272,8 @@ class AutosuggestTextarea extends ImmutablePureComponent {
               key={suggestion}
               data-index={suggestion}
               className={`autosuggest-textarea__suggestions__item ${i === selectedSuggestion ? 'selected' : ''}`}
-              onClick={this.onSuggestionClick}>
+              onMouseDown={this.onSuggestionClick}
+            >
               <AutosuggestAccountContainer id={suggestion} />
             </div>
           ))}

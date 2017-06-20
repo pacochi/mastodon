@@ -245,15 +245,15 @@ Devise.setup do |config|
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth_path_prefix = '/auth/oauth'
 
-  Rails.application.secrets.oauth['pixiv'].tap do |secret|
+  Rails.application.secrets.oauth[:pixiv].tap do |secret|
     omniauth = [
       :pixiv,
-      secret['key'],
-      secret['secret'],
+      secret[:key],
+      secret[:secret],
       scope: 'read-email read-favorite-users',
     ]
 
-    client_options = secret.slice('site', 'authorize_url', 'token_url').symbolize_keys.compact
+    client_options = secret.slice(:site, :authorize_url, :token_url).symbolize_keys.compact
     omniauth.last.merge!(client_options: client_options) if client_options.present?
 
     config.omniauth(*omniauth)

@@ -77,11 +77,15 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
   },
 
   onDelete (status) {
-    dispatch(openModal('CONFIRM', {
-      message: intl.formatMessage(messages.deleteMessage),
-      confirm: intl.formatMessage(messages.deleteConfirm),
-      onConfirm: () => dispatch(deleteStatus(status.get('id'))),
-    }));
+    if (!this.deleteModal) {
+      dispatch(deleteStatus(status.get('id')));
+    } else {
+      dispatch(openModal('CONFIRM', {
+        message: intl.formatMessage(messages.deleteMessage),
+        confirm: intl.formatMessage(messages.deleteConfirm),
+        onConfirm: () => dispatch(deleteStatus(status.get('id'))),
+      }));
+    }
   },
 
   onMention (account, router) {

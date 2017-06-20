@@ -16,7 +16,7 @@ class Settings::OauthAuthenticationsController < ApplicationController
       flash[:notice] = t('oauth_authentications.successfully_unlinked')
 
       url = PIXIV_URL.expand(
-        code: Rails.application.secrets.oauth['pixiv']['key'],
+        code: Rails.application.secrets.oauth[:pixiv][:key],
         uid: @oauth_authentication.uid
       )
 

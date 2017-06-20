@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::TrendTagsController < ApiController
+class Api::V1::TrendTagsController < Api::BaseController
   respond_to :json
 
   def index
