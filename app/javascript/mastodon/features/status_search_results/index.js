@@ -15,14 +15,15 @@ import LoadingIndicator from '../../components/loading_indicator';
 import StatusList from '../../components/status_list';
 
 const mapStateToProps = (state, props) => {
-  console.log(state.getIn(['timelines', `status_search:${props.params.keyword}`], Immutable.Map()).toJS())
+  console.log(state.getIn(['timelines', `status_search:${props.params.keyword}`], Immutable.Map()).toJS());
 
   return {
     statusIds: state.getIn(['timelines', `status_search:${props.params.keyword}`, 'items'], Immutable.List()),
     isLoading: state.getIn(['timelines', `status_search:${props.params.keyword}`, 'isLoading']),
     hasMore: !!state.getIn(['timelines', `status_search:${props.params.keyword}`, 'next']),
   };
-}
+};
+
 class StatusSearchResults extends React.PureComponent {
 
   static propTypes = {
@@ -58,7 +59,7 @@ class StatusSearchResults extends React.PureComponent {
   }
 
   render () {
-    const { statusIds, isLoading, params, hasUnread } = this.props;
+    const { statusIds, isLoading, params } = this.props;
     const keyword = params.keyword;
     const column_header = <FormattedMessage id='column.search_toots' defaultMessage='Search: "{keyword}"' values={{ keyword }} />;
 
@@ -74,7 +75,7 @@ class StatusSearchResults extends React.PureComponent {
       <Column ref={this.setRef}>
         <ColumnHeader
           icon='search'
-          active={hasUnread}
+          active={false}
           title={column_header}
           onClick={this.handleHeaderClick}
           pinned={false}
