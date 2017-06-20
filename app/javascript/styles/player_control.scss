@@ -192,7 +192,7 @@ $player-apollo-color:#38b6c5;
   }
 
   .control-bar__deck-selector {
-    width: 120px;
+    width: 150px;
     height: 550px;
     display: flex;
     align-items: flex-start;
@@ -212,10 +212,10 @@ $player-apollo-color:#38b6c5;
     align-items: center;
     justify-content: center;
     color: #333;
-    font-size: 16px;
+    font-size: 14px;
     font-weight: bold;
     letter-spacing: 0.5px;
-    width: 89px;
+    width: 120px;
     height: 40px;
     padding: 8px 15px;
     background: #fff;
@@ -224,6 +224,10 @@ $player-apollo-color:#38b6c5;
     margin-bottom: 0;
     user-select: none;
     white-space: nowrap;
+
+    .deck-selector__selector-body__multiline {
+      white-space: pre;
+    }
 
     img {
       width: 18px;
