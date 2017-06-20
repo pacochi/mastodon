@@ -14,12 +14,12 @@ class PlayControl extends React.PureComponent {
     super(props, context);
 
     this.CONST_DECKS = [
-      {index: 1, type: 'DECK'  , name: 'DECK1'     , icon: '/player/pawoo-music-playlist-icon.svg'       },
-      {index: 2, type: 'APOLLO', name: 'APOLLO A'  , icon: '/player/pawoo-music-playlist-apollo-icon.png'},
-      {index: 3, type: 'APOLLO', name: 'APOLLO B'  , icon: '/player/pawoo-music-playlist-apollo-icon.png'},
-      {index: 4, type: 'DECK'  , name: 'DECK4'     , icon: '/player/pawoo-music-playlist-icon.svg'       },
-      {index: 5, type: 'DECK'  , name: 'DECK5'     , icon: '/player/pawoo-music-playlist-icon.svg'       },
-      {index: 6, type: 'DECK'  , name: 'DECK6'     , icon: '/player/pawoo-music-playlist-icon.svg'       },
+      {index: 1, type: 'DECK', name: '共有チャンネル1', icon: '/player/pawoo-music-playlist-icon.svg'},
+      {index: 2, type: 'DECK', name: '共有チャンネル2', icon: '/player/pawoo-music-playlist-icon.svg'},
+      {index: 3, type: 'DECK', name: '共有チャンネル3', icon: '/player/pawoo-music-playlist-icon.svg'},
+      {index: 4, type: 'DECK', name: '共有チャンネル4', icon: '/player/pawoo-music-playlist-icon.svg'},
+      {index: 5, type: 'DECK', name: '共有チャンネル5', icon: '/player/pawoo-music-playlist-icon.svg'},
+      {index: 6, type: 'DECK', name: '同人・ネット音楽\n専用チャンネル', icon: '/player/pawoo-music-playlist-icon.svg'},
     ];
 
     let targetDeck = 1;
@@ -437,7 +437,7 @@ class PlayControl extends React.PureComponent {
                   style={deckSelectorStyle}
                 >
                   <img src={SINGLE_DECK.icon} />
-                  <span>{SINGLE_DECK.name}</span>
+                  <span className={SINGLE_DECK.name.includes('\n') ? 'deck-selector__selector-body__multiline' : ''}>{SINGLE_DECK.name}</span>
                 </li>
               )))()}
             </ul>
