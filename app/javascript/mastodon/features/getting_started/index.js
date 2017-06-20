@@ -64,10 +64,13 @@ class GettingStarted extends ImmutablePureComponent {
       if (!columns.find(item => item.get('id') === 'PUBLIC')) {
         navItems.push(<ColumnLink key='3' icon='globe' text={intl.formatMessage(messages.public_timeline)} to='/timelines/public' />);
       }
+
+      if (!columns.find(item => item.get('id') === 'MEDIA')) {
+        navItems.push(<ColumnLink key='media_timeline' icon='image' text={intl.formatMessage(messages.media_timeline)} to='/timelines/public/media' />);
+      }
     }
 
     navItems = navItems.concat([
-      <ColumnLink key='media_timeline' icon='image' text={intl.formatMessage(messages.media_timeline)} to='/timelines/public/media' />,
       <ColumnLink key='4' icon='star' text={intl.formatMessage(messages.favourites)} to='/favourites' />,
       <ColumnLink key='suggested_accounts' icon='user' text={intl.formatMessage(messages.suggested_accounts)} to='/suggested_accounts' />,
     ]);
