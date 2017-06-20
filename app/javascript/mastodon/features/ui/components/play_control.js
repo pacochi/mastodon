@@ -647,7 +647,7 @@ class PlayControl extends React.PureComponent {
             </div>
           </div>
           {!isTop && <TipsBalloonContainer id={2} style={{ left: '250px' }}>
-            再生する共有チャンネルの切り替え
+            チャンネルの切り替え
           </TipsBalloonContainer>}
         </div>
         <div className={seekbarClass} style={playerSeekBarStyle} />
