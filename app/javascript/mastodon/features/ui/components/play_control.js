@@ -5,6 +5,7 @@ import IconButton from '../../../components/icon_button';
 import api from '../../../api';
 import createStream from '../../../../mastodon/stream';
 import YouTube from 'react-youtube';
+import TipsBalloonContainer from '../../../containers/tips_balloon_container';
 
 // FIXME: Old react style
 
@@ -397,6 +398,9 @@ class PlayControl extends React.PureComponent {
             <div className={toggleClass} onClick={this.handleClickToggle}>
               <i className={iconClass} />
             </div>
+            <TipsBalloonContainer id={1}>
+              音楽を再生！
+            </TipsBalloonContainer>
 
             {(()=>{
               if(this.props.isTop) {
@@ -642,6 +646,9 @@ class PlayControl extends React.PureComponent {
               </div>
             </div>
           </div>
+          <TipsBalloonContainer id={2} style={{ left: '250px' }}>
+            プレイリスト（DECK）の切り替え
+          </TipsBalloonContainer>
         </div>
         <div className={seekbarClass} style={playerSeekBarStyle} />
         <div className='player-control__overlay' onClick={this.handleClickOverlay} />

@@ -22,6 +22,7 @@ import UploadFormContainer from '../containers/upload_form_container';
 import TextIconButton from './text_icon_button';
 import WarningContainer from '../containers/warning_container';
 import ImmutablePureComponent from 'react-immutable-pure-component';
+import TipsBalloonContainer from '../../../containers/tips_balloon_container';
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What is on your mind?' },
@@ -230,6 +231,9 @@ class ComposeForm extends ImmutablePureComponent {
             <PrivacyDropdownContainer />
             <SensitiveButtonContainer />
             <SpoilerButtonContainer />
+            <TipsBalloonContainer id={3} style={{ left: '35px', top: '-46px' }}>
+              楽曲投稿ボタン
+            </TipsBalloonContainer>
           </div>
 
           <div className='compose-form__publish'>
