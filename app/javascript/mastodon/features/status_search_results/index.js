@@ -15,8 +15,6 @@ import LoadingIndicator from '../../components/loading_indicator';
 import StatusList from '../../components/status_list';
 
 const mapStateToProps = (state, props) => {
-  console.log(state.getIn(['timelines', `status_search:${props.params.keyword}`], Immutable.Map()).toJS());
-
   return {
     statusIds: state.getIn(['timelines', `status_search:${props.params.keyword}`, 'items'], Immutable.List()),
     isLoading: state.getIn(['timelines', `status_search:${props.params.keyword}`, 'isLoading']),
