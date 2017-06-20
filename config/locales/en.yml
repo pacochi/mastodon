@@ -223,7 +223,7 @@ en:
     register: Sign up
     resend_confirmation: Resend confirmation instructions
     reset_password: Reset password
-    send_password_stting_url: 'Send password setting URL to your registered email address(%{email}).'
+    send_password_setting_url: 'Send password setting URL to your registered email address(%{email}).'
     set_new_password: Set new password
     oauth_registration: Continue sign up
     confirmed_email: '(confirmed)'

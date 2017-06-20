@@ -5,7 +5,7 @@
   = render 'shared/error_messages', object: resource
 
   - if f.object.initial_password_usage
-    %p.hint= t('auth.send_password_stting_url', email: f.object.email)
+    %p.hint= t('auth.send_password_setting_url', email: f.object.email)
     .actions
       = f.button :button, t('auth.reset_password'), type: :submit
   - else

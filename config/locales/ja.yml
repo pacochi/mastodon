@@ -220,7 +220,7 @@ ja:
     register: 登録する
     resend_confirmation: 確認メールを再送する
     reset_password: パスワードを再発行
-    send_password_stting_url: 'パスワードの設定URLを登録されたメールアドレス（%{email}）に送る'
+    send_password_setting_url: 'パスワードの設定URLを登録されたメールアドレス（%{email}）に送る'
     set_new_password: 新しいパスワードを設定
     oauth_registration: 登録を続ける
     confirmed_email: '(認証済み)'
