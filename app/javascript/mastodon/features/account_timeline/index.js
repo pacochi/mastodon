@@ -77,7 +77,7 @@ class AccountTimeline extends ImmutablePureComponent {
           hasMore={hasMore}
           me={me}
           onScrollToBottom={this.handleScrollToBottom}
-          displayPinned={true}
+          displayPinned
         />
       </Column>
     );

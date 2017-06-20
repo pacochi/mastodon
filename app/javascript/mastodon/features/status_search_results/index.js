@@ -79,7 +79,7 @@ class StatusSearchResults extends React.PureComponent {
           onClick={this.handleHeaderClick}
           pinned={false}
           multiColumn={false}
-          showBackButton={true}
+          showBackButton
         >
         </ColumnHeader>
 
