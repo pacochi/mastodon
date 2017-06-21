@@ -8,6 +8,6 @@ class DefaultFollowWorker
     default_follow_account = Account.find_by!(username: 'now_playing')
     FollowService.new.call(account, default_follow_account.acct)
   rescue ActiveRecord::RecordNotFound
-    true
+    nil
   end
 end
