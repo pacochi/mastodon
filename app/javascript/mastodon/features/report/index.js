@@ -61,7 +61,7 @@ class Report extends React.PureComponent {
 
   componentWillMount () {
     if (!this.props.account) {
-      this.context.router.replace('/');
+      this.context.router.history.replace('/');
     }
 
     this.options = Immutable.fromJS([
@@ -93,7 +93,7 @@ class Report extends React.PureComponent {
 
   handleSubmit = () => {
     this.props.dispatch(submitReport());
-    this.context.router.replace('/');
+    this.context.router.history.replace('/');
   }
 
   handlePreSubmit = () => {

@@ -12,15 +12,11 @@ import {
 } from '../actions/timelines';
 import { showOnboardingOnce } from '../actions/onboarding';
 import { updateNotifications, refreshNotifications } from '../actions/notifications';
-import createBrowserHistory from 'history/lib/createBrowserHistory';
-import applyRouterMiddleware from 'react-router/lib/applyRouterMiddleware';
-import useRouterHistory from 'react-router/lib/useRouterHistory';
-import Router from 'react-router/lib/Router';
-import Route from 'react-router/lib/Route';
-import IndexRedirect from 'react-router/lib/IndexRedirect';
-import IndexRoute from 'react-router/lib/IndexRoute';
-import { useScroll } from 'react-router-scroll';
+import BrowserRouter from 'react-router-dom/BrowserRouter';
+import Route from 'react-router-dom/Route';
+import ScrollContext from 'react-router-scroll/lib/ScrollBehaviorContext';
 import UI from '../features/ui';
+<<<<<<< HEAD
 import Status from '../features/status';
 import GettingStarted from '../features/getting_started';
 import PublicTimeline from '../features/public_timeline';
@@ -40,6 +36,8 @@ import FavouritedStatuses from '../features/favourited_statuses';
 import Blocks from '../features/blocks';
 import Mutes from '../features/mutes';
 import Report from '../features/report';
+=======
+>>>>>>> 946a166791e5a1a10778e15ca4a9f5f10c961134
 import { hydrateStore } from '../actions/store';
 import createStream from '../stream';
 import { IntlProvider, addLocaleData } from 'react-intl';
@@ -54,10 +52,6 @@ addLocaleData(localeData);
 const store = configureStore();
 const initialState = JSON.parse(document.getElementById('initial-state').textContent);
 store.dispatch(hydrateStore(initialState));
-
-const browserHistory = useRouterHistory(createBrowserHistory)({
-  basename: '/web',
-});
 
 class Mastodon extends React.PureComponent {
 
@@ -142,6 +136,7 @@ class Mastodon extends React.PureComponent {
   render () {
     const { locale } = this.props;
 
+<<<<<<< HEAD
     if (this.appmode === 'intent') {
       return (
         <IntlProvider locale={locale} messages={messages}>
@@ -211,6 +206,19 @@ class Mastodon extends React.PureComponent {
     }
 
     return <div />;
+=======
+    return (
+      <IntlProvider locale={locale} messages={messages}>
+        <Provider store={store}>
+          <BrowserRouter basename='/web'>
+            <ScrollContext>
+              <Route path='/' component={UI} />
+            </ScrollContext>
+          </BrowserRouter>
+        </Provider>
+      </IntlProvider>
+    );
+>>>>>>> 946a166791e5a1a10778e15ca4a9f5f10c961134
   }
 
 };

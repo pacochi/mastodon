@@ -30,8 +30,13 @@
   %meta{ property: 'og:site_name', content: site_title }/
   %meta{ property: 'og:url', content: about_url }/
   %meta{ property: 'og:type', content: 'website' }/
+<<<<<<< HEAD
   %meta{ property: 'og:title', content: Rails.configuration.x.local_domain }/
   %meta{ property: 'og:description', content: strip_tags(@instance_presenter.site_description.blank? ? t('about.about_mastodon') : @instance_presenter.site_description) }/
+=======
+  %meta{ property: 'og:title', content: site_hostname }/
+  %meta{ property: 'og:description', content: strip_tags(@instance_presenter.site_description.presence || t('about.about_mastodon')) }/
+>>>>>>> 946a166791e5a1a10778e15ca4a9f5f10c961134
   %meta{ property: 'og:image', content: asset_pack_path('mastodon_small.jpg', protocol: :request) }/
   %meta{ property: 'og:image:width', content: '400' }/
   %meta{ property: 'og:image:height', content: '400' }/

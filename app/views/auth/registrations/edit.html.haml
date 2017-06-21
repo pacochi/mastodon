@@ -17,7 +17,11 @@
     .actions
       = f.button :button, t('generic.save_changes'), type: :submit
 
+<<<<<<< HEAD
 - unless current_user.initial_password_usage
+=======
+- if open_deletion?
+>>>>>>> 946a166791e5a1a10778e15ca4a9f5f10c961134
   %hr/
 
   %h6= t('auth.delete_account')

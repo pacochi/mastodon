@@ -7,7 +7,7 @@ import AnnouncementsContainer from './containers/announcements_container';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { mountCompose, unmountCompose } from '../../actions/compose';
-import Link from 'react-router/lib/Link';
+import Link from 'react-router-dom/Link';
 import { injectIntl, defineMessages } from 'react-intl';
 import SearchContainer from './containers/search_container';
 import Motion from 'react-motion/lib/Motion';

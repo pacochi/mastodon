@@ -97,12 +97,15 @@ class Status extends ImmutablePureComponent {
   }
 
   componentWillUnmount () {
+<<<<<<< HEAD
     if (!this.props.intersectionObserverWrapper) {
       // TODO: enable IntersectionObserver optimization for notification statuses.
       // These are managed in notifications/index.js rather than status_list.js
       return;
     }
 
+=======
+>>>>>>> 946a166791e5a1a10778e15ca4a9f5f10c961134
     this.componentMounted = false;
   }
 
@@ -152,7 +155,7 @@ class Status extends ImmutablePureComponent {
 
   handleClick = () => {
     const { status } = this.props;
-    this.context.router.push(`/statuses/${status.getIn(['reblog', 'id'], status.get('id'))}`);
+    this.context.router.history.push(`/statuses/${status.getIn(['reblog', 'id'], status.get('id'))}`);
   }
 
   handleAccountClick = (e) => {
@@ -161,7 +164,7 @@ class Status extends ImmutablePureComponent {
     } else if (e.button === 0) {
       const id = Number(e.currentTarget.getAttribute('data-id'));
       e.preventDefault();
-      this.context.router.push(`/accounts/${id}`);
+      this.context.router.history.push(`/accounts/${id}`);
     }
   }
 

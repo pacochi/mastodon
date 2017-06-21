@@ -151,6 +151,7 @@ ja:
       not_linked: 連携なし
       unlink_forcibly: 強制的に解除
     reports:
+      action_taken_by: レポート処理者
       are_you_sure: 本当に実行しますか？
       comment:
         label: コメント

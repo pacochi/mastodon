@@ -56,7 +56,7 @@ class StatusActionBar extends ImmutablePureComponent {
   ]
 
   handleReplyClick = () => {
-    this.props.onReply(this.props.status, this.context.router);
+    this.props.onReply(this.props.status, this.context.router.history);
   }
 
   handleFavouriteClick = () => {
@@ -76,7 +76,7 @@ class StatusActionBar extends ImmutablePureComponent {
   }
 
   handleMentionClick = () => {
-    this.props.onMention(this.props.status.get('account'), this.context.router);
+    this.props.onMention(this.props.status.get('account'), this.context.router.history);
   }
 
   handleMuteClick = () => {
@@ -88,12 +88,12 @@ class StatusActionBar extends ImmutablePureComponent {
   }
 
   handleOpen = () => {
-    this.context.router.push(`/statuses/${this.props.status.get('id')}`);
+    this.context.router.history.push(`/statuses/${this.props.status.get('id')}`);
   }
 
   handleReport = () => {
     this.props.onReport(this.props.status);
-    this.context.router.push('/report');
+    this.context.router.history.push('/report');
   }
 
   handleConversationMuteClick = () => {
