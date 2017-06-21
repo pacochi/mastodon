@@ -16,6 +16,7 @@ import BrowserRouter from 'react-router-dom/BrowserRouter';
 import Route from 'react-router-dom/Route';
 import ScrollContext from 'react-router-scroll/lib/ScrollBehaviorContext';
 import CommunityTimeline from '../features/community_timeline';
+import Compose from '../features/compose';
 import UI from '../features/ui';
 import { hydrateStore } from '../actions/store';
 import createStream from '../stream';
