@@ -103,12 +103,14 @@ class Status extends ImmutablePureComponent {
       return;
     }
 
-    this.props.intersectionObserverWrapper.unobserve(this.props.id, this.node);
-
     this.componentMounted = false;
   }
 
   handleIntersection = (entry) => {
+    if (!this.componentMounted) {
+      return;
+    }
+
     // Edge 15 doesn't support isIntersecting, but we can infer it
     // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/12156111/
     // https://github.com/WICG/IntersectionObserver/issues/211
