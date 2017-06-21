@@ -52,6 +52,12 @@ const initialState = Immutable.Map({
       body: '',
     }),
   }),
+
+  media: Immutable.Map({
+    regex: Immutable.Map({
+      body: '',
+    }),
+  }),
 });
 
 const defaultColumns = Immutable.fromJS([
