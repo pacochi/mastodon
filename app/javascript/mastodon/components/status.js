@@ -97,15 +97,6 @@ class Status extends ImmutablePureComponent {
   }
 
   componentWillUnmount () {
-<<<<<<< HEAD
-    if (!this.props.intersectionObserverWrapper) {
-      // TODO: enable IntersectionObserver optimization for notification statuses.
-      // These are managed in notifications/index.js rather than status_list.js
-      return;
-    }
-
-=======
->>>>>>> 946a166791e5a1a10778e15ca4a9f5f10c961134
     this.componentMounted = false;
   }
 
@@ -175,7 +166,7 @@ class Status extends ImmutablePureComponent {
   render () {
     let media = null;
     let statusAvatar;
-    const { status, account, intersectionObserverWrapper, expandMedia, squareMedia, standalone, ...other } = this.props;
+    const { status, account, expandMedia, squareMedia, standalone, ...other } = this.props;
     const { isExpanded, isIntersecting, isHidden } = this.state;
 
     if (status === null) {
@@ -192,7 +183,7 @@ class Status extends ImmutablePureComponent {
     }
 
     if (this.props.displayPinned && status.get('pinned')) {
-      const { displayPinned, intersectionObserverWrapper, ...otherProps } = this.props;
+      const { displayPinned, ...otherProps } = this.props;
 
       return (
         <div className='status__wrapper pinned' ref={this.handleRef} data-id={status.get('id')} >
