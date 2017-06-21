@@ -116,6 +116,7 @@ Rails.application.routes.draw do
       resource :suspension, only: [:create, :destroy]
       resource :confirmation, only: [:create]
       resources :statuses, only: [:index, :update, :destroy]
+      resources :media, only: [:index, :update, :destroy]
     end
 
     resources :users, only: [] do

@@ -1,5 +1,4 @@
 document.body.addEventListener('ajax:success', function(event) {
-  console.log(event);
   const [data, status, xhr] = event.detail;
   const { target } = event;
 

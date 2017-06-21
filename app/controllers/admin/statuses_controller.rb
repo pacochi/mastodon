@@ -2,22 +2,26 @@
 
 module Admin
   class StatusesController < BaseController
+    include Authorization
+
+    helper_method :target_path
+
     before_action :set_account
     before_action :set_status, only: [:update, :destroy]
 
-    PAGE_PAR_NUM = 20
+    PAR_PAGE = 20
 
     def index
-      @statuses = @account.statuses.page(params[:page]).per(PAGE_PAR_NUM).preload(:media_attachments, :pixiv_cards)
+      @statuses = target_statuses.preload(:media_attachments, :mentions, :pixiv_cards).page(params[:page]).per(PAR_PAGE)
     end
 
     def update
       @status.update(status_params)
-      page = (@account.statuses.where(Status.arel_table[:id].gt(@status.id)).size.to_f / PAGE_PAR_NUM).ceil
-      redirect_to admin_account_statuses_path(@account.id, page: page)
+      redirect_to redirect_path
     end
 
     def destroy
+      authorize @status, :destroy?
       RemovalWorker.perform_async(@status.id)
       render json: @status
     end
@@ -34,6 +38,27 @@ module Admin
 
     def set_account
       @account = Account.find(params[:account_id])
+    end
+
+    def target_statuses
+      @account.statuses
+    end
+
+    def current_page_params
+      page = (target_statuses.where(Status.arel_table[:id].gt(@status.id)).size.to_f / PAR_PAGE).ceil
+      if page > 1
+        { page: page }
+      else
+        {}
+      end
+    end
+
+    def redirect_path
+      admin_account_statuses_path(@account.id, current_page_params)
+    end
+
+    def target_path(*args)
+      admin_account_status_path(*args)
     end
   end
 end

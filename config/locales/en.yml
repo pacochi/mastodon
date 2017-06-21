@@ -100,7 +100,6 @@ en:
         created_reports: Reports created by this account
         report: report
         targeted_reports: Reports made about this account
-      show_statuses: Show statuses
       silence: Silence
       statuses: Statuses
       subscribe: Subscribe
