@@ -166,7 +166,7 @@ class Status extends ImmutablePureComponent {
   render () {
     let media = null;
     let statusAvatar;
-    const { status, account, expandMedia, squareMedia, standalone, ...other } = this.props;
+    const { status, account, intersectionObserverWrapper, expandMedia, squareMedia, standalone, ...other } = this.props;
     const { isExpanded, isIntersecting, isHidden } = this.state;
 
     if (status === null) {
@@ -183,7 +183,7 @@ class Status extends ImmutablePureComponent {
     }
 
     if (this.props.displayPinned && status.get('pinned')) {
-      const { displayPinned, ...otherProps } = this.props;
+      const { displayPinned, intersectionObserverWrapper, ...otherProps } = this.props;
 
       return (
         <div className='status__wrapper pinned' ref={this.handleRef} data-id={status.get('id')} >
