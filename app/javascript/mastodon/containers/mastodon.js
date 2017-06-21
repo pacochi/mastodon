@@ -16,28 +16,6 @@ import BrowserRouter from 'react-router-dom/BrowserRouter';
 import Route from 'react-router-dom/Route';
 import ScrollContext from 'react-router-scroll/lib/ScrollBehaviorContext';
 import UI from '../features/ui';
-<<<<<<< HEAD
-import Status from '../features/status';
-import GettingStarted from '../features/getting_started';
-import PublicTimeline from '../features/public_timeline';
-import CommunityTimeline from '../features/community_timeline';
-import AccountTimeline from '../features/account_timeline';
-import HomeTimeline from '../features/home_timeline';
-import Compose from '../features/compose';
-import Followers from '../features/followers';
-import Following from '../features/following';
-import Reblogs from '../features/reblogs';
-import Favourites from '../features/favourites';
-import HashtagTimeline from '../features/hashtag_timeline';
-import Notifications from '../features/notifications';
-import FollowRequests from '../features/follow_requests';
-import GenericNotFound from '../features/generic_not_found';
-import FavouritedStatuses from '../features/favourited_statuses';
-import Blocks from '../features/blocks';
-import Mutes from '../features/mutes';
-import Report from '../features/report';
-=======
->>>>>>> 946a166791e5a1a10778e15ca4a9f5f10c961134
 import { hydrateStore } from '../actions/store';
 import createStream from '../stream';
 import { IntlProvider, addLocaleData } from 'react-intl';
@@ -136,7 +114,6 @@ class Mastodon extends React.PureComponent {
   render () {
     const { locale } = this.props;
 
-<<<<<<< HEAD
     if (this.appmode === 'intent') {
       return (
         <IntlProvider locale={locale} messages={messages}>
@@ -167,58 +144,17 @@ class Mastodon extends React.PureComponent {
       return (
         <IntlProvider locale={locale} messages={messages}>
           <Provider store={store}>
-            <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
-              <Route path='/' component={UI}>
-                <IndexRedirect to='/getting-started' />
-                <Route path='getting-started' component={GettingStarted} />
-                <Route path='timelines/home' component={HomeTimeline} />
-                <Route path='timelines/public' component={PublicTimeline} />
-                <Route path='timelines/public/local' component={CommunityTimeline} />
-                <Route path='timelines/tag/:id' component={HashtagTimeline} />
-                <Route path='timelines/public/media' component={MediaTimeline} />
-                <Route path='suggested_accounts' component={SuggestedAccounts} />
-
-                <Route path='notifications' component={Notifications} />
-                <Route path='favourites' component={FavouritedStatuses} />
-
-                <Route path='statuses/new' component={Compose} />
-                <Route path='statuses/search/:keyword' component={StatusSearchResults} />
-                <Route path='statuses/:statusId' component={Status} />
-                <Route path='statuses/:statusId/reblogs' component={Reblogs} />
-                <Route path='statuses/:statusId/favourites' component={Favourites} />
-
-                <Route path='accounts/:accountId' component={AccountTimeline} />
-                <Route path='accounts/:accountId/followers' component={Followers} />
-                <Route path='accounts/:accountId/following' component={Following} />
-                <Route path='accounts/:accountId/media' component={AccountMediaTimeline} />
-
-                <Route path='follow_requests' component={FollowRequests} />
-                <Route path='blocks' component={Blocks} />
-                <Route path='mutes' component={Mutes} />
-                <Route path='report' component={Report} />
-
-                <Route path='*' component={GenericNotFound} />
-              </Route>
-            </Router>
+            <BrowserRouter basename='/web'>
+              <ScrollContext>
+                <Route path='/' component={UI} />
+              </ScrollContext>
+            </BrowserRouter>
           </Provider>
         </IntlProvider>
       );
     }
 
     return <div />;
-=======
-    return (
-      <IntlProvider locale={locale} messages={messages}>
-        <Provider store={store}>
-          <BrowserRouter basename='/web'>
-            <ScrollContext>
-              <Route path='/' component={UI} />
-            </ScrollContext>
-          </BrowserRouter>
-        </Provider>
-      </IntlProvider>
-    );
->>>>>>> 946a166791e5a1a10778e15ca4a9f5f10c961134
   }
 
 };

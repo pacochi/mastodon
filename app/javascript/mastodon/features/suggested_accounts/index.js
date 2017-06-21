@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import LoadingIndicator from '../../components/loading_indicator';
-import { Link } from 'react-router';
+import Link from 'react-router-dom/Link';
 import {
   fetchAccount,
   fetchSuggestedAccounts,

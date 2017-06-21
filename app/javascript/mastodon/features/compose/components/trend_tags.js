@@ -1,6 +1,6 @@
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router';
+import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 
