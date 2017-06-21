@@ -211,7 +211,7 @@ class OnboardingModal extends React.PureComponent {
 
     // モーダルを閉じた時に、おすすめアカウントへ飛ばす
     const path = '/suggested_accounts';
-    this.context.router.push(path);
+    this.context.router.history.push(path);
   }
 
   handleSkip = (e) => {

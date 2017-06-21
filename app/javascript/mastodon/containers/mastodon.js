@@ -15,6 +15,7 @@ import { updateNotifications, refreshNotifications } from '../actions/notificati
 import BrowserRouter from 'react-router-dom/BrowserRouter';
 import Route from 'react-router-dom/Route';
 import ScrollContext from 'react-router-scroll/lib/ScrollBehaviorContext';
+import CommunityTimeline from '../features/community_timeline';
 import UI from '../features/ui';
 import { hydrateStore } from '../actions/store';
 import createStream from '../stream';
@@ -130,11 +131,13 @@ class Mastodon extends React.PureComponent {
       return (
         <IntlProvider locale={locale} messages={messages}>
           <Provider store={store}>
-            <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
-              <UI intent>
-                <Route path='*' component={connect(() => ({ standalone: true }))(CommunityTimeline)} />
-              </UI>
-            </Router>
+            <BrowserRouter basename='/about'>
+              <ScrollContext>
+                <UI intent>
+                  <Route path='*' component={connect(() => ({ standalone: true }))(CommunityTimeline)} />
+                </UI>
+              </ScrollContext>
+            </BrowserRouter>
           </Provider>
         </IntlProvider>
       );
