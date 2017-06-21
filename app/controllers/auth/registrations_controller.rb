@@ -5,7 +5,12 @@ class Auth::RegistrationsController < Devise::RegistrationsController
 
   before_action :check_enabled_registrations, only: [:new, :create]
   before_action :configure_sign_up_params, only: [:create]
-  after_action :create_default_follow_account, only: [:create], if: -> { resource.persisted? }
+
+  def create
+    super do |user|
+      DefaultFollowWorker.perform_async(user.account_id) if user.persisted?
+    end
+  end
 
   def update
     if current_user.initial_password_usage
@@ -59,9 +64,5 @@ class Auth::RegistrationsController < Devise::RegistrationsController
 
   def determine_layout
     %w(edit update).include?(action_name) ? 'admin' : 'auth'
-  end
-
-  def create_default_follow_account
-    DefaultFollowWorker.perform_async(resource.account_id)
   end
 end
