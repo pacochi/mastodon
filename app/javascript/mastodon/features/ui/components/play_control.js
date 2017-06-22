@@ -33,6 +33,7 @@ class PlayControl extends React.PureComponent {
       isSp: window.innerWidth < 1024,
       targetDeck,
       deck: null,
+      playlist: (new Array(10)).fill(null),
       player: null,
       offset_time: 0,
       offset_start_time: 0,
@@ -81,6 +82,11 @@ class PlayControl extends React.PureComponent {
     window.removeEventListener('resize', this.handleResizeWindow);
   }
 
+  createPlaylist (deck) {
+    const queues = ((deck && deck.queues) || []);
+    return queues.concat((new Array(10 - queues.length)).fill(null));
+  }
+
   setSubscription (target) {
     // TODO: ソケットが正しくクローズされているかをしっかり調査する
     if(this.subscription) this.subscription.close();
@@ -113,8 +119,10 @@ class PlayControl extends React.PureComponent {
             if(this.state.ytControl){
               this.state.ytControl.destroy();
             }
+
             this.setState({
               deck,
+              playlist: this.createPlaylist(deck),
               ytControl: null,
               scControl: null,
               isYoutubeLoadingDone: false,
@@ -129,6 +137,7 @@ class PlayControl extends React.PureComponent {
   playNextQueueItem (deck, offset_start_time) {
     this.setState({
       deck,
+      playlist: this.createPlaylist(deck),
       isSeekbarActive: false,
       isLoadingArtwork: true,
       offset_start_time,
@@ -376,9 +385,41 @@ class PlayControl extends React.PureComponent {
     );
   }
 
+  renderQueueItem = (queue_item, i) => {
+    const { deck } = this.state;
+    const queues = ((deck && deck.queues) || []);
+
+    return (
+      <li key={queue_item ? queue_item.id : `empty-queue-item_${i}`} className="deck__queue-item">
+        <div className="queue-item__main">
+          <div>
+            {!this.state.isOpen && i === 0 && this.renderDeckQueueCaption('- いまみんなで一緒に聞いている曲 -')}
+            <div className='queue-item__metadata'>
+              {queues.length === 0 && i === 0 ? (
+                <span>プレイリストに好きな曲を入れてね！</span>
+              ) : (queue_item && (
+                <span className='queue-item__metadata-title'>{queue_item.info.length > 40 ? `${queue_item.info.slice(0, 40)}……` : queue_item.info}</span>
+              ))}
+            </div>
+          </div>
+        </div>
+        <div className='queue-item__datasource'>
+          {queue_item && (
+            <a href={queue_item.link} target="_blank" onClick={this.handleClickItemLink}>
+              <img src={`/player/logos/${queue_item.source_type}.${queue_item.source_type === 'apollo' ? 'png' : 'svg'}`} />
+            </a>
+          )}
+        </div>
+      </li>
+    );
+  }
+
   render () {
     if(this.state.isSp) return null;
     const { isTop } = this.props;
+    const { playlist } = this.state;
+
+
     const playerClass = `player-control${this.state.isOpen ? ' is-open':''}`;
     const iconClass = `fa ${this.state.isPlaying?'fa-volume-up':'fa-play'}`;
     const toggleClass = `control-bar__controller-toggle is-${this.state.isPlaying?'playing':'pause'}`;
@@ -410,9 +451,6 @@ class PlayControl extends React.PureComponent {
         };
       }
     }
-
-    const queues = ((this.state.deck && this.state.deck.queues) || []);
-    const playlist = queues.concat((new Array(10 - queues.length)).fill(null));
 
     return (
       <div className={playerClass + (this.CONST_DECKS.find(d => (d.index === this.state.targetDeck && d.type === 'APOLLO')) ? ' is-apollo':'')}>
@@ -541,29 +579,7 @@ class PlayControl extends React.PureComponent {
               <div className="deck_queue-column deck__queue-column-list">
                 {this.state.isOpen && this.renderDeckQueueCaption('- いまみんなで一緒に聞いているプレイリスト -')}
                 <ul className="deck__queue">
-                  {playlist.map((queue_item, i) => (
-                    <li key={queue_item ? queue_item.id : `empty-queue-item_${i}`} className="deck__queue-item">
-                      <div className="queue-item__main">
-                        <div>
-                          {!this.state.isOpen && i === 0 && this.renderDeckQueueCaption('- いまみんなで一緒に聞いている曲 -')}
-                          <div className='queue-item__metadata'>
-                            {queues.length === 0 && i === 0 ? (
-                              <span>プレイリストに好きな曲を入れてね！</span>
-                            ) : (queue_item && (
-                              <span className='queue-item__metadata-title'>{queue_item.info.length > 40 ? `${queue_item.info.slice(0, 40)}……` : queue_item.info}</span>
-                            ))}
-                          </div>
-                        </div>
-                      </div>
-                      <div className='queue-item__datasource'>
-                        {queue_item && (
-                          <a href={queue_item.link} target="_blank" onClick={this.handleClickItemLink}>
-                            <img src={`/player/logos/${queue_item.source_type}.${queue_item.source_type === 'apollo' ? 'png' : 'svg'}`} />
-                          </a>
-                        )}
-                      </div>
-                    </li>
-                  ))}
+                  {playlist.map(this.renderQueueItem)}
                   {(()=>{
                     if(isTop) {
                       return null;
