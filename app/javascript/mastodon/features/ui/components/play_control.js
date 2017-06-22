@@ -419,7 +419,6 @@ class PlayControl extends React.PureComponent {
     const { isTop } = this.props;
     const { playlist } = this.state;
 
-
     const playerClass = `player-control${this.state.isOpen ? ' is-open':''}`;
     const iconClass = `fa ${this.state.isPlaying?'fa-volume-up':'fa-play'}`;
     const toggleClass = `control-bar__controller-toggle is-${this.state.isPlaying?'playing':'pause'}`;
