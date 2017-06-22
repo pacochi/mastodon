@@ -9,7 +9,7 @@ export default class TweetButton extends React.PureComponent {
   };
 
   static defaultProps = {
-    url: null,
+    url: location.href,
   }
 
   render() {
