@@ -222,7 +222,7 @@ class QueueItem
       item = new(
         id: SecureRandom.uuid,
         info: title,
-        thumbnail_url: json['thumbnail_url'],
+        thumbnail_url: json['thumbnail_url'].gsub('http://', 'https://'),
         music_url: nil,
         video_url: nil,
         duration: duration_sec,
