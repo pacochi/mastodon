@@ -6,6 +6,7 @@ import api from '../../../api';
 import createStream from '../../../../mastodon/stream';
 import YouTube from 'react-youtube';
 import TipsBalloonContainer from '../../../containers/tips_balloon_container';
+import TweetButton from '../../../components/tweet_button';
 
 // FIXME: Old react style
 
@@ -290,6 +291,11 @@ class PlayControl extends React.PureComponent {
     e.stopPropagation();
   }
 
+  handleClickTwitterShare = (e) => {
+    // クリック時にDeckが開かないように
+    e.stopPropagation();
+  }
+
   handleResizeWindow (e) {
     const isSp = window.innerWidth < 1024;
     if (this.state.isSp !== isSp) {
@@ -357,6 +363,19 @@ class PlayControl extends React.PureComponent {
     }, 2000);
   }
 
+  renderDeckQueueCaption(text) {
+    const queueItem = this.state.deck && this.state.deck.queues && this.state.deck.queues[0];
+    const shareText = `いまみんなで一緒に${queueItem ? `「${queueItem.info}」` : '音楽'}を聞きながら談話しています。`;
+    return (
+      <div className="deck__queue-caption">
+        <span>{text}</span>
+        <div onClick={this.handleClickTwitterShare} style={{ display: 'inline-block', marginLeft: '3px', verticalAlign: 'bottom' }}>
+          <TweetButton text={shareText} url='https://music.pawoo.net/' />
+        </div>
+      </div>
+    );
+  }
+
   render () {
     if(this.state.isSp) return null;
     const { isTop } = this.props;
@@ -391,6 +410,9 @@ class PlayControl extends React.PureComponent {
         };
       }
     }
+
+    const queues = ((this.state.deck && this.state.deck.queues) || []);
+    const playlist = queues.concat((new Array(10 - queues.length)).fill(null));
 
     return (
       <div className={playerClass + (this.CONST_DECKS.find(d => (d.index === this.state.targetDeck && d.type === 'APOLLO')) ? ' is-apollo':'')}>
@@ -517,74 +539,31 @@ class PlayControl extends React.PureComponent {
                 })()}
               </div>
               <div className="deck_queue-column deck__queue-column-list">
-                {(()=>{
-                  if(!this.state.isOpen) return null;
-                  return(<div className="deck__queue-caption">- いまみんなで一緒に聞いているプレイリスト -</div>);
-                })()}
+                {this.state.isOpen && this.renderDeckQueueCaption('- いまみんなで一緒に聞いているプレイリスト -')}
                 <ul className="deck__queue">
-                  {(()=>{
-                    if(this.isDeckInActive() ){
-                      return [0,1,2,3,4,5,6,7,8,9].map((_,index)=>(
-                        <li className="deck__queue-item" key={'empty-queue-item_'+index}>
-                          <div className="queue-item__main">
-                            <div>
-                              {(()=>{
-                                if(!this.state.isOpen && !index) {
-                                  return (
-                                    <div className="deck__queue-caption">- いまみんなで一緒に聞いている曲 -</div>
-                                  );
-                                }
-                                return null;
-                              })()}
-                              <div className='queue-item__metadata'>
-                                {!index ? 'プレイリストに好きな曲を入れてね！' : ''}
-                              </div>
-                            </div>
+                  {playlist.map((queue_item, i) => (
+                    <li key={queue_item ? queue_item.id : `empty-queue-item_${i}`} className="deck__queue-item">
+                      <div className="queue-item__main">
+                        <div>
+                          {!this.state.isOpen && i === 0 && this.renderDeckQueueCaption('- いまみんなで一緒に聞いている曲 -')}
+                          <div className='queue-item__metadata'>
+                            {queues.length === 0 && i === 0 ? (
+                              <span>プレイリストに好きな曲を入れてね！</span>
+                            ) : (queue_item && (
+                              <span className='queue-item__metadata-title'>{queue_item.info.length > 40 ? `${queue_item.info.slice(0, 40)}……` : queue_item.info}</span>
+                            ))}
                           </div>
-                          <div className='queue-item__datasource' />
-                        </li>
-                      ));
-                    }
-
-                    return this.state.deck.queues.map((queue_item, i) =>(
-                        <li key={queue_item.id} className="deck__queue-item">
-                          <div className="queue-item__main">
-                            <div>
-                              {(()=>{
-                                if(!this.state.isOpen && i === 0) {
-                                  return (
-                                    <div className="deck__queue-caption">- いまみんなで一緒に聞いている曲 -</div>
-                                  );
-                                }
-                                return null;
-                              })()}
-                              <div className='queue-item__metadata'>
-                                <span className='queue-item__metadata-title'>{queue_item.info.length > 40 ? `${queue_item.info.slice(0, 40)}……` : queue_item.info}</span>
-                              </div>
-                            </div>
-                          </div>
-                          <div className='queue-item__datasource'>
-                            <a href={queue_item.link} target="_blank" onClick={this.handleClickItemLink}>
-                              <img src={`/player/logos/${queue_item.source_type}.${queue_item.source_type === 'apollo' ? 'png' : 'svg'}`} />
-                            </a>
-                          </div>
-                        </li>
-                      )
-                    );
-                  })()}
-
-                  {(()=>{
-                    if(this.isDeckInActive()) return null;
-                    return (new Array(10-this.state.deck.queues.length)).fill(0).map((_,index)=>(
-                      <li className="deck__queue-item" key={'empty-track'+index}>
-                        <div className="queue-item__main">
-                          <div className='queue-item__metadata' />
                         </div>
-                        <div className='queue-item__datasource' />
-                      </li>
-                    ));
-                  })()}
-
+                      </div>
+                      <div className='queue-item__datasource'>
+                        {queue_item && (
+                          <a href={queue_item.link} target="_blank" onClick={this.handleClickItemLink}>
+                            <img src={`/player/logos/${queue_item.source_type}.${queue_item.source_type === 'apollo' ? 'png' : 'svg'}`} />
+                          </a>
+                        )}
+                      </div>
+                    </li>
+                  ))}
                   {(()=>{
                     if(isTop) {
                       return null;
