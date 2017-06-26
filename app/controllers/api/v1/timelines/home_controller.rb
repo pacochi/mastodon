@@ -25,10 +25,22 @@ class Api::V1::Timelines::HomeController < Api::BaseController
   end
 
   def home_statuses
+    max_id = params[:max_id]&.to_i
+    since_id = params[:since_id]&.to_i
+
+    limiting_max_id = max_id
+    if limiting_max_id.nil?
+      first = Status.first
+      return [] if first.nil?
+      limiting_max_id = first.id
+    end
+
+    limited_since_id = limiting_max_id - FeedManager::MIN_ID_RANGE
+
     account_home_feed.get(
       limit_param(DEFAULT_STATUSES_LIMIT),
-      params[:max_id],
-      params[:since_id]
+      max_id,
+      (since_id.nil? || since_id < limited_since_id) ? limited_since_id : since_id
     )
   end
 
