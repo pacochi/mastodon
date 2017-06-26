@@ -1,14 +1,13 @@
 # frozen_string_literal: true
 
 class Playlist
-
   MAX_QUEUE_SIZE = 10
   MAX_ADD_COUNT = 5
   MAX_SKIP_COUNT = 2
   SKIP_LIMT_TIME = 90
   attr_accessor :deck
 
-  MEDIA_TL_DECK_ID = 346
+  MEDIA_TL_DECK_ID = 346 # Pawoo Musicに投稿された曲が自動的に追加されるDECK(手動での追加はできない)
   DECK_NUMBERS = [1, 2, 3, 4, 5, 6, MEDIA_TL_DECK_ID].freeze
 
   def initialize(deck)
