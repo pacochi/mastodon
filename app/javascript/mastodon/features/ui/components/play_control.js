@@ -98,6 +98,10 @@ class PlayControl extends React.PureComponent {
             const payload = JSON.parse(data.payload);
             const deck = Object.assign({}, this.state.deck);
             deck.queues.push(payload);
+            this.setState({
+              deck,
+              playlist: this.createPlaylist(deck),
+            });
             if(deck.queues.length === 1) {
               this.playNextQueueItem(deck, (new Date().getTime() / 1000));
             }
