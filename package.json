@@ -75,6 +75,7 @@
     "precss": "^1.4.0",
     "prop-types": "^15.5.10",
     "punycode": "^2.1.0",
+    "query-string": "^4.3.4",
     "rails-erb-loader": "^5.0.0",
     "rails-ujs": "^5.1.1",
     "react": "^15.5.4",
