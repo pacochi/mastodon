@@ -23,6 +23,8 @@ class Api::V1::DeckQueuesController < ApiController
     render json: { error: '不明なエラーが発生しました。' }, status: :service_unavailable
   rescue Mastodon::MusicSourceForbidden => _
     render json: { error: 'この楽曲は外部への埋め込みが禁止されています。' }, status: :forbidden
+  rescue Mastodon::MusicSourceNoAdditionalPermissionError
+    render json: { error: 'このプレイリストには動画を追加できません。' }, status: :bad_request
   end
 
   def destroy
@@ -44,8 +46,7 @@ class Api::V1::DeckQueuesController < ApiController
   private
 
   def set_playlist
-    #deck346はreadonlyなので入れないでね
-    raise ActiveRecord::RecordNotFound unless [1, 2, 3, 4, 5, 6].include?(params[:playlist_deck].to_i)
+    raise ActiveRecord::RecordNotFound unless Playlist::DECK_NUMBERS.include?(params[:playlist_deck].to_i)
 
     @playlist = Playlist.new(params[:playlist_deck])
   end

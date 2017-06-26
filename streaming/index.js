@@ -51,6 +51,8 @@ const dbUrlToConfig = (dbUrl) => {
   return config;
 };
 
+const deckNumbers = [1, 2, 3, 4, 5, 6, 346];
+
 const redisUrlToClient = (defaultConfig, redisUrl) => {
   const config = defaultConfig;
 
@@ -361,7 +363,7 @@ const startWorker = (workerId) => {
 
   app.get('/api/v1/streaming/playlist', (req, res) => {
     const deck = Number(req.query.deck);
-    if ([1, 2, 3, 4, 5, 6].includes(deck)) {
+    if (deckNumbers.includes(deck)) {
       streamFrom(`streaming:playlist:${deck}`, req, streamToHttp(req, res), streamHttpEnd(req));
     } else {
       // FIXME
@@ -381,7 +383,7 @@ const startWorker = (workerId) => {
 
     if(location.query.stream === 'playlist') {
       const deck = Number(location.query.deck);
-      if ([1, 2, 3, 4, 5, 6].includes(deck)) {
+      if (deckNumbers.includes(deck)) {
         streamFrom(`streaming:playlist:${deck}`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);
       } else {
         ws.close();

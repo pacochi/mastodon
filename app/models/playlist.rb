@@ -9,12 +9,14 @@ class Playlist
   attr_accessor :deck
 
   MEDIA_TL_DECK_ID = 346
+  DECK_NUMBERS = [1, 2, 3, 4, 5, 6, MEDIA_TL_DECK_ID].freeze
 
   def initialize(deck)
     @deck = deck
   end
 
   def add(link, account, force = false)
+    raise Mastodon::MusicSourceNoAdditionalPermissionError if deck.to_i == MEDIA_TL_DECK_ID && !force
     count = redis.get(music_add_count_key(account))&.to_i || 0
     raise Mastodon::PlayerControlLimitError if control_limit?(count, account, force)
 
@@ -114,7 +116,7 @@ class Playlist
   private
 
   def control_limit?(count, account, force)
-    MAX_ADD_COUNT <= count && (!account.user.admin || !force)
+    !account.user.admin && !force && count >= MAX_ADD_COUNT
   end
 
   def play_item(queue_item_id, duration, gap = 10)

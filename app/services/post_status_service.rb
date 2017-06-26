@@ -33,11 +33,10 @@ class PostStatusService < BaseService
       attach_pixiv_cards(status)
     end
 
-    if status&.media_attachments&.any? { |m| m.music_info.present? } && status&.visibility == :public
+    if status&.media_attachments&.any? { |m| m.music_info.present? } && status&.public_visibility?
       begin
-        link = "https://#{Rails.configuration.x.local_domain}/web/statuses/#{status.id}"
-        Playlist.new(Playlist::MEDIA_TL_DECK_ID).add(link, account, true)
-      rescue StandardError => e
+        Playlist.new(Playlist::MEDIA_TL_DECK_ID).add(short_account_status_url(account, status), account, true)
+      rescue StandardError
         #とりあえずPlaylistに突っ込んでみて、例外はいたら握りつぶす
       end
     end
