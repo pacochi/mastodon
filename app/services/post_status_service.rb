@@ -33,6 +33,14 @@ class PostStatusService < BaseService
       attach_pixiv_cards(status)
     end
 
+    if status&.media_attachments&.any? { |m| m.music_info.present? } && status&.public_visibility?
+      begin
+        Playlist.new(Playlist::MEDIA_TL_DECK_ID).add(short_account_status_url(account, status), account, true)
+      rescue
+        #とりあえずPlaylistに突っ込んでみて、例外はいたら握りつぶす
+      end
+    end
+
     process_hashtags_service.call(status)
     process_mentions_service.call(status)
 

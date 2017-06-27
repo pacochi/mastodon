@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router';
 import PropTypes from 'prop-types';
+import classNames from 'classnames';
 import IconButton from '../../../components/icon_button';
 import api from '../../../api';
 import createStream from '../../../../mastodon/stream';
@@ -10,18 +11,69 @@ import TweetButton from '../../../components/tweet_button';
 
 // FIXME: Old react style
 
+const PlatformHelp = () => {
+  const platforms = [
+    {
+      icon: '/player/logos/pawoo-music.svg',
+      title: 'Pawoo Music',
+      url: 'https://music.pawoo.net/web/statuses/[XXXXX…]',
+    },
+    {
+      icon: '/player/logos/youtube.svg',
+      title: 'YouTube',
+      url: 'https://www.youtube.com/watch?v=[XXXXX……]',
+    },
+    {
+      icon: '/player/logos/booth.svg',
+      title: 'BOOTH',
+      url: 'https://booth.pm/ja/items/[XXXXX……]',
+    },
+    {
+      icon: '/player/logos/apollo.png',
+      title: 'APOLLO',
+      url: 'https://booth.pm/apollo/a06/item?id=[XXXXX……]',
+    },
+    {
+      icon: '/player/logos/soundcloud.svg',
+      title: 'SoundCloud',
+      url: 'https://soundcloud.com/[username]/[trackname]',
+    },
+  ];
+
+  return (
+    <div className='deck__queue-add-form-help'>
+      <i className='fa fa-question-circle deck__queue-add-form-help-icon' />
+      <div className='deck__queue-add-form-help-popup'>
+        <h3>対応プラットフォーム</h3>
+        <ul>
+          {platforms.map(({ icon, title, url }) => (
+            <li key={title}>
+              <img src={icon} />
+              <div className='platform-info'>
+                <div className='platform-info__title'>{title}</div>
+                <div className='platform-info__url'>{url}</div>
+              </div>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+};
+
 class PlayControl extends React.PureComponent {
 
   constructor (props, context) {
     super(props, context);
 
     this.CONST_DECKS = [
-      {index: 1, type: 'DECK', name: '共有チャンネル1', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {index: 2, type: 'DECK', name: '共有チャンネル2', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {index: 3, type: 'DECK', name: '共有チャンネル3', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {index: 4, type: 'DECK', name: '共有チャンネル4', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {index: 5, type: 'DECK', name: '共有チャンネル5', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {index: 6, type: 'DECK', name: '同人・ネット音楽\n専用チャンネル', icon: '/player/pawoo-music-playlist-icon.svg'},
+      {number: 1, type: 'DECK', name: '共有チャンネル1', icon: '/player/pawoo-music-playlist-icon.svg'},
+      {number: 2, type: 'DECK', name: '共有チャンネル2', icon: '/player/pawoo-music-playlist-icon.svg'},
+      {number: 3, type: 'DECK', name: '共有チャンネル3', icon: '/player/pawoo-music-playlist-icon.svg'},
+      {number: 4, type: 'DECK', name: '共有チャンネル4', icon: '/player/pawoo-music-playlist-icon.svg'},
+      {number: 5, type: 'DECK', name: '共有チャンネル5', icon: '/player/pawoo-music-playlist-icon.svg'},
+      {number: 6, type: 'DECK', name: '同人・ネット音楽\n専用チャンネル', icon: '/player/pawoo-music-playlist-icon.svg'},
+      {number: 346, type: 'DECK', name: 'Pawoo Music\nチャンネル', icon: '/player/pawoo-music-playlist-icon.svg'},
     ];
 
     let targetDeck = 1;
@@ -252,19 +304,19 @@ class PlayControl extends React.PureComponent {
   }
 
   handleClickDeckTab (e) {
-    const index = Number(e.currentTarget.getAttribute('data-index'));
-    if(index === this.state.targetDeck) return;
+    const number = Number(e.currentTarget.getAttribute('data-number'));
+    if(number === this.state.targetDeck) return;
     if (this.isLoading()) return;
 
-    try { localStorage.setItem('LATEST_DECK', index); } catch (err) {}
+    try { localStorage.setItem('LATEST_DECK', number); } catch (err) {}
 
     this.setState({
-      targetDeck: index,
+      targetDeck: number,
       isSeekbarActive: false,
       isLoadingArtwork: true,
     });
-    this.fetchDeck(index);
-    this.setSubscription(index);
+    this.fetchDeck(number);
+    this.setSubscription(number);
   }
 
   handleSubmitAddForm (e) {
@@ -421,7 +473,7 @@ class PlayControl extends React.PureComponent {
   render () {
     if(this.state.isSp) return null;
     const { isTop } = this.props;
-    const { playlist } = this.state;
+    const { playlist, targetDeck } = this.state;
 
     const playerClass = `player-control${this.state.isOpen ? ' is-open':''}`;
     const iconClass = `fa ${this.state.isPlaying?'fa-volume-up':'fa-play'}`;
@@ -431,8 +483,9 @@ class PlayControl extends React.PureComponent {
     let playerSeekBarStyle = {};
     let nowPlayingArtwork = {};
     let ytplayerStyle = {};
+    const index = this.CONST_DECKS.findIndex((deck) => deck.number === targetDeck);
     const deckSelectorStyle = {
-      transform: `translate(0, -${(!this.state.isOpen) ? (this.state.targetDeck-1)*56 : 0}px)`,
+      transform: `translate(0, -${(this.state.isOpen) ? 0 : index * 56}px)`,
     };
 
     if(this.state.deck && ("queues" in this.state.deck) && this.state.deck.queues.length) {
@@ -456,7 +509,7 @@ class PlayControl extends React.PureComponent {
     }
 
     return (
-      <div className={playerClass + (this.CONST_DECKS.find(d => (d.index === this.state.targetDeck && d.type === 'APOLLO')) ? ' is-apollo':'')}>
+      <div className={playerClass + (this.CONST_DECKS.find(d => (d.number === targetDeck && d.type === 'APOLLO')) ? ' is-apollo':'')}>
         <div className='player-control__control-bar'>
           <div className='control-bar__controller'>
             <div className={toggleClass} onClick={this.handleClickToggle}>
@@ -490,26 +543,23 @@ class PlayControl extends React.PureComponent {
           </div>
           <div className='control-bar__deck' onClick={this.handleClickDeck}>
             <ul className='control-bar__deck-selector'>
-              {(()=>this.CONST_DECKS.map((SINGLE_DECK)=>(
-                <li key={SINGLE_DECK.index}
-                  className={
-                    [
-                      'deck-selector__selector-body',
-                      SINGLE_DECK.index === this.state.targetDeck ? 'active'   : '',
-                      SINGLE_DECK.type  === 'APOLLO'              ? 'is-apollo'   : '',
-                      this.isLoading()                            ? 'disabled' : '',
-                    ].join(' ')
-                  }
-                  data-index={SINGLE_DECK.index}
+              {this.CONST_DECKS.map((deck) => (
+                <li key={deck.number}
+                  className={classNames('deck-selector__selector-body', {
+                    active: deck.number === targetDeck,
+                    'is-apollo': deck.type  === 'APOLLO',
+                    disabled: this.isLoading(),
+                  })}
+                  data-number={deck.number}
                   onClick={this.handleClickDeckTab}
                   style={deckSelectorStyle}
                 >
-                  <img src={SINGLE_DECK.icon} />
-                  <span className={SINGLE_DECK.name.includes('\n') ? 'deck-selector__selector-body__multiline' : ''}>{SINGLE_DECK.name}</span>
+                  <img src={deck.icon} />
+                  <span className={deck.name.includes('\n') ? 'deck-selector__selector-body__multiline' : ''}>{deck.name}</span>
                 </li>
-              )))()}
+              ))}
             </ul>
-            <div className={'deck_queue-wrapper'+(this.CONST_DECKS.find(d => (d.index === this.state.targetDeck && d.type === 'APOLLO')) ? ' is-apollo':'')}>
+            <div className={'deck_queue-wrapper'+(this.CONST_DECKS.find(d => (d.number === targetDeck && d.type === 'APOLLO')) ? ' is-apollo':'')}>
               <div className="deck_queue-column">
                 <div className="queue-item__artwork" style={nowPlayingArtwork}>
                   {(()=>{
@@ -583,63 +633,20 @@ class PlayControl extends React.PureComponent {
                 {this.state.isOpen && this.renderDeckQueueCaption('- いまみんなで一緒に聞いているプレイリスト -')}
                 <ul className="deck__queue">
                   {playlist.map(this.renderQueueItem)}
-                  {(()=>{
-                    if(isTop) {
-                      return null;
-                    }
-                    return (
-                      <li className="deck__queue-add-form">
+                  {!isTop && (
+                    <li className="deck__queue-add-form">
+                      {targetDeck === 346 ? (
+                        <div style={{ paddingTop: '20px' }}>Pawoo Musicに曲をアップロードすると、このプレイリストに曲が追加されます。</div>
+                      ) : (
                         <form onSubmit={this.handleSubmitAddForm}>
                           <span>曲を追加</span>
                           <input ref={this.setURLRef} type="text" placeholder="URLを入力 (Pawoo Music, APOLLO(BOOTH), YouTube and SoundCloud URL)" required />
-                          <div className='deck__queue-add-form-help'>
-                            <i className='fa fa-question-circle deck__queue-add-form-help-icon' />
-                            <div className='deck__queue-add-form-help-popup'>
-                              <h3>対応プラットフォーム</h3>
-                              <ul>
-                                <li>
-                                  <img src="/player/logos/pawoo-music.svg" />
-                                  <div className='platform-info'>
-                                    <div className='platform-info__title'>Pawoo Music</div>
-                                    <div className='platform-info__url'>https://music.pawoo.net/web/statuses/[XXXXX…]</div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <img src="/player/logos/youtube.svg" />
-                                  <div className='platform-info'>
-                                    <div className='platform-info__title'>YouTube</div>
-                                    <div className='platform-info__url'>https://www.youtube.com/watch?v=[XXXXX……]</div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <img src="/player/logos/booth.svg" />
-                                  <div className='platform-info'>
-                                    <div className='platform-info__title'>BOOTH</div>
-                                    <div className='platform-info__url'>https://booth.pm/ja/items/[XXXXX……]</div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <img src="/player/logos/apollo.png" />
-                                  <div className='platform-info'>
-                                    <div className='platform-info__title'>APOLLO</div>
-                                    <div className='platform-info__url'>https://booth.pm/apollo/a06/item?id=[XXXXX……]</div>
-                                  </div>
-                                </li>
-                                <li>
-                                  <img src="/player/logos/soundcloud.svg" />
-                                  <div className='platform-info'>
-                                    <div className='platform-info__title'>SoundCloud</div>
-                                    <div className='platform-info__url'>https://soundcloud.com/[username]/[trackname]</div>
-                                  </div>
-                                </li>
-                              </ul>
-                            </div>
-                          </div>
+                          <PlatformHelp />
                           <input type="submit" value="追加" />
                         </form>
-                      </li>
-                    );
-                  })()}
+                      )}
+                    </li>
+                  )}
                 </ul>
               </div>
             </div>

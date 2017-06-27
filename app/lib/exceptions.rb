@@ -7,6 +7,7 @@ module Mastodon
   class RaceConditionError < Error; end
   class MusicSourceNotFoundError < Error; end
   class MusicSourceForbidden < Error; end
+  class MusicSourceNoAdditionalPermissionError < Error; end
   class PlayerControlLimitError < Error; end
   class PlayerControlSkipLimitTimeError < Error; end
   class PlaylistSizeOverError < Error; end

@@ -18,8 +18,7 @@ class QueueItem
     YOUTUBE_API_KEY = ENV['YOUTUBE_API_KEY']
 
     def create_from_link(link, account)
-      entities = Extractor.extract_entities_with_indices(link, extract_url_without_protocol: false)
-      link = entities.map { |entry| entry[:url] }.compact.first
+      link = link.strip.split(/\s/).try(:[], 0)
       return if link.blank? || addressable_link(link).nil?
 
       pawoo_link(link, account) || booth_link(link, account) || apollo_link(link, account) || youtube_link(link, account) || soundcloud_link(link, account)
