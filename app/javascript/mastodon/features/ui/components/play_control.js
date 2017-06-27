@@ -430,12 +430,12 @@ class PlayControl extends React.PureComponent {
 
   renderDeckQueueCaption(text) {
     const queueItem = this.state.deck && this.state.deck.queues && this.state.deck.queues[0];
-    const shareText = `いまみんなで一緒に${queueItem ? `「${queueItem.info}」` : '音楽'}を聞きながら談話しています。`;
+    const shareText = `いまみんなで一緒に${queueItem ? `「${queueItem.info}」` : '音楽'}を聞きながらトーク中♪ ${queueItem ? queueItem.link : ''}`;
     return (
       <div className='deck__queue-caption'>
         <span>{text}</span>
         <div onClick={this.handleClickTwitterShare} style={{ display: 'inline-block', marginLeft: '3px', verticalAlign: 'bottom' }}>
-          <TweetButton text={shareText} url='https://music.pawoo.net/' />
+          <TweetButton text={shareText} url='https://music.pawoo.net/' hashtags='PawooMusic' />
         </div>
       </div>
     );
