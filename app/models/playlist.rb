@@ -8,7 +8,7 @@ class Playlist
   attr_accessor :deck
 
   MEDIA_TL_DECK_ID = 346 # Pawoo Musicに投稿された曲が自動的に追加されるDECK(手動での追加はできない)
-  DECK_NUMBERS = [1, 2, 3, 4, 5, 6, MEDIA_TL_DECK_ID].freeze
+  DECK_NUMBERS = [1, 2, 3, 6, MEDIA_TL_DECK_ID].freeze
 
   def initialize(deck)
     @deck = deck
