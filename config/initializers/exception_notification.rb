@@ -8,6 +8,8 @@ ExceptionNotification.configure do |config|
     ActionController::UnknownFormat
     ActionController::ParameterMissing
     ActiveRecord::RecordNotUnique
+    HTTP::TimeoutError
+    Goldfinger::NotFoundError
   )
 
   ignore_workers = %w[
@@ -15,7 +17,6 @@ ExceptionNotification.configure do |config|
     Pubsubhubbub::ConfirmationWorker
     Pubsubhubbub::DistributionWorker
     Pubsubhubbub::SubscribeWorker
-    HTTP::TimeoutError
   ].freeze
 
   config.ignore_if do |_exception, options|
