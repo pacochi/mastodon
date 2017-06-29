@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import queryString from 'query-string';
 
 class SoundCloudArtwork extends React.PureComponent {
 
@@ -53,6 +54,18 @@ class SoundCloudArtwork extends React.PureComponent {
 
   render () {
     const { sourceId } = this.props;
+    const params = {
+      url: `https://api.soundcloud.com/tracks/${sourceId}`,
+      auto_play: true,
+      liking: false,
+      show_playcount: false,
+      show_bpm: false,
+      sharing: false,
+      buying: false,
+      show_artwork: true,
+      show_comments: false,
+      visual: true,
+    };
 
     return (
       <div className="queue-item__artwork">
@@ -64,9 +77,7 @@ class SoundCloudArtwork extends React.PureComponent {
           height="250"
           scrolling="no"
           frameBorder="no"
-          src={
-            `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${sourceId}&auto_play=true&liking=false&show_playcount=false&show_bpm=false&sharing=false&buying=false&show_artwork=true&show_playcount=false&show_bpm=false&show_comments=false&visual=true`
-          }
+          src={`https://w.soundcloud.com/player/?${queryString.stringify(params)}`}
         />
     </div>
     );
