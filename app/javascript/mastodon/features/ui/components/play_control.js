@@ -75,10 +75,12 @@ class PlaylistController extends React.PureComponent {
     isTop: PropTypes.bool.isRequired,
     isActive: PropTypes.bool.isRequired,
     muted: PropTypes.bool.isRequired,
+    volume: PropTypes.number.isRequired,
     duration: PropTypes.number,
     skipLimitTime: PropTypes.number,
     onSkip: PropTypes.func.isRequired,
     onToggleMute: PropTypes.func.isRequired,
+    onChangeVolume: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -90,6 +92,12 @@ class PlaylistController extends React.PureComponent {
     timeOffset: Math.floor(new Date() / 1000 - this.props.offsetStartTime),
   };
   interval = null;
+  volumeList = [
+    { value: 1,    text: '100%' },
+    { value: 0.75, text: '75%'  },
+    { value: 0.5,  text: '50%'  },
+    { value: 0.25, text: '25%'  },
+  ];
 
   componentDidMount () {
     this.interval = setInterval(() => {
@@ -118,16 +126,30 @@ class PlaylistController extends React.PureComponent {
     }
   }
 
+  handleSelectVolume = (e) => {
+    const volume = Number(e.currentTarget.getAttribute('data-volume'));
+    this.props.onChangeVolume(volume);
+  }
+
   render () {
-    const { isTop, isActive, duration, muted } = this.props;
+    const { isTop, isActive, duration, muted, volume } = this.props;
     const { timeOffset } = this.state;
 
     const time = Math.min(timeOffset, duration);
 
     return (
       <div className='control-bar__controller'>
-        <div className={`control-bar__controller-toggle is-${muted ? 'pause' : 'playing'}`} onClick={this.props.onToggleMute}>
-          <i className={`fa ${muted ? 'fa-play' : 'fa-volume-up'}`} />
+        <div className='control-bar__controller-toggle-wrapper'>
+          <div className={`control-bar__controller-toggle is-${muted ? 'pause' : 'playing'}`} onClick={this.props.onToggleMute}>
+            <i className={`fa ${muted ? 'fa-play' : 'fa-volume-up'}`} />
+          </div>
+          <div className='control-bar__volume-selector'>
+            <ul>
+              {this.volumeList.map(({ value, text }) => (
+                <li key={value} className={classNames('control-bar__volume-selector__item', { active: value === volume })} data-volume={value} onClick={this.handleSelectVolume}>{text}</li>
+              ))}
+            </ul>
+          </div>
         </div>
         {!isTop && <TipsBalloonContainer id={1}>
           音楽を再生！
@@ -173,12 +195,15 @@ class PlayControl extends React.PureComponent {
 
     let targetDeck = 1;
     try { targetDeck = Number(localStorage.getItem('LATEST_DECK')) || 1; } catch (err) {}
+    let volume = 1;
+    try { volume = Number(localStorage.getItem('player_volume')) || 1; } catch (err) {}
 
     this.state = {
       isOpen: false,
       isPlaying: false,
       isSp: window.innerWidth < 1024,
       targetDeck,
+      volume,
       deck: null,
       playlist: (new Array(10)).fill(null),
       player: null,
@@ -331,6 +356,11 @@ class PlayControl extends React.PureComponent {
     }
   }
 
+  handleChangeVolume = (volume) => {
+    this.setState({ volume });
+    try { localStorage.setItem('player_volume', volume); } catch (err) {}
+  }
+
   handleCancelOpenDeck = (e) => {
     // クリック時にDeckが開かないように
     e.stopPropagation();
@@ -418,7 +448,7 @@ class PlayControl extends React.PureComponent {
   }
 
   renderArtwork () {
-    const { deck, isLoadingArtwork, isPlaying, timeOffset, muted } = this.state;
+    const { deck, isLoadingArtwork, isPlaying, timeOffset, muted, volume } = this.state;
     const deckQueue = this.getDeckFirstQueue();
 
     if (isLoadingArtwork) {
@@ -431,14 +461,14 @@ class PlayControl extends React.PureComponent {
 
     switch (deckQueue.source_type) {
     case 'youtube':
-      return <YouTubeArtwork muted={muted} volume={1} timeOffset={timeOffset} videoId={deckQueue.source_id} onReadyYoutube={this.handleReadyYoutube}/>;
+      return <YouTubeArtwork muted={muted} volume={volume} timeOffset={timeOffset} videoId={deckQueue.source_id} onReadyYoutube={this.handleReadyYoutube}/>;
     case 'soundcloud':
-      return <SoundCloudArtwork muted={muted} volume={1} timeOffset={timeOffset} sourceId={deckQueue.source_id} />;
+      return <SoundCloudArtwork muted={muted} volume={volume} timeOffset={timeOffset} sourceId={deckQueue.source_id} />;
     case 'pawoo-music':
-      return <VideoArtwork muted={muted} volume={1} timeOffset={timeOffset} videoUrl={deckQueue.video_url} />;
+      return <VideoArtwork muted={muted} volume={volume} timeOffset={timeOffset} videoUrl={deckQueue.video_url} />;
     case 'booth':
     case 'apollo':
-      return <AudioArtwork muted={muted} volume={1} timeOffset={timeOffset} musicUrl={deckQueue.music_url} thumbnailUrl={deckQueue.thumbnail_url} />;
+      return <AudioArtwork muted={muted} volume={volume} timeOffset={timeOffset} musicUrl={deckQueue.music_url} thumbnailUrl={deckQueue.thumbnail_url} />;
     default:
       return <div className="queue-item__artwork" />;
     }
@@ -447,7 +477,7 @@ class PlayControl extends React.PureComponent {
   render () {
     if(this.state.isSp) return null;
     const { isTop } = this.props;
-    const { playlist, targetDeck, deck, offsetStartTime, muted, isSeekbarActive, isOpen, timeOffset } = this.state;
+    const { playlist, targetDeck, deck, offsetStartTime, muted, volume, isSeekbarActive, isOpen, timeOffset } = this.state;
 
     const deckQueue = this.getDeckFirstQueue();
     const sourceType = deckQueue && deckQueue.source_type;
@@ -487,9 +517,11 @@ class PlayControl extends React.PureComponent {
             isActive={this.isDeckActive()}
             muted={muted}
             duration={duration}
+            volume={volume}
             skipLimitTime={skipLimitTime}
             onSkip={this.handleClickSkip}
             onToggleMute={this.handleClickToggleMute}
+            onChangeVolume={this.handleChangeVolume}
           />
           <div className='control-bar__deck' onClick={this.handleClickDeck}>
             <ul className='control-bar__deck-selector'>
