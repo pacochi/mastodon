@@ -182,55 +182,57 @@ class PlayControl extends React.PureComponent {
     onSkip: PropTypes.func.isRequired,
   };
 
-  constructor (props, context) {
-    super(props, context);
+  deckList = [
+    {number: 1, type: 'DECK', name: '共有チャンネル1', icon: '/player/pawoo-music-playlist-icon.svg'},
+    {number: 2, type: 'DECK', name: '共有チャンネル2', icon: '/player/pawoo-music-playlist-icon.svg'},
+    {number: 3, type: 'DECK', name: '共有チャンネル3', icon: '/player/pawoo-music-playlist-icon.svg'},
+    {number: 4, type: 'DECK', name: '共有チャンネル4', icon: '/player/pawoo-music-playlist-icon.svg'},
+    {number: 5, type: 'DECK', name: '共有チャンネル5', icon: '/player/pawoo-music-playlist-icon.svg'},
+    {number: 346, type: 'DECK', name: 'Pawoo Music\nチャンネル', icon: '/player/pawoo-music-playlist-icon.svg'},
+  ];
 
-    this.CONST_DECKS = [
-      {number: 1, type: 'DECK', name: '共有チャンネル1', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {number: 2, type: 'DECK', name: '共有チャンネル2', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {number: 3, type: 'DECK', name: '共有チャンネル3', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {number: 4, type: 'DECK', name: '共有チャンネル4', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {number: 5, type: 'DECK', name: '共有チャンネル5', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {number: 346, type: 'DECK', name: 'Pawoo Music\nチャンネル', icon: '/player/pawoo-music-playlist-icon.svg'},
-    ];
-
-    let targetDeck = 1;
-    try { targetDeck = Number(localStorage.getItem('LATEST_DECK')) || 1; } catch (err) {}
-    if (!this.CONST_DECKS.find((deck) => deck.number === targetDeck)) {
-      targetDeck = this.CONST_DECKS[0].number;
-    }
-    let volume = 1;
-    try { volume = Number(localStorage.getItem('player_volume')) || 1; } catch (err) {}
-
-    this.state = {
-      isOpen: false,
-      isPlaying: false,
-      isSp: window.innerWidth < 1024,
-      targetDeck,
-      volume,
-      deck: null,
-      playlist: (new Array(10)).fill(null),
-      player: null,
-      timeOffset: 0,
-      offsetStartTime: 0,
-      isSeekbarActive: false,
-      isLoadingArtwork: true,
-      muted: true,
-    };
-
-    this.subscription = null;
-  }
+  state = {
+    isOpen: false,
+    isPlaying: false,
+    isSp: window.innerWidth < 1024,
+    targetDeck: this.deckList[0].number,
+    volume: 1,
+    deck: null,
+    playlist: (new Array(10)).fill(null),
+    player: null,
+    timeOffset: 0,
+    offsetStartTime: 0,
+    isSeekbarActive: false,
+    isLoadingArtwork: true,
+    muted: true,
+  };
+  subscription = null;
 
   componentDidMount () {
     window.addEventListener('resize', this.handleResizeWindow);
-
-    if(this.state.isSp) return;
-    this.fetchDeck(this.state.targetDeck);
-    this.setSubscription(this.state.targetDeck);
+    console.log(this.state);
+    if (!this.state.isSp) {
+      this.initDeck();
+    }
   }
 
   componentWillUnmount () {
     window.removeEventListener('resize', this.handleResizeWindow);
+  }
+
+  initDeck() {
+    const newState = {};
+    try {
+      const targetDeck = Number(localStorage.getItem('LATEST_DECK'));
+      newState.targetDeck = this.deckList.find((deck) => deck.number === targetDeck) ? targetDeck : this.deckList[0].number;
+    } catch (err) {}
+    try {
+      newState.volume = Number(localStorage.getItem('player_volume')) || 1;
+    } catch (err) {}
+    this.setState(newState);
+
+    this.fetchDeck(newState.targetDeck);
+    this.setSubscription(newState.targetDeck);
   }
 
   createPlaylist (deck) {
@@ -374,6 +376,15 @@ class PlayControl extends React.PureComponent {
     const isSp = window.innerWidth < 1024;
     if (this.state.isSp !== isSp) {
       this.setState({ isSp });
+      if (isSp) {
+        if (this.subscription) {
+          this.subscription.close();
+          this.subscription = null;
+        }
+      } else {
+        this.initDeck();
+      }
+
     }
   }
 
@@ -488,8 +499,8 @@ class PlayControl extends React.PureComponent {
     const duration = deckQueue && deckQueue.duration;
     const skipLimitTime = deck && deck.skip_limit_time;
 
-    const index = this.CONST_DECKS.findIndex((deck) => deck.number === targetDeck);
-    const isApollo = this.CONST_DECKS[index].type === 'APOLLO';
+    const index = this.deckList.findIndex((deck) => deck.number === targetDeck);
+    const isApollo = this.deckList[index].type === 'APOLLO';
     const deckSelectorStyle = {
       transform: `translate(0, -${(this.state.isOpen) ? 0 : index * 56}px)`,
     };
@@ -529,7 +540,7 @@ class PlayControl extends React.PureComponent {
           />
           <div className='control-bar__deck' onClick={this.handleClickDeck}>
             <ul className='control-bar__deck-selector'>
-              {this.CONST_DECKS.map((deck) => (
+              {this.deckList.map((deck) => (
                 <li key={deck.number}
                   className={classNames('deck-selector__selector-body', {
                     active: deck.number === targetDeck,
