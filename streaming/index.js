@@ -51,7 +51,7 @@ const dbUrlToConfig = (dbUrl) => {
   return config;
 };
 
-const deckNumbers = [1, 2, 3, 4, 5, 6, 346];
+const deckNumbers = [1, 2, 3, 4, 5, 346];
 
 const redisUrlToClient = (defaultConfig, redisUrl) => {
   const config = defaultConfig;

@@ -189,12 +189,14 @@ class PlayControl extends React.PureComponent {
       {number: 3, type: 'DECK', name: '共有チャンネル3', icon: '/player/pawoo-music-playlist-icon.svg'},
       {number: 4, type: 'DECK', name: '共有チャンネル4', icon: '/player/pawoo-music-playlist-icon.svg'},
       {number: 5, type: 'DECK', name: '共有チャンネル5', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {number: 6, type: 'DECK', name: '同人・ネット音楽\n専用チャンネル', icon: '/player/pawoo-music-playlist-icon.svg'},
       {number: 346, type: 'DECK', name: 'Pawoo Music\nチャンネル', icon: '/player/pawoo-music-playlist-icon.svg'},
     ];
 
     let targetDeck = 1;
     try { targetDeck = Number(localStorage.getItem('LATEST_DECK')) || 1; } catch (err) {}
+    if (!this.CONST_DECKS.find((deck) => deck.number === targetDeck)) {
+      targetDeck = this.CONST_DECKS[0].number;
+    }
     let volume = 1;
     try { volume = Number(localStorage.getItem('player_volume')) || 1; } catch (err) {}
 
