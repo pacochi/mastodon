@@ -92,12 +92,6 @@ class PlaylistController extends React.PureComponent {
     timeOffset: Math.floor(new Date() / 1000 - this.props.offsetStartTime),
   };
   interval = null;
-  volumeList = [
-    { value: 1,    text: '100%' },
-    { value: 0.75, text: '75%'  },
-    { value: 0.5,  text: '50%'  },
-    { value: 0.25, text: '25%'  },
-  ];
 
   componentDidMount () {
     this.interval = setInterval(() => {
@@ -126,9 +120,8 @@ class PlaylistController extends React.PureComponent {
     }
   }
 
-  handleSelectVolume = (e) => {
-    const volume = Number(e.currentTarget.getAttribute('data-volume'));
-    this.props.onChangeVolume(volume);
+  handleChangeVolume = (e) => {
+    this.props.onChangeVolume(Number(e.target.value));
   }
 
   convertTimeFormat(time) {
@@ -145,12 +138,8 @@ class PlaylistController extends React.PureComponent {
           <div className={`control-bar__controller-toggle is-${muted ? 'pause' : 'playing'}`} onClick={this.props.onToggleMute}>
             <i className={`fa ${muted ? 'fa-play' : 'fa-volume-up'}`} />
           </div>
-          <div className='control-bar__volume-selector'>
-            <ul>
-              {this.volumeList.map(({ value, text }) => (
-                <li key={value} className={classNames('control-bar__volume-selector__item', { active: value === volume })} data-volume={value} onClick={this.handleSelectVolume}>{text}</li>
-              ))}
-            </ul>
+          <div className='control-bar__volume-slider'>
+            <input className='vertical-slider' type='range' value={volume} min='0' max='1' step='0.01' onChange={this.handleChangeVolume} />
           </div>
         </div>
         {!isTop && <TipsBalloonContainer id={1}>
