@@ -131,11 +131,13 @@ class PlaylistController extends React.PureComponent {
     this.props.onChangeVolume(volume);
   }
 
+  convertTimeFormat(time) {
+    return `${Math.floor(time / 60)}:${String(time % 60).padStart(2, 0)}`;
+  }
+
   render () {
     const { isTop, isActive, duration, muted, volume } = this.props;
     const { timeOffset } = this.state;
-
-    const time = Math.min(timeOffset, duration);
 
     return (
       <div className='control-bar__controller'>
@@ -160,9 +162,9 @@ class PlaylistController extends React.PureComponent {
         </div>}
 
         {isActive && <div className='control-bar__controller-info'>
-          <span className='control-bar__controller-now'>{Math.floor(time / 60)}:{('0' + (time % 60)).slice(-2)}</span>
+          <span className='control-bar__controller-now'>{this.convertTimeFormat(Math.min(timeOffset, duration))}</span>
           <span className='control-bar__controller-separater'>/</span>
-          <span className='control-bar__controller-time'>{Math.floor(duration / 60)}:{('0' + (duration % 60)).slice(-2)}</span>
+          <span className='control-bar__controller-time'>{this.convertTimeFormat(duration)}</span>
         </div>}
       </div>
     );
