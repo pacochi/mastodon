@@ -17,8 +17,14 @@
     .actions
       = f.button :button, t('generic.save_changes'), type: :submit
 
-- unless current_user.initial_password_usage
-  %hr/
+%hr/
 
-  %h6= t('auth.delete_account')
+%h6= t('auth.delete_account')
+- if current_user.initial_password_usage
+  %p.muted-hint= t('deletes.exists_initial_password_usage')
+
+- elsif current_user.oauth_authentications.find_by(provider: :pixiv)
+  %p.muted-hint= t('deletes.exists_oauth_authentications_html', path: settings_oauth_authentications_path)
+
+- else
   %p.muted-hint= t('auth.delete_account_html', path: settings_delete_path)

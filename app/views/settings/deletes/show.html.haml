@@ -5,6 +5,11 @@
   = simple_form_for(current_user, url: registration_path(:user), html: { method: :put }) do |f|
     = render 'shared/error_messages', object: f.object
     %p.hint= t('deletes.exists_initial_password_usage')
+    .actions
+      = f.button :button, t('auth.reset_password'), type: :submit
+
+- elsif current_user.oauth_authentications.find_by(provider: :pixiv)
+  %p.hint= t('deletes.exists_oauth_authentications_html', path: settings_oauth_authentications_path)
 
 - else
   = simple_form_for @confirmation, url: settings_delete_path, method: :delete do |f|

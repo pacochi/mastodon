@@ -255,6 +255,7 @@ en:
     warning_html: Only deletion of content from this particular instance is guaranteed. Content that has been widely shared is likely to leave traces. Offline servers and servers that have unsubscribed from your updates will not update their databases.
     warning_title: Disseminated content availability
     exists_initial_password_usage: Please change your password before deleting account
+    exists_oauth_authentications_html: Please unlink <a href="%{path}">pixiv Login</a> before deleting account
   errors:
     top: Go to top
     '403': You don't have permission to view this page.
