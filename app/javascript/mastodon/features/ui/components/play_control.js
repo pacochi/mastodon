@@ -199,7 +199,6 @@ class PlayControl extends React.PureComponent {
 
   componentDidMount () {
     window.addEventListener('resize', this.handleResizeWindow);
-    console.log(this.state);
     if (!this.state.isSp) {
       this.initDeck();
     }
