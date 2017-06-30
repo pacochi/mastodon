@@ -10,12 +10,13 @@ class Settings::DeletesController < ApplicationController
   end
 
   def destroy
-    if current_user.valid_password?(delete_params[:password])
+    oauth_authentication = current_user.oauth_authentications.find_by(provider: :pixiv)
+    if !oauth_authentication && current_user.valid_password?(delete_params[:password])
       Admin::SuspensionWorker.perform_async(current_user.account_id, true)
       sign_out
       redirect_to new_user_session_path, notice: I18n.t('deletes.success_msg')
     else
-      redirect_to settings_delete_path, alert: I18n.t('deletes.bad_password_msg')
+      redirect_to settings_delete_path, (oauth_authentication ? {} : { alert: I18n.t('deletes.bad_password_msg') })
     end
   end
 
