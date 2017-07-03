@@ -46,8 +46,10 @@ class YouTubeArtwork extends React.PureComponent {
   }
 
   onReadyYouTube = (event) => {
+    const { volume } = this.props;
     this.ytControl = event.target;
     this.changeMute();
+    this.setVolume(volume);
   }
 
   // Youtubeの動画の読み込みが完了し、再生が始まると呼ばれる
