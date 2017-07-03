@@ -122,10 +122,10 @@ $player-apollo-color:#38b6c5;
       transition: all .2s ease;
       visibility: hidden;
       opacity: 0;
-      top: -120px;
+      bottom: 60px;
       left: 13px;
       width: 30px;
-      height: 120px;
+      height: 0;
       border-radius: 5px;
       background: #EFEFEF;
 
@@ -148,14 +148,23 @@ $player-apollo-color:#38b6c5;
         margin: 0;
         padding: 0;
         position: absolute;
+        visibility: hidden;
+        opacity: 0;
         left: -35px;
-        top: 50px;
+        bottom: 50px;
+        transition: visibility, opacity .1s .1s ease;
       }
     }
 
     &:hover .control-bar__volume-slider {
       visibility: visible;
       opacity: 1;
+      height: 120px;
+
+      input.vertical-slider {
+        visibility: visible;
+        opacity: 1;
+      }
     }
   }
 
