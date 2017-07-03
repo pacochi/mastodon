@@ -21,7 +21,15 @@ class QueueItem
       link = link.strip.split(/\s/).try(:[], 0)
       return if link.blank? || addressable_link(link).nil?
 
-      pawoo_link(link, account) || booth_link(link, account) || apollo_link(link, account) || youtube_link(link, account) || soundcloud_link(link, account)
+      item = pawoo_link(link) || booth_link(link) || apollo_link(link) || youtube_link(link) || soundcloud_link(link)
+      return unless item
+
+      item.tap do |i|
+        i.assign_attributes(
+          id: SecureRandom.uuid,
+          account_id: account.id
+        )
+      end
     end
 
     private
@@ -32,12 +40,12 @@ class QueueItem
       nil
     end
 
-    def pawoo_link(link, account)
+    def pawoo_link(link)
       status_id = find_status_id(link)
       return unless status_id
 
       cache = find_cache('pawoo-music', status_id)
-      return set_uuid(cache) if cache
+      return cache if cache
 
       video = MediaAttachment.video.joins(:status).find_by(statuses: { id: status_id, visibility: [:public, :unlisted] })
       return unless video&.music_info
@@ -45,7 +53,6 @@ class QueueItem
       video_url = full_asset_url(video.file.url(:original))
 
       item = new(
-        id: SecureRandom.uuid,
         info: "#{video.music_info['artist']} - #{video.music_info['title']}",
         thumbnail_url: nil,
         music_url: nil,
@@ -53,8 +60,7 @@ class QueueItem
         link: link,
         duration: video.music_info['duration'],
         source_type: 'pawoo-music',
-        source_id: status_id,
-        account_id: account.id
+        source_id: status_id
       )
 
       cache_item('pawoo-music', status_id, item)
@@ -65,48 +71,46 @@ class QueueItem
       matched ? matched[:status_id] : nil
     end
 
-    def apollo_link(link, account)
+    def apollo_link(link)
       shop_id = BoothUrl.extract_apollo_item_id(link)
       return unless shop_id
 
       cache = find_cache('apollo', shop_id)
-      return set_uuid(cache) if cache
+      return cache if cache
 
       if instance = from_booth_api(shop_id)
         instance.assign_attributes(
           link: link,
-          source_type: 'apollo',
-          account_id: account.id
+          source_type: 'apollo'
         )
 
         cache_item('apollo', shop_id, instance)
       end
     end
 
-    def booth_link(link, account)
+    def booth_link(link)
       shop_id = BoothUrl.extract_booth_item_id(link)
       return unless shop_id
 
       cache = find_cache('booth', shop_id)
-      return set_uuid(cache) if cache
+      return cache if cache
 
       if instance = from_booth_api(shop_id)
         instance.assign_attributes(
           link: link,
-          source_type: 'booth',
-          account_id: account.id
+          source_type: 'booth'
         )
 
         cache_item('booth', shop_id, instance)
       end
     end
 
-    def youtube_link(link, account)
+    def youtube_link(link)
       video_id = find_youtube_id(link)
       return unless video_id
 
       cache = find_cache('youtube', video_id)
-      return set_uuid(cache) if cache
+      return cache if cache
 
       title = fetch_youtube_title(link)
       return unless title
@@ -114,7 +118,6 @@ class QueueItem
       duration_sec = fetch_youtube_duration(video_id)
 
       item = new(
-        id: SecureRandom.uuid,
         info: title,
         thumbnail_url: nil,
         music_url: nil,
@@ -122,8 +125,7 @@ class QueueItem
         link: link,
         duration: duration_sec,
         source_type: 'youtube',
-        source_id: video_id,
-        account_id: account.id
+        source_id: video_id
       )
       cache_item('youtube', video_id, item)
     end
@@ -172,28 +174,26 @@ class QueueItem
       user_or_shop_name = json.dig('body', 'shop', 'user', 'nickname') || json.dig('body', 'shop', 'name')
 
       new(
-        id: SecureRandom.uuid,
         info: "#{user_or_shop_name} - #{json.dig('body', 'name')}",
         thumbnail_url: json.dig('body', 'primary_image', 'url'),
         music_url: json.dig('body', 'sound', 'long_url'),
         video_url: nil,
         duration: json.dig('body', 'sound', 'duration'),
-        source_id: id,
+        source_id: id
       )
     end
 
-    def soundcloud_link(link, account)
+    def soundcloud_link(link)
       source_link = find_soundcloud_link(link)
       return unless source_link
 
       cache = find_cache('soundcloud', source_link)
-      return set_uuid(cache) if cache
+      return cache if cache
 
       if instance = from_soundcloud_api(link)
         instance.assign_attributes(
           link: link,
           source_type: 'soundcloud',
-          account_id: account.id,
         )
 
         cache_item('soundcloud', instance.source_id, instance)
@@ -219,13 +219,12 @@ class QueueItem
       duration_sec = find_soundcloud_duration(json['html'])
 
       item = new(
-        id: SecureRandom.uuid,
         info: title,
         thumbnail_url: json['thumbnail_url'].gsub('http://', 'https://'),
         music_url: nil,
         video_url: nil,
         duration: duration_sec,
-        source_id: source_id,
+        source_id: source_id
       )
     end
 
@@ -237,11 +236,6 @@ class QueueItem
 
       duration_pattern = %r{full_duration.+?(?<duration>\d+)}
       (response.body.to_s.match(duration_pattern).try(:[], :duration).to_i/1000).ceil
-    end
-
-    def set_uuid(item)
-      item.id = SecureRandom.uuid
-      item
     end
 
     def find_cache(type, source_id)

@@ -213,5 +213,19 @@ RSpec.describe QueueItem do
         it { is_expected.to be_nil }
       end
     end
+
+    context 'given same link' do
+      let(:url) { Rails.application.routes.url_helpers.short_account_status_url(status.account, status) }
+      let(:status) { Fabricate(:status, account: account) }
+      let!(:media_attachment) { Fabricate(:media_attachment, status: status, type: 'video', music_info: music_info) }
+      let(:music_info) { { title: 'title', artist: 'artist', duration: 1 } }
+      let(:another_account) { Fabricate(:account) }
+
+      before do
+        described_class.create_from_link(url, another_account)
+      end
+
+      it { expect(subject.account_id).not_to eq(another_account.id) }
+    end
   end
 end
