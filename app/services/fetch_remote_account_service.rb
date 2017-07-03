@@ -32,7 +32,5 @@ class FetchRemoteAccountService < BaseService
   rescue Nokogiri::XML::XPath::SyntaxError
     Rails.logger.debug 'Invalid XML or missing namespace'
     nil
-  rescue Goldfinger::NotFoundError, Goldfinger::SSLError, Goldfinger::Error
-    nil
   end
 end
