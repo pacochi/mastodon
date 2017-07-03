@@ -5,11 +5,12 @@ import classNames from 'classnames';
 import IconButton from '../../../components/icon_button';
 import api from '../../../api';
 import createStream from '../../../../mastodon/stream';
-import YouTube from 'react-youtube';
 import TipsBalloonContainer from '../../../containers/tips_balloon_container';
 import TweetButton from '../../../components/tweet_button';
-
-// FIXME: Old react style
+import YouTubeArtwork from './youtube_artwork';
+import SoundCloudArtwork from './soundcloud_artwork';
+import VideoArtwork from './video_artwork';
+import AudioArtwork from './audio_artwork';
 
 const PlatformHelp = () => {
   const platforms = [
@@ -61,79 +62,165 @@ const PlatformHelp = () => {
   );
 };
 
+const LoadingArtwork = () => (
+  <div className="queue-item__artwork">
+    <div className='loading' />
+  </div>
+);
+
+class PlaylistController extends React.PureComponent {
+
+  static propTypes = {
+    offsetStartTime: PropTypes.number.isRequired,
+    isTop: PropTypes.bool.isRequired,
+    isActive: PropTypes.bool.isRequired,
+    muted: PropTypes.bool.isRequired,
+    volume: PropTypes.number.isRequired,
+    duration: PropTypes.number,
+    skipLimitTime: PropTypes.number,
+    onSkip: PropTypes.func.isRequired,
+    onToggleMute: PropTypes.func.isRequired,
+    onChangeVolume: PropTypes.func.isRequired,
+  };
+
+  static defaultProps = {
+    duration: 0,
+    skipLimitTime: 0,
+  };
+
+  state = {
+    timeOffset: Math.floor(new Date() / 1000 - this.props.offsetStartTime),
+  };
+  interval = null;
+
+  componentDidMount () {
+    this.interval = setInterval(() => {
+      const { offsetStartTime } = this.props;
+      this.setState({
+        timeOffset: Math.floor(new Date() / 1000 - offsetStartTime),
+      });
+    }, 300);
+  }
+
+  componentWillUnmount () {
+    if (this.interval) {
+      clearInterval(this.interval);
+    }
+  }
+
+  isSkipEnable () {
+    const { isActive, skipLimitTime } = this.props;
+    const { timeOffset } = this.state;
+    return isActive && skipLimitTime && timeOffset > skipLimitTime;
+  }
+
+  handleClickSkip = () => {
+    if(this.isSkipEnable()) {
+      this.props.onSkip();
+    }
+  }
+
+  handleChangeVolume = (e) => {
+    this.props.onChangeVolume(Number(e.target.value));
+  }
+
+  convertTimeFormat(time) {
+    return `${Math.floor(time / 60)}:${String(time % 60).padStart(2, 0)}`;
+  }
+
+  render () {
+    const { isTop, isActive, duration, muted, volume } = this.props;
+    const { timeOffset } = this.state;
+
+    return (
+      <div className='control-bar__controller'>
+        <div className='control-bar__controller-toggle-wrapper'>
+          <div className={`control-bar__controller-toggle is-${muted ? 'pause' : 'playing'}`} onClick={this.props.onToggleMute}>
+            <i className={`fa ${muted ? 'fa-play' : 'fa-volume-up'}`} />
+          </div>
+          <div className='control-bar__volume-slider'>
+            <input className='vertical-slider' type='range' value={volume} min='0' max='1' step='0.01' onChange={this.handleChangeVolume} />
+          </div>
+        </div>
+        {!isTop && <TipsBalloonContainer id={1}>
+          音楽を再生！
+        </TipsBalloonContainer>}
+
+        {isActive && !isTop && <div className='control-bar__controller-skip'>
+          <span className={this.isSkipEnable() ? '' : 'disabled'} onClick={this.handleClickSkip}>SKIP</span>
+        </div>}
+
+        {isActive && <div className='control-bar__controller-info'>
+          <span className='control-bar__controller-now'>{this.convertTimeFormat(Math.min(timeOffset, duration))}</span>
+          <span className='control-bar__controller-separater'>/</span>
+          <span className='control-bar__controller-time'>{this.convertTimeFormat(duration)}</span>
+        </div>}
+      </div>
+    );
+  }
+
+}
+
 class PlayControl extends React.PureComponent {
 
-  constructor (props, context) {
-    super(props, context);
+  static propTypes = {
+    accessToken: PropTypes.string.isRequired,
+    streamingAPIBaseURL: PropTypes.string.isRequired,
+    isTop: PropTypes.bool.isRequired,
+    onError: PropTypes.func.isRequired,
+    onSkip: PropTypes.func.isRequired,
+  };
 
-    this.CONST_DECKS = [
-      {number: 1, type: 'DECK', name: '共有チャンネル1', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {number: 2, type: 'DECK', name: '共有チャンネル2', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {number: 3, type: 'DECK', name: '共有チャンネル3', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {number: 4, type: 'DECK', name: '共有チャンネル4', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {number: 5, type: 'DECK', name: '共有チャンネル5', icon: '/player/pawoo-music-playlist-icon.svg'},
-      {number: 346, type: 'DECK', name: 'Pawoo Music\nチャンネル', icon: '/player/pawoo-music-playlist-icon.svg'},
-    ];
+  deckList = [
+    {number: 1, type: 'DECK', name: '共有チャンネル1', icon: '/player/pawoo-music-playlist-icon.svg'},
+    {number: 2, type: 'DECK', name: '共有チャンネル2', icon: '/player/pawoo-music-playlist-icon.svg'},
+    {number: 3, type: 'DECK', name: '共有チャンネル3', icon: '/player/pawoo-music-playlist-icon.svg'},
+    {number: 4, type: 'DECK', name: '共有チャンネル4', icon: '/player/pawoo-music-playlist-icon.svg'},
+    {number: 5, type: 'DECK', name: '共有チャンネル5', icon: '/player/pawoo-music-playlist-icon.svg'},
+    {number: 346, type: 'DECK', name: 'Pawoo Music\nチャンネル', icon: '/player/pawoo-music-playlist-icon.svg'},
+  ];
 
-    let targetDeck = 1;
-    try { targetDeck = Number(localStorage.getItem('LATEST_DECK')) || 1; } catch (err) {}
-    if (!this.CONST_DECKS.find((deck) => deck.number === targetDeck)) {
-      targetDeck = this.CONST_DECKS[0].number;
-    }
-
-    this.state = {
-      isOpen: false,
-      isPlaying: false,
-      isSp: window.innerWidth < 1024,
-      targetDeck,
-      deck: null,
-      playlist: (new Array(10)).fill(null),
-      player: null,
-      offset_time: 0,
-      offset_start_time: 0,
-      offset_counter: null,
-      isSeekbarActive: false,
-      isLoadingArtwork: true,
-      ytControl: null,
-      scControl: null,
-      youtubeOpts: {},
-    };
-
-    this.scRef = null;
-    this.audioRef = null;
-    this.videoRef = null;
-
-    this.subscription = null;
-
-    this.setSCRef  = this.setSCRef.bind(this);
-    this.setURLRef = this.setURLRef.bind(this);
-    this.setVideoRef = this.setVideoRef.bind(this);
-    this.setAudioRef = this.setAudioRef.bind(this);
-    this.getMockState = this.getMockState.bind(this);
-    this.handleClickSkip = this.handleClickSkip.bind(this);
-    this.handleClickDeck = this.handleClickDeck.bind(this);
-    this.handleClickToggle = this.handleClickToggle.bind(this);
-    this.handleClickOverlay = this.handleClickOverlay.bind(this);
-    this.handleClickDeckTab = this.handleClickDeckTab.bind(this);
-    this.handleSubmitAddForm = this.handleSubmitAddForm.bind(this);
-    this.handleClickItemLink = this.handleClickItemLink.bind(this);
-    this.handleResizeWindow = this.handleResizeWindow.bind(this);
-    this.onReadyYouTube = this.onReadyYouTube.bind(this);
-    this.onChangeYoutubeState = this.onChangeYoutubeState.bind(this);
-
-    this.isDeckInActive = this.isDeckInActive.bind(this);
-  }
+  state = {
+    isOpen: false,
+    isPlaying: false,
+    isSp: window.innerWidth < 1024,
+    targetDeck: this.deckList[0].number,
+    volume: 1,
+    deck: null,
+    playlist: (new Array(10)).fill(null),
+    player: null,
+    timeOffset: 0,
+    offsetStartTime: 0,
+    isSeekbarActive: false,
+    isLoadingArtwork: true,
+    muted: true,
+  };
+  subscription = null;
 
   componentDidMount () {
     window.addEventListener('resize', this.handleResizeWindow);
-
-    if(this.state.isSp) return;
-    this.fetchDeck(this.state.targetDeck);
-    this.setSubscription(this.state.targetDeck);
+    if (!this.state.isSp) {
+      this.initDeck();
+    }
   }
 
   componentWillUnmount () {
     window.removeEventListener('resize', this.handleResizeWindow);
+  }
+
+  initDeck() {
+    const newState = {};
+    try {
+      const targetDeck = Number(localStorage.getItem('LATEST_DECK'));
+      newState.targetDeck = this.deckList.find((deck) => deck.number === targetDeck) ? targetDeck : this.deckList[0].number;
+    } catch (err) {}
+    try {
+      newState.volume = Number(localStorage.getItem('player_volume')) || 1;
+    } catch (err) {}
+    this.setState(newState);
+
+    this.fetchDeck(newState.targetDeck);
+    this.setSubscription(newState.targetDeck);
   }
 
   createPlaylist (deck) {
@@ -156,9 +243,6 @@ class PlayControl extends React.PureComponent {
               deck,
               playlist: this.createPlaylist(deck),
             });
-            if(deck.queues.length === 1) {
-              this.playNextQueueItem(deck, (new Date().getTime() / 1000));
-            }
           }
           break;
         case 'play':
@@ -174,16 +258,12 @@ class PlayControl extends React.PureComponent {
             const deck = Object.assign({}, this.state.deck);
             if(deck.queues.length <= 1) deck.queues = [];
             deck.time_offset = 0;
-            if(this.state.ytControl){
-              this.state.ytControl.destroy();
-            }
 
             this.setState({
               deck,
               playlist: this.createPlaylist(deck),
-              ytControl: null,
-              scControl: null,
               isYoutubeLoadingDone: false,
+              isPlaying: false,
             });
           }
           break;
@@ -192,120 +272,47 @@ class PlayControl extends React.PureComponent {
     });
   }
 
-  playNextQueueItem (deck, offset_start_time) {
+  playNextQueueItem (deck, offsetStartTime) {
     this.setState({
       deck,
       playlist: this.createPlaylist(deck),
       isSeekbarActive: false,
       isLoadingArtwork: true,
-      offset_start_time,
-      offset_time: deck.time_offset,
-      youtubeOpts: (deck.queues.length && deck.queues[0].source_type === 'youtube') ? {
-        playerVars: {
-          autoplay: 1,
-          controls: 0,
-          start: deck.time_offset,
-        },
-      } : {},
+      isPlaying: false,
+      offsetStartTime,
+      timeOffset: deck.time_offset,
       isYoutubeLoadingDone: false,
     });
 
-    // YouTube / Animation用の遅延ローディング
+    // Animation用の遅延ローディング
     setTimeout(()=>{
-
       this.setState({
         isSeekbarActive:true,
         isLoadingArtwork: false,
+        isPlaying: this.isDeckActive(),
       });
-
-      // video / audioタグがレンダリングされた後に時間をシフトするための遅延ロード
-      setTimeout(()=>{
-        if(!deck.queues.length) return;
-        switch (deck.queues[0].source_type) {
-        case 'pawoo-music':
-          if (this.videoRef) {
-            this.videoRef.currentTime = deck.time_offset;
-            this.videoRef.play();
-          }
-          break;
-
-        case 'booth':
-        case 'apollo':
-          if (this.audioRef) {
-            this.audioRef.currentTime = deck.time_offset;
-            this.audioRef.play();
-          }
-          break;
-
-          case 'soundcloud': {
-            const widgetIframe = document.getElementById('sc-widget');
-            this.setState({
-              scControl: SC.Widget(widgetIframe),
-            });
-
-            this.state.scControl.bind(SC.Widget.Events.READY, ()=>{
-              this.state.scControl.bind(SC.Widget.Events.PLAY, ()=>{
-                this.state.scControl.getCurrentSound((currentSound)=>{
-                  // SoundCloudはmilisecondsで、だいたいちょっと遅延するので+2ぐらいしとく
-                  this.state.scControl.setVolume(this.state.isPlaying ? 1 : 0);
-                  this.state.scControl.seekTo( (deck.time_offset+2) * 1000);
-                });
-              });
-            });
-            break;
-          }
-        }
-      }, 400);
     }, 20);
   }
 
   fetchDeck(id) {
-    const newState = {};
-    if(this.state.ytControl){
-      this.state.ytControl.destroy();
-      Object.assign(newState, {
-        ytControl: null,
-        isYoutubeLoadingDone: false,
-      });
-    }
-    if (this.state.scControl) {
-      Object.assign(newState, {
-        scControl: null,
-      });
-    }
-
-    if(Object.keys(newState).length) {
-      this.setState(newState);
-    }
-
-
     return api(this.getMockState).get(`/api/v1/playlists/${id}`)
-      .then((response)=>{
-        if(this.state.offset_counter) clearInterval(this.state.offset_counter);
-        const interval = setInterval(()=>{
-          this.setState({
-            offset_time: parseInt(new Date().getTime() / 1000) - parseInt(this.state.offset_start_time),
-          });
-        }, 300);
-        this.setState({
-          offset_counter: interval,
-        });
+      .then((response) => {
         this.playNextQueueItem(response.data.deck, (new Date().getTime() / 1000) - response.data.deck.time_offset);
       })
-      .catch((error)=>{
+      .catch((error) => {
         this.props.onError(error);
       });
   }
 
-  handleClickDeck () {
+  handleClickDeck = () => {
     this.setState({isOpen: true});
   }
 
-  handleClickOverlay () {
+  handleClickOverlay = () => {
     this.setState({isOpen: false});
   }
 
-  handleClickDeckTab (e) {
+  handleClickDeckTab = (e) => {
     const number = Number(e.currentTarget.getAttribute('data-number'));
     if(number === this.state.targetDeck) return;
     if (this.isLoading()) return;
@@ -316,12 +323,13 @@ class PlayControl extends React.PureComponent {
       targetDeck: number,
       isSeekbarActive: false,
       isLoadingArtwork: true,
+      isPlaying: false,
     });
     this.fetchDeck(number);
     this.setSubscription(number);
   }
 
-  handleSubmitAddForm (e) {
+  handleSubmitAddForm = (e) => {
     e.preventDefault();
     return api(this.getMockState).post(`/api/v1/playlists/${this.state.targetDeck}/deck_queues`, {link: this.urlRef.value})
       .then((response)=>{
@@ -332,111 +340,81 @@ class PlayControl extends React.PureComponent {
       });
   }
 
-  handleClickToggle () {
-    if(this.state.ytControl){
-      if(this.state.isPlaying){
-        this.state.ytControl.mute();
-      }else{
-        this.state.ytControl.unMute();
-      }
-    }
-
-    if(this.state.scControl){
-      this.state.scControl.setVolume(this.state.isPlaying ? 0 : 1);
-    }
-
-    this.setState({isPlaying: (!this.state.isPlaying)});
+  handleClickToggleMute = () => {
+    this.setState({ muted: (!this.state.muted) });
   }
 
-  handleClickSkip () {
-    if(this.isDeckInActive() || !this.isSkipEnable()) return;
-    this.props.onSkip(this.state.targetDeck, this.state.deck.queues[0].id);
+  handleClickSkip = () => {
+    if (this.isDeckActive()) {
+      this.props.onSkip(this.state.targetDeck, this.state.deck.queues[0].id);
+    }
   }
 
-  handleClickItemLink (e) {
+  handleChangeVolume = (volume) => {
+    this.setState({ volume });
+    try { localStorage.setItem('player_volume', volume); } catch (err) {}
+  }
+
+  handleCancelOpenDeck = (e) => {
     // クリック時にDeckが開かないように
     e.stopPropagation();
   }
 
-  handleClickTwitterShare = (e) => {
-    // クリック時にDeckが開かないように
-    e.stopPropagation();
-  }
-
-  handleResizeWindow (e) {
+  handleResizeWindow = (e) => {
     const isSp = window.innerWidth < 1024;
     if (this.state.isSp !== isSp) {
       this.setState({ isSp });
+      if (isSp) {
+        if (this.subscription) {
+          this.subscription.close();
+          this.subscription = null;
+        }
+      } else {
+        this.initDeck();
+      }
+
     }
   }
 
-  getMockState () {
+  getMockState = () => {
     return {
       getIn: () => this.props.accessToken,
     };
   }
 
-  setSCRef (c) {
-    this.scRef = c;
-  }
-
-  setURLRef (c) {
+  setURLRef = (c) => {
     this.urlRef = c;
   }
 
-  setVideoRef (c) {
-    this.videoRef = c;
+  getDeckFirstQueue() {
+    const { deck } = this.state;
+    return deck && deck.queues && deck.queues[0];
   }
 
-  setAudioRef (c) {
-    this.audioRef = c;
-    if(this.audioRef) this.audioRef.volume = 0.8;
-  }
-
-  isDeckInActive () {
-    return !this.state.deck || !("queues" in this.state.deck) || !(this.state.deck.queues.length);
+  isDeckActive () {
+    return Boolean(this.getDeckFirstQueue());
   }
 
   isLoading () {
-    return (this.state.isLoadingArtwork || (!this.isDeckInActive() && this.state.deck.queues[0].source_type === "youtube" && !this.state.isYoutubeLoadingDone));
+    const { isLoadingArtwork, isYoutubeLoadingDone } = this.state;
+    const deckQueue = this.getDeckFirstQueue();
+
+    return isLoadingArtwork || (deckQueue && deckQueue.source_type === 'youtube' && !isYoutubeLoadingDone);
   }
 
-  isSkipEnable () {
-    const skip_limit_time = this.state.deck && this.state.deck.skip_limit_time;
-    return skip_limit_time && this.state.offset_time > skip_limit_time;
-  }
-
-  onReadyYouTube(event) {
-    if(this.state.isPlaying){
-      event.target.unMute();
-    }else{
-      event.target.mute();
-    }
+  handleReadyYoutube = () => {
     this.setState({
-      ytControl: event.target,
+      isYoutubeLoadingDone: true,
     });
   }
 
-  // Youtubeの動画の読み込みが完了し、再生が始まると呼ばれる
-  onChangeYoutubeState(e) {
-    // さらにiframeにpostMessageが送られてくるまで2秒ほど待つ
-    // 2秒待たない間にコンポーネントが削除されると、デベロッパーコンソールが開く
-    setTimeout(() => {
-      if (!this.state.isYoutubeLoadingDone) {
-        this.setState({
-          isYoutubeLoadingDone: true,
-        });
-      }
-    }, 2000);
-  }
-
   renderDeckQueueCaption(text) {
-    const queueItem = this.state.deck && this.state.deck.queues && this.state.deck.queues[0];
+    const queueItem = this.getDeckFirstQueue();
     const shareText = `いまみんなで一緒に${queueItem ? `「${queueItem.info}」` : '音楽'}を聞きながらトーク中♪ ${queueItem ? queueItem.link : ''}`;
     return (
       <div className='deck__queue-caption'>
         <span>{text}</span>
-        <div onClick={this.handleClickTwitterShare} style={{ display: 'inline-block', marginLeft: '3px', verticalAlign: 'bottom' }}>
+        <div onClick={this.handleCancelOpenDeck} style={{ display: 'inline-block', marginLeft: '3px', verticalAlign: 'bottom' }}>
           <TweetButton text={shareText} url='https://music.pawoo.net/' hashtags='PawooMusic' />
         </div>
       </div>
@@ -463,7 +441,7 @@ class PlayControl extends React.PureComponent {
         </div>
         <div className='queue-item__datasource'>
           {queue_item && (
-            <a href={queue_item.link} target="_blank" onClick={this.handleClickItemLink}>
+            <a href={queue_item.link} target="_blank" onClick={this.handleCancelOpenDeck}>
               <img src={`/player/logos/${queue_item.source_type}.${queue_item.source_type === 'apollo' ? 'png' : 'svg'}`} />
             </a>
           )}
@@ -472,84 +450,89 @@ class PlayControl extends React.PureComponent {
     );
   }
 
+  renderArtwork () {
+    const { deck, isLoadingArtwork, isPlaying, timeOffset, muted, volume } = this.state;
+    const deckQueue = this.getDeckFirstQueue();
+
+    if (isLoadingArtwork) {
+      return <LoadingArtwork />;
+    }
+
+    if (!deckQueue || !isPlaying) {
+      return <div className="queue-item__artwork" />;
+    }
+
+    switch (deckQueue.source_type) {
+    case 'youtube':
+      return <YouTubeArtwork muted={muted} volume={volume} timeOffset={timeOffset} videoId={deckQueue.source_id} onReadyYoutube={this.handleReadyYoutube}/>;
+    case 'soundcloud':
+      return <SoundCloudArtwork muted={muted} volume={volume} timeOffset={timeOffset} sourceId={deckQueue.source_id} />;
+    case 'pawoo-music':
+      return <VideoArtwork muted={muted} volume={volume} timeOffset={timeOffset} videoUrl={deckQueue.video_url} />;
+    case 'booth':
+    case 'apollo':
+      return <AudioArtwork muted={muted} volume={volume} timeOffset={timeOffset} musicUrl={deckQueue.music_url} thumbnailUrl={deckQueue.thumbnail_url} />;
+    default:
+      return <div className="queue-item__artwork" />;
+    }
+  }
+
   render () {
     if(this.state.isSp) return null;
     const { isTop } = this.props;
-    const { playlist, targetDeck } = this.state;
+    const { playlist, targetDeck, deck, offsetStartTime, muted, volume, isSeekbarActive, isOpen, timeOffset } = this.state;
 
-    const playerClass = `player-control${this.state.isOpen ? ' is-open':''}`;
-    const iconClass = `fa ${this.state.isPlaying?'fa-volume-up':'fa-play'}`;
-    const toggleClass = `control-bar__controller-toggle is-${this.state.isPlaying?'playing':'pause'}`;
-    const seekbarClass = `player-seekbar ${this.state.isSeekbarActive?'active':''}`;
+    const deckQueue = this.getDeckFirstQueue();
+    const sourceType = deckQueue && deckQueue.source_type;
+    const duration = deckQueue && deckQueue.duration;
+    const skipLimitTime = deck && deck.skip_limit_time;
 
-    let playerSeekBarStyle = {};
-    let nowPlayingArtwork = {};
-    let ytplayerStyle = {};
-    const index = this.CONST_DECKS.findIndex((deck) => deck.number === targetDeck);
+    const index = this.deckList.findIndex((deck) => deck.number === targetDeck);
+    const isApollo = this.deckList[index].type === 'APOLLO';
     const deckSelectorStyle = {
       transform: `translate(0, -${(this.state.isOpen) ? 0 : index * 56}px)`,
     };
+    const playerClass = classNames('player-control', {
+      'is-open': isOpen,
+      'is-apollo': isApollo,
+    });
 
-    if(this.state.deck && ("queues" in this.state.deck) && this.state.deck.queues.length) {
-      nowPlayingArtwork = {
-        backgroundImage: `url(${this.state.deck.queues[0].thumbnail_url})`,
-      };
-      ytplayerStyle = {
-        display: this.state.deck.queues[0].source_type === 'youtube' ? 'block' : 'none',
-      };
-
-      if(this.state.isSeekbarActive){
+    let playerSeekBarStyle = {};
+    if (deckQueue) {
+      if (isSeekbarActive) {
         playerSeekBarStyle = {
-          transition: `width ${this.state.isSeekbarActive ? (this.state.deck.queues[0].duration-this.state.offset_time) : '0'}s linear`,
+          transition: `width ${isSeekbarActive ? (deckQueue.duration - timeOffset) : '0'}s linear`,
         };
-      }else{
+      } else {
         playerSeekBarStyle = {
           transition: `width 0s linear`,
-          width: `${this.state.deck.queues[0].duration ? (this.state.offset_time / this.state.deck.queues[0].duration) * 100 : 0}%`,
+          width: `${deckQueue.duration ? (timeOffset / deckQueue.duration) * 100 : 0}%`,
         };
       }
     }
 
     return (
-      <div className={playerClass + (this.CONST_DECKS.find(d => (d.number === targetDeck && d.type === 'APOLLO')) ? ' is-apollo':'')}>
+      <div className={playerClass}>
         <div className='player-control__control-bar'>
-          <div className='control-bar__controller'>
-            <div className={toggleClass} onClick={this.handleClickToggle}>
-              <i className={iconClass} />
-            </div>
-            {!isTop && <TipsBalloonContainer id={1}>
-              音楽を再生！
-            </TipsBalloonContainer>}
-
-            {(()=>{
-              if(isTop) {
-                return null;
-              }
-              return (
-                <div className='control-bar__controller-skip'>
-                  <span className={this.isSkipEnable() ? '' : 'disabled'} onClick={this.handleClickSkip}>SKIP</span>
-                </div>
-              );
-            })()}
-
-            {(()=>{
-              if(this.isDeckInActive() ) return null;
-              return (
-                <div className='control-bar__controller-info'>
-                  <span className='control-bar__controller-now'>{parseInt(Math.min(this.state.offset_time, this.state.deck.queues[0].duration)/60)}:{("0"+Math.min(this.state.offset_time, this.state.deck.queues[0].duration)%60).slice(-2)}</span>
-                  <span className='control-bar__controller-separater'>/</span>
-                  <span className='control-bar__controller-time'>{parseInt(this.state.deck.queues[0].duration/60)}:{("0"+this.state.deck.queues[0].duration%60).slice(-2)}</span>
-                </div>
-              );
-            })()}
-          </div>
+          <PlaylistController
+            offsetStartTime={offsetStartTime}
+            isTop={isTop}
+            isActive={this.isDeckActive()}
+            muted={muted}
+            duration={duration}
+            volume={volume}
+            skipLimitTime={skipLimitTime}
+            onSkip={this.handleClickSkip}
+            onToggleMute={this.handleClickToggleMute}
+            onChangeVolume={this.handleChangeVolume}
+          />
           <div className='control-bar__deck' onClick={this.handleClickDeck}>
             <ul className='control-bar__deck-selector'>
-              {this.CONST_DECKS.map((deck) => (
+              {this.deckList.map((deck) => (
                 <li key={deck.number}
                   className={classNames('deck-selector__selector-body', {
                     active: deck.number === targetDeck,
-                    'is-apollo': deck.type  === 'APOLLO',
+                    'is-apollo': deck.type === 'APOLLO',
                     disabled: this.isLoading(),
                   })}
                   data-number={deck.number}
@@ -561,58 +544,9 @@ class PlayControl extends React.PureComponent {
                 </li>
               ))}
             </ul>
-            <div className={'deck_queue-wrapper'+(this.CONST_DECKS.find(d => (d.number === targetDeck && d.type === 'APOLLO')) ? ' is-apollo':'')}>
+            <div className={classNames('deck_queue-wrapper', { 'is-apollo': isApollo })}>
               <div className="deck_queue-column">
-                <div className="queue-item__artwork" style={nowPlayingArtwork}>
-                  {(()=>{
-
-                    if(this.state.isLoadingArtwork){
-                      return (
-                        <div className='loading' />
-                      );
-                    }
-
-                    if(this.isDeckInActive() ) return null;
-
-                    if(this.state.deck.queues[0].source_type === 'youtube'){
-                      return (
-                        <YouTube
-                          videoId={this.state.deck.queues[0].source_id}
-                          opts={this.state.youtubeOpts}
-                          onReady={this.onReadyYouTube}
-                          onStateChange={this.onChangeYoutubeState}
-                        />
-                      );
-                    }
-                    if(this.state.deck.queues[0].source_type === 'soundcloud'){
-                      return (
-                        <iframe
-                          ref={this.setSCRef}
-                          id="sc-widget"
-                          width="250"
-                          height="250"
-                          scrolling="no"
-                          frameBorder="no"
-                          src={
-                            `https://w.soundcloud.com/player/?url=https://api.soundcloud.com/tracks/${this.state.deck.queues[0].source_id}&auto_play=true&liking=false&show_playcount=false&show_bpm=false&sharing=false&buying=false&show_artwork=true&show_playcount=false&show_bpm=false&show_comments=false&visual=true`
-                          }
-                        />
-                      );
-                    }
-
-                    if(this.state.deck.queues[0].video_url){
-                      return (
-                        <video ref={this.setVideoRef} style={nowPlayingArtwork} muted={!this.state.isPlaying}>
-                          <source src={this.state.deck.queues[0].video_url}/>
-                        </video>
-                      );
-                    }else{
-                      return (
-                        <audio ref={this.setAudioRef} src={this.state.deck.queues[0].music_url} muted={!this.state.isPlaying} />
-                      );
-                    }
-                  })()}
-                </div>
+                {this.renderArtwork()}
                 {(()=>{
                   if(!this.state.deck || !this.state.deck.max_queue_size || !this.state.deck.max_add_count || !this.state.deck.max_skip_count || !this.state.deck.skip_limit_time) return null;
                   if(!this.state.isOpen) return null;
@@ -657,20 +591,12 @@ class PlayControl extends React.PureComponent {
             チャンネルの切り替え
           </TipsBalloonContainer>}
         </div>
-        <div className={seekbarClass} style={playerSeekBarStyle} />
+        <div className={classNames('player-seekbar', { active: isSeekbarActive })} style={playerSeekBarStyle} />
         <div className='player-control__overlay' onClick={this.handleClickOverlay} />
       </div>
     );
   }
 
 }
-
-PlayControl.propTypes = {
-  accessToken: PropTypes.string.isRequired,
-  streamingAPIBaseURL: PropTypes.string.isRequired,
-  isTop: PropTypes.bool.isRequired,
-  onError: PropTypes.func.isRequired,
-  onSkip: PropTypes.func.isRequired,
-};
 
 export default PlayControl;
