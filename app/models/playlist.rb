@@ -2,7 +2,7 @@
 
 class Playlist
   MAX_QUEUE_SIZE = 10
-  MAX_ADD_COUNT = 5
+  MAX_ADD_COUNT = 10
   MAX_SKIP_COUNT = 2
   SKIP_LIMT_TIME = 90
   attr_accessor :deck
