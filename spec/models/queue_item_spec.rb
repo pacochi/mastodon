@@ -220,12 +220,10 @@ RSpec.describe QueueItem do
       let!(:media_attachment) { Fabricate(:media_attachment, status: status, type: 'video', music_info: music_info) }
       let(:music_info) { { title: 'title', artist: 'artist', duration: 1 } }
       let(:another_account) { Fabricate(:account) }
+      let(:another_queue) { described_class.create_from_link(url, another_account) }
 
-      before do
-        described_class.create_from_link(url, another_account)
-      end
-
-      it { expect(subject.account_id).not_to eq(another_account.id) }
+      it { expect(subject.id).not_to eq(another_queue.id) }
+      it { expect(subject.account_id).not_to eq(another_queue.account_id) }
     end
   end
 end
