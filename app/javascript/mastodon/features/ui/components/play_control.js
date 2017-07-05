@@ -125,7 +125,7 @@ class PlaylistController extends React.PureComponent {
   }
 
   convertTimeFormat(time) {
-    return `${Math.floor(time / 60)}:${String(time % 60).padStart(2, 0)}`;
+    return `${Math.floor(time / 60)}:${('0' + (time % 60)).slice(-2)}`;
   }
 
   render () {
