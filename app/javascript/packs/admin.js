@@ -1,3 +1,5 @@
+import { delegate } from 'rails-ujs';
+
 document.body.addEventListener('ajax:success', (event) => {
   const [data, status, xhr] = event.detail;
   const { target } = event;
@@ -10,24 +12,29 @@ document.body.addEventListener('ajax:success', (event) => {
   }
 });
 
-const checkAll = document.querySelector('#batch_checkbox_all');
-const checkboxes = [].slice.call(document.querySelectorAll('.batch-checkbox input[type="checkbox"]'));
+const batchCheckboxClassName = '.batch-checkbox input[type="checkbox"]';
 
-function changeCheckAll() {
-  if (checkAll) {
-    checkAll.checked = checkboxes.every((checkbox) => checkbox.checked);
-  }
-}
-
-if (checkAll) {
-  checkAll.addEventListener('change', () => {
-    for (const checkbox of checkboxes) {
-      checkbox.checked = checkAll.checked;
-    }
+delegate(document, '#batch_checkbox_all', 'change', ({ target }) => {
+  [].forEach.call(document.querySelectorAll(batchCheckboxClassName), (content) => {
+    content.checked = target.checked;
   });
-  if (checkboxes.length) {
-    for (const checkbox of checkboxes) {
-      checkbox.addEventListener('change', changeCheckAll);
-    }
+});
+
+delegate(document, batchCheckboxClassName, 'change', () => {
+  const checkAllElement = document.querySelector('#batch_checkbox_all');
+  if (checkAllElement) {
+    checkAllElement.checked = [].every.call(document.querySelectorAll(batchCheckboxClassName), (content) => content.checked);
   }
-}
+});
+
+delegate(document, '.media-spoiler-show-button', 'click', () => {
+  [].forEach.call(document.querySelectorAll('.activity-stream .media-spoiler-wrapper'), (content) => {
+    content.classList.add('media-spoiler-wrapper__visible');
+  });
+});
+
+delegate(document, '.media-spoiler-hide-button', 'click', () => {
+  [].forEach.call(document.querySelectorAll('.activity-stream .media-spoiler-wrapper'), (content) => {
+    content.classList.remove('media-spoiler-wrapper__visible');
+  });
+});

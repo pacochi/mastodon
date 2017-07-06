@@ -25,10 +25,13 @@
           = f.select :action, Form::StatusManager::ACTION_TYPE.map{|action| [t("admin.statuses.batch.#{action}"), action]}
           = f.submit t('admin.statuses.execute'), data: { confirm: t('admin.reports.are_you_sure') }
       .filter-subset
-        %strong= t('admin.statuses.media')
+        %strong= t('admin.statuses.media.title')
         %ul
           %li= link_to t('admin.statuses.no_media'), admin_account_statuses_path(@account.id, current_params.merge(media: nil)), class: !params[:media] && 'selected'
           %li= link_to t('admin.statuses.with_media'), admin_account_statuses_path(@account.id, current_params.merge(media: true)), class: params[:media] && 'selected'
+      .filter-subset
+        .media-spoiler-show-button.button= t('admin.statuses.media.show')
+        .media-spoiler-hide-button.button= t('admin.statuses.media.hide')
     - @statuses.each do |status|
       .account-status{ data: { id: status.id } }
         .batch-checkbox

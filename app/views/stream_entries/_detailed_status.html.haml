@@ -17,13 +17,11 @@
   - unless status.media_attachments.empty?
     - if status.media_attachments.first.video?
       .video-player
-        - if status.sensitive?
-          = render partial: 'stream_entries/content_spoiler'
+        = render partial: 'stream_entries/content_spoiler', locals: { sensitive: status.sensitive? }
         %video.u-video{ src: status.media_attachments.first.file.url(:original), loop: true }
     - else
       .detailed-status__attachments
-        - if status.sensitive?
-          = render partial: 'stream_entries/content_spoiler'
+        = render partial: 'stream_entries/content_spoiler', locals: { sensitive: status.sensitive? }
         .status__attachments__inner
           - status.media_attachments.each do |media|
             = render partial: 'stream_entries/media', locals: { media: media, expand_media: true }
@@ -31,8 +29,7 @@
   - pixiv_cards = status.pixiv_cards.select(&:image_url?)
   - unless pixiv_cards.empty?
     .detailed-status__attachments
-      - if status.sensitive?
-        = render 'stream_entries/content_spoiler'
+      = render 'stream_entries/content_spoiler', locals: { sensitive: status.sensitive? }
       .status__attachments__inner
         - pixiv_cards.each do |pixiv_card|
           .media-item
