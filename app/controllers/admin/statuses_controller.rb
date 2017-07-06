@@ -19,11 +19,11 @@ module Admin
       end
       @statuses = @statuses.preload(:media_attachments, :mentions, :pixiv_cards).page(params[:page]).per(PAR_PAGE)
 
-      @form = Form::StatusManager.new
+      @form = Form::StatusBatch.new
     end
 
     def create
-      @form = Form::StatusManager.new(form_status_manager_params)
+      @form = Form::StatusBatch.new(form_status_batch_params)
       unless @form.save
         flash[:alert] = t('admin.statuses.failed_to_execute')
       end
@@ -47,8 +47,8 @@ module Admin
       params.require(:status).permit(:sensitive)
     end
 
-    def form_status_manager_params
-      params.require(:form_status_manager).permit(:action, status_ids: [])
+    def form_status_batch_params
+      params.require(:form_status_batch).permit(:action, status_ids: [])
     end
 
     def set_status

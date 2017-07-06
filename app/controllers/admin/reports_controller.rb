@@ -9,7 +9,7 @@ module Admin
     end
 
     def show
-      @form = Form::StatusManager.new
+      @form = Form::StatusBatch.new
     end
 
     def update

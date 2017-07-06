@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Form::StatusManager
+class Form::StatusBatch
   include ActiveModel::Model
 
   attr_accessor :status_ids, :action

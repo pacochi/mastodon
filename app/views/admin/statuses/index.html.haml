@@ -22,7 +22,7 @@
         .batch-form-box
           .batch-checkbox-all
             = check_box_tag :batch_checkbox_all, nil, false
-          = f.select :action, Form::StatusManager::ACTION_TYPE.map{|action| [t("admin.statuses.batch.#{action}"), action]}
+          = f.select :action, Form::StatusBatch::ACTION_TYPE.map{|action| [t("admin.statuses.batch.#{action}"), action]}
           = f.submit t('admin.statuses.execute'), data: { confirm: t('admin.reports.are_you_sure') }
       .filter-subset
         %strong= t('admin.statuses.media.title')
