@@ -1,15 +1,15 @@
 import { delegate } from 'rails-ujs';
 
-document.body.addEventListener('ajax:success', (event) => {
+function handleDeleteStatus() {
   const [data, status, xhr] = event.detail;
-  const { target } = event;
-
-  if (target.className.split(' ').includes('trash-button')) {
-    const element = document.querySelector(`[data-id="${data.id}"]`);
-    if (element) {
-      element.parentNode.removeChild(element);
-    }
+  const element = document.querySelector(`[data-id="${data.id}"]`);
+  if (element) {
+    element.parentNode.removeChild(element);
   }
+}
+
+[].forEach.call(document.querySelectorAll('.trash-button'), (content) => {
+  content.addEventListener('ajax:success', handleDeleteStatus);
 });
 
 const batchCheckboxClassName = '.batch-checkbox input[type="checkbox"]';
