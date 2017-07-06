@@ -7,18 +7,31 @@ class Form::StatusBatch
 
   ACTION_TYPE = %w(nsfw_on nsfw_off delete).freeze
 
-  def save
-    if %w(nsfw_on nsfw_off).include?(action)
-      statuses = Status.where(id: MediaAttachment.where(status_id: status_ids).select(:status_id).reorder(nil))
-      sensitive = action == 'nsfw_on'
-      statuses.update_all(sensitive: sensitive)
-    elsif action == 'delete'
-      Status.where(id: status_ids).find_each do |status|
-        RemovalWorker.perform_async(status.id)
+  def change_sensitive(sensitive)
+    media_attached_status_ids = MediaAttachment.where(status_id: status_ids).pluck(:status_id)
+    ApplicationRecord.transaction do
+      Status.where(id: media_attached_status_ids).find_each do |status|
+        status.update!(sensitive: sensitive)
       end
-      true
     end
+    true
   rescue ActiveRecord::RecordInvalid
     false
+  end
+
+  def delete_statuses
+    Status.where(id: status_ids).find_each do |status|
+      RemovalWorker.perform_async(status.id)
+    end
+    true
+  end
+
+  def save
+    case action
+    when 'nsfw_on', 'nsfw_off'
+      change_sensitive(action == 'nsfw_on')
+    when 'delete'
+      delete_statuses
+    end
   end
 end
