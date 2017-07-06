@@ -57,7 +57,7 @@
     %tr
       %th= t('admin.accounts.media_attachments')
       %td
-        = link_to @account.media_attachments.count, admin_account_media_path(@account.id)
+        = link_to @account.media_attachments.count, admin_account_statuses_path(@account.id, { media: true })
         = surround '(', ')' do
           = number_to_human_size @account.media_attachments.sum('file_file_size')
     %tr

@@ -5,7 +5,15 @@ module Admin
     include Authorization
 
     before_action :set_report
-    before_action :set_status
+    before_action :set_status, only: [:update, :destroy]
+
+    def create
+      @form = Form::StatusManager.new(form_status_manager_params)
+      unless @form.save
+        flash[:alert] = t('admin.statuses.failed_to_execute')
+      end
+      redirect_to admin_report_path(@report)
+    end
 
     def update
       @status.update(status_params)
@@ -22,6 +30,10 @@ module Admin
 
     def status_params
       params.require(:status).permit(:sensitive)
+    end
+
+    def form_status_manager_params
+      params.require(:form_status_manager).permit(:action, status_ids: [])
     end
 
     def set_report

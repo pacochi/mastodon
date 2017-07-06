@@ -4,7 +4,7 @@ module Admin
   class StatusesController < BaseController
     include Authorization
 
-    helper_method :target_path
+    helper_method :current_params
 
     before_action :set_account
     before_action :set_status, only: [:update, :destroy]
@@ -12,12 +12,27 @@ module Admin
     PAR_PAGE = 20
 
     def index
-      @statuses = target_statuses.preload(:media_attachments, :mentions, :pixiv_cards).page(params[:page]).per(PAR_PAGE)
+      @statuses = @account.statuses
+      if params[:media]
+        account_media_status_ids = @account.media_attachments.attached.reorder(nil).select(:status_id).distinct
+        @statuses.merge!(Status.where(id: account_media_status_ids))
+      end
+      @statuses = @statuses.preload(:media_attachments, :mentions, :pixiv_cards).page(params[:page]).per(PAR_PAGE)
+
+      @form = Form::StatusManager.new
+    end
+
+    def create
+      @form = Form::StatusManager.new(form_status_manager_params)
+      unless @form.save
+        flash[:alert] = t('admin.statuses.failed_to_execute')
+      end
+      redirect_to admin_account_statuses_path(@account.id, current_params)
     end
 
     def update
       @status.update(status_params)
-      redirect_to redirect_path
+      redirect_to admin_account_statuses_path(@account.id, current_params)
     end
 
     def destroy
@@ -32,6 +47,10 @@ module Admin
       params.require(:status).permit(:sensitive)
     end
 
+    def form_status_manager_params
+      params.require(:form_status_manager).permit(:action, status_ids: [])
+    end
+
     def set_status
       @status = @account.statuses.find(params[:id])
     end
@@ -40,25 +59,13 @@ module Admin
       @account = Account.find(params[:account_id])
     end
 
-    def target_statuses
-      @account.statuses
+    def current_params
+      page = (params[:page] || 1).to_i
+      {
+        media: params[:media],
+        page: page > 1 && page,
+      }.select { |_, value| value.present? }
     end
 
-    def current_page_params
-      page = (target_statuses.where(Status.arel_table[:id].gt(@status.id)).size.to_f / PAR_PAGE).ceil
-      if page > 1
-        { page: page }
-      else
-        {}
-      end
-    end
-
-    def redirect_path
-      admin_account_statuses_path(@account.id, current_page_params)
-    end
-
-    def target_path(*args)
-      admin_account_status_path(*args)
-    end
   end
 end
