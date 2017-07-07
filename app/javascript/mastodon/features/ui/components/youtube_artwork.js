@@ -15,21 +15,21 @@ class YouTubeArtwork extends React.PureComponent {
   ytControl = null;
   isYoutubeLoadingDone = false;
 
-  componentDidUpdate (props) {
+  componentDidUpdate (prevProps) {
     const { muted, volume } = this.props;
 
-    if (props.muted !== muted) {
+    if (prevProps.muted !== muted) {
       this.changeMute();
     }
 
-    if (props.volume !== volume) {
+    if (prevProps.volume !== volume) {
       this.setVolume(volume);
     }
   }
 
   setVolume (volume) {
     if (this.ytControl) {
-      this.ytControl.setVolume(Math.floor(volume * 100));
+      this.ytControl.setVolume(volume);
     }
   }
 

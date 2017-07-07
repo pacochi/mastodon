@@ -139,7 +139,7 @@ class PlaylistController extends React.PureComponent {
             <i className={`fa ${muted ? 'fa-play' : 'fa-volume-up'}`} />
           </div>
           <div className='control-bar__volume-slider'>
-            <input className='vertical-slider' type='range' value={volume} min='0' max='1' step='0.01' onChange={this.handleChangeVolume} />
+            <input className='vertical-slider' type='range' value={volume} min='0' max='100' step='1' onChange={this.handleChangeVolume} />
           </div>
         </div>
         {!isTop && <TipsBalloonContainer id={1}>

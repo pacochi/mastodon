@@ -15,20 +15,24 @@ class VideoArtwork extends React.PureComponent {
   componentDidMount () {
     const { volume, timeOffset } = this.props;
     this.videoRef.currentTime = timeOffset;
-    this.videoRef.volume = volume;
+    this.setVolume(volume);
     this.videoRef.play();
   }
 
-  componentDidUpdate (props) {
+  componentDidUpdate (prevProps) {
     const { volume } = this.props;
 
-    if (props.volume !== volume) {
-      this.videoRef.volume = volume;
+    if (prevProps.volume !== volume) {
+      this.setVolume(volume);
     }
   }
 
   setVideoRef = (c) => {
     this.videoRef = c;
+  }
+
+  setVolume (volume) {
+    this.videoRef.volume = volume / 100;
   }
 
   render () {
