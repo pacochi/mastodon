@@ -16,20 +16,24 @@ class AudioArtwork extends React.PureComponent {
   componentDidMount () {
     const { volume, timeOffset } = this.props;
     this.audioRef.currentTime = timeOffset;
-    this.audioRef.volume = volume;
+    this.setVolume(volume);
     this.audioRef.play();
   }
 
-  componentDidUpdate (props) {
+  componentDidUpdate (prevProps) {
     const { volume } = this.props;
 
-    if (props.volume !== volume) {
-      this.audioRef.volume = volume;
+    if (prevProps.volume !== volume) {
+      this.setVolume(volume);
     }
   }
 
   setAudioRef = (c) => {
     this.audioRef = c;
+  }
+
+  setVolume (volume) {
+    this.audioRef.volume = volume / 100;
   }
 
   render () {

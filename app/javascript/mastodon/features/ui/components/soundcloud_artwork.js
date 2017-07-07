@@ -28,10 +28,10 @@ class SoundCloudArtwork extends React.PureComponent {
     });
   }
 
-  componentDidUpdate (props) {
+  componentDidUpdate (prevProps) {
     const { muted, volume } = this.props;
 
-    if (props.muted !== muted || props.volume !== volume) {
+    if (prevProps.muted !== muted || prevProps.volume !== volume) {
       this.setMuteOrVolume();
     }
   }
