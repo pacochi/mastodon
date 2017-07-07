@@ -1,6 +1,6 @@
 import { delegate } from 'rails-ujs';
 
-function handleDeleteStatus(event) {
+function handleDeleteStatus() {
   const [data, status, xhr] = event.detail;
   const element = document.querySelector(`[data-id="${data.id}"]`);
   if (element) {
