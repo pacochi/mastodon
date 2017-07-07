@@ -7,6 +7,17 @@ class Form::StatusBatch
 
   ACTION_TYPE = %w(nsfw_on nsfw_off delete).freeze
 
+  def save
+    case action
+    when 'nsfw_on', 'nsfw_off'
+      change_sensitive(action == 'nsfw_on')
+    when 'delete'
+      delete_statuses
+    end
+  end
+
+  private
+
   def change_sensitive(sensitive)
     media_attached_status_ids = MediaAttachment.where(status_id: status_ids).pluck(:status_id)
     ApplicationRecord.transaction do
@@ -24,14 +35,5 @@ class Form::StatusBatch
       RemovalWorker.perform_async(status.id)
     end
     true
-  end
-
-  def save
-    case action
-    when 'nsfw_on', 'nsfw_off'
-      change_sensitive(action == 'nsfw_on')
-    when 'delete'
-      delete_statuses
-    end
   end
 end
