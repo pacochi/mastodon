@@ -78,12 +78,8 @@ function main() {
     }
   });
 
-  delegate(document, '.activity-stream .media-spoiler-wrapper .media-spoiler', 'click', function() {
-    this.parentNode.classList.add('media-spoiler-wrapper__visible');
-  });
-
-  delegate(document, '.activity-stream .media-spoiler-wrapper .spoiler-button', 'click', function() {
-    this.parentNode.classList.remove('media-spoiler-wrapper__visible');
+  delegate(document, '.media-spoiler', 'click', ({ target }) => {
+    target.style.display = 'none';
   });
 
   delegate(document, '.webapp-btn', 'click', ({ target, button }) => {

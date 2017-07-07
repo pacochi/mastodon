@@ -53,11 +53,11 @@
       %td= @account.followers_count
     %tr
       %th= t('admin.accounts.statuses')
-      %td= link_to @account.statuses_count, admin_account_statuses_path(@account.id)
+      %td= @account.statuses_count
     %tr
       %th= t('admin.accounts.media_attachments')
       %td
-        = link_to @account.media_attachments.count, admin_account_statuses_path(@account.id, { media: true })
+        = @account.media_attachments.count
         = surround '(', ')' do
           = number_to_human_size @account.media_attachments.sum('file_file_size')
     %tr
@@ -101,3 +101,5 @@
     = link_to t('admin.accounts.undo_suspension'), admin_account_suspension_path(@account.id), method: :delete, class: 'button'
   - else
     = link_to t('admin.accounts.perform_full_suspension'), admin_account_suspension_path(@account.id), method: :post, data: { confirm: t('admin.accounts.are_you_sure') }, class: 'button'
+
+  = link_to t('admin.accounts.show_statuses'), admin_account_statuses_path(@account.id), class: 'button'

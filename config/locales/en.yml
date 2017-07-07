@@ -100,6 +100,7 @@ en:
         created_reports: Reports created by this account
         report: report
         targeted_reports: Reports made about this account
+      show_statuses: Show statuses
       silence: Silence
       statuses: Statuses
       subscribe: Subscribe
@@ -193,21 +194,6 @@ en:
         title: Extended site description
       site_title: Site title
       title: Site Settings
-    statuses:
-      back_to_account: Back to account page
-      batch:
-        delete: Delete
-        nsfw_off: NSFW OFF
-        nsfw_on: NSFW ON
-      batch_action: Batch processing
-      execute: Execute
-      failed_to_execute: Failed to execute
-      media:
-        hide: Hide media
-        show: Show media
-        title: Media
-      no_media: No media
-      with_media: With media
     subscriptions:
       callback_url: Callback URL
       confirmed: Confirmed
