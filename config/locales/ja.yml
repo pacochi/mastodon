@@ -207,8 +207,8 @@ ja:
         hide: メディアを隠す
         show: メディアを表示
         title: メディア
-      no_media: メディアあり
-      with_media: メディアなし
+      no_media: メディアなし
+      with_media: メディアあり
       title: トゥート一覧
     suggestion:
       title: 運営タグ
