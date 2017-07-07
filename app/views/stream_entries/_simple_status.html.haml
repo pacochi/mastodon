@@ -22,7 +22,8 @@
 
   - unless status.media_attachments.empty?
     .status__attachments
-      = render partial: 'stream_entries/content_spoiler', locals: { sensitive: status.sensitive? }
+      - if status.sensitive?
+        = render partial: 'stream_entries/content_spoiler'
       - if status.media_attachments.first.video?
         .status__attachments__inner
           .video-item
@@ -37,7 +38,8 @@
   - pixiv_cards = status.pixiv_cards.select(&:image_url?)
   - if pixiv_cards.present?
     .status__attachments
-      = render partial: 'stream_entries/content_spoiler', locals: { sensitive: status.sensitive? }
+      - if status.sensitive?
+        = render partial: 'stream_entries/content_spoiler'
       - klass = 'expand_media' if expand_media
 
       - if pixiv_cards.size > 1 && pixiv_cards.size.odd?
