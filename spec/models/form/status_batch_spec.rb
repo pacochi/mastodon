@@ -5,18 +5,18 @@ describe Form::StatusBatch do
   let(:status) { Fabricate(:status) }
 
   describe 'with nsfw action' do
-    let(:status_with_shown_media) { Fabricate(:status, sensitive: false) }
-    let(:status_with_hidden_media) { Fabricate(:status, sensitive: true) }
-    let!(:shown_media_attachment) { Fabricate(:media_attachment, status: status_with_shown_media) }
-    let!(:hidden_media_attachment) { Fabricate(:media_attachment, status: status_with_hidden_media) }
-    let(:status_ids) { [status.id, status_with_shown_media.id, status_with_hidden_media.id] }
+    let(:status_ids) { [status.id, nonsensitive_status.id, sensitive_status.id] }
+    let(:nonsensitive_status) { Fabricate(:status, sensitive: false) }
+    let(:sensitive_status) { Fabricate(:status, sensitive: true) }
+    let!(:shown_media_attachment) { Fabricate(:media_attachment, status: nonsensitive_status) }
+    let!(:hidden_media_attachment) { Fabricate(:media_attachment, status: sensitive_status) }
 
     context 'nsfw_on' do
       let(:action) { 'nsfw_on' }
 
       it { expect(form.save).to be true }
-      it { expect { form.save }.to change { Status.find(status_with_shown_media.id).sensitive }.from(false).to(true) }
-      it { expect { form.save }.not_to change { Status.find(status_with_hidden_media.id).sensitive } }
+      it { expect { form.save }.to change { Status.find(nonsensitive_status.id).sensitive }.from(false).to(true) }
+      it { expect { form.save }.not_to change { Status.find(sensitive_status.id).sensitive } }
       it { expect { form.save }.not_to change { Status.find(status.id).sensitive } }
     end
 
@@ -24,16 +24,16 @@ describe Form::StatusBatch do
       let(:action) { 'nsfw_off' }
 
       it { expect(form.save).to be true }
-      it { expect { form.save }.to change { Status.find(status_with_hidden_media.id).sensitive }.from(true).to(false) }
-      it { expect { form.save }.not_to change { Status.find(status_with_shown_media.id).sensitive } }
+      it { expect { form.save }.to change { Status.find(sensitive_status.id).sensitive }.from(true).to(false) }
+      it { expect { form.save }.not_to change { Status.find(nonsensitive_status.id).sensitive } }
       it { expect { form.save }.not_to change { Status.find(status.id).sensitive } }
     end
   end
 
   describe 'with delete action' do
-    let!(:another_status) { Fabricate(:status) }
     let(:status_ids) { [status.id] }
     let(:action) { 'delete' }
+    let!(:another_status) { Fabricate(:status) }
 
     before do
       allow(RemovalWorker).to receive(:perform_async)
