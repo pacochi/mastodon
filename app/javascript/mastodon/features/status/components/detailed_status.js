@@ -13,7 +13,7 @@ import { FormattedDate, FormattedNumber } from 'react-intl';
 import CardContainer from '../containers/card_container';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
-class DetailedStatus extends ImmutablePureComponent {
+export default class DetailedStatus extends ImmutablePureComponent {
 
   static contextTypes = {
     router: PropTypes.object,
@@ -105,5 +105,3 @@ class DetailedStatus extends ImmutablePureComponent {
   }
 
 }
-
-export default DetailedStatus;

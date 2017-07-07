@@ -10,6 +10,7 @@ ja:
         name: 名前
   activerecord:
     attributes:
+<<<<<<< HEAD
       oauth_authentication:
         provider: プロバイダー
         uid: ユーザーID
@@ -17,6 +18,10 @@ ja:
         file: ファイル
         file_content_type: Content-Type
         file_file_size: ファイルサイズ
+=======
+      user:
+        email: メールアドレス
+>>>>>>> v1.4.7
     errors:
       models:
         account:

@@ -6,7 +6,7 @@ class HomeController < ApplicationController
   # app/controllers/intent/statuses_controller.rb でも使っているので、ここが更新された場合は気をつける
   def index
     @body_classes           = 'app-body'
-    @token                  = find_or_create_access_token.token
+    @token                  = current_session.token
     @web_settings           = Web::Setting.find_by(user: current_user)&.data || {}
     @admin                  = Account.find_local(Setting.site_contact_username)
     @streaming_api_base_url = Rails.configuration.x.streaming_api_base_url
@@ -18,6 +18,7 @@ class HomeController < ApplicationController
   def authenticate_user!
     redirect_to(find_redirect_path_from_request) unless user_signed_in?
   end
+<<<<<<< HEAD
 
   def find_or_create_access_token
     Doorkeeper::AccessToken.find_or_create_for(
@@ -46,4 +47,6 @@ class HomeController < ApplicationController
     end
     about_path
   end
+=======
+>>>>>>> v1.4.7
 end

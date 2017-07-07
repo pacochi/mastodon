@@ -3,7 +3,6 @@ import { connect, Provider } from 'react-redux';
 import PropTypes from 'prop-types';
 import configureStore from '../store/configureStore';
 import {
-  refreshTimelineSuccess,
   updateTimeline,
   deleteFromTimelines,
   refreshHomeTimeline,
@@ -33,7 +32,11 @@ const store = configureStore();
 const initialState = JSON.parse(document.getElementById('initial-state').textContent);
 store.dispatch(hydrateStore(initialState));
 
-class Mastodon extends React.PureComponent {
+export default class Mastodon extends React.PureComponent {
+
+  static propTypes = {
+    locale: PropTypes.string.isRequired,
+  };
 
   componentWillMount() {
     this.appmode = store.getState().getIn(['meta', 'appmode']);
@@ -161,6 +164,7 @@ class Mastodon extends React.PureComponent {
     return <div />;
   }
 
+<<<<<<< HEAD
 };
 
 Mastodon.propTypes = {
@@ -168,3 +172,6 @@ Mastodon.propTypes = {
 };
 
 export default Mastodon;
+=======
+}
+>>>>>>> v1.4.7

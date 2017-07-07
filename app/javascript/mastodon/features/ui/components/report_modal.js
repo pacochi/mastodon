@@ -1,20 +1,22 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { cancelReport, changeReportComment, submitReport } from '../../actions/reports';
-import { refreshAccountTimeline } from '../../actions/timelines';
+import { changeReportComment, submitReport } from '../../../actions/reports';
+import { refreshAccountTimeline } from '../../../actions/timelines';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import Column from '../ui/components/column';
-import Button from '../../components/button';
-import { makeGetAccount } from '../../selectors';
+import { makeGetAccount } from '../../../selectors';
 import { defineMessages, FormattedMessage, injectIntl } from 'react-intl';
-import StatusCheckBox from './containers/status_check_box_container';
+import StatusCheckBox from '../../report/containers/status_check_box_container';
 import Immutable from 'immutable';
+<<<<<<< HEAD:app/javascript/mastodon/features/report/index.js
 import Toggle from 'react-toggle';
 import ColumnBackButtonSlim from '../../components/column_back_button_slim';
+=======
+import ImmutablePureComponent from 'react-immutable-pure-component';
+import Button from '../../../components/button';
+>>>>>>> v1.4.7:app/javascript/mastodon/features/ui/components/report_modal.js
 
 const messages = defineMessages({
-  heading: { id: 'report.heading', defaultMessage: 'New report' },
   placeholder: { id: 'report.placeholder', defaultMessage: 'Additional comments' },
   submit: { id: 'report.submit', defaultMessage: 'Submit' },
   reportTitle: { id: 'report.select.title', defaultMessage: 'Please select the reason for reporting' },
@@ -42,11 +44,9 @@ const makeMapStateToProps = () => {
   return mapStateToProps;
 };
 
-class Report extends React.PureComponent {
-
-  static contextTypes = {
-    router: PropTypes.object,
-  };
+@connect(makeMapStateToProps)
+@injectIntl
+export default class ReportModal extends ImmutablePureComponent {
 
   static propTypes = {
     isSubmitting: PropTypes.bool,
@@ -57,6 +57,7 @@ class Report extends React.PureComponent {
     intl: PropTypes.object.isRequired,
   };
 
+<<<<<<< HEAD:app/javascript/mastodon/features/report/index.js
   state = { option: false };
 
   componentWillMount () {
@@ -71,13 +72,17 @@ class Report extends React.PureComponent {
       { id: 'reproduction', value: '無断転載' },
       { id: 'prohibited', value: '禁止行為に該当' },
     ]);
+=======
+  handleCommentChange = (e) => {
+    this.props.dispatch(changeReportComment(e.target.value));
+>>>>>>> v1.4.7:app/javascript/mastodon/features/ui/components/report_modal.js
+  }
+
+  handleSubmit = () => {
+    this.props.dispatch(submitReport());
   }
 
   componentDidMount () {
-    if (!this.props.account) {
-      return;
-    }
-
     this.props.dispatch(refreshAccountTimeline(this.props.account.get('id')));
   }
 
@@ -87,6 +92,7 @@ class Report extends React.PureComponent {
     }
   }
 
+<<<<<<< HEAD:app/javascript/mastodon/features/report/index.js
   handleCommentChange = (e) => {
     this.props.dispatch(changeReportComment(e.target.value));
   }
@@ -105,6 +111,8 @@ class Report extends React.PureComponent {
     this.props.dispatch(changeReportComment(e.target.getAttribute('name')));
   }
 
+=======
+>>>>>>> v1.4.7:app/javascript/mastodon/features/ui/components/report_modal.js
   render () {
     const { account, comment, intl, statusIds, isSubmitting } = this.props;
     const filled = this.options.findIndex(option => option.get('value') === comment) > -1;
@@ -114,21 +122,19 @@ class Report extends React.PureComponent {
     }
 
     return (
-      <Column heading={intl.formatMessage(messages.heading)} icon='flag'>
-        <ColumnBackButtonSlim />
+      <div className='modal-root__modal report-modal'>
+        <div className='report-modal__target'>
+          <FormattedMessage id='report.target' defaultMessage='Report {target}' values={{ target: <strong>{account.get('acct')}</strong> }} />
+        </div>
 
-        <div className='report scrollable'>
-          <div className='report__target'>
-            <FormattedMessage id='report.target' defaultMessage='Reporting' />
-            <strong>{account.get('acct')}</strong>
-          </div>
-
-          <div className='scrollable report__statuses'>
+        <div className='report-modal__container'>
+          <div className='report-modal__statuses'>
             <div>
               {statusIds.map(statusId => <StatusCheckBox id={statusId} key={statusId} disabled={isSubmitting} />)}
             </div>
           </div>
 
+<<<<<<< HEAD:app/javascript/mastodon/features/report/index.js
           <div className='report__textarea-wrapper' style={{ padding: '10px' }}>
             {this.state.option &&
               <div className='report__select'>
@@ -159,12 +165,24 @@ class Report extends React.PureComponent {
             <div className='report__submit'>
               <Button disabled={isSubmitting} text={intl.formatMessage(messages.submit)} onClick={this.handlePreSubmit} block />
             </div>
+=======
+          <div className='report-modal__comment'>
+            <textarea
+              className='setting-text light'
+              placeholder={intl.formatMessage(messages.placeholder)}
+              value={comment}
+              onChange={this.handleCommentChange}
+              disabled={isSubmitting}
+            />
+>>>>>>> v1.4.7:app/javascript/mastodon/features/ui/components/report_modal.js
           </div>
         </div>
-      </Column>
+
+        <div className='report-modal__action-bar'>
+          <Button disabled={isSubmitting} text={intl.formatMessage(messages.submit)} onClick={this.handleSubmit} />
+        </div>
+      </div>
     );
   }
 
 }
-
-export default connect(makeMapStateToProps)(injectIntl(Report));

@@ -132,6 +132,7 @@ RSpec.describe FeedManager do
     end
   end
 
+<<<<<<< HEAD
   describe 'push' do
     let(:accounts) { [Fabricate(:account), Fabricate(:account)] }
     let(:status) { Fabricate(:status) }
@@ -155,6 +156,18 @@ RSpec.describe FeedManager do
 
       reblog = Fabricate(:status, reblog: status)
       instance.push(:home, accounts, reblog)
+=======
+  describe '#push' do
+    it 'trims timelines if they will have more than FeedManager::MAX_ITEMS' do
+      account = Fabricate(:account)
+      status = Fabricate(:status)
+      members = FeedManager::MAX_ITEMS.times.map { |count| [count, count] }
+      Redis.current.zadd("feed:type:#{account.id}", members)
+
+      FeedManager.instance.push('type', account, status)
+
+      expect(Redis.current.zcard("feed:type:#{account.id}")).to eq FeedManager::MAX_ITEMS
+>>>>>>> v1.4.7
     end
   end
 end

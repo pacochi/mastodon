@@ -8,7 +8,7 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 import IntersectionObserverWrapper from '../features/ui/util/intersection_observer_wrapper';
 import { debounce } from 'lodash';
 
-class StatusList extends ImmutablePureComponent {
+export default class StatusList extends ImmutablePureComponent {
 
   static propTypes = {
     scrollKey: PropTypes.string.isRequired,
@@ -107,7 +107,11 @@ class StatusList extends ImmutablePureComponent {
   }
 
   render () {
+<<<<<<< HEAD
     const { statusIds, onScrollToBottom, scrollKey, trackScroll, shouldUpdateScroll, isLoading, hasMore, prepend, emptyMessage, squareMedia, expandMedia, standalone, displayPinned } = this.props;
+=======
+    const { statusIds, scrollKey, trackScroll, shouldUpdateScroll, isLoading, hasMore, prepend, emptyMessage } = this.props;
+>>>>>>> v1.4.7
 
     let loadMore       = null;
     let scrollableArea = null;
@@ -150,5 +154,3 @@ class StatusList extends ImmutablePureComponent {
   }
 
 }
-
-export default StatusList;

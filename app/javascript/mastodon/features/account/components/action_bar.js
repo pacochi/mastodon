@@ -21,6 +21,7 @@ const messages = defineMessages({
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
 });
 
+<<<<<<< HEAD
 const outerDropdownStyle = {
   padding: '10px',
   flex: '0 0 auto',
@@ -33,6 +34,10 @@ const outerLinksStyle = {
 };
 
 class ActionBar extends React.PureComponent {
+=======
+@injectIntl
+export default class ActionBar extends React.PureComponent {
+>>>>>>> v1.4.7
 
   static propTypes = {
     account: ImmutablePropTypes.map.isRequired,
@@ -121,5 +126,3 @@ class ActionBar extends React.PureComponent {
   }
 
 }
-
-export default injectIntl(ActionBar);
