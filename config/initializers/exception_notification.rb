@@ -9,9 +9,7 @@ ExceptionNotification.configure do |config|
     ActionController::ParameterMissing
     ActiveRecord::RecordNotUnique
     HTTP::TimeoutError
-    Goldfinger::NotFoundError
     Goldfinger::SSLError
-    Goldfinger::Error
   )
 
   ignore_workers = %w[
