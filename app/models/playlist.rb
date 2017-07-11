@@ -1,21 +1,26 @@
 # frozen_string_literal: true
+# == Schema Information
+#
+# Table name: playlists
+#
+#  id            :integer          not null, primary key
+#  deck          :integer          not null
+#  name          :string           default(""), not null
+#  deck_type     :integer          default("normal"), not null
+#  write_protect :boolean          default(FALSE), not null
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
 
-class Playlist
-  MAX_QUEUE_SIZE = 10
-  MAX_ADD_COUNT = 10
-  MAX_SKIP_COUNT = 2
-  SKIP_LIMT_TIME = 90
-  attr_accessor :deck
+class Playlist < ApplicationRecord
+  validates :deck, uniqueness: true, presence: true
+
+  enum deck_type: { normal: 0, apollo: 1 }
 
   MEDIA_TL_DECK_ID = 346 # Pawoo Musicに投稿された曲が自動的に追加されるDECK(手動での追加はできない)
-  DECK_NUMBERS = [1, 2, 3, 4, 5, MEDIA_TL_DECK_ID].freeze
-
-  def initialize(deck)
-    @deck = deck
-  end
 
   def add(link, account, force = false)
-    raise Mastodon::MusicSourceNoAdditionalPermissionError if deck.to_i == MEDIA_TL_DECK_ID && !force
+    raise Mastodon::MusicSourceNoAdditionalPermissionError if write_protect && !force
     count = redis.get(music_add_count_key(account))&.to_i || 0
     raise Mastodon::PlayerControlLimitError if control_limit?(count, account, force)
 
@@ -31,7 +36,7 @@ class Playlist
           raise Mastodon::PlayerControlLimitError if control_limit?(count, account, force)
 
           items = queue_items
-          raise Mastodon::PlaylistSizeOverError unless items.size < MAX_QUEUE_SIZE
+          raise Mastodon::PlaylistSizeOverError unless items.size < settings['max_queue_size']
 
           ttl = redis.ttl(add_count_key)
           ttl = 60 * 60 if ttl <= 0
@@ -67,8 +72,8 @@ class Playlist
     count = redis.get(skip_count_key)&.to_i || 0
 
     unless account&.user.admin
-      raise Mastodon::PlayerControlSkipLimitTimeError if current_time_sec < SKIP_LIMT_TIME
-      raise Mastodon::PlayerControlLimitError unless count < MAX_SKIP_COUNT
+      raise Mastodon::PlayerControlSkipLimitTimeError if current_time_sec < settings['skip_limit_time']
+      raise Mastodon::PlayerControlLimitError unless count < settings['max_skip_count']
     end
 
     ret = self.next(id)
@@ -115,7 +120,7 @@ class Playlist
   private
 
   def control_limit?(count, account, force)
-    !account.user.admin && !force && count >= MAX_ADD_COUNT
+    !account.user.admin && !force && count >= settings['max_add_count']
   end
 
   def play_item(queue_item_id, duration, gap = 10)
@@ -158,7 +163,7 @@ class Playlist
 
   def redis_push(item)
     update_queue_items do |items|
-      if items.size < MAX_QUEUE_SIZE
+      if items.size < settings['max_queue_size']
         items.push(item)
       else
         raise Mastodon::PlaylistSizeOverError
@@ -190,4 +195,7 @@ class Playlist
     Redis.current
   end
 
+  def settings
+    @settings ||= Setting.playlist
+  end
 end

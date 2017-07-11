@@ -171,36 +171,55 @@ class PlayControl extends React.PureComponent {
     onSkip: PropTypes.func.isRequired,
   };
 
-  deckList = [
-    {number: 1, type: 'DECK', name: '共有チャンネル1', icon: '/player/pawoo-music-playlist-icon.svg'},
-    {number: 2, type: 'DECK', name: '共有チャンネル2', icon: '/player/pawoo-music-playlist-icon.svg'},
-    {number: 3, type: 'DECK', name: '共有チャンネル3', icon: '/player/pawoo-music-playlist-icon.svg'},
-    {number: 4, type: 'DECK', name: '共有チャンネル4', icon: '/player/pawoo-music-playlist-icon.svg'},
-    {number: 5, type: 'DECK', name: '共有チャンネル5', icon: '/player/pawoo-music-playlist-icon.svg'},
-    {number: 346, type: 'DECK', name: 'Pawoo Music\nチャンネル', icon: '/player/pawoo-music-playlist-icon.svg'},
-  ];
-
+  interval = null;
+  subscription = null;
+  queues = [];
   state = {
     isOpen: false,
     isPlaying: false,
     isSp: window.innerWidth < 1024,
-    targetDeck: this.deckList[0].number,
-    volume: 1,
-    deck: null,
-    playlist: (new Array(10)).fill(null),
-    player: null,
+    targetDeck: null,
+    playlist: this.createPlaylist(),
+    deckList: [],
+    deckSettings: null,
     timeOffset: 0,
     offsetStartTime: 0,
     isSeekbarActive: false,
     isLoadingArtwork: true,
     muted: true,
+    volume: 80,
   };
-  subscription = null;
 
   componentDidMount () {
     window.addEventListener('resize', this.handleResizeWindow);
     if (!this.state.isSp) {
-      this.initDeck();
+      this.initDecks();
+    }
+  }
+
+  componentDidUpdate (prevProps, prevState) {
+    const { targetDeck } = this.state;
+    if (prevState.targetDeck !== targetDeck) {
+      if (targetDeck === null) {
+        if (this.subscription) {
+          this.subscription.close();
+          this.subscription = null;
+        }
+        if (this.interval) {
+          clearInterval(this.interval);
+          this.interval = null;
+        }
+        this.queues = [];
+        this.setState({
+          playlists: this.createPlaylist(),
+        });
+      } else {
+        this.fetchDeck(targetDeck);
+        this.setSubscription(targetDeck);
+        try {
+          localStorage.setItem('LATEST_DECK', targetDeck);
+        } catch (err) {}
+      }
     }
   }
 
@@ -208,24 +227,15 @@ class PlayControl extends React.PureComponent {
     window.removeEventListener('resize', this.handleResizeWindow);
   }
 
-  initDeck() {
-    const newState = {};
-    try {
-      const targetDeck = Number(localStorage.getItem('LATEST_DECK'));
-      newState.targetDeck = this.deckList.find((deck) => deck.number === targetDeck) ? targetDeck : this.deckList[0].number;
-    } catch (err) {}
-    try {
-      newState.volume = Number(localStorage.getItem('player_volume')) || 1;
-    } catch (err) {}
-    this.setState(newState);
-
-    this.fetchDeck(newState.targetDeck);
-    this.setSubscription(newState.targetDeck);
+  initDecks () {
+    this.fetchDecks();
+    this.interval = setInterval(() => {
+      this.fetchDecks();
+    }, 10 * 60 * 1000);
   }
 
-  createPlaylist (deck) {
-    const queues = ((deck && deck.queues) || []);
-    return queues.concat((new Array(10 - queues.length)).fill(null));
+  createPlaylist () {
+    return this.queues.concat((new Array(10 - this.queues.length)).fill(null));
   }
 
   setSubscription (target) {
@@ -237,31 +247,29 @@ class PlayControl extends React.PureComponent {
         case 'add':
           {
             const payload = JSON.parse(data.payload);
-            const deck = Object.assign({}, this.state.deck);
-            deck.queues.push(payload);
+            this.queues.push(payload);
             this.setState({
-              deck,
-              playlist: this.createPlaylist(deck),
+              playlist: this.createPlaylist(),
             });
           }
           break;
         case 'play':
           {
-            const deck = Object.assign({}, this.state.deck);
-            if(deck.queues.length >= 2) deck.queues.shift();
-            deck.time_offset = 0;
-            this.playNextQueueItem(deck, (new Date().getTime() / 1000));
+            if (this.queues.length >= 2) {
+              this.queues.shift();
+            }
+            this.playNextQueueItem(0);
           }
           break;
         case 'end':
           {
-            const deck = Object.assign({}, this.state.deck);
-            if(deck.queues.length <= 1) deck.queues = [];
-            deck.time_offset = 0;
-
+            if (this.queues.length <= 1) {
+              this.queues = [];
+            }
             this.setState({
-              deck,
-              playlist: this.createPlaylist(deck),
+              playlist: this.createPlaylist(),
+              timeOffset: 0,
+              offsetStartTime: 0,
               isYoutubeLoadingDone: false,
               isPlaying: false,
             });
@@ -272,15 +280,14 @@ class PlayControl extends React.PureComponent {
     });
   }
 
-  playNextQueueItem (deck, offsetStartTime) {
+  playNextQueueItem (timeOffset) {
     this.setState({
-      deck,
-      playlist: this.createPlaylist(deck),
+      playlist: this.createPlaylist(),
       isSeekbarActive: false,
       isLoadingArtwork: true,
       isPlaying: false,
-      offsetStartTime,
-      timeOffset: deck.time_offset,
+      offsetStartTime: (new Date().getTime() / 1000) - timeOffset,
+      timeOffset,
       isYoutubeLoadingDone: false,
     });
 
@@ -294,10 +301,39 @@ class PlayControl extends React.PureComponent {
     }, 20);
   }
 
+  fetchDecks () {
+    return api(this.getMockState).get('/api/v1/playlists')
+      .then((response) => {
+        const { decks, settings } = response.data;
+        const newState = {
+          deckList: decks,
+          deckSettings: settings,
+        };
+
+        try {
+          if (decks.length) {
+            const targetDeck = Number(localStorage.getItem('LATEST_DECK'));
+            newState.targetDeck = decks.find((deck) => deck.number === targetDeck) ? targetDeck : decks[0].number;
+          } else {
+            newState.targetDeck = null;
+          }
+        } catch (err) {}
+        try {
+          newState.volume = Number(localStorage.getItem('player_volume')) || 80;
+        } catch (err) {}
+        this.setState(newState);
+      })
+      .catch((error) => {
+        this.props.onError(error);
+      });
+  }
+
   fetchDeck(id) {
     return api(this.getMockState).get(`/api/v1/playlists/${id}`)
       .then((response) => {
-        this.playNextQueueItem(response.data.deck, (new Date().getTime() / 1000) - response.data.deck.time_offset);
+        const { time_offset: timeOffset, queues } = response.data.deck;
+        this.queues = queues;
+        this.playNextQueueItem(timeOffset);
       })
       .catch((error) => {
         this.props.onError(error);
@@ -317,16 +353,12 @@ class PlayControl extends React.PureComponent {
     if(number === this.state.targetDeck) return;
     if (this.isLoading()) return;
 
-    try { localStorage.setItem('LATEST_DECK', number); } catch (err) {}
-
     this.setState({
       targetDeck: number,
       isSeekbarActive: false,
       isLoadingArtwork: true,
       isPlaying: false,
     });
-    this.fetchDeck(number);
-    this.setSubscription(number);
   }
 
   handleSubmitAddForm = (e) => {
@@ -345,14 +377,17 @@ class PlayControl extends React.PureComponent {
   }
 
   handleClickSkip = () => {
-    if (this.isDeckActive()) {
-      this.props.onSkip(this.state.targetDeck, this.state.deck.queues[0].id);
+    const deckQueue = this.getDeckFirstQueue();
+    if (deckQueue) {
+      this.props.onSkip(this.state.targetDeck, deckQueue.id);
     }
   }
 
   handleChangeVolume = (volume) => {
     this.setState({ volume });
-    try { localStorage.setItem('player_volume', volume); } catch (err) {}
+    try {
+      localStorage.setItem('player_volume', volume);
+    } catch (err) {}
   }
 
   handleCancelOpenDeck = (e) => {
@@ -363,16 +398,10 @@ class PlayControl extends React.PureComponent {
   handleResizeWindow = (e) => {
     const isSp = window.innerWidth < 1024;
     if (this.state.isSp !== isSp) {
-      this.setState({ isSp });
-      if (isSp) {
-        if (this.subscription) {
-          this.subscription.close();
-          this.subscription = null;
-        }
-      } else {
-        this.initDeck();
+      this.setState({ isSp, targetDeck: null });
+      if (!isSp) {
+        this.initDecks();
       }
-
     }
   }
 
@@ -387,8 +416,7 @@ class PlayControl extends React.PureComponent {
   }
 
   getDeckFirstQueue() {
-    const { deck } = this.state;
-    return deck && deck.queues && deck.queues[0];
+    return this.queues[0];
   }
 
   isDeckActive () {
@@ -422,16 +450,13 @@ class PlayControl extends React.PureComponent {
   }
 
   renderQueueItem = (queue_item, i) => {
-    const { deck } = this.state;
-    const queues = ((deck && deck.queues) || []);
-
     return (
       <li key={queue_item ? queue_item.id : `empty-queue-item_${i}`} className="deck__queue-item">
         <div className="queue-item__main">
           <div>
             {!this.state.isOpen && i === 0 && this.renderDeckQueueCaption('- いまみんなで一緒に聞いている曲 -')}
             <div className='queue-item__metadata'>
-              {queues.length === 0 && i === 0 ? (
+              {this.queues.length === 0 && i === 0 ? (
                 <span>プレイリストに好きな曲を入れてね！</span>
               ) : (queue_item && (
                 <span className='queue-item__metadata-title'>{queue_item.info.length > 40 ? `${queue_item.info.slice(0, 40)}……` : queue_item.info}</span>
@@ -451,7 +476,7 @@ class PlayControl extends React.PureComponent {
   }
 
   renderArtwork () {
-    const { deck, isLoadingArtwork, isPlaying, timeOffset, muted, volume } = this.state;
+    const { isLoadingArtwork, isPlaying, timeOffset, muted, volume } = this.state;
     const deckQueue = this.getDeckFirstQueue();
 
     if (isLoadingArtwork) {
@@ -478,17 +503,19 @@ class PlayControl extends React.PureComponent {
   }
 
   render () {
-    if(this.state.isSp) return null;
     const { isTop } = this.props;
-    const { playlist, targetDeck, deck, offsetStartTime, muted, volume, isSeekbarActive, isOpen, timeOffset } = this.state;
+    const { isSp, playlist, targetDeck, deckList, deckSettings, offsetStartTime, muted, volume, isSeekbarActive, isOpen, timeOffset } = this.state;
+    if (isSp || !targetDeck) {
+      return null;
+    }
 
     const deckQueue = this.getDeckFirstQueue();
     const sourceType = deckQueue && deckQueue.source_type;
     const duration = deckQueue && deckQueue.duration;
-    const skipLimitTime = deck && deck.skip_limit_time;
 
-    const index = this.deckList.findIndex((deck) => deck.number === targetDeck);
-    const isApollo = this.deckList[index].type === 'APOLLO';
+    const index = deckList.findIndex((deck) => deck.number === targetDeck);
+    const isApollo = deckList[index].type === 'apollo';
+    const isWriteProtect = deckList[index].write_protect;
     const deckSelectorStyle = {
       transform: `translate(0, -${(this.state.isOpen) ? 0 : index * 56}px)`,
     };
@@ -521,49 +548,45 @@ class PlayControl extends React.PureComponent {
             muted={muted}
             duration={duration}
             volume={volume}
-            skipLimitTime={skipLimitTime}
+            skipLimitTime={deckSettings.skip_limit_time}
             onSkip={this.handleClickSkip}
             onToggleMute={this.handleClickToggleMute}
             onChangeVolume={this.handleChangeVolume}
           />
           <div className='control-bar__deck' onClick={this.handleClickDeck}>
             <ul className='control-bar__deck-selector'>
-              {this.deckList.map((deck) => (
+              {deckList.map((deck) => (
                 <li key={deck.number}
                   className={classNames('deck-selector__selector-body', {
                     active: deck.number === targetDeck,
-                    'is-apollo': deck.type === 'APOLLO',
+                    'is-apollo': deck.type === 'apollo',
                     disabled: this.isLoading(),
                   })}
                   data-number={deck.number}
                   onClick={this.handleClickDeckTab}
                   style={deckSelectorStyle}
                 >
-                  <img src={deck.icon} />
-                  <span className={deck.name.includes('\n') ? 'deck-selector__selector-body__multiline' : ''}>{deck.name}</span>
+                  <img alt={deck.type} src={deck.type === 'apollo' ? '/player/pawoo-music-playlist-apollo-icon.png' : '/player/pawoo-music-playlist-icon.svg'} />
+                  <span>{deck.name}</span>
                 </li>
               ))}
             </ul>
             <div className={classNames('deck_queue-wrapper', { 'is-apollo': isApollo })}>
               <div className="deck_queue-column">
                 {this.renderArtwork()}
-                {(()=>{
-                  if(!this.state.deck || !this.state.deck.max_queue_size || !this.state.deck.max_add_count || !this.state.deck.max_skip_count || !this.state.deck.skip_limit_time) return null;
-                  if(!this.state.isOpen) return null;
-                  return (
-                    <div className="queue-item__restrictions">
-                      <div className="queue-item__restrictions-title">
-                        <i className="fa fa-fw fa-info-circle" />
-                        <span>楽曲追加・SKIPについて（実験中）</span>
-                      </div>
-                      <ul className="queue-item__restrictions-list">
-                        <li>楽曲追加は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_add_count}回まで</span>です</li>
-                        <li>SKIPの回数は<span className="queue-item__restrictions-num">1時間に{this.state.deck.max_skip_count}回まで</span>です</li>
-                        <li>SKIPボタンは、<span className="queue-item__restrictions-num">楽曲が始まってから<br />{this.state.deck.skip_limit_time}秒後</span>に押せるようになります</li>
-                      </ul>
+                {isOpen && deckSettings && (
+                  <div className="queue-item__restrictions">
+                    <div className="queue-item__restrictions-title">
+                      <i className="fa fa-fw fa-info-circle" />
+                      <span>楽曲追加・SKIPについて（実験中）</span>
                     </div>
-                  );
-                })()}
+                    <ul className="queue-item__restrictions-list">
+                      <li>楽曲追加は<span className="queue-item__restrictions-num">1時間に{deckSettings.max_add_count}回まで</span>です</li>
+                      <li>SKIPの回数は<span className="queue-item__restrictions-num">1時間に{deckSettings.max_skip_count}回まで</span>です</li>
+                      <li>SKIPボタンは、<span className="queue-item__restrictions-num">楽曲が始まってから<br />{deckSettings.skip_limit_time}秒後</span>に押せるようになります</li>
+                    </ul>
+                  </div>
+                )}
               </div>
               <div className="deck_queue-column deck__queue-column-list">
                 {this.state.isOpen && this.renderDeckQueueCaption('- いまみんなで一緒に聞いているプレイリスト -')}
@@ -571,7 +594,7 @@ class PlayControl extends React.PureComponent {
                   {playlist.map(this.renderQueueItem)}
                   {!isTop && (
                     <li className="deck__queue-add-form">
-                      {targetDeck === 346 ? (
+                      {isWriteProtect ? (
                         <div style={{ paddingTop: '20px' }}>Pawoo Musicに曲をアップロードすると、このプレイリストに曲が追加されます。</div>
                       ) : (
                         <form onSubmit={this.handleSubmitAddForm}>

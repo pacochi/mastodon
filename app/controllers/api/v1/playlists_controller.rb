@@ -1,31 +1,36 @@
 # frozen_string_literal: true
 
 class Api::V1::PlaylistsController < ApiController
-  before_action :set_playlist
-
   respond_to :json
 
-  def show
-    items = @playlist.queue_items
+  def index
+    settings = Setting.playlist
+    playlists = Playlist.order(:deck)
+    decks = playlists.map do |playlist|
+      {
+        number: playlist.deck,
+        type: playlist.deck_type,
+        name: playlist.name,
+        write_protect: playlist.write_protect,
+      }
+    end
 
     render json: {
-      deck: {
-        number: params[:deck],
-        time_offset: items.blank? ? 0 : @playlist.current_time_sec,
-        queues: items,
-        max_queue_size: Playlist::MAX_QUEUE_SIZE,
-        max_add_count: Playlist::MAX_ADD_COUNT,
-        max_skip_count: Playlist::MAX_SKIP_COUNT,
-        skip_limit_time: Playlist::SKIP_LIMT_TIME,
-      },
+      settings: settings,
+      decks: decks,
     }
   end
 
-  private
+  def show
+    playlist = Playlist.find_by!(deck: params[:deck])
+    items = playlist.queue_items
 
-  def set_playlist
-    raise ActiveRecord::RecordNotFound unless Playlist::DECK_NUMBERS.include?(params[:deck].to_i)
-
-    @playlist = Playlist.new(params[:deck])
+    render json: {
+      deck: {
+        number: playlist.deck,
+        time_offset: items.blank? ? 0 : playlist.current_time_sec,
+        queues: items,
+      },
+    }
   end
 end

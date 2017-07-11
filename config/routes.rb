@@ -97,6 +97,8 @@ Rails.application.routes.draw do
     resources :suggestion_tags, only: [:index, :new, :create, :edit, :update, :destroy]
     resources :trend_ng_words, only: [:index, :new, :create, :edit, :update, :destroy]
     resources :oauth_authentications, only: [:destroy]
+    resources :playlists, only: [:index, :new, :create, :edit, :update, :destroy]
+    resource :playlist_setting, only: [:update]
 
     resources :reports, only: [:index, :show, :update] do
       resources :reported_statuses, only: [:update, :destroy]
@@ -181,7 +183,7 @@ Rails.application.routes.draw do
       resources :firebase_cloud_messaging_tokens, only: [:create, :destroy], param: :platform
       resources :oauth_authentications, only: [:show], param: :uid
       resources :booth_items, only: [:show]
-      resources :playlists, only: [:show], param: :deck do
+      resources :playlists, only: [:index, :show], param: :deck do
         resources :deck_queues, only: [:create, :destroy]
       end
 
