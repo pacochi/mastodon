@@ -20,7 +20,7 @@ class Playlist < ApplicationRecord
   MEDIA_TL_DECK_ID = 346 # Pawoo Musicに投稿された曲が自動的に追加されるDECK(手動での追加はできない)
 
   def add(link, account, force = false)
-    raise Mastodon::MusicSourceNoAdditionalPermissionError if write_protect && !force
+    raise Mastodon::PlaylistWriteProtectionError if write_protect && !force
     count = redis.get(music_add_count_key(account))&.to_i || 0
     raise Mastodon::PlayerControlLimitError if control_limit?(count, account, force)
 
