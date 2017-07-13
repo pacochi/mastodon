@@ -2,6 +2,8 @@ import React from 'react';
 import { Link } from 'react-router';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import { debounce } from 'lodash';
+
 import IconButton from '../../../components/icon_button';
 import api from '../../../api';
 import createStream from '../../../../mastodon/stream';
@@ -174,6 +176,7 @@ class PlayControl extends React.PureComponent {
   interval = null;
   subscription = null;
   queues = [];
+  defaultVolume = 80;
   state = {
     isOpen: false,
     isPlaying: false,
@@ -187,7 +190,7 @@ class PlayControl extends React.PureComponent {
     isSeekbarActive: false,
     isLoadingArtwork: true,
     muted: true,
-    volume: 80,
+    volume: this.defaultVolume,
   };
 
   componentDidMount () {
@@ -201,18 +204,7 @@ class PlayControl extends React.PureComponent {
     const { targetDeck } = this.state;
     if (prevState.targetDeck !== targetDeck) {
       if (targetDeck === null) {
-        if (this.subscription) {
-          this.subscription.close();
-          this.subscription = null;
-        }
-        if (this.interval) {
-          clearInterval(this.interval);
-          this.interval = null;
-        }
-        this.queues = [];
-        this.setState({
-          playlists: this.createPlaylist(),
-        });
+        this.clearDecks();
       } else {
         this.fetchDeck(targetDeck);
         this.setSubscription(targetDeck);
@@ -232,6 +224,21 @@ class PlayControl extends React.PureComponent {
     this.interval = setInterval(() => {
       this.fetchDecks();
     }, 10 * 60 * 1000);
+  }
+
+  clearDecks () {
+    if (this.subscription) {
+      this.subscription.close();
+      this.subscription = null;
+    }
+    if (this.interval) {
+      clearInterval(this.interval);
+      this.interval = null;
+    }
+    this.queues = [];
+    this.setState({
+      playlists: this.createPlaylist(),
+    });
   }
 
   createPlaylist () {
@@ -319,7 +326,7 @@ class PlayControl extends React.PureComponent {
           }
         } catch (err) {}
         try {
-          newState.volume = Number(localStorage.getItem('player_volume')) || 80;
+          newState.volume = Number(localStorage.getItem('player_volume')) || this.defaultVolume;
         } catch (err) {}
         this.setState(newState);
       })
@@ -395,7 +402,7 @@ class PlayControl extends React.PureComponent {
     e.stopPropagation();
   }
 
-  handleResizeWindow = (e) => {
+  handleResizeWindow = debounce(() => {
     const isSp = window.innerWidth < 1024;
     if (this.state.isSp !== isSp) {
       this.setState({ isSp, targetDeck: null });
@@ -403,7 +410,7 @@ class PlayControl extends React.PureComponent {
         this.initDecks();
       }
     }
-  }
+  }, 200);
 
   getMockState = () => {
     return {
