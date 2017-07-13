@@ -34,12 +34,8 @@ module Admin
     end
 
     def destroy
-      if @playlist.destroy
-        flash[:notice] = 'チャンネルを削除しました'
-      else
-        flash[:alert] = 'チャンネルの削除に失敗しました'
-      end
-      redirect_to admin_playlists_path
+      @playlist.destroy!
+      redirect_to admin_playlists_path, notice: 'チャンネルを削除しました'
     end
 
     private
