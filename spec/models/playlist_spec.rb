@@ -15,25 +15,17 @@ RSpec.describe Playlist, type: :model do
 
   let(:settings) { { 'max_add_count' => 10, 'max_queue_size' => 10, 'max_skip_count' => 2, 'skip_limit_time' => 0 } }
 
+  around(:example) do |example|
+    # 同期的にWorkerの処理が実行されてqueue_itemsが変化するので、同期実行を防ぐ
+    Sidekiq::Testing.fake! { example.run }
+  end
+
   before do
     Redis.current.flushdb
   end
 
-  # 同期的にWorkerの処理が実行されてqueue_itemsが変化するので、同期実行を防ぐラッパーを用意
-  def playlist_add(*args)
-    Sidekiq::Testing.fake! { playlist.add(*args) }
-  end
-
-  def playlist_next(*args)
-    Sidekiq::Testing.fake! { playlist.next(*args) }
-  end
-
-  def playlist_skip(*args)
-    Sidekiq::Testing.fake! { playlist.skip(*args) }
-  end
-
   describe '#add' do
-    subject { playlist_add(link, account, force) }
+    subject { playlist.add(link, account, force) }
 
     let(:force) { false }
 
@@ -59,7 +51,7 @@ RSpec.describe Playlist, type: :model do
 
     context 'when the playlist is not empty' do
       before do
-        playlist_add(link, account)
+        playlist.add(link, account)
         allow(playlist).to receive(:play_item)
       end
 
@@ -107,10 +99,10 @@ RSpec.describe Playlist, type: :model do
 
   describe '#next' do
     before do
-      playlist_add(link, account)
+      playlist.add(link, account)
     end
 
-    subject { playlist_next(id) }
+    subject { playlist.next(id) }
 
     let(:id) { playlist.queue_items.first[:id] }
 
@@ -135,7 +127,7 @@ RSpec.describe Playlist, type: :model do
 
     context 'when the playlist does not becomes empty' do
       before do
-        playlist_add(link, account)
+        playlist.add(link, account)
         allow(playlist).to receive(:play_item)
       end
 
@@ -147,7 +139,7 @@ RSpec.describe Playlist, type: :model do
 
     context 'id other than the first' do
       before do
-        playlist_add(link, account)
+        playlist.add(link, account)
       end
 
       context 'second item' do
@@ -164,12 +156,12 @@ RSpec.describe Playlist, type: :model do
 
   describe '#skip' do
     before do
-      playlist_add(link, account)
+      playlist.add(link, account)
       allow(playlist).to receive(:settings).and_return(settings)
       allow(playlist).to receive(:current_time_sec).and_return(10)
     end
 
-    subject { playlist_skip(id, account) }
+    subject { playlist.skip(id, account) }
 
     let(:id) { playlist.queue_items.first[:id] }
 
@@ -186,8 +178,8 @@ RSpec.describe Playlist, type: :model do
     context 'over max skip count' do
       before do
         allow(playlist).to receive(:settings).and_return(settings.merge({ 'max_skip_count' => 1 }))
-        playlist_add(link, account)
-        playlist_skip(playlist.queue_items.first[:id], account)
+        playlist.add(link, account)
+        playlist.skip(playlist.queue_items.first[:id], account)
       end
       it { expect{ subject }.to raise_error(Mastodon::PlayerControlLimitError) }
 
