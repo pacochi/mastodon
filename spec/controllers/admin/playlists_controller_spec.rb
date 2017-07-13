@@ -3,7 +3,7 @@ require 'rails_helper'
 describe Admin::PlaylistsController, type: :controller do
   render_views
 
-  let(:playlist) { Fabricate(:playlist, deck: 1) }
+  let!(:playlist) { Fabricate(:playlist, deck: 1) }
   before do
     sign_in Fabricate(:user, admin: true), scope: :user
   end
@@ -23,6 +23,7 @@ describe Admin::PlaylistsController, type: :controller do
 
     let(:deck) { 2 }
 
+    it { is_expected.to change { Playlist.count }.by(1) }
     it 'redirects to admin playlists page' do
       subject.call
       expect(response).to redirect_to(admin_playlists_path)
@@ -31,6 +32,7 @@ describe Admin::PlaylistsController, type: :controller do
     context 'same deck number' do
       let(:deck) { playlist.deck }
 
+      it { is_expected.not_to change { Playlist.count } }
       it 'is not permitted' do
         subject.call
         expect(response).to have_http_status(:unprocessable_entity)
@@ -62,9 +64,13 @@ describe Admin::PlaylistsController, type: :controller do
   end
 
   describe 'DELETE #destroy' do
-    it 'redirects to admin playlists page' do
-      delete :destroy, params: { id: playlist.id }
+    subject do
+      -> { delete :destroy, params: { id: playlist.id } }
+    end
 
+    it { is_expected.to change { Playlist.count }.by(-1) }
+    it 'redirects to admin playlists page' do
+      subject.call
       expect(response).to redirect_to(admin_playlists_path)
     end
   end

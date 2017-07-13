@@ -37,7 +37,7 @@ class Api::V1::DeckQueuesController < ApiController
     render json: { error: "１時間にスキップできる回数は#{@settings.max_skip_count}回までです。" }, status: :too_many_requests
   rescue Mastodon::PlayerControlSkipLimitTimeError
     render json: { error: "SKIPボタンは、楽曲が始まってから#{@settings.skip_limit_time}秒後に押せるようになります" }, status: :bad_request
-  rescue Mastodon::PlaylistEmptyError
+  rescue Mastodon::PlaylistItemNotFoundError
     render json: { error: 'スキップに失敗しました。' }, status: :bad_request
   rescue Mastodon::RedisMaxRetryError
     render json: { error: '不明なエラーが発生しました。' }, status: :service_unavailable

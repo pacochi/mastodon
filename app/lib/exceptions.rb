@@ -11,6 +11,6 @@ module Mastodon
   class PlayerControlSkipLimitTimeError < Error; end
   class PlaylistWriteProtectionError < Error; end
   class PlaylistSizeOverError < Error; end
-  class PlaylistEmptyError < Error; end
+  class PlaylistItemNotFoundError < Error; end
   class RedisMaxRetryError < Error; end
 end

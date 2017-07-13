@@ -21,95 +21,72 @@ class Playlist < ApplicationRecord
 
   def add(link, account, force = false)
     raise Mastodon::PlaylistWriteProtectionError if write_protect && !force
-    count = redis.get(music_add_count_key(account))&.to_i || 0
-    raise Mastodon::PlayerControlLimitError if control_limit?(count, account, force)
 
     queue_item = QueueItem.create_from_link(link, account)
     raise Mastodon::MusicSourceNotFoundError if queue_item.nil?
 
-    retry_count = 3
-    add_count_key = music_add_count_key(account)
-    while retry_count.positive?
-      begin
-        redis.watch(playlist_key, add_count_key) do
-          count = redis.get(music_add_count_key(account))&.to_i || 0
-          raise Mastodon::PlayerControlLimitError if control_limit?(count, account, force)
+    updated_items = update_queue_items(music_add_count_key(account)) do |items|
+      raise Mastodon::PlayerControlLimitError if control_limit?(account, force)
+      raise Mastodon::PlaylistSizeOverError unless items.size < settings['max_queue_size']
 
-          items = queue_items
-          raise Mastodon::PlaylistSizeOverError unless items.size < settings['max_queue_size']
-
-          ttl = redis.ttl(add_count_key)
-          ttl = 60 * 60 if ttl <= 0
-          result = redis.multi do |m|
-            items.push(queue_item)
-            m.set(playlist_key, items.to_json)
-            m.setex(add_count_key, ttl, count + 1)
-          end
-
-          if result
-            PushPlaylistWorker.perform_async(deck, 'add', queue_item.to_json)
-            PlaylistLog.create(
-              account: account,
-              uuid: queue_item.id,
-              deck: deck,
-              link: link,
-              info: queue_item.info,
-            )
-            play_item(queue_item.id, queue_item.duration, 0) if items.size == 1
-            return queue_item
-          end
-        end
-      ensure
-        retry_count -= 1
-        redis.unwatch
-      end
+      items.push(queue_item)
     end
-    raise Mastodon::RedisMaxRetryError
+
+    return false unless updated_items
+
+    PushPlaylistWorker.perform_async(deck, 'add', queue_item.to_json)
+    PlaylistLog.create(
+      account: account,
+      uuid: queue_item.id,
+      deck: deck,
+      link: link,
+      info: queue_item.info
+    )
+    play_item(queue_item.id, queue_item.duration, 0) if updated_items.size == 1
+    true
   end
 
   def skip(id, account)
     skip_count_key = music_skip_count_key(account)
-    count = redis.get(skip_count_key)&.to_i || 0
 
-    unless account&.user.admin
+    unless account.user.admin
       raise Mastodon::PlayerControlSkipLimitTimeError if current_time_sec < settings['skip_limit_time']
-      raise Mastodon::PlayerControlLimitError unless count < settings['max_skip_count']
+      # 本当はredisに値を入れる前にスキップ回数のチェックをするべき
+      raise Mastodon::PlayerControlLimitError unless (redis.get(skip_count_key)&.to_i || 0) < settings['max_skip_count']
     end
 
-    ret = self.next(id)
+    ret = self.next(id, skip_count_key)
     return false unless ret
 
     PlaylistLog.find_by(uuid: id)&.update(skipped_at: Time.now, skipped_account: account)
+    true
+  end
 
-    ttl = redis.ttl(skip_count_key)
-    ttl = 60 * 60 if ttl <= 0
+  def next(id, incriment_key = nil)
+    updated_items = update_queue_items(incriment_key) do |items|
+      first_item = items.first
+      if first_item && first_item[:id] == id
+        items.shift
+        items
+      else
+        raise Mastodon::PlaylistItemNotFoundError
+      end
+    end
 
-    redis.multi do |m|
-      m.incr(skip_count_key)
-      m.expire(skip_count_key, ttl)
+    return false unless updated_items
+
+    PushPlaylistWorker.perform_async(deck, 'end', { id: id }.to_json)
+    first_item = updated_items.first
+
+    if first_item
+      queue_item = QueueItem.new(first_item)
+      play_item(queue_item.id, queue_item.duration)
     end
     true
   end
 
-  def next(id)
-    if redis_shift(id)
-      PushPlaylistWorker.perform_async(deck, 'end', { id: id }.to_json)
-      first_item = queue_items.first
-
-      if first_item
-        queue_item = QueueItem.new(queue_items.first)
-        play_item(queue_item.id, queue_item.duration)
-      end
-      true
-    end
-  end
-
   def queue_items
     JSON.parse(redis.get(playlist_key) || '[]', symbolize_names: true)
-  end
-
-  def set_start_time
-    redis.set(start_time_key, Time.now.to_i)
   end
 
   def current_time_sec
@@ -119,7 +96,12 @@ class Playlist < ApplicationRecord
 
   private
 
-  def control_limit?(count, account, force)
+  def set_start_time
+    redis.set(start_time_key, Time.now.to_i)
+  end
+
+  def control_limit?(account, force)
+    count = redis.get(music_add_count_key(account))&.to_i || 0
     !account.user.admin && !force && count >= settings['max_add_count']
   end
 
@@ -138,20 +120,29 @@ class Playlist < ApplicationRecord
     "music:playlist:time:#{deck}"
   end
 
-  def update_queue_items(retry_count = 3)
+  def update_queue_items(incriment_key = nil, retry_count = 3)
+    watch_keys = [playlist_key, incriment_key].compact
     while retry_count.positive?
-      redis.watch(playlist_key) do
+      redis.watch(*watch_keys) do
         begin
           items = yield queue_items
-          if items
-            res = redis.multi do |m|
-              m.set(playlist_key, items.to_json)
-            end
+          return nil unless items
 
-            return true if res
-          else
-            return false
+          ttl = nil
+          if incriment_key
+            ttl = redis.ttl(incriment_key)
+            ttl = 60 * 60 if ttl <= 0
           end
+
+          res = redis.multi do |m|
+            m.set(playlist_key, items.to_json)
+            if incriment_key && ttl
+              m.incr(incriment_key)
+              m.expire(incriment_key, ttl)
+            end
+          end
+
+          return items if res
         ensure
           redis.unwatch
         end
@@ -159,28 +150,6 @@ class Playlist < ApplicationRecord
       retry_count -= 1
     end
     raise Mastodon::RedisMaxRetryError
-  end
-
-  def redis_push(item)
-    update_queue_items do |items|
-      if items.size < settings['max_queue_size']
-        items.push(item)
-      else
-        raise Mastodon::PlaylistSizeOverError
-      end
-    end
-  end
-
-  def redis_shift(id)
-    update_queue_items do |items|
-      first_item = items.first
-      if first_item && first_item[:id] == id
-        items.shift
-        items
-      else
-        raise Mastodon::PlaylistEmptyError
-      end
-    end
   end
 
   def music_add_count_key(account)
