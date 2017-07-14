@@ -143,6 +143,8 @@ en:
       linked: Linked
       not_linked: Not linked
       unlink_forcibly: Unlink forcibly
+    playlists:
+      title: Playlist
     pubsubhubbub:
       callback_url: Callback URL
       confirmed: Confirmed

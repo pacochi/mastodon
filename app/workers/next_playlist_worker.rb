@@ -5,9 +5,10 @@ class NextPlaylistWorker
   sidekiq_options queue: 'playlist'
 
   def perform(deck, item_id)
-    playlist = Playlist.new(deck)
+    # プレイリストが削除済みでも、配信を続ける
+    playlist = Playlist.find_or_initialize_by(deck: deck)
     playlist.next(item_id)
-  rescue Mastodon::PlaylistEmptyError
+  rescue Mastodon::PlaylistItemNotFoundError
     nil
   end
 end

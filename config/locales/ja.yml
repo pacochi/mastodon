@@ -145,6 +145,8 @@ ja:
       linked: 連携中
       not_linked: 連携なし
       unlink_forcibly: 強制的に解除
+    playlists:
+      title: プレイリスト
     pubsubhubbub:
       callback_url: コールバックURL
       confirmed: 確認済み

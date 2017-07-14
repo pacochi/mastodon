@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170612110935) do
+ActiveRecord::Schema.define(version: 20170710015311) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -267,6 +267,16 @@ ActiveRecord::Schema.define(version: 20170612110935) do
     t.datetime "created_at",                      null: false
     t.datetime "updated_at",                      null: false
     t.index ["uuid"], name: "index_playlist_logs_on_uuid", unique: true, using: :btree
+  end
+
+  create_table "playlists", force: :cascade do |t|
+    t.integer  "deck",                          null: false
+    t.string   "name",          default: "",    null: false
+    t.integer  "deck_type",     default: 0,     null: false
+    t.boolean  "write_protect", default: false, null: false
+    t.datetime "created_at",                    null: false
+    t.datetime "updated_at",                    null: false
+    t.index ["deck"], name: "index_playlists_on_deck", unique: true, using: :btree
   end
 
   create_table "preview_cards", force: :cascade do |t|
