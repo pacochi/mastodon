@@ -20,7 +20,7 @@ import GettingStarted from '../../features/getting_started';
 import PublicTimeline from '../../features/public_timeline';
 import CommunityTimeline from '../../features/community_timeline';
 import AccountTimeline from '../../features/account_timeline';
-import AccountGallery from '../../features/account_gallery';
+// import AccountGallery from '../../features/account_gallery';
 import HomeTimeline from '../../features/home_timeline';
 import Compose from '../../features/compose';
 import Followers from '../../features/followers';
@@ -34,14 +34,10 @@ import GenericNotFound from '../../features/generic_not_found';
 import FavouritedStatuses from '../../features/favourited_statuses';
 import Blocks from '../../features/blocks';
 import Mutes from '../../features/mutes';
-<<<<<<< HEAD
-import Report from '../../features/report';
 import MediaTimeline from '../../features/media_timeline';
 import SuggestedAccounts from '../../features/suggested_accounts';
 import StatusSearchResults from '../../features/status_search_results';
 import AccountMediaTimeline from '../../features/account_media_timeline';
-=======
->>>>>>> v1.4.7
 
 // Small wrapper to pass multiColumn to the route components
 const WrappedSwitch = ({ multiColumn, children }) => (
