@@ -17,15 +17,12 @@
   feed_cleanup_scheduler:
     cron: '0 0 * * *'
     class: Scheduler::FeedCleanupScheduler
-<<<<<<< HEAD
+  doorkeeper_cleanup_scheduler:
+    cron: '1 1 * * 0'
+    class: Scheduler::DoorkeeperCleanupScheduler
   delete_elasticsearch_documents_worker:
     cron: '*/2 * * * *'
     class: Scheduler::DeleteElasticsearchDocumentsWorker
   trend_tag_scheduler:
     cron: '*/30 * * * *'
     class: Scheduler::TrendTagScheduler
-=======
-  doorkeeper_cleanup_scheduler:
-    cron: '1 1 * * 0'
-    class: Scheduler::DoorkeeperCleanupScheduler
->>>>>>> v1.4.7
