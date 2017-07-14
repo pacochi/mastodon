@@ -201,18 +201,15 @@ en:
       last_delivery: Last delivery
       title: PubSubHubbub
       topic: Topic
-    title: Administration
-<<<<<<< HEAD
     suggestion:
       title: Suggestion Tags
+    title: Administration
     trend_ng_word:
       title: "NG word"
-=======
   admin_mailer:
     new_report:
       body: "%{reporter} has reported %{target}"
       subject: New report for %{instance} (#%{id})
->>>>>>> v1.4.7
   application_mailer:
     settings: 'Change e-mail preferences: %{link}'
     signature: Mastodon notifications from %{instance}
