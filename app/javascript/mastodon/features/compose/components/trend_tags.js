@@ -8,7 +8,8 @@ const messages = defineMessages({
   title: { id: 'trend_tags.title', defaultMessage: 'Suggested tag' },
 });
 
-class TrendTags extends React.PureComponent {
+@injectIntl
+export default class TrendTags extends React.PureComponent {
 
   static propTypes = {
     tags: ImmutablePropTypes.list.isRequired,
@@ -58,5 +59,3 @@ class TrendTags extends React.PureComponent {
   }
 
 };
-
-export default injectIntl(TrendTags);
