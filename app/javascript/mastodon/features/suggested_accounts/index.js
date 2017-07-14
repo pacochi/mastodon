@@ -5,20 +5,17 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import LoadingIndicator from '../../components/loading_indicator';
 import Link from 'react-router-dom/Link';
 import {
-  fetchAccount,
   fetchSuggestedAccounts,
   expandSuggestedAccounts,
 } from '../../actions/suggested_accounts';
 import { ScrollContainer } from 'react-router-scroll';
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import { defineMessages, injectIntl } from 'react-intl';
 import SuggestedAccountContainer from '../../containers/suggested_account_container';
 import Column from '../ui/components/column';
-import HeaderContainer from '../account_timeline/containers/header_container';
 import LoadMore from '../../components/load_more';
 import ColumnBackButtonSlim from '../../components/column_back_button_slim';
-import Button from '../../components/button';
 
-const mapStateToProps = (state, props) => ({
+const mapStateToProps = (state) => ({
   accountIds: state.getIn(['user_lists', 'suggested_accounts', 'items']),
 });
 

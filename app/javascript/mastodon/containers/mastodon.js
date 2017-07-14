@@ -21,10 +21,6 @@ import { hydrateStore } from '../actions/store';
 import createStream from '../stream';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { getLocale } from '../locales';
-import MediaTimeline from '../features/media_timeline';
-import AccountMediaTimeline from '../features/account_media_timeline';
-import StatusSearchResults from '../features/status_search_results';
-import SuggestedAccounts from '../features/suggested_accounts';
 const { localeData, messages } = getLocale();
 addLocaleData(localeData);
 

@@ -5,10 +5,6 @@ import SuggestedAccount from '../components/suggested_account';
 import {
   followAccount,
   unfollowAccount,
-  blockAccount,
-  unblockAccount,
-  muteAccount,
-  unmuteAccount,
 } from '../actions/accounts';
 
 const makeMapStateToProps = () => {

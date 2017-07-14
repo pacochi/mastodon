@@ -14,7 +14,6 @@ import {
 } from '../../actions/timelines';
 import { addColumn, removeColumn, moveColumn } from '../../actions/columns';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
-import ColumnBackButtonSlim from '../../components/column_back_button_slim';
 import ColumnSettingsContainer from './containers/column_settings_container';
 import createStream from '../../stream';
 
@@ -27,8 +26,6 @@ const mapStateToProps = state => ({
   streamingAPIBaseURL: state.getIn(['meta', 'streaming_api_base_url']),
   accessToken: state.getIn(['meta', 'access_token']),
 });
-
-let subscription;
 
 class MediaTimeline extends React.PureComponent {
 

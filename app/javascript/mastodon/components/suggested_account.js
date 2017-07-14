@@ -7,7 +7,6 @@ import MediaGallery from './media_gallery';
 import VideoPlayer from './video_player';
 import Permalink from './permalink';
 import IconButton from './icon_button';
-import { openModal } from '../actions/modal';
 import { defineMessages, injectIntl } from 'react-intl';
 
 const messages = defineMessages({
