@@ -31,7 +31,6 @@ const textAtCursorMatchesToken = (str, caretPosition, prefix) => {
   }
 };
 
-<<<<<<< HEAD
 const textAtCursorMatchesHashToken = (str, caretPosition) => {
   return textAtCursorMatchesToken(str, caretPosition, '#');
 };
@@ -43,10 +42,7 @@ const textAtCursorMatchesMentionToken = (str, caretPosition) => {
   return [start, word];
 };
 
-class AutosuggestTextarea extends ImmutablePureComponent {
-=======
 export default class AutosuggestTextarea extends ImmutablePureComponent {
->>>>>>> v1.4.7
 
   static propTypes = {
     value: PropTypes.string,
@@ -289,10 +285,4 @@ export default class AutosuggestTextarea extends ImmutablePureComponent {
     );
   }
 
-<<<<<<< HEAD
-};
-
-export default AutosuggestTextarea;
-=======
 }
->>>>>>> v1.4.7
