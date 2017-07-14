@@ -50,11 +50,6 @@ RSpec.describe Auth::RegistrationsController, type: :controller do
 
   describe 'GET #new' do
     before do
-<<<<<<< HEAD
-      Setting.open_registrations = true
-      request.headers["Accept-Language"] = accept_language
-=======
->>>>>>> v1.4.7
       request.env["devise.mapping"] = Devise.mappings[:user]
     end
 
@@ -111,24 +106,7 @@ RSpec.describe Auth::RegistrationsController, type: :controller do
       subject
     end
 
-<<<<<<< HEAD
-    [
-      ['en', 'en'],
-      ['fr', 'fr'],
-      [nil, I18n.default_locale.to_s],
-      ['NotFound', I18n.default_locale.to_s],
-    ].each do |accept_language, locale|
-      context "with Accept-Language='#{accept_language}'" do
-        let(:accept_language) { accept_language }
-
-        it 'creates user with requested locale' do
-          expect(User.find_by!(email: 'test@example.com').locale).to eq(locale)
-        end
-      end
-    end
-=======
     include_examples 'checks for enabled registrations', :create
->>>>>>> v1.4.7
   end
 
   describe 'DELETE #destroy' do
