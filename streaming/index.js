@@ -78,16 +78,11 @@ const startWorker = (workerId) => {
 
   const pgConfigs = {
     development: {
-<<<<<<< HEAD
-      database: 'pawoo_development',
-      host:     process.env.DB_HOST || '/var/run/postgresql',
-=======
       user:     process.env.DB_USER || pg.defaults.user,
       password: process.env.DB_PASS || pg.defaults.password,
-      database: 'mastodon_development',
+      database: 'pawoo_development',
       host:     process.env.DB_HOST || pg.defaults.host,
       port:     process.env.DB_PORT || pg.defaults.port,
->>>>>>> v1.4.7
       max:      10,
     },
 
