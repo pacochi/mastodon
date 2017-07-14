@@ -12,11 +12,7 @@ require 'capybara/rspec'
 Dir[Rails.root.join('spec/support/**/*.rb')].each { |f| require f }
 
 ActiveRecord::Migration.maintain_test_schema!
-<<<<<<< HEAD
-=======
-WebMock.disable_net_connect!
 Redis.current = Redis::Namespace.new("mastodon_test#{ENV['TEST_ENV_NUMBER']}", redis: Redis.current)
->>>>>>> v1.4.7
 Sidekiq::Testing.inline!
 Sidekiq::Logging.logger = nil
 
