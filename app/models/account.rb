@@ -161,15 +161,11 @@ class Account < ApplicationRecord
   end
 
   class << self
-<<<<<<< HEAD
-    def triadic_closures(account, limit: 5, offset: 0, exclude_ids: [])
-=======
     def domains
       reorder(nil).pluck('distinct accounts.domain')
     end
 
-    def triadic_closures(account, limit: 5, offset: 0)
->>>>>>> v1.4.7
+    def triadic_closures(account, limit: 5, offset: 0, exclude_ids: [])
       sql = <<-SQL.squish
         WITH first_degree AS (
           SELECT target_account_id
