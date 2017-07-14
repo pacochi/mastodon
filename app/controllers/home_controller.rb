@@ -18,17 +18,6 @@ class HomeController < ApplicationController
   def authenticate_user!
     redirect_to(find_redirect_path_from_request) unless user_signed_in?
   end
-<<<<<<< HEAD
-
-  def find_or_create_access_token
-    Doorkeeper::AccessToken.find_or_create_for(
-      Doorkeeper::Application.where(superapp: true).first,
-      current_user.id,
-      Doorkeeper::OAuth::Scopes.from_string('read write follow'),
-      Doorkeeper.configuration.access_token_expires_in,
-      Doorkeeper.configuration.refresh_token_enabled?
-    )
-  end
 
   def find_redirect_path_from_request
     return account_path(Account.first) if single_user_mode?
@@ -47,6 +36,4 @@ class HomeController < ApplicationController
     end
     about_path
   end
-=======
->>>>>>> v1.4.7
 end
