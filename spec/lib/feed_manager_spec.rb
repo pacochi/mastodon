@@ -155,10 +155,10 @@ RSpec.describe FeedManager do
 
       reblog = Fabricate(:status, reblog: status)
       instance.push(:home, accounts, reblog)
+    end
 
     it 'trims timelines if they will have more than FeedManager::MAX_ITEMS' do
       account = Fabricate(:account)
-      status = Fabricate(:status)
       members = FeedManager::MAX_ITEMS.times.map { |count| [count, count] }
       Redis.current.zadd("feed:type:#{account.id}", members)
 
