@@ -164,14 +164,4 @@ export default class Mastodon extends React.PureComponent {
     return <div />;
   }
 
-<<<<<<< HEAD
-};
-
-Mastodon.propTypes = {
-  locale: PropTypes.string.isRequired,
-};
-
-export default Mastodon;
-=======
 }
->>>>>>> v1.4.7
