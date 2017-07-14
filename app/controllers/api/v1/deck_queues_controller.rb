@@ -52,5 +52,4 @@ class Api::V1::DeckQueuesController < ApiController
   def set_settings
     @settings = Setting.playlist
   end
-
 end

@@ -202,7 +202,5 @@ RSpec.describe Playlist, type: :model do
         it { expect{ subject }.not_to raise_error }
       end
     end
-
-
   end
 end
