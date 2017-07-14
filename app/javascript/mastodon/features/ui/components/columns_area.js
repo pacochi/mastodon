@@ -8,12 +8,9 @@ import Notifications from '../../notifications';
 import PublicTimeline from '../../public_timeline';
 import CommunityTimeline from '../../community_timeline';
 import HashtagTimeline from '../../hashtag_timeline';
-import Compose from '../../compose';
-<<<<<<< HEAD
 import MediaTimeline from '../../media_timeline';
-=======
+import Compose from '../../compose';
 import { getPreviousLink, getNextLink } from './tabs_bar';
->>>>>>> v1.4.7
 
 const componentMap = {
   'COMPOSE': Compose,
