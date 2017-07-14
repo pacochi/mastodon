@@ -93,29 +93,6 @@ class Item extends React.PureComponent {
     let thumbnail = '';
 
     if (attachment.get('type') === 'image') {
-<<<<<<< HEAD
-      if (expandMedia) {
-        thumbnail = (
-          <a
-            href={attachment.get('remote_url') || attachment.get('url')}
-            onClick={this.handleClick}
-            target='_blank'
-          >
-            <img src={attachment.get('preview_url')} alt='media' style={{ width: '100%' }} />
-          </a>
-        );
-      } else {
-        thumbnail = (
-          <a // eslint-disable-line jsx-a11y/anchor-has-content
-            className='media-gallery__item-thumbnail'
-            href={attachment.get('remote_url') || attachment.get('url')}
-            onClick={this.handleClick}
-            target='_blank'
-            style={{ backgroundImage: `url(${attachment.get('preview_url')})`, backgroundPosition: `50% ${squareMedia ? '0' : '20%'}` }}
-          />
-        );
-      }
-=======
       const previewUrl = attachment.get('preview_url');
       const previewWidth = attachment.getIn(['meta', 'small', 'width']);
 
@@ -125,17 +102,28 @@ class Item extends React.PureComponent {
       const srcSet = `${originalUrl} ${originalWidth}w, ${previewUrl} ${previewWidth}w`;
       const sizes = `(min-width: 1025px) ${320 * (width / 100)}px, ${width}vw`;
 
-      thumbnail = (
-        <a
-          className='media-gallery__item-thumbnail'
-          href={attachment.get('remote_url') || originalUrl}
-          onClick={this.handleClick}
-          target='_blank'
-        >
-          <img src={previewUrl} srcSet={srcSet} sizes={sizes} alt='' />
-        </a>
-      );
->>>>>>> v1.4.7
+      if (expandMedia) {
+        thumbnail = (
+          <a
+            href={attachment.get('remote_url') || originalUrl}
+            onClick={this.handleClick}
+            target='_blank'
+          >
+            <img src={previewUrl} srcSet={srcSet} sizes={sizes} alt='' style={{ width: '100%' }} />
+          </a>
+        );
+      } else {
+        thumbnail = (
+          <a
+            className='media-gallery__item-thumbnail'
+            href={attachment.get('remote_url') || originalUrl}
+            onClick={this.handleClick}
+            target='_blank'
+          >
+            <img src={previewUrl} srcSet={srcSet} sizes={sizes} alt='' style={{ backgroundPosition: `50% ${squareMedia ? '0' : '20%'}` }} />
+          </a>
+        );
+      }
     } else if (attachment.get('type') === 'gifv') {
       const autoPlay = !isIOS() && this.props.autoPlayGif;
 
