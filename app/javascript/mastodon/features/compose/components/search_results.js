@@ -1,11 +1,7 @@
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-<<<<<<< HEAD
 import PropTypes from 'prop-types';
-import { injectIntl, FormattedMessage } from 'react-intl';
-=======
 import { FormattedMessage } from 'react-intl';
->>>>>>> v1.4.7
 import AccountContainer from '../../../containers/account_container';
 import StatusContainer from '../../../containers/status_container';
 import Link from 'react-router-dom/Link';
