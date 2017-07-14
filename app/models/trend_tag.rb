@@ -14,6 +14,7 @@ class TrendTag
 
     trend_ng_words = TrendNgWord.pluck(:word)
 
+    # suggestion_tagsは運営側が設定するものなので、NGワードで除外しない
     (trend_tags.first(TREND_TAG_LIMIT).select { |trend_tag|
       trend_ng_words.none? { |ng_word| trend_tag.name.downcase.include?(ng_word) }
     } + suggestion_tags).uniq(&:name).first(limit)
