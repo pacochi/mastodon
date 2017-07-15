@@ -99,7 +99,7 @@ class Item extends React.PureComponent {
       const originalUrl = attachment.get('url');
       const originalWidth = attachment.getIn(['meta', 'original', 'width']);
 
-      const srcSet = `${originalUrl} ${originalWidth}w, ${previewUrl} ${previewWidth}w`;
+      const srcSet = attachment.has('meta') ? `${originalUrl} ${originalWidth}w, ${previewUrl} ${previewWidth}w` : null;
       const sizes = `(min-width: 1025px) ${320 * (width / 100)}px, ${width}vw`;
 
       if (expandMedia) {
