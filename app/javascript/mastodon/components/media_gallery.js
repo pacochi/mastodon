@@ -102,28 +102,16 @@ class Item extends React.PureComponent {
       const srcSet = attachment.has('meta') ? `${originalUrl} ${originalWidth}w, ${previewUrl} ${previewWidth}w` : null;
       const sizes = `(min-width: 1025px) ${320 * (width / 100)}px, ${width}vw`;
 
-      if (expandMedia) {
-        thumbnail = (
-          <a
-            href={attachment.get('remote_url') || originalUrl}
-            onClick={this.handleClick}
-            target='_blank'
-          >
-            <img src={previewUrl} srcSet={srcSet} sizes={sizes} alt='' style={{ width: '100%' }} />
-          </a>
-        );
-      } else {
-        thumbnail = (
-          <a
-            className='media-gallery__item-thumbnail'
-            href={attachment.get('remote_url') || originalUrl}
-            onClick={this.handleClick}
-            target='_blank'
-          >
-            <img src={previewUrl} srcSet={srcSet} sizes={sizes} alt='' style={{ backgroundPosition: `50% ${squareMedia ? '0' : '20%'}` }} />
-          </a>
-        );
-      }
+      thumbnail = (
+        <a
+          className={expandMedia ? null : 'media-gallery__item-thumbnail'}
+          href={attachment.get('remote_url') || originalUrl}
+          onClick={this.handleClick}
+          target='_blank'
+        >
+          <img src={previewUrl} srcSet={srcSet} sizes={sizes} alt='' style={expandMedia ? { width: '100%' } : null} />
+        </a>
+      );
     } else if (attachment.get('type') === 'gifv') {
       const autoPlay = !isIOS() && this.props.autoPlayGif;
 
