@@ -91,6 +91,7 @@ export default class ReportModal extends ImmutablePureComponent {
 
   render () {
     const { account, comment, intl, statusIds, isSubmitting } = this.props;
+    const { option: visibleOption } = this.state;
     const filled = this.options.findIndex(option => option.get('value') === comment) > -1;
 
     if (!account) {
@@ -104,14 +105,14 @@ export default class ReportModal extends ImmutablePureComponent {
         </div>
 
         <div className='report-modal__container'>
-          <div className='report-modal__statuses'>
+          <div className='report-modal__statuses' style={{ display: visibleOption ? 'none': null }}>
             <div>
               {statusIds.map(statusId => <StatusCheckBox id={statusId} key={statusId} disabled={isSubmitting} />)}
             </div>
           </div>
 
-          <div className='report-modal__comment'>
-            {this.state.option &&
+          {visibleOption &&
+            <div className='report-modal__comment'>
               <div className='report__select'>
                 <div>
                   <div className='report__select__title'>{intl.formatMessage(messages.reportTitle)}</div>
@@ -132,16 +133,14 @@ export default class ReportModal extends ImmutablePureComponent {
                     onChange={this.handleCommentChange}
                     disabled={isSubmitting}
                   />
-
-                  <Button disabled={isSubmitting || comment.length === 0} text={intl.formatMessage(messages.submit)} onClick={this.handleSubmit} block />
                 </div>
               </div>
-            }
-          </div>
+            </div>
+          }
         </div>
 
         <div className='report-modal__action-bar'>
-          <Button disabled={isSubmitting} text={intl.formatMessage(messages.submit)} onClick={this.handlePreSubmit} />
+          <Button disabled={isSubmitting || (visibleOption && comment.length === 0)} text={intl.formatMessage(messages.submit)} onClick={visibleOption ? this.handleSubmit : this.handlePreSubmit} />
         </div>
       </div>
     );
