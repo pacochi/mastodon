@@ -28,6 +28,11 @@ export default class DetailedStatus extends ImmutablePureComponent {
     squareMedia: PropTypes.bool,
   };
 
+  static defaultProps = {
+    expandMedia: true,
+    squareMedia: true,
+  }
+
   handleAccountClick = (e) => {
     if (e.button === 0) {
       e.preventDefault();
