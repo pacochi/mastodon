@@ -50,7 +50,7 @@ export default class SuggestedAccount extends React.PureComponent {
       } else if (attachments.first().get('type') === 'video') {
         media = <VideoPlayer media={attachments.first()} onOpenVideo={this.props.onOpenVideo} />;
       } else {
-        media = <MediaGallery media={attachments} height={132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={false} expandMedia={false} squareMedia={false} lineMedia />;
+        media = <MediaGallery media={attachments} height={132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={false} expandMedia={false} lineMedia />;
       }
 
       media = (<div className='account__suggested_accounts_media'>{media}</div>);

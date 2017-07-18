@@ -19,7 +19,6 @@ class Item extends React.PureComponent {
     autoPlayGif: PropTypes.bool.isRequired,
     expandMedia: PropTypes.bool.isRequired,
     lineMedia: PropTypes.bool,
-    squareMedia: PropTypes.bool.isRequired,
   };
 
   handleClick = (e) => {
@@ -34,7 +33,7 @@ class Item extends React.PureComponent {
   }
 
   render () {
-    const { attachment, index, size, squareMedia, expandMedia, lineMedia } = this.props;
+    const { attachment, index, size, expandMedia, lineMedia } = this.props;
 
     let width  = 50;
     let height = 100;
@@ -153,13 +152,11 @@ export default class MediaGallery extends React.PureComponent {
     autoPlayGif: PropTypes.bool.isRequired,
     expandMedia: PropTypes.bool.isRequired,
     lineMedia: PropTypes.bool,
-    squareMedia: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
     expandMedia: false,
     lineMedia: false,
-    squareMedia: false,
   };
 
   state = {
@@ -181,7 +178,7 @@ export default class MediaGallery extends React.PureComponent {
   }
 
   render () {
-    const { media, intl, sensitive, squareMedia, expandMedia, lineMedia } = this.props;
+    const { media, intl, sensitive, expandMedia, lineMedia } = this.props;
 
     let children;
 
@@ -203,7 +200,7 @@ export default class MediaGallery extends React.PureComponent {
     } else {
       const size = media.take(4).size;
       children = media.take(4).map((attachment, i) =>
-        <Item key={attachment.get('id')} onClick={this.handleClick} attachment={attachment} autoPlayGif={this.props.autoPlayGif} index={i} size={size} squareMedia={squareMedia} expandMedia={expandMedia} lineMedia={!!lineMedia} />
+        <Item key={attachment.get('id')} onClick={this.handleClick} attachment={attachment} autoPlayGif={this.props.autoPlayGif} index={i} size={size} expandMedia={expandMedia} lineMedia={!!lineMedia} />
       );
     }
 

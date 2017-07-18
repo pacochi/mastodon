@@ -25,12 +25,10 @@ export default class DetailedStatus extends ImmutablePureComponent {
     onOpenVideo: PropTypes.func.isRequired,
     autoPlayGif: PropTypes.bool,
     expandMedia: PropTypes.bool,
-    squareMedia: PropTypes.bool,
   };
 
   static defaultProps = {
     expandMedia: true,
-    squareMedia: true,
   }
 
   handleAccountClick = (e) => {
@@ -43,7 +41,7 @@ export default class DetailedStatus extends ImmutablePureComponent {
   }
 
   render () {
-    const { expandMedia, squareMedia } = this.props;
+    const { expandMedia } = this.props;
     const status = this.props.status.get('reblog') ? this.props.status.get('reblog') : this.props.status;
 
     let media           = '';
@@ -69,7 +67,7 @@ export default class DetailedStatus extends ImmutablePureComponent {
       } else if (attachments.first().get('type') === 'video') {
         media = <VideoPlayer sensitive={status.get('sensitive')} media={attachments.first()} width={300} height={150} onOpenVideo={this.props.onOpenVideo} autoplay />;
       } else {
-        media = <MediaGallery sensitive={status.get('sensitive')} media={attachments} height={300} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} squareMedia={squareMedia} />;
+        media = <MediaGallery sensitive={status.get('sensitive')} media={attachments} height={300} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} />;
       }
     } else if (status.get('spoiler_text').length === 0) {
       media = <CardContainer statusId={status.get('id')} />;
