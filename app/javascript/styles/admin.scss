@@ -259,7 +259,8 @@
   }
 }
 
-.report-status, .account-status {
+.report-status,
+.account-status {
   display: flex;
   margin-bottom: 10px;
 
@@ -269,7 +270,8 @@
   }
 }
 
-.report-status__actions, .account-status__actions {
+.report-status__actions,
+.account-status__actions {
   flex: 0 0 auto;
   display: flex;
   flex-direction: column;
@@ -284,7 +286,20 @@
 
 .batch-form-box {
   display: flex;
-  margin-top: 5px;
+  margin-bottom: 10px;
+
+  #form_status_batch_action {
+    margin-right: 5px;
+    font-size: 14px;
+  }
+
+  .media-spoiler-toggle-buttons {
+    margin-left: auto;
+
+    .button {
+      overflow: visible;
+    }
+  }
 }
 
 .batch-checkbox,

@@ -201,7 +201,6 @@ ja:
         delete: 削除
         nsfw_off: NSFW オフ
         nsfw_on: NSFW オン
-      batch_action: 一括操作
       execute: 実行
       failed_to_execute: 実行に失敗しました
       media:
@@ -211,11 +210,18 @@ ja:
       no_media: メディアなし
       with_media: メディアあり
       title: トゥート一覧
+    subscriptions:
+      callback_url: コールバックURL
+      confirmed: 確認済み
+      expires_in: 期限
+      last_delivery: 最終配送
+      title: PubSubHubbub
+      topic: トピック
     suggestion:
       title: 運営タグ
+    title: 管理
     trend_ng_word:
       title: NGワード
-    title: 管理
   admin_mailer:
     new_report:
       body: "%{reporter} が %{target} を通報しました"
