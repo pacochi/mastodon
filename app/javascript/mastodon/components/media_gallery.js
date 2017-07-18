@@ -178,7 +178,7 @@ export default class MediaGallery extends React.PureComponent {
     visible: !this.props.sensitive,
   };
 
-  componentWillReceiveProps(nextProps) {
+  componentWillReceiveProps (nextProps) {
     if (nextProps.sensitive !== this.props.sensitive) {
       this.setState({ visible: !nextProps.sensitive });
     }
