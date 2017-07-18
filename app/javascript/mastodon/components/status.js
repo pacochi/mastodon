@@ -45,6 +45,10 @@ export default class Status extends ImmutablePureComponent {
     intersectionObserverWrapper: PropTypes.object,
   };
 
+  static defaultProps = {
+    expandMedia: false,
+  };
+
   state = {
     isExpanded: false,
     isIntersecting: true, // assume intersecting until told otherwise

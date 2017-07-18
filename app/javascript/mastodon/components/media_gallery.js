@@ -18,7 +18,7 @@ class Item extends React.PureComponent {
     onClick: PropTypes.func.isRequired,
     autoPlayGif: PropTypes.bool.isRequired,
     expandMedia: PropTypes.bool.isRequired,
-    lineMedia: PropTypes.bool,
+    lineMedia: PropTypes.bool.isRequired,
   };
 
   handleClick = (e) => {
@@ -150,7 +150,7 @@ export default class MediaGallery extends React.PureComponent {
     onOpenMedia: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
     autoPlayGif: PropTypes.bool.isRequired,
-    expandMedia: PropTypes.bool.isRequired,
+    expandMedia: PropTypes.bool,
     lineMedia: PropTypes.bool,
   };
 
@@ -200,7 +200,7 @@ export default class MediaGallery extends React.PureComponent {
     } else {
       const size = media.take(4).size;
       children = media.take(4).map((attachment, i) =>
-        <Item key={attachment.get('id')} onClick={this.handleClick} attachment={attachment} autoPlayGif={this.props.autoPlayGif} index={i} size={size} expandMedia={expandMedia} lineMedia={!!lineMedia} />
+        <Item key={attachment.get('id')} onClick={this.handleClick} attachment={attachment} autoPlayGif={this.props.autoPlayGif} index={i} size={size} expandMedia={expandMedia} lineMedia={lineMedia} />
       );
     }
 
