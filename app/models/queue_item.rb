@@ -19,10 +19,10 @@ class QueueItem
 
     def create_from_link(link, account)
       link = link.strip.split(/\s/).try(:[], 0)
-      return if link.blank? || addressable_link(link).nil?
+      raise Mastodon::MusicSourceNotFoundError if link.blank? || addressable_link(link).nil?
 
       item = pawoo_link(link) || booth_link(link) || apollo_link(link) || youtube_link(link) || soundcloud_link(link)
-      return unless item
+      raise Mastodon::MusicSourceNotFoundError unless item
 
       item.tap do |i|
         i.assign_attributes(
@@ -48,7 +48,7 @@ class QueueItem
       return cache if cache
 
       video = MediaAttachment.video.joins(:status).find_by(statuses: { id: status_id, visibility: [:public, :unlisted] })
-      return unless video&.music_info
+      raise Mastodon::MusicSourceFetchFailedError unless video&.music_info
 
       video_url = full_asset_url(video.file.url(:original))
 
@@ -78,14 +78,13 @@ class QueueItem
       cache = find_cache('apollo', shop_id)
       return cache if cache
 
-      if instance = from_booth_api(shop_id)
-        instance.assign_attributes(
-          link: link,
-          source_type: 'apollo'
-        )
+      instance = from_booth_api(shop_id)
+      instance.assign_attributes(
+        link: link,
+        source_type: 'apollo'
+      )
 
-        cache_item('apollo', shop_id, instance)
-      end
+      cache_item('apollo', shop_id, instance)
     end
 
     def booth_link(link)
@@ -95,14 +94,29 @@ class QueueItem
       cache = find_cache('booth', shop_id)
       return cache if cache
 
-      if instance = from_booth_api(shop_id)
-        instance.assign_attributes(
-          link: link,
-          source_type: 'booth'
-        )
+      instance = from_booth_api(shop_id)
+      instance.assign_attributes(
+        link: link,
+        source_type: 'booth'
+      )
 
-        cache_item('booth', shop_id, instance)
-      end
+      cache_item('booth', shop_id, instance)
+    end
+
+    def from_booth_api(id)
+      code, json = BoothApiClient.new.item(id)
+      raise Mastodon::MusicSourceFetchFailedError if code != 200 || json.dig('body', 'sound').nil? || json.dig('body', 'adult')
+
+      user_or_shop_name = json.dig('body', 'shop', 'user', 'nickname') || json.dig('body', 'shop', 'name')
+
+      new(
+        info: "#{user_or_shop_name} - #{json.dig('body', 'name')}",
+        thumbnail_url: json.dig('body', 'primary_image', 'url'),
+        music_url: json.dig('body', 'sound', 'long_url'),
+        video_url: nil,
+        duration: json.dig('body', 'sound', 'duration'),
+        source_id: id
+      )
     end
 
     def youtube_link(link)
@@ -113,8 +127,6 @@ class QueueItem
       return cache if cache
 
       title = fetch_youtube_title(link)
-      return unless title
-
       duration_sec = fetch_youtube_duration(video_id)
 
       item = new(
@@ -133,11 +145,12 @@ class QueueItem
     def fetch_youtube_duration(video_id)
       url = "https://www.googleapis.com/youtube/v3/videos?key=#{YOUTUBE_API_KEY}&part=contentDetails&id=#{video_id}"
       json = JSON.parse(http_client.get(url).body.to_s)
-      return if json['items'].blank?
+      raise Mastodon::MusicSourceFetchFailedError if json['items'].blank?
+
       item = json['items'].first
       duration = item['contentDetails']['duration']
       matched = duration.match(%r{PT(\d+H)?(\d+M)?(\d+S)?})
-      return unless matched
+      raise Mastodon::MusicSourceFetchFailedError unless matched
 
       hour = matched[1]&.slice(/\d+/)&.to_i || 0
       minute = matched[2]&.slice(/\d+/)&.to_i || 0
@@ -150,8 +163,8 @@ class QueueItem
       url = "https://www.youtube.com/oembed?url=#{link}"
       response = http_client.get(url)
 
-      raise Mastodon::MusicSourceForbidden if response.status == 401
-      return unless response.status == 200
+      raise Mastodon::MusicSourceForbiddenError if response.status == 401
+      raise Mastodon::MusicSourceFetchFailedError unless response.status == 200
 
       json = JSON.parse(response.body.to_s)
       json['title']
@@ -167,22 +180,6 @@ class QueueItem
       end
     end
 
-    def from_booth_api(id)
-      code, json = BoothApiClient.new.item(id)
-      return if code != 200 || json.dig('body', 'sound').nil? || json.dig('body', 'adult')
-
-      user_or_shop_name = json.dig('body', 'shop', 'user', 'nickname') || json.dig('body', 'shop', 'name')
-
-      new(
-        info: "#{user_or_shop_name} - #{json.dig('body', 'name')}",
-        thumbnail_url: json.dig('body', 'primary_image', 'url'),
-        music_url: json.dig('body', 'sound', 'long_url'),
-        video_url: nil,
-        duration: json.dig('body', 'sound', 'duration'),
-        source_id: id
-      )
-    end
-
     def soundcloud_link(link)
       source_link = find_soundcloud_link(link)
       return unless source_link
@@ -190,35 +187,32 @@ class QueueItem
       cache = find_cache('soundcloud', source_link)
       return cache if cache
 
-      if instance = from_soundcloud_api(link)
-        instance.assign_attributes(
-          link: link,
-          source_type: 'soundcloud',
-        )
+      instance = from_soundcloud_api(link)
+      instance.assign_attributes(
+        link: link,
+        source_type: 'soundcloud'
+      )
 
-        cache_item('soundcloud', instance.source_id, instance)
-      end
+      cache_item('soundcloud', instance.source_id, instance)
     end
 
     def find_soundcloud_link(link)
       addressable = addressable_link(link)
-      if addressable.hostname == 'soundcloud.com'
-        link.remove(%r{\?\Z})
-      end
+      link.remove(%r{\?\Z}) if addressable.hostname == 'soundcloud.com'
     end
 
     def from_soundcloud_api(link)
       url = "https://soundcloud.com/oembed?format=json&url=#{link}"
       response = http_client.get(url)
-      raise Mastodon::MusicSourceForbidden if response.status == 403
-      return unless response.status == 200
+      raise Mastodon::MusicSourceForbiddenError if response.status == 403
+      raise Mastodon::MusicSourceFetchFailedError unless response.status == 200
 
       json = JSON.parse(response.body.to_s)
       title = "#{json['author_name']} - #{json['title'].remove(%r{\sby\s.+?$})}"
       source_id = json['html'].match(%r{https%3A%2F%2Fapi\.soundcloud\.com%2Ftracks%2F(?<id>\d+)}).try(:[], :id)
       duration_sec = find_soundcloud_duration(json['html'])
 
-      item = new(
+      new(
         info: title,
         thumbnail_url: json['thumbnail_url'].gsub('http://', 'https://'),
         music_url: nil,
@@ -232,10 +226,10 @@ class QueueItem
       embed_src_pattern = %r{(?<url>https://w\.soundcloud\.com/player/\?.+?&?url=https%3A%2F%2Fapi\.soundcloud\.com%2Ftracks%2F\d+(?:&show_artwork=true)?)}
       url = embed.match(embed_src_pattern).try(:[], :url)
       response = http_client.get(url)
-      raise Mastodon::MusicSourceNotFoundError unless response.status == 200
+      raise Mastodon::MusicSourceFetchFailedError unless response.status == 200
 
       duration_pattern = %r{full_duration.+?(?<duration>\d+)}
-      (response.body.to_s.match(duration_pattern).try(:[], :duration).to_i/1000).ceil
+      (response.body.to_s.match(duration_pattern).try(:[], :duration).to_i / 1000).ceil
     end
 
     def find_cache(type, source_id)

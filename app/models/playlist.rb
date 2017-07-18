@@ -23,7 +23,6 @@ class Playlist < ApplicationRecord
     raise Mastodon::PlaylistWriteProtectionError if write_protect && !force
 
     queue_item = QueueItem.create_from_link(link, account)
-    raise Mastodon::MusicSourceNotFoundError if queue_item.nil?
 
     updated_items = update_queue_items(music_add_count_key(account)) do |items|
       raise Mastodon::PlayerControlLimitError if control_limit?(account, force)

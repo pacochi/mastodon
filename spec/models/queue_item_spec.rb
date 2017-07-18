@@ -58,12 +58,12 @@ RSpec.describe QueueItem do
       let(:status) { Fabricate(:status, account: account) }
 
       context "when status hasn't attachments" do
-        it { is_expected.to be_nil }
+        it { expect{ subject }.to raise_error(Mastodon::MusicSourceFetchFailedError) }
       end
 
       context "when status has image attachments" do
         let!(:media_attachment) { Fabricate(:media_attachment, status: status) }
-        it { is_expected.to be_nil }
+        it { expect{ subject }.to raise_error(Mastodon::MusicSourceFetchFailedError) }
       end
 
       context "when status has video attachments" do
@@ -79,12 +79,12 @@ RSpec.describe QueueItem do
 
         context 'status is direct' do
           let(:status) { Fabricate(:status, account: account, visibility: 'direct') }
-          it { is_expected.to be_nil }
+          it { expect{ subject }.to raise_error(Mastodon::MusicSourceFetchFailedError) }
         end
 
         context 'status is private' do
           let(:status) { Fabricate(:status, account: account, visibility: 'private') }
-          it { is_expected.to be_nil }
+          it { expect{ subject }.to raise_error(Mastodon::MusicSourceFetchFailedError) }
         end
       end
     end
@@ -96,7 +96,7 @@ RSpec.describe QueueItem do
 
       context 'invalid url' do
         let(:url) { 'https://booth.pm/ja/browse/1' }
-        it { is_expected.to be_nil }
+        it { expect{ subject }.to raise_error(Mastodon::MusicSourceNotFoundError) }
       end
 
       context 'market url' do
@@ -208,9 +208,15 @@ RSpec.describe QueueItem do
 
       context 'not found' do
         let(:url) { 'https://youtu.be/1' }
-        let(:youtube_oembed_status) { 404 }
+        let(:oembed_status) { 404 }
         let(:youtube_oembed_response) { 'Not Found' }
-        it { is_expected.to be_nil }
+        it { expect{ subject }.to raise_error(Mastodon::MusicSourceFetchFailedError) }
+      end
+
+      context 'api request is failed' do
+        let(:url) { 'https://youtu.be/1' }
+        let(:youtube_api_response) { {} }
+        it { expect{ subject }.to raise_error(Mastodon::MusicSourceFetchFailedError) }
       end
     end
 
