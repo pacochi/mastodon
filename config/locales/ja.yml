@@ -102,7 +102,6 @@ ja:
         created_reports: このアカウントで作られたレポート
         report: レポート
         targeted_reports: このアカウントについてのレポート
-      show_statuses: トゥートを表示
       silence: サイレンス
       statuses: トゥート数
       subscribe: 購読する
@@ -174,9 +173,6 @@ ja:
       title: レポート
       unresolved: 未解決
       view: 表示
-      nsfw:
-        'true': NSFW ON
-        'false': NSFW OFF
     settings:
       contact_information:
         email: 公開するメールアドレスを入力
@@ -199,6 +195,22 @@ ja:
         title: サイトの詳細な説明
       site_title: サイトのタイトル
       title: サイト設定
+    statuses:
+      back_to_account: アカウントページに戻る
+      batch:
+        delete: 削除
+        nsfw_off: NSFW オフ
+        nsfw_on: NSFW オン
+      batch_action: 一括操作
+      execute: 実行
+      failed_to_execute: 実行に失敗しました
+      media:
+        hide: メディアを隠す
+        show: メディアを表示
+        title: メディア
+      no_media: メディアなし
+      with_media: メディアあり
+      title: トゥート一覧
     suggestion:
       title: 運営タグ
     trend_ng_word:
@@ -257,6 +269,7 @@ ja:
     warning_html: 削除が保証されるのはこのインスタンス上のコンテンツのみです。他のインスタンス等、外部に広く共有されたコンテンツについては痕跡が残ることがあります。また、現在接続できないサーバーや、あなたの更新を受け取らなくなったサーバーに対しては、削除は反映されません。
     warning_title: 共有されたコンテンツについて
     exists_initial_password_usage: セキュリティ上の理由により、パスワードが設定されていないアカウントを削除することができません。
+    exists_oauth_authentications_html: アカウント削除の前に、<a href="%{path}">pixivアカウント連携</a>を解除してください。
   errors:
     top: トップに戻る
     '403': このページを表示する権限がありません

@@ -10,7 +10,11 @@ module Remotable
       method_name = "#{attribute_name}=".to_sym
 
       define_method method_name do |url|
-        parsed_url = Addressable::URI.parse(url).normalize
+        begin
+          parsed_url = Addressable::URI.parse(url).normalize
+        rescue Addressable::URI::InvalidURIError
+          return
+        end
 
         return if !%w(http https).include?(parsed_url.scheme) || parsed_url.host.empty? || self[attribute_name] == url
 

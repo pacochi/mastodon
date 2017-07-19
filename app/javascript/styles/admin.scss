@@ -281,3 +281,29 @@
     margin-bottom: 10px;
   }
 }
+
+.batch-form-box {
+  display: flex;
+  margin-top: 5px;
+}
+
+.batch-checkbox,
+.batch-checkbox-all {
+  display: flex;
+  align-items: center;
+  margin-right: 5px;
+}
+
+.back-link {
+  margin-bottom: 10px;
+  font-size: 14px;
+
+  a {
+    color: $classic-highlight-color;
+    text-decoration: none;
+
+    &:hover {
+      text-decoration: underline;
+    }
+  }
+}

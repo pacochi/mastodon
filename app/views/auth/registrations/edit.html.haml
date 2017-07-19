@@ -21,8 +21,15 @@
 
 = render 'sessions'
 
-- if open_deletion? && !current_user.initial_password_usage
+- if open_deletion?
   %hr/
 
   %h6= t('auth.delete_account')
-  %p.muted-hint= t('auth.delete_account_html', path: settings_delete_path)
+  - if current_user.initial_password_usage
+    %p.muted-hint= t('deletes.exists_initial_password_usage')
+
+  - elsif current_user.oauth_authentications.find_by(provider: :pixiv)
+    %p.muted-hint= t('deletes.exists_oauth_authentications_html', path: settings_oauth_authentications_path)
+
+  - else
+    %p.muted-hint= t('auth.delete_account_html', path: settings_delete_path)
