@@ -262,7 +262,6 @@ export default class Status extends ImmutablePureComponent {
           <a onClick={this.handleAccountClick} data-id={status.getIn(['account', 'id'])} href={status.getIn(['account', 'url'])} className='status__display-name'>
             <div className='status__avatar'>
               {statusAvatar}
-
             </div>
 
             <DisplayName account={status.get('account')} />
