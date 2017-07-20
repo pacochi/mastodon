@@ -7,11 +7,7 @@ import PropTypes from 'prop-types';
 import LoadingBarContainer from './containers/loading_bar_container';
 import TabsBar from './components/tabs_bar';
 import ModalContainer from './containers/modal_container';
-<<<<<<< HEAD
 import PlayControlContainer from './containers/play_control_container';
-import Notifications from '../notifications';
-=======
->>>>>>> pawoo/migrate_to_v_1_4_7
 import { connect } from 'react-redux';
 import { isMobile } from '../../is_mobile';
 import { debounce } from 'lodash';
