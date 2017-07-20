@@ -8,13 +8,9 @@ import RelativeTimestamp from './relative_timestamp';
 import DisplayName from './display_name';
 import MediaGallery from './media_gallery';
 import VideoPlayer from './video_player';
-<<<<<<< HEAD
 import BoothWidget from './booth_widget';
 import SCWidget from './sc_widget';
 import YTWidget from './yt_widget';
-import AttachmentList from './attachment_list';
-=======
->>>>>>> pawoo/migrate_to_v_1_4_7
 import StatusContent from './status_content';
 import StatusActionBar from './status_action_bar';
 import { FormattedMessage } from 'react-intl';
@@ -49,16 +45,13 @@ export default class Status extends ImmutablePureComponent {
     standalone: PropTypes.bool,
     onPin: PropTypes.func,
     displayPinned: PropTypes.bool,
-<<<<<<< HEAD
     fetchBoothItem: PropTypes.func,
     boothItem: ImmutablePropTypes.map,
-=======
     intersectionObserverWrapper: PropTypes.object,
   };
 
   static defaultProps = {
     expandMedia: false,
->>>>>>> pawoo/migrate_to_v_1_4_7
   };
 
   state = {
