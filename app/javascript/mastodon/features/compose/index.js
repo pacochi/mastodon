@@ -97,14 +97,10 @@ export default class Compose extends React.PureComponent {
               <ComposeFormContainer />
             </div>
             <AnnouncementsContainer />
-<<<<<<< HEAD
-            <div className="drawer__block">
+            <div className='drawer__block'>
               <EventCalendarContainer />
             </div>
-            <div className="drawer__block">
-=======
-            <div className='drawer__block'>
->>>>>>> pawoo/migrate_to_v_1_4_7
+            <div className='drawer__blockz'>
               <TrendTagsContainer />
             </div>
           </div>
