@@ -129,20 +129,11 @@ export default class VideoPlayer extends React.PureComponent {
       </div>
     );
 
-    let muteButton = '';
-
-    if (this.state.hasAudio) {
-      muteButton = (
-        <div className='status__video-player-mute'>
-          <IconButton overlay title={intl.formatMessage(messages.toggle_sound)} icon={this.state.muted ? 'volume-off' : 'volume-up'} onClick={this.handleClick} />
-        </div>
-      );
-    }
-
     if (!this.state.visible) {
       if (sensitive) {
         return (
           <div role='button' tabIndex='0' style={{ width: `${width}px`, height: `${height}px` }} className='media-spoiler' onClick={this.handleVisibility}>
+            {spoilerButton}
             <span className='media-spoiler__warning'><FormattedMessage id='status.sensitive_warning' defaultMessage='Sensitive content' /></span>
             <span className='media-spoiler__trigger'><FormattedMessage id='status.sensitive_toggle' defaultMessage='Click to view' /></span>
           </div>
@@ -150,6 +141,7 @@ export default class VideoPlayer extends React.PureComponent {
       } else {
         return (
           <div role='button' tabIndex='0' style={{ width: `${width}px`, height: `${height}px` }} className='media-spoiler' onClick={this.handleVisibility}>
+            {spoilerButton}
             <span className='media-spoiler__warning'><FormattedMessage id='status.media_hidden' defaultMessage='Media hidden' /></span>
             <span className='media-spoiler__trigger'><FormattedMessage id='status.sensitive_toggle' defaultMessage='Click to view' /></span>
           </div>
@@ -160,6 +152,7 @@ export default class VideoPlayer extends React.PureComponent {
     if (this.state.preview && !autoplay) {
       return (
         <div role='button' tabIndex='0' className='media-spoiler-video' style={{ width: `${width}px`, height: `${height}px`, backgroundImage: `url(${media.get('preview_url')})` }} onClick={this.handleOpen}>
+          {spoilerButton}
           <div className='media-spoiler-video-play-icon'><i className='fa fa-play' /></div>
         </div>
       );
@@ -173,29 +166,17 @@ export default class VideoPlayer extends React.PureComponent {
       );
     }
 
-    let videoOverlayElement = '';
-    if (this.video && this.state.paused) {
-      // ポーズ中
-      videoOverlayElement = (
-        <div className='video-overlay'>
-          <div className='video-overlay-icon'>
-            <i className='fa fa-play' />
-          </div>
+    const videoOverlayElement = (
+      <div className='video-overlay'>
+        <div className='video-overlay-icon'>
+          <i className={`fa ${this.video && this.state.paused ? 'fa-play' : 'fa-pause'}`} />
         </div>
-      );
-    } else {
-      // 再生中
-      videoOverlayElement = (
-        <div className='video-overlay'>
-          <div className='video-overlay-icon'>
-            <i className='fa fa-pause' />
-          </div>
-        </div>
-      );
-    }
+      </div>
+    );
 
     return (
       <div className={`status__video-player ${this.video && this.state.paused ? ' is-paused' : ''}`} style={{ width: `${width}px`, height: `${height}px` }} onClick={this.handleVideoClick}>
+        {spoilerButton}
         {expandButton}
         {videoOverlayElement}
         <video
