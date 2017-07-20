@@ -21,12 +21,6 @@ import { hydrateStore } from '../actions/store';
 import createStream from '../stream';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { getLocale } from '../locales';
-<<<<<<< HEAD
-import MediaTimeline from '../features/media_timeline';
-import AccountMediaTimeline from '../features/account_media_timeline';
-import StatusSearchResults from '../features/status_search_results';
-=======
->>>>>>> pawoo/migrate_to_v_1_4_7
 const { localeData, messages } = getLocale();
 addLocaleData(localeData);
 
@@ -153,46 +147,11 @@ export default class Mastodon extends React.PureComponent {
       return (
         <IntlProvider locale={locale} messages={messages}>
           <Provider store={store}>
-<<<<<<< HEAD
-            <Router history={browserHistory} render={applyRouterMiddleware(useScroll())}>
-              <Route path='/' component={UI}>
-                <IndexRedirect to='/timelines/public/local' />
-                <Route path='getting-started' component={GettingStarted} />
-                <Route path='timelines/home' component={HomeTimeline} />
-                <Route path='timelines/public' component={PublicTimeline} />
-                <Route path='timelines/public/local' component={CommunityTimeline} />
-                <Route path='timelines/tag/:id' component={HashtagTimeline} />
-                <Route path='timelines/public/media' component={MediaTimeline} />
-
-                <Route path='notifications' component={Notifications} />
-                <Route path='favourites' component={FavouritedStatuses} />
-
-                <Route path='statuses/new' component={Compose} />
-                <Route path='statuses/search/:keyword' component={StatusSearchResults} />
-                <Route path='statuses/:statusId' component={Status} />
-                <Route path='statuses/:statusId/reblogs' component={Reblogs} />
-                <Route path='statuses/:statusId/favourites' component={Favourites} />
-
-                <Route path='accounts/:accountId' component={AccountTimeline} />
-                <Route path='accounts/:accountId/followers' component={Followers} />
-                <Route path='accounts/:accountId/following' component={Following} />
-                <Route path='accounts/:accountId/media' component={AccountMediaTimeline} />
-
-                <Route path='follow_requests' component={FollowRequests} />
-                <Route path='blocks' component={Blocks} />
-                <Route path='mutes' component={Mutes} />
-                <Route path='report' component={Report} />
-
-                <Route path='*' component={GenericNotFound} />
-              </Route>
-            </Router>
-=======
             <BrowserRouter basename='/web'>
               <ScrollContext>
                 <Route path='/' component={UI} />
               </ScrollContext>
             </BrowserRouter>
->>>>>>> pawoo/migrate_to_v_1_4_7
           </Provider>
         </IntlProvider>
       );
