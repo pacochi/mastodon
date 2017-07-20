@@ -41,11 +41,7 @@ export default combineReducers({
   settings,
   cards,
   reports,
-<<<<<<< HEAD
-=======
   contexts,
-  suggested_accounts,
->>>>>>> pawoo/migrate_to_v_1_4_7
   trend_tags,
   booth_items,
   tips_balloon,
