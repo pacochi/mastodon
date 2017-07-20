@@ -91,19 +91,11 @@ jobs:
             sql=tmp/circleci/db/$(cat tmp/circleci/master.hash).$PARALLEL_TEST_PROCESSORS.sql
             if [ -f $sql ]; then
               psql -h $DB_HOST < $sql
-<<<<<<< HEAD
             fi
-            ./bin/rails db:create
+            ./bin/rails parallel:create
           # pawoo_music_testが作られないので一時的に毎回作るように
-      - run: ./bin/rails db:migrate
-      - run: pg_dump --create --host=$DB_HOST --file=tmp/circleci/db/$(cat tmp/circleci/master.hash).sql pawoo_music_test
-=======
-            else
-              ./bin/rails parallel:create
-            fi
       - run: ./bin/rails parallel:migrate
       - run: pg_dumpall --host=$DB_HOST --file=tmp/circleci/db/$(cat tmp/circleci/master.hash).$PARALLEL_TEST_PROCESSORS.sql
->>>>>>> pawoo/migrate_to_v_1_4_7
       - save_cache:
           key: db/{{ checksum "tmp/circleci/master.hash" }}/1
           paths:
