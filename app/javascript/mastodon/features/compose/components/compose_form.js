@@ -8,13 +8,8 @@ import ReplyIndicatorContainer from '../containers/reply_indicator_container';
 import AutosuggestTextarea from '../../../components/autosuggest_textarea';
 import { debounce } from 'lodash';
 import UploadButtonContainer from '../containers/upload_button_container';
-<<<<<<< HEAD
 import MusicButtonContainer from '../containers/music_button_container';
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
-import Toggle from 'react-toggle';
-=======
 import { defineMessages, injectIntl } from 'react-intl';
->>>>>>> pawoo/migrate_to_v_1_4_7
 import Collapsable from '../../../components/collapsable';
 import SpoilerButtonContainer from '../containers/spoiler_button_container';
 import PrivacyDropdownContainer from '../containers/privacy_dropdown_container';
@@ -25,11 +20,8 @@ import TimeLimitDropdown from './time_limit_dropdown';
 import UploadFormContainer from '../containers/upload_form_container';
 import WarningContainer from '../containers/warning_container';
 import ImmutablePureComponent from 'react-immutable-pure-component';
-<<<<<<< HEAD
 import TipsBalloonContainer from '../../../containers/tips_balloon_container';
-=======
 import { length } from 'stringz';
->>>>>>> pawoo/migrate_to_v_1_4_7
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What is on your mind?' },
