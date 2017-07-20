@@ -131,11 +131,11 @@ class MusicModal extends React.PureComponent {
     return (
       <div className='modal-root__modal music-modal'>
         <div className='music-modal__container'>
-          <div className="music-modal__artwork">
+          <div className='music-modal__artwork'>
             {(() => {
               if(this.state.imageURL) {
                 return (
-                  <div className="music-modal__artwork-exist" style={{backgroundImage: this.state.imageURL}} onClick={this.handleChooseImage} />
+                  <div className='music-modal__artwork-exist' style={{backgroundImage: this.state.imageURL}} onClick={this.handleChooseImage} />
                 );
               } else {
                 const klass = onMouseInUploadButton ? warningClass : '';
@@ -143,39 +143,39 @@ class MusicModal extends React.PureComponent {
                 return (
                   <div className={`music-modal__artwork-none icon-button ${klass}`} onClick={this.handleChooseImage} >
                     <i style={{ fontSize: '30px' }} className='fa fa-fw fa-camera' aria-hidden='true' />
-                    <span className="music-modal__artwork-info">画像を<br />アップロード<br />（必須）</span>
+                    <span className='music-modal__artwork-info'>画像を<br />アップロード<br />（必須）</span>
                   </div>
                 );
               }
             })()}
           </div>
 
-          <div className="music-modal__metabox">
+          <div className='music-modal__metabox'>
             <div>
-              <input className={`music-modal__title ${(onMouseInUploadButton && !validTitle) ? warningClass : ''}`} placeholder="楽曲名を入力" onChange={this.onChangeTitle} value={title} />
+              <input className={`music-modal__title ${(onMouseInUploadButton && !validTitle) ? warningClass : ''}`} placeholder='楽曲名を入力' onChange={this.onChangeTitle} value={title} />
             </div>
             <div>
-              <input className={`music-modal__artist ${(onMouseInUploadButton && !validArtist) ? warningClass : ''}`} placeholder="作者名を入力" onChange={this.onChangeArtist} value={artist} />
+              <input className={`music-modal__artist ${(onMouseInUploadButton && !validArtist) ? warningClass : ''}`} placeholder='作者名を入力' onChange={this.onChangeArtist} value={artist} />
             </div>
-            <div className="music-modal__info">
+            <div className='music-modal__info'>
               <div>※128文字を超える部分は自動的にカットされます</div>
               <div>※アップロードできる音楽と画像のサイズは合計7MBまでです</div>
             </div>
 
-            <input type="file" name="image" accept="image/*" ref={this.setImageRef} onChange={this.handleOnSelectImage} />
+            <input type='file' name='image' accept='image/*' ref={this.setImageRef} onChange={this.handleOnSelectImage} />
           </div>
         </div>
 
         <div className='music-modal__action-bar'>
           <div className='music-modal__upload'>
-            <input className='music-modal__checkbox-confirm' id="checkbox-confirm" type="checkbox" checked={isClickedWaring} onChange={this.handleChangeCheckbox} />
+            <input className='music-modal__checkbox-confirm' id='checkbox-confirm' type='checkbox' checked={isClickedWaring} onChange={this.handleChangeCheckbox} />
             <div className='music-modal__checkbox-content'>
-              <label htmlFor="checkbox-confirm" className={`${(onMouseInUploadButton && !isClickedWaring) ? warningClass : ''}`}>
+              <label htmlFor='checkbox-confirm' className={`${(onMouseInUploadButton && !isClickedWaring) ? warningClass : ''}`}>
                 作品（画像、音源、楽曲、テキスト等を含む）のアップロードにおいて、下記の注意事項を守ることを誓います。
               </label>
             </div>
             <div ref={this.setUploadButtonRef} className='music-modal__submit-button'>
-              <Button disabled={!enableUploadButton} text="upload" onClick={this.handleUpload} />
+              <Button disabled={!enableUploadButton} text='upload' onClick={this.handleUpload} />
             </div>
           </div>
           <div className='music-modal__terms-of-use'>

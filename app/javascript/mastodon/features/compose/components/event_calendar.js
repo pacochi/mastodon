@@ -32,20 +32,20 @@ export default class EventCalendar extends React.PureComponent {
 
   render () {
     return (
-      <div className="event_calendar">
-        <div className="event_calendar__header">
-          <i className="fa fa-calendar event_calendar__header__icon" aria-hidden="true" />
-          <div className="event_calendar__header__name">
+      <div className='event_calendar'>
+        <div className='event_calendar__header'>
+          <i className='fa fa-calendar event_calendar__header__icon' aria-hidden='true' />
+          <div className='event_calendar__header__name'>
             イベントカレンダー
           </div>
         </div>
-        <div className="event_calendar__body">
+        <div className='event_calendar__body'>
           <ul>
             {this.props.events.map(event => (
               <li key={event.get('name')}>
-                <div className="event_calendar__row">
-                  <div className="event_calendar__text">
-                    <Link className="event_calendar__name" to={`/timelines/tag/${event.get('name')}`}>
+                <div className='event_calendar__row'>
+                  <div className='event_calendar__text'>
+                    <Link className='event_calendar__name' to={`/timelines/tag/${event.get('name')}`}>
                       #{event.get('name')}
                     </Link>
                   </div>

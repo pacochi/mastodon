@@ -44,7 +44,7 @@ class AudioArtwork extends React.PureComponent {
     };
 
     return (
-      <div className="queue-item__artwork" style={nowPlayingArtwork}>
+      <div className='queue-item__artwork' style={nowPlayingArtwork}>
         <audio ref={this.setAudioRef} src={musicUrl} muted={muted} />
       </div>
     );

@@ -74,7 +74,7 @@ class YouTubeArtwork extends React.PureComponent {
       },
     };
     return (
-      <div className="queue-item__artwork">
+      <div className='queue-item__artwork'>
         <YouTube
           videoId={videoId}
           opts={option}

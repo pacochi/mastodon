@@ -68,15 +68,15 @@ class SoundCloudArtwork extends React.PureComponent {
     };
 
     return (
-      <div className="queue-item__artwork">
+      <div className='queue-item__artwork'>
         <iframe
           title={sourceId}
           ref={this.setSCRef}
-          id="sc-widget"
-          width="250"
-          height="250"
-          scrolling="no"
-          frameBorder="no"
+          id='sc-widget'
+          width='250'
+          height='250'
+          scrolling='no'
+          frameBorder='no'
           src={`https://w.soundcloud.com/player/?${queryString.stringify(params)}`}
         />
     </div>
