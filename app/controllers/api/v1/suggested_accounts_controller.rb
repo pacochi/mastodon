@@ -1,8 +1,6 @@
 # frozen_string_literal: true
 
 class Api::V1::SuggestedAccountsController < Api::BaseController
-  DEFAULT_ACCOUNTS_LIMIT
-
   before_action -> { doorkeeper_authorize! :follow }
   before_action :require_user!
 
