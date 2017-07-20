@@ -100,7 +100,7 @@ export default class Compose extends React.PureComponent {
             <div className='drawer__block'>
               <EventCalendarContainer />
             </div>
-            <div className='drawer__blockz'>
+            <div className='drawer__block'>
               <TrendTagsContainer />
             </div>
           </div>
