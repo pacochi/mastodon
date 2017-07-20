@@ -148,18 +148,8 @@ en:
       linked: Linked
       not_linked: Not linked
       unlink_forcibly: Unlink forcibly
-<<<<<<< HEAD
     playlists:
       title: Playlist
-    pubsubhubbub:
-      callback_url: Callback URL
-      confirmed: Confirmed
-      expires_in: Expires in
-      last_delivery: Last delivery
-      title: PubSubHubbub
-      topic: Topic
-=======
->>>>>>> pawoo/migrate_to_v_1_4_7
     reports:
       action_taken_by: Action taken by
       are_you_sure: Are you sure?
