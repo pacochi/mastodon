@@ -27,27 +27,15 @@
   = javascript_pack_tag 'public', integrity: true, crossorigin: 'anonymous'
 
 - content_for :header_tags do
-  - description = strip_tags(@instance_presenter.site_description.blank? ? t('about.about_mastodon') : @instance_presenter.site_description)
   %meta{ property: 'og:site_name', content: site_title }/
   %meta{ property: 'og:url', content: about_url }/
   %meta{ property: 'og:type', content: 'website' }/
-<<<<<<< HEAD
-  %meta{ property: 'og:title', content: Rails.configuration.x.local_domain }/
-  %meta{ property: 'og:description', content: description }/
+  %meta{ property: 'og:title', content: site_hostname }/
+  %meta{ property: 'og:description', content: strip_tags(@instance_presenter.site_description.presence || t('about.about_mastodon')) }/
   %meta{ property: 'og:image', content: asset_pack_path('pawoo_music_small.png', protocol: :request) }/
   %meta{ property: 'og:image:width', content: '400' }/
   %meta{ property: 'og:image:height', content: '400' }/
-  %meta{ name: 'twitter:card', content: 'summary' }/
-  %meta{ name: 'twitter:image', content: asset_pack_path('pawoo_music_small.png', protocol: :request) }/
-  %meta{ name: 'twitter:description', content: description }/
-=======
-  %meta{ property: 'og:title', content: site_hostname }/
-  %meta{ property: 'og:description', content: strip_tags(@instance_presenter.site_description.presence || t('about.about_mastodon')) }/
-  %meta{ property: 'og:image', content: asset_pack_path('mastodon_small.jpg', protocol: :request) }/
-  %meta{ property: 'og:image:width', content: '400' }/
-  %meta{ property: 'og:image:height', content: '400' }/
   %meta{ property: 'twitter:card', content: 'summary' }/
->>>>>>> pawoo/migrate_to_v_1_4_7
 
 .about-cols
   .about-col.left
