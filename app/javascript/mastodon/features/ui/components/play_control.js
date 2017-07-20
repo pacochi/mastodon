@@ -346,11 +346,11 @@ class PlayControl extends React.PureComponent {
   }
 
   handleClickDeck = () => {
-    this.setState({isOpen: true});
+    this.setState({ isOpen: true });
   }
 
   handleClickOverlay = () => {
-    this.setState({isOpen: false});
+    this.setState({ isOpen: false });
   }
 
   handleClickDeckTab = (e) => {
@@ -368,7 +368,7 @@ class PlayControl extends React.PureComponent {
 
   handleSubmitAddForm = (e) => {
     e.preventDefault();
-    return api(this.getMockState).post(`/api/v1/playlists/${this.state.targetDeck}/deck_queues`, {link: this.urlRef.value})
+    return api(this.getMockState).post(`/api/v1/playlists/${this.state.targetDeck}/deck_queues`, { link: this.urlRef.value })
       .then(() => {
         this.urlRef.value = "";
       })

@@ -135,7 +135,7 @@ class MusicModal extends React.PureComponent {
             {(() => {
               if(this.state.imageURL) {
                 return (
-                  <div className='music-modal__artwork-exist' style={{backgroundImage: this.state.imageURL}} onClick={this.handleChooseImage} />
+                  <div className='music-modal__artwork-exist' style={{ backgroundImage: this.state.imageURL }} onClick={this.handleChooseImage} />
                 );
               } else {
                 const klass = onMouseInUploadButton ? warningClass : '';
