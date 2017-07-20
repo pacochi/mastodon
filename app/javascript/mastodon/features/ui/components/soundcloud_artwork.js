@@ -18,7 +18,7 @@ class SoundCloudArtwork extends React.PureComponent {
 
     this.scControl.bind(SC.Widget.Events.READY, () => {
       this.scControl.bind(SC.Widget.Events.PLAY, () => {
-        this.scControl.getCurrentSound((currentSound) => {
+        this.scControl.getCurrentSound(() => {
           this.setMuteOrVolume();
           const { timeOffset } = this.props;
           // SoundCloudはmilisecondsで、だいたいちょっと遅延するので+2ぐらいしとく

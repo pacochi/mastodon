@@ -1,10 +1,8 @@
 import React from 'react';
-import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
 
-import IconButton from '../../../components/icon_button';
 import api from '../../../api';
 import createStream from '../../../../mastodon/stream';
 import TipsBalloonContainer from '../../../containers/tips_balloon_container';
@@ -371,7 +369,7 @@ class PlayControl extends React.PureComponent {
   handleSubmitAddForm = (e) => {
     e.preventDefault();
     return api(this.getMockState).post(`/api/v1/playlists/${this.state.targetDeck}/deck_queues`, {link: this.urlRef.value})
-      .then((response)=>{
+      .then(() => {
         this.urlRef.value = "";
       })
       .catch((error)=>{
@@ -517,7 +515,6 @@ class PlayControl extends React.PureComponent {
     }
 
     const deckQueue = this.getDeckFirstQueue();
-    const sourceType = deckQueue && deckQueue.source_type;
     const duration = deckQueue && deckQueue.duration;
 
     const index = deckList.findIndex((deck) => deck.number === targetDeck);

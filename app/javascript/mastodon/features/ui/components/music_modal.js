@@ -1,7 +1,5 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
-import IconButton from '../../../components/icon_button';
 import Button from '../../../components/button';
 
 const storageKey = 'music_modal_clicked_warning';
@@ -18,7 +16,6 @@ class MusicModal extends React.PureComponent {
     onUpload: PropTypes.func.isRequired,
     onClose: PropTypes.func.isRequired,
     onResetFileKey: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired,
   };
 
   constructor(props, context) {
@@ -63,13 +60,13 @@ class MusicModal extends React.PureComponent {
     this.props.onClose();
   }
 
-  handleChooseImage = (e) => {
+  handleChooseImage = () => {
     this.imageFileElement.click();
   }
 
-  handleOnSelectImage = (e) => {
+  handleOnSelectImage = () => {
     Promise.resolve()
-    .then(() => new Promise((resolve, reject) => {
+    .then(() => new Promise((resolve) => {
       const reader = new FileReader();
       reader.onloadend = () => resolve(reader.result);
       reader.readAsDataURL(this.imageFileElement.files[0]);
@@ -125,7 +122,6 @@ class MusicModal extends React.PureComponent {
   }
 
   render () {
-    const { intl } = this.props;
     const { title, artist, onMouseInUploadButton, isClickedWaring } = this.state;
 
     const validTitle = this.isValidString(title);
@@ -201,4 +197,4 @@ class MusicModal extends React.PureComponent {
 
 }
 
-export default injectIntl(MusicModal);
+export default MusicModal;

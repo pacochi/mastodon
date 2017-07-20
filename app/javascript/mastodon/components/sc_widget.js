@@ -1,7 +1,6 @@
 import axios from 'axios';
 import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 
 class SCWidget extends React.PureComponent {
 

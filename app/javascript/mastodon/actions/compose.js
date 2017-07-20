@@ -390,7 +390,7 @@ export function resetFileKeyCompose() {
 }
 
 export function selectMusicFile(file) {
-  return (dispatch, getState) => {
+  return (dispatch) => {
     dispatch(openModal('MUSIC', {
       music: file,
       onUpload(payload) {

@@ -1,8 +1,6 @@
 import React from 'react';
-import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Link from 'react-router-dom/Link';
-import IconButton from '../../../components/icon_button';
 
 export default class EventCalendar extends React.PureComponent {
 

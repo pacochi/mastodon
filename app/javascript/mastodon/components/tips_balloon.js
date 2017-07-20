@@ -1,10 +1,5 @@
 import React from 'react';
-import Immutable from 'immutable';
-import ImmutablePropTypes from 'react-immutable-proptypes';
-import Link from 'react-router-dom/Link';
 import IconButton from './icon_button';
-
-const storageKey = 'tips_balloon';
 
 // メモ: id 3まで使用
 
@@ -22,7 +17,7 @@ class TipsBalloon extends React.PureComponent {
     style: {},
   };
 
-  handleDismiss = (event) => {
+  handleDismiss = () => {
     this.props.onDismiss(this.props.id);
   }
 
