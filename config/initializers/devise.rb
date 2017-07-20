@@ -264,15 +264,9 @@ Devise.setup do |config|
   Rails.application.secrets.oauth[:pixiv].tap do |secret|
     omniauth = [
       :pixiv,
-<<<<<<< HEAD
-      secret['key'],
-      secret['secret'],
-      scope: 'read-email',
-=======
       secret[:key],
       secret[:secret],
-      scope: 'read-email read-favorite-users',
->>>>>>> pawoo/migrate_to_v_1_4_7
+      scope: 'read-email',
     ]
 
     client_options = secret.slice(:site, :authorize_url, :token_url).symbolize_keys.compact
