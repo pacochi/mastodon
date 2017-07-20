@@ -370,7 +370,7 @@ class PlayControl extends React.PureComponent {
     e.preventDefault();
     return api(this.getMockState).post(`/api/v1/playlists/${this.state.targetDeck}/deck_queues`, { link: this.urlRef.value })
       .then(() => {
-        this.urlRef.value = "";
+        this.urlRef.value = '';
       })
       .catch((error)=>{
         this.props.onError(error);
@@ -536,7 +536,7 @@ class PlayControl extends React.PureComponent {
         };
       } else {
         playerSeekBarStyle = {
-          transition: `width 0s linear`,
+          transition: 'width 0s linear',
           width: `${deckQueue.duration ? (timeOffset / deckQueue.duration) * 100 : 0}%`,
         };
       }

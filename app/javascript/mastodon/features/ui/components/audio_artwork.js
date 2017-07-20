@@ -38,7 +38,7 @@ class AudioArtwork extends React.PureComponent {
 
   render () {
     const { muted, musicUrl, thumbnailUrl } = this.props;
-    const thumbnail = (thumbnailUrl.includes("'") || !thumbnailUrl.match(/^https?:\/\//)) ? '' : thumbnailUrl;
+    const thumbnail = (thumbnailUrl.includes('\'') || !thumbnailUrl.match(/^https?:\/\//)) ? '' : thumbnailUrl;
     const nowPlayingArtwork = {
       backgroundImage: `url("${thumbnail}")`,
     };
