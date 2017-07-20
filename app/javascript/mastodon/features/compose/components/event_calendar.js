@@ -1,10 +1,10 @@
 import React from 'react';
 import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router';
+import Link from 'react-router-dom/Link';
 import IconButton from '../../../components/icon_button';
 
-class EventCalendar extends React.PureComponent {
+export default class EventCalendar extends React.PureComponent {
 
   static propTypes = {
     events: ImmutablePropTypes.list.isRequired,
@@ -67,5 +67,3 @@ class EventCalendar extends React.PureComponent {
   }
 
 };
-
-export default EventCalendar;

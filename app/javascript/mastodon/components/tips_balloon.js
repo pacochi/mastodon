@@ -1,7 +1,7 @@
 import React from 'react';
 import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router';
+import Link from 'react-router-dom/Link';
 import IconButton from './icon_button';
 
 const storageKey = 'tips_balloon';
