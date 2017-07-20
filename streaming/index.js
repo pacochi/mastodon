@@ -78,16 +78,11 @@ const startWorker = (workerId) => {
 
   const pgConfigs = {
     development: {
-<<<<<<< HEAD
-      database: 'pawoo_music_development',
-      host:     process.env.DB_HOST || '/var/run/postgresql',
-=======
       user:     process.env.DB_USER || pg.defaults.user,
       password: process.env.DB_PASS || pg.defaults.password,
-      database: 'pawoo_development',
+      database: 'pawoo_music_development',
       host:     process.env.DB_HOST || pg.defaults.host,
       port:     process.env.DB_PORT || pg.defaults.port,
->>>>>>> pawoo/migrate_to_v_1_4_7
       max:      10,
     },
 
@@ -136,10 +131,6 @@ const startWorker = (workerId) => {
     callbacks.forEach(callback => callback(message));
   });
 
-<<<<<<< HEAD
-  redisClient.psubscribe(`${redisPrefix}timeline:*`);
-  redisClient.psubscribe(`${redisPrefix}streaming:playlist:*`);
-=======
   const subscriptionHeartbeat = (channel) => {
     const interval = 6*60;
     const tellSubscribed = () => {
@@ -151,7 +142,6 @@ const startWorker = (workerId) => {
       clearInterval(heartbeat);
     };
   };
->>>>>>> pawoo/migrate_to_v_1_4_7
 
   const subscribe = (channel, callback) => {
     log.silly(`Adding listener for ${channel}`);
@@ -218,26 +208,15 @@ const startWorker = (workerId) => {
     });
   };
 
-<<<<<<< HEAD
-  const authenticationMiddleware = (req, res, next) => {
-    if (req.method === 'OPTIONS') {
-      next();
-      return;
-    }
-
-    if("path" in req && req.path === '/api/v1/streaming/playlist'){
-      next();
-      return;
-    }
-
-    const authorization = req.get('Authorization');
-    const accessToken = req.query.access_token;
-=======
-  const accountFromRequest = (req, next) => {
+  const accountFromRequest = (req, next, type) => {
     const authorization = req.headers.authorization;
     const location = url.parse(req.url, true);
     const accessToken = location.query.access_token;
->>>>>>> pawoo/migrate_to_v_1_4_7
+
+    if ((type === 'sse' && req.path && req.path === '/api/v1/streaming/playlist') || (type === 'ws' && location.query.stream === 'playlist')) {
+      next();
+      return;
+    }
 
     if (!authorization && !accessToken) {
       const err = new Error('Missing access token');
@@ -260,7 +239,7 @@ const startWorker = (workerId) => {
         log.error(info.req.requestId, err.toString());
         cb(false, 401, 'Unauthorized');
       }
-    });
+    }, 'ws');
   };
 
   const authenticationMiddleware = (req, res, next) => {
@@ -269,7 +248,7 @@ const startWorker = (workerId) => {
       return;
     }
 
-    accountFromRequest(req, next);
+    accountFromRequest(req, next, 'sse');
   };
 
   const errorMiddleware = (err, req, res, {}) => {
@@ -435,14 +414,12 @@ const startWorker = (workerId) => {
     streamFrom(`timeline:hashtag:${req.query.tag}:local`, req, streamToHttp(req, res), streamHttpEnd(req), true);
   });
 
-<<<<<<< HEAD
   app.get('/api/v1/streaming/playlist', (req, res) => {
     const deck = Number(req.query.deck);
     streamFrom(`streaming:playlist:${deck}`, req, streamToHttp(req, res), streamHttpEnd(req));
   });
-=======
+
   const wss    = new WebSocket.Server({ server, verifyClient: wsVerifyClient });
->>>>>>> pawoo/migrate_to_v_1_4_7
 
   wss.on('connection', ws => {
     const req      = ws.upgradeReq;
@@ -455,41 +432,6 @@ const startWorker = (workerId) => {
       ws.isAlive = true;
     });
 
-<<<<<<< HEAD
-    if(location.query.stream === 'playlist') {
-      const deck = Number(location.query.deck);
-      streamFrom(`streaming:playlist:${deck}`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);
-      return;
-    }
-
-    accountFromToken(token, req, err => {
-      if (err) {
-        log.error(req.requestId, err);
-        ws.close();
-        return;
-      }
-
-      switch(location.query.stream) {
-      case 'user':
-        streamFrom(`timeline:${req.accountId}`, req, streamToWs(req, ws), streamWsEnd(req, ws));
-        break;
-      case 'public':
-        streamFrom('timeline:public', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
-        break;
-      case 'public:local':
-        streamFrom('timeline:public:local', req, streamToWs(req, ws), streamWsEnd(req, ws), true);
-        break;
-      case 'hashtag':
-        streamFrom(`timeline:hashtag:${location.query.tag}`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);
-        break;
-      case 'hashtag:local':
-        streamFrom(`timeline:hashtag:${location.query.tag}:local`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);
-        break;
-      default:
-        ws.close();
-      }
-    });
-=======
     switch(location.query.stream) {
     case 'user':
       const channel = `timeline:${req.accountId}`;
@@ -510,10 +452,13 @@ const startWorker = (workerId) => {
     case 'hashtag:local':
       streamFrom(`timeline:hashtag:${location.query.tag}:local`, req, streamToWs(req, ws), streamWsEnd(req, ws), true);
       break;
+    case 'playlist':
+      const deck = Number(location.query.deck);
+      streamFrom(`streaming:playlist:${deck}`, req, streamToWs(req, ws), streamWsEnd(req, ws));
+      break;
     default:
       ws.close();
     }
->>>>>>> pawoo/migrate_to_v_1_4_7
   });
 
   setInterval(() => {
