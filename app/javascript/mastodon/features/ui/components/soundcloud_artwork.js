@@ -79,7 +79,7 @@ class SoundCloudArtwork extends React.PureComponent {
           frameBorder='no'
           src={`https://w.soundcloud.com/player/?${queryString.stringify(params)}`}
         />
-    </div>
+      </div>
     );
   }
 

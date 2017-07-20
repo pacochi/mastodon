@@ -81,7 +81,7 @@ class YouTubeArtwork extends React.PureComponent {
           onReady={this.onReadyYouTube}
           onStateChange={this.onChangeYoutubeState}
         />
-    </div>
+      </div>
     );
   }
 
