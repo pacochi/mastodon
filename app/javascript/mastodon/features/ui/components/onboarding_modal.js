@@ -227,10 +227,6 @@ export default class OnboardingModal extends React.PureComponent {
 
   componentWillUnmount() {
     window.addEventListener('keyup', this.handleKeyUp);
-
-    // モーダルを閉じた時に、おすすめアカウントへ飛ばす
-    const path = '/suggested_accounts';
-    this.context.router.history.push(path);
   }
 
   handleSkip = (e) => {
