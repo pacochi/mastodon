@@ -40,7 +40,7 @@ RSpec.describe Settings::OauthAuthenticationsController, type: :controller do
 
     it 'redirects to pixiv page' do
       subject.call
-      code = Rails.application.secrets.oauth['pixiv']['key']
+      code = Rails.application.secrets.oauth[:pixiv][:key]
       uid = oauth_authentication.uid
       expect(response).to redirect_to("https://www.pixiv.net/oauth/revoke/?code=#{code}&pixiv_user_id=#{uid}")
     end

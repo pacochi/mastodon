@@ -2,14 +2,19 @@ import React from 'react';
 import { FormattedMessage } from 'react-intl';
 import PropTypes from 'prop-types';
 
-class ColumnBackButtonSlim extends React.PureComponent {
+export default class ColumnBackButtonSlim extends React.PureComponent {
 
   static contextTypes = {
     router: PropTypes.object,
   };
 
   handleClick = () => {
+<<<<<<< HEAD
     this.context.router.push('/getting-started');
+=======
+    if (window.history && window.history.length === 1) this.context.router.history.push('/');
+    else this.context.router.history.goBack();
+>>>>>>> pawoo/migrate_to_v_1_4_7
   }
 
   render () {
@@ -24,5 +29,3 @@ class ColumnBackButtonSlim extends React.PureComponent {
   }
 
 }
-
-export default ColumnBackButtonSlim;

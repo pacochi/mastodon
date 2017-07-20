@@ -52,6 +52,7 @@ $button-icon-scale-ration-on-pc: 0.85;
   }
 }
 
+<<<<<<< HEAD
 .twitter-share-button {
   height: 14px;
   padding: 2px 8px 2px 6px;
@@ -78,4 +79,8 @@ $button-icon-scale-ration-on-pc: 0.85;
   color: #fff;
   margin-left: 3px;
   vertical-align: middle;
+=======
+.status__wrapper.pinned {
+  background: rgba(lighten($ui-base-color, 4%), 0.9);
+>>>>>>> pawoo/migrate_to_v_1_4_7
 }

@@ -8,18 +8,22 @@ import RelativeTimestamp from './relative_timestamp';
 import DisplayName from './display_name';
 import MediaGallery from './media_gallery';
 import VideoPlayer from './video_player';
+<<<<<<< HEAD
 import BoothWidget from './booth_widget';
 import SCWidget from './sc_widget';
 import YTWidget from './yt_widget';
 import AttachmentList from './attachment_list';
+=======
+>>>>>>> pawoo/migrate_to_v_1_4_7
 import StatusContent from './status_content';
 import StatusActionBar from './status_action_bar';
 import { FormattedMessage } from 'react-intl';
 import emojify from '../emoji';
 import escapeTextContentForBrowser from 'escape-html';
 import ImmutablePureComponent from 'react-immutable-pure-component';
+import scheduleIdleTask from '../features/ui/util/schedule_idle_task';
 
-class Status extends ImmutablePureComponent {
+export default class Status extends ImmutablePureComponent {
 
   static contextTypes = {
     router: PropTypes.object,
@@ -36,8 +40,6 @@ class Status extends ImmutablePureComponent {
     onOpenMedia: PropTypes.func,
     onOpenVideo: PropTypes.func,
     onBlock: PropTypes.func,
-    onRef: PropTypes.func,
-    isIntersecting: PropTypes.bool,
     me: PropTypes.number,
     boostModal: PropTypes.bool,
     autoPlayGif: PropTypes.bool,
@@ -47,12 +49,22 @@ class Status extends ImmutablePureComponent {
     standalone: PropTypes.bool,
     onPin: PropTypes.func,
     displayPinned: PropTypes.bool,
+<<<<<<< HEAD
     fetchBoothItem: PropTypes.func,
     boothItem: ImmutablePropTypes.map,
+=======
+    intersectionObserverWrapper: PropTypes.object,
+  };
+
+  static defaultProps = {
+    expandMedia: false,
+>>>>>>> pawoo/migrate_to_v_1_4_7
   };
 
   state = {
-    isHidden: false,
+    isExpanded: false,
+    isIntersecting: true, // assume intersecting until told otherwise
+    isHidden: false, // set to true in requestIdleCallback to trigger un-render
   }
 
   // Avoid checking props that are functions (and whose equality will always
@@ -68,7 +80,7 @@ class Status extends ImmutablePureComponent {
     'boothItem',
   ]
 
-  updateOnStates = []
+  updateOnStates = ['isExpanded']
 
   componentDidMount() {
     const boothItemId = this.props.status.get('booth_item_id');
@@ -79,12 +91,12 @@ class Status extends ImmutablePureComponent {
   }
 
   shouldComponentUpdate (nextProps, nextState) {
-    if (nextProps.isIntersecting === false && nextState.isHidden) {
+    if (!nextState.isIntersecting && nextState.isHidden) {
       // It's only if we're not intersecting (i.e. offscreen) and isHidden is true
       // that either "isIntersecting" or "isHidden" matter, and then they're
       // the only things that matter.
-      return this.props.isIntersecting !== false || !this.state.isHidden;
-    } else if (nextProps.isIntersecting !== false && this.props.isIntersecting === false) {
+      return this.state.isIntersecting || !this.state.isHidden;
+    } else if (nextState.isIntersecting && !this.state.isIntersecting) {
       // If we're going from a non-intersecting state to an intersecting state,
       // (i.e. offscreen to onscreen), then we definitely need to re-render
       return true;
@@ -94,27 +106,72 @@ class Status extends ImmutablePureComponent {
     return super.shouldComponentUpdate(nextProps, nextState);
   }
 
-  componentWillReceiveProps (nextProps) {
-    if (nextProps.isIntersecting === false && this.props.isIntersecting !== false) {
-      requestIdleCallback(() => this.setState({ isHidden: true }));
-    } else {
-      this.setState({ isHidden: !nextProps.isIntersecting });
+  componentDidMount () {
+    if (!this.props.intersectionObserverWrapper) {
+      // TODO: enable IntersectionObserver optimization for notification statuses.
+      // These are managed in notifications/index.js rather than status_list.js
+      return;
+    }
+    this.props.intersectionObserverWrapper.observe(
+      this.props.id,
+      this.node,
+      this.handleIntersection
+    );
+
+    this.componentMounted = true;
+  }
+
+  componentWillUnmount () {
+    this.componentMounted = false;
+  }
+
+  handleIntersection = (entry) => {
+    if (!this.componentMounted) {
+      return;
+    }
+
+    // Edge 15 doesn't support isIntersecting, but we can infer it
+    // https://developer.microsoft.com/en-us/microsoft-edge/platform/issues/12156111/
+    // https://github.com/WICG/IntersectionObserver/issues/211
+    const isIntersecting = (typeof entry.isIntersecting === 'boolean') ?
+      entry.isIntersecting : entry.intersectionRect.height > 0;
+    this.setState((prevState) => {
+      if (prevState.isIntersecting && !isIntersecting) {
+        scheduleIdleTask(this.hideIfNotIntersecting);
+      }
+      return {
+        isIntersecting: isIntersecting,
+        isHidden: false,
+      };
+    });
+  }
+
+  hideIfNotIntersecting = () => {
+    if (!this.componentMounted) {
+      return;
+    }
+
+    // When the browser gets a chance, test if we're still not intersecting,
+    // and if so, set our isHidden to true to trigger an unrender. The point of
+    // this is to save DOM nodes and avoid using up too much memory.
+    // See: https://github.com/tootsuite/mastodon/issues/2900
+    this.setState((prevState) => ({ isHidden: !prevState.isIntersecting }));
+  }
+
+  saveHeight = () => {
+    if (this.node && this.node.children.length !== 0) {
+      this.height = this.node.getBoundingClientRect().height;
     }
   }
 
   handleRef = (node) => {
-    if (this.props.onRef) {
-      this.props.onRef(node);
-
-      if (node && node.children.length !== 0) {
-        this.height = node.clientHeight;
-      }
-    }
+    this.node = node;
+    this.saveHeight();
   }
 
   handleClick = () => {
     const { status } = this.props;
-    this.context.router.push(`/statuses/${status.getIn(['reblog', 'id'], status.get('id'))}`);
+    this.context.router.history.push(`/statuses/${status.getIn(['reblog', 'id'], status.get('id'))}`);
   }
 
   handleAccountClick = (e) => {
@@ -123,21 +180,28 @@ class Status extends ImmutablePureComponent {
     } else if (e.button === 0) {
       const id = Number(e.currentTarget.getAttribute('data-id'));
       e.preventDefault();
-      this.context.router.push(`/accounts/${id}`);
+      this.context.router.history.push(`/accounts/${id}`);
     }
   }
+
+  handleExpandedToggle = () => {
+    this.setState({ isExpanded: !this.state.isExpanded });
+  };
 
   render () {
     let media = null;
     let statusAvatar;
-    const { status, account, isIntersecting, onRef, expandMedia, squareMedia, standalone, ...other } = this.props;
-    const { isHidden } = this.state;
+
+    // Exclude intersectionObserverWrapper from `other` variable
+    // because intersection is managed in here.
+    const { status, account, intersectionObserverWrapper, expandMedia, squareMedia, standalone, ...other } = this.props;
+    const { isExpanded, isIntersecting, isHidden } = this.state;
 
     if (status === null) {
       return null;
     }
 
-    if (isIntersecting === false && isHidden) {
+    if (!isIntersecting && isHidden) {
       return (
         <div ref={this.handleRef} data-id={status.get('id')} style={{ height: `${this.height}px`, opacity: 0, overflow: 'hidden' }}>
           {status.getIn(['account', 'display_name']) || status.getIn(['account', 'username'])}
@@ -147,11 +211,10 @@ class Status extends ImmutablePureComponent {
     }
 
     if (this.props.displayPinned && status.get('pinned')) {
-      // onRefは要素の高さが変わらない場合のみ使用する
-      const { displayPinned, onRef, ...otherProps } = this.props;
+      const { displayPinned, intersectionObserverWrapper, ...otherProps } = this.props;
 
       return (
-        <div className='status__wrapper' ref={this.handleRef} data-id={status.get('id')} >
+        <div className='status__wrapper pinned' ref={this.handleRef} data-id={status.get('id')} >
           <div className='status__prepend'>
             <div className='status__prepend-icon-wrapper'><i className='fa fa-fw fa-pin status__prepend-icon' /></div>
             <FormattedMessage id='status.pinned' defaultMessage='Pinned Toot' className='status__display-name muted' />
@@ -178,7 +241,7 @@ class Status extends ImmutablePureComponent {
             <FormattedMessage id='status.reblogged_by' defaultMessage='{name} boosted' values={{ name: <a onClick={this.handleAccountClick} data-id={status.getIn(['account', 'id'])} href={status.getIn(['account', 'url'])} className='status__display-name muted'><strong dangerouslySetInnerHTML={displayNameHTML} /></a> }} />
           </div>
 
-          <Status {...other} wrapped={true} status={status.get('reblog')} account={status.get('account')} displayPinned={false} />
+          <Status {...other} wrapped status={status.get('reblog')} account={status.get('account')} displayPinned={false} />
         </div>
       );
     }
@@ -203,7 +266,7 @@ class Status extends ImmutablePureComponent {
       } else if (attachments.first().get('type') === 'video') {
         media = <VideoPlayer media={attachments.first()} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
       } else {
-        media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={squareMedia ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} squareMedia={squareMedia} />;
+        media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={squareMedia ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} />;
       }
     }
 
@@ -215,7 +278,7 @@ class Status extends ImmutablePureComponent {
     }
 
     if (account === undefined || account === null) {
-      statusAvatar = <Avatar src={status.getIn(['account', 'avatar'])} staticSrc={status.getIn(['account', 'avatar_static'])} size={48}/>;
+      statusAvatar = <Avatar src={status.getIn(['account', 'avatar'])} staticSrc={status.getIn(['account', 'avatar_static'])} size={48} />;
     } else {
       statusAvatar = <AvatarOverlay staticSrc={status.getIn(['account', 'avatar_static'])} overlaySrc={account.get('avatar_static')} />;
     }
@@ -240,14 +303,13 @@ class Status extends ImmutablePureComponent {
           <a onClick={this.handleAccountClick} data-id={status.getIn(['account', 'id'])} href={status.getIn(['account', 'url'])} className='status__display-name'>
             <div className='status__avatar'>
               {statusAvatar}
-
             </div>
 
             <DisplayName account={status.get('account')} />
           </a>
         </div>
 
-        <StatusContent status={status} onClick={this.handleClick} standalone />
+        <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} onHeightUpdate={this.saveHeight} standalone />
 
         {media}
 
@@ -257,5 +319,3 @@ class Status extends ImmutablePureComponent {
   }
 
 }
-
-export default Status;

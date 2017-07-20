@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::PinnedStatusesController < ApiController
+class Api::V1::PinnedStatusesController < Api::BaseController
   before_action -> { doorkeeper_authorize!(:write) }
   before_action :require_user!
   before_action :set_status

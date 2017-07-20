@@ -1,3 +1,19 @@
+Warden::Manager.after_set_user except: :fetch do |user, warden|
+  SessionActivation.deactivate warden.raw_session['auth_id']
+  warden.raw_session['auth_id'] = user.activate_session(warden.request)
+end
+
+Warden::Manager.after_fetch do |user, warden|
+  unless user.session_active?(warden.raw_session['auth_id'])
+    warden.logout
+    throw :warden, message: :unauthenticated
+  end
+end
+
+Warden::Manager.before_logout do |_, warden|
+  SessionActivation.deactivate warden.raw_session['auth_id']
+end
+
 Devise.setup do |config|
   config.warden do |manager|
     manager.default_strategies(scope: :user).unshift :two_factor_authenticatable
@@ -245,15 +261,21 @@ Devise.setup do |config|
   # config.omniauth :github, 'APP_ID', 'APP_SECRET', scope: 'user,public_repo'
   config.omniauth_path_prefix = '/auth/oauth'
 
-  Rails.application.secrets.oauth['pixiv'].tap do |secret|
+  Rails.application.secrets.oauth[:pixiv].tap do |secret|
     omniauth = [
       :pixiv,
+<<<<<<< HEAD
       secret['key'],
       secret['secret'],
       scope: 'read-email',
+=======
+      secret[:key],
+      secret[:secret],
+      scope: 'read-email read-favorite-users',
+>>>>>>> pawoo/migrate_to_v_1_4_7
     ]
 
-    client_options = secret.slice('site', 'authorize_url', 'token_url').symbolize_keys.compact
+    client_options = secret.slice(:site, :authorize_url, :token_url).symbolize_keys.compact
     omniauth.last.merge!(client_options: client_options) if client_options.present?
 
     config.omniauth(*omniauth)

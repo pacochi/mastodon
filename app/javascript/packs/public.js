@@ -3,13 +3,14 @@ import IntlRelativeFormat from 'intl-relativeformat';
 import { delegate } from 'rails-ujs';
 import emojify from '../mastodon/emoji';
 import { getLocale } from '../mastodon/locales';
+import loadPolyfills from '../mastodon/load_polyfills';
 
 require.context('../images/', true);
 
 const { localeData } = getLocale();
 localeData.forEach(IntlRelativeFormat.__addLocaleData);
 
-function main() {
+function loaded() {
   const locale = document.documentElement.lang;
   const dateTimeFormat = new Intl.DateTimeFormat(locale, {
     year: 'numeric',
@@ -20,48 +21,54 @@ function main() {
   });
   const relativeFormat = new IntlRelativeFormat(locale);
 
-  document.addEventListener('DOMContentLoaded', () => {
-    [].forEach.call(document.querySelectorAll('.emojify'), (content) => {
-      content.innerHTML = emojify(content.innerHTML);
-    });
-
-    [].forEach.call(document.querySelectorAll('time.formatted'), (content) => {
-      const datetime = new Date(content.getAttribute('datetime'));
-      const formattedDate = dateTimeFormat.format(datetime);
-      content.title = formattedDate;
-      content.textContent = formattedDate;
-    });
-
-    [].forEach.call(document.querySelectorAll('time.time-ago'), (content) => {
-      const datetime = new Date(content.getAttribute('datetime'));
-      content.textContent = relativeFormat.format(datetime);;
-    });
-
-    (() => {
-      // MSIE(IE11のみUAにMSIEを含まないのでTridentで検出)
-      const userAgent = window.navigator.userAgent.toLowerCase();
-      const isMSIE = /MSIE/i.test(userAgent) || /Trident/i.test(userAgent);
-
-      if (isMSIE) {
-        alert('お使いのブラウザはサポートされていません。Microsoft Edge、Google Chromeなどをお試しください。');
-      }
-    })();
-
-    // タイムラインが伸びすぎないようにする
-    if (location.pathname === '/about') {
-      // Reactのレンダリングを待つ必要がある？
-      setTimeout(() => {
-        const timeline = document.getElementsByClassName('about-col main')[0];
-        if (!timeline) return;
-
-        [].forEach.call(document.getElementsByClassName('about-timeline-container'), (content) => {
-          [].forEach.call(content.getElementsByClassName('column'), (column) => {
-            column.style.height = `${timeline.clientHeight}px`;
-          });
-        });
-      }, 200);
-    }
+  [].forEach.call(document.querySelectorAll('.emojify'), (content) => {
+    content.innerHTML = emojify(content.innerHTML);
   });
+
+  [].forEach.call(document.querySelectorAll('time.formatted'), (content) => {
+    const datetime = new Date(content.getAttribute('datetime'));
+    const formattedDate = dateTimeFormat.format(datetime);
+    content.title = formattedDate;
+    content.textContent = formattedDate;
+  });
+
+  [].forEach.call(document.querySelectorAll('time.time-ago'), (content) => {
+    const datetime = new Date(content.getAttribute('datetime'));
+    content.textContent = relativeFormat.format(datetime);;
+  });
+
+  (() => {
+    // MSIE(IE11のみUAにMSIEを含まないのでTridentで検出)
+    const userAgent = window.navigator.userAgent.toLowerCase();
+    const isMSIE = /MSIE/i.test(userAgent) || /Trident/i.test(userAgent);
+
+    if (isMSIE) {
+      alert('お使いのブラウザはサポートされていません。Microsoft Edge、Google Chromeなどをお試しください。');
+    }
+  })();
+
+  // タイムラインが伸びすぎないようにする
+  if (location.pathname === '/about') {
+    // Reactのレンダリングを待つ必要がある？
+    setTimeout(() => {
+      const timeline = document.getElementsByClassName('about-col main')[0];
+      if (!timeline) return;
+
+      [].forEach.call(document.getElementsByClassName('about-timeline-container'), (content) => {
+        [].forEach.call(content.getElementsByClassName('column'), (column) => {
+          column.style.height = `${timeline.clientHeight}px`;
+        });
+      });
+    }, 200);
+  }
+}
+
+function main() {
+  if (['interactive', 'complete'].includes(document.readyState)) {
+    loaded();
+  } else {
+    document.addEventListener('DOMContentLoaded', loaded);
+  }
 
   delegate(document, '.video-player video', 'click', ({ target }) => {
     if (target.paused) {
@@ -71,8 +78,12 @@ function main() {
     }
   });
 
-  delegate(document, '.media-spoiler', 'click', ({ target }) => {
-    target.style.display = 'none';
+  delegate(document, '.activity-stream .media-spoiler-wrapper .media-spoiler', 'click', function() {
+    this.parentNode.classList.add('media-spoiler-wrapper__visible');
+  });
+
+  delegate(document, '.activity-stream .media-spoiler-wrapper .spoiler-button', 'click', function() {
+    this.parentNode.classList.remove('media-spoiler-wrapper__visible');
   });
 
   delegate(document, '.webapp-btn', 'click', ({ target, button }) => {
@@ -118,12 +129,6 @@ function main() {
   });
 }
 
-if (!window.Intl) {
-  import(/* webpackChunkName: "base_polyfills" */ 'mastodon/base_polyfills').then(() => {
-    main();
-  }).catch(error => {
-    console.log(error); // eslint-disable-line no-console
-  });
-} else {
-  main();
-}
+loadPolyfills().then(main).catch(error => {
+  console.error(error);
+});

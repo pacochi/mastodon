@@ -18,6 +18,7 @@ Rails.application.routes.draw do
 
   get '.well-known/host-meta', to: 'well_known/host_meta#show', as: :host_meta, defaults: { format: 'xml' }
   get '.well-known/webfinger', to: 'well_known/webfinger#show', as: :webfinger
+  get 'manifest', to: 'manifests#show', defaults: { format: 'json' }
 
   devise_for :users, path: 'auth', controllers: {
     sessions:           'auth/sessions',
@@ -76,6 +77,7 @@ Rails.application.routes.draw do
     end
 
     resource :follower_domains, only: [:show, :update]
+    resource :delete, only: [:show, :destroy]
   end
 
   resources :media, only: [:show]
@@ -90,7 +92,7 @@ Rails.application.routes.draw do
   resource :authorize_follow, only: [:show, :create]
 
   namespace :admin do
-    resources :pubsubhubbub, only: [:index]
+    resources :subscriptions, only: [:index]
     resources :domain_blocks, only: [:index, :new, :create, :show, :destroy]
     resource :settings, only: [:edit, :update]
     resources :instances, only: [:index]
@@ -101,15 +103,21 @@ Rails.application.routes.draw do
     resource :playlist_setting, only: [:update]
 
     resources :reports, only: [:index, :show, :update] do
-      resources :reported_statuses, only: [:update, :destroy]
+      resources :reported_statuses, only: [:create, :update, :destroy]
     end
 
     resources :accounts, only: [:index, :show] do
+      member do
+        post :subscribe
+        post :unsubscribe
+        post :redownload
+      end
+
       resource :reset, only: [:create]
       resource :silence, only: [:create, :destroy]
       resource :suspension, only: [:create, :destroy]
       resource :confirmation, only: [:create]
-      resources :statuses, only: [:index, :update, :destroy]
+      resources :statuses, only: [:index, :create, :update, :destroy]
     end
 
     resources :users, only: [] do
@@ -143,18 +151,22 @@ Rails.application.routes.draw do
     # JSON / REST API
     namespace :v1 do
       resources :statuses, only: [:create, :show, :destroy] do
+        scope module: :statuses do
+          resources :reblogged_by, controller: :reblogged_by_accounts, only: :index
+          resources :favourited_by, controller: :favourited_by_accounts, only: :index
+          resource :reblog, only: :create
+          post :unreblog, to: 'reblogs#destroy'
+
+          resource :favourite, only: :create
+          post :unfavourite, to: 'favourites#destroy'
+
+          resource :mute, only: :create
+          post :unmute, to: 'mutes#destroy'
+        end
+
         member do
           get :context
           get :card
-          get :reblogged_by
-          get :favourited_by
-
-          post :reblog
-          post :unreblog
-          post :favourite
-          post :unfavourite
-          post :mute
-          post :unmute
         end
 
         resource :pin, only: [:create, :destroy], controller: :pinned_statuses
@@ -165,6 +177,7 @@ Rails.application.routes.draw do
         resource :public, only: :show, controller: :public
         resources :tag, only: :show
       end
+      resources :streaming,  only: [:index]
 
       get '/search', to: 'search#index', as: :search
       get '/search/statuses/:query', to: 'search#statuses', as: :status_search_timeline
@@ -204,20 +217,19 @@ Rails.application.routes.draw do
         end
       end
 
+      namespace :accounts do
+        get :verify_credentials, to: 'credentials#show'
+        patch :update_credentials, to: 'credentials#update'
+        resource :search, only: :show, controller: :search
+        resources :relationships, only: :index
+      end
       resources :accounts, only: [:show] do
-        collection do
-          get :relationships
-          get :verify_credentials
-          patch :update_credentials
-          get :search
-        end
+        resources :statuses, only: :index, controller: 'accounts/statuses'
+        resources :followers, only: :index, controller: 'accounts/follower_accounts'
+        resources :following, only: :index, controller: 'accounts/following_accounts'
+        resources :pinned_statuses, only: :index, controller: 'accounts/pinned_statuses'
 
         member do
-          get :statuses
-          get :followers
-          get :following
-          get :pinned_statuses
-
           post :follow
           post :unfollow
           post :block

@@ -22,8 +22,6 @@ import {
 import { muteStatus, unmuteStatus, deleteStatus, pinStatus, unpinStatus } from '../actions/statuses';
 import { initReport } from '../actions/reports';
 import { openModal } from '../actions/modal';
-import { createSelector } from 'reselect';
-import { isMobile } from '../is_mobile';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 
 const messages = defineMessages({
@@ -85,11 +83,15 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
   },
 
   onDelete (status) {
-    dispatch(openModal('CONFIRM', {
-      message: intl.formatMessage(messages.deleteMessage),
-      confirm: intl.formatMessage(messages.deleteConfirm),
-      onConfirm: () => dispatch(deleteStatus(status.get('id'))),
-    }));
+    if (!this.deleteModal) {
+      dispatch(deleteStatus(status.get('id')));
+    } else {
+      dispatch(openModal('CONFIRM', {
+        message: intl.formatMessage(messages.deleteMessage),
+        confirm: intl.formatMessage(messages.deleteConfirm),
+        onConfirm: () => dispatch(deleteStatus(status.get('id'))),
+      }));
+    }
   },
 
   onMention (account, router) {

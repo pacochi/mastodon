@@ -42,10 +42,10 @@ class PostStatusService < BaseService
     end
 
     process_hashtags_service.call(status)
-    process_mentions_service.call(status)
+    process_mentions_service.call(status) # 抽出したハッシュタグを使用するため、順番を変更
 
     PixivCardUpdateWorker.perform_async(status.id) if status.pixiv_cards.any?
-    LinkCrawlWorker.perform_async(status.id) unless status.spoiler_text.present?
+    LinkCrawlWorker.perform_async(status.id) unless status.spoiler_text?
     DistributionWorker.perform_async(status.id)
     Pubsubhubbub::DistributionWorker.perform_async(status.stream_entry.id)
 

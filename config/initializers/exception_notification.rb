@@ -34,9 +34,9 @@ ExceptionNotification.configure do |config|
       exception_recipients: ENV['EXCEPTION_NOTIFICATION_EMAIL'].split(',')
   end
 
-  if Rails.application.secrets.slack['error_webhook_url'] && Rails.application.secrets.slack['error_channel']
+  if Rails.application.secrets.slack[:error_webhook_url] && Rails.application.secrets.slack[:error_channel]
     config.add_notifier :slack,
-      webhook_url: Rails.application.secrets.slack['error_webhook_url'],
-      channel: Rails.application.secrets.slack['error_channel']
+      webhook_url: Rails.application.secrets.slack[:error_webhook_url],
+      channel: Rails.application.secrets.slack[:error_channel]
   end
 end

@@ -284,7 +284,7 @@ export function fetchComposeSuggestions(token) {
 };
 
 export function fetchComposeHashTagSuggestions(token) {
-  return (dispatch, _) => {
+  return (dispatch) => {
     const tags = JSON.parse(localStorage.getItem('hash_tag_history')) || [];
     const suggestionMaxSize = 4;
     const suggestions = tags.filter(it => it.startsWith(token)).slice(0, suggestionMaxSize);

@@ -30,7 +30,11 @@ module Remotable
           send("#{attachment_name}_file_name=", filename)
 
           self[attribute_name] = url if has_attribute?(attribute_name)
+<<<<<<< HEAD
         rescue HTTP::TimeoutError, HTTP::ConnectionError, OpenSSL::SSL::SSLError, Paperclip::Errors::NotIdentifiedByImageMagickError, Addressable::URI::InvalidURIError => e
+=======
+        rescue HTTP::TimeoutError, OpenSSL::SSL::SSLError, Paperclip::Errors::NotIdentifiedByImageMagickError, Addressable::URI::InvalidURIError => e
+>>>>>>> pawoo/migrate_to_v_1_4_7
           Rails.logger.debug "Error fetching remote #{attachment_name}: #{e}"
           nil
         end

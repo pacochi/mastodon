@@ -11,7 +11,8 @@ const messages = defineMessages({
   expand_video: { id: 'video_player.expand', defaultMessage: 'Expand video' },
 });
 
-class VideoPlayer extends React.PureComponent {
+@injectIntl
+export default class VideoPlayer extends React.PureComponent {
 
   static propTypes = {
     media: ImmutablePropTypes.map.isRequired,
@@ -204,7 +205,7 @@ class VideoPlayer extends React.PureComponent {
           ref={this.setRef}
           src={media.get('url')}
           autoPlay={!isIOS()}
-          loop={true}
+          loop
           muted={this.state.muted}
         />
       </div>
@@ -212,5 +213,3 @@ class VideoPlayer extends React.PureComponent {
   }
 
 }
-
-export default injectIntl(VideoPlayer);

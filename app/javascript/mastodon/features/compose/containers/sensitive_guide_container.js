@@ -1,8 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import TextIconButton from '../components/text_icon_button';
 import PropTypes from 'prop-types';
-import { changeComposeSensitivity } from '../../../actions/compose';
 import { Motion, spring } from 'react-motion';
 import { injectIntl, defineMessages } from 'react-intl';
 

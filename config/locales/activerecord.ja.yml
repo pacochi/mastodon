@@ -17,6 +17,8 @@ ja:
         file: ファイル
         file_content_type: Content-Type
         file_file_size: ファイルサイズ
+      user:
+        email: メールアドレス
     errors:
       models:
         account:

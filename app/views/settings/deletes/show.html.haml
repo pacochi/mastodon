@@ -1,0 +1,27 @@
+- content_for :page_title do
+  = t('settings.delete')
+
+- if current_user.initial_password_usage
+  = simple_form_for(current_user, url: registration_path(:user), html: { method: :put }) do |f|
+    = render 'shared/error_messages', object: f.object
+    %p.hint= t('deletes.exists_initial_password_usage')
+    .actions
+      = f.button :button, t('auth.reset_password'), type: :submit
+
+- elsif current_user.oauth_authentications.find_by(provider: :pixiv)
+  %p.hint= t('deletes.exists_oauth_authentications_html', path: settings_oauth_authentications_path)
+
+- else
+  = simple_form_for @confirmation, url: settings_delete_path, method: :delete do |f|
+    .warning
+      %strong
+        = fa_icon('warning')
+        = t('deletes.warning_title')
+      = t('deletes.warning_html')
+
+    %p.hint= t('deletes.description_html')
+
+    = f.input :password, autocomplete: 'off', placeholder: t('simple_form.labels.defaults.current_password'), input_html: { 'aria-label' => t('simple_form.labels.defaults.current_password') }, hint: t('deletes.confirm_password')
+
+    .actions
+      = f.button :button, t('deletes.proceed'), type: :submit, class: 'negative'
