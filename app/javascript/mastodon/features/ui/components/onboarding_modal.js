@@ -205,19 +205,19 @@ export default class OnboardingModal extends React.PureComponent {
     currentIndex: 0,
   };
 
-<<<<<<< HEAD
-  constructor(props, context) {
-    super(props, context);
-    this.isSp = window.innerWidth < 1024;
-=======
+
   componentWillMount() {
     const { me, admin, domain, intl } = this.props;
-    this.pages = [
+    this.isSp = window.innerWidth < 1024;
+    this.pages = this.isSp ? [
       <PageOne acct={me.get('acct')} domain={domain} />,
       <PageTwo me={me} />,
       <PageThree me={me} />,
       <PageFour domain={domain} intl={intl} />,
       <PageSix admin={admin} domain={domain} />,
+    ] : [
+      <MusicPageOne />,
+      <MusicPageTwo />,
     ];
   };
 
@@ -231,7 +231,6 @@ export default class OnboardingModal extends React.PureComponent {
     // モーダルを閉じた時に、おすすめアカウントへ飛ばす
     const path = '/suggested_accounts';
     this.context.router.history.push(path);
->>>>>>> pawoo/migrate_to_v_1_4_7
   }
 
   handleSkip = (e) => {
@@ -274,23 +273,7 @@ export default class OnboardingModal extends React.PureComponent {
   }
 
   render () {
-<<<<<<< HEAD
-    const { me, admin, domain, intl } = this.props;
-
-    const pages = this.isSp ? [
-      <PageOne acct={me.get('acct')} domain={domain} />,
-      <PageTwo me={me} />,
-      <PageThree me={me} domain={domain} />,
-      <PageFour domain={domain} intl={intl} />,
-      <PageSix admin={admin} domain={domain} />,
-    ] : [
-      <MusicPageOne />,
-      <MusicPageTwo />,
-    ];
-
-=======
     const { pages } = this;
->>>>>>> pawoo/migrate_to_v_1_4_7
     const { currentIndex } = this.state;
     const hasMore = currentIndex < pages.length - 1;
 
@@ -321,17 +304,8 @@ export default class OnboardingModal extends React.PureComponent {
     return (
       <div className='modal-root__modal onboarding-modal'>
         <TransitionMotion styles={styles}>
-<<<<<<< HEAD
-          {interpolatedStyles =>
-            <div className={`onboarding-modal${this.isSp ? '' : '-music'}__pager`}>
-              {pages.map((page, i) =>
-                <div key={`page-${i}`} style={{ opacity: interpolatedStyles[i].style.opacity, pointerEvents: i === currentIndex ? 'auto' : 'none' }}>{page}</div>
-              )}
-            </div>
-          }
-=======
           {interpolatedStyles => (
-            <ReactSwipeable onSwipedRight={this.handlePrev} onSwipedLeft={this.handleNext} className='onboarding-modal__pager'>
+            <ReactSwipeable onSwipedRight={this.handlePrev} onSwipedLeft={this.handleNext} className={`onboarding-modal${this.isSp ? '' : '-music'}__pager`}>
               {interpolatedStyles.map(({ key, data, style }, i) => {
                 const className = classNames('onboarding-modal__page__wrapper', {
                   'onboarding-modal__page__wrapper--active': i === currentIndex,
@@ -342,7 +316,6 @@ export default class OnboardingModal extends React.PureComponent {
               })}
             </ReactSwipeable>
           )}
->>>>>>> pawoo/migrate_to_v_1_4_7
         </TransitionMotion>
 
         <div className='onboarding-modal__paginator'>
