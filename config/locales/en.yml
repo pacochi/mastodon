@@ -7,6 +7,8 @@ en:
     business_email: 'Business e-mail:'
     closed_registrations: Registrations are currently closed on this instance.
     contact: Contact
+    contact_body_mastodon: From here inside Pawoo
+    contact_body_twitter: From here inside Twitter
     description_headline: What is %{domain}?
     domain_count_after: other instances
     domain_count_before: Connected to
@@ -34,6 +36,7 @@ en:
     follow: Follow
     followers: Followers
     following: Following
+    media: Media
     medium: "%{name}'s Media"
     nothing_here: There is nothing here!
     people_followed_by: People whom %{name} follows
@@ -54,7 +57,6 @@ en:
   admin:
     accounts:
       are_you_sure: Are you sure?
-      back: Back
       confirm: Confirm
       confirmed: Confirmed
       disable_two_factor_authentication: Disable 2FA
@@ -65,7 +67,6 @@ en:
       feed_url: Feed URL
       followers: Followers
       follows: Follows
-      media: Media
       ip: IP
       location:
         all: All

@@ -57,7 +57,6 @@ ja:
   admin:
     accounts:
       are_you_sure: 本当に実行しますか?
-      back: 戻る
       confirm: 確認
       confirmed: 確認済み
       disable_two_factor_authentication: 二段階認証を無効にする
@@ -191,7 +190,7 @@ ja:
         desc_html: トップページへの表示と meta タグに使用されます。<br>HTMLタグ、特に<code>&lt;a&gt;</code> と <code>&lt;em&gt;</code>が利用可能です。
         title: サイトの説明文
       site_description_extended:
-        desc_html: インスタンスについてのページに表示されます<br>HTMLタグが使えます
+        desc_html: インスタンスについてのページに表示されます。<br>HTMLタグが利用可能です。
         title: サイトの詳細な説明
       site_title: サイトのタイトル
       title: サイト設定

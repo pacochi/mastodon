@@ -43,13 +43,13 @@ ja:
         must_be_following: フォローしていないユーザーからの通知をブロック
       notification_emails:
         digest: タイムラインの要約をメールで通知
-        favourite: いいねされた時にメールで通知
+        favourite: お気に入りに登録された時にメールで通知
         follow: フォローされた時にメールで通知
         follow_request: フォローリクエストを受けた時にメールで通知
         mention: 返信された時にメールで通知
         reblog: ブーストされた時にメールで通知
       notification_firebase_cloud_messagings:
-        favourite: いいねされた時にアプリで通知
+        favourite: お気に入りに登録された時にアプリで通知
         follow: フォローされた時にアプリで通知
         follow_request: フォローリクエストを受けた時にアプリで通知
         mention: 返信された時にアプリで通知
