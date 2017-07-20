@@ -118,13 +118,9 @@ class MediaTimeline extends React.PureComponent {
     const pinned = !!columnId;
 
     return (
-<<<<<<< HEAD
-      <Column icon='music' active={hasUnread} heading={intl.formatMessage(messages.title)}>
-        <ColumnBackButtonSlim />
-=======
       <Column ref={this.setRef}>
         <ColumnHeader
-          icon='image'
+          icon='music'
           active={hasUnread}
           title={intl.formatMessage(messages.title)}
           onPin={this.handlePin}
@@ -135,7 +131,6 @@ class MediaTimeline extends React.PureComponent {
         >
           <ColumnSettingsContainer />
         </ColumnHeader>
->>>>>>> pawoo/migrate_to_v_1_4_7
         <StatusListContainer
           timelineId='media'
           loadMore={this.handleLoadMore}
