@@ -51,7 +51,7 @@ class Api::V1::Accounts::StatusesController < Api::BaseController
   end
 
   def account_media_status_ids
-    @account.media_attachments.attached.reorder(nil).select(:status_id).distinct
+    @account.media_attachments.attached.where(type: :video).reorder(nil).select(:status_id).distinct
   end
 
   def no_replies_scope
