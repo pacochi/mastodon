@@ -51,35 +51,7 @@ class Announcements extends React.PureComponent {
             body: 'Google Playストア',
           },
         ],
-<<<<<<< HEAD
       },
-=======
-      }, {
-        id: 7,
-        icon: '/announcements/icon_2x_360.png',
-        body: 'Pawooにどんなユーザーさんがいるのか見てみよう！',
-        link: [
-          {
-            reactRouter: true,
-            inline: false,
-            href: '/suggested_accounts',
-            body: 'おすすめユーザー（実験中）',
-          },
-        ],
-      }, {
-        id: 9,
-        icon: '/announcements/icon_2x_360.png',
-        body: '音楽版Pawooリリース！楽曲投稿や共有プレイリストで盛り上がろう！',
-        link: [
-          {
-            reactRouter: false,
-            inline: false,
-            href: 'https://music.pawoo.net/?ref=pawoo-announcements',
-            body: 'Pawoo Music',
-          },
-        ],
-      }
->>>>>>> pawoo/migrate_to_v_1_4_7
       // NOTE: id: 9 まで使用した
     );
 
