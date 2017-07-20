@@ -8,16 +8,6 @@ import {
   FOLLOW_REQUESTS_EXPAND_SUCCESS,
 } from '../actions/accounts';
 import {
-<<<<<<< HEAD
-  STATUS_SEARCH_TIMELINE_FETCH_SUCCESS,
-  STATUS_SEARCH_TIMELINE_EXPAND_SUCCESS,
-} from '../actions/search';
-=======
-  SUGGESTED_ACCOUNTS_FETCH_SUCCESS,
-  SUGGESTED_ACCOUNTS_EXPAND_SUCCESS,
-} from '../actions/suggested_accounts';
->>>>>>> pawoo/migrate_to_v_1_4_7
-import {
   BLOCKS_FETCH_SUCCESS,
   BLOCKS_EXPAND_SUCCESS,
 } from '../actions/blocks';
