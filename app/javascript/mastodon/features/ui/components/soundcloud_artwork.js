@@ -1,3 +1,4 @@
+/* global SC: false */
 import React from 'react';
 import PropTypes from 'prop-types';
 import queryString from 'query-string';
