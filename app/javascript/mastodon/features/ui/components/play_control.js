@@ -560,7 +560,8 @@ class PlayControl extends React.PureComponent {
           <div className='control-bar__deck' onClick={this.handleClickDeck}>
             <ul className='control-bar__deck-selector'>
               {deckList.map((deck) => (
-                <li key={deck.number}
+                <li
+                  key={deck.number}
                   className={classNames('deck-selector__selector-body', {
                     active: deck.number === targetDeck,
                     'is-apollo': deck.type === 'apollo',
