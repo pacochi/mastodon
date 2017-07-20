@@ -30,7 +30,7 @@ class SCWidget extends React.PureComponent {
       <div className='status-sc-widget-wrapper'>
         {
           this.state.iframe ? (
-            <div className='status-sc-widget' dangerouslySetInnerHTML={this.getEmbed()}/>
+            <div className='status-sc-widget' dangerouslySetInnerHTML={this.getEmbed()} />
           ) : (
             <div className='status-sc-widget-loading' />
           )

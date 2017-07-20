@@ -95,7 +95,7 @@ class BoothWidget extends React.PureComponent {
           <div className='booth-widget__viewer-btn' onClick={this.handlePlayerClick}>
             <i className={`fa ${this.state.isPlaying ? 'fa-pause' : 'fa-play'}`} />
           </div>
-          <img className='booth-widget__image' src={boothItem.getIn(['primary_image', 'f_620', 'url'])} alt=''/>
+          <img className='booth-widget__image' src={boothItem.getIn(['primary_image', 'f_620', 'url'])} alt='' />
         </div>
         <div className='booth-widget__seekbar-wrapper'>
           <div className='booth-widget__text'>
@@ -130,7 +130,7 @@ class BoothWidget extends React.PureComponent {
       <div className='booth-widget'>
         <div className='booth-widget__viewer'>
           <a href={this.props.url} target='_blank'>
-            <img className='booth-widget__image' src={boothItem.getIn(['primary_image', 'f_620', 'url'])} alt=''/>
+            <img className='booth-widget__image' src={boothItem.getIn(['primary_image', 'f_620', 'url'])} alt='' />
           </a>
         </div>
         <div className='booth-widget__text'>

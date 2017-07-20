@@ -494,7 +494,7 @@ class PlayControl extends React.PureComponent {
 
     switch (deckQueue.source_type) {
     case 'youtube':
-      return <YouTubeArtwork muted={muted} volume={volume} timeOffset={timeOffset} videoId={deckQueue.source_id} onReadyYoutube={this.handleReadyYoutube}/>;
+      return <YouTubeArtwork muted={muted} volume={volume} timeOffset={timeOffset} videoId={deckQueue.source_id} onReadyYoutube={this.handleReadyYoutube} />;
     case 'soundcloud':
       return <SoundCloudArtwork muted={muted} volume={volume} timeOffset={timeOffset} sourceId={deckQueue.source_id} />;
     case 'pawoo-music':

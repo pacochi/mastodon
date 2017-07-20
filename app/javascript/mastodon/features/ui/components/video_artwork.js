@@ -40,7 +40,7 @@ class VideoArtwork extends React.PureComponent {
     return (
       <div className='queue-item__artwork'>
         <video ref={this.setVideoRef} muted={muted}>
-          <source src={videoUrl}/>
+          <source src={videoUrl} />
         </video>
       </div>
     );
