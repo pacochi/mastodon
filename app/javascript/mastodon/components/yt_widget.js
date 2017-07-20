@@ -15,7 +15,8 @@ class YTWidget extends React.PureComponent {
           width='234'
           height='131'
           src={`https://www.youtube.com/embed/${this.props.videoId}`}
-          frameBorder='0' />
+          frameBorder='0'
+        />
       </div>
     );
   }
