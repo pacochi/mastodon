@@ -10,11 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-<<<<<<< HEAD
 ActiveRecord::Schema.define(version: 20170710015311) do
-=======
-ActiveRecord::Schema.define(version: 20170625140443) do
->>>>>>> pawoo/migrate_to_v_1_4_7
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -153,24 +149,6 @@ ActiveRecord::Schema.define(version: 20170625140443) do
     t.string "file_content_type"
     t.integer "file_file_size"
     t.datetime "file_updated_at"
-<<<<<<< HEAD
-    t.string   "remote_url",        default: "", null: false
-    t.integer  "account_id"
-    t.datetime "created_at",                     null: false
-    t.datetime "updated_at",                     null: false
-    t.string   "shortcode"
-    t.integer  "type",              default: 0,  null: false
-    t.json     "file_meta"
-    t.json     "music_info"
-    t.index ["account_id"], name: "index_media_attachments_on_account_id", using: :btree
-    t.index ["shortcode"], name: "index_media_attachments_on_shortcode", unique: true, using: :btree
-    t.index ["status_id"], name: "index_media_attachments_on_status_id", using: :btree
-  end
-
-  create_table "mentions", force: :cascade do |t|
-    t.integer  "account_id"
-    t.bigint   "status_id"
-=======
     t.string "remote_url", default: "", null: false
     t.integer "account_id"
     t.datetime "created_at", null: false
@@ -178,6 +156,7 @@ ActiveRecord::Schema.define(version: 20170625140443) do
     t.string "shortcode"
     t.integer "type", default: 0, null: false
     t.json "file_meta"
+    t.json "music_info"
     t.index ["account_id"], name: "index_media_attachments_on_account_id"
     t.index ["shortcode"], name: "index_media_attachments_on_shortcode", unique: true
     t.index ["status_id"], name: "index_media_attachments_on_status_id"
@@ -195,7 +174,6 @@ ActiveRecord::Schema.define(version: 20170625140443) do
   create_table "mutes", id: :serial, force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "target_account_id", null: false
->>>>>>> pawoo/migrate_to_v_1_4_7
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["account_id", "target_account_id"], name: "index_mutes_on_account_id_and_target_account_id", unique: true
@@ -272,56 +250,33 @@ ActiveRecord::Schema.define(version: 20170625140443) do
 
   create_table "pixiv_cards", id: :serial, force: :cascade do |t|
     t.integer "status_id", null: false
-<<<<<<< HEAD
-    t.string  "url",       null: false
-    t.string  "image_url"
-    t.index ["status_id"], name: "index_pixiv_cards_on_status_id", using: :btree
-  end
-
-  create_table "playlist_logs", force: :cascade do |t|
-    t.string   "uuid",                            null: false
-    t.integer  "deck",                            null: false
-    t.string   "info",               default: "", null: false
-    t.string   "link",                            null: false
-    t.integer  "account_id",                      null: false
-    t.datetime "started_at"
-    t.integer  "skipped_account_id"
-    t.datetime "skipped_at"
-    t.datetime "created_at",                      null: false
-    t.datetime "updated_at",                      null: false
-    t.index ["uuid"], name: "index_playlist_logs_on_uuid", unique: true, using: :btree
-  end
-
-  create_table "playlists", force: :cascade do |t|
-    t.integer  "deck",                          null: false
-    t.string   "name",          default: "",    null: false
-    t.integer  "deck_type",     default: 0,     null: false
-    t.boolean  "write_protect", default: false, null: false
-    t.datetime "created_at",                    null: false
-    t.datetime "updated_at",                    null: false
-    t.index ["deck"], name: "index_playlists_on_deck", unique: true, using: :btree
-  end
-
-  create_table "preview_cards", force: :cascade do |t|
-    t.bigint   "status_id"
-    t.string   "url",                default: "", null: false
-    t.string   "title"
-    t.string   "description"
-    t.string   "image_file_name"
-    t.string   "image_content_type"
-    t.integer  "image_file_size"
-=======
     t.string "url", null: false
     t.string "image_url"
     t.index ["status_id"], name: "index_pixiv_cards_on_status_id"
   end
 
-  create_table "pixiv_follows", id: :serial, force: :cascade do |t|
-    t.integer "oauth_authentication_id", null: false
-    t.integer "target_pixiv_uid", null: false
+  create_table "playlist_logs", id: :serial, force: :cascade do |t|
+    t.string "uuid", null: false
+    t.integer "deck", null: false
+    t.string "info", default: "", null: false
+    t.string "link", null: false
+    t.integer "account_id", null: false
+    t.datetime "started_at"
+    t.integer "skipped_account_id"
+    t.datetime "skipped_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["oauth_authentication_id", "target_pixiv_uid"], name: "index_pixiv_follows_on_oauth_authentication_id", unique: true
+    t.index ["uuid"], name: "index_playlist_logs_on_uuid", unique: true
+  end
+
+  create_table "playlists", id: :serial, force: :cascade do |t|
+    t.integer "deck", null: false
+    t.string "name", default: "", null: false
+    t.integer "deck_type", default: 0, null: false
+    t.boolean "write_protect", default: false, null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["deck"], name: "index_playlists_on_deck", unique: true
   end
 
   create_table "preview_cards", id: :serial, force: :cascade do |t|
@@ -332,7 +287,6 @@ ActiveRecord::Schema.define(version: 20170625140443) do
     t.string "image_file_name"
     t.string "image_content_type"
     t.integer "image_file_size"
->>>>>>> pawoo/migrate_to_v_1_4_7
     t.datetime "image_updated_at"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
