@@ -148,18 +148,8 @@ ja:
       linked: 連携中
       not_linked: 連携なし
       unlink_forcibly: 強制的に解除
-<<<<<<< HEAD
     playlists:
       title: プレイリスト
-    pubsubhubbub:
-      callback_url: コールバックURL
-      confirmed: 確認済み
-      expires_in: 期限
-      last_delivery: 最終配送
-      title: PubSubHubbub
-      topic: トピック
-=======
->>>>>>> pawoo/migrate_to_v_1_4_7
     reports:
       action_taken_by: レポート処理者
       are_you_sure: 本当に実行しますか？
