@@ -18,12 +18,9 @@ import status_lists from './status_lists';
 import cards from './cards';
 import reports from './reports';
 import trend_tags from './trend_tags';
-<<<<<<< HEAD
 import booth_items from './booth_items';
 import tips_balloon from './tips_balloon';
-=======
 import contexts from './contexts';
->>>>>>> pawoo/migrate_to_v_1_4_7
 
 export default combineReducers({
   timelines,
