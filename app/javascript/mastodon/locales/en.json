@@ -26,11 +26,7 @@
   "column.mutes": "Muted users",
   "column.notifications": "Notifications",
   "column.public": "Federated timeline",
-<<<<<<< HEAD
-=======
-  "column.suggested_accounts": "Active Accounts",
   "column.media": "Media timeline",
->>>>>>> pawoo/migrate_to_v_1_4_7
   "column.search_toots": "Search: \"{keyword}\"",
   "column_back_button.label": "Back",
   "column_header.pin": "Pin",
