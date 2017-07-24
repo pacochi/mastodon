@@ -20,6 +20,6 @@ class PlaylistLog < ApplicationRecord
   belongs_to :skipped_account, class_name: 'Account'
 
   validates :uuid, uniqueness: true, presence: true
-  validates :deck, presence: true, inclusion: { in: 1..6 }
+  validates :deck, presence: true
   validates :link, presence: true
 end
