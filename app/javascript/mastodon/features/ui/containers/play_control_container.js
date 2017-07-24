@@ -13,6 +13,7 @@ const messages = defineMessages({
 const mapStateToProps = state => ({
   accessToken: state.getIn(['meta', 'access_token']),
   streamingAPIBaseURL: state.getIn(['meta', 'streaming_api_base_url']),
+  isAdmin: state.getIn(['meta', 'is_user_admin']),
   isTop: false,
 });
 
