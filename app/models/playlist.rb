@@ -15,9 +15,12 @@
 class Playlist < ApplicationRecord
   validates :deck, uniqueness: true, presence: true
 
+  after_destroy :remove_queue_items
+
   enum deck_type: { normal: 0, apollo: 1 }
 
   MEDIA_TL_DECK_ID = 346 # Pawoo Musicに投稿された曲が自動的に追加されるDECK(手動での追加はできない)
+  REPEAT_MUSIC_NUM = 30
 
   def add(link, account, force = false)
     raise Mastodon::PlaylistWriteProtectionError if write_protect && !force
@@ -80,6 +83,11 @@ class Playlist < ApplicationRecord
     if first_item
       queue_item = QueueItem.new(first_item)
       play_item(queue_item.id, queue_item.duration)
+    else
+      # プレイリストが空の場合は、過去に追加された曲をもう一度再生
+      playlist_log = PlaylistLog.where(deck: deck).order(id: :desc).limit(REPEAT_MUSIC_NUM).sample
+      account = Account.find_local('pixiv')
+      add(playlist_log.link, account, true) if playlist_log && account
     end
     true
   end
@@ -161,6 +169,10 @@ class Playlist < ApplicationRecord
 
   def redis
     Redis.current
+  end
+
+  def remove_queue_items
+    Rails.cache.delete("exclude_domains_for:#{account_id}")
   end
 
   def settings
