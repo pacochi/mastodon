@@ -8,8 +8,8 @@ export default class ImageLoader extends React.PureComponent {
     alt: PropTypes.string,
     src: PropTypes.string.isRequired,
     previewSrc: PropTypes.string.isRequired,
-    width: PropTypes.number.isRequired,
-    height: PropTypes.number.isRequired,
+    width: PropTypes.number,
+    height: PropTypes.number,
   }
 
   static defaultProps = {
@@ -67,7 +67,9 @@ export default class ImageLoader extends React.PureComponent {
     };
     const handleLoad = () => {
       removeEventListeners();
-      this.canvasContext.drawImage(image, 0, 0, width, height);
+      if (width && height) {
+        this.canvasContext.drawImage(image, 0, 0, width, height);
+      }
       resolve();
     };
     image.addEventListener('error', handleError);
@@ -78,7 +80,9 @@ export default class ImageLoader extends React.PureComponent {
 
   clearPreviewCanvas () {
     const { width, height } = this.canvas;
-    this.canvasContext.clearRect(0, 0, width, height);
+    if (width && height) {
+      this.canvasContext.clearRect(0, 0, width, height);
+    }
   }
 
   loadOriginalImage = ({ src }) => new Promise((resolve, reject) => {
@@ -120,17 +124,19 @@ export default class ImageLoader extends React.PureComponent {
 
     return (
       <div className={className}>
-        <canvas
-          className='image-loader__preview-canvas'
-          width={width}
-          height={height}
-          ref={this.setCanvasRef}
-        />
+        {width && height && (
+          <canvas
+            className='image-loader__preview-canvas'
+            width={width}
+            height={height}
+            ref={this.setCanvasRef}
+          />
+        )}
 
         {!loading && (
           <img
             alt={alt}
-            className='image-loader__img'
+            className={width && height && 'image-loader__img'}
             src={src}
             width={width}
             height={height}
