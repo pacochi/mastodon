@@ -17,7 +17,8 @@ const dropdownStyle = {
   top: '35px',
 };
 
-class TimeLimitDropdown extends React.PureComponent {
+@injectIntl
+export default class TimeLimitDropdown extends React.PureComponent {
 
   static propTypes = {
     onSelectTimeLimit: PropTypes.func.isRequired,
@@ -76,5 +77,3 @@ class TimeLimitDropdown extends React.PureComponent {
   }
 
 }
-
-export default injectIntl(TimeLimitDropdown);

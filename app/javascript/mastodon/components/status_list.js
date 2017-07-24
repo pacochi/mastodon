@@ -6,8 +6,9 @@ import StatusContainer from '../containers/status_container';
 import LoadMore from './load_more';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import IntersectionObserverWrapper from '../features/ui/util/intersection_observer_wrapper';
+import { debounce } from 'lodash';
 
-class StatusList extends ImmutablePureComponent {
+export default class StatusList extends ImmutablePureComponent {
 
   static propTypes = {
     scrollKey: PropTypes.string.isRequired,
@@ -37,7 +38,7 @@ class StatusList extends ImmutablePureComponent {
 
   intersectionObserverWrapper = new IntersectionObserverWrapper();
 
-  handleScroll = (e) => {
+  handleScroll = debounce((e) => {
     const { scrollTop, scrollHeight, clientHeight } = e.target;
     const offset = scrollHeight - scrollTop - clientHeight;
     this._oldScrollPosition = scrollHeight - scrollTop;
@@ -49,7 +50,9 @@ class StatusList extends ImmutablePureComponent {
     } else if (this.props.onScroll) {
       this.props.onScroll();
     }
-  }
+  }, 200, {
+    trailing: true,
+  });
 
   componentDidMount () {
     this.attachScrollListener();
@@ -57,8 +60,16 @@ class StatusList extends ImmutablePureComponent {
   }
 
   componentDidUpdate (prevProps) {
-    if ((prevProps.statusIds.size < this.props.statusIds.size && prevProps.statusIds.first() !== this.props.statusIds.first() && !!this._oldScrollPosition) && this.node.scrollTop > 0) {
-      this.node.scrollTop = this.node.scrollHeight - this._oldScrollPosition;
+    // Reset the scroll position when a new toot comes in in order not to
+    // jerk the scrollbar around if you're already scrolled down the page.
+    if (prevProps.statusIds.size < this.props.statusIds.size &&
+        prevProps.statusIds.first() !== this.props.statusIds.first() &&
+        this._oldScrollPosition &&
+        this.node.scrollTop > 0) {
+      let newScrollTop = this.node.scrollHeight - this._oldScrollPosition;
+      if (this.node.scrollTop !== newScrollTop) {
+        this.node.scrollTop = newScrollTop;
+      }
     }
   }
 
@@ -96,7 +107,7 @@ class StatusList extends ImmutablePureComponent {
   }
 
   render () {
-    const { statusIds, onScrollToBottom, scrollKey, trackScroll, shouldUpdateScroll, isLoading, hasMore, prepend, emptyMessage, squareMedia, expandMedia, standalone, displayPinned } = this.props;
+    const { statusIds, scrollKey, trackScroll, shouldUpdateScroll, isLoading, hasMore, prepend, emptyMessage, squareMedia, expandMedia, standalone, displayPinned } = this.props;
 
     let loadMore       = null;
     let scrollableArea = null;
@@ -139,5 +150,3 @@ class StatusList extends ImmutablePureComponent {
   }
 
 }
-
-export default StatusList;

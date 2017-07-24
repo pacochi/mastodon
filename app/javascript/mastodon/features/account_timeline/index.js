@@ -20,7 +20,8 @@ const mapStateToProps = (state, props) => ({
   pinnedStatusIds: state.getIn(['timelines', `account:${Number(props.params.accountId)}:pinned_status`, 'items'], Immutable.List()),
 });
 
-class AccountTimeline extends ImmutablePureComponent {
+@connect(mapStateToProps)
+export default class AccountTimeline extends ImmutablePureComponent {
 
   static propTypes = {
     params: PropTypes.object.isRequired,
@@ -84,5 +85,3 @@ class AccountTimeline extends ImmutablePureComponent {
   }
 
 }
-
-export default connect(mapStateToProps)(AccountTimeline);

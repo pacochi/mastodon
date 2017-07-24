@@ -8,12 +8,12 @@ import StatusContent from '../../../components/status_content';
 import MediaGallery from '../../../components/media_gallery';
 import VideoPlayer from '../../../components/video_player';
 import AttachmentList from '../../../components/attachment_list';
-import Link from 'react-router/lib/Link';
+import Link from 'react-router-dom/Link';
 import { FormattedDate, FormattedNumber } from 'react-intl';
 import CardContainer from '../containers/card_container';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
-class DetailedStatus extends ImmutablePureComponent {
+export default class DetailedStatus extends ImmutablePureComponent {
 
   static contextTypes = {
     router: PropTypes.object,
@@ -24,21 +24,18 @@ class DetailedStatus extends ImmutablePureComponent {
     onOpenMedia: PropTypes.func.isRequired,
     onOpenVideo: PropTypes.func.isRequired,
     autoPlayGif: PropTypes.bool,
-    expandMedia: PropTypes.bool,
-    squareMedia: PropTypes.bool,
   };
 
   handleAccountClick = (e) => {
     if (e.button === 0) {
       e.preventDefault();
-      this.context.router.push(`/accounts/${this.props.status.getIn(['account', 'id'])}`);
+      this.context.router.history.push(`/accounts/${this.props.status.getIn(['account', 'id'])}`);
     }
 
     e.stopPropagation();
   }
 
   render () {
-    const { expandMedia, squareMedia } = this.props;
     const status = this.props.status.get('reblog') ? this.props.status.get('reblog') : this.props.status;
 
     let media           = '';
@@ -64,7 +61,7 @@ class DetailedStatus extends ImmutablePureComponent {
       } else if (attachments.first().get('type') === 'video') {
         media = <VideoPlayer sensitive={status.get('sensitive')} media={attachments.first()} width={300} height={150} onOpenVideo={this.props.onOpenVideo} autoplay />;
       } else {
-        media = <MediaGallery sensitive={status.get('sensitive')} media={attachments} height={300} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia squareMedia />;
+        media = <MediaGallery sensitive={status.get('sensitive')} media={attachments} height={300} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia />;
       }
     } else if (status.get('spoiler_text').length === 0) {
       media = <CardContainer statusId={status.get('id')} />;
@@ -105,5 +102,3 @@ class DetailedStatus extends ImmutablePureComponent {
   }
 
 }
-
-export default DetailedStatus;

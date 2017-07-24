@@ -2,7 +2,7 @@ import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import DropdownMenu from '../../../components/dropdown_menu';
-import Link from 'react-router/lib/Link';
+import Link from 'react-router-dom/Link';
 import { defineMessages, injectIntl, FormattedMessage, FormattedNumber } from 'react-intl';
 
 const messages = defineMessages({
@@ -21,18 +21,8 @@ const messages = defineMessages({
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
 });
 
-const outerDropdownStyle = {
-  padding: '10px',
-  flex: '0 0 auto',
-};
-
-const outerLinksStyle = {
-  flex: '4 1 auto',
-  display: 'flex',
-  lineHeight: '18px',
-};
-
-class ActionBar extends React.PureComponent {
+@injectIntl
+export default class ActionBar extends React.PureComponent {
 
   static propTypes = {
     account: ImmutablePropTypes.map.isRequired,
@@ -121,5 +111,3 @@ class ActionBar extends React.PureComponent {
   }
 
 }
-
-export default injectIntl(ActionBar);

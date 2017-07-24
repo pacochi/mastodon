@@ -1,6 +1,5 @@
 import api, { getLinks } from '../api';
 import { fetchRelationships } from './accounts';
-import Immutable from 'immutable';
 
 export const SUGGESTED_ACCOUNTS_FETCH_REQUEST = 'SUGGESTED_ACCOUNTS_FETCH_REQUEST';
 export const SUGGESTED_ACCOUNTS_FETCH_SUCCESS = 'SUGGESTED_ACCOUNTS_FETCH_SUCCESS';

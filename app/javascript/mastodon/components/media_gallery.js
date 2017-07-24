@@ -18,8 +18,7 @@ class Item extends React.PureComponent {
     onClick: PropTypes.func.isRequired,
     autoPlayGif: PropTypes.bool.isRequired,
     expandMedia: PropTypes.bool.isRequired,
-    lineMedia: PropTypes.bool,
-    squareMedia: PropTypes.bool.isRequired,
+    lineMedia: PropTypes.bool.isRequired,
   };
 
   handleClick = (e) => {
@@ -34,7 +33,7 @@ class Item extends React.PureComponent {
   }
 
   render () {
-    const { attachment, index, size, squareMedia, expandMedia, lineMedia } = this.props;
+    const { attachment, index, size, expandMedia, lineMedia } = this.props;
 
     let width  = 50;
     let height = 100;
@@ -93,27 +92,25 @@ class Item extends React.PureComponent {
     let thumbnail = '';
 
     if (attachment.get('type') === 'image') {
-      if (expandMedia) {
-        thumbnail = (
-          <a
-            href={attachment.get('remote_url') || attachment.get('url')}
-            onClick={this.handleClick}
-            target='_blank'
-          >
-            <img src={attachment.get('preview_url')} alt='media' style={{ width: '100%' }} />
-          </a>
-        );
-      } else {
-        thumbnail = (
-          <a // eslint-disable-line jsx-a11y/anchor-has-content
-            className='media-gallery__item-thumbnail'
-            href={attachment.get('remote_url') || attachment.get('url')}
-            onClick={this.handleClick}
-            target='_blank'
-            style={{ backgroundImage: `url(${attachment.get('preview_url')})`, backgroundPosition: `50% ${squareMedia ? '0' : '20%'}` }}
-          />
-        );
-      }
+      const previewUrl = attachment.get('preview_url');
+      const previewWidth = attachment.getIn(['meta', 'small', 'width']);
+
+      const originalUrl = attachment.get('url');
+      const originalWidth = attachment.getIn(['meta', 'original', 'width']);
+
+      const srcSet = attachment.has('meta') ? `${originalUrl} ${originalWidth}w, ${previewUrl} ${previewWidth}w` : null;
+      const sizes = `(min-width: 1025px) ${320 * (width / 100)}px, ${width}vw`;
+
+      thumbnail = (
+        <a
+          className={expandMedia ? null : 'media-gallery__item-thumbnail'}
+          href={attachment.get('remote_url') || originalUrl}
+          onClick={this.handleClick}
+          target='_blank'
+        >
+          <img src={previewUrl} srcSet={srcSet} sizes={sizes} alt='' style={expandMedia ? { width: '100%' } : null} />
+        </a>
+      );
     } else if (attachment.get('type') === 'gifv') {
       const autoPlay = !isIOS() && this.props.autoPlayGif;
 
@@ -143,7 +140,8 @@ class Item extends React.PureComponent {
 
 }
 
-class MediaGallery extends React.PureComponent {
+@injectIntl
+export default class MediaGallery extends React.PureComponent {
 
   static propTypes = {
     sensitive: PropTypes.bool,
@@ -152,22 +150,26 @@ class MediaGallery extends React.PureComponent {
     onOpenMedia: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
     autoPlayGif: PropTypes.bool.isRequired,
-    expandMedia: PropTypes.bool.isRequired,
+    expandMedia: PropTypes.bool,
     lineMedia: PropTypes.bool,
-    squareMedia: PropTypes.bool.isRequired,
   };
 
   static defaultProps = {
     expandMedia: false,
     lineMedia: false,
-    squareMedia: false,
   };
 
   state = {
     visible: !this.props.sensitive,
   };
 
-  handleOpen = (e) => {
+  componentWillReceiveProps (nextProps) {
+    if (nextProps.sensitive !== this.props.sensitive) {
+      this.setState({ visible: !nextProps.sensitive });
+    }
+  }
+
+  handleOpen = () => {
     this.setState({ visible: !this.state.visible });
   }
 
@@ -176,7 +178,7 @@ class MediaGallery extends React.PureComponent {
   }
 
   render () {
-    const { media, intl, sensitive, squareMedia, expandMedia, lineMedia } = this.props;
+    const { media, intl, sensitive, expandMedia, lineMedia } = this.props;
 
     let children;
 
@@ -198,7 +200,7 @@ class MediaGallery extends React.PureComponent {
     } else {
       const size = media.take(4).size;
       children = media.take(4).map((attachment, i) =>
-        <Item key={attachment.get('id')} onClick={this.handleClick} attachment={attachment} autoPlayGif={this.props.autoPlayGif} index={i} size={size} squareMedia={squareMedia} expandMedia={expandMedia} lineMedia={!!lineMedia} />
+        <Item key={attachment.get('id')} onClick={this.handleClick} attachment={attachment} autoPlayGif={this.props.autoPlayGif} index={i} size={size} expandMedia={expandMedia} lineMedia={lineMedia} />
       );
     }
 
@@ -214,5 +216,3 @@ class MediaGallery extends React.PureComponent {
   }
 
 }
-
-export default injectIntl(MediaGallery);

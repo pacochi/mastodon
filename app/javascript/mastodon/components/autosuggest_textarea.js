@@ -42,7 +42,7 @@ const textAtCursorMatchesMentionToken = (str, caretPosition) => {
   return [start, word];
 };
 
-class AutosuggestTextarea extends ImmutablePureComponent {
+export default class AutosuggestTextarea extends ImmutablePureComponent {
 
   static propTypes = {
     value: PropTypes.string,
@@ -285,6 +285,4 @@ class AutosuggestTextarea extends ImmutablePureComponent {
     );
   }
 
-};
-
-export default AutosuggestTextarea;
+}

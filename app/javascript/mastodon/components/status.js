@@ -8,7 +8,6 @@ import RelativeTimestamp from './relative_timestamp';
 import DisplayName from './display_name';
 import MediaGallery from './media_gallery';
 import VideoPlayer from './video_player';
-import AttachmentList from './attachment_list';
 import StatusContent from './status_content';
 import StatusActionBar from './status_action_bar';
 import { FormattedMessage } from 'react-intl';
@@ -17,7 +16,7 @@ import escapeTextContentForBrowser from 'escape-html';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import scheduleIdleTask from '../features/ui/util/schedule_idle_task';
 
-class Status extends ImmutablePureComponent {
+export default class Status extends ImmutablePureComponent {
 
   static contextTypes = {
     router: PropTypes.object,
@@ -44,6 +43,10 @@ class Status extends ImmutablePureComponent {
     onPin: PropTypes.func,
     displayPinned: PropTypes.bool,
     intersectionObserverWrapper: PropTypes.object,
+  };
+
+  static defaultProps = {
+    expandMedia: false,
   };
 
   state = {
@@ -97,12 +100,6 @@ class Status extends ImmutablePureComponent {
   }
 
   componentWillUnmount () {
-    if (!this.props.intersectionObserverWrapper) {
-      // TODO: enable IntersectionObserver optimization for notification statuses.
-      // These are managed in notifications/index.js rather than status_list.js
-      return;
-    }
-
     this.componentMounted = false;
   }
 
@@ -141,7 +138,7 @@ class Status extends ImmutablePureComponent {
 
   saveHeight = () => {
     if (this.node && this.node.children.length !== 0) {
-      this.height = this.node.clientHeight;
+      this.height = this.node.getBoundingClientRect().height;
     }
   }
 
@@ -152,7 +149,7 @@ class Status extends ImmutablePureComponent {
 
   handleClick = () => {
     const { status } = this.props;
-    this.context.router.push(`/statuses/${status.getIn(['reblog', 'id'], status.get('id'))}`);
+    this.context.router.history.push(`/statuses/${status.getIn(['reblog', 'id'], status.get('id'))}`);
   }
 
   handleAccountClick = (e) => {
@@ -161,7 +158,7 @@ class Status extends ImmutablePureComponent {
     } else if (e.button === 0) {
       const id = Number(e.currentTarget.getAttribute('data-id'));
       e.preventDefault();
-      this.context.router.push(`/accounts/${id}`);
+      this.context.router.history.push(`/accounts/${id}`);
     }
   }
 
@@ -172,6 +169,9 @@ class Status extends ImmutablePureComponent {
   render () {
     let media = null;
     let statusAvatar;
+
+    // Exclude intersectionObserverWrapper from `other` variable
+    // because intersection is managed in here.
     const { status, account, intersectionObserverWrapper, expandMedia, squareMedia, standalone, ...other } = this.props;
     const { isExpanded, isIntersecting, isHidden } = this.state;
 
@@ -244,7 +244,7 @@ class Status extends ImmutablePureComponent {
       } else if (attachments.first().get('type') === 'video') {
         media = <VideoPlayer media={attachments.first()} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
       } else {
-        media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={squareMedia ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} squareMedia={squareMedia} />;
+        media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={squareMedia ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} />;
       }
     }
 
@@ -262,7 +262,6 @@ class Status extends ImmutablePureComponent {
           <a onClick={this.handleAccountClick} data-id={status.getIn(['account', 'id'])} href={status.getIn(['account', 'url'])} className='status__display-name'>
             <div className='status__avatar'>
               {statusAvatar}
-
             </div>
 
             <DisplayName account={status.get('account')} />
@@ -279,5 +278,3 @@ class Status extends ImmutablePureComponent {
   }
 
 }
-
-export default Status;

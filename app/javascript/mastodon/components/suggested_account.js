@@ -7,7 +7,6 @@ import MediaGallery from './media_gallery';
 import VideoPlayer from './video_player';
 import Permalink from './permalink';
 import IconButton from './icon_button';
-import { openModal } from '../actions/modal';
 import { defineMessages, injectIntl } from 'react-intl';
 
 const messages = defineMessages({
@@ -18,7 +17,8 @@ const messages = defineMessages({
   unmute: { id: 'account.unmute', defaultMessage: 'Unmute @{name}' },
 });
 
-class SuggestedAccount extends React.PureComponent {
+@injectIntl
+export default class SuggestedAccount extends React.PureComponent {
 
   static propTypes = {
     account: ImmutablePropTypes.map.isRequired,
@@ -50,7 +50,7 @@ class SuggestedAccount extends React.PureComponent {
       } else if (attachments.first().get('type') === 'video') {
         media = <VideoPlayer media={attachments.first()} onOpenVideo={this.props.onOpenVideo} />;
       } else {
-        media = <MediaGallery media={attachments} height={132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={false} expandMedia={false} squareMedia={false} lineMedia />;
+        media = <MediaGallery media={attachments} height={132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={false} expandMedia={false} lineMedia />;
       }
 
       media = (<div className='account__suggested_accounts_media'>{media}</div>);
@@ -93,5 +93,3 @@ class SuggestedAccount extends React.PureComponent {
   }
 
 }
-
-export default injectIntl(SuggestedAccount);

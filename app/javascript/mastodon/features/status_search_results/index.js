@@ -10,7 +10,6 @@ import {
 import Column from '../../components/column';
 import ColumnHeader from '../../components/column_header';
 import { FormattedMessage } from 'react-intl';
-import ColumnBackButtonSlim from '../../components/column_back_button_slim';
 import LoadingIndicator from '../../components/loading_indicator';
 import StatusList from '../../components/status_list';
 

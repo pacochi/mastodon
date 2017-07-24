@@ -17,10 +17,6 @@ class LanguageDetector
     simplified_text.strip
   end
 
-  def prepared_text
-    simplified_text.strip
-  end
-
   private
 
   def detected_language_code

@@ -17,6 +17,10 @@ class Api::V1::ReportsController < Api::BaseController
       status_ids: reported_status_ids,
       comment: report_params[:comment]
     )
+
+    # 管理者権限を持つ全てのアカウントにメールが送信されるため一旦無効化
+    # User.admins.includes(:account).each { |u| AdminMailer.new_report(u.account, @report).deliver_later }
+
     render :show
   end
 

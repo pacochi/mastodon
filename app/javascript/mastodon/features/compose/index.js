@@ -1,13 +1,12 @@
 import React from 'react';
 import ComposeFormContainer from './containers/compose_form_container';
-import UploadFormContainer from './containers/upload_form_container';
 import NavigationContainer from './containers/navigation_container';
 import TrendTagsContainer from './containers/trend_tags_container';
 import AnnouncementsContainer from './containers/announcements_container';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { mountCompose, unmountCompose } from '../../actions/compose';
-import Link from 'react-router/lib/Link';
+import Link from 'react-router-dom/Link';
 import { injectIntl, defineMessages } from 'react-intl';
 import SearchContainer from './containers/search_container';
 import Motion from 'react-motion/lib/Motion';
@@ -27,7 +26,9 @@ const mapStateToProps = state => ({
   submitting: state.getIn(['compose', 'is_submitting']),
 });
 
-class Compose extends React.PureComponent {
+@connect(mapStateToProps)
+@injectIntl
+export default class Compose extends React.PureComponent {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -113,5 +114,3 @@ class Compose extends React.PureComponent {
   }
 
 }
-
-export default connect(mapStateToProps)(injectIntl(Compose));

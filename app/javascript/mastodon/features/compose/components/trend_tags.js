@@ -1,6 +1,6 @@
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router';
+import Link from 'react-router-dom/Link';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 
@@ -8,7 +8,8 @@ const messages = defineMessages({
   title: { id: 'trend_tags.title', defaultMessage: 'Suggested tag' },
 });
 
-class TrendTags extends React.PureComponent {
+@injectIntl
+export default class TrendTags extends React.PureComponent {
 
   static propTypes = {
     tags: ImmutablePropTypes.list.isRequired,
@@ -58,5 +59,3 @@ class TrendTags extends React.PureComponent {
   }
 
 };
-
-export default injectIntl(TrendTags);
