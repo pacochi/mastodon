@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::BoothItemsController < ApiController
+class Api::V1::BoothItemsController < Api::BaseController
   respond_to :json
 
   def show

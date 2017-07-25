@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::PlaylistsController < ApiController
+class Api::V1::PlaylistsController < Api::BaseController
   respond_to :json
 
   def index
