@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import queryString from 'query-string';
+import querystring from 'querystring';
 
 export default class TweetButton extends React.PureComponent {
 
@@ -23,7 +23,7 @@ export default class TweetButton extends React.PureComponent {
     }
 
     return (
-      <a target='_blank' rel='noopener noreferrer' href={`https://twitter.com/intent/tweet?${queryString.stringify(params)}`} className='twitter-share-button'>
+      <a target='_blank' rel='noopener noreferrer' href={`https://twitter.com/intent/tweet?${querystring.stringify(params)}`} className='twitter-share-button'>
         <div className='twitter-share-button__wrapper'>
           <img src='/player/logos/twitter.png' width='14' height='14' className='twitter-share-button__image' />
           <span className='twitter-share-button__label'>ツイート</span>
