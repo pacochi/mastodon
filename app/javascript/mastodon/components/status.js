@@ -75,14 +75,6 @@ export default class Status extends ImmutablePureComponent {
 
   updateOnStates = ['isExpanded']
 
-  componentDidMount() {
-    const boothItemId = this.props.status.get('booth_item_id');
-
-    if (!this.props.boothItem && boothItemId) {
-      this.props.fetchBoothItem(boothItemId);
-    }
-  }
-
   shouldComponentUpdate (nextProps, nextState) {
     if (!nextState.isIntersecting && nextState.isHidden) {
       // It's only if we're not intersecting (i.e. offscreen) and isHidden is true
@@ -100,6 +92,12 @@ export default class Status extends ImmutablePureComponent {
   }
 
   componentDidMount () {
+    const boothItemId = this.props.status.get('booth_item_id');
+
+    if (!this.props.boothItem && boothItemId) {
+      this.props.fetchBoothItem(boothItemId);
+    }
+
     if (!this.props.intersectionObserverWrapper) {
       // TODO: enable IntersectionObserver optimization for notification statuses.
       // These are managed in notifications/index.js rather than status_list.js
@@ -253,6 +251,9 @@ export default class Status extends ImmutablePureComponent {
       }).concat(attachments);
     }
 
+    const youtube_pattern = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/;
+    const soundcloud_pattern = /soundcloud\.com\/([a-zA-Z0-9\-\_\.]+)\/([a-zA-Z0-9\-\_\.]+)(|\/)/;
+
     if (attachments.size > 0 && !this.props.muted) {
       if (attachments.some(item => item.get('type') === 'unknown')) {
 
@@ -261,31 +262,23 @@ export default class Status extends ImmutablePureComponent {
       } else {
         media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={squareMedia ? 229 : 132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={expandMedia} />;
       }
-    }
-
-    if (attachments.size === 0 && this.props.boothItem) {
+    } else if (this.props.boothItem) {
       const boothItemUrl = status.get('booth_item_url');
       const boothItemId = status.get('booth_item_id');
 
       media = <BoothWidget url={boothItemUrl} itemId={boothItemId} boothItem={this.props.boothItem} />;
+    } else if (status.get('content').match(youtube_pattern)) {
+      const videoId = status.get('content').match(youtube_pattern)[1];
+      media = <YTWidget videoId={videoId} />;
+    } else if (status.get('content').match(soundcloud_pattern)) {
+      const url = 'https://' + status.get('content').match(soundcloud_pattern)[0];
+      media = <SCWidget url={url} />;
     }
 
     if (account === undefined || account === null) {
       statusAvatar = <Avatar src={status.getIn(['account', 'avatar'])} staticSrc={status.getIn(['account', 'avatar_static'])} size={48} />;
     } else {
       statusAvatar = <AvatarOverlay staticSrc={status.getIn(['account', 'avatar_static'])} overlaySrc={account.get('avatar_static')} />;
-    }
-
-    const youtube_pattern = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/;
-    if(media === null && status.get('content').match(youtube_pattern)){
-      const videoId = status.get('content').match(youtube_pattern)[1];
-      media = <YTWidget videoId={videoId} />;
-    }
-
-    const soundcloud_pattern = /soundcloud\.com\/([a-zA-Z0-9\-\_\.]+)\/([a-zA-Z0-9\-\_\.]+)(|\/)/;
-    if(media === null && status.get('content').match(soundcloud_pattern)){
-      const url = status.get('content').match(soundcloud_pattern)[0];
-      media = <SCWidget url={url} />;
     }
 
     return (

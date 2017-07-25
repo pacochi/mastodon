@@ -5,15 +5,17 @@ class YTWidget extends React.PureComponent {
 
   static propTypes = {
     videoId: PropTypes.string,
+    detail: PropTypes.bool,
   };
 
   render () {
+    const { detail } = this.props;
     return (
-      <div className='status-wtwidget-wrapper'>
+      <div className='status-yt-widget-wrapper'>
         <iframe
-          className='status-wtwidget'
-          width='234'
-          height='131'
+          className='status-yt-widget'
+          width={detail ? '287' : '234'}
+          height={detail ? '160' : '131'}
           src={`https://www.youtube.com/embed/${this.props.videoId}`}
           frameBorder='0'
         />

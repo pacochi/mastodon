@@ -14,6 +14,9 @@ import {
   unreblog,
 } from '../../actions/interactions';
 import {
+  fetchBoothItem,
+} from '../../actions/booth_items';
+import {
   replyCompose,
   mentionCompose,
 } from '../../actions/compose';
@@ -35,15 +38,20 @@ const messages = defineMessages({
 const makeMapStateToProps = () => {
   const getStatus = makeGetStatus();
 
-  const mapStateToProps = (state, props) => ({
-    status: getStatus(state, Number(props.params.statusId)),
-    ancestorsIds: state.getIn(['contexts', 'ancestors', Number(props.params.statusId)]),
-    descendantsIds: state.getIn(['contexts', 'descendants', Number(props.params.statusId)]),
-    me: state.getIn(['meta', 'me']),
-    boostModal: state.getIn(['meta', 'boost_modal']),
-    deleteModal: state.getIn(['meta', 'delete_modal']),
-    autoPlayGif: state.getIn(['meta', 'auto_play_gif']),
-  });
+  const mapStateToProps = (state, props) => {
+    const status = getStatus(state, Number(props.params.statusId));
+
+    return {
+      status,
+      ancestorsIds: state.getIn(['contexts', 'ancestors', Number(props.params.statusId)]),
+      descendantsIds: state.getIn(['contexts', 'descendants', Number(props.params.statusId)]),
+      me: state.getIn(['meta', 'me']),
+      boostModal: state.getIn(['meta', 'boost_modal']),
+      deleteModal: state.getIn(['meta', 'delete_modal']),
+      autoPlayGif: state.getIn(['meta', 'auto_play_gif']),
+      boothItem: status && state.getIn(['booth_items', status.get('booth_item_id')]),
+    };
+  };
 
   return mapStateToProps;
 };
@@ -66,11 +74,24 @@ export default class Status extends ImmutablePureComponent {
     boostModal: PropTypes.bool,
     deleteModal: PropTypes.bool,
     autoPlayGif: PropTypes.bool,
+    boothItem: ImmutablePropTypes.map,
     intl: PropTypes.object.isRequired,
   };
 
   componentWillMount () {
     this.props.dispatch(fetchStatus(Number(this.props.params.statusId)));
+  }
+
+  componentDidMount () {
+    const { status } = this.props;
+    if (!status) {
+      return;
+    }
+
+    const boothItemId = status.get('booth_item_id');
+    if (!this.props.boothItem && boothItemId) {
+      this.props.dispatch(fetchBoothItem(boothItemId));
+    }
   }
 
   componentWillReceiveProps (nextProps) {
@@ -143,7 +164,7 @@ export default class Status extends ImmutablePureComponent {
 
   render () {
     let ancestors, descendants;
-    const { status, ancestorsIds, descendantsIds, me, autoPlayGif } = this.props;
+    const { status, ancestorsIds, descendantsIds, me, autoPlayGif, boothItem } = this.props;
 
     if (status === null) {
       return (
@@ -176,6 +197,7 @@ export default class Status extends ImmutablePureComponent {
               me={me}
               onOpenVideo={this.handleOpenVideo}
               onOpenMedia={this.handleOpenMedia}
+              boothItem={boothItem}
             />
 
             <ActionBar
