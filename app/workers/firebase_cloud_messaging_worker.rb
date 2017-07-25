@@ -12,6 +12,8 @@ class FirebaseCloudMessagingWorker
     I18n.with_locale(@recipient.user.locale || I18n.default_locale) do
       send_push_notifications
     end
+  rescue ActiveRecord::RecordNotFound
+    nil
   end
 
   def send_push_notifications
