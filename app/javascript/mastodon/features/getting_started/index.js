@@ -22,7 +22,7 @@ const messages = defineMessages({
   favourites: { id: 'navigation_bar.favourites', defaultMessage: 'Favourites' },
   blocks: { id: 'navigation_bar.blocks', defaultMessage: 'Blocked users' },
   mutes: { id: 'navigation_bar.mutes', defaultMessage: 'Muted users' },
-  help: { id: 'navigation_bar.help', defaultMessage: 'Pawoo Help' },
+  help: { id: 'navigation_bar.help', defaultMessage: 'Pawoo Music Help' },
   info: { id: 'navigation_bar.info', defaultMessage: 'Extended information' },
   media_timeline: { id: 'navigation_bar.media_timeline', defaultMessage: 'Media timeline' },
 });
@@ -91,7 +91,7 @@ export default class GettingStarted extends ImmutablePureComponent {
           <ColumnSubheading text={intl.formatMessage(messages.settings_subheading)} />
           <ColumnLink icon='book' text={intl.formatMessage(messages.info)} href='/about/more' />
           <ColumnLink icon='cog' text={intl.formatMessage(messages.preferences)} href='/settings/preferences' />
-          <ColumnLink icon='question-circle' text={intl.formatMessage(messages.help)} to='/timelines/tag/pawooヘルプ' />
+          <ColumnLink icon='question-circle' text={intl.formatMessage(messages.help)} to='/timelines/tag/pawoomusicヘルプ' />
           <ColumnLink icon='sign-out' text={intl.formatMessage(messages.sign_out)} href='/auth/sign_out' method='delete' />
         </div>
 
