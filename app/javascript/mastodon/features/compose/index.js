@@ -36,6 +36,7 @@ export default class Compose extends React.PureComponent {
     showSearch: PropTypes.bool,
     intl: PropTypes.object.isRequired,
     intent: PropTypes.bool,
+    schedule: PropTypes.bool,
     submitting: PropTypes.bool,
   };
 
@@ -65,6 +66,10 @@ export default class Compose extends React.PureComponent {
           </div>
         </div>
       );
+    }
+
+    if (this.props.schedule) {
+      return (<ComposeFormContainer enableScheduler />);
     }
 
     const { multiColumn, showSearch, intl } = this.props;

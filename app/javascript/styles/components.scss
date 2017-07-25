@@ -544,7 +544,7 @@
   }
 
   &.light {
-    .status__relative-time {
+    .status__time {
       color: $ui-primary-color;
     }
 
@@ -591,7 +591,7 @@
   }
 }
 
-.status__relative-time {
+.status__time {
   color: lighten($ui-base-color, 26%);
   float: right;
   font-size: 14px;
@@ -660,6 +660,16 @@
   float: left;
   height: 18px;
   width: 18px;
+}
+
+.scheduled_statuses__container {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  > #mastodon, > .scrollable {
+    flex: 1;
+  }
 }
 
 .detailed-status__action-bar-dropdown {
@@ -1000,7 +1010,7 @@
 }
 
 .status__display-name,
-.status__relative-time,
+.status__time,
 .detailed-status__display-name,
 .detailed-status__datetime,
 .detailed-status__application,
@@ -1149,7 +1159,7 @@
   font-size: 14px;
 }
 
-.status__relative-time,
+.status__time,
 .detailed-status__datetime {
   &:hover {
     text-decoration: underline;

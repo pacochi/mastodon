@@ -3,6 +3,45 @@ require 'rails_helper'
 RSpec.describe PostStatusService do
   subject { PostStatusService.new }
 
+  context 'with published option' do
+    it 'distributes at time specified by published option' do
+      account = Fabricate(:account)
+      published = 1.day.from_now
+
+      Sidekiq::Testing.fake! do
+        status = subject.call(account, 'text', nil, published: published)
+        expect(ScheduledDistributionWorker).to have_enqueued_sidekiq_job(status.id).at(published)
+      end
+
+    end
+  end
+
+  context 'without published option' do
+    it 'processes mentions' do
+      mention_service = double(:process_mentions_service)
+      allow(mention_service).to receive(:call)
+      allow(ProcessMentionsService).to receive(:new).and_return(mention_service)
+      account = Fabricate(:account)
+
+      status = subject.call(account, "test status update")
+
+      expect(ProcessMentionsService).to have_received(:new)
+      expect(mention_service).to have_received(:call).with(status)
+    end
+
+    it 'pings PuSH hubs' do
+      allow(DistributionWorker).to receive(:perform_async)
+      allow(Pubsubhubbub::DistributionWorker).to receive(:perform_async)
+      account = Fabricate(:account)
+
+      status = subject.call(account, "test status update")
+
+      expect(DistributionWorker).to have_received(:perform_async).with(status.id)
+      expect(Pubsubhubbub::DistributionWorker).
+        to have_received(:perform_async).with(status.stream_entry.id)
+    end
+  end
+
   it 'creates a new status' do
     account = Fabricate(:account)
     text = "test status update"
@@ -78,18 +117,6 @@ RSpec.describe PostStatusService do
     expect(LanguageDetector).to have_received(:new).with(text, account)
   end
 
-  it 'processes mentions' do
-    mention_service = double(:process_mentions_service)
-    allow(mention_service).to receive(:call)
-    allow(ProcessMentionsService).to receive(:new).and_return(mention_service)
-    account = Fabricate(:account)
-
-    status = subject.call(account, "test status update")
-
-    expect(ProcessMentionsService).to have_received(:new)
-    expect(mention_service).to have_received(:call).with(status)
-  end
-
   it 'processes hashtags' do
     hashtags_service = double(:process_hashtags_service)
     allow(hashtags_service).to receive(:call)
@@ -100,18 +127,6 @@ RSpec.describe PostStatusService do
 
     expect(ProcessHashtagsService).to have_received(:new)
     expect(hashtags_service).to have_received(:call).with(status)
-  end
-
-  it 'pings PuSH hubs' do
-    allow(DistributionWorker).to receive(:perform_async)
-    allow(Pubsubhubbub::DistributionWorker).to receive(:perform_async)
-    account = Fabricate(:account)
-
-    status = subject.call(account, "test status update")
-
-    expect(DistributionWorker).to have_received(:perform_async).with(status.id)
-    expect(Pubsubhubbub::DistributionWorker).
-      to have_received(:perform_async).with(status.stream_entry.id)
   end
 
   it 'crawls links' do

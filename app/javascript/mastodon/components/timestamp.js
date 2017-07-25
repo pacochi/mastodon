@@ -1,5 +1,5 @@
 import React from 'react';
-import { injectIntl, FormattedRelative } from 'react-intl';
+import { injectIntl, FormattedDate, FormattedRelative } from 'react-intl';
 import PropTypes from 'prop-types';
 
 const dateFormatOptions = {
@@ -15,6 +15,7 @@ const dateFormatOptions = {
 export default class RelativeTimestamp extends React.Component {
 
   static propTypes = {
+    absolute: PropTypes.bool,
     intl: PropTypes.object.isRequired,
     timestamp: PropTypes.string.isRequired,
   };
@@ -27,12 +28,16 @@ export default class RelativeTimestamp extends React.Component {
   }
 
   render () {
-    const { timestamp, intl } = this.props;
+    const { absolute, timestamp, intl } = this.props;
     const date = new Date(timestamp);
 
     return (
       <time dateTime={timestamp} title={intl.formatDate(date, dateFormatOptions)}>
-        <FormattedRelative value={date} />
+        {
+          absolute ?
+            (<FormattedDate {...dateFormatOptions} value={date} />) :
+            (<FormattedRelative value={date} />)
+        }
       </time>
     );
   }

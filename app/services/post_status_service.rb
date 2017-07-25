@@ -13,6 +13,8 @@ class PostStatusService < BaseService
   # @option [Doorkeeper::Application] :application
   # @option [String] :idempotency Optional idempotency key
   # @return [Status]
+  #
+  # Models made by this class must be tracked in ScheduledDistributionWorker
   def call(account, text, in_reply_to = nil, options = {})
     if options[:idempotency].present?
       existing_id = redis.get("idempotency:status:#{account.id}:#{options[:idempotency]}")
@@ -20,10 +22,13 @@ class PostStatusService < BaseService
     end
 
     media  = validate_media!(options[:media_ids])
+    published = options[:published]
+
     status = nil
     ApplicationRecord.transaction do
       status = account.statuses.create!(text: text,
                                         thread: in_reply_to,
+                                        created_at: published,
                                         sensitive: options[:sensitive],
                                         spoiler_text: options[:spoiler_text] || '',
                                         visibility: options[:visibility],
@@ -34,15 +39,22 @@ class PostStatusService < BaseService
     end
 
     process_hashtags_service.call(status)
-    process_mentions_service.call(status) # 抽出したハッシュタグを使用するため、順番を変更
 
     PixivCardUpdateWorker.perform_async(status.id) if status.pixiv_cards.any?
     LinkCrawlWorker.perform_async(status.id) unless status.spoiler_text?
-    DistributionWorker.perform_async(status.id)
-    Pubsubhubbub::DistributionWorker.perform_async(status.stream_entry.id)
 
-    time_limit = TimeLimit.from_tags(status.tags)
-    RemovalWorker.perform_in(time_limit.to_duration, status.id) if time_limit
+    if published
+      ScheduledDistributionWorker.perform_at(published, status.id)
+    else
+      # 抽出したハッシュタグを使用するため、ProcessHashtagsServiceの後に実行されなければならない
+      ProcessMentionsService.new.call(status)
+
+      DistributionWorker.perform_async(status.id)
+      Pubsubhubbub::DistributionWorker.perform_async(status.stream_entry.id)
+
+      time_limit = TimeLimit.from_tags(status.tags)
+      RemovalWorker.perform_in(time_limit.to_duration, status.id) if time_limit
+    end
 
     if options[:idempotency].present?
       redis.setex("idempotency:status:#{account.id}:#{options[:idempotency]}", 3_600, status.id)
@@ -89,10 +101,6 @@ class PostStatusService < BaseService
 
   def detect_language_for(text, account)
     LanguageDetector.new(text, account).to_iso_s
-  end
-
-  def process_mentions_service
-    @process_mentions_service ||= ProcessMentionsService.new
   end
 
   def process_hashtags_service

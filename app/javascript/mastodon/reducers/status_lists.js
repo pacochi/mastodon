@@ -2,10 +2,19 @@ import {
   FAVOURITED_STATUSES_FETCH_SUCCESS,
   FAVOURITED_STATUSES_EXPAND_SUCCESS,
 } from '../actions/favourites';
+import {
+  SCHEDULED_STATUSES_FETCH_SUCCESS,
+  SCHEDULED_STATUSES_EXPAND_SUCCESS,
+} from '../actions/schedules';
 import Immutable from 'immutable';
 
 const initialState = Immutable.Map({
   favourites: Immutable.Map({
+    next: null,
+    loaded: false,
+    items: Immutable.List(),
+  }),
+  schedules: Immutable.Map({
     next: null,
     loaded: false,
     items: Immutable.List(),
@@ -33,6 +42,10 @@ export default function statusLists(state = initialState, action) {
     return normalizeList(state, 'favourites', action.statuses, action.next);
   case FAVOURITED_STATUSES_EXPAND_SUCCESS:
     return appendToList(state, 'favourites', action.statuses, action.next);
+  case SCHEDULED_STATUSES_FETCH_SUCCESS:
+    return normalizeList(state, 'schedules', action.statuses, action.next);
+  case SCHEDULED_STATUSES_EXPAND_SUCCESS:
+    return appendToList(state, 'schedules', action.statuses, action.next);
   default:
     return state;
   }

@@ -7,6 +7,7 @@ import {
   clearComposeSuggestions,
   fetchComposeSuggestions,
   selectComposeSuggestion,
+  changeComposeDateTime,
   changeComposeSpoilerText,
   insertEmojiCompose,
   requestImageCache,
@@ -71,6 +72,10 @@ const mapDispatchToProps = (dispatch) => ({
 
   onHashTagSuggestionsSelected(tokenStart, token, value) {
     dispatch(selectComposeHashTagSuggestion(tokenStart, token, value));
+  },
+
+  onChangeDateTime (dateTime) {
+    dispatch(changeComposeDateTime(dateTime));
   },
 
   onChangeSpoilerText (checked) {

@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import Avatar from './avatar';
 import AvatarOverlay from './avatar_overlay';
-import RelativeTimestamp from './relative_timestamp';
+import Timestamp from './timestamp';
 import DisplayName from './display_name';
 import MediaGallery from './media_gallery';
 import VideoPlayer from './video_player';
@@ -40,6 +40,7 @@ export default class Status extends ImmutablePureComponent {
     expandMedia: PropTypes.bool,
     squareMedia: PropTypes.bool,
     standalone: PropTypes.bool,
+    absoluteTimestamp: PropTypes.bool,
     onPin: PropTypes.func,
     displayPinned: PropTypes.bool,
     intersectionObserverWrapper: PropTypes.object,
@@ -172,7 +173,7 @@ export default class Status extends ImmutablePureComponent {
 
     // Exclude intersectionObserverWrapper from `other` variable
     // because intersection is managed in here.
-    const { status, account, intersectionObserverWrapper, expandMedia, squareMedia, standalone, ...other } = this.props;
+    const { status, account, intersectionObserverWrapper, expandMedia, squareMedia, standalone, absoluteTimestamp, ...other } = this.props;
     const { isExpanded, isIntersecting, isHidden } = this.state;
 
     if (status === null) {
@@ -257,7 +258,7 @@ export default class Status extends ImmutablePureComponent {
     return (
       <div className={`status ${this.props.muted ? 'muted' : ''} status-${status.get('visibility')}`} data-id={status.get('id')} ref={this.handleRef}>
         <div className='status__info'>
-          <a href={status.get('url')} className='status__relative-time' target='_blank' rel='noopener'><RelativeTimestamp timestamp={status.get('created_at')} /></a>
+          <a href={status.get('url')} className='status__time' target='_blank' rel='noopener'><Timestamp absolute={absoluteTimestamp} timestamp={status.get('created_at')} /></a>
 
           <a onClick={this.handleAccountClick} data-id={status.getIn(['account', 'id'])} href={status.getIn(['account', 'url'])} className='status__display-name'>
             <div className='status__avatar'>

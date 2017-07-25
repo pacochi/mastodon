@@ -102,7 +102,8 @@ export default class StatusActionBar extends ImmutablePureComponent {
 
   render () {
     const { status, me, intl, withDismiss } = this.props;
-    const reblogDisabled = status.get('visibility') === 'private' || status.get('visibility') === 'direct';
+    const reblogDisabled = status.get('visibility') === 'private' || status.get('visibility') === 'direct' ||
+                           Date.parse(status.get('created_at')) > Date.now();
     const mutingConversation = status.get('muted');
 
     let menu = [];

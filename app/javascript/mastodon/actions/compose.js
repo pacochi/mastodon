@@ -1,5 +1,6 @@
 import api from '../api';
 
+import { expandScheduledStatusesSuccess } from './schedules';
 import { updateTimeline } from './timelines';
 
 import * as emojione from 'emojione';
@@ -28,6 +29,7 @@ export const COMPOSE_HASH_TAG_SELECT = 'COMPOSE_HASH_TAG_SELECT';
 export const COMPOSE_MOUNT   = 'COMPOSE_MOUNT';
 export const COMPOSE_UNMOUNT = 'COMPOSE_UNMOUNT';
 
+export const COMPOSE_DATE_TIME_CHANGE = 'COMPOSE_DATE_TIME_CHANGE';
 export const COMPOSE_SENSITIVITY_CHANGE = 'COMPOSE_SENSITIVITY_CHANGE';
 export const COMPOSE_SPOILERNESS_CHANGE = 'COMPOSE_SPOILERNESS_CHANGE';
 export const COMPOSE_SPOILER_TEXT_CHANGE = 'COMPOSE_SPOILER_TEXT_CHANGE';
@@ -79,6 +81,7 @@ export function mentionCompose(account, router) {
 export function submitCompose() {
   return function (dispatch, getState) {
     const status = emojione.shortnameToUnicode(getState().getIn(['compose', 'text'], ''));
+    const published = getState().getIn(['compose', 'published']);
     if (!status || !status.length) {
       return;
     }
@@ -90,6 +93,7 @@ export function submitCompose() {
       sensitive: getState().getIn(['compose', 'sensitive']),
       spoiler_text: getState().getIn(['compose', 'spoiler_text'], ''),
       visibility: getState().getIn(['compose', 'privacy']),
+      published: published,
     }, {
       headers: {
         'Idempotency-Key': getState().getIn(['compose', 'idempotencyKey']),
@@ -99,6 +103,11 @@ export function submitCompose() {
 
       // To make the app more responsive, immediately get the status into the columns
       dispatch(updateTimeline('home', { ...response.data }));
+
+      // Make the schedule list responsive as well
+      if (published) {
+        dispatch(expandScheduledStatusesSuccess([response.data]));
+      }
 
       if (response.data.in_reply_to_id === null && response.data.visibility === 'public') {
         if (getState().getIn(['timelines', 'community', 'loaded'])) {
@@ -311,6 +320,13 @@ export function mountCompose() {
 export function unmountCompose() {
   return {
     type: COMPOSE_UNMOUNT,
+  };
+};
+
+export function changeComposeDateTime(value) {
+  return {
+    type: COMPOSE_DATE_TIME_CHANGE,
+    value,
   };
 };
 
