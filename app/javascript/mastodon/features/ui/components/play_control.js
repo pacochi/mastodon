@@ -73,6 +73,7 @@ class PlaylistController extends React.PureComponent {
   static propTypes = {
     offsetStartTime: PropTypes.number.isRequired,
     isTop: PropTypes.bool.isRequired,
+    isAdmin: PropTypes.bool.isRequired,
     isActive: PropTypes.bool.isRequired,
     muted: PropTypes.bool.isRequired,
     volume: PropTypes.number.isRequired,
@@ -109,9 +110,9 @@ class PlaylistController extends React.PureComponent {
   }
 
   isSkipEnable () {
-    const { isActive, skipLimitTime } = this.props;
+    const { isActive, skipLimitTime, isAdmin } = this.props;
     const { timeOffset } = this.state;
-    return isActive && skipLimitTime && timeOffset > skipLimitTime;
+    return isAdmin || (isActive && skipLimitTime && timeOffset > skipLimitTime);
   }
 
   handleClickSkip = () => {
@@ -166,10 +167,15 @@ class PlayControl extends React.PureComponent {
   static propTypes = {
     accessToken: PropTypes.string.isRequired,
     streamingAPIBaseURL: PropTypes.string.isRequired,
+    isAdmin: PropTypes.bool,
     isTop: PropTypes.bool.isRequired,
     onError: PropTypes.func.isRequired,
     onSkip: PropTypes.func.isRequired,
   };
+
+  static defaultProps = {
+    isAdmin: false,
+  }
 
   interval = null;
   subscription = null;
@@ -508,7 +514,7 @@ class PlayControl extends React.PureComponent {
   }
 
   render () {
-    const { isTop } = this.props;
+    const { isTop, isAdmin } = this.props;
     const { isSp, playlist, targetDeck, deckList, deckSettings, offsetStartTime, muted, volume, isSeekbarActive, isOpen, timeOffset } = this.state;
     if (isSp || !targetDeck) {
       return null;
@@ -548,6 +554,7 @@ class PlayControl extends React.PureComponent {
           <PlaylistController
             offsetStartTime={offsetStartTime}
             isTop={isTop}
+            isAdmin={isAdmin}
             isActive={this.isDeckActive()}
             muted={muted}
             duration={duration}

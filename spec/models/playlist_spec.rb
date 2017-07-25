@@ -115,13 +115,17 @@ RSpec.describe Playlist, type: :model do
     end
 
     context 'when the playlist becomes empty' do
+      let!(:pixiv_account) { Fabricate(:account, user: user, username: 'pixiv') }
+
       before do
         allow(playlist).to receive(:play_item)
+        allow(playlist).to receive(:add)
       end
 
       it do
         subject
         expect(playlist).not_to have_received(:play_item)
+        expect(playlist).to have_received(:add).once
       end
     end
 
