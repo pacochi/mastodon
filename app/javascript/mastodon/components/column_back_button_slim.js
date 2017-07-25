@@ -9,7 +9,7 @@ export default class ColumnBackButtonSlim extends React.PureComponent {
   };
 
   handleClick = () => {
-    if (window.history && window.history.length === 1) this.context.router.history.push('/getting-started');
+    if (window.history && window.history.length === 1) this.context.router.history.push('/');
     else this.context.router.history.goBack();
   }
 
