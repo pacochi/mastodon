@@ -33,7 +33,6 @@ class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         else
           sign_in(user)
           remember_me(user)
-          enqueue_fetch_pixiv_follows_worker(oauth_authentication, data)
 
           redirect_to after_sign_in_path_for(user)
         end
