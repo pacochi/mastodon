@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
+  include Devise::Controllers::Rememberable
   include WithRedisSessionStore
   include Localized
 
@@ -30,9 +31,11 @@ class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
           self.resource = user
           render 'auth/sessions/two_factor', layout: 'auth'
         else
-          sign_in(oauth_authentication.user)
+          sign_in(user)
+          remember_me(user)
+          enqueue_fetch_pixiv_follows_worker(oauth_authentication, data)
 
-          redirect_to after_sign_in_path_for(oauth_authentication.user)
+          redirect_to after_sign_in_path_for(user)
         end
       else
         store_omniauth_auth

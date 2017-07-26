@@ -10,6 +10,7 @@ node(:meta) do
     admin: @admin.try(:id),
     is_user_admin: current_account.user&.admin?,
     boost_modal: current_account.user.setting_boost_modal,
+    delete_modal: current_account.user.setting_delete_modal,
     auto_play_gif: current_account.user.setting_auto_play_gif,
     appmode: @appmode
   }

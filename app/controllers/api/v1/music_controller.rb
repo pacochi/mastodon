@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::MusicController < ApiController
+class Api::V1::MusicController < Api::BaseController
   before_action -> { doorkeeper_authorize! :write }
   before_action :require_user!
 

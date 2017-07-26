@@ -20,6 +20,7 @@ import reports from './reports';
 import trend_tags from './trend_tags';
 import booth_items from './booth_items';
 import tips_balloon from './tips_balloon';
+import contexts from './contexts';
 
 export default combineReducers({
   timelines,
@@ -40,6 +41,7 @@ export default combineReducers({
   settings,
   cards,
   reports,
+  contexts,
   trend_tags,
   booth_items,
   tips_balloon,

@@ -53,7 +53,7 @@ class YouTubeArtwork extends React.PureComponent {
   }
 
   // Youtubeの動画の読み込みが完了し、再生が始まると呼ばれる
-  onChangeYoutubeState = (e) => {
+  onChangeYoutubeState = () => {
     // さらにiframeにpostMessageが送られてくるまで2秒ほど待つ
     // 2秒待たない間にコンポーネントが削除されると、デベロッパーコンソールが開く
     setTimeout(() => {
@@ -74,14 +74,14 @@ class YouTubeArtwork extends React.PureComponent {
       },
     };
     return (
-      <div className="queue-item__artwork">
+      <div className='queue-item__artwork'>
         <YouTube
           videoId={videoId}
           opts={option}
           onReady={this.onReadyYouTube}
           onStateChange={this.onChangeYoutubeState}
         />
-    </div>
+      </div>
     );
   }
 

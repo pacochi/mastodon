@@ -18,7 +18,7 @@ const messages = defineMessages({
 });
 
 const makeMapStateToProps = () => {
-  const mapStateToProps = (state, props) => ({
+  const mapStateToProps = state => ({
     autoPlayGif: state.getIn(['meta', 'auto_play_gif']),
   });
 
@@ -53,7 +53,7 @@ class Avatar extends ImmutablePureComponent {
     return (
       <Motion defaultStyle={{ radius: 90 }} style={{ radius: spring(isHovered ? 30 : 90, { stiffness: 180, damping: 12 }) }}>
         {({ radius }) =>
-          <a
+          <a // eslint-disable-line jsx-a11y/anchor-has-content
             href={account.get('url')}
             className='account__header__avatar'
             target='_blank'
@@ -71,7 +71,9 @@ class Avatar extends ImmutablePureComponent {
 
 }
 
-class Header extends ImmutablePureComponent {
+@connect(makeMapStateToProps)
+@injectIntl
+export default class Header extends ImmutablePureComponent {
 
   static propTypes = {
     account: ImmutablePropTypes.map,
@@ -105,7 +107,7 @@ class Header extends ImmutablePureComponent {
       if (account.getIn(['relationship', 'requested'])) {
         actionBtn = (
           <div className='account--action-button'>
-            <IconButton size={26} disabled={true} icon='hourglass' title={intl.formatMessage(messages.requested)} />
+            <IconButton size={26} disabled icon='hourglass' title={intl.formatMessage(messages.requested)} />
           </div>
         );
       } else if (!account.getIn(['relationship', 'blocking'])) {
@@ -156,5 +158,3 @@ class Header extends ImmutablePureComponent {
   }
 
 }
-
-export default connect(makeMapStateToProps)(injectIntl(Header));

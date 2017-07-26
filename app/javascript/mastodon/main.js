@@ -2,7 +2,7 @@ const perf = require('./performance');
 
 // import default stylesheet with variables
 require('font-awesome/css/font-awesome.css');
-require('../styles/custom.scss');
+require('mastodon-application-style');
 
 function onDomContentLoaded(callback) {
   if (document.readyState !== 'loading') {
@@ -21,6 +21,14 @@ function main() {
 
   require.context('../images/', true);
 
+  if (window.history && history.replaceState) {
+    const { pathname, search, hash } = window.location;
+    const path = pathname + search + hash;
+    if (!(/^\/(web|about|intent)(\/|$)/).test(path)) {
+      history.replaceState(null, document.title, `/web${path}`);
+    }
+  }
+
   onDomContentLoaded(() => {
     const mountNode = document.getElementById('mastodon');
     const mountAboutPlayControl = document.getElementById('about-playcontrol');
@@ -31,7 +39,7 @@ function main() {
 
     ReactDOM.render(<Mastodon {...props} />, mountNode);
     if (mountAboutPlayControl) {
-      ReactDOM.render(<PlayControl isTop={true} onError={function(){}} onSkip={function(){}} streamingAPIBaseURL={playControlInitialState.streaming_api_base_url} accessToken={playControlInitialState.access_token} />, mountAboutPlayControl);
+      ReactDOM.render(<PlayControl isTop onError={function(){}} onSkip={function(){}} streamingAPIBaseURL={playControlInitialState.streaming_api_base_url} accessToken={playControlInitialState.access_token} />, mountAboutPlayControl);
     }
     perf.stop('main()');
   });

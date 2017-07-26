@@ -19,6 +19,9 @@
   feed_cleanup_scheduler:
     cron: '0 15 * * *'
     class: Scheduler::FeedCleanupScheduler
+  doorkeeper_cleanup_scheduler:
+    cron: '1 1 * * 0'
+    class: Scheduler::DoorkeeperCleanupScheduler
   trend_tag_scheduler:
     cron: '*/30 * * * *'
     class: Scheduler::TrendTagScheduler

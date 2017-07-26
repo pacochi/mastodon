@@ -2,7 +2,7 @@ import { connect }   from 'react-redux';
 import Immutable from 'immutable';
 import EventCalendar from '../components/event_calendar';
 
-const mapStateToProps = (state, props) => {
+const mapStateToProps = () => {
   return {
     events: Immutable.fromJS([
       {

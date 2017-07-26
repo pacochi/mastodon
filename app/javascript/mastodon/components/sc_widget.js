@@ -1,12 +1,13 @@
 import axios from 'axios';
 import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
+import querystring from 'querystring';
 
 class SCWidget extends React.PureComponent {
 
   static propTypes = {
     url: PropTypes.string,
+    detail: PropTypes.bool,
   };
 
   constructor (props, context) {
@@ -18,22 +19,40 @@ class SCWidget extends React.PureComponent {
   }
 
   componentDidMount () {
-    axios.get(`https://soundcloud.com/oembed?format=json&maxwidth=234&maxheight=234&url=https://${this.props.url}`)
-    .then(res => this.setState({iframe: res.data.html}) );
+    const { url } = this.props;
+    const size = this.getContentSize();
+
+    const params = {
+      format: 'json',
+      maxwidth: size,
+      maxheight: size,
+      url,
+    };
+
+    axios.get(`https://soundcloud.com/oembed?${querystring.stringify(params)}`)
+    .then(res => this.setState({ iframe: res.data.html }) );
+  }
+
+  getContentSize () {
+    const { detail } = this.props;
+
+    return detail ? '287' : '234';
   }
 
   getEmbed = () => {
-    return {__html: this.state.iframe};
+    return { __html: this.state.iframe };
   }
 
   render () {
+    const size = this.getContentSize();
+
     return (
-      <div className="status-sc-widget-wrapper">
+      <div className='status-sc-widget-wrapper'>
         {
           this.state.iframe ? (
-            <div className="status-sc-widget" dangerouslySetInnerHTML={this.getEmbed()}/>
+            <div className='status-sc-widget' dangerouslySetInnerHTML={this.getEmbed()} />
           ) : (
-            <div className="status-sc-widget-loading" />
+            <div style={{ width: `${size}px`, height: `${size}px` }} />
           )
         }
       </div>

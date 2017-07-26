@@ -38,13 +38,13 @@ class AudioArtwork extends React.PureComponent {
 
   render () {
     const { muted, musicUrl, thumbnailUrl } = this.props;
-    const thumbnail = (thumbnailUrl.includes("'") || !thumbnailUrl.match(/^https?:\/\//)) ? '' : thumbnailUrl;
+    const thumbnail = (thumbnailUrl.includes('\'') || !thumbnailUrl.match(/^https?:\/\//)) ? '' : thumbnailUrl;
     const nowPlayingArtwork = {
       backgroundImage: `url("${thumbnail}")`,
     };
 
     return (
-      <div className="queue-item__artwork" style={nowPlayingArtwork}>
+      <div className='queue-item__artwork' style={nowPlayingArtwork}>
         <audio ref={this.setAudioRef} src={musicUrl} muted={muted} />
       </div>
     );

@@ -4,20 +4,22 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import {
-  fetchStatusSearchTimeline,
+  refreshStatusSearchTimeline,
   expandStatusSearchTimeline,
 } from '../../actions/search';
-import Column from '../ui/components/column';
+import Column from '../../components/column';
+import ColumnHeader from '../../components/column_header';
 import { FormattedMessage } from 'react-intl';
-import ColumnBackButtonSlim from '../../components/column_back_button_slim';
 import LoadingIndicator from '../../components/loading_indicator';
 import StatusList from '../../components/status_list';
 
-const mapStateToProps = (state, props) => ({
-  statusIds: state.getIn(['timelines', 'status_search_timelines', props.params.keyword, 'items'], Immutable.List()),
-  isLoading: state.getIn(['timelines', 'status_search_timelines', props.params.keyword, 'isLoading']),
-  hasMore: state.getIn(['timelines', 'status_search_timelines', props.params.keyword, 'hasMore']),
-});
+const mapStateToProps = (state, props) => {
+  return {
+    statusIds: state.getIn(['timelines', `status_search:${props.params.keyword}`, 'items'], Immutable.List()),
+    isLoading: state.getIn(['timelines', `status_search:${props.params.keyword}`, 'isLoading']),
+    hasMore: !!state.getIn(['timelines', `status_search:${props.params.keyword}`, 'next']),
+  };
+};
 
 class StatusSearchResults extends React.PureComponent {
 
@@ -30,13 +32,21 @@ class StatusSearchResults extends React.PureComponent {
   };
 
   componentWillMount (){
-    this.props.dispatch(fetchStatusSearchTimeline(this.props.params.keyword));
+    this.props.dispatch(refreshStatusSearchTimeline(this.props.params.keyword));
   }
 
   componentWillReceiveProps(nextProps) {
     if (nextProps.params.keyword !== this.props.params.keyword && nextProps.params.keyword) {
-      this.props.dispatch(fetchStatusSearchTimeline(nextProps.params.keyword));
+      this.props.dispatch(refreshStatusSearchTimeline(nextProps.params.keyword));
     }
+  }
+
+  setRef = c => {
+    this.column = c;
+  }
+
+  handleHeaderClick = () => {
+    this.column.scrollTop();
   }
 
   handleScrollToBottom = () => {
@@ -59,8 +69,17 @@ class StatusSearchResults extends React.PureComponent {
     }
 
     return (
-      <Column icon='search' heading={column_header}>
-        <ColumnBackButtonSlim />
+      <Column ref={this.setRef}>
+        <ColumnHeader
+          icon='search'
+          active={false}
+          title={column_header}
+          onClick={this.handleHeaderClick}
+          pinned={false}
+          multiColumn={false}
+          showBackButton
+        />
+
         <StatusList
           scrollKey='status_search_results'
           statusIds={statusIds}

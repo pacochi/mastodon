@@ -34,6 +34,7 @@ ja:
         setting_auto_play_gif: アニメーションGIFを自動再生する
         setting_boost_modal: ブーストする前に確認ダイアログを表示する
         setting_default_privacy: 投稿の公開範囲
+        setting_delete_modal: トゥートを削除する前に確認ダイアログを表示する
         severity: 重大性
         type: インポートする項目
         username: ユーザー名
@@ -42,13 +43,13 @@ ja:
         must_be_following: フォローしていないユーザーからの通知をブロック
       notification_emails:
         digest: タイムラインの要約をメールで通知
-        favourite: いいねされた時にメールで通知
+        favourite: お気に入りに登録された時にメールで通知
         follow: フォローされた時にメールで通知
         follow_request: フォローリクエストを受けた時にメールで通知
         mention: 返信された時にメールで通知
         reblog: ブーストされた時にメールで通知
       notification_firebase_cloud_messagings:
-        favourite: いいねされた時にアプリで通知
+        favourite: お気に入りに登録された時にアプリで通知
         follow: フォローされた時にアプリで通知
         follow_request: フォローリクエストを受けた時にアプリで通知
         mention: 返信された時にアプリで通知

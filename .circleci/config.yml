@@ -19,11 +19,13 @@ jobs:
       ELASTICSEARCH_HOST: 127.0.0.1
       LOCAL_DOMAIN: cb6e6126.ngrok.io
       LOCAL_HTTPS: true
+      PARALLEL_TEST_PROCESSORS: 2 # Set 2 explicitly or CircleCI container with 36 processors causes Errno::ENOMEM !
       PATH: /root/.rbenv/shims:/usr/local/node/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
       RAILS_ENV: test
     working_directory: /app
     parallelism: 2
     steps:
+      - run: cat /proc/cpuinfo
       - checkout
       - run: ./.circleci/primary/setup.sh
       - run: mkdir -p tmp/circleci/db
@@ -56,11 +58,18 @@ jobs:
             - ~/.cache/.yarn
             - node_modules
 
-      # Start assets precompilation
+      # Start assets precompilation. It wastes about 60 seconds, so that runs on background.
       - restore_cache:
-          key: assets/{{ checksum "tmp/circleci/master.hash" }}/1
+          key: assets/{{ checksum "tmp/circleci/master.hash" }}/2
       - run:
-          command: ./bin/rake assets:precompile assets:clean && touch tmp/circleci/assets.done
+          command: |
+            # `rake assets:precompile error_page:generate` causes curious error: https://circleci.com/gh/pixiv/pawoo/2274
+            if ./bin/rake assets:precompile && ./bin/rake error_page:generate; then
+              touch tmp/circleci/assets.success
+            else
+              touch tmp/circleci/assets.failure
+              exit 1
+            fi
           background: true
 
       # Database schema
@@ -79,14 +88,14 @@ jobs:
       - run:
           name: Create Database
           command: |
-            sql=tmp/circleci/db/$(cat tmp/circleci/master.hash).sql
+            sql=tmp/circleci/db/$(cat tmp/circleci/master.hash).$PARALLEL_TEST_PROCESSORS.sql
             if [ -f $sql ]; then
               psql -h $DB_HOST < $sql
             fi
-            ./bin/rails db:create
+            ./bin/rails parallel:create
           # pawoo_music_testが作られないので一時的に毎回作るように
-      - run: ./bin/rails db:migrate
-      - run: pg_dump --create --host=$DB_HOST --file=tmp/circleci/db/$(cat tmp/circleci/master.hash).sql pawoo_music_test
+      - run: ./bin/rails parallel:migrate
+      - run: pg_dumpall --host=$DB_HOST --file=tmp/circleci/db/$(cat tmp/circleci/master.hash).$PARALLEL_TEST_PROCESSORS.sql
       - save_cache:
           key: db/{{ checksum "tmp/circleci/master.hash" }}/1
           paths:
@@ -110,21 +119,22 @@ jobs:
           name: Wait for assets precompilation
           command: |
             for i in $(seq 120); do
-              if [ -f tmp/circleci/assets.done ]; then
+              if [ -f tmp/circleci/assets.success ]; then
                 exit 0
+              elif [ -f tmp/circleci/assets.failure ]; then
+                exit 1
               fi
               sleep 0.5;
             done
             exit 1
       - save_cache:
-          key: assets/{{ checksum "tmp/circleci/master.hash" }}/1
+          key: assets/{{ checksum "tmp/circleci/master.hash" }}/2
           paths:
             - public/assets
-            - public/packs
             - tmp/cache/assets
 
       # Run tests
-      - run: ./bin/rspec --profile -- $(circleci tests glob spec/**/*_spec.rb | circleci tests split --split-by=filesize)
+      - run: bundle exec parallel_test --group-by filesize --type rspec -- --profile -- $(circleci tests glob spec/**/*_spec.rb | circleci tests split --split-by=filesize)
       - run: if [ $CIRCLE_NODE_INDEX = 0 ]; then npm test; fi
 
       - run: ./bin/spring stop

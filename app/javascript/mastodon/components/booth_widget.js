@@ -91,33 +91,33 @@ class BoothWidget extends React.PureComponent {
 
     return (
       <div className={`booth-widget booth-widget--music ${this.state.isPlaying ? 'is-playing' : ''} ${this.state.apollo ? 'is-apollo' : ''}`}>
-        <div className="booth-widget__viewer">
-          <div className="booth-widget__viewer-btn" onClick={this.handlePlayerClick}>
+        <div className='booth-widget__viewer'>
+          <div className='booth-widget__viewer-btn' onClick={this.handlePlayerClick}>
             <i className={`fa ${this.state.isPlaying ? 'fa-pause' : 'fa-play'}`} />
           </div>
-          <img className="booth-widget__image" src={boothItem.getIn(['primary_image', 'f_620', 'url'])} alt=""/>
+          <img className='booth-widget__image' src={boothItem.getIn(['primary_image', 'f_620', 'url'])} alt='' />
         </div>
-        <div className="booth-widget__seekbar-wrapper">
-          <div className="booth-widget__text">
-            <div className="booth-widget__seekbar-time">
+        <div className='booth-widget__seekbar-wrapper'>
+          <div className='booth-widget__text'>
+            <div className='booth-widget__seekbar-time'>
               {seekbarMinutes}:{(`0${seekbarSeconds}`).slice(-2)}
             </div>
-            <a className="booth-widget__shop" href={boothItem.getIn(['shop', 'url'])} target="_blank">
-              <div className="booth-widget__shop-name">{boothItem.getIn(['shop', 'name'])}</div>
+            <a className='booth-widget__shop' href={boothItem.getIn(['shop', 'url'])} target='_blank'>
+              <div className='booth-widget__shop-name'>{boothItem.getIn(['shop', 'name'])}</div>
             </a>
-            <a className="booth-widget__name" href={this.props.url} target="_blank">
+            <a className='booth-widget__name' href={this.props.url} target='_blank'>
               {boothItem.get('name')}
             </a>
           </div>
-          <div className="booth-widget__seekbar" onClick={this.handleSeekbarClick}>
-            <div className="booth-widget__seekbar-process" style={seekBarProgressStyle} />
+          <div className='booth-widget__seekbar' onClick={this.handleSeekbarClick}>
+            <div className='booth-widget__seekbar-process' style={seekBarProgressStyle} />
           </div>
         </div>
-        <div className="booth-widget__footer">
-          <div className="booth-widget__price">
+        <div className='booth-widget__footer'>
+          <div className='booth-widget__price'>
             {boothItem.get('price_str')}
           </div>
-          <a className="booth-widget__logo" href={this.props.url} target="_blank" />
+          <a className='booth-widget__logo' href={this.props.url} target='_blank' />
         </div>
       </div>
     );
@@ -127,25 +127,25 @@ class BoothWidget extends React.PureComponent {
     const { boothItem } = this.props;
 
     return (
-      <div className="booth-widget">
-        <div className="booth-widget__viewer">
-          <a href={this.props.url} target="_blank">
-            <img className="booth-widget__image" src={boothItem.getIn(['primary_image', 'f_620', 'url'])} alt=""/>
+      <div className='booth-widget'>
+        <div className='booth-widget__viewer'>
+          <a href={this.props.url} target='_blank'>
+            <img className='booth-widget__image' src={boothItem.getIn(['primary_image', 'f_620', 'url'])} alt='' />
           </a>
         </div>
-        <div className="booth-widget__text">
-          <a className="booth-widget__shop" href={boothItem.getIn(['shop', 'url'])} target="_blank">
-            <div className="booth-widget__shop-name">{boothItem.getIn(['shop', 'name'])}</div>
+        <div className='booth-widget__text'>
+          <a className='booth-widget__shop' href={boothItem.getIn(['shop', 'url'])} target='_blank'>
+            <div className='booth-widget__shop-name'>{boothItem.getIn(['shop', 'name'])}</div>
           </a>
-          <a className="booth-widget__name" href={this.props.url} target="_blank">
+          <a className='booth-widget__name' href={this.props.url} target='_blank'>
             {boothItem.get('name')}
           </a>
         </div>
-        <div className="booth-widget__footer">
-          <div className="booth-widget__price">
+        <div className='booth-widget__footer'>
+          <div className='booth-widget__price'>
             {boothItem.get('price_str')}
           </div>
-          <a className="booth-widget__logo" href={this.props.url} target="_blank" />
+          <a className='booth-widget__logo' href={this.props.url} target='_blank' />
         </div>
       </div>
     );

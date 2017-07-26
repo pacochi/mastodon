@@ -1,10 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
 
-import IconButton from '../../../components/icon_button';
 import api from '../../../api';
 import createStream from '../../../../mastodon/stream';
 import TipsBalloonContainer from '../../../containers/tips_balloon_container';
@@ -65,7 +63,7 @@ const PlatformHelp = () => {
 };
 
 const LoadingArtwork = () => (
-  <div className="queue-item__artwork">
+  <div className='queue-item__artwork'>
     <div className='loading' />
   </div>
 );
@@ -354,11 +352,11 @@ class PlayControl extends React.PureComponent {
   }
 
   handleClickDeck = () => {
-    this.setState({isOpen: true});
+    this.setState({ isOpen: true });
   }
 
   handleClickOverlay = () => {
-    this.setState({isOpen: false});
+    this.setState({ isOpen: false });
   }
 
   handleClickDeckTab = (e) => {
@@ -376,9 +374,9 @@ class PlayControl extends React.PureComponent {
 
   handleSubmitAddForm = (e) => {
     e.preventDefault();
-    return api(this.getMockState).post(`/api/v1/playlists/${this.state.targetDeck}/deck_queues`, {link: this.urlRef.value})
-      .then((response)=>{
-        this.urlRef.value = "";
+    return api(this.getMockState).post(`/api/v1/playlists/${this.state.targetDeck}/deck_queues`, { link: this.urlRef.value })
+      .then(() => {
+        this.urlRef.value = '';
       })
       .catch((error)=>{
         this.props.onError(error);
@@ -464,8 +462,8 @@ class PlayControl extends React.PureComponent {
 
   renderQueueItem = (queue_item, i) => {
     return (
-      <li key={queue_item ? queue_item.id : `empty-queue-item_${i}`} className="deck__queue-item">
-        <div className="queue-item__main">
+      <li key={queue_item ? queue_item.id : `empty-queue-item_${i}`} className='deck__queue-item'>
+        <div className='queue-item__main'>
           <div>
             {!this.state.isOpen && i === 0 && this.renderDeckQueueCaption('- いまみんなで一緒に聞いている曲 -')}
             <div className='queue-item__metadata'>
@@ -479,7 +477,7 @@ class PlayControl extends React.PureComponent {
         </div>
         <div className='queue-item__datasource'>
           {queue_item && (
-            <a href={queue_item.link} target="_blank" onClick={this.handleCancelOpenDeck}>
+            <a href={queue_item.link} target='_blank' onClick={this.handleCancelOpenDeck}>
               <img src={`/player/logos/${queue_item.source_type}.${queue_item.source_type === 'apollo' ? 'png' : 'svg'}`} />
             </a>
           )}
@@ -497,12 +495,12 @@ class PlayControl extends React.PureComponent {
     }
 
     if (!deckQueue || !isPlaying) {
-      return <div className="queue-item__artwork" />;
+      return <div className='queue-item__artwork' />;
     }
 
     switch (deckQueue.source_type) {
     case 'youtube':
-      return <YouTubeArtwork muted={muted} volume={volume} timeOffset={timeOffset} videoId={deckQueue.source_id} onReadyYoutube={this.handleReadyYoutube}/>;
+      return <YouTubeArtwork muted={muted} volume={volume} timeOffset={timeOffset} videoId={deckQueue.source_id} onReadyYoutube={this.handleReadyYoutube} />;
     case 'soundcloud':
       return <SoundCloudArtwork muted={muted} volume={volume} timeOffset={timeOffset} sourceId={deckQueue.source_id} />;
     case 'pawoo-music':
@@ -511,7 +509,7 @@ class PlayControl extends React.PureComponent {
     case 'apollo':
       return <AudioArtwork muted={muted} volume={volume} timeOffset={timeOffset} musicUrl={deckQueue.music_url} thumbnailUrl={deckQueue.thumbnail_url} />;
     default:
-      return <div className="queue-item__artwork" />;
+      return <div className='queue-item__artwork' />;
     }
   }
 
@@ -523,7 +521,6 @@ class PlayControl extends React.PureComponent {
     }
 
     const deckQueue = this.getDeckFirstQueue();
-    const sourceType = deckQueue && deckQueue.source_type;
     const duration = deckQueue && deckQueue.duration;
 
     const index = deckList.findIndex((deck) => deck.number === targetDeck);
@@ -545,7 +542,7 @@ class PlayControl extends React.PureComponent {
         };
       } else {
         playerSeekBarStyle = {
-          transition: `width 0s linear`,
+          transition: 'width 0s linear',
           width: `${deckQueue.duration ? (timeOffset / deckQueue.duration) * 100 : 0}%`,
         };
       }
@@ -570,7 +567,8 @@ class PlayControl extends React.PureComponent {
           <div className='control-bar__deck' onClick={this.handleClickDeck}>
             <ul className='control-bar__deck-selector'>
               {deckList.map((deck) => (
-                <li key={deck.number}
+                <li
+                  key={deck.number}
                   className={classNames('deck-selector__selector-body', {
                     active: deck.number === targetDeck,
                     'is-apollo': deck.type === 'apollo',
@@ -586,36 +584,36 @@ class PlayControl extends React.PureComponent {
               ))}
             </ul>
             <div className={classNames('deck_queue-wrapper', { 'is-apollo': isApollo })}>
-              <div className="deck_queue-column">
+              <div className='deck_queue-column'>
                 {this.renderArtwork()}
                 {isOpen && deckSettings && (
-                  <div className="queue-item__restrictions">
-                    <div className="queue-item__restrictions-title">
-                      <i className="fa fa-fw fa-info-circle" />
+                  <div className='queue-item__restrictions'>
+                    <div className='queue-item__restrictions-title'>
+                      <i className='fa fa-fw fa-info-circle' />
                       <span>楽曲追加・SKIPについて（実験中）</span>
                     </div>
-                    <ul className="queue-item__restrictions-list">
-                      <li>楽曲追加は<span className="queue-item__restrictions-num">1時間に{deckSettings.max_add_count}回まで</span>です</li>
-                      <li>SKIPの回数は<span className="queue-item__restrictions-num">1時間に{deckSettings.max_skip_count}回まで</span>です</li>
-                      <li>SKIPボタンは、<span className="queue-item__restrictions-num">楽曲が始まってから<br />{deckSettings.skip_limit_time}秒後</span>に押せるようになります</li>
+                    <ul className='queue-item__restrictions-list'>
+                      <li>楽曲追加は<span className='queue-item__restrictions-num'>1時間に{deckSettings.max_add_count}回まで</span>です</li>
+                      <li>SKIPの回数は<span className='queue-item__restrictions-num'>1時間に{deckSettings.max_skip_count}回まで</span>です</li>
+                      <li>SKIPボタンは、<span className='queue-item__restrictions-num'>楽曲が始まってから<br />{deckSettings.skip_limit_time}秒後</span>に押せるようになります</li>
                     </ul>
                   </div>
                 )}
               </div>
-              <div className="deck_queue-column deck__queue-column-list">
+              <div className='deck_queue-column deck__queue-column-list'>
                 {this.state.isOpen && this.renderDeckQueueCaption('- いまみんなで一緒に聞いているプレイリスト -')}
-                <ul className="deck__queue">
+                <ul className='deck__queue'>
                   {playlist.map(this.renderQueueItem)}
                   {!isTop && (
-                    <li className="deck__queue-add-form">
+                    <li className='deck__queue-add-form'>
                       {isWriteProtect ? (
                         <div style={{ paddingTop: '20px' }}>Pawoo Musicに曲をアップロードすると、このプレイリストに曲が追加されます。</div>
                       ) : (
                         <form onSubmit={this.handleSubmitAddForm}>
                           <span>曲を追加</span>
-                          <input ref={this.setURLRef} type="text" placeholder="URLを入力 (Pawoo Music, APOLLO(BOOTH), YouTube and SoundCloud URL)" required />
+                          <input ref={this.setURLRef} type='text' placeholder='URLを入力 (Pawoo Music, APOLLO(BOOTH), YouTube and SoundCloud URL)' required />
                           <PlatformHelp />
-                          <input type="submit" value="追加" />
+                          <input type='submit' value='追加' />
                         </form>
                       )}
                     </li>

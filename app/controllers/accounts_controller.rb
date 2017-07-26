@@ -26,12 +26,9 @@ class AccountsController < ApplicationController
   private
 
   def statuses_from_pinned_status
-    records = PinnedStatus.where(account: @account)
-
     permitted_statuses
-      .where(id: records.pluck(:status_id))
       .joins(:pinned_status)
-      .merge(PinnedStatus.recent)
+      .merge(PinnedStatus.where(account: @account).recent)
   end
 
   def permitted_statuses

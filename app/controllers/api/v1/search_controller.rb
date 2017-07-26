@@ -1,11 +1,14 @@
 # frozen_string_literal: true
 
-class Api::V1::SearchController < ApiController
+class Api::V1::SearchController < Api::BaseController
+  before_action :require_user!, only: [:statuses]
+  RESULTS_LIMIT = 5
+  MAX_HITS_TOTAL = 10_000 # this value should be the same with index.max_result.window in ElasticSearch
+
   respond_to :json
-  MAX_HITS_TOTAL = 10000 # this value should be the same with index.max_result.window in ElasticSearch
 
   def index
-    @search = OpenStruct.new(SearchService.new.call(params[:q], 5, params[:resolve] == 'true', current_account))
+    @search = OpenStruct.new(search_results)
   end
 
   def statuses
@@ -15,9 +18,7 @@ class Api::V1::SearchController < ApiController
     query = params[:query]
     current_page = params[:page].to_i
     statuses_limit = limit_param(DEFAULT_STATUSES_LIMIT)
-    if ((current_page - 1) * statuses_limit) >= MAX_HITS_TOTAL
-      return not_found
-    end
+    return not_found if ((current_page - 1) * statuses_limit) >= MAX_HITS_TOTAL
 
     blocking_account_ids = current_account.blocking.pluck(:target_account_id)
     muting_account_ids = current_account.muting.pluck(:target_account_id)
@@ -28,5 +29,20 @@ class Api::V1::SearchController < ApiController
     # JS gives an error. Since it is quite a rare case, we leave this issue for a while.
     @statuses = search_results.records
     @hits_total = [search_results.records.total, MAX_HITS_TOTAL].min
+  end
+
+  private
+
+  def search_results
+    SearchService.new.call(
+      params[:q],
+      RESULTS_LIMIT,
+      resolving_search?,
+      current_account
+    )
+  end
+
+  def resolving_search?
+    params[:resolve] == 'true'
   end
 end
