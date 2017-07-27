@@ -111,14 +111,14 @@ class Playlist < ApplicationRecord
   end
 
   def replay
-    playlist_logs = PlaylistLog.where(id: PlaylistLog.where(deck: deck).order(id: :desc).limit(REPEAT_MUSIC_NUM)).select(:link).distinct
     account = Account.find_local('pixiv')
+    return unless account
 
-    return if playlist_logs.blank? || !account
+    playlist_links = PlaylistLog.where(deck: deck).where.not(account: account).order(id: :desc).limit(REPEAT_MUSIC_NUM).pluck(:link)
 
-    playlist_logs.shuffle.each do |playlist_log|
+    playlist_links.uniq.shuffle.each do |link|
       begin
-        break if add(playlist_log.link, account, true)
+        break if add(link, account, true)
       rescue Mastodon::MusicSourceNotFoundError, Mastodon::MusicSourceFetchFailedError, Mastodon::MusicSourceForbiddenError
         next
       end
