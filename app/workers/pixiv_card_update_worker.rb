@@ -7,7 +7,7 @@ class PixivCardUpdateWorker
 
   def perform(status_id)
     status = Status.find(status_id)
-    unfetched_pixiv_cards = status.pixiv_cards.reject(&:image_url?)
+    unfetched_pixiv_cards = status.pixiv_cards.where(image_url: nil)
     return if unfetched_pixiv_cards.empty?
 
     unfetched_pixiv_cards.each do |pixiv_card|
