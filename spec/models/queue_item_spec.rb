@@ -5,7 +5,7 @@ RSpec.describe QueueItem do
     subject { described_class.create_from_link(url, account) }
 
     before do
-      Redis.current.flushdb
+      Redis.current.redis.flushdb
     end
 
     let(:account) { Fabricate(:account) }

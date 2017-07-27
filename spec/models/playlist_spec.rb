@@ -21,7 +21,7 @@ RSpec.describe Playlist, type: :model do
   end
 
   before do
-    Redis.current.flushdb
+    Redis.current.redis.flushdb
   end
 
   describe '#add' do
