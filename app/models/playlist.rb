@@ -20,7 +20,7 @@ class Playlist < ApplicationRecord
   enum deck_type: { normal: 0, apollo: 1 }
 
   MEDIA_TL_DECK_ID = 346 # Pawoo Musicに投稿された曲が自動的に追加されるDECK(手動での追加はできない)
-  REPEAT_MUSIC_NUM = 30
+  REPEAT_MUSIC_NUM = 100
 
   def add(link, account, force = false)
     raise Mastodon::PlaylistWriteProtectionError if write_protect && !force
@@ -85,9 +85,7 @@ class Playlist < ApplicationRecord
       play_item(queue_item.id, queue_item.duration)
     else
       # プレイリストが空の場合は、過去に追加された曲をもう一度再生
-      playlist_log = PlaylistLog.where(deck: deck).order(id: :desc).limit(REPEAT_MUSIC_NUM).sample
-      account = Account.find_local('pixiv')
-      add(playlist_log.link, account, true) if playlist_log && account
+      replay
     end
     true
   end
@@ -110,6 +108,21 @@ class Playlist < ApplicationRecord
   def control_limit?(account, force)
     count = redis.get(music_add_count_key(account))&.to_i || 0
     !account.user.admin && !force && count >= settings['max_add_count']
+  end
+
+  def replay
+    playlist_logs = PlaylistLog.where(id: PlaylistLog.where(deck: deck).order(id: :desc).limit(REPEAT_MUSIC_NUM)).select(:link).distinct
+    account = Account.find_local('pixiv')
+
+    return if playlist_logs.blank? || !account
+
+    playlist_logs.shuffle.each do |playlist_log|
+      begin
+        break if add(playlist_log.link, account, true)
+      rescue Mastodon::MusicSourceNotFoundError, Mastodon::MusicSourceFetchFailedError, Mastodon::MusicSourceForbiddenError
+        next
+      end
+    end
   end
 
   def play_item(queue_item_id, duration, gap = 10)
