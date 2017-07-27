@@ -21,7 +21,7 @@ RSpec.describe Playlist, type: :model do
   end
 
   before do
-    Redis.current.flushdb
+    Redis.current.redis.flushdb
   end
 
   describe '#add' do
@@ -125,7 +125,7 @@ RSpec.describe Playlist, type: :model do
       it do
         subject
         expect(playlist).not_to have_received(:play_item)
-        expect(playlist).to have_received(:add).once
+        expect(playlist).to have_received(:add)
       end
     end
 
