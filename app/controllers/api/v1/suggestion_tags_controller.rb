@@ -9,6 +9,6 @@ class Api::V1::SuggestionTagsController < Api::BaseController
     type = SuggestionTag.suggestion_types.include?(params[:type]) ? params[:type] : :normal
     limit = limit_param(DEFAULT_SUGGESTION_LIMIT)
 
-    @suggestion_tags = SuggestionTag.where(suggestion_type: type).limit(limit)
+    @suggestion_tags = SuggestionTag.where(suggestion_type: type).order(:order).limit(limit)
   end
 end
