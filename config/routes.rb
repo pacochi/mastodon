@@ -183,6 +183,7 @@ Rails.application.routes.draw do
 
       resource :push_notification_preferences, only: [:show, :update]
       resources :trend_tags, only: [:index]
+      resources :suggestion_tags, only: [:index]
       resources :follows,    only: [:create]
       resources :media,      only: [:create]
       resources :apps,       only: [:create]

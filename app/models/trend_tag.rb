@@ -8,7 +8,7 @@ class TrendTag
   attr_accessor :name, :description, :tag_type
 
   def self.find_tags(limit = 3)
-    suggestion_tags = SuggestionTag.order(:order).preload(:tag).limit(limit).map do |tag|
+    suggestion_tags = SuggestionTag.where(suggestion_type: :normal).order(:order).preload(:tag).limit(limit).map do |tag|
       new(name: tag.name, description: tag.description, tag_type: 'suggestion')
     end
 
