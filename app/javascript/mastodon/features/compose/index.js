@@ -59,11 +59,9 @@ export default class Compose extends React.PureComponent {
   render () {
     if (this.props.intent) {
       return (
-        <div className='compose-form__intent'>
-          <div style={{ maxWidth: 400, width: '100%' }}>
-            <NavigationContainer />
-            <ComposeFormContainer />
-          </div>
+        <div style={{ maxWidth: 400, width: '100%' }}>
+          <NavigationContainer />
+          <ComposeFormContainer />
         </div>
       );
     }

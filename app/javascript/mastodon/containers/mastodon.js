@@ -120,7 +120,7 @@ export default class Mastodon extends React.PureComponent {
       return (
         <IntlProvider locale={locale} messages={messages}>
           <Provider store={store}>
-            <UI intent>
+            <UI className='compose-form__intent' intent>
               <Compose intent />
             </UI>
           </Provider>
