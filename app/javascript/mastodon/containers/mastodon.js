@@ -134,8 +134,9 @@ export default class Mastodon extends React.PureComponent {
           <Provider store={store}>
             <BrowserRouter basename='/admin/scheduled_statuses'>
               <ScrollContext>
-                <UI intent>
+                <UI className='scheduled_statuses__container' intent>
                   <Route path='*' component={connect(() => ({ standalone: true }))(ScheduledStatuses)} />
+                  <Compose schedule />
                 </UI>
               </ScrollContext>
             </BrowserRouter>

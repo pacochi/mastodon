@@ -5,7 +5,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import LoadingIndicator from '../../components/loading_indicator';
 import { fetchScheduledStatuses, expandScheduledStatuses } from '../../actions/schedules';
 import StatusList from '../../components/status_list';
-import Compose from '../../features/compose';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 
 const mapStateToProps = state => ({
@@ -33,16 +32,9 @@ export default class ScheduledStatuses extends ImmutablePureComponent {
   render () {
     const { loaded } = this.props;
 
-    return (
-      <div className='scheduled_statuses__container'>
-        {
-          loaded ?
+    return loaded ?
             (<StatusList {...this.props} scrollKey='scheduledStatuses' standalone={false} absoluteTimestamp onScrollToBottom={this.handleScrollToBottom} />) :
-            (<LoadingIndicator />)
-        }
-        <Compose schedule />
-      </div>
-    );
+            (<LoadingIndicator />);
   }
 
 }
