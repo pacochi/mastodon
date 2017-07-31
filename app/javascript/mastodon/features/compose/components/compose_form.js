@@ -23,6 +23,9 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 import { length } from 'stringz';
 
 // TODO: i18n
+// Moment is used by react-datetime, which is imported only by this module.
+// Fix the setting to ja for now because the default display is confusing for
+// Japanese people.
 require('moment/locale/ja');
 
 const messages = defineMessages({
