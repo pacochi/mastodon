@@ -67,7 +67,7 @@ export default class Compose extends React.PureComponent {
     }
 
     if (this.props.schedule) {
-      return (<ComposeFormContainer enableScheduler />);
+      return (<ComposeFormContainer scheduling />);
     }
 
     const { multiColumn, showSearch, intl } = this.props;

@@ -37,9 +37,10 @@ const messages = defineMessages({
 export default class ComposeForm extends ImmutablePureComponent {
 
   static propTypes = {
-    enableScheduler: PropTypes.bool,
+    scheduling: PropTypes.bool,
     intl: PropTypes.object.isRequired,
     text: PropTypes.string.isRequired,
+    published: PropTypes.string,
     suggestion_token: PropTypes.string,
     suggestions: ImmutablePropTypes.list,
     spoiler: PropTypes.bool,
@@ -98,7 +99,9 @@ export default class ComposeForm extends ImmutablePureComponent {
       this.props.onChange(this.autosuggestTextarea.textarea.value);
     }
 
-    this.props.onSubmit();
+    if (!this.props.scheduling || this.props.published != null) {
+      this.props.onSubmit();
+    }
   }
 
   onSuggestionsClearRequested = () => {
@@ -184,7 +187,7 @@ export default class ComposeForm extends ImmutablePureComponent {
   }
 
   render () {
-    const { enableScheduler, intl, onPaste, showSearch } = this.props;
+    const { scheduling, intl, onPaste, showSearch } = this.props;
     const disabled = this.props.is_submitting;
     const text = [this.props.spoiler_text, this.props.text].join('');
 
@@ -245,7 +248,7 @@ export default class ComposeForm extends ImmutablePureComponent {
           </div>
 
           {
-            enableScheduler && (
+            scheduling && (
               <DateTime
                 className='compose-form__datetime'
                 inputProps={{
@@ -253,6 +256,7 @@ export default class ComposeForm extends ImmutablePureComponent {
                   placeholder: intl.formatMessage(messages.schedule_placeholder),
                 }}
                 onChange={this.props.onChangeDateTime}
+                value={this.props.published}
               />
             )
           }

@@ -19,6 +19,7 @@ import {
 
 const mapStateToProps = state => ({
   text: state.getIn(['compose', 'text']),
+  published: state.getIn(['compose', 'published']),
   suggestion_token: state.getIn(['compose', 'suggestion_token']),
   suggestions: state.getIn(['compose', 'suggestions']),
   spoiler: state.getIn(['compose', 'spoiler']),
