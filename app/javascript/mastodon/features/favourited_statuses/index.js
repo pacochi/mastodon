@@ -29,8 +29,6 @@ export default class Favourites extends ImmutablePureComponent {
     statusIds: ImmutablePropTypes.list.isRequired,
     loaded: PropTypes.bool,
     intl: PropTypes.object.isRequired,
-
-    // TODO: who requires this?
     me: PropTypes.number.isRequired,
   };
 
