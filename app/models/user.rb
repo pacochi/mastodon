@@ -62,7 +62,7 @@ class User < ApplicationRecord
 
   before_validation :sanitize_languages
 
-  after_update :delete_initial_password_usage, if: :encrypted_password_changed?
+  after_update :delete_initial_password_usage, if: :saved_change_to_encrypted_password?
 
   # This avoids a deprecation warning from Rails 5.1
   # It seems possible that a future release of devise-two-factor will
