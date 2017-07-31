@@ -24,11 +24,20 @@ const initialState = Immutable.Map({
 
 const insertToDateSortedList = (state, listType, statuses, allStatuses) => {
   return state.update(listType, listMap => listMap.withMutations(map => {
+    const compare = (i, j) => {
+      if (i.created_at < j.created_at) {
+        return -1;
+      } else if (i.created_at > j.created_at) {
+        return 1;
+      } else {
+        return 0;
+      }
+    };
+
     map.set('items', map.get('items')
-                        .map(id => ({id, created_at: allStatuses.getIn([id, 'created_at'])}))
+                        .map(id => ({ id, created_at: allStatuses.getIn([id, 'created_at']) }))
                         .concat(statuses)
-                        .sort((i, j) => i.created_at < j.created_at ? -1 :
-                                        (i.created_at > j.created_at ? 1 : 0))
+                        .sort(compare)
                         .map(item => item.id));
   }));
 };
