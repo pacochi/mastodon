@@ -5,6 +5,7 @@ import {
 import {
   SCHEDULED_STATUSES_FETCH_SUCCESS,
   SCHEDULED_STATUSES_EXPAND_SUCCESS,
+  SCHEDULED_STATUSES_ADDITION,
 } from '../actions/schedules';
 import Immutable from 'immutable';
 
@@ -20,6 +21,17 @@ const initialState = Immutable.Map({
     items: Immutable.List(),
   }),
 });
+
+const insertToDateSortedList = (state, listType, statuses, allStatuses) => {
+  return state.update(listType, listMap => listMap.withMutations(map => {
+    map.set('items', map.get('items')
+                        .map(id => ({id, created_at: allStatuses.getIn([id, 'created_at'])}))
+                        .concat(statuses)
+                        .sort((i, j) => i.created_at < j.created_at ? -1 :
+                                        (i.created_at > j.created_at ? 1 : 0))
+                        .map(item => item.id));
+  }));
+};
 
 const normalizeList = (state, listType, statuses, next) => {
   return state.update(listType, listMap => listMap.withMutations(map => {
@@ -46,6 +58,8 @@ export default function statusLists(state = initialState, action) {
     return normalizeList(state, 'schedules', action.statuses, action.next);
   case SCHEDULED_STATUSES_EXPAND_SUCCESS:
     return appendToList(state, 'schedules', action.statuses, action.next);
+  case SCHEDULED_STATUSES_ADDITION:
+    return insertToDateSortedList(state, 'schedules', action.statuses, action.allStatuses);
   default:
     return state;
   }

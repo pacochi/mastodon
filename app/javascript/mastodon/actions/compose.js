@@ -1,6 +1,6 @@
 import api from '../api';
 
-import { expandScheduledStatusesSuccess } from './schedules';
+import { addScheduledStatuses } from './schedules';
 import { updateTimeline } from './timelines';
 
 import * as emojione from 'emojione';
@@ -106,7 +106,7 @@ export function submitCompose() {
 
       // Make the schedule list responsive as well
       if (published) {
-        dispatch(expandScheduledStatusesSuccess([response.data]));
+        dispatch(addScheduledStatuses([response.data]));
       }
 
       if (response.data.in_reply_to_id === null && response.data.visibility === 'public') {

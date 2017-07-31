@@ -8,6 +8,8 @@ export const SCHEDULED_STATUSES_EXPAND_REQUEST = 'SCHEDULED_STATUSES_EXPAND_REQU
 export const SCHEDULED_STATUSES_EXPAND_SUCCESS = 'SCHEDULED_STATUSES_EXPAND_SUCCESS';
 export const SCHEDULED_STATUSES_EXPAND_FAIL    = 'SCHEDULED_STATUSES_EXPAND_FAIL';
 
+export const SCHEDULED_STATUSES_ADDITION = 'SCHEDULED_STATUSES_ADDITION';
+
 export function fetchScheduledStatuses() {
   return (dispatch, getState) => {
     dispatch(fetchScheduledStatusesRequest());
@@ -39,6 +41,16 @@ export function fetchScheduledStatusesFail(error) {
   return {
     type: SCHEDULED_STATUSES_FETCH_FAIL,
     error,
+  };
+};
+
+export function addScheduledStatuses(statuses) {
+  return (dispatch, getState) => {
+    dispatch({
+      type: SCHEDULED_STATUSES_ADDITION,
+      statuses,
+      allStatuses: getState().get('statuses'),
+    });
   };
 };
 
