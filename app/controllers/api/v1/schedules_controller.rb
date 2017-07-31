@@ -29,6 +29,8 @@ class Api::V1::SchedulesController < Api::BaseController
   end
 
   def results
+    return @_results if @_results.present?
+
     max_time = params[:max_time]
     since_time = params[:since_time]
 
@@ -40,7 +42,7 @@ class Api::V1::SchedulesController < Api::BaseController
     query = query.where("statuses.created_at < ? AT TIME ZONE 'UTC'", max_time) if max_time.present?
     query = query.where("statuses.created_at > ? AT TIME ZONE 'UTC'", since_time) if since_time.present?
 
-    @_results ||= query
+    @_results = query
   end
 
   def insert_pagination_headers
