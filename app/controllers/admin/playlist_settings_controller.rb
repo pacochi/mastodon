@@ -7,11 +7,12 @@ module Admin
       max_add_count
       max_skip_count
       skip_limit_time
+      replay_history_num
     ).freeze
 
     def update
       settings = Setting.where(var: 'playlist').first_or_initialize(var: 'playlist')
-      value = Setting.playlist.merge(settings_params.map { |k, v| [k, v.to_i] }.to_h)
+      value = Setting.playlist.merge(settings_params.to_h.map { |k, v| [k, v.to_i] }.to_h)
       if settings.update(value: value)
         flash[:notice] = 'Success!'
       else

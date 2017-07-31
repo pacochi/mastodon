@@ -20,7 +20,6 @@ class Playlist < ApplicationRecord
   enum deck_type: { normal: 0, apollo: 1 }
 
   MEDIA_TL_DECK_ID = 346 # Pawoo Musicに投稿された曲が自動的に追加されるDECK(手動での追加はできない)
-  REPEAT_MUSIC_NUM = 100
 
   def add(link, account, force = false)
     raise Mastodon::PlaylistWriteProtectionError if write_protect && !force
@@ -114,7 +113,7 @@ class Playlist < ApplicationRecord
     account = Account.find_local('pixiv')
     return unless account
 
-    playlist_links = PlaylistLog.where(deck: deck).where.not(account: account).order(id: :desc).limit(REPEAT_MUSIC_NUM).pluck(:link)
+    playlist_links = PlaylistLog.where(deck: deck).where.not(account: account).order(id: :desc).limit(settings['replay_history_num']).pluck(:link)
 
     playlist_links.uniq.shuffle.each do |link|
       begin
