@@ -24,6 +24,10 @@
         %td
           %strong= 'スキップができるようになるまでの秒数'
         %td= text_field_tag :skip_limit_time, @settings['skip_limit_time'], type: :number
+      %tr
+        %td
+          %strong= 'ランダムに曲を選択するときに使用する履歴の件数'
+        %td= text_field_tag :replay_history_num, @settings['replay_history_num'], type: :number
   .simple_form.actions
     = button_tag t('generic.save_changes'), type: :submit, class: :btn
 
