@@ -26,7 +26,7 @@ import { length } from 'stringz';
 // Moment is used by react-datetime, which is imported only by this module.
 // Fix the setting to ja for now because the default display is confusing for
 // Japanese people.
-require('moment/locale/ja');
+import 'moment/locale/ja';
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What is on your mind?' },
