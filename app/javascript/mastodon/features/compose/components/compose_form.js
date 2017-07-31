@@ -102,7 +102,7 @@ export default class ComposeForm extends ImmutablePureComponent {
       this.props.onChange(this.autosuggestTextarea.textarea.value);
     }
 
-    if (!this.props.scheduling || this.props.published != null) {
+    if (!this.props.scheduling || this.props.published !== null) {
       this.props.onSubmit();
     }
   }
