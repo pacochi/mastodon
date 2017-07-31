@@ -33,7 +33,7 @@ class Api::V1::SchedulesController < Api::BaseController
     since_time = params[:since_time]
 
     query = current_account.statuses
-                          .where("statuses.created_at > CURRENT_TIMESTAMP AT TIME ZONE 'UTC'")
+                          .where('statuses.created_at > ?', Time.now)
                           .reorder(:created_at)
                           .limit(limit_param(DEFAULT_STATUSES_LIMIT))
 
