@@ -9,6 +9,9 @@ ExceptionNotification.configure do |config|
     ActionController::ParameterMissing
     ActiveRecord::RecordNotUnique
     HTTP::TimeoutError
+    HTTP::Redirector::TooManyRedirectsError
+    HTTP::Redirector::EndlessRedirectError
+    HTTP::Request::UnsupportedSchemeError
     Goldfinger::SSLError
   )
 
@@ -17,6 +20,7 @@ ExceptionNotification.configure do |config|
     Pubsubhubbub::ConfirmationWorker
     Pubsubhubbub::DistributionWorker
     Pubsubhubbub::SubscribeWorker
+    LinkCrawlWorker
   ].freeze
 
   config.ignore_if do |_exception, options|
