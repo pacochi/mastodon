@@ -9,6 +9,8 @@ class StatusPolicy
   end
 
   def show?
+    return false if status.created_at.future? && status.account != account
+
     if direct?
       owned? || status.mentions.where(account: account).exists?
     elsif private?

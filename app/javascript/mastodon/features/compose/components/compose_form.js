@@ -1,5 +1,6 @@
 import qs from 'querystring';
 import React from 'react';
+import DateTime from 'react-datetime';
 import CharacterCounter from './character_counter';
 import Button from '../../../components/button';
 import ImmutablePropTypes from 'react-immutable-proptypes';
@@ -21,9 +22,16 @@ import WarningContainer from '../containers/warning_container';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { length } from 'stringz';
 
+// TODO: i18n
+// Moment is used by react-datetime, which is imported only by this module.
+// Fix the setting to ja for now because the default display is confusing for
+// Japanese people.
+import 'moment/locale/ja';
+
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What is on your mind?' },
   spoiler_placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Content warning' },
+  schedule_placeholder: { id: 'compose_form.schedule_placeholder', defaultMessage: 'Time to post' },
   publish: { id: 'compose_form.publish', defaultMessage: 'Toot' },
   publishLoud: { id: 'compose_form.publish_loud', defaultMessage: '{publish}!' },
 });
@@ -32,8 +40,10 @@ const messages = defineMessages({
 export default class ComposeForm extends ImmutablePureComponent {
 
   static propTypes = {
+    scheduling: PropTypes.bool,
     intl: PropTypes.object.isRequired,
     text: PropTypes.string.isRequired,
+    published: PropTypes.string,
     suggestion_token: PropTypes.string,
     suggestions: ImmutablePropTypes.list,
     spoiler: PropTypes.bool,
@@ -49,6 +59,7 @@ export default class ComposeForm extends ImmutablePureComponent {
     onClearSuggestions: PropTypes.func.isRequired,
     onFetchSuggestions: PropTypes.func.isRequired,
     onSuggestionSelected: PropTypes.func.isRequired,
+    onChangeDateTime: PropTypes.func.isRequired,
     onChangeSpoilerText: PropTypes.func.isRequired,
     onPaste: PropTypes.func.isRequired,
     onPickEmoji: PropTypes.func.isRequired,
@@ -91,7 +102,9 @@ export default class ComposeForm extends ImmutablePureComponent {
       this.props.onChange(this.autosuggestTextarea.textarea.value);
     }
 
-    this.props.onSubmit();
+    if (!this.props.scheduling || this.props.published !== null) {
+      this.props.onSubmit();
+    }
   }
 
   onSuggestionsClearRequested = () => {
@@ -177,7 +190,7 @@ export default class ComposeForm extends ImmutablePureComponent {
   }
 
   render () {
-    const { intl, onPaste, showSearch } = this.props;
+    const { scheduling, intl, onPaste, showSearch } = this.props;
     const disabled = this.props.is_submitting;
     const text = [this.props.spoiler_text, this.props.text].join('');
 
@@ -236,6 +249,20 @@ export default class ComposeForm extends ImmutablePureComponent {
             <SensitiveButtonContainer />
             <SpoilerButtonContainer />
           </div>
+
+          {
+            scheduling && (
+              <DateTime
+                className='compose-form__datetime'
+                inputProps={{
+                  className: 'compose-form__datetime-input',
+                  placeholder: intl.formatMessage(messages.schedule_placeholder),
+                }}
+                onChange={this.props.onChangeDateTime}
+                value={this.props.published}
+              />
+            )
+          }
 
           <div className='compose-form__publish'>
             <div className='character-counter__wrapper'><CharacterCounter max={500} text={text} /></div>

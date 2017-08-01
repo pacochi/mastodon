@@ -97,6 +97,7 @@ Rails.application.routes.draw do
     resource :settings, only: [:edit, :update]
     resources :instances, only: [:index]
     resources :suggestion_tags, only: [:index, :new, :create, :edit, :update, :destroy]
+    resources :scheduled_statuses, only: [:index]
     resources :trend_ng_words, only: [:index, :new, :create, :edit, :update, :destroy]
     resources :oauth_authentications, only: [:destroy]
 
@@ -189,6 +190,7 @@ Rails.application.routes.draw do
       resources :mutes,      only: [:index]
       resources :favourites, only: [:index]
       resources :reports,    only: [:index, :create]
+      resources :schedules,  only: [:index]
       resources :pixiv_twitter_images, only: [:create]
       resources :firebase_cloud_messaging_tokens, only: [:create, :destroy], param: :platform
       resources :suggested_accounts, only: [:index]

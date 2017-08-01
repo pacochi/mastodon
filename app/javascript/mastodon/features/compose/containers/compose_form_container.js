@@ -7,6 +7,7 @@ import {
   clearComposeSuggestions,
   fetchComposeSuggestions,
   selectComposeSuggestion,
+  changeComposeDateTime,
   changeComposeSpoilerText,
   insertEmojiCompose,
   requestImageCache,
@@ -18,6 +19,7 @@ import {
 
 const mapStateToProps = state => ({
   text: state.getIn(['compose', 'text']),
+  published: state.getIn(['compose', 'published']),
   suggestion_token: state.getIn(['compose', 'suggestion_token']),
   suggestions: state.getIn(['compose', 'suggestions']),
   spoiler: state.getIn(['compose', 'spoiler']),
@@ -71,6 +73,10 @@ const mapDispatchToProps = (dispatch) => ({
 
   onHashTagSuggestionsSelected(tokenStart, token, value) {
     dispatch(selectComposeHashTagSuggestion(tokenStart, token, value));
+  },
+
+  onChangeDateTime (dateTime) {
+    dispatch(changeComposeDateTime(dateTime));
   },
 
   onChangeSpoilerText (checked) {

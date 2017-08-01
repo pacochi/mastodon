@@ -16,6 +16,7 @@ import {
   COMPOSE_SUGGESTIONS_CLEAR,
   COMPOSE_SUGGESTIONS_READY,
   COMPOSE_SUGGESTION_SELECT,
+  COMPOSE_DATE_TIME_CHANGE,
   COMPOSE_SENSITIVITY_CHANGE,
   COMPOSE_SPOILERNESS_CHANGE,
   COMPOSE_SPOILER_TEXT_CHANGE,
@@ -37,6 +38,7 @@ const initialState = Immutable.Map({
   spoiler: false,
   spoiler_text: '',
   privacy: null,
+  published: null,
   text: '',
   focusDate: null,
   preselectDate: null,
@@ -68,6 +70,7 @@ function statusToTextMentions(state, status) {
 function clearAll(state) {
   return state.withMutations(map => {
     map.set('text', '');
+    map.set('published', null);
     map.set('spoiler', false);
     map.set('spoiler_text', '');
     map.set('is_submitting', false);
@@ -163,6 +166,8 @@ export default function compose(state = initialState, action) {
     return state.set('mounted', true);
   case COMPOSE_UNMOUNT:
     return state.set('mounted', false);
+  case COMPOSE_DATE_TIME_CHANGE:
+    return state.set('published', action.value);
   case COMPOSE_SENSITIVITY_CHANGE:
     return state
       .set('sensitive', !state.get('sensitive'))

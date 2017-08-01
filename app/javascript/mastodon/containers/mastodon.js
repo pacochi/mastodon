@@ -15,6 +15,7 @@ import BrowserRouter from 'react-router-dom/BrowserRouter';
 import Route from 'react-router-dom/Route';
 import ScrollContext from 'react-router-scroll/lib/ScrollBehaviorContext';
 import CommunityTimeline from '../features/community_timeline';
+import ScheduledStatuses from '../features/scheduled_statuses';
 import Compose from '../features/compose';
 import UI from '../features/ui';
 import { hydrateStore } from '../actions/store';
@@ -119,9 +120,26 @@ export default class Mastodon extends React.PureComponent {
       return (
         <IntlProvider locale={locale} messages={messages}>
           <Provider store={store}>
-            <UI intent>
+            <UI className='compose-form__intent' intent>
               <Compose intent />
             </UI>
+          </Provider>
+        </IntlProvider>
+      );
+    }
+
+    if (this.appmode === 'scheduledStatuses') {
+      return (
+        <IntlProvider locale={locale} messages={messages}>
+          <Provider store={store}>
+            <BrowserRouter basename='/admin/scheduled_statuses'>
+              <ScrollContext>
+                <UI className='scheduled_statuses__container' intent>
+                  <Route path='*' component={connect(() => ({ standalone: true }))(ScheduledStatuses)} />
+                  <Compose schedule />
+                </UI>
+              </ScrollContext>
+            </BrowserRouter>
           </Provider>
         </IntlProvider>
       );

@@ -172,6 +172,8 @@ ja:
       title: レポート
       unresolved: 未解決
       view: 表示
+    scheduled_statuses:
+      title: 予約投稿
     settings:
       contact_information:
         email: 公開するメールアドレスを入力
