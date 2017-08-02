@@ -67,6 +67,18 @@ describe ScheduledDistributionWorker do
       expect(new_pixiv_cards).to match_array old_pixiv_cards
     end
 
+    it 'updates tags' do
+      old_tags = [Fabricate(:tag)]
+      old_status = Fabricate(:status, text: TEXT, tags: old_tags)
+
+      ScheduledDistributionWorker.new.perform(old_status.id)
+
+      new_status = Status.find_by!(text: TEXT)
+      new_tags = new_status.tags
+
+      expect(new_tags).to match_array old_tags
+    end
+
     it 'processes mentions' do
       old_status = Fabricate(:status, text: MENTIONING_TEXT)
       alice = Fabricate(:account, domain: nil, username: 'alice')
