@@ -6,9 +6,10 @@ class Api::V1::SuggestionTagsController < Api::BaseController
   DEFAULT_SUGGESTION_LIMIT = 30
 
   def index
-    type = SuggestionTag.suggestion_types.include?(params[:type]) ? params[:type] : :normal
-    limit = limit_param(DEFAULT_SUGGESTION_LIMIT)
+    type = params[:type].presence || :normal
+    raise Mastodon::ValidationError unless SuggestionTag.suggestion_types.include?(type)
 
+    limit = limit_param(DEFAULT_SUGGESTION_LIMIT)
     @suggestion_tags = SuggestionTag.where(suggestion_type: type).order(:order).limit(limit)
   end
 end

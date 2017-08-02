@@ -6,10 +6,26 @@ RSpec.describe Api::V1::SuggestionTagsController, type: :controller do
   let!(:suggestion_tag)  { Fabricate(:suggestion_tag, tag: Fabricate(:tag, name: 'suggestion')) }
 
   describe 'GET #index' do
-    it 'returns http success' do
-      get :index, params: { limit: 1, type: 'normal' }
+    subject do
+      -> { get :index, params: { limit: 1, type: type } }
+    end
 
-      expect(response).to have_http_status(:success)
+    context 'given valid parameters' do
+      let(:type) { 'comiket' }
+
+      it 'returns http success' do
+        subject.call
+        expect(response).to have_http_status(:success)
+      end
+    end
+
+    context 'given invalid parameters' do
+      let(:type) { 'invalid' }
+
+      it 'returns http unprocessable_entity' do
+        subject.call
+        expect(response).to have_http_status(:unprocessable_entity)
+      end
     end
   end
 end
