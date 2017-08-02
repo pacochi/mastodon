@@ -8,14 +8,14 @@
 #  description     :string           default(""), not null
 #  created_at      :datetime         not null
 #  updated_at      :datetime         not null
-#  suggestion_type :integer          default(0), not null
+#  suggestion_type :integer          default("normal"), not null
 #
 
 class SuggestionTag < ApplicationRecord
   belongs_to :tag, required: true
 
   validates :order, :description, presence: true
-  validates :tag_id, uniqueness: true
+  validates :tag_id, uniqueness: { scope: :suggestion_type }
 
   enum suggestion_type: { normal: 0, comiket: 1 }
 
