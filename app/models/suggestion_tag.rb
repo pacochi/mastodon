@@ -2,12 +2,13 @@
 #
 # Table name: suggestion_tags
 #
-#  id          :integer          not null, primary key
-#  tag_id      :integer          not null
-#  order       :integer          default(1), not null
-#  description :string           default(""), not null
-#  created_at  :datetime         not null
-#  updated_at  :datetime         not null
+#  id              :integer          not null, primary key
+#  tag_id          :integer          not null
+#  order           :integer          default(1), not null
+#  description     :string           default(""), not null
+#  created_at      :datetime         not null
+#  updated_at      :datetime         not null
+#  suggestion_type :integer          default(0), not null
 #
 
 class SuggestionTag < ApplicationRecord
@@ -15,6 +16,8 @@ class SuggestionTag < ApplicationRecord
 
   validates :order, :description, presence: true
   validates :tag_id, uniqueness: true
+
+  enum suggestion_type: { normal: 0, comiket: 1 }
 
   delegate :name, to: :tag, allow_nil: true
 

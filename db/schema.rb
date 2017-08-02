@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170625140443) do
+ActiveRecord::Schema.define(version: 20170727063749) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -381,6 +381,7 @@ ActiveRecord::Schema.define(version: 20170625140443) do
     t.string "description", default: "", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "suggestion_type", default: 0, null: false
     t.index ["tag_id"], name: "index_suggestion_tags_on_tag_id", unique: true
   end
 
