@@ -3082,6 +3082,7 @@ button.icon-button.active i.fa-retweet {
 .suggestion-tags__body li {
   padding: 10px;
   display: flex;
+  align-items: center;
 }
 
 .suggestion-tags__content {
@@ -3122,18 +3123,20 @@ button.icon-button.active i.fa-retweet {
 }
 
 .suggestion-tags__button {
-  color: lighten($ui-base-color, 33%);
-  background: darken($simple-background-color, 8%);
+  color: lighten($ui-base-color, 13%);
+  background: lighten($ui-base-color, 33%);
   border: 0;
   border-radius: 5px;
   cursor: pointer;
   font-size: 16px;
   padding: 0 10px;
+  height: 35px;
+  margin-left: 6px;
 
   &:hover,
   &:focus {
-    color: lighten($ui-base-color, 26%);
-    background: darken($simple-background-color, 15%);
+    color: lighten($ui-base-color, 8%);
+    background: lighten($ui-base-color, 26%);
   }
 }
 
