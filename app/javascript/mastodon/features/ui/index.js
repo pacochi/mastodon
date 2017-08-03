@@ -36,6 +36,7 @@ import Blocks from '../../features/blocks';
 import Mutes from '../../features/mutes';
 import MediaTimeline from '../../features/media_timeline';
 import SuggestedAccounts from '../../features/suggested_accounts';
+import SuggestionTags from '../../features/suggestion_tags';
 import StatusSearchResults from '../../features/status_search_results';
 import AccountMediaTimeline from '../../features/account_media_timeline';
 
@@ -228,6 +229,7 @@ export default class UI extends React.PureComponent {
 
             <WrappedRoute path='/timelines/public/media' component={MediaTimeline} content={children} />
             <WrappedRoute path='/suggested_accounts' component={SuggestedAccounts} content={children} />
+            <WrappedRoute path='/suggestion_tags/:type' component={SuggestionTags} content={children} />
             <WrappedRoute path='/statuses/search/:keyword' component={StatusSearchResults} content={children} />
             <WrappedRoute path='/accounts/:accountId/media' component={AccountMediaTimeline} content={children} />
 

@@ -3049,6 +3049,12 @@ button.icon-button.active i.fa-retweet {
 
 .trend-tags {
   background: $ui-base-color;
+  .suggestion-tags__name {
+    font-size: 14px;
+  }
+  .suggestion-tags__description {
+    font-size: 12px;
+  }
 }
 
 .trend-tags__header {
@@ -3070,11 +3076,11 @@ button.icon-button.active i.fa-retweet {
   color: rgba(#FFF, 0.6);
   font-size: 12px;
 }
-.trend-tags__body li{
+.suggestion-tags__body li {
   padding: 10px
 }
-.trend-tags__name {
-  font-size: 14px;
+.suggestion-tags__name {
+  font-size: 15px;
   color: #FFF;
   text-decoration: none;
   &:hover{
@@ -3082,9 +3088,9 @@ button.icon-button.active i.fa-retweet {
     text-decoration: underline;
   }
 }
-.trend-tags__description {
+.suggestion-tags__description {
   position: relative;
-  font-size: 12px;
+  font-size: 14px;
   color: rgba(#FFF, 0.5);
   &.suggestion {
     padding-left: 18px;
@@ -3103,11 +3109,6 @@ button.icon-button.active i.fa-retweet {
       opacity: 0.5;
     }
   }
-}
-.trend-tags__note {
-  padding: 10px;
-  font-size: 10px;
-  color: rgba(#FFF, 0.5);
 }
 
 .modal-root__overlay {

@@ -98,7 +98,7 @@ export default class Compose extends React.PureComponent {
               <NavigationContainer />
               <ComposeFormContainer />
             </div>
-            <AnnouncementsContainer />
+            <AnnouncementsContainer multiColumn={multiColumn} />
             <div className='drawer__block'>
               <TrendTagsContainer />
             </div>
