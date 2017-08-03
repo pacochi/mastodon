@@ -44,6 +44,7 @@ class Api::V1::Accounts::StatusesController < Api::BaseController
 
   def permitted_account_statuses
     @account.statuses.permitted_for(@account, current_account)
+                     .where('statuses.created_at <= ?', Time.current)
   end
 
   def only_media_scope
