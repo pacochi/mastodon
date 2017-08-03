@@ -9,7 +9,8 @@ RSpec.describe AccountsController, type: :controller do
     let!(:status1) { Status.create!(account: alice, text: 'Hello world') }
     let!(:status2) { Status.create!(account: alice, text: 'Boop', thread: status1) }
     let!(:status3) { Status.create!(account: alice, text: 'Picture!') }
-    let!(:status4) { Status.create!(account: alice, text: 'Mentioning @alice') }
+    let!(:status4) { Fabricate(:status, account: alice, created_at: 1.day.from_now) }
+    let!(:status5) { Status.create!(account: alice, text: 'Mentioning @alice') }
 
     before do
       status3.media_attachments.create!(account: alice, file: fixture_file_upload('files/attachment.jpg', 'image/jpeg'))
@@ -17,7 +18,7 @@ RSpec.describe AccountsController, type: :controller do
 
     context 'atom' do
       before do
-        get :show, params: { username: alice.username, max_id: status4.stream_entry.id, since_id: status1.stream_entry.id }, format: 'atom'
+        get :show, params: { username: alice.username, max_id: status5.stream_entry.id, since_id: status1.stream_entry.id }, format: 'atom'
       end
 
       it 'assigns @account' do
@@ -52,7 +53,7 @@ RSpec.describe AccountsController, type: :controller do
 
     context 'html' do
       before do
-        get :show, params: { username: alice.username, max_id: status4.id, since_id: status1.id }
+        get :show, params: { username: alice.username, max_id: status5.id, since_id: status1.id }
       end
 
       it 'assigns @account' do

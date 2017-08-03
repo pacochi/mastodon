@@ -190,6 +190,7 @@ RSpec.describe Status, type: :model do
 
       @self_status = Fabricate(:status, account: account, visibility: :public)
       @self_direct_status = Fabricate(:status, account: account, visibility: :direct)
+      @self_scheduled_status = Fabricate(:status, account: account, created_at: 1.day.from_now)
       @followed_status = Fabricate(:status, account: followed, visibility: :public)
       @followed_direct_status = Fabricate(:status, account: followed, visibility: :direct)
       @not_followed_status = Fabricate(:status, account: not_followed, visibility: :public)
@@ -203,6 +204,10 @@ RSpec.describe Status, type: :model do
 
     it 'does not include direct statuses from self' do
       expect(@results).to_not include(@self_direct_status)
+    end
+
+    it 'does not include scheduled statuses from self' do
+      expect(@results).to_not include(@self_scheduled_status)
     end
 
     it 'includes statuses from followed' do
