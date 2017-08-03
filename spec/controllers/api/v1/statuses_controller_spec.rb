@@ -35,12 +35,14 @@ RSpec.describe Api::V1::StatusesController, type: :controller do
     end
 
     describe 'POST #create' do
-      before do
+      it 'returns http success' do
         post :create, params: { status: 'Hello world' }
+        expect(response).to have_http_status(:success)
       end
 
-      it 'returns http success' do
-        expect(response).to have_http_status(:success)
+      it 'returns http unprocessable entity when published parameter is invalid' do
+        post :create, params: { status: 'Hello world', published: 'invalid' }
+        expect(response).to have_http_status(:unprocessable_entity)
       end
     end
 

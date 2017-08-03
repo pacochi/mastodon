@@ -1,6 +1,8 @@
 # frozen_string_literal: true
 
-class Intent::StatusesController < HomeController
+class Intent::StatusesController < ApplicationController
+  include HomeConcern
+
   def new
     index
     @appmode = 'intent'

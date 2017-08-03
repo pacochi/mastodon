@@ -24,7 +24,7 @@ function main() {
   if (window.history && history.replaceState) {
     const { pathname, search, hash } = window.location;
     const path = pathname + search + hash;
-    if (!(/^\/(web|about|intent)(\/|$)/).test(path)) {
+    if (!(/^\/(web|about|intent|admin\/scheduled_statuses)(\/|$)/).test(path)) {
       history.replaceState(null, document.title, `/web${path}`);
     }
   }
