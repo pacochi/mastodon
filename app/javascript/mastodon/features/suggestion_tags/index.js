@@ -11,6 +11,7 @@ import ColumnHeader from '../../components/column_header';
 import ColumnBackButton from '../../components/column_back_button';
 import MissingIndicator from '../../components/missing_indicator';
 import { addColumn, removeColumn, moveColumn } from '../../actions/columns';
+import { insertTagCompose } from '../../actions/compose';
 
 
 const mapStateToProps = (state, props) => ({
@@ -66,6 +67,11 @@ class SuggestionTags extends React.PureComponent {
     this.column.scrollTop();
   }
 
+  handleButtonClick = (e) => {
+    const tag = e.currentTarget.getAttribute('data-tag');
+    this.props.dispatch(insertTagCompose(`#${tag}`));
+  }
+
   startPolling () {
     const { params, dispatch } = this.props;
 
@@ -117,10 +123,13 @@ class SuggestionTags extends React.PureComponent {
             <ul>
               {tags && tags.map(tag => (
                 <li key={tag.get('name')}>
-                  <Link className='suggestion-tags__name' to={`/timelines/tag/${tag.get('name')}`}>
-                    #{tag.get('name')}
-                  </Link>
-                  <div className='suggestion-tags__description suggestion'>{tag.get('description')}</div>
+                  <div className='suggestion-tags__content'>
+                    <Link className='suggestion-tags__name' to={`/timelines/tag/${tag.get('name')}`}>
+                      #{tag.get('name')}
+                    </Link>
+                    <div className='suggestion-tags__description suggestion'>{tag.get('description')}</div>
+                  </div>
+                  <button className='suggestion-tags__button' data-tag={tag.get('name')} onClick={this.handleButtonClick}><i className='fa fa-pencil' /></button>
                 </li>
               ))}
             </ul>
