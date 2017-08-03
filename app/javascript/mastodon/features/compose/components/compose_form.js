@@ -76,6 +76,8 @@ export default class ComposeForm extends ImmutablePureComponent {
     showSearch: false,
   };
 
+  _restoreCaret = null;
+
   componentDidMount () {
     const rawQuery = location.search.replace(/^\?/, '');
     if (rawQuery.length > 0) {
@@ -116,7 +118,7 @@ export default class ComposeForm extends ImmutablePureComponent {
   }, 500, { trailing: true })
 
   onSuggestionSelected = (tokenStart, token, value) => {
-    this._restoreCaret = null;
+    this._restoreCaret = 'suggestion';
     this.props.onSuggestionSelected(tokenStart, token, value);
   }
 
@@ -129,7 +131,7 @@ export default class ComposeForm extends ImmutablePureComponent {
   }
 
   onHashTagSuggestionsSelected = (tokenStart, token, value) => {
-    this._restoreCaret = null;
+    this._restoreCaret = 'suggestion';
     this.props.onHashTagSuggestionsSelected(tokenStart, token, value);
   }
 
@@ -140,8 +142,11 @@ export default class ComposeForm extends ImmutablePureComponent {
   componentWillReceiveProps (nextProps) {
     // If this is the update where we've finished uploading,
     // save the last caret position so we can restore it below!
-    if (!nextProps.is_uploading && this.props.is_uploading) {
+    if ((!nextProps.is_uploading && this.props.is_uploading) || this._restoreCaret === null) {
       this._restoreCaret = this.autosuggestTextarea.textarea.selectionStart;
+    } else if (this._restoreCaret === 'suggestion') {
+      const diff = nextProps.text.length - this.props.text.length;
+      this._restoreCaret = this.autosuggestTextarea.textarea.selectionStart + diff;
     }
   }
 
@@ -172,6 +177,7 @@ export default class ComposeForm extends ImmutablePureComponent {
     } else if(prevProps.is_submitting && !this.props.is_submitting) {
       this.autosuggestTextarea.textarea.focus();
     }
+    this._restoreCaret = null;
   }
 
   setAutosuggestTextarea = (c) => {
