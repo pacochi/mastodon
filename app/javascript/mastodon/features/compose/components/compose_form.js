@@ -43,7 +43,7 @@ export default class ComposeForm extends ImmutablePureComponent {
     scheduling: PropTypes.bool,
     intl: PropTypes.object.isRequired,
     text: PropTypes.string.isRequired,
-    published: PropTypes.string,
+    published: PropTypes.any,
     suggestion_token: PropTypes.string,
     suggestions: ImmutablePropTypes.list,
     spoiler: PropTypes.bool,
@@ -266,7 +266,7 @@ export default class ComposeForm extends ImmutablePureComponent {
 
           <div className='compose-form__publish'>
             <div className='character-counter__wrapper'><CharacterCounter max={500} text={text} /></div>
-            <div className='compose-form__publish-button-wrapper'><Button text={publishText} onClick={this.handleSubmit} disabled={disabled || this.props.is_uploading || length(text) > 500 || (text.length !==0 && text.trim().length === 0)} block /></div>
+            <div className='compose-form__publish-button-wrapper'><Button text={publishText} onClick={this.handleSubmit} disabled={disabled || this.props.is_uploading || typeof this.props.published == 'string' || length(text) > 500 || (text.length !==0 && text.trim().length === 0)} block /></div>
           </div>
         </div>
 
