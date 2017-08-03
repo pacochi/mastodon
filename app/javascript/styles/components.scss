@@ -3083,6 +3083,7 @@ button.icon-button.active i.fa-retweet {
   padding: 10px;
   display: flex;
   align-items: center;
+  border-bottom: 1px solid lighten($ui-base-color, 8%);
 }
 
 .suggestion-tags__content {
