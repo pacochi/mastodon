@@ -35,7 +35,7 @@ class Api::V1::SchedulesController < Api::BaseController
     since_time = params[:since_time]
 
     query = current_account.statuses
-                          .where('statuses.created_at > ?', Time.current)
+                          .scheduled
                           .reorder(:created_at)
                           .limit(limit_param(DEFAULT_STATUSES_LIMIT))
 
