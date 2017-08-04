@@ -33,6 +33,6 @@ class Api::V1::Statuses::FavouritesController < Api::BaseController
   end
 
   def requested_status
-    Status.where('created_at <= ?', Time.current).find(params[:status_id])
+    Status.published.find(params[:status_id])
   end
 end
