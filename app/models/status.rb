@@ -142,6 +142,7 @@ class Status < ApplicationRecord
 
     def as_home_timeline(account)
       where(account: [account] + account.following).where(visibility: [:public, :unlisted, :private])
+                                                   .published
     end
 
     def as_public_timeline(account = nil, local_only = false)
