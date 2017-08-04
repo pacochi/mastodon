@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import Link from 'react-router-dom/Link';
@@ -10,6 +11,9 @@ class Announcements extends React.PureComponent {
 
   static propTypes = {
     account: ImmutablePropTypes.map.isRequired,
+    multiColumn: PropTypes.bool,
+    pinnedComiketTag: ImmutablePropTypes.map,
+    addComiketTagColumn: PropTypes.func.isRequired,
   };
 
   componentDidUpdate (prevProps, prevState) {
@@ -72,8 +76,30 @@ class Announcements extends React.PureComponent {
             body: 'Pawoo Music',
           },
         ],
+      }, {
+        id: 10,
+        icon: '/announcements/icon_2x_360.png',
+        body: 'コミケタグを使ってみんなでリアルタイムに情報を共有しよう！',
+        link: [
+          {
+            reactRouter: true,
+            inline: false,
+            href: '/suggestion_tags/comiket',
+            body: 'コミケタグ',
+            action: (e) => {
+              const { multiColumn, pinnedComiketTag, addComiketTagColumn } = this.props;
+              if (multiColumn) {
+                // PC版の場合はカラムを追加
+                if (!pinnedComiketTag) {
+                  addComiketTagColumn();
+                }
+                e.preventDefault();
+              }
+            },
+          },
+        ],
       }
-      // NOTE: id: 9 まで使用した
+      // NOTE: id: 10 まで使用した
     );
 
     this.announcements = Immutable.fromJS(announcements);
@@ -103,6 +129,7 @@ class Announcements extends React.PureComponent {
               <p>
                 {announcement.get('link').map((link) => {
                   const classNames = ['announcements__link'];
+                  const action = link.get('action');
 
                   if (link.get('inline')) {
                     classNames.push('announcements__link-inline');
@@ -110,13 +137,13 @@ class Announcements extends React.PureComponent {
 
                   if (link.get('reactRouter')) {
                     return (
-                      <Link key={link.get('href')} className={classNames.join(' ')} to={link.get('href')}>
+                      <Link key={link.get('href')} className={classNames.join(' ')} to={link.get('href')} onClick={action ? action : null}>
                         {link.get('body')}
                       </Link>
                     );
                   } else {
                     return (
-                      <a className={classNames.join(' ')} key={link.get('href')} href={link.get('href')} target='_blank'>
+                      <a className={classNames.join(' ')} key={link.get('href')} href={link.get('href')} target='_blank' onClick={action ? action : null}>
                         {link.get('body')}
                       </a>
                     );

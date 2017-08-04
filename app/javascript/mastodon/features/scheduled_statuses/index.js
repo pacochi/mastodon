@@ -33,7 +33,7 @@ export default class ScheduledStatuses extends ImmutablePureComponent {
     const { loaded } = this.props;
 
     return loaded ?
-            (<StatusList {...this.props} scrollKey='scheduledStatuses' standalone={false} absoluteTimestamp onScrollToBottom={this.handleScrollToBottom} />) :
+            (<StatusList {...this.props} scrollKey='scheduledStatuses' standalone={false} schedule onScrollToBottom={this.handleScrollToBottom} />) :
             (<LoadingIndicator />);
   }
 
