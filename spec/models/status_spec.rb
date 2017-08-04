@@ -167,6 +167,28 @@ RSpec.describe Status, type: :model do
     end
   end
 
+  describe '.published' do
+    it 'returns only statuses already published' do
+      published_status = Fabricate(:status, created_at: 1.day.ago)
+      scheduled_status = Fabricate(:status, created_at: 1.day.from_now)
+
+      results = described_class.published
+      expect(results).to include(published_status)
+      expect(results).not_to include(scheduled_status)
+    end
+  end
+
+  describe '.scheduled' do
+    it 'returns only scheduled statuses' do
+      published_status = Fabricate(:status, created_at: 1.day.ago)
+      scheduled_status = Fabricate(:status, created_at: 1.day.from_now)
+
+      results = described_class.scheduled
+      expect(results).not_to include(published_status)
+      expect(results).to include(scheduled_status)
+    end
+  end
+
   describe '.local_only' do
     it 'returns only statuses from local accounts' do
       local_account = Fabricate(:account, domain: nil)
