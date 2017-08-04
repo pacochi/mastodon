@@ -32,7 +32,7 @@ class AccountsController < ApplicationController
   end
 
   def permitted_statuses
-    Status.where(account: @account).permitted_for(@account, current_account).where('statuses.created_at <= ?', Time.current).recent
+    Status.where(account: @account).permitted_for(@account, current_account).published.recent
   end
 
   def set_account
