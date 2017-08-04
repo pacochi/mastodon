@@ -5,9 +5,7 @@ class Api::V1::TrendTagsController < Api::BaseController
 
   def index
     # iOSアプリではおすすめタグの場所にコミケタグを表示する
-    # is_ios_app = request.env['HTTP_USER_AGENT'].start_with?('PawooiOSApp/')
-    # TODO: コミケのときに有効化する
-    is_ios_app = false
+    is_ios_app = request.env['HTTP_USER_AGENT'].start_with?('PawooiOSApp/')
 
     if is_ios_app
       limit = 30
