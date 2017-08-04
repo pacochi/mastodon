@@ -65,9 +65,12 @@ class Status < ApplicationRecord
   scope :remote, -> { where.not(uri: nil) }
   scope :local, -> { where(uri: nil) }
 
+  scope :published, -> { where('statuses.created_at <= ?', Time.current) }
+  scope :scheduled, -> { where('statuses.created_at > ?', Time.current) }
+
   scope :without_replies, -> { where('statuses.reply = FALSE OR statuses.in_reply_to_account_id = statuses.account_id') }
   scope :without_reblogs, -> { where('statuses.reblog_of_id IS NULL') }
-  scope :with_public_visibility, -> { where(visibility: :public).where('statuses.created_at <= ?', Time.current) }
+  scope :with_public_visibility, -> { where(visibility: :public).published }
   scope :tagged_with, ->(tag) { joins(:statuses_tags).where(statuses_tags: { tag_id: tag }) }
   scope :local_only, -> { left_outer_joins(:account).where(accounts: { domain: nil }) }
   scope :excluding_silenced_accounts, -> { left_outer_joins(:account).where(accounts: { silenced: false }) }
@@ -190,7 +193,7 @@ class Status < ApplicationRecord
       visibility = [:public, :unlisted]
 
       if account.nil?
-        where(visibility: visibility).where('statuses.created_at <= ?', Time.current)
+        where(visibility: visibility).published
       elsif target_account.blocking?(account) # get rid of blocked peeps
         none
       elsif account.id == target_account.id # author can see own stuff
@@ -202,7 +205,7 @@ class Status < ApplicationRecord
 
         joins("LEFT OUTER JOIN mentions ON statuses.id = mentions.status_id AND mentions.account_id = #{account.id}")
           .where(arel_table[:visibility].in(visibility).or(Mention.arel_table[:id].not_eq(nil)))
-          .where('statuses.created_at <= ?', Time.current)
+          .published
           .order(visibility: :desc)
       end
     end

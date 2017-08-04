@@ -9,6 +9,7 @@ import PublicTimeline from '../../public_timeline';
 import CommunityTimeline from '../../community_timeline';
 import HashtagTimeline from '../../hashtag_timeline';
 import MediaTimeline from '../../media_timeline';
+import SuggestionTag from '../../suggestion_tags';
 import Compose from '../../compose';
 import { getPreviousLink, getNextLink } from './tabs_bar';
 
@@ -20,6 +21,7 @@ const componentMap = {
   'COMMUNITY': CommunityTimeline,
   'HASHTAG': HashtagTimeline,
   'MEDIA': MediaTimeline,
+  'SUGGESTION_TAGS': SuggestionTag,
 };
 
 export default class ColumnsArea extends ImmutablePureComponent {
