@@ -164,6 +164,7 @@
   "search_results.total": "{count, number}件の結果",
   "search_results.search_toots": "\"{keyword}\" でトゥート検索",
   "status.cannot_reblog": "この投稿はブーストできません",
+  "status.cannot_favourite": "この投稿はお気に入りにできません",
   "status.delete": "削除",
   "status.favourite": "お気に入り",
   "status.load_more": "もっと見る",
