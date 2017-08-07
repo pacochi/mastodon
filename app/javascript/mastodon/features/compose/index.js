@@ -37,6 +37,7 @@ export default class Compose extends React.PureComponent {
     showSearch: PropTypes.bool,
     intl: PropTypes.object.isRequired,
     intent: PropTypes.bool,
+    schedule: PropTypes.bool,
     submitting: PropTypes.bool,
   };
 
@@ -59,13 +60,15 @@ export default class Compose extends React.PureComponent {
   render () {
     if (this.props.intent) {
       return (
-        <div className='compose-form__intent'>
-          <div style={{ maxWidth: 400, width: '100%' }}>
-            <NavigationContainer />
-            <ComposeFormContainer />
-          </div>
+        <div style={{ maxWidth: 400, width: '100%' }}>
+          <NavigationContainer />
+          <ComposeFormContainer />
         </div>
       );
+    }
+
+    if (this.props.schedule) {
+      return (<ComposeFormContainer scheduling />);
     }
 
     const { multiColumn, showSearch, intl } = this.props;

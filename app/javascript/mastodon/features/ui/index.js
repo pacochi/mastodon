@@ -86,6 +86,7 @@ export default class UI extends React.PureComponent {
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     children: PropTypes.node,
+    className: PropTypes.string,
     intent: PropTypes.bool,
   };
 
@@ -188,7 +189,12 @@ export default class UI extends React.PureComponent {
     const { intent, children } = this.props;
 
     if (intent) {
-      return children;
+      return (
+        <div className={this.props.className}>
+          {children}
+          <ModalContainer />
+        </div>
+      );
     }
 
     return (

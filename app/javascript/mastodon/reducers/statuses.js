@@ -35,6 +35,10 @@ import {
   FAVOURITED_STATUSES_EXPAND_SUCCESS,
 } from '../actions/favourites';
 import { SEARCH_FETCH_SUCCESS } from '../actions/search';
+import {
+  SCHEDULED_STATUSES_FETCH_SUCCESS,
+  SCHEDULED_STATUSES_EXPAND_SUCCESS,
+} from '../actions/schedules';
 import Immutable from 'immutable';
 
 const normalizeStatus = (state, status) => {
@@ -117,6 +121,8 @@ export default function statuses(state = initialState, action) {
   case FAVOURITED_STATUSES_FETCH_SUCCESS:
   case FAVOURITED_STATUSES_EXPAND_SUCCESS:
   case SEARCH_FETCH_SUCCESS:
+  case SCHEDULED_STATUSES_FETCH_SUCCESS:
+  case SCHEDULED_STATUSES_EXPAND_SUCCESS:
     return normalizeStatuses(state, action.statuses);
   case TIMELINE_DELETE:
     return deleteStatus(state, action.id, action.references);

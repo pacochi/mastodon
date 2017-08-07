@@ -16,6 +16,7 @@ const messages = defineMessages({
   reblog: { id: 'status.reblog', defaultMessage: 'Boost' },
   cannot_reblog: { id: 'status.cannot_reblog', defaultMessage: 'This post cannot be boosted' },
   favourite: { id: 'status.favourite', defaultMessage: 'Favourite' },
+  cannot_favourite: { id: 'status.cannot_favourite', defaultMessage: 'This post cannot be favourited' },
   open: { id: 'status.open', defaultMessage: 'Expand this status' },
   report: { id: 'status.report', defaultMessage: 'Report @{name}' },
   muteConversation: { id: 'status.mute_conversation', defaultMessage: 'Mute conversation' },
@@ -43,6 +44,7 @@ export default class StatusActionBar extends ImmutablePureComponent {
     onReport: PropTypes.func,
     onMuteConversation: PropTypes.func,
     me: PropTypes.number,
+    schedule: PropTypes.bool,
     withDismiss: PropTypes.bool,
     intl: PropTypes.object.isRequired,
     onPin: PropTypes.func,
@@ -101,8 +103,9 @@ export default class StatusActionBar extends ImmutablePureComponent {
   }
 
   render () {
-    const { status, me, intl, withDismiss } = this.props;
-    const reblogDisabled = status.get('visibility') === 'private' || status.get('visibility') === 'direct';
+    const { status, me, intl, schedule, withDismiss } = this.props;
+    const favouriteDisabled = schedule;
+    const reblogDisabled = status.get('visibility') === 'private' || status.get('visibility') === 'direct' || schedule;
     const mutingConversation = status.get('muted');
 
     let menu = [];
@@ -154,7 +157,7 @@ export default class StatusActionBar extends ImmutablePureComponent {
       <div className='status__action-bar'>
         <IconButton className='status__action-bar-button' title={replyTitle} icon={replyIcon} onClick={this.handleReplyClick} />
         <IconButton className='status__action-bar-button' disabled={reblogDisabled} active={status.get('reblogged')} title={reblogDisabled ? intl.formatMessage(messages.cannot_reblog) : intl.formatMessage(messages.reblog)} icon={reblogIcon} onClick={this.handleReblogClick} />
-        <IconButton className='status__action-bar-button star-icon' animate active={status.get('favourited')} title={intl.formatMessage(messages.favourite)} icon='star' onClick={this.handleFavouriteClick} />
+        <IconButton className='status__action-bar-button star-icon' animate disabled={favouriteDisabled} active={status.get('favourited')} title={favouriteDisabled ? intl.formatMessage(messages.cannot_favourite) : intl.formatMessage(messages.favourite)} icon='star' onClick={this.handleFavouriteClick} />
 
         <div className='status__action-bar-dropdown'>
           <DropdownMenu items={menu} icon='ellipsis-h' size={18} direction='right' ariaLabel='More' />
