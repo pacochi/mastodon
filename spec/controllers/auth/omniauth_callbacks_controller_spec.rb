@@ -55,9 +55,38 @@ RSpec.describe Auth::OmniauthCallbacksController, type: :controller do
       end
 
       it do
+        controller.store_location_for(:user, settings_oauth_authentications_path)
         subject.call
         expect(response).to redirect_to(settings_oauth_authentications_path)
         expect(flash[:notice]).to be_present
+      end
+
+      context 'current_user is already linked in' do
+        let!(:oauth_authentication) { Fabricate(:oauth_authentication, uid: auth.uid, provider: auth.provider, user: user) }
+
+        it 'signed in current_user' do
+          is_expected.to_not change {
+            controller.current_user
+          }.from(user)
+        end
+
+        it "dosen't synchronize email address" do
+          is_expected.not_to change {
+            controller.current_user.reload.email
+          }.from(user.email)
+          expect(flash[:notice]).not_to be_present
+        end
+
+        context 'current_user has initial_password_usage' do
+          let(:user) { Fabricate(:user, initial_password_usage: Fabricate(:initial_password_usage)) }
+
+          it 'synchronize email address' do
+            is_expected.to change {
+              controller.current_user.reload.email
+            }.from(user.email).to(auth['info']['email'])
+            expect(flash[:notice]).to be_present
+          end
+        end
       end
 
       context 'pixiv user is already linked in' do

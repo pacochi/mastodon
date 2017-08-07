@@ -248,6 +248,7 @@ en:
     set_new_password: Set new password
     oauth_registration: Continue sign up
     confirmed_email: '(confirmed)'
+    synchronize_email_address: Synchronize with e-mail address of pixiv account
   authorize_follow:
     error: Unfortunately, there was an error looking up the remote account
     follow: Follow
@@ -360,6 +361,7 @@ en:
     confirm: Are you sure?
     successfully_unlinked: Successfully unlinked
     successfully_linked: Successfully linked
+    successfully_synchronization: Successfully synchronized
     failed_linking: Failed linking
     initial_password_usage_note_html: To change pixiv login, please %{link} at the first.
   oauth_registrations:
