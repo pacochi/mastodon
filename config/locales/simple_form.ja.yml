@@ -60,6 +60,7 @@ ja:
         register: pixivアカウントで参加する
         signin: pixivアカウントでログイン
         signup: pixivアカウントではじめる
+        sync_email: メールアドレスを同期する
     'no': いいえ
     required:
       mark: "*"

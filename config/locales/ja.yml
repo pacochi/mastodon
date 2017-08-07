@@ -250,6 +250,7 @@ ja:
     set_new_password: 新しいパスワードを設定
     oauth_registration: 登録を続ける
     confirmed_email: '(認証済み)'
+    synchronize_email_address: pixivアカウントのメールアドレスと同期する
   authorize_follow:
     error: 残念ながら、リモートアカウントにエラーが発生しました。
     follow: フォロー
@@ -366,6 +367,7 @@ ja:
     confirm: 本当によろしいですか？
     successfully_unlinked: 解除しました
     successfully_linked: 連携しました
+    successfully_synchronization: 同期しました
     failed_linking: 連携できませんでした
     initial_password_usage_note_html: pixivアカウント連携を変更する場合は、先に%{link}する必要があります。
   oauth_registrations:
