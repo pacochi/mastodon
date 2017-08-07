@@ -14,13 +14,21 @@ class Auth::OmniauthCallbacksController < Devise::OmniauthCallbacksController
         uid: data[:uid]
       )
 
-      if oauth_authentication.save
+      if oauth_authentication.persisted?
+        if current_user.initial_password_usage
+          if current_user.update(email: data['info']['email'])
+            flash[:notice] = t('oauth_authentications.successfully_synchronization')
+          else
+            flash[:alert] = current_user.errors.full_messages.first
+          end
+        end
+      elsif oauth_authentication.save
         flash[:notice] = t('oauth_authentications.successfully_linked')
       else
         flash[:alert] = oauth_authentication.errors.full_messages.first
       end
 
-      redirect_to settings_oauth_authentications_path
+      redirect_to after_sign_in_path_for(current_user)
     else
       oauth_authentication = OauthAuthentication.find_by(provider: data.provider, uid: data.uid)
 

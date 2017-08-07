@@ -6,6 +6,7 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   before_action :check_enabled_registrations, only: [:new, :create]
   before_action :configure_sign_up_params, only: [:create]
   before_action :set_sessions, only: [:edit, :update]
+  before_action :store_current_location, only: [:edit]
 
   def create
     super do |user|
