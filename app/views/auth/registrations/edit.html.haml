@@ -13,7 +13,7 @@
 
     %p.hint= t('auth.synchronize_email_address')
     .omniauth
-      = render 'oauth/authorizations/pixiv_auth', auth_type: 'sync_email'
+      = render 'oauth/authorizations/pixiv_auth', auth_type: 'synchronize_email_address'
   - else
     = f.input :email, placeholder: t('simple_form.labels.defaults.email'), input_html: { 'aria-label' => t('simple_form.labels.defaults.email') }
     = f.input :password, autocomplete: "off", placeholder: t('simple_form.labels.defaults.new_password'), input_html: { 'aria-label' => t('simple_form.labels.defaults.new_password') }
