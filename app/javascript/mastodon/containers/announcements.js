@@ -34,7 +34,8 @@ export default class Announcements extends React.PureComponent {
 
   render () {
     // コミケタグ告知
-    if (initialState.meta.appmode === 'about' && !this.dismissed) {
+    const heldComiket = Date.now() < 1502636400000; // 2017/08/14/ 00:00:00 JST
+    if (initialState.meta.appmode === 'about' && !this.dismissed && heldComiket) {
       const url = '/announcements/C92pawoo.png';
       const media = Immuatable.fromJS([{
         id: 'pawoo_comiket_92_tag_modal',
