@@ -10,6 +10,7 @@ export default class ImageLoader extends React.PureComponent {
     previewSrc: PropTypes.string.isRequired,
     width: PropTypes.number,
     height: PropTypes.number,
+    scrollable: PropTypes.bool,
   }
 
   static defaultProps = {
@@ -115,11 +116,16 @@ export default class ImageLoader extends React.PureComponent {
   }
 
   render () {
-    const { alt, src, width, height } = this.props;
+    const { alt, src, width, height, scrollable } = this.props;
     const { loading } = this.state;
 
     const className = classNames('image-loader', {
       'image-loader--loading': loading,
+    });
+
+    const imageClassName = classNames({
+      'image-loader__img': width && height,
+      'image-loader__scrollable': scrollable,
     });
 
     return (
@@ -136,7 +142,7 @@ export default class ImageLoader extends React.PureComponent {
         {!loading && (
           <img
             alt={alt}
-            className={width && height && 'image-loader__img'}
+            className={imageClassName}
             src={src}
             width={width}
             height={height}

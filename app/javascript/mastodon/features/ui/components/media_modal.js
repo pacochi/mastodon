@@ -20,6 +20,7 @@ export default class MediaModal extends ImmutablePureComponent {
     index: PropTypes.number.isRequired,
     onClose: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
+    scrollable: PropTypes.bool,
   };
 
   state = {
@@ -58,7 +59,7 @@ export default class MediaModal extends ImmutablePureComponent {
   }
 
   render () {
-    const { media, intl, onClose } = this.props;
+    const { media, intl, onClose, scrollable } = this.props;
 
     const index = this.getIndex();
     const attachment = media.get(index);
@@ -74,7 +75,7 @@ export default class MediaModal extends ImmutablePureComponent {
     }
 
     if (attachment.get('type') === 'image') {
-      content = <ImageLoader previewSrc={attachment.get('preview_url')} src={url} width={attachment.getIn(['meta', 'original', 'width'])} height={attachment.getIn(['meta', 'original', 'height'])} />;
+      content = <ImageLoader previewSrc={attachment.get('preview_url')} src={url} width={attachment.getIn(['meta', 'original', 'width'])} height={attachment.getIn(['meta', 'original', 'height'])} scrollable={scrollable} />;
     } else if (attachment.get('type') === 'gifv') {
       content = <ExtendedVideoPlayer src={url} muted controls={false} />;
     }
