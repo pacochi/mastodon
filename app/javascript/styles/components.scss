@@ -3197,11 +3197,9 @@ button.icon-button.active i.fa-retweet {
   }
 
   img.image-loader__scrollable {
-    max-width: 80vh;
-    max-height: 100%;
-    @media screen and (max-width: 1024px) {
-      max-width: 100%;
-    }
+    max-width: none;
+    max-height: none;
+    width: 100%;
   }
 }
 
