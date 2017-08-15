@@ -25,7 +25,6 @@ const messages = defineMessages({
   help: { id: 'navigation_bar.help', defaultMessage: 'Pawoo Help' },
   info: { id: 'navigation_bar.info', defaultMessage: 'Extended information' },
   suggested_accounts: { id: 'navigation_bar.suggested_accounts', defaultMessage: 'Active Accounts' },
-  comiket_tags: { id: 'navigation_bar.comiket_tags', defaultMessage: 'Comiket tags' },
   media_timeline: { id: 'navigation_bar.media_timeline', defaultMessage: 'Media timeline' },
 });
 
@@ -74,7 +73,6 @@ export default class GettingStarted extends ImmutablePureComponent {
 
     navItems = navItems.concat([
       <ColumnLink key='4' icon='star' text={intl.formatMessage(messages.favourites)} to='/favourites' />,
-      <ColumnLink key='comiket_tags' icon='tag' text={intl.formatMessage(messages.comiket_tags)} to='/suggestion_tags/comiket' />,
       <ColumnLink key='suggested_accounts' icon='user' text={intl.formatMessage(messages.suggested_accounts)} to='/suggested_accounts' />,
     ]);
 

@@ -12,8 +12,6 @@ class Announcements extends React.PureComponent {
   static propTypes = {
     account: ImmutablePropTypes.map.isRequired,
     multiColumn: PropTypes.bool,
-    pinnedComiketTag: ImmutablePropTypes.map,
-    addComiketTagColumn: PropTypes.func.isRequired,
   };
 
   componentDidUpdate (prevProps, prevState) {
@@ -74,28 +72,6 @@ class Announcements extends React.PureComponent {
             inline: false,
             href: 'https://music.pawoo.net/?ref=pawoo-announcements',
             body: 'Pawoo Music',
-          },
-        ],
-      }, {
-        id: 10,
-        icon: '/announcements/icon_2x_360.png',
-        body: 'コミケタグを使ってみんなでリアルタイムに情報を共有しよう！',
-        link: [
-          {
-            reactRouter: true,
-            inline: false,
-            href: '/suggestion_tags/comiket',
-            body: 'コミケタグ',
-            action: (e) => {
-              const { multiColumn, pinnedComiketTag, addComiketTagColumn } = this.props;
-              if (multiColumn) {
-                // PC版の場合はカラムを追加
-                if (!pinnedComiketTag) {
-                  addComiketTagColumn();
-                }
-                e.preventDefault();
-              }
-            },
           },
         ],
       }
