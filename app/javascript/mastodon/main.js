@@ -33,13 +33,6 @@ function main() {
     const props = JSON.parse(mountNode.getAttribute('data-props'));
 
     ReactDOM.render(<Mastodon {...props} />, mountNode);
-
-    const mountNodeAnnouncement = document.getElementById('announcements');
-    if (mountNodeAnnouncement) {
-      const Announcements = require('mastodon/containers/announcements').default;
-      ReactDOM.render(<Announcements {...props} />, mountNodeAnnouncement);
-    }
-
     perf.stop('main()');
   });
 }

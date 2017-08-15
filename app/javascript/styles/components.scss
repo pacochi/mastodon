@@ -3142,7 +3142,7 @@ button.icon-button.active i.fa-retweet {
 }
 
 .modal-root__overlay {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   right: 0;
@@ -3194,12 +3194,6 @@ button.icon-button.active i.fa-retweet {
   canvas {
     display: block;
     background: url('../images/void.png') repeat;
-  }
-
-  img.image-loader__scrollable {
-    max-width: none;
-    max-height: none;
-    width: 100%;
   }
 }
 
