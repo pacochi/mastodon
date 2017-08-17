@@ -11,6 +11,7 @@ parser: babel-eslint
 plugins:
 - react
 - jsx-a11y
+- import
 
 parserOptions:
   sourceType: module
@@ -124,3 +125,7 @@ rules:
   jsx-a11y/role-supports-aria-props: warn
   jsx-a11y/scope: warn
   jsx-a11y/tabindex-no-positive: warn
+
+  import/no-unresolved:
+  - 2
+  - commonjs: true

@@ -1,0 +1,79 @@
+@import '../../../styles/variables'
+
+.timeline-header
+  background: lighten($ui-base-color, 4%)
+
+  &:focus, &:active
+    outline: 0
+
+  .header-button
+    display: flex
+    font-size: 16px
+    cursor: pointer
+    position: relative
+    outline: 0
+    position: relative
+
+    &.active
+      box-shadow: 0 1px 0 rgba($ui-highlight-color, 0.3)
+
+      &::before
+        display: block
+        content: ""
+        position: absolute
+        top: 35px
+        left: 0
+        right: 0
+        margin: 0 auto
+        width: 60%
+        pointer-events: none
+        height: 28px
+        background: radial-gradient(ellipse, rgba($ui-highlight-color, 0.23) 0%, rgba($ui-highlight-color, 0) 60%)
+
+      .header-icon
+        color: $ui-highlight-color
+        text-shadow: 0 0 10px rgba($ui-highlight-color, 0.4)
+
+    .header-title
+      flex: 1
+      padding: 15px
+
+    .collapsible-button
+      margin-left: auto
+      background: lighten($ui-base-color, 4%)
+      border: 0
+      color: $ui-primary-color
+      cursor: pointer
+      font-size: 16px
+      height: 48px
+      padding: 0 15px
+
+      &:hover
+        color: lighten($ui-primary-color, 7%)
+
+      &.active
+        color: $primary-text-color
+        background: lighten($ui-base-color, 8%)
+
+        &:hover
+          color: $primary-text-color
+          background: lighten($ui-base-color, 8%)
+
+  .collapsible
+    max-height: 70vh
+    overflow: hidden
+    overflow-y: auto
+    color: $ui-primary-color
+    transition: max-height 150ms ease-in-out, opacity 300ms linear
+    opacity: 1
+
+    &.collapsed
+      max-height: 0
+      opacity: 0.5
+
+    &.animating
+      overflow-y: hidden
+
+  .collapsible-inner
+    background: lighten($ui-base-color, 8%)
+    padding: 15px
