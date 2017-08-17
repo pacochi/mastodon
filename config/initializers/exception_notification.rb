@@ -30,6 +30,8 @@ ExceptionNotification.configure do |config|
     !Rails.env.production? || ignore_worker
   end
 
+  config.error_grouping = true
+
   if ENV['EXCEPTION_NOTIFICATION_EMAIL'] && ENV['LOCAL_DOMAIN']
     # Email notifier sends notifications by email.
     config.add_notifier :email,
