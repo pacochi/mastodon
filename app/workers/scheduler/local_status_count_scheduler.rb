@@ -5,12 +5,6 @@ class Scheduler::LocalStatusCountScheduler
   include Sidekiq::Worker
 
   def perform
-    redis.setex('local_status_count', 15.minutes, Status.local.count)
-  end
-
-  private
-
-  def redis
-    Redis.current
+    Rails.cache.write('local_status_count', Status.local.count, expires_in: 15.minutes)
   end
 end

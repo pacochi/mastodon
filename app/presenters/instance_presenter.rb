@@ -19,7 +19,7 @@ class InstancePresenter
   end
 
   def status_count
-    Redis.current.get('local_status_count') || 0
+    Rails.cache.fetch('local_status_count', expires_in: 15.minutes) { Status.local.count }
   end
 
   def domain_count
