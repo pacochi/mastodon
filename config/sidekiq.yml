@@ -21,6 +21,9 @@
   doorkeeper_cleanup_scheduler:
     cron: '1 1 * * 0'
     class: Scheduler::DoorkeeperCleanupScheduler
+  subscriptions_cleanup_scheduler:
+    cron: '2 2 * * 0'
+    class: Scheduler::SubscriptionsCleanupScheduler
   delete_elasticsearch_documents_worker:
     cron: '*/2 * * * *'
     class: Scheduler::DeleteElasticsearchDocumentsWorker
