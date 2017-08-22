@@ -2,6 +2,7 @@
 
 class AccountsController < ApplicationController
   include AccountControllerConcern
+  include SignatureVerification
 
   STATUSES_PER_PAGE = 20
 
