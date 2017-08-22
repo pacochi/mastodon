@@ -13,7 +13,6 @@ class QueueItem
 
   class << self
     include RoutingHelper
-    include HttpHelper
 
     YOUTUBE_API_KEY = ENV['YOUTUBE_API_KEY']
 
@@ -144,7 +143,7 @@ class QueueItem
 
     def fetch_youtube_duration(video_id)
       url = "https://www.googleapis.com/youtube/v3/videos?key=#{YOUTUBE_API_KEY}&part=contentDetails&id=#{video_id}"
-      json = JSON.parse(http_client.get(url).body.to_s)
+      json = JSON.parse(Request.new(:get, url).perform.body.to_s)
       raise Mastodon::MusicSourceFetchFailedError if json['items'].blank?
 
       item = json['items'].first
@@ -161,7 +160,7 @@ class QueueItem
 
     def fetch_youtube_title(link)
       url = "https://www.youtube.com/oembed?url=#{link}"
-      response = http_client.get(url)
+      response = Request.new(:get, url).perform
 
       raise Mastodon::MusicSourceForbiddenError if response.status == 401
       raise Mastodon::MusicSourceFetchFailedError unless response.status == 200
@@ -203,7 +202,7 @@ class QueueItem
 
     def from_soundcloud_api(link)
       url = "https://soundcloud.com/oembed?format=json&url=#{link}"
-      response = http_client.get(url)
+      response = Request.new(:get, url).perform
       raise Mastodon::MusicSourceForbiddenError if response.status == 403
       raise Mastodon::MusicSourceFetchFailedError unless response.status == 200
 
@@ -225,7 +224,7 @@ class QueueItem
     def find_soundcloud_duration(embed)
       embed_src_pattern = %r{(?<url>https://w\.soundcloud\.com/player/\?.+?&?url=https%3A%2F%2Fapi\.soundcloud\.com%2Ftracks%2F\d+(?:&show_artwork=true)?)}
       url = embed.match(embed_src_pattern).try(:[], :url)
-      response = http_client.get(url)
+      response = Request.new(:get, url).perform
       raise Mastodon::MusicSourceFetchFailedError unless response.status == 200
 
       duration_pattern = %r{full_duration.+?(?<duration>\d+)}
