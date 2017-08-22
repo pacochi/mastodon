@@ -1,12 +1,10 @@
 # frozen_string_literal: true
 
 class BoothApiClient
-  include HttpHelper # FIXME: HttpHelperはviewの責務ではないので、libに置くべき
-
   PREFIX = 'https://api.booth.pm/pixiv/'
 
   def item(id)
-    response = http_client.get("#{PREFIX}items/#{id}")
+    response = Request.new(:get, "#{PREFIX}items/#{id}").perform
     json = parse_json(response.body)
 
     # related: #36

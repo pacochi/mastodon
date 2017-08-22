@@ -3,8 +3,6 @@ module PixivUrl
     EXPIRES_IN = 12.hours
 
     class << self
-      include HttpHelper
-
       def cache_or_fetch(url, force: false)
         return unless PixivUrl.valid_pixiv_url?(url)
 
@@ -24,7 +22,10 @@ module PixivUrl
       end
 
       def fetch_image_url(url)
-        response = http_client.get(url, headers: { 'Referer' => "https://#{Rails.configuration.x.local_domain}" })
+        request = Request.new(:get, url)
+        request.add_headers('Referer' => "https://#{Rails.configuration.x.local_domain}")
+
+        response = request.perform
         return unless response.status == 200
 
         html = Nokogiri::HTML.parse(response.body.to_s)

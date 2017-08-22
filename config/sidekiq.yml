@@ -22,6 +22,12 @@
   doorkeeper_cleanup_scheduler:
     cron: '1 1 * * 0'
     class: Scheduler::DoorkeeperCleanupScheduler
+  user_cleanup_scheduler:
+    cron: '4 5 * * *'
+    class: Scheduler::UserCleanupScheduler
+  subscriptions_cleanup_scheduler:
+    cron: '2 2 * * 0'
+    class: Scheduler::SubscriptionsCleanupScheduler
   trend_tag_scheduler:
     cron: '*/30 * * * *'
     class: Scheduler::TrendTagScheduler
