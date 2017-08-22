@@ -2,8 +2,6 @@
 require 'nkf'
 
 class FetchLinkCardService < BaseService
-  include HttpHelper
-
   URL_PATTERN = %r{https?://\S+}
 
   def call(status)
@@ -14,7 +12,7 @@ class FetchLinkCardService < BaseService
 
     url  = url.to_s
     card = PreviewCard.where(status: status).first_or_initialize(status: status, url: url)
-    res  = http_client.head(url)
+    res  = Request.new(:head, url).perform
 
     return if res.code != 200 || res.mime_type != 'text/html'
 
@@ -81,7 +79,7 @@ class FetchLinkCardService < BaseService
   end
 
   def attempt_opengraph(card, url)
-    response = http_client.get(url)
+    response = Request.new(:get, url).perform
 
     return if response.code != 200 || response.mime_type != 'text/html'
 

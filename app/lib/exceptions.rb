@@ -14,4 +14,14 @@ module Mastodon
   class PlaylistSizeOverError < Error; end
   class PlaylistItemNotFoundError < Error; end
   class RedisMaxRetryError < Error; end
+
+  class UnexpectedResponseError < Error
+    def initialize(response = nil)
+      @response = response
+    end
+
+    def to_s
+      "#{@response.uri} returned code #{@response.code}"
+    end
+  end
 end

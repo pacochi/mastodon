@@ -389,6 +389,7 @@ ActiveRecord::Schema.define(version: 20170710015311) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.datetime "last_successful_delivery_at"
+    t.string "domain"
     t.index ["account_id", "callback_url"], name: "index_subscriptions_on_account_id_and_callback_url", unique: true
   end
 
