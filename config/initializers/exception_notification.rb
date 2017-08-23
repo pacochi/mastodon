@@ -11,8 +11,8 @@ ExceptionNotification.configure do |config|
     HTTP::TimeoutError
     HTTP::Redirector::TooManyRedirectsError
     HTTP::Redirector::EndlessRedirectError
-    HTTP::Request::UnsupportedSchemeError
-    Goldfinger::SSLError
+    OpenSSL::SSL::SSLError
+    Mastodon::UnexpectedResponseError
   )
 
   ignore_workers = %w[
