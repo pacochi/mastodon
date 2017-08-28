@@ -67,8 +67,8 @@ RSpec.describe QueueItem do
       end
 
       context "when status has video attachments" do
-        let!(:media_attachment) { Fabricate(:media_attachment, status: status, type: 'video', music_info: music_info) }
-        let(:music_info) { { title: 'title', artist: 'artist', duration: 1 } }
+        let(:media_attachment) { Fabricate(:media_attachment, status: status, type: 'video') }
+        let!(:music_attachment) { Fabricate(:music_attachment, title: 'title', artist: 'artist', duration: 1, media_attachment: media_attachment) }
 
         it { is_expected.to be_present }
 
@@ -223,8 +223,8 @@ RSpec.describe QueueItem do
     context 'given same link' do
       let(:url) { Rails.application.routes.url_helpers.short_account_status_url(status.account, status) }
       let(:status) { Fabricate(:status, account: account) }
-      let!(:media_attachment) { Fabricate(:media_attachment, status: status, type: 'video', music_info: music_info) }
-      let(:music_info) { { title: 'title', artist: 'artist', duration: 1 } }
+      let(:media_attachment) { Fabricate(:media_attachment, status: status, type: 'video') }
+      let!(:music_attachment) { Fabricate(:music_attachment, title: 'title', artist: 'artist', duration: 1, media_attachment: media_attachment) }
       let(:another_account) { Fabricate(:account) }
       let(:another_queue) { described_class.create_from_link(url, another_account) }
 

@@ -46,18 +46,18 @@ class QueueItem
       cache = find_cache('pawoo-music', status_id)
       return cache if cache
 
-      video = MediaAttachment.video.joins(:status).find_by(statuses: { id: status_id, visibility: [:public, :unlisted] })
-      raise Mastodon::MusicSourceFetchFailedError unless video&.music_info
+      video = MediaAttachment.video.joins(:music_attachment, :status).find_by(statuses: { id: status_id, visibility: [:public, :unlisted] })
+      raise Mastodon::MusicSourceFetchFailedError unless video
 
       video_url = full_asset_url(video.file.url(:original))
 
       item = new(
-        info: "#{video.music_info['artist']} - #{video.music_info['title']}",
+        info: "#{video.music_attachment.artist} - #{video.music_attachment.title}",
         thumbnail_url: nil,
         music_url: nil,
         video_url: video_url,
         link: link,
-        duration: video.music_info['duration'],
+        duration: video.music_attachment.duration,
         source_type: 'pawoo-music',
         source_id: status_id
       )

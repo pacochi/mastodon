@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170710015311) do
+ActiveRecord::Schema.define(version: 20170830000000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -156,7 +156,6 @@ ActiveRecord::Schema.define(version: 20170710015311) do
     t.string "shortcode"
     t.integer "type", default: 0, null: false
     t.json "file_meta"
-    t.json "music_info"
     t.index ["account_id"], name: "index_media_attachments_on_account_id"
     t.index ["shortcode"], name: "index_media_attachments_on_shortcode", unique: true
     t.index ["status_id"], name: "index_media_attachments_on_status_id"
@@ -169,6 +168,22 @@ ActiveRecord::Schema.define(version: 20170710015311) do
     t.datetime "updated_at", null: false
     t.index ["account_id", "status_id"], name: "index_mentions_on_account_id_and_status_id", unique: true
     t.index ["status_id"], name: "index_mentions_on_status_id"
+  end
+
+  create_table "music_attachments", force: :cascade do |t|
+    t.bigint "media_attachment_id", null: false
+    t.integer "duration", null: false
+    t.string "title", null: false
+    t.string "artist", null: false
+    t.string "music_file_name"
+    t.string "music_content_type"
+    t.integer "music_file_size"
+    t.datetime "music_updated_at"
+    t.string "image_file_name"
+    t.string "image_content_type"
+    t.integer "image_file_size"
+    t.datetime "image_updated_at"
+    t.index ["media_attachment_id"], name: "index_music_attachments_on_media_attachment_id"
   end
 
   create_table "mutes", id: :serial, force: :cascade do |t|
@@ -477,6 +492,7 @@ ActiveRecord::Schema.define(version: 20170710015311) do
   add_foreign_key "media_attachments", "statuses", on_delete: :nullify
   add_foreign_key "mentions", "accounts", on_delete: :cascade
   add_foreign_key "mentions", "statuses", on_delete: :cascade
+  add_foreign_key "music_attachments", "media_attachments", on_update: :cascade, on_delete: :cascade
   add_foreign_key "mutes", "accounts", column: "target_account_id", on_delete: :cascade
   add_foreign_key "mutes", "accounts", on_delete: :cascade
   add_foreign_key "notifications", "accounts", column: "from_account_id", on_delete: :cascade

@@ -10,8 +10,8 @@ RSpec.describe Playlist, type: :model do
 
   let(:link) { Rails.application.routes.url_helpers.short_account_status_url(status.account, status) }
   let(:status) { Fabricate(:status, account: account) }
-  let!(:media_attachment) { Fabricate(:media_attachment, status: status, type: 'video', music_info: music_info) }
-  let(:music_info) { { title: 'title', artist: 'artist', duration: 10 } }
+  let(:media_attachment) { Fabricate(:media_attachment, status: status, type: 'video') }
+  let!(:music_attachment) { Fabricate(:music_attachment, title: 'title', artist: 'artist', duration: 10, media_attachment: media_attachment) }
 
   let(:settings) { { 'max_add_count' => 10, 'max_queue_size' => 10, 'max_skip_count' => 2, 'skip_limit_time' => 0 } }
 

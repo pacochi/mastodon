@@ -16,7 +16,6 @@
 #  shortcode         :string
 #  type              :integer          default("image"), not null
 #  file_meta         :json
-#  music_info        :json
 #
 
 class MediaAttachment < ApplicationRecord
@@ -47,6 +46,8 @@ class MediaAttachment < ApplicationRecord
                     styles: ->(f) { file_styles f },
                     processors: ->(f) { file_processors f },
                     convert_options: { all: '-quality 90 -strip' }
+
+  has_one :music_attachment
 
   include Remotable
 

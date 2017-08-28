@@ -23,6 +23,13 @@ en:
           attributes:
             username:
               invalid: only letters, numbers and underscores
+        music_attachment:
+          attributes:
+            music:
+              invalid: The music file is invalid
+            image:
+              invalid: The cover image file is invalid
+          in_between: Your mp3 and cover image must be less than :maxMB for each
         status:
           attributes:
             reblog:
