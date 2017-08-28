@@ -43,5 +43,7 @@ class Api::V1::MusicController < Api::BaseController
       m.tag2.remove_pictures
       { duration: m.length, bitrate: m.bitrate }
     end
+  rescue Mp3InfoError
+    raise Mastodon::ValidationError, I18n.t('music_attachments.invalid_mp3')
   end
 end

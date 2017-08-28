@@ -332,6 +332,8 @@ en:
     validations:
       images_and_video: Cannot attach a video to a status that already contains images
       too_many: Cannot attach more than 4 files
+  music_attachments:
+    invalid_mp3: The music file is an invalid MP3
   notification_mailer:
     digest:
       body: 'Here is a brief summary of what you missed on %{instance} since your last visit on %{since}:'
