@@ -14,7 +14,7 @@
 
     %title<
       - if content_for?(:page_title)
-        = "#{yield(:page_title).delete("\n")} - #{title}"
+        = safe_join([yield(:page_title).delete("\n").html_safe, title], ' - ')
       - else
         = title
 
