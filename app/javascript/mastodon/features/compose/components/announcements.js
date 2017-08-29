@@ -34,6 +34,18 @@ class Announcements extends React.PureComponent {
 
     announcements.push(
       {
+        id: 11,
+        icon: '/announcements/icon_2x_360.png',
+        body: 'ユーザー20万人突破記念「パウーちゃん」擬人化イラスト募集！！',
+        link: [
+          {
+            reactRouter: false,
+            inline: false,
+            href: 'https://pawoo.net/@pixiv/36520971',
+            body: '企画詳細はこちら',
+          },
+        ],
+      }, {
         id: 1,
         icon: '/announcements/icon_2x_360.png',
         body: 'PawooのiOS・Android版アプリをリリースしました！！',
@@ -75,7 +87,7 @@ class Announcements extends React.PureComponent {
           },
         ],
       }
-      // NOTE: id: 10 まで使用した
+      // NOTE: id: 11 まで使用した
     );
 
     this.announcements = Immutable.fromJS(announcements);
