@@ -1752,11 +1752,13 @@
 }
 
 .autosuggest-textarea,
+.hashtag-editor,
 .spoiler-input {
   position: relative;
 }
 
 .autosuggest-textarea__textarea,
+.hastag-editor__input,
 .spoiler-input__input {
   display: block;
   box-sizing: border-box;
@@ -1777,6 +1779,25 @@
   @media screen and (max-width: 600px) {
     font-size: 16px;
   }
+}
+
+.hashtag-editor {
+  display: flex;
+  align-items: center;
+  border-top: 1px solid rgba($ui-base-color, 0.1);
+  font-size: 12px;
+
+  .hastag-editor__input {
+    padding-left: 0;
+    font-size: 12px;
+    border-radius: 0 0 4px;
+  }
+
+  .fa-hashtag {
+    color: rgba($ui-base-color, 0.7);
+    padding-left: 5px;
+  }
+
 }
 
 .spoiler-input__input {
