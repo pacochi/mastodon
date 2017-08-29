@@ -92,7 +92,7 @@ export default class AutosuggestTextarea extends ImmutablePureComponent {
     const [ hashTagTokenStart, hashToken ] = textAtCursorMatchesHashToken(e.target.value, e.target.selectionStart);
     if (hashToken !== null && this.state.lastHashTagToken !== hashToken) {
       this.setState({ lastHashTagToken: hashToken, selectedHashTagSuggestion: 0, hashTagTokenStart });
-      this.props.onHashTagSuggestionsFetchRequested(hashToken);
+      this.props.onHashTagSuggestionsFetchRequested(hashToken, 'autosuggested-textarea');
     } else if (hashToken === null) {
       this.setState({ lastHashTagToken: null });
       this.props.onHashTagSuggestionsClearRequested();

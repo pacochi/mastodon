@@ -5,8 +5,10 @@ import CharacterCounter from './character_counter';
 import Button from '../../../components/button';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
+import Immutable from 'immutable';
 import ReplyIndicatorContainer from '../containers/reply_indicator_container';
 import AutosuggestTextarea from '../../../components/autosuggest_textarea';
+import HashtagEditor from '../../../components/hashtag_editor';
 import { debounce } from 'lodash';
 import UploadButtonContainer from '../containers/upload_button_container';
 import { defineMessages, injectIntl } from 'react-intl';
@@ -32,6 +34,7 @@ const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What is on your mind?' },
   spoiler_placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Content warning' },
   schedule_placeholder: { id: 'compose_form.schedule_placeholder', defaultMessage: 'Time to post' },
+  hashtag_editor_placeholder: { id: 'compose_form.hashtag_editor_placeholder', defaultMessage: 'Append tag (press enter to add)' },
   publish: { id: 'compose_form.publish', defaultMessage: 'Toot' },
   publishLoud: { id: 'compose_form.publish_loud', defaultMessage: '{publish}!' },
 });
@@ -70,12 +73,14 @@ export default class ComposeForm extends ImmutablePureComponent {
     onHashTagSuggestionsFetchRequested: PropTypes.func.isRequired,
     onHashTagSuggestionsSelected: PropTypes.func.isRequired,
     onSelectTimeLimit: PropTypes.func.isRequired,
+    onInsertHashtag: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     showSearch: false,
   };
 
+  state = { tagSuggestionFrom: null }
   _restoreCaret = null;
 
   componentDidMount () {
@@ -124,15 +129,18 @@ export default class ComposeForm extends ImmutablePureComponent {
 
   onHashTagSuggestionsClearRequested = () => {
     this.props.onHashTagSuggestionsClearRequested();
+    this.setState({ tagSuggestionFrom: null });
   }
 
-  onHashTagSuggestionsFetchRequested = (token) => {
+  onHashTagSuggestionsFetchRequested = (token, tagSuggestionFrom) => {
     this.props.onHashTagSuggestionsFetchRequested(token);
+    this.setState({ tagSuggestionFrom });
   }
 
   onHashTagSuggestionsSelected = (tokenStart, token, value) => {
     this._restoreCaret = 'suggestion';
     this.props.onHashTagSuggestionsSelected(tokenStart, token, value);
+    this.setState({ tagSuggestionFrom: null });
   }
 
   handleChangeSpoilerText = (e) => {
@@ -197,6 +205,7 @@ export default class ComposeForm extends ImmutablePureComponent {
 
   render () {
     const { scheduling, intl, onPaste, showSearch } = this.props;
+    const { tagSuggestionFrom } = this.state;
     const disabled = this.props.is_submitting;
     const text = [this.props.spoiler_text, this.props.text].join('');
 
@@ -234,7 +243,7 @@ export default class ComposeForm extends ImmutablePureComponent {
             onSuggestionSelected={this.onSuggestionSelected}
             onPaste={onPaste}
             autoFocus={!showSearch}
-            hash_tag_suggestions={this.props.hash_tag_suggestions}
+            hash_tag_suggestions={tagSuggestionFrom === 'autosuggested-textarea' ? this.props.hash_tag_suggestions : Immutable.List()}
             onHashTagSuggestionsFetchRequested={this.onHashTagSuggestionsFetchRequested}
             onHashTagSuggestionsClearRequested={this.onHashTagSuggestionsClearRequested}
             onHashTagSuggestionsSelected={this.onHashTagSuggestionsSelected}
@@ -246,6 +255,14 @@ export default class ComposeForm extends ImmutablePureComponent {
 
         <div className='compose-form__modifiers'>
           <UploadFormContainer />
+          <HashtagEditor
+            placeholder={intl.formatMessage(messages.hashtag_editor_placeholder)}
+            disabled={disabled}
+            suggestions={tagSuggestionFrom === 'hashtag-editor' ? this.props.hash_tag_suggestions : Immutable.List()}
+            onSuggestionsFetchRequested={this.onHashTagSuggestionsFetchRequested}
+            onSuggestionsClearRequested={this.onHashTagSuggestionsClearRequested}
+            onInsertHashtag={this.props.onInsertHashtag}
+          />
         </div>
 
         <div className='compose-form__buttons-wrapper'>
