@@ -28,7 +28,7 @@ describe Api::V1::MusicController, type: :controller do
       skip 'skipped for environments without supported FFmpeg'
 
       post :create, params: { title: 'title', artist: 'artist', music: music, image: image }
-      MediaAttachment.joins(:music_attachment).find_by!(music_attachments: { title: 'title', artist: 'artist' })
+      expect { MediaAttachment.joins(:music_attachment).find_by!(music_attachments: { title: 'title', artist: 'artist' }) }.not_to raise_error
     end
 
     it 'returns http success' do
