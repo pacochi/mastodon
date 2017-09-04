@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Api::V1::MusicController, type: :controller do
+describe Api::V1::MusicsController, type: :controller do
   let(:music) { fixture_file_upload('files/aint_we_got_fun_billy_jones1921.mp3') }
   let(:image) { fixture_file_upload('files/attachment.jpg') }
   let(:unknown) { fixture_file_upload('files/imports.txt') }
