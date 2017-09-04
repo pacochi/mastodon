@@ -50,6 +50,8 @@ class Status < ApplicationRecord
   has_many :pixiv_cards, dependent: :destroy
   has_and_belongs_to_many :tags
 
+  has_one :music_attachment, dependent: :destroy
+
   has_one :notification, as: :activity, dependent: :destroy
   has_one :preview_card, dependent: :destroy
   has_one :pinned_status, dependent: :destroy

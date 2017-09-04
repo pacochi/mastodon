@@ -38,14 +38,6 @@ class PostStatusService < BaseService
       attach_pixiv_cards(status)
     end
 
-    if status&.media_attachments&.any? { |m| m.music_attachment.present? } && status&.public_visibility?
-      begin
-        Playlist.find_by!(deck: Playlist::MEDIA_TL_DECK_ID).add(short_account_status_url(account, status), account, true)
-      rescue
-        #とりあえずPlaylistに突っ込んでみて、例外はいたら握りつぶす
-      end
-    end
-
     process_hashtags_service.call(status)
 
     PixivCardUpdateWorker.perform_async(status.id) if status.pixiv_cards.any?
@@ -79,7 +71,7 @@ class PostStatusService < BaseService
     raise Mastodon::ValidationError, I18n.t('media_attachments.validations.too_many') if media_ids.size > 4
 
     target_media_ids = media_ids.take(4).map(&:to_i)
-    media = target_media_ids.blank? ? [] : MediaAttachment.includes(:music_attachment).where(status_id: nil).where(id: target_media_ids)
+    media = target_media_ids.blank? ? [] : MediaAttachment.where(status_id: nil).where(id: target_media_ids)
 
     raise Mastodon::ValidationError, I18n.t('media_attachments.validations.images_and_video') if media.size > 1 && media.find(&:video?)
 

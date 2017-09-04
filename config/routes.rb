@@ -80,6 +80,8 @@ Rails.application.routes.draw do
     resource :delete, only: [:show, :destroy]
   end
 
+  resources :musics, only: [:show]
+
   resources :media, only: [:show]
   resources :tags,  only: [:show]
   resources :oauth_authentications, only: [:show], param: :uid
@@ -187,7 +189,7 @@ Rails.application.routes.draw do
       resources :trend_tags, only: [:index]
       resources :follows,    only: [:create]
       resources :media,      only: [:create]
-      resources :musics,     only: [:create]
+      resources :musics,     only: [:show, :create, :destroy]
       resources :apps,       only: [:create]
       resources :blocks,     only: [:index]
       resources :mutes,      only: [:index]

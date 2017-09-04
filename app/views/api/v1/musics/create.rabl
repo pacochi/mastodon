@@ -1,2 +1,2 @@
 object @music
-attribute :id, :title, :artist, :music, :image
+extends 'api/v1/musics/show'

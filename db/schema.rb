@@ -171,10 +171,9 @@ ActiveRecord::Schema.define(version: 20170830000000) do
   end
 
   create_table "music_attachments", force: :cascade do |t|
-    t.bigint "media_attachment_id"
+    t.bigint "status_id", null: false
     t.integer "duration", null: false
     t.string "title", null: false
-    t.string "artist", null: false
     t.string "music_file_name"
     t.string "music_content_type"
     t.integer "music_file_size"
@@ -183,7 +182,23 @@ ActiveRecord::Schema.define(version: 20170830000000) do
     t.string "image_content_type"
     t.integer "image_file_size"
     t.datetime "image_updated_at"
-    t.index ["media_attachment_id"], name: "index_music_attachments_on_media_attachment_id"
+    t.string "video_file_name"
+    t.string "video_content_type"
+    t.integer "video_file_size"
+    t.datetime "video_updated_at"
+    t.integer "video_blur_movement_band_bottom", default: 0, null: false
+    t.integer "video_blur_movement_band_top", default: 0, null: false
+    t.integer "video_blur_movement_threshold", default: 0, null: false
+    t.integer "video_blur_blink_band_bottom", default: 0, null: false
+    t.integer "video_blur_blink_band_top", default: 0, null: false
+    t.integer "video_blur_blink_threshold", default: 0, null: false
+    t.integer "video_particle_limit_band_bottom", default: 0, null: false
+    t.integer "video_particle_limit_band_top", default: 0, null: false
+    t.integer "video_particle_limit_threshold", default: 0, null: false
+    t.integer "video_particle_color"
+    t.integer "video_spectrum_mode"
+    t.integer "video_spectrum_color"
+    t.index ["status_id"], name: "index_music_attachments_on_status_id"
   end
 
   create_table "mutes", id: :serial, force: :cascade do |t|
@@ -492,7 +507,7 @@ ActiveRecord::Schema.define(version: 20170830000000) do
   add_foreign_key "media_attachments", "statuses", on_delete: :nullify
   add_foreign_key "mentions", "accounts", on_delete: :cascade
   add_foreign_key "mentions", "statuses", on_delete: :cascade
-  add_foreign_key "music_attachments", "media_attachments", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "music_attachments", "statuses", on_update: :cascade, on_delete: :cascade
   add_foreign_key "mutes", "accounts", column: "target_account_id", on_delete: :cascade
   add_foreign_key "mutes", "accounts", on_delete: :cascade
   add_foreign_key "notifications", "accounts", column: "from_account_id", on_delete: :cascade
