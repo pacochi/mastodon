@@ -1,7 +1,7 @@
 class CreateMusicAttachments < ActiveRecord::Migration[5.1]
   def change
     create_table :music_attachments do |t|
-      t.belongs_to :media_attachment, foreign_key: { on_delete: :cascade, on_update: :cascade }, null: false
+      t.belongs_to :media_attachment, foreign_key: { on_delete: :cascade, on_update: :cascade }
       t.integer :duration, null: false
       t.string :title, null: false
       t.string :artist, null: false

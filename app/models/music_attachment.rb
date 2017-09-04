@@ -3,7 +3,7 @@
 # Table name: music_attachments
 #
 #  id                  :integer          not null, primary key
-#  media_attachment_id :integer          not null
+#  media_attachment_id :integer
 #  duration            :integer          not null
 #  title               :string           not null
 #  artist              :string           not null

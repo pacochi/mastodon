@@ -171,7 +171,7 @@ ActiveRecord::Schema.define(version: 20170830000000) do
   end
 
   create_table "music_attachments", force: :cascade do |t|
-    t.bigint "media_attachment_id", null: false
+    t.bigint "media_attachment_id"
     t.integer "duration", null: false
     t.string "title", null: false
     t.string "artist", null: false
