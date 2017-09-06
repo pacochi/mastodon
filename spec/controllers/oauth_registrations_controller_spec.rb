@@ -50,10 +50,19 @@ RSpec.describe OauthRegistrationsController, type: :controller do
     context 'found cache of pixiv oauth' do
       let(:auth) { OmniAuth.config.mock_auth[:pixiv] }
 
+      before do
+        allow(DefaultFollowWorker).to receive(:perform_async)
+      end
+
       it 'creates user' do
         is_expected.to change {
           [User.count, Account.count]
         }.from([0, 0]).to([1, 1])
+      end
+
+      it 'calls DefaultFollowWorker' do
+        subject.call
+        expect(DefaultFollowWorker).to have_received(:perform_async)
       end
 
       context 'when the email is duplicated' do
