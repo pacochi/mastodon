@@ -66,6 +66,7 @@ class SuggestedAccountQuery
       uid = oauth_authentication.pixiv_follows.pluck(:target_pixiv_uid)
 
       accounts = default_scoped.joins(:media_attachments).joins(:user).where.not(id: excluded_ids).joins(:oauth_authentications).where(oauth_authentications: { provider: 'pixiv', uid: uid }).where(sign_in_at.gteq(3.weeks.ago)).distinct.preload(:user)
+
       accounts.sort_by { |account| account.user.current_sign_in_at }.reverse.map(&:id)
     end
 
@@ -78,7 +79,11 @@ class SuggestedAccountQuery
     private
 
     def popular_account_ids
-      all_popular_account_ids - excluded_ids
+      ids = all_popular_account_ids - excluded_ids
+
+      active_ids = Account.filter_active(ids, Time.mktime(2017, 4, 1, 0, 0, 0)...Time.mktime(2017, 5, 8, 0, 0, 0))
+
+      active_ids.map{ |account| account.id }
     end
 
     # TODO: 自動的に検出するようにする
