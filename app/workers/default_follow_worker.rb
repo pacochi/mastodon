@@ -7,7 +7,7 @@ class DefaultFollowWorker
 
   def perform(account_id)
     account = Account.find(account_id)
-    Account.where(username: DEFAULT_FOLLOW_USERS, domain: nil).each do |default_follow_account|
+    Account.where(username: DEFAULT_FOLLOW_USERS, domain: nil).where.not(id: account_id).each do |default_follow_account|
       FollowService.new.call(account, default_follow_account.acct)
     end
   end
