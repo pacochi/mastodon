@@ -7,10 +7,11 @@ describe Api::V1::MusicsController, type: :controller do
 
   let(:music) { fixture_file_upload('files/aint_we_got_fun_billy_jones1921.mp3') }
   let(:music_with_picture) { fixture_file_upload('files/aint_we_got_fun_billy_jones1921_with_picture.mp3') }
+  let(:another_music) { fixture_file_upload('files/aprilshowers.mp3') }
   let(:image) { fixture_file_upload('files/attachment.jpg') }
   let(:unknown) { fixture_file_upload('files/imports.txt') }
 
-  context 'POST #create' do
+  describe 'POST #create' do
     context 'with write scope' do
       before do
         allow(controller).to receive(:doorkeeper_token) do
@@ -33,30 +34,6 @@ describe Api::V1::MusicsController, type: :controller do
       end
 
       it 'creates status and music attachment' do
-        post :create,
-             params: { title: 'title', artist: 'artist', music: music, image: image }
-
-        music_attachment = MusicAttachment.find_by!(
-          id: body_as_json[:id],
-          title: 'title',
-          artist: 'artist',
-          duration: 177
-        )
-
-        expect(music_attachment.status.text).to eq music_url(music_attachment)
-        expect(body_as_json[:title]).to eq 'title'
-        expect(body_as_json[:artist]).to eq 'artist'
-        expect(body_as_json[:status][:id]).to eq music_attachment.status_id
-      end
-
-      it 'does not render child nodes of video property if no parameters are specified' do
-        post :create,
-             params: { title: 'title', artist: Faker::Name.name, music: music, image: image }
-
-        expect(body_as_json[:video]).to eq({})
-      end
-
-      it 'saves video parameters' do
         video = {
           blur: {
             movement: { band: { bottom: 50, top: 300 }, threshold: 165 },
@@ -73,8 +50,31 @@ describe Api::V1::MusicsController, type: :controller do
         }
 
         post :create,
-             params: { title: 'title', artist: Faker::Name.name, music: music, image: image, video: video }
+             params: { title: 'title', artist: 'artist', music: music, image: image, video: video }
 
+        music_attachment = MusicAttachment.find_by!(
+          id: body_as_json[:id],
+          title: 'title',
+          artist: 'artist',
+          duration: 177,
+          video_blur_movement_band_bottom: 50,
+          video_blur_movement_band_top: 300,
+          video_blur_movement_threshold: 165,
+          video_blur_blink_band_bottom: 2000,
+          video_blur_blink_band_top: 15000,
+          video_blur_blink_threshold: 165,
+          video_particle_limit_band_bottom: 300,
+          video_particle_limit_band_top: 2000,
+          video_particle_limit_threshold: 165,
+          video_particle_color: 0xff0000,
+          video_spectrum_mode: 0,
+          video_spectrum_color: 0xff0000,
+        )
+
+        expect(music_attachment.status.text).to eq music_url(music_attachment)
+        expect(body_as_json[:title]).to eq 'title'
+        expect(body_as_json[:artist]).to eq 'artist'
+        expect(body_as_json[:status][:id]).to eq music_attachment.status_id
         expect(body_as_json[:video]).to eq video
       end
 
@@ -111,7 +111,79 @@ describe Api::V1::MusicsController, type: :controller do
     end
   end
 
-  context 'DELETE #destroy' do
+  describe 'PATCH #update' do
+    context 'with write scope' do
+      before do
+        allow(controller).to receive(:doorkeeper_token) do
+          Fabricate(:accessible_access_token, resource_owner_id: Fabricate(:user).id, scopes: 'write')
+        end
+      end
+
+      it 'updates and renders music attributes' do
+        music_attachment = Fabricate(:music_attachment)
+
+        video = {
+          blur: {
+            movement: { band: { bottom: 50, top: 300 }, threshold: 165 },
+            blink: { band: { bottom: 2000, top: 15000 }, threshold: 165 },
+          },
+          particle: {
+            limit: { band: { bottom: 300, top: 2000 }, threshold: 165 },
+            color: 0xff0000,
+          },
+          spectrum: {
+            mode: 0,
+            color: 0xff0000,
+          },
+        }
+
+        patch :update,
+              params: { id: music_attachment.id, title: 'updated title', artist: 'updated artist', music: another_music, video: video }
+
+        expect do
+          MusicAttachment.find_by(
+            id: music_attachment.id,
+            title: 'updated title',
+            artist: 'updated artist',
+            duration: 60,
+            video_blur_movement_band_bottom: 50,
+            video_blur_movement_band_top: 300,
+            video_blur_movement_threshold: 165,
+            video_blur_blink_band_bottom: 2000,
+            video_blur_blink_band_top: 15000,
+            video_blur_blink_threshold: 165,
+            video_particle_limit_band_bottom: 300,
+            video_particle_limit_band_top: 2000,
+            video_particle_limit_threshold: 165,
+            video_particle_color: 0xff0000,
+            video_spectrum_mode: 0,
+            video_spectrum_color: 0xff0000,
+          )
+        end.not_to raise_error
+
+        expect(body_as_json[:id]).to eq music_attachment.id
+        expect(body_as_json[:title]).to eq 'updated title'
+        expect(body_as_json[:artist]).to eq 'updated artist'
+        expect(body_as_json[:video]).to eq video
+      end
+
+      it 'returns http success' do
+        music_attachment = Fabricate(:music_attachment)
+        patch :update, params: { id: music_attachment.id }
+        expect(response).to have_http_status :success
+      end
+    end
+
+    context 'without write scope' do
+      it 'returns http unauthorized' do
+        music_attachment = Fabricate(:music_attachment)
+        patch :update, params: { id: music_attachment.id }
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+  end
+
+  describe 'DELETE #destroy' do
     context 'with write scope' do
       before do
         allow(controller).to receive(:doorkeeper_token) do
@@ -142,8 +214,8 @@ describe Api::V1::MusicsController, type: :controller do
     end
   end
 
-  context 'GET #show' do
-    it 'shows properties' do
+  describe 'GET #show' do
+    it 'renders attributes' do
       music_attachment = Fabricate(
         :music_attachment,
         title: 'title',
@@ -188,7 +260,7 @@ describe Api::V1::MusicsController, type: :controller do
       expect(body_as_json[:status][:id]).to eq music_attachment.status.id
     end
 
-    it 'skips optional properties of video if missing' do
+    it 'skips optional attributes of video if missing' do
       status = Fabricate(:status)
 
       music_attachment = Fabricate(

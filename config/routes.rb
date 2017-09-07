@@ -189,7 +189,7 @@ Rails.application.routes.draw do
       resources :trend_tags, only: [:index]
       resources :follows,    only: [:create]
       resources :media,      only: [:create]
-      resources :musics,     only: [:show, :create, :destroy]
+      resources :musics,     only: [:show, :create, :update, :destroy]
       resources :apps,       only: [:create]
       resources :blocks,     only: [:index]
       resources :mutes,      only: [:index]

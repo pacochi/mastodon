@@ -7,9 +7,50 @@ class Api::V1::MusicsController < Api::BaseController
   respond_to :json
 
   def create
-    music_duration = update_music_info
+    params.require [:title, :artist, :music, :image]
+    attributes = prepare_music_attributes
 
-    attributes = music_params.merge(duration: music_duration.ceil)
+    ApplicationRecord.transaction do
+      status = Status.new(account: current_account, text: '', visibility: :unlisted)
+      status.save! validate: false
+
+      attributes.merge!(status: status)
+      @music = MusicAttachment.create!(attributes)
+
+      status.update! text: music_url(@music)
+    end
+  end
+
+  def update
+    attributes = prepare_music_attributes
+    @music = MusicAttachment.find(params[:id])
+    @music.update! attributes
+  end
+
+  def destroy
+    music = MusicAttachment.find(params[:id])
+
+    music.destroy!
+    RemovalWorker.perform_async music.status_id
+
+    render_empty
+  end
+
+  def show
+    @music = MusicAttachment.find(params[:id])
+  end
+
+  private
+
+  def prepare_music_attributes
+    return @prepared_music_attributes if @prepared_music_attributes
+
+    attributes = music_params
+
+    if music_params[:music].present?
+      music_duration = update_music
+      attributes.merge! duration: music_duration.ceil
+    end
 
     if params.dig('video', 'blur')
       attributes.merge!(
@@ -38,43 +79,19 @@ class Api::V1::MusicsController < Api::BaseController
       )
     end
 
-    ApplicationRecord.transaction do
-      status = Status.new(account: current_account, text: '', visibility: :unlisted)
-      status.save! validate: false
-
-      attributes.merge!(status: status)
-      @music = MusicAttachment.create!(attributes)
-
-      status.update! text: music_url(@music)
-    end
+    @prepared_music_attributes = attributes
   end
-
-  def destroy
-    music = MusicAttachment.find(params[:id])
-
-    music.destroy!
-    RemovalWorker.perform_async music.status_id
-
-    render_empty
-  end
-
-  def show
-    @music = MusicAttachment.find(params[:id])
-  end
-
-  private
 
   def music_params
-    return @music_params if @music_params
-
-    title, artist, music, image = params.require([:title, :artist, :music, :image])
-    @music_params = { title: title, artist: artist, music: music, image: image }
+    params.permit :title, :artist, :music, :image
   end
 
-  def update_music_info
+  def update_music
+    return @updated_music_duration if @updated_music_duration
+
     Mp3Info.open music_params[:music].path do |m|
       m.tag2.remove_pictures
-      m.length
+      @updated_music_duration = m.length
     end
   rescue Mp3InfoError
     raise Mastodon::ValidationError, I18n.t('music_attachments.invalid_mp3')
