@@ -6,6 +6,7 @@ describe Api::V1::MusicsController, type: :controller do
   render_views
 
   let(:music) { fixture_file_upload('files/aint_we_got_fun_billy_jones1921.mp3') }
+  let(:music_with_picture) { fixture_file_upload('files/aint_we_got_fun_billy_jones1921_with_picture.mp3') }
   let(:image) { fixture_file_upload('files/attachment.jpg') }
   let(:unknown) { fixture_file_upload('files/imports.txt') }
 
@@ -75,6 +76,21 @@ describe Api::V1::MusicsController, type: :controller do
              params: { title: 'title', artist: Faker::Name.name, music: music, image: image, video: video }
 
         expect(body_as_json[:video]).to eq video
+      end
+
+      it 'removes pictures in ID3v2 tag' do
+        skip 'the output of ruby-mp3info messes up `file -b --mime`, used by Paperclip'
+
+        post :create,
+             params: { title: 'title', artist: Faker::Name.name, music: music_with_picture, image: image }
+
+        tempfile = Tempfile.new
+        begin
+          MusicAttachment.find(body_as_json[:id]).music.copy_to_local_file :original, tempfile.path
+          expect(Mp3Info.open(tempfile.path) { |m| m.tag2.pictures }).to be_empty
+        ensure
+          tempfile.unlink
+        end
       end
 
       it 'returns http success' do
