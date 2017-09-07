@@ -241,7 +241,7 @@ class Account < ApplicationRecord
       time_begin, time_end = time_range.begin.strftime('%Y-%m-%d %H:%M:%S'), time_range.end.strftime('%Y-%m-%d %H:%M:%S')
 
       sql = <<-SQL.squish
-        SELECT accounts.id
+        SELECT accounts.*
         FROM accounts
         WHERE accounts.id IN (:ids)
         AND accounts.suspended = false
