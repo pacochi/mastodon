@@ -80,10 +80,16 @@ class SuggestedAccountQuery
     def popular_account_ids
       ids = all_popular_account_ids - excluded_ids
 
+<<<<<<< HEAD
       active_ids = Account.filter_by_time_range(ids).map(&:id)
 
       #アクティブなアカウントを先に表示する
       shuffle_ids(active_ids) + shuffle_ids(ids - active_ids)
+=======
+      active_ids = Account.filter_active(ids, Time.mktime(2017, 4, 1, 0, 0, 0)...Time.mktime(2017, 5, 8, 0, 0, 0))
+
+      active_ids.map{ |account| account.id }
+>>>>>>> 11207600... おすすめユーザーの内、人気ユーザーに基づくものをアクティブ度でフィルタリング
     end
 
     # TODO: 自動的に検出するようにする
