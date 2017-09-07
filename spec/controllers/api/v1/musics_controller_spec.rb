@@ -261,8 +261,6 @@ describe Api::V1::MusicsController, type: :controller do
     end
 
     it 'skips optional attributes of video if missing' do
-      status = Fabricate(:status)
-
       music_attachment = Fabricate(
         :music_attachment,
         video_blur_movement_band_bottom: 0,
@@ -281,7 +279,9 @@ describe Api::V1::MusicsController, type: :controller do
 
       get :show, params: { id: music_attachment.id }
 
-      expect(body_as_json[:status][:id]).to eq status.id
+      expect(body_as_json[:video]).not_to have_key :blur
+      expect(body_as_json[:video]).not_to have_key :particle
+      expect(body_as_json[:video]).not_to have_key :spectrum
     end
 
     it 'returns http success' do
