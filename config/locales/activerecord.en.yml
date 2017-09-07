@@ -34,7 +34,7 @@ en:
               invalid: The music file is invalid
             image:
               invalid: The cover image file is invalid
-          in_between: Your mp3 and cover image must be less than :maxMB for each
+          in_between: Your mp3 and cover image must be less than :max for each
         status:
           attributes:
             reblog:

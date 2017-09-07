@@ -36,7 +36,7 @@ ja:
               invalid: 音楽ファイルの形式が無効です
             image:
               invalid: 画像ファイルの形式が無効です
-          in_between: MP3ファイルと画像ファイルのサイズはそれぞれ:maxMB未満である必要があります
+          in_between: MP3ファイルと画像ファイルのサイズはそれぞれ:max未満である必要があります
         status:
           attributes:
             reblog:
