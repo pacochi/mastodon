@@ -62,15 +62,11 @@ class SuggestedAccountQuery
     def pixiv_following_account_ids
       return [] unless enable_pixiv_follows_query?
 
-      sign_in_at = User.arel_table[:current_sign_in_at]
       uid = oauth_authentication.pixiv_follows.pluck(:target_pixiv_uid)
 
-      account_ids = default_scoped.joins(:media_attachments).joins(:user).where.not(id: excluded_ids).joins(:oauth_authentications).where(oauth_authentications: { provider: 'pixiv', uid: uid }).where(sign_in_at.gteq(12.months.ago)).distinct.preload(:user).pluck(:id)
+      account_ids = default_scoped.joins(:media_attachments).joins(:user).where.not(id: excluded_ids).joins(:oauth_authentications).where(oauth_authentications: { provider: 'pixiv', uid: uid }).distinct.preload(:user).pluck(:id)
 
-      active_accounts = Account.filter_by_time_range(account_ids, Time.new(2017,4).all_month)
-
-      #active_accounts.sort_by { |account| account.user.current_sign_in_at }.reverse.map(&:id)
-      active_accounts.map(&:id)
+      Account.filter_by_time_range(account_ids).map(&:id)
     end
 
     def enable_pixiv_follows_query?
@@ -84,7 +80,10 @@ class SuggestedAccountQuery
     def popular_account_ids
       ids = all_popular_account_ids - excluded_ids
 
-      Account.filter_by_time_range(ids, Time.mktime(2017, 4, 1, 0, 0, 0)...Time.mktime(2017, 5, 8, 0, 0, 0)).map(&:id)
+      active_ids = Account.filter_by_time_range(ids).map(&:id)
+
+      #アクティブなアカウントを先に表示する
+      shuffle_ids(active_ids) + shuffle_ids(ids - active_ids)
     end
 
     # TODO: 自動的に検出するようにする
@@ -104,7 +103,7 @@ class SuggestedAccountQuery
     ids = []
     ids += pickup(pixiv_following_account_ids, limit: with_pixiv_follows_limit)
     ids += (triadic_account_ids - ids)
-    ids += pickup((shuffle_ids(popular_account_ids) - ids), limit: limit - ids.length) # limitに達する数までidを取得する
+    ids += pickup(popular_account_ids - ids, limit: limit - ids.length) # limitに達する数までidを取得する
 
     default_scoped.where(id: ids).limit(limit).sort_by { |account| ids.index(account.id) }
   end
