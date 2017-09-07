@@ -33,7 +33,7 @@ describe Api::V1::MusicsController, type: :controller do
         expect(response).to have_http_status :unprocessable_entity
       end
 
-      it 'creates status and music attachment' do
+      it 'creates and renders status and music attachment' do
         video = {
           blur: {
             movement: { band: { bottom: 50, top: 300 }, threshold: 165 },
@@ -54,6 +54,7 @@ describe Api::V1::MusicsController, type: :controller do
 
         music_attachment = MusicAttachment.find_by!(
           id: body_as_json[:id],
+          status: body_as_json[:status][:id],
           title: 'title',
           artist: 'artist',
           duration: 177,
@@ -74,7 +75,7 @@ describe Api::V1::MusicsController, type: :controller do
         expect(music_attachment.status.text).to eq music_url(music_attachment)
         expect(body_as_json[:title]).to eq 'title'
         expect(body_as_json[:artist]).to eq 'artist'
-        expect(body_as_json[:status][:id]).to eq music_attachment.status_id
+        expect(body_as_json[:status][:text]).to eq music_url(music_attachment)
         expect(body_as_json[:video]).to eq video
       end
 
@@ -140,26 +141,22 @@ describe Api::V1::MusicsController, type: :controller do
         patch :update,
               params: { id: music_attachment.id, title: 'updated title', artist: 'updated artist', music: another_music, video: video }
 
-        expect do
-          MusicAttachment.find_by(
-            id: music_attachment.id,
-            title: 'updated title',
-            artist: 'updated artist',
-            duration: 60,
-            video_blur_movement_band_bottom: 50,
-            video_blur_movement_band_top: 300,
-            video_blur_movement_threshold: 165,
-            video_blur_blink_band_bottom: 2000,
-            video_blur_blink_band_top: 15000,
-            video_blur_blink_threshold: 165,
-            video_particle_limit_band_bottom: 300,
-            video_particle_limit_band_top: 2000,
-            video_particle_limit_threshold: 165,
-            video_particle_color: 0xff0000,
-            video_spectrum_mode: 0,
-            video_spectrum_color: 0xff0000,
-          )
-        end.not_to raise_error
+        music_attachment.reload
+        expect(music_attachment.title).to eq 'updated title'
+        expect(music_attachment.artist).to eq 'updated artist'
+        expect(music_attachment.duration).to eq 60
+        expect(music_attachment.video_blur_movement_band_bottom).to eq 50
+        expect(music_attachment.video_blur_movement_band_top).to eq 300
+        expect(music_attachment.video_blur_movement_threshold).to eq 165
+        expect(music_attachment.video_blur_blink_band_bottom).to eq 2000
+        expect(music_attachment.video_blur_blink_band_top).to eq 15000
+        expect(music_attachment.video_blur_blink_threshold).to eq 165
+        expect(music_attachment.video_particle_limit_band_bottom).to eq 300
+        expect(music_attachment.video_particle_limit_band_top).to eq 2000
+        expect(music_attachment.video_particle_limit_threshold).to eq 165
+        expect(music_attachment.video_particle_color).to eq 0xff0000
+        expect(music_attachment.video_spectrum_mode).to eq 0
+        expect(music_attachment.video_spectrum_color).to eq 0xff0000
 
         expect(body_as_json[:id]).to eq music_attachment.id
         expect(body_as_json[:title]).to eq 'updated title'
@@ -257,7 +254,7 @@ describe Api::V1::MusicsController, type: :controller do
         },
       })
 
-      expect(body_as_json[:status][:id]).to eq music_attachment.status.id
+      expect(body_as_json[:status][:id]).to eq music_attachment.status_id
     end
 
     it 'skips optional attributes of video if missing' do
