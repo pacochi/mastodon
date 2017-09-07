@@ -84,10 +84,11 @@ describe Api::V1::MusicsController, type: :controller do
         end
       end
 
-      it 'deletes music attachment' do
+      it 'deletes status and music attachment' do
         music_attachment = Fabricate(:music_attachment)
         delete :destroy, params: { id: music_attachment.id }
-        expect { music_attachment.reload }.to raise_error(ActiveRecord::RecordNotFound)
+        expect { music_attachment.status.reload }.to raise_error ActiveRecord::RecordNotFound
+        expect { music_attachment.reload }.to raise_error ActiveRecord::RecordNotFound
       end
 
       it 'returns http success' do
