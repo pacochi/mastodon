@@ -237,11 +237,11 @@ class Account < ApplicationRecord
       find_by_sql([sql, account.id, account.id, limit])
     end
 
-    def filter_by_time_range(ids, time_range = Time.current.days_ago(3)...Time.current)
+    def filter_by_time_range(ids, time_range = 3.days.ago...Time.current)
       time_begin, time_end = time_range.begin, time_range.end
 
       sql = <<-SQL.squish
-        SELECT accounts.*
+        SELECT accounts.id
         FROM accounts
         WHERE accounts.id IN (:ids)
         AND accounts.suspended = false

@@ -66,7 +66,7 @@ class SuggestedAccountQuery
 
       account_ids = default_scoped.joins(:media_attachments).joins(:user).where.not(id: excluded_ids).joins(:oauth_authentications).where(oauth_authentications: { provider: 'pixiv', uid: uid }).distinct.preload(:user).pluck(:id)
 
-      Account.filter_by_time_range(account_ids).map(&:id)
+      Account.filter_by_time_range(account_ids)
     end
 
     def enable_pixiv_follows_query?
@@ -80,7 +80,7 @@ class SuggestedAccountQuery
     def popular_account_ids
       ids = all_popular_account_ids - excluded_ids
 
-      active_ids = Account.filter_by_time_range(ids).map(&:id)
+      active_ids = Account.filter_by_time_range(ids)
 
       #アクティブなアカウントを先に表示する
       shuffle_ids(active_ids) + shuffle_ids(ids - active_ids)
