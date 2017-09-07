@@ -65,9 +65,12 @@ class SuggestedAccountQuery
       sign_in_at = User.arel_table[:current_sign_in_at]
       uid = oauth_authentication.pixiv_follows.pluck(:target_pixiv_uid)
 
-      accounts = default_scoped.joins(:media_attachments).joins(:user).where.not(id: excluded_ids).joins(:oauth_authentications).where(oauth_authentications: { provider: 'pixiv', uid: uid }).where(sign_in_at.gteq(3.weeks.ago)).distinct.preload(:user)
+      account_ids = default_scoped.joins(:media_attachments).joins(:user).where.not(id: excluded_ids).joins(:oauth_authentications).where(oauth_authentications: { provider: 'pixiv', uid: uid }).where(sign_in_at.gteq(12.months.ago)).distinct.preload(:user).pluck(:id)
 
-      accounts.sort_by { |account| account.user.current_sign_in_at }.reverse.map(&:id)
+      active_accounts = Account.filter_by_time_range(account_ids, Time.new(2017,4).all_month)
+
+      #active_accounts.sort_by { |account| account.user.current_sign_in_at }.reverse.map(&:id)
+      active_accounts.map(&:id)
     end
 
     def enable_pixiv_follows_query?
