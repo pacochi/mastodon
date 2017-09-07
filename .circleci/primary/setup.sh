@@ -111,6 +111,7 @@ if ! rbenv version-name > /dev/null; then
   mv ruby-build-master ~/.rbenv/plugins/ruby-build
 
   CONFIGURE_OPTS='--disable-install-doc' rbenv install $(cat .ruby-version)
+  gem update --system
   gem install bundler
 fi
 
