@@ -8,6 +8,12 @@ class Auth::RegistrationsController < Devise::RegistrationsController
   before_action :set_sessions, only: [:edit, :update]
   before_action :store_current_location, only: [:edit]
 
+  def create
+    super do |user|
+      DefaultFollowWorker.perform_async(user.account_id) if user.persisted?
+    end
+  end
+
   def update
     if current_user.initial_password_usage
       send_reset_password_instructions
