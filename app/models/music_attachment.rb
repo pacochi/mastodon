@@ -43,6 +43,8 @@ class MusicAttachment < ApplicationRecord
   has_attached_file :image
   has_attached_file :video
 
+  validates_attachment_presence :music, :image
+
   validates_attachment_size :music,
                             :image,
                             less_than: 7.megabytes

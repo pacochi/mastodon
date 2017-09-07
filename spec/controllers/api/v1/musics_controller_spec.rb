@@ -128,8 +128,8 @@ describe Api::V1::MusicsController, type: :controller do
 
   context 'GET #show' do
     it 'shows properties' do
-      status = Fabricate(:status)
-      music_attachment = MusicAttachment.create!(
+      music_attachment = Fabricate(
+        :music_attachment,
         title: 'title',
         artist: 'artist',
         duration: 1.minute,
@@ -147,7 +147,6 @@ describe Api::V1::MusicsController, type: :controller do
         video_particle_color: 0xff0000,
         video_spectrum_mode: 0,
         video_spectrum_color: 0xff0000,
-        status: status,
       )
 
       get :show, params: { id: music_attachment.id }
@@ -170,23 +169,30 @@ describe Api::V1::MusicsController, type: :controller do
         },
       })
 
-      expect(body_as_json[:status][:id]).to eq status.id
+      expect(body_as_json[:status][:id]).to eq music_attachment.status.id
     end
 
     it 'skips optional properties of video if missing' do
       status = Fabricate(:status)
 
-      music_attachment = MusicAttachment.create!(
-        title: 'title',
-        artist: 'artist',
-        status: status,
-        duration: 1.minute,
+      music_attachment = Fabricate(
+        :music_attachment,
+        video_blur_movement_band_bottom: 0,
+        video_blur_movement_band_top: 0,
+        video_blur_movement_threshold: 0,
+        video_blur_blink_band_bottom: 0,
+        video_blur_blink_band_top: 0,
+        video_blur_blink_threshold: 0,
+        video_particle_limit_band_bottom: 0,
+        video_particle_limit_band_top: 0,
+        video_particle_limit_threshold: 0,
+        video_particle_color: nil,
+        video_spectrum_mode: nil,
+        video_spectrum_color: nil,
       )
 
       get :show, params: { id: music_attachment.id }
 
-      expect(body_as_json[:title]).to eq 'title'
-      expect(body_as_json[:artist]).to eq 'artist'
       expect(body_as_json[:status][:id]).to eq status.id
     end
 
