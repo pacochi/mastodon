@@ -247,7 +247,7 @@ class Account < ApplicationRecord
         AND (SELECT created_at FROM statuses WHERE statuses.account_id = accounts.id ORDER BY statuses.id DESC LIMIT 1) > :time_begin
       SQL
 
-      find_by_sql([sql, {ids: ids, time_begin: time_begin}])
+      find_by_sql([sql, {ids: ids, time_begin: time_begin}]).map(&:id)
     end
 
     private
