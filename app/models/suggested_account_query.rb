@@ -112,6 +112,7 @@ class SuggestedAccountQuery
     ids += (triadic_account_ids - ids)
     ids += pickup(popular_account_ids - ids, limit: limit - ids.length) # limitに達する数までidを取得する
 
+    # sort_byにより、取得したAccountがidsの順番通りになるよう再度並び替える
     default_scoped.where(id: ids)
                   .preload(:media_attachments, :oauth_authentications)
                   .limit(limit)
