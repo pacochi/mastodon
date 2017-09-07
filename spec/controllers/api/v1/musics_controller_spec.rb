@@ -144,7 +144,7 @@ describe Api::V1::MusicsController, type: :controller do
         music_attachment.reload
         expect(music_attachment.title).to eq 'updated title'
         expect(music_attachment.artist).to eq 'updated artist'
-        expect(music_attachment.duration).to eq 60
+        expect(music_attachment.duration).to eq 181
         expect(music_attachment.video_blur_movement_band_bottom).to eq 50
         expect(music_attachment.video_blur_movement_band_top).to eq 300
         expect(music_attachment.video_blur_movement_threshold).to eq 165
