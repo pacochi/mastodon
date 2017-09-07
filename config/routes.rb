@@ -38,7 +38,7 @@ Rails.application.routes.draw do
   get '/@:username', to: 'accounts#show', as: :short_account
   get '/@:account_username/:id', to: 'statuses#show', as: :short_account_status
   get '/@:account_username/albums/:id', to: 'albums#show', as: :short_account_album
-  get '/@:account_username/musics/:id', to: 'musics#show', as: :short_account_music
+  get '/@:account_username/tracks/:id', to: 'tracks#show', as: :short_account_track
 
   get '/users/:username', to: redirect('/@%{username}'), constraints: { format: :html }
 
@@ -190,7 +190,7 @@ Rails.application.routes.draw do
       resources :follows,    only: [:create]
       resources :media,      only: [:create]
       resources :albums,     only: [:show, :create, :update, :destroy]
-      resources :musics,     only: [:show, :create, :update, :destroy]
+      resources :tracks,     only: [:show, :create, :update, :destroy]
       resources :apps,       only: [:create]
       resources :blocks,     only: [:index]
       resources :mutes,      only: [:index]

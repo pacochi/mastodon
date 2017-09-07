@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Api::V1::MusicsController < Api::BaseController
+class Api::V1::TracksController < Api::BaseController
   before_action -> { doorkeeper_authorize! :write }, except: :show
   before_action :require_user!, except: :show
 
@@ -15,16 +15,16 @@ class Api::V1::MusicsController < Api::BaseController
       status.save! validate: false
 
       attributes.merge!(status: status)
-      @music = MusicAttachment.create!(attributes)
+      @track = MusicAttachment.create!(attributes)
 
-      status.update! text: short_account_music_url(current_account.username, @music)
+      status.update! text: short_account_track_url(current_account.username, @track)
     end
   end
 
   def update
     attributes = prepare_music_attributes
-    @music = MusicAttachment.find(params.require(:id))
-    @music.update! attributes
+    @track = MusicAttachment.find(params.require(:id))
+    @track.update! attributes
   end
 
   def destroy
@@ -37,7 +37,7 @@ class Api::V1::MusicsController < Api::BaseController
   end
 
   def show
-    @music = MusicAttachment.find(params.require(:id))
+    @track = MusicAttachment.find(params.require(:id))
   end
 
   private

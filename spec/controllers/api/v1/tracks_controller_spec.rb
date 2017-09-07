@@ -2,7 +2,7 @@
 
 require 'rails_helper'
 
-describe Api::V1::MusicsController, type: :controller do
+describe Api::V1::TracksController, type: :controller do
   render_views
 
   let(:music) { fixture_file_upload('files/aint_we_got_fun_billy_jones1921.mp3') }
@@ -74,10 +74,10 @@ describe Api::V1::MusicsController, type: :controller do
           video_spectrum_color: 0xff0000,
         )
 
-        expect(music_attachment.status.text).to eq short_account_music_url(user.account.username, music_attachment)
+        expect(music_attachment.status.text).to eq short_account_track_url(user.account.username, music_attachment)
         expect(body_as_json[:title]).to eq 'title'
         expect(body_as_json[:artist]).to eq 'artist'
-        expect(body_as_json[:status][:text]).to eq short_account_music_url(user.account.username, music_attachment)
+        expect(body_as_json[:status][:text]).to eq short_account_track_url(user.account.username, music_attachment)
         expect(body_as_json[:video]).to eq video
       end
 

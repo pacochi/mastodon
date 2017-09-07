@@ -9,7 +9,7 @@ RSpec.describe Playlist, type: :model do
   let(:admin) { false }
 
   let(:link) do
-    Rails.application.routes.url_helpers.short_account_music_url(music_attachment.status.account.username, music_attachment)
+    Rails.application.routes.url_helpers.short_account_track_url(music_attachment.status.account.username, music_attachment)
   end
 
   let!(:music_attachment) { Fabricate(:music_attachment, title: 'title', duration: 10) }
