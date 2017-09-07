@@ -237,9 +237,7 @@ class Account < ApplicationRecord
       find_by_sql([sql, account.id, account.id, limit])
     end
 
-    def filter_by_time_range(ids, time_range = 3.days.ago...Time.current)
-      time_begin, time_end = time_range.begin, time_range.end
-
+    def filter_by_time(ids, time_begin = 3.days.ago)
       sql = <<-SQL.squish
         SELECT accounts.id
         FROM accounts
@@ -247,10 +245,10 @@ class Account < ApplicationRecord
         AND accounts.suspended = false
         AND suspended = 'f'
         AND silenced = 'f'
-        AND (SELECT created_at FROM statuses ORDER BY statuses.id LIMIT 1) BETWEEN :time_begin AND :time_end
+        AND (SELECT created_at FROM statuses ORDER BY statuses.id DESC LIMIT 1) > :time_begin
       SQL
 
-      find_by_sql([sql, {ids: ids, time_begin: time_begin, time_end: time_end}])
+      find_by_sql([sql, {ids: ids, time_begin: time_begin}])
     end
 
     private
