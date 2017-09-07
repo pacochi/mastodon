@@ -71,7 +71,6 @@ class SuggestedAccountQuery
                                   .joins(:oauth_authentications)
                                   .where(oauth_authentications: { provider: 'pixiv', uid: uids })
                                   .distinct
-                                  .preload(:user)
                                   .pluck(:id)
 
       Account.filter_by_time(account_ids)
@@ -113,7 +112,7 @@ class SuggestedAccountQuery
     ids += (triadic_account_ids - ids)
     ids += pickup(popular_account_ids - ids, limit: limit - ids.length) # limitに達する数までidを取得する
 
-    default_scoped.where(id: ids).limit(limit).sort_by { |account| ids.index(account.id) }
+    default_scoped.where(id: ids).preload(:media_attachments, :oauth_authentications).limit(limit).sort_by { |account| ids.index(account.id) }
   end
 
   private
