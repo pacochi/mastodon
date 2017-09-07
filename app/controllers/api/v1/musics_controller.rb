@@ -23,12 +23,12 @@ class Api::V1::MusicsController < Api::BaseController
 
   def update
     attributes = prepare_music_attributes
-    @music = MusicAttachment.find(params[:id])
+    @music = MusicAttachment.find(params.require(:id))
     @music.update! attributes
   end
 
   def destroy
-    music = MusicAttachment.find(params[:id])
+    music = MusicAttachment.find(params.require(:id))
 
     music.destroy!
     RemovalWorker.perform_async music.status_id
@@ -37,7 +37,7 @@ class Api::V1::MusicsController < Api::BaseController
   end
 
   def show
-    @music = MusicAttachment.find(params[:id])
+    @music = MusicAttachment.find(params.require(:id))
   end
 
   private
