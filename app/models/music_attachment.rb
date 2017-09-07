@@ -35,6 +35,7 @@
 class MusicAttachment < ApplicationRecord
 
   before_save :truncate_title,  if: :title_changed?
+  before_save :truncate_artist, if: :artist_changed?
 
   belongs_to :status
 
@@ -56,6 +57,10 @@ class MusicAttachment < ApplicationRecord
 
   def truncate_title
     self.title = self.title.slice(0, 128)
+  end
+
+  def truncate_artist
+    self.artist = self.artist.slice(0, 128)
   end
 
 end

@@ -67,8 +67,8 @@ class Api::V1::MusicsController < Api::BaseController
   def music_params
     return @music_params if @music_params
 
-    title, music, image = params.require([:title, :music, :image])
-    @music_params = { title: title, music: music, image: image }
+    title, artist, music, image = params.require([:title, :artist, :music, :image])
+    @music_params = { title: title, artist: artist, music: music, image: image }
   end
 
   def update_music_info

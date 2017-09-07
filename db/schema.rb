@@ -174,6 +174,7 @@ ActiveRecord::Schema.define(version: 20170830000000) do
     t.bigint "status_id", null: false
     t.integer "duration", null: false
     t.string "title", null: false
+    t.string "artist", null: false
     t.string "music_file_name"
     t.string "music_content_type"
     t.integer "music_file_size"

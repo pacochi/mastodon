@@ -18,26 +18,40 @@ describe Api::V1::MusicsController, type: :controller do
       end
 
       it 'returns http unprocessable entity when a non-audio file is uploaded as a music' do
-        post :create, params: { title: 'title', music: unknown, image: image }
+        post :create,
+             params: { title: 'title', artist: Faker::Name.name, music: unknown, image: image }
+
         expect(response).to have_http_status :unprocessable_entity
       end
 
       it 'raises when a non-image file is uploaded as an album art' do
-        post :create, params: { title: 'title', music: music, image: unknown }
+        post :create,
+             params: { title: 'title', artist: Faker::Name.name, music: music, image: unknown }
+
         expect(response).to have_http_status :unprocessable_entity
       end
 
       it 'creates status and music attachment' do
-        post :create, params: { title: 'title', music: music, image: image }
+        post :create,
+             params: { title: 'title', artist: 'artist', music: music, image: image }
 
-        music_attachment = MusicAttachment.find_by!(id: body_as_json[:id], title: 'title', duration: 177)
+        music_attachment = MusicAttachment.find_by!(
+          id: body_as_json[:id],
+          title: 'title',
+          artist: 'artist',
+          duration: 177
+        )
+
         expect(music_attachment.status.text).to eq music_url(music_attachment)
         expect(body_as_json[:title]).to eq 'title'
+        expect(body_as_json[:artist]).to eq 'artist'
         expect(body_as_json[:status][:id]).to eq music_attachment.status_id
       end
 
       it 'does not render child nodes of video property if no parameters are specified' do
-        post :create, params: { title: 'title', music: music, image: image }
+        post :create,
+             params: { title: 'title', artist: Faker::Name.name, music: music, image: image }
+
         expect(body_as_json[:video]).to eq({})
       end
 
@@ -57,20 +71,25 @@ describe Api::V1::MusicsController, type: :controller do
           },
         }
 
-        post :create, params: { title: 'title', music: music, image: image, video: video }
+        post :create,
+             params: { title: 'title', artist: Faker::Name.name, music: music, image: image, video: video }
 
         expect(body_as_json[:video]).to eq video
       end
 
       it 'returns http success' do
-        post :create, params: { title: 'title', music: music, image: image }
+        post :create,
+             params: { title: 'title', artist: Faker::Name.name, music: music, image: image }
+
         expect(response).to have_http_status :success
       end
     end
 
     context 'without write scope' do
       it 'returns http unauthorized' do
-        post :create, params: { title: 'title', music: music, image: image }
+        post :create,
+             params: { title: 'title', artist: Faker::Name.name, music: music, image: image }
+
         expect(response).to have_http_status :unauthorized
       end
     end
@@ -112,6 +131,7 @@ describe Api::V1::MusicsController, type: :controller do
       status = Fabricate(:status)
       music_attachment = MusicAttachment.create!(
         title: 'title',
+        artist: 'artist',
         duration: 1.minute,
         music: music,
         image: image,
@@ -133,6 +153,7 @@ describe Api::V1::MusicsController, type: :controller do
       get :show, params: { id: music_attachment.id }
 
       expect(body_as_json[:title]).to eq 'title'
+      expect(body_as_json[:artist]).to eq 'artist'
 
       expect(body_as_json[:video]).to eq({
         blur: {
@@ -154,11 +175,18 @@ describe Api::V1::MusicsController, type: :controller do
 
     it 'skips optional properties of video if missing' do
       status = Fabricate(:status)
-      music_attachment = MusicAttachment.create!(title: 'title', status: status, duration: 1.minute)
+
+      music_attachment = MusicAttachment.create!(
+        title: 'title',
+        artist: 'artist',
+        status: status,
+        duration: 1.minute,
+      )
 
       get :show, params: { id: music_attachment.id }
 
       expect(body_as_json[:title]).to eq 'title'
+      expect(body_as_json[:artist]).to eq 'artist'
       expect(body_as_json[:status][:id]).to eq status.id
     end
 

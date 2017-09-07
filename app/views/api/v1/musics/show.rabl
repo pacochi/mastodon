@@ -1,6 +1,6 @@
 object @music
 
-attribute :id, :title
+attribute :id, :title, :artist
 
 node :music { |music| full_asset_url(music.music.url(:original)) }
 node :image { |music| full_asset_url(music.image.url(:original)) }
