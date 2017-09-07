@@ -62,9 +62,17 @@ class SuggestedAccountQuery
     def pixiv_following_account_ids
       return [] unless enable_pixiv_follows_query?
 
-      uid = oauth_authentication.pixiv_follows.pluck(:target_pixiv_uid)
+      uids = oauth_authentication.pixiv_follows.pluck(:target_pixiv_uid)
 
-      account_ids = default_scoped.joins(:media_attachments).joins(:user).where.not(id: excluded_ids).joins(:oauth_authentications).where(oauth_authentications: { provider: 'pixiv', uid: uid }).distinct.preload(:user).pluck(:id)
+      # メディアを投稿しているユーザーだけを取り出すため、media_attachmentsとjoinする
+      account_ids = default_scoped.joins(:media_attachments)
+                                  .joins(:user)
+                                  .where.not(id: excluded_ids)
+                                  .joins(:oauth_authentications)
+                                  .where(oauth_authentications: { provider: 'pixiv', uid: uids })
+                                  .distinct
+                                  .preload(:user)
+                                  .pluck(:id)
 
       Account.filter_by_time(account_ids)
     end
