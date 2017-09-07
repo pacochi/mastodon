@@ -80,6 +80,7 @@ Rails.application.routes.draw do
     resource :delete, only: [:show, :destroy]
   end
 
+  resources :albums, only: [:show]
   resources :musics, only: [:show]
 
   resources :media, only: [:show]
@@ -189,6 +190,7 @@ Rails.application.routes.draw do
       resources :trend_tags, only: [:index]
       resources :follows,    only: [:create]
       resources :media,      only: [:create]
+      resources :albums,     only: [:show, :create, :update, :destroy]
       resources :musics,     only: [:show, :create, :update, :destroy]
       resources :apps,       only: [:create]
       resources :blocks,     only: [:index]

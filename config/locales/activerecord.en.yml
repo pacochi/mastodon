@@ -23,6 +23,11 @@ en:
           attributes:
             username:
               invalid: only letters, numbers and underscores
+        album:
+          attributes:
+            image:
+              in_between: Your cover image must be less than :max
+              invalid: The cover image file is invalid
         music_attachment:
           attributes:
             music:

@@ -229,6 +229,8 @@ ja:
     new_report:
       body: "%{reporter} が %{target} を通報しました"
       subject: "%{instance} の新しい通報 (#%{id})"
+  albums:
+    over_character_limit: 上限は %{max}文字までです
   application_mailer:
     settings: 'メール設定の変更: %{link}'
     signature: Mastodon %{instance} インスタンスからの通知

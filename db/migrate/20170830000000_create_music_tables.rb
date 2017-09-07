@@ -1,5 +1,12 @@
-class CreateMusicAttachments < ActiveRecord::Migration[5.1]
+class CreateMusicTables < ActiveRecord::Migration[5.1]
   def change
+    create_table :albums do |t|
+      t.belongs_to :status, foreign_key: { on_delete: :cascade, on_update: :cascade }, null: false
+      t.string :title, null: false
+      t.text :description, default: '', null: false
+      t.attachment :image
+    end
+
     create_table :music_attachments do |t|
       t.belongs_to :status, foreign_key: { on_delete: :cascade, on_update: :cascade }, null: false
       t.integer :duration, null: false
@@ -21,5 +28,17 @@ class CreateMusicAttachments < ActiveRecord::Migration[5.1]
       t.integer :video_spectrum_mode
       t.integer :video_spectrum_color
     end
+
+    create_table :albums_music_attachments do |t|
+      t.belongs_to :album, foreign_key: { on_delete: :cascade, on_update: :cascade }, null: false
+      t.belongs_to :music_attachment, foreign_key: { on_delete: :cascade, on_update: :cascade }, null: false
+      t.integer :next
+    end
+
+    add_foreign_key :albums_music_attachments,
+                    :albums_music_attachments,
+                    column: :next,
+                    on_delete: :restrict,
+                    on_update: :cascade
   end
 end

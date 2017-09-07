@@ -6,6 +6,7 @@
 #  status_id                        :integer          not null
 #  duration                         :integer          not null
 #  title                            :string           not null
+#  artist                           :string           not null
 #  music_file_name                  :string
 #  music_content_type               :string
 #  music_file_size                  :integer
@@ -38,6 +39,7 @@ class MusicAttachment < ApplicationRecord
   before_save :truncate_artist, if: :artist_changed?
 
   belongs_to :status
+  has_one :album_music_attachment
 
   has_attached_file :music
   has_attached_file :image

@@ -16,7 +16,6 @@
 #  shortcode         :string
 #  type              :integer          default("image"), not null
 #  file_meta         :json
-#  music_info        :json
 #
 
 class MediaAttachment < ApplicationRecord

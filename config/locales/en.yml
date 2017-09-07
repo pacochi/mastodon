@@ -229,6 +229,8 @@ en:
     new_report:
       body: "%{reporter} has reported %{target}"
       subject: New report for %{instance} (#%{id})
+  albums:
+    over_character_limit: character limit of %{max} exceeded
   application_mailer:
     settings: 'Change e-mail preferences: %{link}'
     signature: Mastodon notifications from %{instance}

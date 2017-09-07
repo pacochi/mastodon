@@ -63,6 +63,25 @@ ActiveRecord::Schema.define(version: 20170830000000) do
     t.index ["username", "domain"], name: "index_accounts_on_username_and_domain", unique: true
   end
 
+  create_table "albums", force: :cascade do |t|
+    t.bigint "status_id", null: false
+    t.string "title", null: false
+    t.text "description", default: "", null: false
+    t.string "image_file_name"
+    t.string "image_content_type"
+    t.integer "image_file_size"
+    t.datetime "image_updated_at"
+    t.index ["status_id"], name: "index_albums_on_status_id"
+  end
+
+  create_table "albums_music_attachments", force: :cascade do |t|
+    t.bigint "album_id", null: false
+    t.bigint "music_attachment_id", null: false
+    t.integer "next"
+    t.index ["album_id"], name: "index_albums_music_attachments_on_album_id"
+    t.index ["music_attachment_id"], name: "index_albums_music_attachments_on_music_attachment_id"
+  end
+
   create_table "blocks", id: :serial, force: :cascade do |t|
     t.integer "account_id", null: false
     t.integer "target_account_id", null: false
@@ -493,6 +512,10 @@ ActiveRecord::Schema.define(version: 20170830000000) do
   end
 
   add_foreign_key "account_domain_blocks", "accounts", on_delete: :cascade
+  add_foreign_key "albums", "statuses", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "albums_music_attachments", "albums", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "albums_music_attachments", "albums_music_attachments", column: "next", on_update: :cascade, on_delete: :restrict
+  add_foreign_key "albums_music_attachments", "music_attachments", on_update: :cascade, on_delete: :cascade
   add_foreign_key "blocks", "accounts", column: "target_account_id", on_delete: :cascade
   add_foreign_key "blocks", "accounts", on_delete: :cascade
   add_foreign_key "conversation_mutes", "accounts", on_delete: :cascade
