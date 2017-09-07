@@ -62,11 +62,18 @@ class SuggestedAccountQuery
     def pixiv_following_account_ids
       return [] unless enable_pixiv_follows_query?
 
-      sign_in_at = User.arel_table[:current_sign_in_at]
-      uid = oauth_authentication.pixiv_follows.pluck(:target_pixiv_uid)
+      uids = oauth_authentication.pixiv_follows.pluck(:target_pixiv_uid)
 
-      accounts = default_scoped.joins(:media_attachments).joins(:user).where.not(id: excluded_ids).joins(:oauth_authentications).where(oauth_authentications: { provider: 'pixiv', uid: uid }).where(sign_in_at.gteq(3.weeks.ago)).distinct.preload(:user)
-      accounts.sort_by { |account| account.user.current_sign_in_at }.reverse.map(&:id)
+      # メディアを投稿しているユーザーだけを取り出すため、media_attachmentsとjoinする
+      account_ids = default_scoped.joins(:media_attachments)
+                                  .joins(:user)
+                                  .where.not(id: excluded_ids)
+                                  .joins(:oauth_authentications)
+                                  .where(oauth_authentications: { provider: 'pixiv', uid: uids })
+                                  .distinct
+                                  .pluck(:id)
+
+      Account.filter_by_time(account_ids)
     end
 
     def enable_pixiv_follows_query?
@@ -78,7 +85,12 @@ class SuggestedAccountQuery
     private
 
     def popular_account_ids
-      all_popular_account_ids - excluded_ids
+      ids = all_popular_account_ids - excluded_ids
+
+      active_ids = Account.filter_by_time(ids)
+
+      #アクティブなアカウントを先に表示する
+      shuffle_ids(active_ids) + shuffle_ids(ids - active_ids)
     end
 
     # TODO: 自動的に検出するようにする
@@ -98,9 +110,13 @@ class SuggestedAccountQuery
     ids = []
     ids += pickup(pixiv_following_account_ids, limit: with_pixiv_follows_limit)
     ids += (triadic_account_ids - ids)
-    ids += pickup((shuffle_ids(popular_account_ids) - ids), limit: limit - ids.length) # limitに達する数までidを取得する
+    ids += pickup(popular_account_ids - ids, limit: limit - ids.length) # limitに達する数までidを取得する
 
-    default_scoped.where(id: ids).limit(limit).sort_by { |account| ids.index(account.id) }
+    # sort_byにより、取得したAccountがidsの順番通りになるよう再度並び替える
+    default_scoped.where(id: ids)
+                  .preload(:media_attachments, :oauth_authentications)
+                  .limit(limit)
+                  .sort_by { |account| ids.index(account.id) }
   end
 
   private
