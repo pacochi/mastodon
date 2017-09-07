@@ -69,7 +69,7 @@ class QueueItem
       matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/((@\w+)|(web/statuses))/(?<status_id>\d+)})
       return scope.find_by!(status_id: matched[:status_id]) if matched
 
-      matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/musics/(?<music_id>\d+)})
+      matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/(@\w+)/musics/(?<music_id>\d+)})
       return scope.find(matched[:music_id]) if matched
 
       return nil

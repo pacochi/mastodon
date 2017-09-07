@@ -9,9 +9,11 @@ describe Api::V1::AlbumsController, type: :controller do
 
   describe 'POST #create' do
     context 'with write scope' do
+      let(:user) { Fabricate(:user) }
+
       before do
         allow(controller).to receive(:doorkeeper_token) do
-          Fabricate(:accessible_access_token, resource_owner_id: Fabricate(:user).id, scopes: 'write')
+          Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: 'write')
         end
       end
 
@@ -26,10 +28,10 @@ describe Api::V1::AlbumsController, type: :controller do
           description: 'description',
         )
 
-        expect(album.status.text).to eq album_url(album)
+        expect(album.status.text).to eq short_account_album_url(user.account.username, album)
         expect(body_as_json[:title]).to eq 'title'
         expect(body_as_json[:description]).to eq 'description'
-        expect(body_as_json[:status][:text]).to eq album_url(album)
+        expect(body_as_json[:status][:text]).to eq short_account_album_url(user.account.username, album)
       end
 
       it 'returns http success' do

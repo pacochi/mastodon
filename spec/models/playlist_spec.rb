@@ -8,7 +8,10 @@ RSpec.describe Playlist, type: :model do
   let(:user) { Fabricate(:user, admin: admin) }
   let(:admin) { false }
 
-  let(:link) { Rails.application.routes.url_helpers.music_url(music_attachment) }
+  let(:link) do
+    Rails.application.routes.url_helpers.short_account_music_url(music_attachment.status.account.username, music_attachment)
+  end
+
   let!(:music_attachment) { Fabricate(:music_attachment, title: 'title', duration: 10) }
 
   let(:settings) { { 'max_add_count' => 10, 'max_queue_size' => 10, 'max_skip_count' => 2, 'skip_limit_time' => 0 } }

@@ -37,6 +37,8 @@ Rails.application.routes.draw do
 
   get '/@:username', to: 'accounts#show', as: :short_account
   get '/@:account_username/:id', to: 'statuses#show', as: :short_account_status
+  get '/@:account_username/albums/:id', to: 'albums#show', as: :short_account_album
+  get '/@:account_username/musics/:id', to: 'musics#show', as: :short_account_music
 
   get '/users/:username', to: redirect('/@%{username}'), constraints: { format: :html }
 
@@ -79,9 +81,6 @@ Rails.application.routes.draw do
     resource :follower_domains, only: [:show, :update]
     resource :delete, only: [:show, :destroy]
   end
-
-  resources :albums, only: [:show]
-  resources :musics, only: [:show]
 
   resources :media, only: [:show]
   resources :tags,  only: [:show]

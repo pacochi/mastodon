@@ -15,9 +15,11 @@ describe Api::V1::MusicsController, type: :controller do
     context 'with write scope' do
       before do
         allow(controller).to receive(:doorkeeper_token) do
-          Fabricate(:accessible_access_token, resource_owner_id: Fabricate(:user).id, scopes: 'write')
+          Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: 'write')
         end
       end
+
+      let(:user) { Fabricate(:user) }
 
       it 'returns http unprocessable entity when a non-audio file is uploaded as a music' do
         post :create,
@@ -72,10 +74,10 @@ describe Api::V1::MusicsController, type: :controller do
           video_spectrum_color: 0xff0000,
         )
 
-        expect(music_attachment.status.text).to eq music_url(music_attachment)
+        expect(music_attachment.status.text).to eq short_account_music_url(user.account.username, music_attachment)
         expect(body_as_json[:title]).to eq 'title'
         expect(body_as_json[:artist]).to eq 'artist'
-        expect(body_as_json[:status][:text]).to eq music_url(music_attachment)
+        expect(body_as_json[:status][:text]).to eq short_account_music_url(user.account.username, music_attachment)
         expect(body_as_json[:video]).to eq video
       end
 

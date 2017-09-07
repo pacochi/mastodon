@@ -17,7 +17,7 @@ class Api::V1::MusicsController < Api::BaseController
       attributes.merge!(status: status)
       @music = MusicAttachment.create!(attributes)
 
-      status.update! text: music_url(@music)
+      status.update! text: short_account_music_url(current_account.username, @music)
     end
   end
 

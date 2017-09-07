@@ -20,7 +20,7 @@ class Api::V1::AlbumsController < Api::BaseController
       attributes.merge!(status: status)
       @album = Album.create!(attributes)
 
-      status.update! text: album_url(@album)
+      status.update! text: short_account_album_url(current_account.username, @album)
     end
   end
 
