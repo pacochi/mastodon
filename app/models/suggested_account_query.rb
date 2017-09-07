@@ -81,7 +81,7 @@ class SuggestedAccountQuery
     def popular_account_ids
       ids = all_popular_account_ids - excluded_ids
 
-      active_ids = Account.filter_active(ids, Time.mktime(2017, 4, 1, 0, 0, 0)...Time.mktime(2017, 5, 8, 0, 0, 0))
+      active_ids = Account.filter_by_time_range(ids, Time.mktime(2017, 4, 1, 0, 0, 0)...Time.mktime(2017, 5, 8, 0, 0, 0))
 
       active_ids.map{ |account| account.id }
     end

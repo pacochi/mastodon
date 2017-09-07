@@ -237,7 +237,7 @@ class Account < ApplicationRecord
       find_by_sql([sql, account.id, account.id, limit])
     end
 
-    def filter_active(ids, time_range = Time.now.days_ago(3)...Time.now)
+    def filter_by_time_range(ids, time_range = Time.now.days_ago(3)...Time.now)
       time_begin, time_end = time_range.begin.strftime('%Y-%m-%d %H:%M:%S'), time_range.end.strftime('%Y-%m-%d %H:%M:%S')
 
       sql = <<-SQL.squish
