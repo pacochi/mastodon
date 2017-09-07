@@ -181,7 +181,7 @@ class Account < ApplicationRecord
           AND silenced = 'f'
           AND target_account_id NOT IN (SELECT * FROM first_degree)
           AND target_account_id NOT IN (:excluded_account_ids)
-          AND accounts.suspended = false
+          AND accounts.suspended = FALSE
         GROUP BY target_account_id, accounts.id
         HAVING (
           SELECT created_at
@@ -210,7 +210,7 @@ class Account < ApplicationRecord
           ts_rank_cd(#{textsearch}, #{query}, 32) AS rank
         FROM accounts
         WHERE #{query} @@ #{textsearch}
-          AND accounts.suspended = false
+          AND accounts.suspended = FALSE
         ORDER BY rank DESC
         LIMIT ?
       SQL
@@ -228,7 +228,7 @@ class Account < ApplicationRecord
         FROM accounts
         LEFT OUTER JOIN follows AS f ON (accounts.id = f.account_id AND f.target_account_id = ?) OR (accounts.id = f.target_account_id AND f.account_id = ?)
         WHERE #{query} @@ #{textsearch}
-          AND accounts.suspended = false
+          AND accounts.suspended = FALSE
         GROUP BY accounts.id
         ORDER BY rank DESC
         LIMIT ?
@@ -242,10 +242,9 @@ class Account < ApplicationRecord
         SELECT accounts.id
         FROM accounts
         WHERE accounts.id IN (:ids)
-        AND accounts.suspended = false
-        AND suspended = 'f'
-        AND silenced = 'f'
-        AND (SELECT created_at FROM statuses ORDER BY statuses.id DESC LIMIT 1) > :time_begin
+        AND suspended = FALSE
+        AND silenced = FALSE
+        AND (SELECT created_at FROM statuses WHERE statuses.account_id = accounts.id ORDER BY statuses.id DESC LIMIT 1) > :time_begin
       SQL
 
       find_by_sql([sql, {ids: ids, time_begin: time_begin}])
