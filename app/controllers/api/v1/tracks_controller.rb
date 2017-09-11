@@ -41,6 +41,9 @@ class Api::V1::TracksController < Api::BaseController
   end
 
   def prepare_video
+    track = MusicAttachment.joins(:status).find_by!(id: params.require(:id), statuses: { account: current_account })
+    VideoPreparingWorker.perform_async track.id
+
     render_empty
   end
 

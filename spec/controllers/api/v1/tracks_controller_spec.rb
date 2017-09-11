@@ -302,10 +302,15 @@ describe Api::V1::TracksController, type: :controller do
       let(:user) { Fabricate(:user) }
       let(:music_attachment) { Fabricate(:music_attachment, status: Fabricate(:status, account: user.account)) }
 
-      it 'queues rendering'
+      it 'queues rendering' do
+        Sidekiq::Testing.fake! do
+          post :prepare_video, params: { id: music_attachment }
+          expect(VideoPreparingWorker).to have_enqueued_sidekiq_job music_attachment.id
+        end
+      end
 
       it 'returns http success' do
-        post :prepare_video, params: { id: music_attachment.id }
+        post :prepare_video, params: { id: music_attachment }
         expect(response).to have_http_status :success
       end
     end
@@ -313,7 +318,7 @@ describe Api::V1::TracksController, type: :controller do
     context 'without write scope' do
       it 'returns http unauthorized' do
         music_attachment = Fabricate(:music_attachment)
-        delete :destroy, params: { id: music_attachment.id }
+        delete :destroy, params: { id: music_attachment }
         expect(response).to have_http_status :unauthorized
       end
     end
