@@ -56,13 +56,14 @@ describe Api::V1::AlbumsController, type: :controller do
     context 'with write scope' do
       before do
         allow(controller).to receive(:doorkeeper_token) do
-          Fabricate(:accessible_access_token, resource_owner_id: Fabricate(:user).id, scopes: 'write')
+          Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: 'write')
         end
       end
 
-      it 'updates and renders albums' do
-        album = Fabricate(:album)
+      let(:user) { Fabricate(:user) }
+      let(:album) { Fabricate(:album, status: Fabricate(:status, account: user.account)) }
 
+      it 'updates and renders albums' do
         patch :update,
               params: { id: album.id, title: 'updated title', description: 'updated description' }
 
@@ -75,7 +76,6 @@ describe Api::V1::AlbumsController, type: :controller do
       end
 
       it 'returns http success' do
-        album = Fabricate(:album)
         patch :update, params: { id: album.id }
         expect(response).to have_http_status :success
       end
@@ -94,18 +94,19 @@ describe Api::V1::AlbumsController, type: :controller do
     context 'with write scope' do
       before do
         allow(controller).to receive(:doorkeeper_token) do
-          Fabricate(:accessible_access_token, resource_owner_id: Fabricate(:user).id, scopes: 'write')
+          Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: 'write')
         end
       end
 
+      let(:user) { Fabricate(:user) }
+      let(:album) { Fabricate(:album, status: Fabricate(:status, account: user.account)) }
+
       it 'destroys albums' do
-        album = Fabricate(:album)
         delete :destroy, params: { id: album.id }
         expect { album.reload }.to raise_error ActiveRecord::RecordNotFound
       end
 
       it 'returns http success' do
-        album = Fabricate(:album)
         delete :destroy, params: { id: album.id }
         expect(response).to have_http_status :success
       end

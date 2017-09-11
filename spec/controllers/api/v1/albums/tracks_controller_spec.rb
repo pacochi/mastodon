@@ -3,7 +3,8 @@
 require 'rails_helper'
 
 describe Api::V1::Albums::TracksController, type: :controller do
-  let(:album) { Fabricate(:album) }
+  let(:user) { Fabricate(:user) }
+  let(:album) { Fabricate(:album, status: Fabricate(:status, account: user.account)) }
   let(:music_attachment) { Fabricate(:music_attachment) }
 
   shared_examples 'position update' do |http_method|
@@ -45,7 +46,7 @@ describe Api::V1::Albums::TracksController, type: :controller do
     context 'with write scope' do
       before do
         allow(controller).to receive(:doorkeeper_token) do
-          Fabricate(:accessible_access_token, resource_owner_id: Fabricate(:user).id, scopes: 'write')
+          Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: 'write')
         end
       end
 
@@ -74,7 +75,7 @@ describe Api::V1::Albums::TracksController, type: :controller do
     context 'with write scope' do
       before do
         allow(controller).to receive(:doorkeeper_token) do
-          Fabricate(:accessible_access_token, resource_owner_id: Fabricate(:user).id, scopes: 'write')
+          Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: 'write')
         end
       end
 
@@ -131,7 +132,7 @@ describe Api::V1::Albums::TracksController, type: :controller do
     context 'with write scope' do
       before do
         allow(controller).to receive(:doorkeeper_token) do
-          Fabricate(:accessible_access_token, resource_owner_id: Fabricate(:user).id, scopes: 'write')
+          Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: 'write')
         end
       end
 

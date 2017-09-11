@@ -25,12 +25,12 @@ class Api::V1::AlbumsController < Api::BaseController
   end
 
   def update
-    @album = Album.find(params.require(:id))
+    @album = Album.joins(:status).find_by!(id: params.require(:id), statuses: { account: current_account })
     @album.update! params.permit(:title, :description, :image)
   end
 
   def destroy
-    Album.find(params.require(:id)).destroy!
+    Album.joins(:status).find_by!(id: params.require(:id), statuses: { account: current_account }).destroy!
     render_empty
   end
 

@@ -118,13 +118,14 @@ describe Api::V1::TracksController, type: :controller do
     context 'with write scope' do
       before do
         allow(controller).to receive(:doorkeeper_token) do
-          Fabricate(:accessible_access_token, resource_owner_id: Fabricate(:user).id, scopes: 'write')
+          Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: 'write')
         end
       end
 
-      it 'updates and renders music attributes' do
-        music_attachment = Fabricate(:music_attachment)
+      let(:user) { Fabricate(:user) }
+      let(:music_attachment) { Fabricate(:music_attachment, status: Fabricate(:status, account: user.account)) }
 
+      it 'updates and renders music attributes' do
         video = {
           blur: {
             movement: { band: { bottom: 50, top: 300 }, threshold: 165 },
@@ -167,7 +168,6 @@ describe Api::V1::TracksController, type: :controller do
       end
 
       it 'returns http success' do
-        music_attachment = Fabricate(:music_attachment)
         patch :update, params: { id: music_attachment.id }
         expect(response).to have_http_status :success
       end
@@ -186,19 +186,20 @@ describe Api::V1::TracksController, type: :controller do
     context 'with write scope' do
       before do
         allow(controller).to receive(:doorkeeper_token) do
-          Fabricate(:accessible_access_token, resource_owner_id: Fabricate(:user).id, scopes: 'write')
+          Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: 'write')
         end
       end
 
+      let(:user) { Fabricate(:user) }
+      let(:music_attachment) { Fabricate(:music_attachment, status: Fabricate(:status, account: user.account)) }
+
       it 'deletes status and music attachment' do
-        music_attachment = Fabricate(:music_attachment)
         delete :destroy, params: { id: music_attachment.id }
         expect { music_attachment.status.reload }.to raise_error ActiveRecord::RecordNotFound
         expect { music_attachment.reload }.to raise_error ActiveRecord::RecordNotFound
       end
 
       it 'returns http success' do
-        music_attachment = Fabricate(:music_attachment)
         delete :destroy, params: { id: music_attachment.id }
         expect(response).to have_http_status :success
       end

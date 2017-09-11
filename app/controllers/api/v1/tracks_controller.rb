@@ -23,12 +23,12 @@ class Api::V1::TracksController < Api::BaseController
 
   def update
     attributes = prepare_music_attributes
-    @track = MusicAttachment.find(params.require(:id))
+    @track = MusicAttachment.joins(:status).find_by!(id: params.require(:id), statuses: { account: current_account })
     @track.update! attributes
   end
 
   def destroy
-    music = MusicAttachment.find(params.require(:id))
+    music = MusicAttachment.joins(:status).find_by!(id: params.require(:id), statuses: { account: current_account })
 
     music.destroy!
     RemovalWorker.perform_async music.status_id
