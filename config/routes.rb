@@ -190,7 +190,6 @@ Rails.application.routes.draw do
       resources :trend_tags, only: [:index]
       resources :follows,    only: [:create]
       resources :media,      only: [:create]
-      resources :tracks,     only: [:show, :create, :update, :destroy]
       resources :apps,       only: [:create]
       resources :blocks,     only: [:index]
       resources :mutes,      only: [:index]
@@ -219,6 +218,12 @@ Rails.application.routes.draw do
         collection do
           post :clear
           post :dismiss
+        end
+      end
+
+      resources :tracks, only: [:show, :create, :update, :destroy] do
+        collection do
+          post :prepare_video
         end
       end
 

@@ -290,4 +290,32 @@ describe Api::V1::TracksController, type: :controller do
       expect(response).to have_http_status :success
     end
   end
+
+  describe 'POST #prepare_video' do
+    context 'with write scope' do
+      before do
+        allow(controller).to receive(:doorkeeper_token) do
+          Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: 'write')
+        end
+      end
+
+      let(:user) { Fabricate(:user) }
+      let(:music_attachment) { Fabricate(:music_attachment, status: Fabricate(:status, account: user.account)) }
+
+      it 'queues rendering'
+
+      it 'returns http success' do
+        post :prepare_video, params: { id: music_attachment.id }
+        expect(response).to have_http_status :success
+      end
+    end
+
+    context 'without write scope' do
+      it 'returns http unauthorized' do
+        music_attachment = Fabricate(:music_attachment)
+        delete :destroy, params: { id: music_attachment.id }
+        expect(response).to have_http_status :unauthorized
+      end
+    end
+  end
 end

@@ -40,6 +40,10 @@ class Api::V1::TracksController < Api::BaseController
     @track = MusicAttachment.find(params.require(:id))
   end
 
+  def prepare_video
+    render_empty
+  end
+
   private
 
   def prepare_music_attributes
