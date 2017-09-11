@@ -230,7 +230,8 @@ en:
       body: "%{reporter} has reported %{target}"
       subject: New report for %{instance} (#%{id})
   albums:
-    not_found: Positioning tracks not found
+    tracks:
+      positioning_not_found: Positioning tracks not found
     over_character_limit: character limit of %{max} exceeded
   application_mailer:
     settings: 'Change e-mail preferences: %{link}'

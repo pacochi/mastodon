@@ -178,15 +178,32 @@ describe Api::V1::Albums::TracksController, type: :controller do
   describe 'GET #index' do
     render_views
 
-    it 'renders music attachments ordered by position column' do
+    it 'renders music attachments ordered by position column with id constraints' do
+      album_music_attachments = [
+        Fabricate(:album_music_attachment, album: album, position: '0.3'),
+        Fabricate(:album_music_attachment, album: album, position: '0.2'),
+        Fabricate(:album_music_attachment, album: album, position: '0.1'),
+      ]
+
+      get :index, params: { album_id: album, since_id: album_music_attachments[2].music_attachment_id, max_id: album_music_attachments[0].music_attachment_id }
+
+      expect(body_as_json.pluck(:id)).to match_array [album_music_attachments[1].music_attachment_id]
+    end
+
+    it 'renders music attachments ordered by position column with limit constraint' do
       album_music_attachments = [
         Fabricate(:album_music_attachment, album: album, position: '0.2'),
         Fabricate(:album_music_attachment, album: album, position: '0.1'),
       ]
 
-      get :index, params: { album_id: album }
+      get :index, params: { album_id: album, limit: 1 }
 
-      expect(body_as_json.pluck(:id)).to match_array album_music_attachments.pluck(:music_attachment_id)
+      expect(body_as_json.pluck(:id)).to match_array [album_music_attachments[1].music_attachment_id]
+    end
+
+    it 'returns http unprocessable_entity if ranging parameters are unprocessable' do
+      get :index, params: { album_id: album, since_id: 1, max_id: 2 }
+      expect(response).to have_http_status :unprocessable_entity
     end
 
     it 'returns http success' do

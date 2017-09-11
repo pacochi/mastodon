@@ -1,10 +1,20 @@
 class Api::V1::Albums::TracksController < Api::BaseController
   before_action -> { doorkeeper_authorize! :write }, except: :index
   before_action :require_user!, except: :index
+  rescue_from Mastodon::TrackNotFoundError, with: :render_track_not_found
 
   respond_to :json
 
   def update
+    position = AlbumMusicAttachment.position_between(
+      *range(
+        params[:previous_id]&.to_i,
+        params[:next_id]&.to_i,
+        AlbumMusicAttachment::MIN_POSITION,
+        AlbumMusicAttachment::MAX_POSITION,
+      )
+    )
+
     if request.put?
       AlbumMusicAttachment.create!(
         album_id: params.require(:album_id),
@@ -19,8 +29,6 @@ class Api::V1::Albums::TracksController < Api::BaseController
     end
 
     render_empty
-  rescue Mastodon::TrackNotFoundError
-    render json: { error: I18n.t('albums.tracks.not_found') }, status: :unprocessable_entity
   end
 
   def destroy
@@ -33,27 +41,35 @@ class Api::V1::Albums::TracksController < Api::BaseController
   end
 
   def index
-    since_id = params[:since_id]
-    max_id = params[:max_id]
-    ranging_ids = [since_id, max_id]
+    ranged = range(params[:since_id]&.to_i, params[:max_id]&.to_i, nil, nil)
 
-    @tracks = MusicAttachment
-      .joins(:album_music_attachment)
-      .merge(
-         AlbumMusicAttachment
-           .where(album_id: params.require(:album_id))
-           .order(:position))
+    album_music_attachment_scope =
+      AlbumMusicAttachment.where(album_id: params.require(:album_id)).order(:position)
+
+    if ranged[0].present?
+      album_music_attachment_scope = album_music_attachment_scope.where('position > ?', ranged[0])
+    end
+
+    if ranged[1].present?
+      album_music_attachment_scope = album_music_attachment_scope.where('position < ?', ranged[1])
+    end
+
+    @tracks = MusicAttachment.joins(:album_music_attachment)
+                             .merge(album_music_attachment_scope)
+                             .limit(limit_param(DEFAULT_TRACKS_LIMIT))
   end
 
   private
 
-  def position
-    previous_id = params[:previous_id]&.to_i
-    next_id = params[:next_id]&.to_i
-    positioning_ids = [previous_id, next_id].compact
+  def render_track_not_found
+    render json: { error: I18n.t('albums.tracks.positioning_not_found') }, status: :unprocessable_entity
+  end
 
-    previous_position = AlbumMusicAttachment::MIN_POSITION
-    next_position = AlbumMusicAttachment::MAX_POSITION
+  def range(lower_id, upper_id, lower_position_fallback, upper_position_fallback)
+    positioning_ids = [lower_id, upper_id].compact
+
+    lower_position = lower_position_fallback
+    upper_position = upper_position_fallback
 
     positioning_attributes = AlbumMusicAttachment.where(
       music_attachment_id: positioning_ids,
@@ -66,44 +82,17 @@ class Api::V1::Albums::TracksController < Api::BaseController
 
     positioning_attributes.each do |attributes|
       case attributes[0]
-      when previous_id
-        previous_position = attributes[1]
-      when next_id
-        next_position = attributes[1]
+      when lower_id
+        lower_position = attributes[1]
+      when upper_id
+        upper_position = attributes[1]
       end
     end
 
-    if next_position <= previous_position
+    if upper_position.present? && lower_position.present? && upper_position <= lower_position
       raise Mastodon::ValidationError, I18n.t('albums.tracks.invalid_range')
     end
 
-    AlbumMusicAttachment.position_between(previous_position, next_position)
-  end
-
-  def range(lower, upper)
-    previous_id = params[:previous_id]&.to_i
-    next_id = params[:next_id]&.to_i
-    positioning_ids = [previous_id, next_id].compact
-
-    previous_position = AlbumMusicAttachment::MIN_POSITION
-    next_position = AlbumMusicAttachment::MAX_POSITION
-
-    positioning_attributes = AlbumMusicAttachment.where(
-      music_attachment_id: positioning_ids,
-      album_id: params.require(:album_id),
-    ).pluck(:music_attachment_id, :position)
-
-    if positioning_attributes.size < positioning_ids.size
-      raise Mastodon::TrackNotFoundError
-    end
-
-    positioning_attributes.each do |attributes|
-      case attributes[0]
-      when previous_id
-        previous_position = attributes[1]
-      when next_id
-        next_position = attributes[1]
-      end
-    end
+    [lower_position, upper_position]
   end
 end
