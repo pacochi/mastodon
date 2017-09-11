@@ -57,6 +57,8 @@ class Api::V1::Albums::TracksController < Api::BaseController
     @tracks = MusicAttachment.joins(:album_music_attachment)
                              .merge(album_music_attachment_scope)
                              .limit(limit_param(DEFAULT_TRACKS_LIMIT))
+
+    insert_pagination_headers
   end
 
   private
@@ -94,5 +96,41 @@ class Api::V1::Albums::TracksController < Api::BaseController
     end
 
     [lower_position, upper_position]
+  end
+
+  def pagination_params(core_params)
+    params.permit(:limit).merge(core_params)
+  end
+
+  def insert_pagination_headers
+    set_pagination_headers(next_path, prev_path)
+  end
+
+  def next_path
+    unless @tracks.empty?
+      api_v1_album_tracks_url pagination_params(since_id: pagination_since_id)
+    end
+  end
+
+  def prev_path
+    if records_continue?
+      api_v1_album_tracks_url pagination_params(max_id: pagination_max_id)
+    end
+  end
+
+  def records_continue?
+    @tracks.size == limit_param(DEFAULT_TRACKS_LIMIT)
+  end
+
+  def pagination_max_id
+    @tracks.last.id
+  end
+
+  def pagination_since_id
+    @tracks.first.id
+  end
+
+  def insert_pagination_headers
+    set_pagination_headers(next_path, prev_path)
   end
 end

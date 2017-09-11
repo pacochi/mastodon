@@ -201,6 +201,19 @@ describe Api::V1::Albums::TracksController, type: :controller do
       expect(body_as_json.pluck(:id)).to match_array [album_music_attachments[1].music_attachment_id]
     end
 
+    it 'set pagination headers if necessary' do
+      album_music_attachments = [
+        Fabricate(:album_music_attachment, album: album, position: '0.3'),
+        Fabricate(:album_music_attachment, album: album, position: '0.2'),
+        Fabricate(:album_music_attachment, album: album, position: '0.1'),
+      ]
+
+      get :index, params: { album_id: album, since_id: album_music_attachments[2].music_attachment_id, limit: 1 }
+
+      expect(response.headers['Link'].find_link(['rel', 'next']).href).to eq api_v1_album_tracks_url(limit: 1, since_id: album_music_attachments[1].music_attachment_id)
+      expect(response.headers['Link'].find_link(['rel', 'prev']).href).to eq api_v1_album_tracks_url(limit: 1, max_id: album_music_attachments[1].music_attachment_id)
+    end
+
     it 'returns http unprocessable_entity if ranging parameters are unprocessable' do
       get :index, params: { album_id: album, since_id: 1, max_id: 2 }
       expect(response).to have_http_status :unprocessable_entity
