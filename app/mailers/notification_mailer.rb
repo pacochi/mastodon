@@ -50,6 +50,15 @@ class NotificationMailer < ApplicationMailer
     end
   end
 
+  def video_prepared(recipient, notification)
+    @me = recipient
+    @track = notification.activity
+
+    locale_for_account(@me) do
+      mail to: @me.user.email, subject: I18n.t('notification_mailer.video_prepared.subject', title: @track.title)
+    end
+  end
+
   def digest(recipient, opts = {})
     @me            = recipient
     @since         = opts[:since] || @me.user.last_emailed_at || @me.user.current_sign_in_at

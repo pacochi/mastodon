@@ -9,6 +9,7 @@ describe Api::V1::TracksController, type: :controller do
   let(:music_with_picture) { fixture_file_upload('files/aint_we_got_fun_billy_jones1921_with_picture.mp3') }
   let(:another_music) { fixture_file_upload('files/aprilshowers.mp3') }
   let(:image) { fixture_file_upload('files/attachment.jpg') }
+  let(:video) { fixture_file_upload('files/aint_we_got_fun_billy_jones1921.mp4') }
   let(:unknown) { fixture_file_upload('files/imports.txt') }
 
   describe 'POST #create' do
@@ -36,7 +37,7 @@ describe Api::V1::TracksController, type: :controller do
       end
 
       it 'creates and renders status and music attachment' do
-        video = {
+        video_params = {
           blur: {
             movement: { band: { bottom: 50, top: 300 }, threshold: 165 },
             blink: { band: { bottom: 2000, top: 15000 }, threshold: 165 },
@@ -52,7 +53,7 @@ describe Api::V1::TracksController, type: :controller do
         }
 
         post :create,
-             params: { title: 'title', artist: 'artist', music: music, image: image, video: video }
+             params: { title: 'title', artist: 'artist', music: music, image: image, video: video_params }
 
         music_attachment = MusicAttachment.find_by!(
           id: body_as_json[:id],
@@ -78,7 +79,7 @@ describe Api::V1::TracksController, type: :controller do
         expect(body_as_json[:title]).to eq 'title'
         expect(body_as_json[:artist]).to eq 'artist'
         expect(body_as_json[:status][:text]).to eq short_account_track_url(user.account.username, music_attachment)
-        expect(body_as_json[:video]).to eq video
+        expect(body_as_json[:video]).to eq video_params
       end
 
       it 'removes pictures in ID3v2 tag' do
@@ -126,7 +127,7 @@ describe Api::V1::TracksController, type: :controller do
       let(:music_attachment) { Fabricate(:music_attachment, status: Fabricate(:status, account: user.account)) }
 
       it 'updates and renders music attributes' do
-        video = {
+        video_params = {
           blur: {
             movement: { band: { bottom: 50, top: 300 }, threshold: 165 },
             blink: { band: { bottom: 2000, top: 15000 }, threshold: 165 },
@@ -142,7 +143,7 @@ describe Api::V1::TracksController, type: :controller do
         }
 
         patch :update,
-              params: { id: music_attachment.id, title: 'updated title', artist: 'updated artist', music: another_music, video: video }
+              params: { id: music_attachment.id, title: 'updated title', artist: 'updated artist', music: another_music, video: video_params }
 
         music_attachment.reload
         expect(music_attachment.title).to eq 'updated title'
@@ -164,7 +165,7 @@ describe Api::V1::TracksController, type: :controller do
         expect(body_as_json[:id]).to eq music_attachment.id
         expect(body_as_json[:title]).to eq 'updated title'
         expect(body_as_json[:artist]).to eq 'updated artist'
-        expect(body_as_json[:video]).to eq video
+        expect(body_as_json[:video]).to eq video_params
       end
 
       it 'returns http success' do
@@ -223,6 +224,7 @@ describe Api::V1::TracksController, type: :controller do
         duration: 1.minute,
         music: music,
         image: image,
+        video: video,
         video_blur_movement_band_bottom: 50,
         video_blur_movement_band_top: 300,
         video_blur_movement_threshold: 165,
@@ -242,19 +244,21 @@ describe Api::V1::TracksController, type: :controller do
       expect(body_as_json[:title]).to eq 'title'
       expect(body_as_json[:artist]).to eq 'artist'
 
-      expect(body_as_json[:video]).to eq({
-        blur: {
-          movement: { band: { bottom: 50, top: 300 }, threshold: 165 },
-          blink: { band: { bottom: 2000, top: 15000 }, threshold: 165 },
-        },
-        particle: {
-          limit: { band: { bottom: 300, top: 2000 }, threshold: 165 },
-          color: 0xff0000,
-        },
-        spectrum: {
-          mode: 0,
-          color: 0xff0000,
-        },
+      expect(body_as_json[:video][:url]).to be_a String
+
+      expect(body_as_json[:video][:blur]).to eq({
+        movement: { band: { bottom: 50, top: 300 }, threshold: 165 },
+        blink: { band: { bottom: 2000, top: 15000 }, threshold: 165 },
+      })
+
+      expect(body_as_json[:video][:particle]).to eq({
+        limit: { band: { bottom: 300, top: 2000 }, threshold: 165 },
+        color: 0xff0000,
+      })
+
+      expect(body_as_json[:video][:spectrum]).to eq({
+        mode: 0,
+        color: 0xff0000,
       })
 
       expect(body_as_json[:status][:id]).to eq music_attachment.status_id
@@ -263,6 +267,7 @@ describe Api::V1::TracksController, type: :controller do
     it 'skips optional attributes of video if missing' do
       music_attachment = Fabricate(
         :music_attachment,
+        video: nil,
         video_blur_movement_band_bottom: 0,
         video_blur_movement_band_top: 0,
         video_blur_movement_threshold: 0,
@@ -279,6 +284,7 @@ describe Api::V1::TracksController, type: :controller do
 
       get :show, params: { id: music_attachment.id }
 
+      expect(body_as_json[:video]).not_to have_key :url
       expect(body_as_json[:video]).not_to have_key :blur
       expect(body_as_json[:video]).not_to have_key :particle
       expect(body_as_json[:video]).not_to have_key :spectrum
