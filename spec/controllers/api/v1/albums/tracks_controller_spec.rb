@@ -78,42 +78,28 @@ describe Api::V1::Albums::TracksController, type: :controller do
         end
       end
 
-#      include_examples 'position update', :patch do
-#        before do
-#          Fabricate(
-#            :album_music_attachment,
-#            album: album,
-#            music_attachment: music_attachment,
-#            position: '0.3',
-#          )
-#        end
-#      end
+      let!(:album_music_attachment) do
+          Fabricate(
+            :album_music_attachment,
+            album: album,
+            music_attachment: music_attachment,
+            position: '0.3',
+          )
+      end
+
+      include_examples 'position update', :patch
 
       it 'updates album music attachments' do
-        album_music_attachment = Fabricate(
-          :album_music_attachment,
-          album: album,
-          music_attachment: music_attachment,
-          position: '0.1',
-        )
-
-        origin = Fabricate(:album_music_attachment, album: album, position: '0.2')
+        origin = Fabricate(:album_music_attachment, album: album, position: '0.4')
 
         patch :update, params: { album_id: album.id, id: music_attachment.id, prev_id: origin.music_attachment_id }
 
         album_music_attachment.reload
-        expect(album_music_attachment.position).to be > BigDecimal('0.2')
+        expect(album_music_attachment.position).to be > BigDecimal('0.4')
       end
 
       it 'returns http success' do
-        album_music_attachment = Fabricate(
-          :album_music_attachment,
-          album: album,
-          music_attachment: music_attachment,
-          position: '0.1',
-        )
-
-        origin = Fabricate(:album_music_attachment, album: album, position: '0.2')
+        origin = Fabricate(:album_music_attachment, album: album, position: '0.4')
 
         patch :update, params: { album_id: album.id, id: music_attachment.id, prev_id: origin.music_attachment_id }
 
@@ -123,14 +109,7 @@ describe Api::V1::Albums::TracksController, type: :controller do
 
     context 'without write scope' do
       it 'returns http unauthorized' do
-        album_music_attachment = Fabricate(
-          :album_music_attachment,
-          album: album,
-          music_attachment: music_attachment,
-          position: '0.1',
-        )
-
-        origin = Fabricate(:album_music_attachment, album: album, position: '0.2')
+        origin = Fabricate(:album_music_attachment, album: album, position: '0.4')
 
         patch :update, params: { album_id: album.id, id: music_attachment.id, prev_id: origin.music_attachment_id }
 
