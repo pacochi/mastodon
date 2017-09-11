@@ -14,6 +14,7 @@
 #
 
 class Album < ApplicationRecord
+  include Paginable
 
   before_save :truncate_title,  if: :title_changed?
 
