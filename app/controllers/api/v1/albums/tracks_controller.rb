@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class Api::V1::Albums::TracksController < Api::BaseController
   before_action -> { doorkeeper_authorize! :write }, except: :index
   before_action :require_user!, except: :index
