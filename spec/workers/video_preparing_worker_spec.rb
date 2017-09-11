@@ -6,9 +6,18 @@ describe VideoPreparingWorker do
   describe 'perform' do
     let(:music_attachment) { Fabricate(:music_attachment) }
 
-    it 'prepares video'
+    it 'prepares video' do
+      skip 'skipped for environments without supported FFmpeg'
+
+      VideoPreparingWorker.new.perform music_attachment.id
+
+      music_attachment.reload
+      expect(music_attachment.video).not_to eq nil
+    end
 
     it 'notifies finish of preparation' do
+      skip 'skipped for environments without supported FFmpeg'
+
       VideoPreparingWorker.new.perform music_attachment.id
 
       expect do
