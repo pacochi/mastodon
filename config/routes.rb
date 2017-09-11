@@ -38,6 +38,7 @@ Rails.application.routes.draw do
   get '/@:username', to: 'accounts#show', as: :short_account
   get '/@:account_username/:id', to: 'statuses#show', as: :short_account_status
   get '/@:account_username/albums/:id', to: 'albums#show', as: :short_account_album
+  get '/@:account_username/albums/:album_id/tracks/:id', to: 'albums/tracks#show'
   get '/@:account_username/tracks/:id', to: 'tracks#show', as: :short_account_track
 
   get '/users/:username', to: redirect('/@%{username}'), constraints: { format: :html }
@@ -189,7 +190,6 @@ Rails.application.routes.draw do
       resources :trend_tags, only: [:index]
       resources :follows,    only: [:create]
       resources :media,      only: [:create]
-      resources :albums,     only: [:show, :create, :update, :destroy]
       resources :tracks,     only: [:show, :create, :update, :destroy]
       resources :apps,       only: [:create]
       resources :blocks,     only: [:index]
@@ -242,6 +242,10 @@ Rails.application.routes.draw do
           post :mute
           post :unmute
         end
+      end
+
+      resources :albums, only: [:show, :create, :update, :destroy] do
+        resources :tracks, only: [:index, :update, :destroy], controller: 'albums/tracks'
       end
     end
 

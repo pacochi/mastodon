@@ -6,12 +6,12 @@
 #  id                 :integer          not null, primary key
 #  status_id          :integer          not null
 #  title              :string           not null
+#  description        :text             default(""), not null
 #  image_file_name    :string
 #  image_content_type :string
 #  image_file_size    :integer
 #  image_updated_at   :datetime
 #
-
 
 class Album < ApplicationRecord
 

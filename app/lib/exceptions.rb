@@ -14,6 +14,7 @@ module Mastodon
   class PlaylistSizeOverError < Error; end
   class PlaylistItemNotFoundError < Error; end
   class RedisMaxRetryError < Error; end
+  class TrackNotFoundError < Error; end
 
   class UnexpectedResponseError < Error
     def initialize(response = nil)
