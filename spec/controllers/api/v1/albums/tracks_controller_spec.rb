@@ -8,21 +8,21 @@ describe Api::V1::Albums::TracksController, type: :controller do
 
   shared_examples 'position update' do |http_method|
     it 'processes position parameters' do
-      previous_model = Fabricate(:album_music_attachment, album: album, position: '0.1')
+      prev_model = Fabricate(:album_music_attachment, album: album, position: '0.1')
       next_model = Fabricate(:album_music_attachment, album: album, position: '0.2')
 
-      method(http_method).call :update, params: { album_id: album, id: music_attachment, previous_id: previous_model.music_attachment_id, next_id: next_model.music_attachment_id }
+      method(http_method).call :update, params: { album_id: album, id: music_attachment, prev_id: prev_model.music_attachment_id, next_id: next_model.music_attachment_id }
 
       subject_model = AlbumMusicAttachment.find_by!(album: album, music_attachment: music_attachment)
       expect(subject_model.position).to be_between(BigDecimal('0.1'), BigDecimal('0.2')).exclusive
     end
 
     it 'returns http unprocessable_entity if position parameters are unprocessable' do
-      method(http_method).call :update, params: { album_id: album, id: music_attachment, previous_id: 1, next_id: 2 }
+      method(http_method).call :update, params: { album_id: album, id: music_attachment, prev_id: 1, next_id: 2 }
       expect(response).to have_http_status :unprocessable_entity
     end
 
-    it 'allows missing previous_id' do
+    it 'allows missing prev_id' do
       next_model = Fabricate(:album_music_attachment, album: album, position: '0.2')
 
       method(http_method).call :update, params: { album_id: album, id: music_attachment, next_id: next_model.music_attachment_id }
@@ -32,9 +32,9 @@ describe Api::V1::Albums::TracksController, type: :controller do
     end
 
     it 'allows missing next_id' do
-      previous_model = Fabricate(:album_music_attachment, album: album, position: '0.1')
+      prev_model = Fabricate(:album_music_attachment, album: album, position: '0.1')
 
-      method(http_method).call :update, params: { album_id: album, id: music_attachment, previous_id: previous_model.music_attachment_id }
+      method(http_method).call :update, params: { album_id: album, id: music_attachment, prev_id: prev_model.music_attachment_id }
 
       subject_model = AlbumMusicAttachment.find_by!(album: album, music_attachment: music_attachment)
       expect(subject_model.position).to be > BigDecimal('0.1')
@@ -99,7 +99,7 @@ describe Api::V1::Albums::TracksController, type: :controller do
 
         origin = Fabricate(:album_music_attachment, album: album, position: '0.2')
 
-        patch :update, params: { album_id: album.id, id: music_attachment.id, previous_id: origin.music_attachment_id }
+        patch :update, params: { album_id: album.id, id: music_attachment.id, prev_id: origin.music_attachment_id }
 
         album_music_attachment.reload
         expect(album_music_attachment.position).to be > BigDecimal('0.2')
@@ -115,7 +115,7 @@ describe Api::V1::Albums::TracksController, type: :controller do
 
         origin = Fabricate(:album_music_attachment, album: album, position: '0.2')
 
-        patch :update, params: { album_id: album.id, id: music_attachment.id, previous_id: origin.music_attachment_id }
+        patch :update, params: { album_id: album.id, id: music_attachment.id, prev_id: origin.music_attachment_id }
 
         expect(response).to have_http_status :success
       end
@@ -132,7 +132,7 @@ describe Api::V1::Albums::TracksController, type: :controller do
 
         origin = Fabricate(:album_music_attachment, album: album, position: '0.2')
 
-        patch :update, params: { album_id: album.id, id: music_attachment.id, previous_id: origin.music_attachment_id }
+        patch :update, params: { album_id: album.id, id: music_attachment.id, prev_id: origin.music_attachment_id }
 
         expect(response).to have_http_status :unauthorized
       end

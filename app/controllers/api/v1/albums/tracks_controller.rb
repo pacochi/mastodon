@@ -8,7 +8,7 @@ class Api::V1::Albums::TracksController < Api::BaseController
   def update
     position = AlbumMusicAttachment.position_between(
       *range(
-        params[:previous_id]&.to_i,
+        params[:prev_id]&.to_i,
         params[:next_id]&.to_i,
         AlbumMusicAttachment::MIN_POSITION,
         AlbumMusicAttachment::MAX_POSITION,
