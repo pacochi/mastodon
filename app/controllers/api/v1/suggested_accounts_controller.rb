@@ -39,7 +39,7 @@ class Api::V1::SuggestedAccountsController < Api::BaseController
   def popular_media_attachments(accounts)
     media_attachments_ids = accounts.map { |account|
       Rails.cache.fetch("suggested_account:published_attachments:#{account.id}") do
-        MediaAttachment.joins(:status).where(account: account, statuses: { sensitive: false, visibility: [:public, :unlisted] }).order(Status.arel_table[:favourites_count].desc).first(3).map(&:id)
+        MediaAttachment.joins(:status).where(account: account, statuses: { sensitive: false, visibility: [:public, :unlisted] }).reorder(Status.arel_table[:favourites_count].desc).first(3).map(&:id)
       end
     }.flatten
 
