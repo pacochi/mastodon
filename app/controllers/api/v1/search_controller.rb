@@ -33,6 +33,7 @@ class Api::V1::SearchController < Api::BaseController
     # JS gives an error. Since it is quite a rare case, we leave this issue for a while.
     @statuses = search_results.records
     @hits_total = [search_results.records.total, MAX_HITS_TOTAL].min
+    render json: { statuses: @statuses, hits_total: @hits_total }, serializer: REST::SearchResultSerializer
   end
 
   private
