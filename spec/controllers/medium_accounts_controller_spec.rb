@@ -6,10 +6,11 @@ RSpec.describe MediumAccountsController, type: :controller do
   let(:alice)  { Fabricate(:account, username: 'alice') }
 
   describe 'GET #media' do
-    it 'returns http success' do
+    it 'redirect to short_account_media_path' do
+      page = 2
       Rails.application.routes.recognize_path('/users/accounts/media')
-      get :index, params: { account_username: alice.username }
-      expect(response).to have_http_status(:success)
+      get :index, params: { account_username: alice.username, page: page }
+      expect(response).to redirect_to short_account_media_path(username: alice.username, page: page)
     end
   end
 end
