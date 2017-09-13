@@ -4,6 +4,8 @@ class AccountsController < ApplicationController
   include AccountControllerConcern
   include SignatureVerification
 
+  helper_method :next_url, :prev_url
+
   STATUSES_PER_PAGE = 20
 
   def show
@@ -19,7 +21,6 @@ class AccountsController < ApplicationController
         @pinned_statuses     = cache_collection(statuses_from_pinned_status, Status) if show_pinned_statuses?
         @statuses            = filtered_statuses.where.not(id: statuses_from_pinned_status.map(&:id)).page(params[:page]).per(STATUSES_PER_PAGE).without_count
         @statuses_collection = cache_collection(@statuses, Status)
-        @next_url            = next_url unless @statuses.empty?
       end
 
       format.atom do
@@ -51,9 +52,7 @@ class AccountsController < ApplicationController
   end
 
   def statuses_from_pinned_status
-    @statuses_from_pinned_status ||= default_statuses
-      .joins(:pinned_status)
-      .merge(PinnedStatus.where(account: @account).recent)
+    @statuses_from_pinned_status ||= @account.pinned_statuses.published
   end
 
   def only_media_scope
@@ -73,12 +72,27 @@ class AccountsController < ApplicationController
   end
 
   def next_url
+    next_page = @statuses.current_page + 1
+
     if media_requested?
-      short_account_media_url(@account, max_id: @statuses.last.id)
+      short_account_media_url(@account, page: next_page)
     elsif replies_requested?
-      short_account_with_replies_url(@account, max_id: @statuses.last.id)
+      short_account_with_replies_url(@account, page: next_page)
     else
-      short_account_url(@account, max_id: @statuses.last.id)
+      short_account_url(@account, page: next_page)
+    end
+  end
+
+  def prev_url
+    prev_page = @statuses.current_page - 1
+    prev_page = nil if prev_page == 1
+
+    if media_requested?
+      short_account_media_url(@account, page: prev_page)
+    elsif replies_requested?
+      short_account_with_replies_url(@account, page: prev_page)
+    else
+      short_account_url(@account, page: prev_page)
     end
   end
 
