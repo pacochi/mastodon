@@ -57,7 +57,7 @@ Rails.application.routes.draw do
       end
     end
 
-    resources :media, only: [:index], controller: :medium_accounts # redirect_to short_account_media_path
+    get :media, to: redirect(path: '/@%{account_username}/media')
     resources :followers, only: [:index], controller: :follower_accounts
     resources :following, only: [:index], controller: :following_accounts
     resource :follow, only: [:create], controller: :account_follow
@@ -110,9 +110,7 @@ Rails.application.routes.draw do
   resources :tags,  only: [:show]
   resources :oauth_authentications, only: [:show], param: :uid
 
-  namespace :intent do
-    resources :statuses, only: :new
-  end
+  get '/intent/statuses/new', to: redirect(path: '/share')
 
   # Remote follow
   resource :authorize_follow, only: [:show, :create]
