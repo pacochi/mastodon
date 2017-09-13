@@ -42,11 +42,11 @@ class ProcessMentionsService < BaseService
     if mentioned_account.local?
       NotifyService.new.call(mentioned_account, mention)
     elsif time_limit.nil?
-      NotificationWorker.perform_async(stream_entry_to_xml(status.stream_entry), status.account_id, mentioned_account.id)
-    elsif mentioned_account.ostatus? && (Rails.configuration.x.use_ostatus_privacy || !status.stream_entry.hidden?)
-      NotificationWorker.perform_async(stream_entry_to_xml(status.stream_entry), status.account_id, mentioned_account.id)
-    elsif mentioned_account.activitypub?
-      ActivityPub::DeliveryWorker.perform_async(build_json(mention.status), mention.status.account_id, mentioned_account.inbox_url)
+      if mentioned_account.ostatus? && (Rails.configuration.x.use_ostatus_privacy || !status.stream_entry.hidden?)
+        NotificationWorker.perform_async(stream_entry_to_xml(status.stream_entry), status.account_id, mentioned_account.id)
+      elsif mentioned_account.activitypub?
+        ActivityPub::DeliveryWorker.perform_async(build_json(mention.status), mention.status.account_id, mentioned_account.inbox_url)
+      end
     end
   end
 
