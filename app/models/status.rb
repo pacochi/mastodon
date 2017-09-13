@@ -30,7 +30,7 @@ class Status < ApplicationRecord
   include Streamable
   include Cacheable
   include StatusThreadingConcern
-  # include StatusSearchable
+  include StatusSearchable
   include EmojiHelper
 
   enum visibility: [:public, :unlisted, :private, :direct], _suffix: :visibility
