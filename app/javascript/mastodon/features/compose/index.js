@@ -41,21 +41,12 @@ export default class Compose extends React.PureComponent {
     multiColumn: PropTypes.bool,
     showSearch: PropTypes.bool,
     intl: PropTypes.object.isRequired,
-    intent: PropTypes.bool,
     schedule: PropTypes.bool,
     submitting: PropTypes.bool,
   };
 
   componentDidMount () {
     this.props.dispatch(mountCompose());
-  }
-
-  componentDidUpdate (prevProps) {
-    if (this.props.intent && prevProps.submitting && !this.props.submitting) {
-      window.close();
-      // Cannot close window unless it opened by JavaScript.
-      setTimeout(() => (location.href = '/'), 240);
-    }
   }
 
   componentWillUnmount () {
@@ -71,15 +62,6 @@ export default class Compose extends React.PureComponent {
   }
 
   render () {
-    if (this.props.intent) {
-      return (
-        <div style={{ maxWidth: 400, width: '100%' }}>
-          <NavigationContainer />
-          <ComposeFormContainer />
-        </div>
-      );
-    }
-
     if (this.props.schedule) {
       return (<ComposeFormContainer scheduling />);
     }

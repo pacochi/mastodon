@@ -6,14 +6,14 @@ RSpec.describe Intent::StatusesController, type: :controller do
   describe 'GET #new' do
     before do
       sign_in(user)
-      get :new
+      get :new, params: { text: text }
     end
 
     let(:user) { Fabricate(:user) }
+    let(:text) { 'share text' }
 
-    it 'renders intent' do
-      expect(assigns(:appmode)).to eq 'intent'
-      expect(response).to have_http_status(:success)
+    it 'redirect to /share' do
+      expect(response).to redirect_to share_path(text: text)
     end
   end
 end

@@ -62,18 +62,6 @@ export default class Mastodon extends React.PureComponent {
   render () {
     const { locale } = this.props;
 
-    if (this.appmode === 'intent') {
-      return (
-        <IntlProvider locale={locale} messages={messages}>
-          <Provider store={store}>
-            <UI className='compose-form__intent' intent>
-              <Compose intent />
-            </UI>
-          </Provider>
-        </IntlProvider>
-      );
-    }
-
     if (this.appmode === 'scheduledStatuses') {
       return (
         <IntlProvider locale={locale} messages={messages}>

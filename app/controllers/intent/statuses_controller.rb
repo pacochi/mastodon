@@ -1,17 +1,7 @@
 # frozen_string_literal: true
 
 class Intent::StatusesController < ApplicationController
-  include HomeConcern
-
   def new
-    index
-  end
-
-  private :index
-
-  protected
-
-  def appmode
-    'intent'
+    redirect_to share_path(text: params[:text])
   end
 end

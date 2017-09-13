@@ -85,15 +85,6 @@ export default class ComposeForm extends ImmutablePureComponent {
   state = { tagSuggestionFrom: null }
   _restoreCaret = null;
 
-  componentDidMount () {
-    const rawQuery = location.search.replace(/^\?/, '');
-    if (rawQuery.length > 0) {
-      window.history.replaceState(window.history.state, null, location.pathname);
-      const query = qs.parse(rawQuery);
-      this.props.onChange(query.text);
-    }
-  }
-
   handleChange = (e) => {
     this.props.onChange(e.target.value);
   }
