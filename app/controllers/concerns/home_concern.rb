@@ -51,4 +51,7 @@ module HomeConcern
       appmode: appmode,
     }
   end
+
+  # NOTE: Override me
+  def appmode; end
 end

@@ -3,6 +3,8 @@
 require 'rails_helper'
 
 describe ApplicationController, type: :controller do
+  render_views
+
   controller do
     include HomeConcern
   end
@@ -27,12 +29,14 @@ describe ApplicationController, type: :controller do
         expect(assigns(:body_classes)).to eq 'app-body'
       end
 
-      it 'assigns @token' do
+      it 'assigns token' do
         app = Doorkeeper::Application.create!(name: 'Web', superapp: true, redirect_uri: Doorkeeper.configuration.native_redirect_uri)
         allow(Doorkeeper.configuration).to receive(:access_token_expires_in).and_return(42)
 
         subject
-        token = Doorkeeper::AccessToken.find_by(token: assigns(:token))
+        json = JSON.parse(assigns(:initial_state_json), symbolize_names: true)
+        puts json[:meta][:access_token]
+        token = Doorkeeper::AccessToken.find_by(token: json[:meta][:access_token])
 
         expect(token.application).to eq app
         expect(token.resource_owner_id).to eq user.id
@@ -41,27 +45,31 @@ describe ApplicationController, type: :controller do
         expect(token.use_refresh_token?).to eq false
       end
 
-      it 'assigns @web_settings for {} if not available' do
+      it 'assigns settings for {} if not available' do
         subject
-        expect(assigns(:web_settings)).to eq({})
+        json = JSON.parse(assigns(:initial_state_json), symbolize_names: true)
+        expect(json[:settings]).to eq({})
       end
 
-      it 'assigns @web_settings for Web::Setting if available' do
+      it 'assigns settings for Web::Setting if available' do
         setting = Fabricate('Web::Setting', data: '{"home":{}}', user: user)
         subject
-        expect(assigns(:web_settings)).to eq setting.data
+        json = JSON.parse(assigns(:initial_state_json), symbolize_names: true)
+        expect(json[:settings]).to eq setting.data
       end
 
-      it 'assigns @admin' do
+      it 'assigns admin' do
         admin = Fabricate(:account)
         Setting.site_contact_username = admin.username
         subject
-        expect(assigns(:admin)).to eq admin
+        json = JSON.parse(assigns(:initial_state_json), symbolize_names: true)
+        expect(json[:meta][:admin]).to eq admin.id
       end
 
       it 'assigns streaming_api_base_url' do
         subject
-        expect(assigns(:streaming_api_base_url)).to eq 'ws://localhost:4000'
+        json = JSON.parse(assigns(:initial_state_json), symbolize_names: true)
+        expect(json[:meta][:streaming_api_base_url]).to eq 'ws://localhost:4000'
       end
     end
   end
