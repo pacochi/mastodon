@@ -10,6 +10,8 @@
 #  updated_at :datetime         not null
 #
 
+# NOTE: 現在はテーブルとモデルが存在するだけで、使用はされていない
+# TODO: pinned_statusesから移行
 class StatusPin < ApplicationRecord
   belongs_to :account, required: true
   belongs_to :status, required: true
