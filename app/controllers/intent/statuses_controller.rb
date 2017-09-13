@@ -5,8 +5,13 @@ class Intent::StatusesController < ApplicationController
 
   def new
     index
-    @appmode = 'intent'
   end
 
   private :index
+
+  protected
+
+  def appmode
+    'intent'
+  end
 end

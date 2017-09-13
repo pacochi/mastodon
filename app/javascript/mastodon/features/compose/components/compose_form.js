@@ -21,8 +21,10 @@ import EmojiPickerDropdown from './emoji_picker_dropdown';
 import TimeLimitDropdown from './time_limit_dropdown';
 import UploadFormContainer from '../containers/upload_form_container';
 import WarningContainer from '../containers/warning_container';
+import { isMobile } from '../../../is_mobile';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { length } from 'stringz';
+import { countableText } from '../util/counter';
 
 // TODO: i18n
 // Moment is used by react-datetime, which is imported only by this module.
@@ -32,7 +34,7 @@ import 'moment/locale/ja';
 
 const messages = defineMessages({
   placeholder: { id: 'compose_form.placeholder', defaultMessage: 'What is on your mind?' },
-  spoiler_placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Content warning' },
+  spoiler_placeholder: { id: 'compose_form.spoiler_placeholder', defaultMessage: 'Write your warning here' },
   schedule_placeholder: { id: 'compose_form.schedule_placeholder', defaultMessage: 'Time to post' },
   hashtag_editor_placeholder: { id: 'compose_form.hashtag_editor_placeholder', defaultMessage: 'Append tag (press enter to add)' },
   publish: { id: 'compose_form.publish', defaultMessage: 'Toot' },
@@ -194,7 +196,8 @@ export default class ComposeForm extends ImmutablePureComponent {
 
   handleEmojiPick = (data) => {
     const position     = this.autosuggestTextarea.textarea.selectionStart;
-    this._restoreCaret = position + data.shortname.length + 1;
+    const emojiChar    = data.unicode.split('-').map(code => String.fromCodePoint(parseInt(code, 16))).join('');
+    this._restoreCaret = position + emojiChar.length + 1;
     this.props.onPickEmoji(position, data);
   }
 
@@ -207,9 +210,9 @@ export default class ComposeForm extends ImmutablePureComponent {
     const { scheduling, intl, onPaste, showSearch } = this.props;
     const { tagSuggestionFrom } = this.state;
     const disabled = this.props.is_submitting;
-    const text = [this.props.spoiler_text, this.props.text].join('');
+    const text     = [this.props.spoiler_text, countableText(this.props.text)].join('');
 
-    let publishText    = '';
+    let publishText = '';
 
     if (this.props.privacy === 'private' || this.props.privacy === 'direct') {
       publishText = <span className='compose-form__publish-private'><i className='fa fa-lock' /> {intl.formatMessage(messages.publish)}</span>;
@@ -221,7 +224,10 @@ export default class ComposeForm extends ImmutablePureComponent {
       <div className='compose-form'>
         <Collapsable isVisible={this.props.spoiler} fullHeight={50}>
           <div className='spoiler-input'>
-            <input placeholder={intl.formatMessage(messages.spoiler_placeholder)} value={this.props.spoiler_text} onChange={this.handleChangeSpoilerText} onKeyDown={this.handleKeyDown} type='text' className='spoiler-input__input'  id='cw-spoiler-input' />
+            <label>
+              <span style={{ display: 'none' }}>{intl.formatMessage(messages.spoiler_placeholder)}</span>
+              <input placeholder={intl.formatMessage(messages.spoiler_placeholder)} value={this.props.spoiler_text} onChange={this.handleChangeSpoilerText} onKeyDown={this.handleKeyDown} type='text' className='spoiler-input__input'  id='cw-spoiler-input' />
+            </label>
           </div>
         </Collapsable>
 
@@ -242,7 +248,7 @@ export default class ComposeForm extends ImmutablePureComponent {
             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
             onSuggestionSelected={this.onSuggestionSelected}
             onPaste={onPaste}
-            autoFocus={!showSearch}
+            autoFocus={!showSearch && !isMobile(window.innerWidth)}
             hash_tag_suggestions={tagSuggestionFrom === 'autosuggested-textarea' ? this.props.hash_tag_suggestions : Immutable.List()}
             onHashTagSuggestionsFetchRequested={this.onHashTagSuggestionsFetchRequested}
             onHashTagSuggestionsClearRequested={this.onHashTagSuggestionsClearRequested}
@@ -289,7 +295,7 @@ export default class ComposeForm extends ImmutablePureComponent {
 
           <div className='compose-form__publish'>
             <div className='character-counter__wrapper'><CharacterCounter max={500} text={text} /></div>
-            <div className='compose-form__publish-button-wrapper'><Button text={publishText} onClick={this.handleSubmit} disabled={disabled || this.props.is_uploading || typeof this.props.published === 'string' || length(text) > 500 || (text.length !==0 && text.trim().length === 0)} block /></div>
+            <div className='compose-form__publish-button-wrapper'><Button text={publishText} onClick={this.handleSubmit} disabled={disabled || this.props.is_uploading || typeof this.props.published === 'string' || length(text) > 500 || (text.length !== 0 && text.trim().length === 0)} block /></div>
           </div>
         </div>
 

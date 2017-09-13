@@ -24,7 +24,7 @@ class Api::V1::Accounts::PinnedStatusesController < Api::BaseController
 
     set_pagination_headers(next_path, prev_path)
 
-    render 'api/v1/accounts/statuses/index'
+    render json: @statuses, each_serializer: REST::StatusSerializer, relationships: StatusRelationshipsPresenter.new(@statuses, current_user&.account_id)
   end
 
   private

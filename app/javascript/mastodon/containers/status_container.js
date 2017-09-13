@@ -11,12 +11,14 @@ import {
   favourite,
   unreblog,
   unfavourite,
+  pin,
+  unpin,
 } from '../actions/interactions';
 import {
   blockAccount,
   muteAccount,
 } from '../actions/accounts';
-import { muteStatus, unmuteStatus, deleteStatus, pinStatus, unpinStatus } from '../actions/statuses';
+import { muteStatus, unmuteStatus, deleteStatus, setStatusHeight, pinStatus, unpinStatus } from '../actions/statuses';
 import { initReport } from '../actions/reports';
 import { openModal } from '../actions/modal';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
@@ -72,6 +74,18 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
     } else {
       dispatch(favourite(status));
     }
+  },
+
+  onPin (status) {
+    if (status.get('pinned')) {
+      dispatch(unpin(status));
+    } else {
+      dispatch(pin(status));
+    }
+  },
+
+  onEmbed (status) {
+    dispatch(openModal('EMBED', { url: status.get('url') }));
   },
 
   onDelete (status) {
@@ -140,6 +154,10 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
         onConfirm: () => dispatch(pinStatus(status.get('id'))),
       }));
     }
+  },
+
+  onHeightChange (status, height) {
+    dispatch(setStatusHeight(status.get('id'), height));
   },
 
 });

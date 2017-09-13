@@ -4,9 +4,10 @@ module Admin
   class ScheduledStatusesController < BaseController
     include HomeConcern
 
-    def index
-      @appmode = 'scheduledStatuses'
-      super
+    protected
+
+    def appmode
+      'scheduledStatuses'
     end
   end
 end

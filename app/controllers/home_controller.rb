@@ -3,8 +3,9 @@
 class HomeController < ApplicationController
   include HomeConcern
 
-  def index
-    @appmode = 'default'
-    super
+  protected
+
+  def appmode
+    'default'
   end
 end

@@ -31,6 +31,9 @@ export const STATUS_UNPIN_REQUEST = 'STATUS_UNPIN_REQUEST';
 export const STATUS_UNPIN_SUCCESS = 'STATUS_UNPIN_SUCCESS';
 export const STATUS_UNPIN_FAIL    = 'STATUS_UNPIN_FAIL';
 
+export const STATUS_SET_HEIGHT = 'STATUS_SET_HEIGHT';
+export const STATUSES_CLEAR_HEIGHT = 'STATUSES_CLEAR_HEIGHT';
+
 export function fetchStatusRequest(id, skipLoading) {
   return {
     type: STATUS_FETCH_REQUEST,
@@ -121,7 +124,7 @@ export function fetchContext(id) {
       dispatch(fetchContextSuccess(id, response.data.ancestors, response.data.descendants));
 
     }).catch(error => {
-      if (error.response.status === 404) {
+      if (error.response && error.response.status === 404) {
         dispatch(deleteFromTimelines(id));
       }
 
@@ -293,5 +296,19 @@ export function unpinStatusFail(id, error) {
     type: STATUS_UNPIN_FAIL,
     id,
     error,
+  };
+};
+
+export function setStatusHeight (id, height) {
+  return {
+    type: STATUS_SET_HEIGHT,
+    id,
+    height,
+  };
+};
+
+export function clearStatusesHeight () {
+  return {
+    type: STATUSES_CLEAR_HEIGHT,
   };
 };

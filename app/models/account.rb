@@ -36,10 +36,15 @@
 #  followers_count         :integer          default(0), not null
 #  following_count         :integer          default(0), not null
 #  last_webfingered_at     :datetime
+#  inbox_url               :string           default(""), not null
+#  outbox_url              :string           default(""), not null
+#  shared_inbox_url        :string           default(""), not null
+#  followers_url           :string           default(""), not null
+#  protocol                :integer          default("ostatus"), not null
 #
 
 class Account < ApplicationRecord
-  MENTION_RE = /(?:^|[^\/[:word:]])@([a-z0-9_]+(?:@[a-z0-9\.\-]+[a-z0-9]+)?)/i
+  MENTION_RE = /(?:^|[^\/[:word:]])@(([a-z0-9_]+)(?:@[a-z0-9\.\-]+[a-z0-9]+)?)/i
 
   include AccountAvatar
   include AccountFinderConcern
@@ -47,6 +52,9 @@ class Account < ApplicationRecord
   include AccountInteractions
   include Attachmentable
   include Remotable
+  include EmojiHelper
+
+  enum protocol: [:ostatus, :activitypub]
 
   # Local users
   has_one :user, inverse_of: :account
@@ -69,7 +77,10 @@ class Account < ApplicationRecord
   has_many :mentions, inverse_of: :account, dependent: :destroy
   has_many :notifications, inverse_of: :account, dependent: :destroy
   has_many :oauth_authentications, through: :user
-  has_many :pinned_statuses, dependent: :destroy
+
+  # Pinned statuses
+  has_many :status_pins, inverse_of: :account, class_name: 'PinnedStatus', dependent: :destroy
+  has_many :pinned_statuses, -> { reorder('pinned_statuses.created_at DESC') }, through: :status_pins, class_name: 'Status', source: :status
 
   # Media
   has_many :media_attachments, dependent: :destroy
@@ -99,6 +110,7 @@ class Account < ApplicationRecord
            :current_sign_in_ip,
            :current_sign_in_at,
            :confirmed?,
+           :admin?,
            :locale,
            to: :user,
            prefix: true,
@@ -163,6 +175,10 @@ class Account < ApplicationRecord
   class << self
     def domains
       reorder(nil).pluck('distinct accounts.domain')
+    end
+
+    def inboxes
+      reorder(nil).where(protocol: :activitypub).pluck("distinct coalesce(nullif(accounts.shared_inbox_url, ''), accounts.inbox_url)")
     end
 
     def triadic_closures(account, limit: 5, offset: 0, exclude_ids: [], current_time: Time.current)
@@ -263,13 +279,22 @@ class Account < ApplicationRecord
 
   before_create :generate_keys
   before_validation :normalize_domain
+  before_validation :prepare_contents, if: :local?
 
   private
+
+  def prepare_contents
+    display_name&.strip!
+    note&.strip!
+
+    self.display_name = emojify(display_name)
+    self.note         = emojify(note)
+  end
 
   def generate_keys
     return unless local?
 
-    keypair = OpenSSL::PKey::RSA.new(Rails.env.test? ? 1024 : 2048)
+    keypair = OpenSSL::PKey::RSA.new(Rails.env.test? ? 512 : 2048)
     self.private_key = keypair.to_pem
     self.public_key  = keypair.public_key.to_pem
   end
