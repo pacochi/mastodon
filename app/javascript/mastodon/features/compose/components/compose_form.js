@@ -1,4 +1,3 @@
-import qs from 'querystring';
 import React from 'react';
 import DateTime from 'react-datetime';
 import CharacterCounter from './character_counter';
