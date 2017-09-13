@@ -47,7 +47,7 @@ class AccountsController < ApplicationController
   end
 
   def default_statuses
-    @account.statuses.permitted_for(@account, current_account).published.recent
+    @account.statuses.where(visibility: [:public, :unlisted]).published
   end
 
   def statuses_from_pinned_status

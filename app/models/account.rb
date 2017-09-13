@@ -193,8 +193,6 @@ class Account < ApplicationRecord
         INNER JOIN accounts ON follows.target_account_id = accounts.id
         WHERE
           account_id IN (SELECT * FROM first_degree)
-          AND suspended = 'f'
-          AND silenced = 'f'
           AND target_account_id NOT IN (SELECT * FROM first_degree)
           AND target_account_id NOT IN (:excluded_account_ids)
           AND accounts.suspended = FALSE

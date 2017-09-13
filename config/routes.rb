@@ -195,8 +195,6 @@ Rails.application.routes.draw do
           get :context
           get :card
         end
-
-        resource :pin, only: [:create, :destroy], controller: :pinned_statuses
       end
 
       namespace :timelines do
