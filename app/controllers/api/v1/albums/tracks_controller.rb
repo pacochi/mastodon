@@ -8,14 +8,7 @@ class Api::V1::Albums::TracksController < Api::BaseController
   respond_to :json
 
   def update
-    position = AlbumMusicAttachment.position_between(
-      *range(
-        params[:prev_id]&.to_i,
-        params[:next_id]&.to_i,
-        AlbumMusicAttachment::MIN_POSITION,
-        AlbumMusicAttachment::MAX_POSITION,
-      )
-    )
+    position = AlbumMusicAttachment.position_between(*entry_range)
 
     if request.put?
       AlbumMusicAttachment.create!(
@@ -34,30 +27,23 @@ class Api::V1::Albums::TracksController < Api::BaseController
   end
 
   def destroy
-    AlbumMusicAttachment.find_by!(
-      album_id: params.require(:album_id),
-      music_attachment_id: params.require(:id),
-    ).destroy!
-
+    scope.find_by!(music_attachment_id: params.require(:id)).destroy!
     render_empty
   end
 
   def index
-    ranged = range(params[:since_id]&.to_i, params[:max_id]&.to_i, nil, nil)
+    index_scope = scope.order(:position)
 
-    album_music_attachment_scope =
-      AlbumMusicAttachment.where(album_id: params.require(:album_id)).order(:position)
-
-    if ranged[0].present?
-      album_music_attachment_scope = album_music_attachment_scope.where('position > ?', ranged[0])
+    if index_range[0].present?
+      index_scope = index_scope.where('position > ?', index_range[0])
     end
 
-    if ranged[1].present?
-      album_music_attachment_scope = album_music_attachment_scope.where('position < ?', ranged[1])
+    if index_range[1].present?
+      index_scope = index_scope.where('position < ?', index_range[1])
     end
 
     @tracks = MusicAttachment.joins(:album_music_attachment)
-                             .merge(album_music_attachment_scope)
+                             .merge(index_scope)
                              .limit(limit_param(DEFAULT_TRACKS_LIMIT))
 
     insert_pagination_headers
@@ -69,16 +55,52 @@ class Api::V1::Albums::TracksController < Api::BaseController
     render json: { error: I18n.t('albums.tracks.positioning_not_found') }, status: :unprocessable_entity
   end
 
-  def range(lower_id, upper_id, lower_position_fallback, upper_position_fallback)
+  def entry_range
+    return @entry_range if @entry_range
+
+    relative_to_id = params[:relative_to]
+    above = ActiveRecord::Type.lookup(:boolean).cast(params[:above])
+    lower_position = AlbumMusicAttachment::MIN_POSITION
+    upper_position = AlbumMusicAttachment::MAX_POSITION
+
+    if relative_to_id.nil?
+      if above
+        upper = scope.order(:position).first
+        upper_position = upper.position if upper
+      else
+        lower = scope.order(:position).last
+        lower_position = lower.position if lower
+      end
+    else
+      relative_to = scope.find_by!(music_attachment_id: relative_to_id)
+
+      if above
+        lower = scope.find_by('position < ?', relative_to.position)
+        lower_position = lower.position if lower
+        upper_position = relative_to.position
+      else
+        upper = scope.find_by('position > ?', relative_to.position)
+        lower_position = relative_to.position
+        upper_position = upper.position if upper
+      end
+    end
+
+    @entry_range = [lower_position, upper_position]
+  end
+
+  def index_range
+    return @index_range if @index_range
+
+    lower_id = params[:since_id]&.to_i
+    upper_id = params[:max_id]&.to_i
+
     positioning_ids = [lower_id, upper_id].compact
 
-    lower_position = lower_position_fallback
-    upper_position = upper_position_fallback
+    lower_position = nil
+    upper_position = nil
 
-    positioning_attributes = AlbumMusicAttachment.where(
-      music_attachment_id: positioning_ids,
-      album_id: params.require(:album_id),
-    ).pluck(:music_attachment_id, :position)
+    positioning_attributes = scope.where(music_attachment_id: positioning_ids)
+                                  .pluck(:music_attachment_id, :position)
 
     if positioning_attributes.size < positioning_ids.size
       raise Mastodon::TrackNotFoundError
@@ -97,7 +119,11 @@ class Api::V1::Albums::TracksController < Api::BaseController
       raise Mastodon::ValidationError, I18n.t('albums.tracks.invalid_range')
     end
 
-    [lower_position, upper_position]
+    @index_range = [lower_position, upper_position]
+  end
+
+  def scope
+    AlbumMusicAttachment.where album_id: params.require(:album_id)
   end
 
   def pagination_params(core_params)
