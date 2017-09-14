@@ -122,6 +122,10 @@ class Account < ApplicationRecord
     domain.nil?
   end
 
+  def bootstrap_timeline?
+    local? && (Setting.bootstrap_timeline_accounts || '').split(',').map { |str| str.strip.gsub(/\A@/, '') }.include?(username)
+  end
+
   def acct
     local? ? username : "#{username}@#{domain}"
   end

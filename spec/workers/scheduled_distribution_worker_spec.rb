@@ -99,13 +99,12 @@ describe ScheduledDistributionWorker do
         ScheduledDistributionWorker.new.perform(old_status.id)
 
         new_status = Status.find_by!(text: TEXT)
-        new_id = new_status.id
 
         expect(DistributionWorker).to have_enqueued_sidekiq_job new_status.id
       end
     end
 
-    it 'distributes statuses via PubSubHubBub' do
+    it 'distributes statuses via Pubsubhubbub' do
       old_status = Fabricate(:status, text: TEXT)
 
       Sidekiq::Testing.fake! do
@@ -115,6 +114,18 @@ describe ScheduledDistributionWorker do
         new_stream_entry = new_status.stream_entry
 
         expect(Pubsubhubbub::DistributionWorker).to have_enqueued_sidekiq_job new_stream_entry.id
+      end
+    end
+
+    it 'distributes statuses via ActivityPub' do
+      old_status = Fabricate(:status, text: TEXT)
+
+      Sidekiq::Testing.fake! do
+        ScheduledDistributionWorker.new.perform(old_status.id)
+
+        new_status = Status.find_by!(text: TEXT)
+
+        expect(ActivityPub::DistributionWorker).to have_enqueued_sidekiq_job new_status.id
       end
     end
   end

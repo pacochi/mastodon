@@ -142,13 +142,17 @@ class Status < ApplicationRecord
     !sensitive? && media_attachments.any?
   end
 
+  def truncated_content
+    (spoiler_text.presence || text).truncate(33, omission: '')
+  end
+
   after_create :store_uri, if: :local?
 
   before_validation :prepare_contents, if: :local?
   before_validation :set_reblog
   before_validation :set_visibility
   before_validation :set_conversation
-  before_validation :set_sensitivity
+  # before_validation :set_sensitivity # NOTE: CW時にNSFWにならない仕様に戻す
   before_validation :set_local
 
   class << self

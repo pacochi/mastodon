@@ -1,6 +1,6 @@
 -# NOTE: 現在はStreamEntry#activity_typeはStatusしかないが、今後増えるかもしれないので注意
 - content_for :page_title do
-  = "#{@stream_entry.status.text.truncate(33, omission: "")} - #{@stream_entry.account.acct}"
+  = "#{@stream_entry.status.truncated_content} - #{@stream_entry.account.acct}"
 
 - content_for :header_tags do
   - if @account.user&.setting_noindex

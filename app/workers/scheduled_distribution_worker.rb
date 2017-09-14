@@ -24,6 +24,8 @@ class ScheduledDistributionWorker
 
     DistributionWorker.perform_async(new_status.id)
     Pubsubhubbub::DistributionWorker.perform_async(new_status.stream_entry.id)
+    ActivityPub::DistributionWorker.perform_async(new_status.id)
+    ActivityPub::ReplyDistributionWorker.perform_async(new_status.id) if new_status.reply? && new_status.thread.account.local?
 
     time_limit = TimeLimit.from_tags(new_status.tags)
     RemovalWorker.perform_in(time_limit.to_duration, new_status.id) if time_limit
