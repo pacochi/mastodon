@@ -11,7 +11,11 @@ jobs:
         entrypoint:
           - /bin/sh
           - -c
-          - elasticsearch-plugin remove x-pack && elasticsearch-plugin install analysis-kuromoji && elasticsearch-plugin install analysis-icu && elasticsearch
+          - >
+            elasticsearch-plugin remove x-pack &&
+            elasticsearch-plugin install analysis-kuromoji &&
+            elasticsearch-plugin install analysis-icu &&
+            elasticsearch
 
     environment:
       CONTINUOUS_INTEGRATION: true # for fuubar gem
