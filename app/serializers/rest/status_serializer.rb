@@ -58,7 +58,7 @@ class REST::StatusSerializer < ActiveModel::Serializer
   end
 
   def pinned
-    object.pinned_status.present?
+    object.status_pin.present?
   end
 
   def pinnable?

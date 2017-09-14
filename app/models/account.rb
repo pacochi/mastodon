@@ -79,8 +79,8 @@ class Account < ApplicationRecord
   has_many :oauth_authentications, through: :user
 
   # Pinned statuses
-  has_many :status_pins, inverse_of: :account, class_name: 'PinnedStatus', dependent: :destroy
-  has_many :pinned_statuses, -> { reorder('pinned_statuses.created_at DESC') }, through: :status_pins, class_name: 'Status', source: :status
+  has_many :status_pins, inverse_of: :account, dependent: :destroy
+  has_many :pinned_statuses, -> { reorder('status_pins.created_at DESC') }, through: :status_pins, class_name: 'Status', source: :status
 
   # Media
   has_many :media_attachments, dependent: :destroy

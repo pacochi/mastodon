@@ -16,9 +16,9 @@ RSpec.describe AccountsController, type: :controller do
 
     let!(:status_created_at) { Fabricate(:status, account: alice, created_at: 1.day.from_now) }
 
-    let!(:status_pin1) { PinnedStatus.create!(account: alice, status: status5, created_at: 5.days.ago) }
-    let!(:status_pin2) { PinnedStatus.create!(account: alice, status: status6, created_at: 2.years.ago) }
-    let!(:status_pin3) { PinnedStatus.create!(account: alice, status: status7, created_at: 10.minutes.ago) }
+    let!(:status_pin1) { StatusPin.create!(account: alice, status: status5, created_at: 5.days.ago) }
+    let!(:status_pin2) { StatusPin.create!(account: alice, status: status6, created_at: 2.years.ago) }
+    let!(:status_pin3) { StatusPin.create!(account: alice, status: status7, created_at: 10.minutes.ago) }
 
     before do
       status3.media_attachments.create!(account: alice, file: fixture_file_upload('files/attachment.jpg', 'image/jpeg'))

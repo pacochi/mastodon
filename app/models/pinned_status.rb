@@ -9,6 +9,7 @@
 #  updated_at :datetime         not null
 #
 
+# TODO: あとで消す
 class PinnedStatus < ApplicationRecord
   include Paginable
 

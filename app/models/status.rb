@@ -55,7 +55,7 @@ class Status < ApplicationRecord
   has_and_belongs_to_many :preview_cards
 
   has_one :notification, as: :activity, dependent: :destroy
-  has_one :pinned_status, dependent: :destroy
+  has_one :status_pin, dependent: :destroy
   has_one :stream_entry, as: :activity, inverse_of: :status
 
   validates :uri, uniqueness: true, unless: :local?
@@ -82,7 +82,11 @@ class Status < ApplicationRecord
   scope :not_excluded_by_account, ->(account) { where.not(account_id: account.excluded_from_timeline_account_ids) }
   scope :not_domain_blocked_by_account, ->(account) { account.excluded_from_timeline_domains.blank? ? left_outer_joins(:account) : left_outer_joins(:account).where('accounts.domain IS NULL OR accounts.domain NOT IN (?)', account.excluded_from_timeline_domains) }
 
-  cache_associated :application, :media_attachments, :tags, :stream_entry, :pixiv_cards, :pinned_status, mentions: { account: :oauth_authentications }, reblog: [{ account: :oauth_authentications }, :application, :stream_entry, :tags, :media_attachments, :pixiv_cards, :pinned_status, mentions: { account: :oauth_authentications }], thread: { account: :oauth_authentications }, account: :oauth_authentications
+  cache_associated :application, :media_attachments, :tags, :stream_entry, :pixiv_cards, :status_pin,
+    account: :oauth_authentications,
+    mentions: { account: :oauth_authentications },
+    reblog: [{ account: :oauth_authentications }, :application, :media_attachments, :tags, :stream_entry, :pixiv_cards, :status_pin, mentions: { account: :oauth_authentications }],
+    thread: { account: :oauth_authentications }
 
   def postable_to_es?
     public_visibility? && local?
@@ -194,7 +198,7 @@ class Status < ApplicationRecord
     end
 
     def pins_map(status_ids, account_id)
-      PinnedStatus.select('status_id').where(status_id: status_ids).where(account_id: account_id).map { |p| [p.status_id, true] }.to_h
+      StatusPin.select('status_id').where(status_id: status_ids).where(account_id: account_id).map { |p| [p.status_id, true] }.to_h
     end
 
     def reload_stale_associations!(cached_items)
