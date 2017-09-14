@@ -61,6 +61,7 @@ RSpec.describe OauthRegistrationsController, type: :controller do
       end
 
       it 'queues up bootstrapping of home timeline' do
+        subject.call
         user = User.find_by(email: auth.info.email)
         expect(BootstrapTimelineWorker).to have_received(:perform_async).with(user.account_id)
       end
