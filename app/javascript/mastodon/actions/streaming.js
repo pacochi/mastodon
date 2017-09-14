@@ -11,7 +11,7 @@ import { getLocale } from '../locales';
 
 const { messages } = getLocale();
 
-export function connectTimelineStream (timelineId, path, pollingRefresh = null) {
+export function connectTimelineStream (timelineId, path, { shouldUpdateTimeline = null, pollingRefresh = null } = {}) {
   return (dispatch, getState) => {
     const streamingAPIBaseURL = getState().getIn(['meta', 'streaming_api_base_url']);
     const accessToken = getState().getIn(['meta', 'access_token']);
@@ -50,7 +50,10 @@ export function connectTimelineStream (timelineId, path, pollingRefresh = null) 
       received (data) {
         switch(data.event) {
         case 'update':
-          dispatch(updateTimeline(timelineId, JSON.parse(data.payload)));
+          const status = JSON.parse(data.payload);
+          if (!shouldUpdateTimeline || shouldUpdateTimeline(status)) {
+            dispatch(updateTimeline(timelineId, status));
+          }
           break;
         case 'delete':
           dispatch(deleteFromTimelines(data.payload));
@@ -87,8 +90,12 @@ function refreshHomeTimelineAndNotification (dispatch) {
   dispatch(refreshNotifications());
 }
 
-export const connectUserStream = () => connectTimelineStream('home', 'user', refreshHomeTimelineAndNotification);
+function hasMediaAttachment (status) {
+  return status.media_attachments.length > 0;
+}
+
+export const connectUserStream = () => connectTimelineStream('home', 'user', { pollingRefresh: refreshHomeTimelineAndNotification });
 export const connectCommunityStream = () => connectTimelineStream('community', 'public:local');
-export const connectMediaStream = () => connectTimelineStream('community', 'public:local');
+export const connectMediaStream = () => connectTimelineStream('media', 'public:local', { shouldUpdateTimeline: hasMediaAttachment });
 export const connectPublicStream = () => connectTimelineStream('public', 'public');
 export const connectHashtagStream = (tag) => connectTimelineStream(`hashtag:${tag}`, `hashtag&tag=${tag}`);

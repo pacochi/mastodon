@@ -45,6 +45,7 @@ import { SEARCH_FETCH_SUCCESS } from '../actions/search';
 import {
   SCHEDULED_STATUSES_FETCH_SUCCESS,
   SCHEDULED_STATUSES_EXPAND_SUCCESS,
+  SCHEDULED_STATUSES_ADDITION,
 } from '../actions/schedules';
 import emojify from '../emoji';
 import { Map as ImmutableMap, fromJS } from 'immutable';
@@ -151,6 +152,7 @@ export default function statuses(state = initialState, action) {
   case SEARCH_FETCH_SUCCESS:
   case SCHEDULED_STATUSES_FETCH_SUCCESS:
   case SCHEDULED_STATUSES_EXPAND_SUCCESS:
+  case SCHEDULED_STATUSES_ADDITION:
     return normalizeStatuses(state, action.statuses);
   case TIMELINE_DELETE:
     return deleteStatus(state, action.id, action.references);

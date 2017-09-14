@@ -15,7 +15,7 @@ const messages = defineMessages({
 const mapStateToProps = state => ({
   visible: state.getIn(['compose', 'media_attachments']).size > 0,
   active: state.getIn(['compose', 'sensitive']),
-  disabled: state.getIn(['compose', 'spoiler']),
+  // disabled: state.getIn(['compose', 'spoiler']), // NOTE: CW時にNSFWにならない仕様に戻す
 });
 
 const mapDispatchToProps = dispatch => ({

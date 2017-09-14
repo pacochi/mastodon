@@ -204,7 +204,7 @@ export default class Status extends ImmutablePureComponent {
           </a>
         </div>
 
-        <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} onHeightUpdate={this.saveHeight} standalone />
+        <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} standalone />
 
         {media}
 
