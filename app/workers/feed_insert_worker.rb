@@ -7,7 +7,7 @@ class FeedInsertWorker
 
   def perform(status_id, follower_ids)
     @status = Status.find_by(id: status_id)
-    @followers = Account.find_by(id: follower_ids)
+    @followers = Account.where(id: follower_ids)
 
     check_and_insert
   end
