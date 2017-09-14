@@ -18,8 +18,6 @@ describe MusicConvertService do
 
     file = MusicConvertService.new.call(music_attachment)
 
-    expect(`ffprobe -v error -show_entries format=duration -of default=noprint_wrappers=1:nokey=1 #{file.path}`).to eq "176.250000\n"
-    expect(`ffprobe -v error -select_streams a -show_entries stream=bit_rate -of default=noprint_wrappers=1:nokey=1 #{file.path}`).to eq "96017\n"
     expect(`ffprobe -v error -show_entries tags=title -of default=noprint_wrappers=1:nokey=1 #{file.path}`).to eq "title\n"
     expect(`ffprobe -v error -show_entries tags=artist -of default=noprint_wrappers=1:nokey=1 #{file.path}`).to eq "artist\n"
   end

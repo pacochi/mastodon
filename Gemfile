@@ -72,7 +72,6 @@ gem 'exception_notification'
 gem 'slack-notifier'
 gem 'admin_script'
 gem 'activerecord-import'
-gem 'streamio-ffmpeg'
 
 gem 'elasticsearch-model', '~> 5.0'
 gem 'ruby-mp3info', require: 'mp3info'

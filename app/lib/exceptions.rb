@@ -5,6 +5,7 @@ module Mastodon
   class NotPermittedError < Error; end
   class ValidationError < Error; end
   class RaceConditionError < Error; end
+  class FFmpegError < Error; end
   class MusicSourceNotFoundError < Error; end
   class MusicSourceForbiddenError < Error; end
   class MusicSourceFetchFailedError < Error; end
