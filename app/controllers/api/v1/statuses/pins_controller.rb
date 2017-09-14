@@ -10,12 +10,13 @@ class Api::V1::Statuses::PinsController < Api::BaseController
   respond_to :json
 
   def create
-    @status.create_pinned_status!(account: current_account) unless @status.pinned_status
+    PinnedStatus.create!(account: current_account, status: @status)
     render json: @status, serializer: REST::StatusSerializer
   end
 
   def destroy
-    @status.pinned_status&.destroy!
+    pin = PinnedStatus.find_by(account: current_account, status: @status)
+    pin&.destroy!
     render json: @status, serializer: REST::StatusSerializer
   end
 

@@ -15,8 +15,6 @@ import {
   CONTEXT_FETCH_SUCCESS,
   STATUS_MUTE_SUCCESS,
   STATUS_UNMUTE_SUCCESS,
-  STATUS_PIN_SUCCESS,
-  STATUS_UNPIN_SUCCESS,
   STATUS_SET_HEIGHT,
   STATUSES_CLEAR_HEIGHT,
 } from '../actions/statuses';
@@ -158,10 +156,6 @@ export default function statuses(state = initialState, action) {
     return deleteStatus(state, action.id, action.references);
   case ACCOUNT_BLOCK_SUCCESS:
     return filterStatuses(state, action.relationship);
-  case STATUS_PIN_SUCCESS:
-    return state.setIn([action.id, 'pinned'], true);
-  case STATUS_UNPIN_SUCCESS:
-    return state.setIn([action.id, 'pinned'], false);
   case STATUS_SET_HEIGHT:
     return setHeight(state, action.id, action.height);
   case STATUSES_CLEAR_HEIGHT:

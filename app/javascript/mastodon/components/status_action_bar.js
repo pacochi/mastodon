@@ -51,7 +51,6 @@ export default class StatusActionBar extends ImmutablePureComponent {
     schedule: PropTypes.bool,
     withDismiss: PropTypes.bool,
     intl: PropTypes.object.isRequired,
-    onPin: PropTypes.func,
   };
 
   // Avoid checking props that are functions (and whose equality will always
@@ -143,12 +142,8 @@ export default class StatusActionBar extends ImmutablePureComponent {
     }
 
     if (status.getIn(['account', 'id']) === me) {
-      if (!status.get('reblog') && (publicStatus || status.get('visibility') === 'private')) {
-        if (status.get('pinned')) {
-          menu.push({ text: intl.formatMessage(messages.unpin), action: this.handlePinClick });
-        } else {
-          menu.push({ text: intl.formatMessage(messages.pin), action: this.handlePinClick });
-        }
+      if (publicStatus) {
+        menu.push({ text: intl.formatMessage(status.get('pinned') ? messages.unpin : messages.pin), action: this.handlePinClick });
       }
 
       menu.push({ text: intl.formatMessage(messages.delete), action: this.handleDeleteClick });
