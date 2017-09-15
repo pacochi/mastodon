@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Route, Switch, Redirect } from 'react-router-dom';
+import { Route, Switch } from 'react-router-dom';
 import { connectUserStream } from '../../actions/streaming';
 import { refreshHomeTimeline } from '../../../mastodon/actions/timelines';
 import { refreshNotifications } from '../../../mastodon/actions/notifications';
@@ -17,24 +17,34 @@ import MusicPlayer from '../../components/dummy';
 import LoadingBarContainer from '../../../mastodon/features/ui/containers/loading_bar_container';
 import NotificationsContainer from '../../../mastodon/features/ui/containers/notifications_container';
 import ModalContainer from '../../../mastodon/features/ui/containers/modal_container';
+import AccountFollowersContainer from '../account_followers';
+import AccountFollowingContainer from '../account_following';
 
-@connect()
+
+const mapStateToProps = state => ({
+  isLogin: !!state.getIn(['meta', 'me']),
+});
+
+@connect(mapStateToProps)
 export default class App extends PureComponent {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
+    isLogin: PropTypes.bool,
   }
 
   componentDidMount () {
-    const { dispatch } = this.props;
+    const { dispatch, isLogin } = this.props;
 
-    this.disconnect = dispatch(connectUserStream());
-    dispatch(refreshHomeTimeline());
-    dispatch(refreshNotifications());
+    if (isLogin) {
+      this.disconnect = dispatch(connectUserStream());
+      dispatch(refreshHomeTimeline());
+      dispatch(refreshNotifications());
 
-    // Desktop notifications
-    if (typeof window.Notification !== 'undefined' && Notification.permission === 'default') {
-      Notification.requestPermission();
+      // Desktop notifications
+      if (typeof window.Notification !== 'undefined' && Notification.permission === 'default') {
+        Notification.requestPermission();
+      }
     }
   }
 
@@ -46,20 +56,23 @@ export default class App extends PureComponent {
   }
 
   render () {
+    const { isLogin } = this.props;
+
     return (
       <div className='app'>
         <div className='app-center'>
-          <Navigation />
+          <Navigation isLogin={isLogin} />
           <div className='app-content'>
             <Switch>
               <Route path='/' exact component={HomeTimelineContainer} />
               <Route path='/notifications' component={NotificationListContainer} />
               <Route path='/timelines/public/local' component={CommunityTimelineContainer} />
               <Route path='/timelines/public' exact component={PublicTimelineContainer} />
-              <Route path='/timelines/tag/:id' exact component={HashtagTimelineContainer} />
+              <Route path='/tags/:id' exact component={HashtagTimelineContainer} />
               <Route path='/favourites' component={FavouritedStatusesContainer} />
-              <Route path='/accounts/:accountId' exact component={AccountTimelineContainer} />
-              <Redirect from='/getting-started' to='/' exact />
+              <Route path='/@:acct' exact component={AccountTimelineContainer} />
+              <Route path='/users/:acct/followers' exact component={AccountFollowersContainer} />
+              <Route path='/users/:acct/following' exact component={AccountFollowingContainer} />
             </Switch>
           </div>
         </div>

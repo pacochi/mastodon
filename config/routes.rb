@@ -247,7 +247,10 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/web/(*any)', to: 'home#index', as: :web
+  get '/timelines/public', to: 'timelines#index', as: :public_timeline
+  get '/timelines/public/local', to: 'timelines#index', as: :local_timeline
+
+  get '/web/(*any)', to: 'home#web', as: :web
 
   get '/about',      to: 'about#show'
   get '/about/more', to: 'about#more'
@@ -256,6 +259,8 @@ Rails.application.routes.draw do
   get '/app_eula',   to: 'about#app_eula'
 
   root 'home#index'
+  get '/notifications', to: 'home#index'
+  get '/favourites',    to: 'home#index'
 
   match '*unmatched_route',
     via: :all,

@@ -3,6 +3,9 @@ import {
   updateTimeline,
   deleteFromTimelines,
   refreshHomeTimeline,
+  refreshCommunityTimeline,
+  refreshPublicTimeline,
+  refreshHashtagTimeline,
   connectTimeline,
   disconnectTimeline,
 } from '../../mastodon/actions/timelines';
@@ -17,6 +20,7 @@ export function connectTimelineStream (timelineId, path, { shouldUpdateTimeline 
     const accessToken = getState().getIn(['meta', 'access_token']);
     const locale = getState().getIn(['meta', 'locale']);
     let polling = null;
+    let subscription = null;
 
     const setupPolling = () => {
       polling = setInterval(() => {
@@ -31,48 +35,54 @@ export function connectTimelineStream (timelineId, path, { shouldUpdateTimeline 
       }
     };
 
-    const subscription = createStream(streamingAPIBaseURL, accessToken, path, {
+    if (accessToken) {
+      const callbacks = {
 
-      connected () {
-        if (pollingRefresh) {
-          clearPolling();
-        }
-        dispatch(connectTimeline(timelineId));
-      },
-
-      disconnected () {
-        if (pollingRefresh) {
-          setupPolling();
-        }
-        dispatch(disconnectTimeline(timelineId));
-      },
-
-      received (data) {
-        switch(data.event) {
-        case 'update':
-          const status = JSON.parse(data.payload);
-          if (!shouldUpdateTimeline || shouldUpdateTimeline(status)) {
-            dispatch(updateTimeline(timelineId, status));
+        connected () {
+          if (pollingRefresh) {
+            clearPolling();
           }
-          break;
-        case 'delete':
-          dispatch(deleteFromTimelines(data.payload));
-          break;
-        case 'notification':
-          dispatch(updateNotifications(JSON.parse(data.payload), messages, locale));
-          break;
-        }
-      },
+          dispatch(connectTimeline(timelineId));
+        },
 
-      reconnected () {
-        if (pollingRefresh) {
-          clearPolling();
-          pollingRefresh(dispatch);
-        }
-        dispatch(connectTimeline(timelineId));
-      },
+        disconnected () {
+          if (pollingRefresh) {
+            setupPolling();
+          }
+          dispatch(disconnectTimeline(timelineId));
+        },
 
-    });
+        received (data) {
+          switch(data.event) {
+          case 'update':
+            const status = JSON.parse(data.payload);
+            if (!shouldUpdateTimeline || shouldUpdateTimeline(status)) {
+              dispatch(updateTimeline(timelineId, status));
+            }
+            break;
+          case 'delete':
+            dispatch(deleteFromTimelines(data.payload));
+            break;
+          case 'notification':
+            dispatch(updateNotifications(JSON.parse(data.payload), messages, locale));
+            break;
+          }
+        },
+
+        reconnected () {
+          if (pollingRefresh) {
+            clearPolling();
+            pollingRefresh(dispatch);
+          }
+          dispatch(connectTimeline(timelineId));
+        },
+
+      };
+      subscription = createStream(streamingAPIBaseURL, accessToken, path, callbacks);
+    } else {
+      setupPolling();
+    }
+
 
     const disconnect = () => {
       if (subscription) {
@@ -95,7 +105,7 @@ function hasMediaAttachment (status) {
 }
 
 export const connectUserStream = () => connectTimelineStream('home', 'user', { pollingRefresh: refreshHomeTimelineAndNotification });
-export const connectCommunityStream = () => connectTimelineStream('community', 'public:local');
+export const connectCommunityStream = () => connectTimelineStream('community', 'public:local', { pollingRefresh: (dispatch) => dispatch(refreshCommunityTimeline()) });
 export const connectMediaStream = () => connectTimelineStream('community', 'public:local', { shouldUpdateTimeline: hasMediaAttachment });
-export const connectPublicStream = () => connectTimelineStream('public', 'public');
-export const connectHashtagStream = (hashtag) => connectTimelineStream(`hashtag:${hashtag}`, `hashtag&tag=${hashtag}`);
+export const connectPublicStream = () => connectTimelineStream('public', 'public', { pollingRefresh: (dispatch) => dispatch(refreshPublicTimeline()) });
+export const connectHashtagStream = (hashtag) => connectTimelineStream(`hashtag:${hashtag}`, `hashtag&tag=${hashtag}`, { pollingRefresh: (dispatch) => dispatch(refreshHashtagTimeline(hashtag)) });

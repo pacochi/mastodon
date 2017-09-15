@@ -12,7 +12,7 @@ export default class HashtagLink extends PureComponent {
     const { hashtag } = this.props;
 
     return (
-      <Link className='hashtag-link' to={`/timelines/tag/${hashtag}`}>
+      <Link className='hashtag-link' to={`/tags/${hashtag}`}>
         #{hashtag}
       </Link>
     );

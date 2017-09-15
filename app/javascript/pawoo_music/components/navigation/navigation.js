@@ -1,23 +1,45 @@
 import React, { PureComponent } from 'react';
+import PropTypes from 'prop-types';
 import { NavLink } from 'react-router-dom';
-import SearchBox from '../dummy';
-import EventCalendar from '../event_calendar';
+import Logo from '../../components/dummy';
+import SearchBox from '../../components/dummy';
+import LoginBox from '../../components/login_box';
+import EventCalendar from '../../components/event_calendar';
 import PinnedTagsContainer from '../../containers/pinned_tags';
 import TrendTagsContainer from '../../containers/trend_tags';
 
 export default class Navigation extends PureComponent {
 
+  static propTypes = {
+    isLogin: PropTypes.bool,
+  }
+
   render () {
+    const { isLogin } = this.props;
+    const navLinkParams = [
+      { to: '/', node: 'Home', requireLogin: true, exact: true },
+      { to: '/notifications', node: 'Notifications', requireLogin: true },
+      { to: '/timelines/public/local', node: 'CommunityTimeline', exact: true },
+      { to: '/timelines/public', node: 'PublicTimeline', exact: true },
+      { to: '/favourites', node: 'Favourites', requireLogin: true },
+    ];
+
     return (
       <div className='navigation'>
         <div className='navigation-center'>
+          <Logo>logo</Logo>
           <SearchBox>search</SearchBox>
+          {!isLogin ? <LoginBox /> : null}
           <div className='navigation-links'>
-            <NavLink to='/' exact>Home</NavLink>
-            <NavLink to='/notifications'>Notifications</NavLink>
-            <NavLink to='/timelines/public/local'>CommunityTimeline</NavLink>
-            <NavLink to='/timelines/public' exact>PublicTimeline</NavLink>
-            <NavLink to='/favourites'>Favourites</NavLink>
+            {navLinkParams.map((param) => {
+              const { requireLogin, node, ...other } = param;
+
+              if (!isLogin && requireLogin) {
+                return null;
+              }
+
+              return <NavLink key={other.to} {...other}>{node}</NavLink>;
+            })}
           </div>
           <EventCalendar />
           <PinnedTagsContainer />

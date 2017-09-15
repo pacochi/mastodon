@@ -6,17 +6,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { createSelector } from 'reselect';
 import { debounce } from 'lodash';
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import { FormattedMessage } from 'react-intl';
 import { expandNotifications, scrollTopNotifications } from '../../../mastodon/actions/notifications';
 import NotificationContainer from '../../../mastodon/features/notifications/containers/notification_container';
-import Timeline from '../../components/timeline';
+import Timeline from '../timeline';
 import ScrollableList from '../../components/scrollable_list';
-import TimelineHeader from '../../components/timeline_header';
-import ColumnSettingsContainer from '../../../mastodon/features/notifications/containers/column_settings_container';
-
-const messages = defineMessages({
-  title: { id: 'column.notifications', defaultMessage: 'Notifications' },
-});
 
 const getNotifications = createSelector([
   state => Immutable.List(state.getIn(['settings', 'notifications', 'shows']).filter(item => !item).keys()),
@@ -30,14 +24,12 @@ const mapStateToProps = state => ({
   hasMore: !!state.getIn(['notifications', 'next']),
 });
 
-@injectIntl
 @connect(mapStateToProps)
 export default class NotificationList extends ImmutablePureComponent {
 
   static propTypes = {
     notifications: ImmutablePropTypes.list.isRequired,
     dispatch: PropTypes.func.isRequired,
-    intl: PropTypes.object.isRequired,
     isLoading: PropTypes.bool,
     hasUnread: PropTypes.bool,
     hasMore: PropTypes.bool,
@@ -57,7 +49,7 @@ export default class NotificationList extends ImmutablePureComponent {
   }, 100);
 
   render () {
-    const { notifications, isLoading, hasMore, intl, hasUnread } = this.props;
+    const { notifications, isLoading, hasMore } = this.props;
 
     let scrollableContent = null;
 
@@ -79,18 +71,8 @@ export default class NotificationList extends ImmutablePureComponent {
       </div>
     );
 
-    const header = (
-      <TimelineHeader
-        icon='bell'
-        active={hasUnread}
-        title={intl.formatMessage(messages.title)}
-      >
-        <ColumnSettingsContainer />
-      </TimelineHeader>
-    );
-
     return (
-      <Timeline garally={Garally} header={header}>
+      <Timeline garally={Garally}>
         <ScrollableList
           scrollKey='notifications'
           isLoading={isLoading}

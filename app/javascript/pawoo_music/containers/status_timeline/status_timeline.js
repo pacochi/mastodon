@@ -6,8 +6,8 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { createSelector } from 'reselect';
 import { debounce } from 'lodash';
-import Timeline from '../../components/timeline';
-import ScrollableList from '../../components/status_list';
+import TimelineContainer from '../timeline';
+import StatusList from '../../components/status_list';
 import { scrollTopTimeline } from '../../../mastodon/actions/timelines';
 
 const makeGetStatusIds = () => createSelector([
@@ -80,7 +80,7 @@ const mapDispatchToProps = (dispatch, { timelineId, loadMore }) => ({
 });
 
 @connect(makeMapStateToProps, mapDispatchToProps)
-export default class StatusTimelineContainer extends ImmutablePureComponent {
+export default class StatusTimeline extends ImmutablePureComponent {
 
   static propTypes = {
     timelineId: PropTypes.string.isRequired,
@@ -91,7 +91,6 @@ export default class StatusTimelineContainer extends ImmutablePureComponent {
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
     prepend: PropTypes.node,
-    header: PropTypes.node,
     emptyMessage: PropTypes.node,
     withComposeFrom: PropTypes.bool,
   }
@@ -101,7 +100,7 @@ export default class StatusTimelineContainer extends ImmutablePureComponent {
   }
 
   render () {
-    const { timelineId, header, withComposeFrom, ...other } = this.props;
+    const { timelineId, withComposeFrom, ...other } = this.props;
 
     const Garally = (
       <div>
@@ -110,9 +109,9 @@ export default class StatusTimelineContainer extends ImmutablePureComponent {
     );
 
     return (
-      <Timeline garally={Garally} header={header} withComposeFrom={withComposeFrom}>
-        <ScrollableList scrollKey={`${timelineId}_timeline`} {...other} />
-      </Timeline>
+      <TimelineContainer garally={Garally} withComposeFrom={withComposeFrom}>
+        <StatusList scrollKey={`${timelineId}_timeline`} {...other} />
+      </TimelineContainer>
     );
   }
 

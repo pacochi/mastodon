@@ -1,14 +1,21 @@
 import React, { PureComponent } from 'react';
+import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ComposeFormContainer from '../../../mastodon/features/compose/containers/compose_form_container';
 import scrollTop from '../../../mastodon/scroll';
 
-export default class Timeline extends PureComponent {
+const mapStateToProps = state => ({
+  isLogin: !!state.getIn(['meta', 'me']),
+});
+
+@connect(mapStateToProps)
+export default class TimelineContainer extends PureComponent {
 
   static propTypes = {
     children: PropTypes.node.isRequired,
     garally: PropTypes.node.isRequired,
     header: PropTypes.node,
+    isLogin: PropTypes.bool,
     withComposeFrom: PropTypes.bool,
   }
 
@@ -39,13 +46,12 @@ export default class Timeline extends PureComponent {
   }
 
   render () {
-    const { children, garally, header, withComposeFrom } = this.props;
+    const { children, garally, withComposeFrom, isLogin } = this.props;
 
     return (
       <div className='timeline'>
         <div className='timeline-column'>
-          {withComposeFrom ? <ComposeFormContainer /> : null}
-          {header && React.cloneElement(header, { onClick: this.scrollTop })}
+          {withComposeFrom && isLogin ? <ComposeFormContainer /> : null}
           <div className='timeline-content' ref={this.setRef} onWheel={this.handleWheel}>
             {children}
           </div>

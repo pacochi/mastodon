@@ -7,16 +7,22 @@ import { debounce } from 'lodash';
 import { fetchAccount } from '../../../mastodon/actions/accounts';
 import { refreshAccountTimeline, expandAccountTimeline, refreshPinnedStatusTimeline } from '../../../mastodon/actions/timelines';
 import ScrollableList from '../../components/status_list';
-import Timeline from '../../components/timeline';
+import AccountHeaderContainer from '../account_header';
+import TimelineContainer from '../timeline';
+import { makeGetAccount } from '../../../mastodon/selectors';
 
 const mapStateToProps = (state, props) => {
-  const params = props.match.params;
+  const acct = props.match.params.acct;
+  const accountId = Number(state.getIn(['acct_map', acct]));
+  const getAccount = makeGetAccount();
+
   return {
-    params,
-    statusIds: state.getIn(['timelines', `account:${Number(params.accountId)}`, 'items'], Immutable.List()),
-    isLoading: state.getIn(['timelines', `account:${Number(params.accountId)}`, 'isLoading']),
-    hasMore: !!state.getIn(['timelines', `account:${Number(params.accountId)}`, 'next']),
-    pinnedStatusIds: state.getIn(['timelines', `account:${Number(params.accountId)}:pinned_status`, 'items'], Immutable.List()),
+    accountId,
+    account: getAccount(state, accountId),
+    statusIds: state.getIn(['timelines', `account:${accountId}`, 'items'], Immutable.List()),
+    isLoading: state.getIn(['timelines', `account:${accountId}`, 'isLoading']),
+    hasMore: !!state.getIn(['timelines', `account:${accountId}`, 'next']),
+    pinnedStatusIds: state.getIn(['timelines', `account:${accountId}:pinned_status`, 'items'], Immutable.List()),
   };
 };
 
@@ -25,10 +31,12 @@ export default class AccountTimeline extends PureComponent {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    params: PropTypes.object.isRequired,
+    accountId: PropTypes.number.isRequired,
+    account: ImmutablePropTypes.map.isRequired,
     statusIds: ImmutablePropTypes.list.isRequired,
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
+    garally: PropTypes.node,
     pinnedStatusIds: ImmutablePropTypes.list,
   };
 
@@ -41,8 +49,7 @@ export default class AccountTimeline extends PureComponent {
   }
 
   componentWillMount () {
-    const { dispatch, params } = this.props;
-    const accountId = Number(params.accountId);
+    const { dispatch, accountId } = this.props;
 
     dispatch(fetchAccount(accountId));
     dispatch(refreshPinnedStatusTimeline(accountId));
@@ -52,8 +59,8 @@ export default class AccountTimeline extends PureComponent {
   componentWillReceiveProps (nextProps) {
     const { dispatch } = this.props;
 
-    if (nextProps.params.accountId !== this.props.params.accountId && nextProps.params.accountId) {
-      const accountId = Number(nextProps.params.accountId);
+    if (nextProps.accountId !== this.props.accountId && nextProps.accountId) {
+      const accountId = nextProps.accountId;
 
       dispatch(fetchAccount(accountId));
       dispatch(refreshPinnedStatusTimeline(accountId));
@@ -62,17 +69,18 @@ export default class AccountTimeline extends PureComponent {
   }
 
   handleScrollToBottom = debounce(() => {
-    const { dispatch, isLoading, hasMore, params } = this.props;
+    const { dispatch, isLoading, hasMore, accountId } = this.props;
     if (!isLoading && hasMore) {
-      dispatch(expandAccountTimeline(Number(params.accountId)));
+      dispatch(expandAccountTimeline(accountId));
     }
   }, 300, { leading: true })
 
   render () {
-    const { statusIds, pinnedStatusIds, isLoading, hasMore } = this.props;
+    const { account, statusIds, pinnedStatusIds, isLoading, hasMore, garally } = this.props;
 
-    const Garally = (
-      <div>
+    const Garally = garally || (
+      <div className='garally'>
+        <AccountHeaderContainer account={account} />
         Garally
       </div>
     );
@@ -82,7 +90,7 @@ export default class AccountTimeline extends PureComponent {
     const uniqueStatusIds = pinnedStatusIds.concat(statusIds).toOrderedSet().toList();
 
     return (
-      <Timeline garally={Garally} header={header} withComposeFrom={false}>
+      <TimelineContainer garally={Garally} header={header} withComposeFrom={false}>
         <ScrollableList
           scrollKey='account_timeline'
           statusIds={uniqueStatusIds}
@@ -91,7 +99,7 @@ export default class AccountTimeline extends PureComponent {
           prepend={prepend}
           onScrollToBottom={this.handleScrollToBottom}
         />
-      </Timeline>
+      </TimelineContainer>
     );
   }
 

@@ -18,7 +18,7 @@ const mapStateToProps = state => ({
 
 @injectIntl
 @connect(mapStateToProps)
-export default class CommunityTimeline extends PureComponent {
+export default class CommunityTimelineContainer extends PureComponent {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,

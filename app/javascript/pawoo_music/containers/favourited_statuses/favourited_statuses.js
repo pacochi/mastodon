@@ -6,8 +6,8 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 import { debounce } from 'lodash';
 import { defineMessages, injectIntl } from 'react-intl';
 import { fetchFavouritedStatuses, expandFavouritedStatuses } from '../../../mastodon/actions/favourites';
-import Timeline from '../../components/timeline';
-import ScrollableList from '../../components/status_list';
+import Timeline from '../timeline';
+import StatusList from '../../components/status_list';
 import TimelineHeader from '../../components/timeline_header';
 
 const messages = defineMessages({
@@ -54,7 +54,7 @@ export default class Notifications extends ImmutablePureComponent {
 
     return (
       <Timeline garally={Garally} header={header}>
-        <ScrollableList scrollKey='favourited_statuses' statusIds={statusIds} onScrollToBottom={this.onScrollToBottom} />
+        <StatusList scrollKey='favourited_statuses' statusIds={statusIds} onScrollToBottom={this.onScrollToBottom} />
       </Timeline>
     );
   }

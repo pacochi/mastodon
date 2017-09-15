@@ -1,3 +1,3 @@
-import HomeTimeline from './home_timeline';
+import HomeTimelineContainer from './home_timeline';
 
-export default HomeTimeline;
+export default HomeTimelineContainer;

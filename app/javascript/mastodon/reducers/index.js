@@ -21,6 +21,7 @@ import trend_tags from './trend_tags';
 import booth_items from './booth_items';
 import tips_balloon from './tips_balloon';
 import contexts from './contexts';
+import acct_map from '../../pawoo_music/reducers/acct_map';
 
 export default combineReducers({
   timelines,
@@ -45,4 +46,5 @@ export default combineReducers({
   trend_tags,
   booth_items,
   tips_balloon,
+  acct_map,
 });
