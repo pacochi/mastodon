@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170914152344) do
+ActiveRecord::Schema.define(version: 20170915093801) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -246,15 +246,6 @@ ActiveRecord::Schema.define(version: 20170914152344) do
     t.datetime "updated_at", null: false
     t.index ["provider", "uid"], name: "index_oauth_authentications_on_provider_and_uid", unique: true
     t.index ["user_id", "provider"], name: "index_oauth_authentications_on_user_id_and_provider", unique: true
-  end
-
-  create_table "pinned_statuses", id: :serial, force: :cascade do |t|
-    t.integer "account_id", null: false
-    t.bigint "status_id", null: false
-    t.datetime "created_at", null: false
-    t.datetime "updated_at", null: false
-    t.index ["account_id", "status_id"], name: "index_pinned_statuses_on_account_id_and_status_id", unique: true
-    t.index ["status_id"], name: "index_pinned_statuses_on_status_id"
   end
 
   create_table "pixiv_cards", id: :serial, force: :cascade do |t|
@@ -505,8 +496,6 @@ ActiveRecord::Schema.define(version: 20170914152344) do
   add_foreign_key "oauth_access_tokens", "oauth_applications", column: "application_id", on_delete: :cascade
   add_foreign_key "oauth_access_tokens", "users", column: "resource_owner_id", on_delete: :cascade
   add_foreign_key "oauth_applications", "users", column: "owner_id", on_delete: :cascade
-  add_foreign_key "pinned_statuses", "accounts"
-  add_foreign_key "pinned_statuses", "statuses"
   add_foreign_key "reports", "accounts", column: "action_taken_by_account_id", on_delete: :nullify
   add_foreign_key "reports", "accounts", column: "target_account_id", on_delete: :cascade
   add_foreign_key "reports", "accounts", on_delete: :cascade
