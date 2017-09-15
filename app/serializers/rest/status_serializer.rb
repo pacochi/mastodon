@@ -3,7 +3,7 @@
 class REST::StatusSerializer < ActiveModel::Serializer
   attributes :id, :created_at, :in_reply_to_id, :in_reply_to_account_id,
              :sensitive, :spoiler_text, :visibility, :language,
-             :uri, :content, :url, :reblogs_count, :favourites_count, :pinned
+             :uri, :content, :url, :reblogs_count, :favourites_count, :pixiv_cards, :pinned
 
   attribute :favourited, if: :current_user?
   attribute :reblogged, if: :current_user?
@@ -66,6 +66,10 @@ class REST::StatusSerializer < ActiveModel::Serializer
       current_user.account_id == object.account_id &&
       !object.reblog? &&
       %w(public unlisted).include?(object.visibility)
+  end
+
+  def pixiv_cards
+    object.pixiv_cards.select(&:image_url?).map { |record| record.slice(:url, :image_url) }.compact
   end
 
   class ApplicationSerializer < ActiveModel::Serializer

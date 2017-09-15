@@ -94,12 +94,14 @@ export default class Status extends ImmutablePureComponent {
     this.setState({ isExpanded: !this.state.isExpanded });
   };
 
-  renderLoadingMediaGallery () {
-    return <div className='media_gallery' style={{ height: '110px' }} />;
+  renderLoadingMediaGallery = () => {
+    const { squareMedia } = this.props;
+    return <div className='media_gallery' style={{ height: squareMedia ? 229 : 132 }} />;
   }
 
-  renderLoadingVideoPlayer () {
-    return <div className='media-spoiler-video' style={{ height: '110px' }} />;
+  renderLoadingVideoPlayer = () => {
+    const { squareMedia } = this.props;
+    return <div className='media-spoiler-video' style={{ height: squareMedia ? 229 : 132 }} />;
   }
 
   render () {
@@ -171,8 +173,8 @@ export default class Status extends ImmutablePureComponent {
 
       } else if (attachments.first().get('type') === 'video') {
         media = (
-          <Bundle fetchComponent={VideoPlayer} loading={this.renderLoadingVideoPlayer} >
-            {Component => <Component media={attachments.first()} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />}
+          <Bundle fetchComponent={VideoPlayer} loading={this.renderLoadingVideoPlayer}>
+            {Component => <Component media={attachments.first()} sensitive={status.get('sensitive')} height={squareMedia ? 229 : 132} onOpenVideo={this.props.onOpenVideo} />}
           </Bundle>
         );
       } else {
