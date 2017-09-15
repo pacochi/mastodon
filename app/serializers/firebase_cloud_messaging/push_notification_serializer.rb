@@ -30,6 +30,6 @@ class StatusSerializer < ActiveModel::Serializer
   attributes :id, :created_at, :in_reply_to_id, :in_reply_to_account_id, :sensitive, :spoiler_text, :visibility, :content
 
   def content
-    Formatter.instance.format(object)
+    Formatter.instance.plaintext(object)
   end
 end
