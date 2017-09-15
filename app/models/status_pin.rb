@@ -11,8 +11,12 @@
 #
 
 class StatusPin < ApplicationRecord
+  include Paginable
+
   belongs_to :account, required: true
   belongs_to :status, required: true
 
   validates_with StatusPinValidator
+
+  scope :recent, -> { reorder('status_pins.created_at DESC') }
 end
