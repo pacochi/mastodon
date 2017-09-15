@@ -15,11 +15,11 @@ class FeedInsertWorker
   private
 
   def check_and_insert
-    # TODO: reduce N+1 queries to filter followers
-    @followers = followers.reject { |follower| feed_filtered?(follower) }
-
     if records_available?
-      perform_push
+      # TODO: reduce N+1 queries to filter followers
+      @followers = followers.reject { |follower| feed_filtered?(follower) }
+
+      perform_push if followers.present?
     else
       true
     end

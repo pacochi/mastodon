@@ -35,7 +35,7 @@ describe FeedInsertWorker do
         allow(FeedManager).to receive(:instance).and_return(instance)
         result = subject.perform(status.id, follower.id)
 
-        expect(result).to eq true
+        expect(result).to be_nil
         expect(instance).not_to have_received(:push)
       end
 
