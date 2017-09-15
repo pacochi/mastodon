@@ -183,14 +183,12 @@ export default function compose(state = initialState, action) {
     return hydrate(state, action.state.get('compose'));
   case COMPOSE_MOUNT:
     return state.set('mounted', true);
-  case COMPOSE_UNMOUNT:
-    return state.set('mounted', false);
-  case COMPOSE_DATE_TIME_CHANGE:
-    return state.set('published', action.value);
   case COMPOSE_SENSITIVITY_CHANGE:
     return state
       .set('mounted', false)
       .set('is_composing', false);
+  case COMPOSE_DATE_TIME_CHANGE:
+    return state.set('published', action.value);
   case COMPOSE_SENSITIVITY_CHANGE:
     return state.withMutations(map => {
       if (!state.get('spoiler')) {
