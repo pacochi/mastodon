@@ -183,7 +183,7 @@ export default function compose(state = initialState, action) {
     return hydrate(state, action.state.get('compose'));
   case COMPOSE_MOUNT:
     return state.set('mounted', true);
-  case COMPOSE_SENSITIVITY_CHANGE:
+  case COMPOSE_UNMOUNT:
     return state
       .set('mounted', false)
       .set('is_composing', false);
