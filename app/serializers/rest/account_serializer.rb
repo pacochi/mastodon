@@ -7,6 +7,8 @@ class REST::AccountSerializer < ActiveModel::Serializer
              :note, :url, :avatar, :avatar_static, :header, :header_static,
              :followers_count, :following_count, :statuses_count
 
+  belongs_to :oauth_authentications
+
   def note
     Formatter.instance.simplified_format(object)
   end
@@ -29,5 +31,9 @@ class REST::AccountSerializer < ActiveModel::Serializer
 
   def header_static
     full_asset_url(object.header_static_url)
+  end
+
+  class OauthAuthenticationSerializer < ActiveModel::Serializer
+    attributes :uid, :provider
   end
 end
