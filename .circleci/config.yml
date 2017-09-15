@@ -60,7 +60,7 @@ jobs:
 
       # Start assets precompilation. It wastes about 60 seconds, so that runs on background.
       - restore_cache:
-          key: assets/{{ checksum "tmp/circleci/master.hash" }}/2
+          key: assets/{{ checksum "tmp/circleci/master.hash" }}/3
       - run:
           command: |
             # `rake assets:precompile error_page:generate` causes curious error: https://circleci.com/gh/pixiv/pawoo/2274
@@ -127,14 +127,17 @@ jobs:
               sleep 0.5;
             done
             exit 1
-      - save_cache:
-          key: assets/{{ checksum "tmp/circleci/master.hash" }}/2
-          paths:
-            - public/assets
-            - tmp/cache/assets
 
       # Run tests
       - run: bundle exec parallel_test --group-by filesize --type rspec -- --profile -- $(circleci tests glob spec/**/*_spec.rb | circleci tests split --split-by=filesize)
       - run: if [ $CIRCLE_NODE_INDEX = 0 ]; then npm test; fi
+
+      # Save compiled assets
+      - save_cache:
+          key: assets/{{ checksum "tmp/circleci/master.hash" }}/3
+          paths:
+            - public/assets
+            - public/packs-test
+            - tmp/cache/babel-loader
 
       - run: ./bin/spring stop
