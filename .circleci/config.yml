@@ -55,7 +55,6 @@ jobs:
       - save_cache:
           key: yarn/{{ checksum ".nvmrc" }}.{{ checksum "yarn.lock" }}/1
           paths:
-            - ~/.cache/.yarn
             - node_modules
 
       # Start assets precompilation. It wastes about 60 seconds, so that runs on background.
