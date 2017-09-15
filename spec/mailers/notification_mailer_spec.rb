@@ -102,6 +102,22 @@ RSpec.describe NotificationMailer, type: :mailer do
     end
   end
 
+  describe 'video_prepared' do
+    let(:music_attachment) { Fabricate(:music_attachment, title: 'title') }
+    let(:mail) { NotificationMailer.video_prepared(receiver.account, Notification.create!(account: receiver.account, activity: music_attachment)) }
+
+    include_examples 'localized subject', 'notification_mailer.video_prepared.subject', title: 'title'
+
+    it 'renders the headers' do
+      expect(mail.subject).to eq 'The video for your music, title, was generated'
+      expect(mail.to).to eq [receiver.email]
+    end
+
+    it 'renders the body' do
+      expect(mail.body.encoded).to include 'The video for your music, title, was generated:'
+    end
+  end
+
   describe 'digest' do
     before do
       mention = Fabricate(:mention, account: receiver.account, status: foreign_status)

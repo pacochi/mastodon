@@ -37,6 +37,9 @@ Rails.application.routes.draw do
 
   get '/@:username', to: 'accounts#show', as: :short_account
   get '/@:account_username/:id', to: 'statuses#show', as: :short_account_status
+  get '/@:account_username/albums/:id', to: 'albums#show', as: :short_account_album
+  get '/@:account_username/albums/:album_id/tracks/:id', to: 'albums/tracks#show'
+  get '/@:account_username/tracks/:id', to: 'tracks#show', as: :short_account_track
 
   get '/users/:username', to: redirect('/@%{username}'), constraints: { format: :html }
 
@@ -187,7 +190,6 @@ Rails.application.routes.draw do
       resources :trend_tags, only: [:index]
       resources :follows,    only: [:create]
       resources :media,      only: [:create]
-      resources :music,      only: [:create]
       resources :apps,       only: [:create]
       resources :blocks,     only: [:index]
       resources :mutes,      only: [:index]
@@ -219,6 +221,12 @@ Rails.application.routes.draw do
         end
       end
 
+      resources :tracks, only: [:show, :create, :update, :destroy] do
+        collection do
+          post :prepare_video
+        end
+      end
+
       namespace :accounts do
         get :verify_credentials, to: 'credentials#show'
         patch :update_credentials, to: 'credentials#update'
@@ -226,6 +234,7 @@ Rails.application.routes.draw do
         resources :relationships, only: :index
       end
       resources :accounts, only: [:show] do
+        resources :albums, only: :index, controller: 'accounts/albums'
         resources :statuses, only: :index, controller: 'accounts/statuses'
         resources :followers, only: :index, controller: 'accounts/follower_accounts'
         resources :following, only: :index, controller: 'accounts/following_accounts'
@@ -239,6 +248,10 @@ Rails.application.routes.draw do
           post :mute
           post :unmute
         end
+      end
+
+      resources :albums, only: [:show, :create, :update, :destroy] do
+        resources :tracks, only: [:index, :update, :destroy], controller: 'albums/tracks'
       end
     end
 

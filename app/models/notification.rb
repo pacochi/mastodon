@@ -22,6 +22,7 @@ class Notification < ApplicationRecord
     follow:         'Follow',
     follow_request: 'FollowRequest',
     favourite:      'Favourite',
+    video_prepared: 'MusicAttachment',
   }.freeze
 
   STATUS_INCLUDES = [:stream_entry, :media_attachments, :tags, mentions: { account: :oauth_authentications },

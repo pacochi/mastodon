@@ -159,7 +159,7 @@ class MusicModal extends React.PureComponent {
             </div>
             <div className='music-modal__info'>
               <div>※128文字を超える部分は自動的にカットされます</div>
-              <div>※アップロードできる音楽と画像のサイズは合計7MBまでです</div>
+              <div>※アップロードできる音楽と画像のサイズはそれぞれ7MBまでです</div>
             </div>
 
             <input type='file' name='image' accept='image/*' ref={this.setImageRef} onChange={this.handleOnSelectImage} />

@@ -229,6 +229,10 @@ en:
     new_report:
       body: "%{reporter} has reported %{target}"
       subject: New report for %{instance} (#%{id})
+  albums:
+    tracks:
+      positioning_not_found: Positioning tracks not found
+    over_character_limit: character limit of %{max} exceeded
   application_mailer:
     settings: 'Change e-mail preferences: %{link}'
     signature: Mastodon notifications from %{instance}
@@ -333,9 +337,7 @@ en:
       images_and_video: Cannot attach a video to a status that already contains images
       too_many: Cannot attach more than 4 files
   music_attachments:
-    too_large_total_size: Your mp3 and cover image must be less than %{max_size_in_mb}MB in total
-    invalid_music_ext: The music file is invalid
-    invalid_image_ext: The cover image file is invalid
+    invalid_mp3: The music file is an invalid MP3
   notification_mailer:
     digest:
       body: 'Here is a brief summary of what you missed on %{instance} since your last visit on %{since}:'
@@ -361,6 +363,9 @@ en:
     reblog:
       body: 'Your status was boosted by %{name}:'
       subject: "%{name} boosted your status"
+    video_prepared:
+      body: 'The video for your music, %{title}, was generated:'
+      subject: The video for your music, %{title}, was generated
   oauth_authentications:
     link: Link
     unlink: Unlink

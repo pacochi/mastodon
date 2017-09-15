@@ -229,6 +229,10 @@ ja:
     new_report:
       body: "%{reporter} が %{target} を通報しました"
       subject: "%{instance} の新しい通報 (#%{id})"
+  albums:
+    tracks:
+      positioning_not_found: 位置を特定するトラックが見つかりません
+    over_character_limit: 上限は %{max}文字までです
   application_mailer:
     settings: 'メール設定の変更: %{link}'
     signature: Mastodon %{instance} インスタンスからの通知
@@ -333,9 +337,7 @@ ja:
       images_and_video: 既に画像が追加されているため、動画を追加することはできません。
       too_many: 追加できるファイルは4つまでです。
   music_attachments:
-    too_large_total_size: MP3ファイルと画像ファイルのサイズは合計%{max_size_in_mb}MB以下である必要があります
-    invalid_music_ext: 音楽ファイルの形式が無効です
-    invalid_image_ext: 画像ファイルの形式が無効です
+    invalid_mp3: 音楽ファイルが無効なMP3になっています
   notification_mailer:
     digest:
       body: "%{instance} での最後のログインからの出来事:"
@@ -361,6 +363,9 @@ ja:
     reblog:
       body: 'あなたのトゥートが %{name} さんにブーストされました:'
       subject: あなたのトゥートが %{name} さんにブーストされました
+    video_prepared:
+      body: '楽曲『%{title}』の動画の生成が完了しました:'
+      subject: 楽曲『%{title}』の動画の生成が完了しました
   oauth_authentications:
     link: 連携する
     unlink: 解除する

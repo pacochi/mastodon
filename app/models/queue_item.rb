@@ -40,34 +40,39 @@ class QueueItem
     end
 
     def pawoo_link(link)
-      status_id = find_status_id(link)
-      return unless status_id
+      begin
+        music_attachment = find_music_attachment(MusicAttachment.includes(status: :account), link)
+      rescue ActiveRecord::ActiveRecordError
+        raise Mastodon::MusicSourceFetchFailedError
+      end
 
-      cache = find_cache('pawoo-music', status_id)
+      return nil if music_attachment.nil?
+
+      cache = find_cache('pawoo-music', music_attachment.id)
       return cache if cache
 
-      video = MediaAttachment.video.joins(:status).find_by(statuses: { id: status_id, visibility: [:public, :unlisted] })
-      raise Mastodon::MusicSourceFetchFailedError unless video&.music_info
-
-      video_url = full_asset_url(video.file.url(:original))
-
       item = new(
-        info: "#{video.music_info['artist']} - #{video.music_info['title']}",
+        info: "#{music_attachment.artist} - #{music_attachment.title}",
         thumbnail_url: nil,
         music_url: nil,
-        video_url: video_url,
-        link: link,
-        duration: video.music_info['duration'],
+        video_url: nil,
+        link: nil,
+        duration: music_attachment.duration,
         source_type: 'pawoo-music',
-        source_id: status_id
+        source_id: music_attachment.id
       )
 
-      cache_item('pawoo-music', status_id, item)
+      cache_item('pawoo-music', music_attachment.id, item)
     end
 
-    def find_status_id(link)
+    def find_music_attachment(scope, link)
       matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/((@\w+)|(web/statuses))/(?<status_id>\d+)})
-      matched ? matched[:status_id] : nil
+      return scope.find_by!(status_id: matched[:status_id]) if matched
+
+      matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/(@\w+)/tracks/(?<track_id>\d+)})
+      return scope.find(matched[:track_id]) if matched
+
+      return nil
     end
 
     def apollo_link(link)

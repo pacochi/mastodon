@@ -86,4 +86,17 @@ RSpec.describe NotifyService do
       end
     end
   end
+
+  context 'when the activity is music attachment' do
+    let(:activity) { Fabricate(:music_attachment) }
+
+    it { is_expected.to change(Notification, :count).by(1) }
+
+    it 'does not queue FirebaseCloudMessagingWorker' do
+      Sidekiq::Testing.fake! do
+        subject
+        expect(FirebaseCloudMessagingWorker).not_to have_enqueued_sidekiq_job
+      end
+    end
+  end
 end

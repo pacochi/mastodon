@@ -15,9 +15,9 @@ RSpec.describe TagsController, type: :controller do
         expect(response).to have_http_status(:success)
       end
 
-      it 'renders public layout' do
+      it 'renders timeline layout' do
         get :show, params: { id: 'test', max_id: late.id }
-        expect(response).to render_template layout: 'public'
+        expect(response).to render_template layout: 'timeline'
       end
 
       xit 'renders only local statuses if local parameter is specified' do

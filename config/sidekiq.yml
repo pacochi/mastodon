@@ -9,6 +9,7 @@
   - remove
   - elasticsearch
   - playlist
+  - video_preparer
 :schedule:
   subscriptions_scheduler:
     cron: '0 19,0 * * *'

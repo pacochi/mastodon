@@ -48,6 +48,8 @@ RSpec.describe Api::V1::NotificationsController, type: :controller do
       @mention_from_status = mentioning_status.mentions.first
       @favourite = FavouriteService.new.call(other.account, first_status)
       @follow = FollowService.new.call(other.account, 'alice')
+      @video_prepared = Fabricate(:music_attachment)
+      Fabricate(:notification, account: user.account, activity: @video_prepared)
     end
 
     describe 'with no options' do
@@ -74,6 +76,10 @@ RSpec.describe Api::V1::NotificationsController, type: :controller do
       it 'includes follow' do
         expect(assigns(:notifications).map(&:activity)).to include(@follow)
       end
+
+      it 'includes video_prepared' do
+        expect(assigns(:notifications).map(&:activity)).to include(@video_prepared)
+      end
     end
 
     describe 'with excluded mentions' do
@@ -99,6 +105,10 @@ RSpec.describe Api::V1::NotificationsController, type: :controller do
 
       it 'includes follow' do
         expect(assigns(:notifications).map(&:activity)).to include(@follow)
+      end
+
+      it 'includes video_prepared' do
+        expect(assigns(:notifications).map(&:activity)).to include(@video_prepared)
       end
     end
   end

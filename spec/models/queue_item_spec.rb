@@ -54,37 +54,44 @@ RSpec.describe QueueItem do
     end
 
     context 'given pawoo link' do
-      let(:url) { Rails.application.routes.url_helpers.short_account_status_url(status.account, status) }
-      let(:status) { Fabricate(:status, account: account) }
+      let(:music_attachment) { Fabricate(:music_attachment) }
 
-      context "when status hasn't attachments" do
-        it { expect{ subject }.to raise_error(Mastodon::MusicSourceFetchFailedError) }
-      end
+      context 'if link is for status with music attachment' do
+        context 'when it is not a link for an existent' do
+          let(:url) do
+            Rails.application.routes.url_helpers.short_account_status_url(
+              music_attachment.status.account,
+              1,
+            )
+          end
 
-      context "when status has image attachments" do
-        let!(:media_attachment) { Fabricate(:media_attachment, status: status) }
-        it { expect{ subject }.to raise_error(Mastodon::MusicSourceFetchFailedError) }
-      end
+          it { expect{ subject }.to raise_error(Mastodon::MusicSourceFetchFailedError) }
+        end
 
-      context "when status has video attachments" do
-        let!(:media_attachment) { Fabricate(:media_attachment, status: status, type: 'video', music_info: music_info) }
-        let(:music_info) { { title: 'title', artist: 'artist', duration: 1 } }
+        context 'when it is a link for an existent' do
+          let(:url) do
+            Rails.application.routes.url_helpers.short_account_status_url(
+              music_attachment.status.account,
+              music_attachment.status,
+            )
+          end
 
-        it { is_expected.to be_present }
-
-        context 'status is unlisted' do
-          let(:status) { Fabricate(:status, account: account, visibility: 'unlisted') }
           it { is_expected.to be_present }
         end
+      end
 
-        context 'status is direct' do
-          let(:status) { Fabricate(:status, account: account, visibility: 'direct') }
+      context 'if link is for music' do
+        context 'when it is not a link for an existent' do
+          let(:url) { Rails.application.routes.url_helpers.short_account_track_url('unknown', 1) }
           it { expect{ subject }.to raise_error(Mastodon::MusicSourceFetchFailedError) }
         end
 
-        context 'status is private' do
-          let(:status) { Fabricate(:status, account: account, visibility: 'private') }
-          it { expect{ subject }.to raise_error(Mastodon::MusicSourceFetchFailedError) }
+        context 'when it is a link for an existent' do
+          let(:url) do
+            Rails.application.routes.url_helpers.short_account_track_url music_attachment.status.account.username, music_attachment
+          end
+
+          it { is_expected.to be_present }
         end
       end
     end
@@ -221,10 +228,11 @@ RSpec.describe QueueItem do
     end
 
     context 'given same link' do
-      let(:url) { Rails.application.routes.url_helpers.short_account_status_url(status.account, status) }
-      let(:status) { Fabricate(:status, account: account) }
-      let!(:media_attachment) { Fabricate(:media_attachment, status: status, type: 'video', music_info: music_info) }
-      let(:music_info) { { title: 'title', artist: 'artist', duration: 1 } }
+      let(:url) do
+        Rails.application.routes.url_helpers.short_account_track_url music_attachment.status.account.username, music_attachment
+      end
+
+      let!(:music_attachment) { Fabricate(:music_attachment, title: 'title', duration: 1) }
       let(:another_account) { Fabricate(:account) }
       let(:another_queue) { described_class.create_from_link(url, another_account) }
 
