@@ -64,6 +64,11 @@ fetch(url.format({ pathname: path.resolve(argv._[0]), protocol: 'file:' }))
   .then(response => response.arrayBuffer())
   .then(audio => createRgbaEmitter({ audio, image, blur, particle, spectrum, text }))
   .then(emitter => {
-    emitter.pipe(process.stdout);
-    emitter.on('end', close);
+    // XXX: The documentation says the default value of end is true, but somehow
+    // it does not trigger finish event nor flush the stream. Ignore it.
+    emitter.pipe(process.stdout, { end: false });
+
+    emitter.on('end', () => process.stdout.end(close));
+    emitter.on('error', console.error);
+    process.stdout.on('error', console.error);
   });
