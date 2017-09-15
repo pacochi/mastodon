@@ -2,8 +2,12 @@
 
 class FollowingAccountsController < ApplicationController
   include AccountControllerConcern
+  include TimelineConcern
+
+  before_action :set_initial_state_data, only: :index
+
+  layout 'timeline'
 
   def index
-    @follows = Follow.where(account: @account).recent.page(params[:page]).per(FOLLOW_PER_PAGE).preload(:target_account)
   end
 end

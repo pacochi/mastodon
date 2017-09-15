@@ -2,7 +2,7 @@ const perf = require('./performance');
 
 // import default stylesheet with variables
 require('font-awesome/css/font-awesome.css');
-require('mastodon-application-style');
+require('mastodon-application-style'); // eslint-disable-line import/no-unresolved
 
 function onDomContentLoaded(callback) {
   if (document.readyState !== 'loading') {
@@ -14,20 +14,12 @@ function onDomContentLoaded(callback) {
 
 function main() {
   perf.start('main()');
-  const PlayControl = require('mastodon/features/ui/components/play_control').default;
-  const Mastodon = require('mastodon/containers/mastodon').default;
+  const PlayControl = require('mastodon/features/ui/components/play_control').default; // eslint-disable-line import/no-unresolved
+  const PawooMusic = require('pawoo_music').default; // eslint-disable-line import/no-unresolved
   const React = require('react');
   const ReactDOM = require('react-dom');
 
   require.context('../images/', true);
-
-  if (window.history && history.replaceState) {
-    const { pathname, search, hash } = window.location;
-    const path = pathname + search + hash;
-    if (!(/^\/(web|about|intent|admin\/scheduled_statuses)(\/|$)/).test(path)) {
-      history.replaceState(null, document.title, `/web${path}`);
-    }
-  }
 
   onDomContentLoaded(() => {
     const mountNode = document.getElementById('mastodon');
@@ -37,7 +29,7 @@ function main() {
 
     const props = JSON.parse(mountNode.getAttribute('data-props'));
 
-    ReactDOM.render(<Mastodon {...props} />, mountNode);
+    ReactDOM.render(<PawooMusic {...props} />, mountNode);
     if (mountAboutPlayControl) {
       ReactDOM.render(<PlayControl isTop onError={function(){}} onSkip={function(){}} streamingAPIBaseURL={playControlInitialState.streaming_api_base_url} accessToken={playControlInitialState.access_token} />, mountAboutPlayControl);
     }

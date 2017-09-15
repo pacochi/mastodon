@@ -4,11 +4,10 @@ require 'rails_helper'
 
 describe Admin::ScheduledStatusesController, type: :controller do
   describe 'GET #index' do
-    it 'renders scheduledStatuses' do
+    it 'renders' do
       sign_in(Fabricate(:user, admin: true))
       get :index
 
-      expect(assigns(:appmode)).to eq 'scheduledStatuses'
       expect(response).to have_http_status(:success)
     end
   end

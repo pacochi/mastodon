@@ -160,6 +160,14 @@ class Account < ApplicationRecord
     Rails.cache.fetch("exclude_domains_for:#{id}") { domain_blocks.pluck(:domain) }
   end
 
+  def popular_media_attachments
+    media_attachments_ids = Rails.cache.fetch("suggested_account:published_attachments:#{id}") do
+      media_attachments.joins(:status).where(statuses: { sensitive: false, visibility: [:public, :unlisted] }).reorder(Status.arel_table[:favourites_count].desc).limit(3).pluck(:id)
+    end
+
+    MediaAttachment.where(id: media_attachments_ids)
+  end
+
   class << self
     def domains
       reorder(nil).pluck('distinct accounts.domain')

@@ -11,8 +11,7 @@ RSpec.describe Intent::StatusesController, type: :controller do
 
     let(:user) { Fabricate(:user) }
 
-    it 'renders intent' do
-      expect(assigns(:appmode)).to eq 'intent'
+    it 'returns http success' do
       expect(response).to have_http_status(:success)
     end
   end

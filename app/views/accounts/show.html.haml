@@ -1,8 +1,5 @@
 - content_for :page_title do
-  - if @statuses.current_page > 1
-    = "page #{@statuses.current_page} - #{display_name(@account)} - #{@account.acct}"
-  - else
-    = "#{display_name(@account)} - #{@account.acct}"
+  = "#{display_name(@account)} - #{@account.acct}"
 
 - content_for :header_tags do
   %link{ rel: 'salmon', href: api_salmon_url(@account.id) }/
@@ -10,26 +7,3 @@
 
   %meta{ property: 'og:type', content: 'profile' }/
   = render 'og', account: @account, url: short_account_url(@account, only_path: false)
-
-= render 'accounts/service_logo'
-
-- if show_landing_strip?
-  = render partial: 'shared/landing_strip', locals: { account: @account }
-
-.h-feed
-  %data.p-name{ value: "#{@account.username} on #{site_hostname}" }/
-
-  = render 'header', account: @account
-
-  - if @statuses.empty?
-    .accounts-grid
-      = render 'nothing_here'
-  - else
-    .activity-stream
-      - if params[:page].to_i.zero?
-        = render partial: 'stream_entries/status', collection: @statuses_from_pinned_status, as: :status, locals: { display_pinned: true }
-      = render partial: 'stream_entries/status', collection: @statuses_collection, as: :status
-
-  .pagination
-    = link_to_next_page @statuses, safe_join([t('pagination.next'), fa_icon('chevron-right')], ' '), class: 'next'
-    = link_to_prev_page @statuses, safe_join([fa_icon('chevron-left'), t('pagination.prev')], ' '), class: 'prev'
