@@ -129,3 +129,8 @@ rules:
   import/no-unresolved:
   - 2
   - commonjs: true
+
+settings:
+  import/resolver:
+    webpack:
+      config: webpack.eslint.config.js
