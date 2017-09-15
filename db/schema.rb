@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170714184731) do
+ActiveRecord::Schema.define(version: 20170830000000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -61,6 +61,27 @@ ActiveRecord::Schema.define(version: 20170714184731) do
     t.index ["uri"], name: "index_accounts_on_uri"
     t.index ["url"], name: "index_accounts_on_url"
     t.index ["username", "domain"], name: "index_accounts_on_username_and_domain", unique: true
+  end
+
+  create_table "album_music_attachments", force: :cascade do |t|
+    t.bigint "album_id", null: false
+    t.bigint "music_attachment_id", null: false
+    t.decimal "position", null: false
+    t.index ["album_id", "music_attachment_id"], name: "index_album_music_attachments_on_album_music_attachment", unique: true
+    t.index ["album_id", "position"], name: "index_album_music_attachments_on_album_position", unique: true
+    t.index ["album_id"], name: "index_album_music_attachments_on_album_id"
+    t.index ["music_attachment_id"], name: "index_album_music_attachments_on_music_attachment_id"
+  end
+
+  create_table "albums", force: :cascade do |t|
+    t.bigint "status_id", null: false
+    t.string "title", null: false
+    t.text "description", default: "", null: false
+    t.string "image_file_name"
+    t.string "image_content_type"
+    t.integer "image_file_size"
+    t.datetime "image_updated_at"
+    t.index ["status_id"], name: "index_albums_on_status_id"
   end
 
   create_table "blocks", id: :serial, force: :cascade do |t|
@@ -168,6 +189,38 @@ ActiveRecord::Schema.define(version: 20170714184731) do
     t.datetime "updated_at", null: false
     t.index ["account_id", "status_id"], name: "index_mentions_on_account_id_and_status_id", unique: true
     t.index ["status_id"], name: "index_mentions_on_status_id"
+  end
+
+  create_table "music_attachments", force: :cascade do |t|
+    t.bigint "status_id", null: false
+    t.integer "duration", null: false
+    t.string "title", null: false
+    t.string "artist", null: false
+    t.string "music_file_name"
+    t.string "music_content_type"
+    t.integer "music_file_size"
+    t.datetime "music_updated_at"
+    t.string "image_file_name"
+    t.string "image_content_type"
+    t.integer "image_file_size"
+    t.datetime "image_updated_at"
+    t.string "video_file_name"
+    t.string "video_content_type"
+    t.integer "video_file_size"
+    t.datetime "video_updated_at"
+    t.integer "video_blur_movement_band_bottom", default: 0, null: false
+    t.integer "video_blur_movement_band_top", default: 0, null: false
+    t.integer "video_blur_movement_threshold", default: 0, null: false
+    t.integer "video_blur_blink_band_bottom", default: 0, null: false
+    t.integer "video_blur_blink_band_top", default: 0, null: false
+    t.integer "video_blur_blink_threshold", default: 0, null: false
+    t.integer "video_particle_limit_band_bottom", default: 0, null: false
+    t.integer "video_particle_limit_band_top", default: 0, null: false
+    t.integer "video_particle_limit_threshold", default: 0, null: false
+    t.integer "video_particle_color"
+    t.integer "video_spectrum_mode"
+    t.integer "video_spectrum_color"
+    t.index ["status_id"], name: "index_music_attachments_on_status_id"
   end
 
   create_table "mutes", id: :serial, force: :cascade do |t|
@@ -461,6 +514,9 @@ ActiveRecord::Schema.define(version: 20170714184731) do
   end
 
   add_foreign_key "account_domain_blocks", "accounts", on_delete: :cascade
+  add_foreign_key "album_music_attachments", "albums", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "album_music_attachments", "music_attachments", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "albums", "statuses", on_update: :cascade, on_delete: :cascade
   add_foreign_key "blocks", "accounts", column: "target_account_id", on_delete: :cascade
   add_foreign_key "blocks", "accounts", on_delete: :cascade
   add_foreign_key "conversation_mutes", "accounts", on_delete: :cascade
@@ -476,6 +532,7 @@ ActiveRecord::Schema.define(version: 20170714184731) do
   add_foreign_key "media_attachments", "statuses", on_delete: :nullify
   add_foreign_key "mentions", "accounts", on_delete: :cascade
   add_foreign_key "mentions", "statuses", on_delete: :cascade
+  add_foreign_key "music_attachments", "statuses", on_update: :cascade, on_delete: :cascade
   add_foreign_key "mutes", "accounts", column: "target_account_id", on_delete: :cascade
   add_foreign_key "mutes", "accounts", on_delete: :cascade
   add_foreign_key "notifications", "accounts", column: "from_account_id", on_delete: :cascade
