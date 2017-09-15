@@ -32,6 +32,7 @@ RSpec.describe PostStatusService do
     it 'pings PuSH hubs' do
       allow(DistributionWorker).to receive(:perform_async)
       allow(Pubsubhubbub::DistributionWorker).to receive(:perform_async)
+      allow(ActivityPub::DistributionWorker).to receive(:perform_async)
       account = Fabricate(:account)
 
       status = subject.call(account, "test status update")
@@ -39,6 +40,7 @@ RSpec.describe PostStatusService do
       expect(DistributionWorker).to have_received(:perform_async).with(status.id)
       expect(Pubsubhubbub::DistributionWorker).
         to have_received(:perform_async).with(status.stream_entry.id)
+      expect(ActivityPub::DistributionWorker).to have_received(:perform_async).with(status.id)
     end
   end
 
@@ -127,6 +129,20 @@ RSpec.describe PostStatusService do
 
     expect(ProcessHashtagsService).to have_received(:new)
     expect(hashtags_service).to have_received(:call).with(status)
+  end
+
+  it 'gets distributed' do
+    allow(DistributionWorker).to receive(:perform_async)
+    allow(Pubsubhubbub::DistributionWorker).to receive(:perform_async)
+    allow(ActivityPub::DistributionWorker).to receive(:perform_async)
+
+    account = Fabricate(:account)
+
+    status = subject.call(account, "test status update")
+
+    expect(DistributionWorker).to have_received(:perform_async).with(status.id)
+    expect(Pubsubhubbub::DistributionWorker).to have_received(:perform_async).with(status.stream_entry.id)
+    expect(ActivityPub::DistributionWorker).to have_received(:perform_async).with(status.id)
   end
 
   it 'crawls links' do

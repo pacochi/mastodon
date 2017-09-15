@@ -36,10 +36,15 @@
 #  followers_count         :integer          default(0), not null
 #  following_count         :integer          default(0), not null
 #  last_webfingered_at     :datetime
+#  inbox_url               :string           default(""), not null
+#  outbox_url              :string           default(""), not null
+#  shared_inbox_url        :string           default(""), not null
+#  followers_url           :string           default(""), not null
+#  protocol                :integer          default("ostatus"), not null
 #
 
 class Account < ApplicationRecord
-  MENTION_RE = /(?:^|[^\/[:word:]])@([a-z0-9_]+(?:@[a-z0-9\.\-]+[a-z0-9]+)?)/i
+  MENTION_RE = /(?:^|[^\/[:word:]])@(([a-z0-9_]+)(?:@[a-z0-9\.\-]+[a-z0-9]+)?)/i
 
   include AccountAvatar
   include AccountFinderConcern
@@ -47,6 +52,9 @@ class Account < ApplicationRecord
   include AccountInteractions
   include Attachmentable
   include Remotable
+  include EmojiHelper
+
+  enum protocol: [:ostatus, :activitypub]
 
   # Local users
   has_one :user, inverse_of: :account
@@ -69,7 +77,10 @@ class Account < ApplicationRecord
   has_many :mentions, inverse_of: :account, dependent: :destroy
   has_many :notifications, inverse_of: :account, dependent: :destroy
   has_many :oauth_authentications, through: :user
-  has_many :pinned_statuses, dependent: :destroy
+
+  # Pinned statuses
+  has_many :status_pins, inverse_of: :account, dependent: :destroy
+  has_many :pinned_statuses, -> { reorder('status_pins.created_at DESC') }, through: :status_pins, class_name: 'Status', source: :status
 
   # Media
   has_many :media_attachments, dependent: :destroy
@@ -99,6 +110,7 @@ class Account < ApplicationRecord
            :current_sign_in_ip,
            :current_sign_in_at,
            :confirmed?,
+           :admin?,
            :locale,
            to: :user,
            prefix: true,
@@ -108,6 +120,10 @@ class Account < ApplicationRecord
 
   def local?
     domain.nil?
+  end
+
+  def bootstrap_timeline?
+    local? && (Setting.bootstrap_timeline_accounts || '').split(',').map { |str| str.strip.gsub(/\A@/, '') }.include?(username)
   end
 
   def acct
@@ -160,9 +176,21 @@ class Account < ApplicationRecord
     Rails.cache.fetch("exclude_domains_for:#{id}") { domain_blocks.pluck(:domain) }
   end
 
+  def popular_media_attachments
+    media_attachments_ids = Rails.cache.fetch("suggested_account:published_attachments:#{id}") do
+      media_attachments.joins(:status).where(statuses: { sensitive: false, visibility: [:public, :unlisted] }).reorder(Status.arel_table[:favourites_count].desc).limit(3).pluck(:id)
+    end
+
+    MediaAttachment.where(id: media_attachments_ids)
+  end
+
   class << self
     def domains
       reorder(nil).pluck('distinct accounts.domain')
+    end
+
+    def inboxes
+      reorder(nil).where(protocol: :activitypub).pluck("distinct coalesce(nullif(accounts.shared_inbox_url, ''), accounts.inbox_url)")
     end
 
     def triadic_closures(account, limit: 5, offset: 0, exclude_ids: [], current_time: Time.current)
@@ -177,8 +205,6 @@ class Account < ApplicationRecord
         INNER JOIN accounts ON follows.target_account_id = accounts.id
         WHERE
           account_id IN (SELECT * FROM first_degree)
-          AND suspended = 'f'
-          AND silenced = 'f'
           AND target_account_id NOT IN (SELECT * FROM first_degree)
           AND target_account_id NOT IN (:excluded_account_ids)
           AND accounts.suspended = FALSE
@@ -263,13 +289,22 @@ class Account < ApplicationRecord
 
   before_create :generate_keys
   before_validation :normalize_domain
+  before_validation :prepare_contents, if: :local?
 
   private
+
+  def prepare_contents
+    display_name&.strip!
+    note&.strip!
+
+    self.display_name = emojify(display_name)
+    self.note         = emojify(note)
+  end
 
   def generate_keys
     return unless local?
 
-    keypair = OpenSSL::PKey::RSA.new(Rails.env.test? ? 1024 : 2048)
+    keypair = OpenSSL::PKey::RSA.new(Rails.env.test? ? 512 : 2048)
     self.private_key = keypair.to_pem
     self.public_key  = keypair.public_key.to_pem
   end

@@ -2,36 +2,15 @@
   Mastodon (マストドン) hosted by pixiv
 
 - content_for :header_tags do
-  :ruby
-    initial_state = {
-      meta: {
-        streaming_api_base_url: Rails.configuration.x.streaming_api_base_url,
-        access_token: '',
-        locale: I18n.locale,
-        domain: site_hostname,
-        auto_play_gif: false,
-        appmode: 'about'
-      },
-      compose: {},
-      accounts: {},
-      media_attachments: {
-        accept_content_types: MediaAttachment::IMAGE_MIME_TYPES + MediaAttachment::VIDEO_MIME_TYPES
-      },
-      settings: {
-        onboarded: true # related: app/javascript/mastodon/actions/onboarding.js
-      }
-    }
-
-  %script#initial-state{ type: 'application/json' }!= json_escape(initial_state.to_json)
+  %script#initial-state{ type: 'application/json' }!= json_escape(@initial_state_json)
   = javascript_pack_tag 'application', integrity: true, crossorigin: 'anonymous'
   = javascript_pack_tag 'public', integrity: true, crossorigin: 'anonymous'
 
-- content_for :header_tags do
   %meta{ property: 'og:site_name', content: site_title }/
   %meta{ property: 'og:url', content: about_url }/
   %meta{ property: 'og:type', content: 'website' }/
   %meta{ property: 'og:title', content: site_hostname }/
-  %meta{ property: 'og:description', content: strip_tags(@instance_presenter.site_description.presence || t('about.about_mastodon')) }/
+  %meta{ property: 'og:description', content: strip_tags(@instance_presenter.site_description.presence || t('about.about_mastodon_html')) }/
   %meta{ property: 'og:image', content: asset_pack_path('mastodon_small.jpg', protocol: :request) }/
   %meta{ property: 'og:image:width', content: '400' }/
   %meta{ property: 'og:image:height', content: '400' }/
@@ -105,60 +84,38 @@
         = link_to t('about.about_this'), about_more_path, style: 'color:white'
 
     .about-col-body
-      %p.main ＼ マストドン（Mastodon）とは？ ／
-      %p
-        マストドンは、所属するインスタンスを選んでアカウントを登録し、トゥートと呼ばれる投稿を通じてコミュニケーションを楽しむSNSです。
-        オープンソースで公開されているため、誰でも自分のインスタンスを立ち上げることが可能である他、様々なインスタンスにアカウントを持つこともできます。
-        また、インスタンス間を超えたやり取りも可能であるため、様々なコミュニティを介したコミュニケーションが展開されています。
+      %p.main= t 'about.what_is_mastodon'
+      %p= t 'about.about_mastodon_html'
 
       %video{autoplay: '', loop: '',  src: asset_pack_path('about/demo.mp4'),  poster: asset_pack_path('about/demo.jpg'),  style: 'width:100%;'}
 
     .about-col-body
       %p.main ＼ マストドンの特徴 ／
 
-      .features-list
-        .features-list__column
-          %ul.fa-ul
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.chronology'
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.public'
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.characters'
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.gifv'
-        .features-list__column
-          %ul.fa-ul
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.privacy'
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.blocks'
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.ethics'
-            %li
-              = fa_icon('li check-square')
-              = t 'about.features.api'
+      %p.title= t 'about.features.real_conversation_title'
+      %p= t 'about.features.real_conversation_body'
+
+      %p.title= t 'about.features.not_a_product_title'
+      %p= t 'about.features.not_a_product_body'
+
+      %p.title= t 'about.features.within_reach_title'
+      %p= t 'about.features.within_reach_body'
+
+      %p.title= t 'about.features.humane_approach_title'
+      %p= t 'about.features.humane_approach_body'
+
+      %p.learn-more
+        %a.button.button-alternative{ href: 'https://joinmastodon.org/' }= t 'about.learn_more'
 
       %p まずはローカルタイムラインを眺めて、気になるユーザーをフォローしてみましょう！
 
     .actions
       .info
-        = link_to t('about.terms'), terms_path
-        ·
-        = link_to t('about.apps'), 'https://github.com/tootsuite/documentation/blob/master/Using-Mastodon/Apps.md'
-        ·
-        = link_to t('about.source_code'), 'https://github.com/pixiv/mastodon/tree/pawoo'
-        ·
-        = link_to t('about.other_instances'), 'https://github.com/tootsuite/documentation/blob/master/Using-Mastodon/List-of-Mastodon-instances.md'
+        = link_to t('about.source_code'), @instance_presenter.source_url
+        = " (#{@instance_presenter.version_number})"
 
-      = link_to image_tag(asset_pack_path('logo_pixiv.png'), width: 50, style: 'display:block;margin:40px auto'), 'https://www.pixiv.net'
+    = link_to 'https://www.pixiv.net/' do
+      = image_tag asset_pack_path('logo_pixiv.png'), alt: 'pixiv', width: 50, style: 'display:block;margin:40px auto'
 
   .about-col.right
     .about-timeline-container

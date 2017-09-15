@@ -11,12 +11,14 @@ import {
   favourite,
   unreblog,
   unfavourite,
+  pin,
+  unpin,
 } from '../actions/interactions';
 import {
   blockAccount,
   muteAccount,
 } from '../actions/accounts';
-import { muteStatus, unmuteStatus, deleteStatus, pinStatus, unpinStatus } from '../actions/statuses';
+import { muteStatus, unmuteStatus, deleteStatus, setStatusHeight } from '../actions/statuses';
 import { initReport } from '../actions/reports';
 import { openModal } from '../actions/modal';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
@@ -26,8 +28,6 @@ const messages = defineMessages({
   deleteMessage: { id: 'confirmations.delete.message', defaultMessage: 'Are you sure you want to delete this status?' },
   blockConfirm: { id: 'confirmations.block.confirm', defaultMessage: 'Block' },
   muteConfirm: { id: 'confirmations.mute.confirm', defaultMessage: 'Mute' },
-  unpinConfirm: { id: 'confirmations.unpin.confirm', defaultMessage: 'Unpin' },
-  pinConfirm: { id: 'confirmations.pin.confirm', defaultMessage: 'Pin' },
 });
 
 const makeMapStateToProps = () => {
@@ -72,6 +72,18 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
     } else {
       dispatch(favourite(status));
     }
+  },
+
+  onPin (status) {
+    if (status.get('pinned')) {
+      dispatch(unpin(status));
+    } else {
+      dispatch(pin(status));
+    }
+  },
+
+  onEmbed (status) {
+    dispatch(openModal('EMBED', { url: status.get('url') }));
   },
 
   onDelete (status) {
@@ -126,20 +138,8 @@ const mapDispatchToProps = (dispatch, { intl }) => ({
     }
   },
 
-  onPin (status) {
-    if (status.get('pinned')) {
-      dispatch(openModal('CONFIRM', {
-        message: <FormattedMessage id='confirmations.unpin.message' defaultMessage='Unpin from your profile. Are you sure?' />,
-        confirm: intl.formatMessage(messages.unpinConfirm),
-        onConfirm: () => dispatch(unpinStatus(status.get('id'))),
-      }));
-    } else {
-      dispatch(openModal('CONFIRM', {
-        message: <FormattedMessage id='confirmations.pin.message' defaultMessage='This will prepend any previously pinned Toot. Are you sure?' />,
-        confirm: intl.formatMessage(messages.pinConfirm),
-        onConfirm: () => dispatch(pinStatus(status.get('id'))),
-      }));
-    }
+  onHeightChange (status, height) {
+    dispatch(setStatusHeight(status.get('id'), height));
   },
 
 });

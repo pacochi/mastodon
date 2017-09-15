@@ -11,5 +11,6 @@ class Api::V1::SuggestionTagsController < Api::BaseController
 
     limit = limit_param(DEFAULT_SUGGESTION_LIMIT)
     @suggestion_tags = SuggestionTag.where(suggestion_type: type).order(:order).limit(limit)
+    render json: @suggestion_tags, each_serializer: REST::SuggestionTagSerializer
   end
 end

@@ -1,9 +1,12 @@
 import api from '../api';
 
 import { addScheduledStatuses } from './schedules';
-import { updateTimeline } from './timelines';
-
-import * as emojione from 'emojione';
+import {
+  updateTimeline,
+  refreshHomeTimeline,
+  refreshCommunityTimeline,
+  refreshPublicTimeline,
+} from './timelines';
 
 export const COMPOSE_CHANGE          = 'COMPOSE_CHANGE';
 export const COMPOSE_SUBMIT_REQUEST  = 'COMPOSE_SUBMIT_REQUEST';
@@ -35,6 +38,7 @@ export const COMPOSE_SPOILERNESS_CHANGE = 'COMPOSE_SPOILERNESS_CHANGE';
 export const COMPOSE_SPOILER_TEXT_CHANGE = 'COMPOSE_SPOILER_TEXT_CHANGE';
 export const COMPOSE_VISIBILITY_CHANGE  = 'COMPOSE_VISIBILITY_CHANGE';
 export const COMPOSE_LISTABILITY_CHANGE = 'COMPOSE_LISTABILITY_CHANGE';
+export const COMPOSE_COMPOSING_CHANGE = 'COMPOSE_COMPOSING_CHANGE';
 
 export const COMPOSE_EMOJI_INSERT = 'COMPOSE_EMOJI_INSERT';
 export const COMPOSE_TAG_INSERT = 'COMPOSE_TAG_INSERT';
@@ -80,12 +84,15 @@ export function mentionCompose(account, router) {
 
 export function submitCompose() {
   return function (dispatch, getState) {
-    const status = emojione.shortnameToUnicode(getState().getIn(['compose', 'text'], ''));
+    const status = getState().getIn(['compose', 'text'], '');
     const published = getState().getIn(['compose', 'published']);
+
     if (!status || !status.length) {
       return;
     }
+
     dispatch(submitComposeRequest());
+
     api(getState).post('/api/v1/statuses', {
       status,
       in_reply_to_id: getState().getIn(['compose', 'in_reply_to'], null),
@@ -102,7 +109,16 @@ export function submitCompose() {
       dispatch(submitComposeSuccess({ ...response.data }));
 
       // To make the app more responsive, immediately get the status into the columns
-      dispatch(updateTimeline('home', { ...response.data }));
+
+      const insertOrRefresh = (timelineId, refreshAction) => {
+        if (getState().getIn(['timelines', timelineId, 'online'])) {
+          dispatch(updateTimeline(timelineId, { ...response.data }));
+        } else if (getState().getIn(['timelines', timelineId, 'loaded'])) {
+          dispatch(refreshAction());
+        }
+      };
+
+      insertOrRefresh('home', refreshHomeTimeline);
 
       // Make the schedule list responsive as well
       if (published) {
@@ -110,13 +126,8 @@ export function submitCompose() {
       }
 
       if (response.data.in_reply_to_id === null && response.data.visibility === 'public') {
-        if (getState().getIn(['timelines', 'community', 'loaded'])) {
-          dispatch(updateTimeline('community', { ...response.data }));
-        }
-
-        if (getState().getIn(['timelines', 'public', 'loaded'])) {
-          dispatch(updateTimeline('public', { ...response.data }));
-        }
+        insertOrRefresh('community', refreshCommunityTimeline);
+        insertOrRefresh('public', refreshPublicTimeline);
       }
 
       const statusTags = response.data.tags.map(it => it.name);
@@ -368,5 +379,12 @@ export function insertTagCompose(tag) {
   return {
     type: COMPOSE_TAG_INSERT,
     tag,
+  };
+}
+
+export function changeComposing(value) {
+  return {
+    type: COMPOSE_COMPOSING_CHANGE,
+    value,
   };
 }

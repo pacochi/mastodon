@@ -1,18 +1,11 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import Immutable from 'immutable';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import Link from 'react-router-dom/Link';
 import IconButton from '../../../components/icon_button';
 
 const storageKey = 'announcements_dismissed';
 
 class Announcements extends React.PureComponent {
-
-  static propTypes = {
-    account: ImmutablePropTypes.map.isRequired,
-    multiColumn: PropTypes.bool,
-  };
 
   componentDidUpdate (prevProps, prevState) {
     if (prevState.dismissed !== this.state.dismissed) {

@@ -2,6 +2,8 @@
 
 class TrendTag
   include ActiveModel::Model
+  include ActiveModel::Serialization
+
   TREND_TAGS_KEY = 'trend_tags'
   TREND_TAG_LIMIT = 3
 

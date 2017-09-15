@@ -51,7 +51,7 @@ RSpec.describe OauthRegistrationsController, type: :controller do
       let(:auth) { OmniAuth.config.mock_auth[:pixiv] }
 
       before do
-        allow(DefaultFollowWorker).to receive(:perform_async)
+        allow(BootstrapTimelineWorker).to receive(:perform_async)
       end
 
       it 'creates user' do
@@ -60,9 +60,10 @@ RSpec.describe OauthRegistrationsController, type: :controller do
         }.from([0, 0]).to([1, 1])
       end
 
-      it 'calls DefaultFollowWorker' do
+      it 'queues up bootstrapping of home timeline' do
         subject.call
-        expect(DefaultFollowWorker).to have_received(:perform_async)
+        user = User.find_by(email: auth.info.email)
+        expect(BootstrapTimelineWorker).to have_received(:perform_async).with(user.account_id)
       end
 
       context 'when the email is duplicated' do

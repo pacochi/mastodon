@@ -8,6 +8,7 @@ class StatusesController < ApplicationController
   before_action :set_account
   before_action :set_status
   before_action :check_account_suspension
+  before_action :redirect_to_original, only: [:show]
 
   def show
     respond_to do |format|
@@ -20,7 +21,20 @@ class StatusesController < ApplicationController
 
         render 'stream_entries/show'
       end
+
+      format.json do
+        render json: @status, serializer: ActivityPub::NoteSerializer, adapter: ActivityPub::Adapter, content_type: 'application/activity+json'
+      end
     end
+  end
+
+  def activity
+    render json: @status, serializer: ActivityPub::ActivitySerializer, adapter: ActivityPub::Adapter, content_type: 'application/activity+json'
+  end
+
+  def embed
+    response.headers['X-Frame-Options'] = 'ALLOWALL'
+    render 'stream_entries/embed', layout: 'embedded'
   end
 
   private
@@ -30,13 +44,14 @@ class StatusesController < ApplicationController
   end
 
   def set_link_headers(prev_status, next_status)
-    links = []
-    links.push([account_stream_entry_url(@account, @status.stream_entry, format: 'atom'), [%w(rel alternate), %w(type application/atom+xml)]])
-
-    links.push([short_account_status_path(@account, prev_status), [%w(rel prev)]]) if prev_status
-    links.push([short_account_status_path(@account, next_status), [%w(rel next)]]) if next_status
-
-    response.headers['Link'] = LinkHeader.new(links)
+    response.headers['Link'] = LinkHeader.new(
+      [
+        [account_stream_entry_url(@account, @status.stream_entry, format: 'atom'), [%w(rel alternate), %w(type application/atom+xml)]],
+        [ActivityPub::TagManager.instance.uri_for(@status), [%w(rel alternate), %w(type application/activity+json)]],
+        ([short_account_status_path(@account, prev_status), [%w(rel prev)]] if prev_status),
+        ([short_account_status_path(@account, next_status), [%w(rel next)]] if next_status),
+      ].compact
+    )
   end
 
   def set_status
@@ -52,5 +67,9 @@ class StatusesController < ApplicationController
 
   def check_account_suspension
     gone if @account.suspended?
+  end
+
+  def redirect_to_original
+    redirect_to ::TagManager.instance.url_for(@status.reblog) if @status.reblog?
   end
 end
