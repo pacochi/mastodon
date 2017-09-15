@@ -52,7 +52,7 @@ class QueueItem
       return cache if cache
 
       item = new(
-        info: "#{music_attachment.artist} - #{music_attachment.title}",
+        info: "#{music_attachment.title} - #{music_attachment.artist}",
         thumbnail_url: nil,
         music_url: nil,
         video_url: nil,
