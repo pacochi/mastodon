@@ -3,7 +3,7 @@
 class VideoPreparingWorker
   include Sidekiq::Worker
 
-  sidekiq_options unique_for: queue: :video_preparer, 16.minutes
+  sidekiq_options queue: :video_preparer, unique_for: 16.minutes
 
   def perform(id)
     music_attachment = MusicAttachment.joins(:status).includes(status: :account).find(id)
