@@ -12,6 +12,7 @@ import PublicTimelineContainer from '../public_timeline';
 import HashtagTimelineContainer from '../hashtag_timeline';
 import AccountTimelineContainer from '../account_timeline';
 import FavouritedStatusesContainer from '../favourited_statuses';
+import Intent from '../../components/intent';
 import Navigation from '../../components/navigation';
 import MusicPlayer from '../../components/dummy';
 import LoadingBarContainer from '../../../mastodon/features/ui/containers/loading_bar_container';
@@ -65,6 +66,7 @@ export default class App extends PureComponent {
           <div className='app-content'>
             <Switch>
               <Route path='/' exact component={HomeTimelineContainer} />
+              <Route path='/intent/statuses/new' exact component={Intent} />
               <Route path='/notifications' component={NotificationListContainer} />
               <Route path='/timelines/public/local' component={CommunityTimelineContainer} />
               <Route path='/timelines/public' exact component={PublicTimelineContainer} />
