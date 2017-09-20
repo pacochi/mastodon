@@ -90,7 +90,7 @@ export default class AccountTimeline extends PureComponent {
     const uniqueStatusIds = pinnedStatusIds.concat(statusIds).toOrderedSet().toList();
 
     return (
-      <TimelineContainer garally={Garally} header={header} withComposeFrom={false}>
+      <TimelineContainer garally={Garally} header={header} withComposeForm={false}>
         <ScrollableList
           scrollKey='account_timeline'
           statusIds={uniqueStatusIds}

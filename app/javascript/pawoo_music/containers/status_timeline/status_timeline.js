@@ -92,15 +92,15 @@ export default class StatusTimeline extends ImmutablePureComponent {
     hasMore: PropTypes.bool,
     prepend: PropTypes.node,
     emptyMessage: PropTypes.node,
-    withComposeFrom: PropTypes.bool,
+    withComposeForm: PropTypes.bool,
   }
 
   static defaultProps = {
-    withComposeFrom: true,
+    withComposeForm: true,
   }
 
   render () {
-    const { timelineId, withComposeFrom, ...other } = this.props;
+    const { timelineId, withComposeForm, ...other } = this.props;
 
     const Garally = (
       <div>
@@ -109,7 +109,7 @@ export default class StatusTimeline extends ImmutablePureComponent {
     );
 
     return (
-      <TimelineContainer garally={Garally} withComposeFrom={withComposeFrom}>
+      <TimelineContainer garally={Garally} withComposeForm={withComposeForm}>
         <StatusList scrollKey={`${timelineId}_timeline`} {...other} />
       </TimelineContainer>
     );
