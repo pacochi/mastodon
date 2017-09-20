@@ -6,7 +6,7 @@ import {
   SCHEDULED_STATUSES_FETCH_SUCCESS,
   SCHEDULED_STATUSES_EXPAND_SUCCESS,
   SCHEDULED_STATUSES_ADDITION,
-} from '../actions/schedules';
+} from '../../pawoo_music/actions/schedules';
 import Immutable from 'immutable';
 
 const initialState = Immutable.Map({

@@ -38,7 +38,7 @@ import { SEARCH_FETCH_SUCCESS } from '../actions/search';
 import {
   SCHEDULED_STATUSES_FETCH_SUCCESS,
   SCHEDULED_STATUSES_EXPAND_SUCCESS,
-} from '../actions/schedules';
+} from '../../pawoo_music/actions/schedules';
 import Immutable from 'immutable';
 
 const normalizeStatus = (state, status) => {

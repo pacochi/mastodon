@@ -15,7 +15,7 @@ function onDomContentLoaded(callback) {
 function main() {
   perf.start('main()');
   const PlayControl = require('mastodon/features/ui/components/play_control').default; // eslint-disable-line import/no-unresolved
-  const PawooMusic = require('pawoo_music').default; // eslint-disable-line import/no-unresolved
+  const Timeline = require('pawoo_music/entries/timeline').default; // eslint-disable-line import/no-unresolved
   const React = require('react');
   const ReactDOM = require('react-dom');
 
@@ -29,7 +29,7 @@ function main() {
 
     const props = JSON.parse(mountNode.getAttribute('data-props'));
 
-    ReactDOM.render(<PawooMusic {...props} />, mountNode);
+    ReactDOM.render(<Timeline {...props} />, mountNode);
     if (mountAboutPlayControl) {
       ReactDOM.render(<PlayControl isTop onError={function(){}} onSkip={function(){}} streamingAPIBaseURL={playControlInitialState.streaming_api_base_url} accessToken={playControlInitialState.access_token} />, mountAboutPlayControl);
     }
