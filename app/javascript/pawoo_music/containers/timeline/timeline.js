@@ -16,11 +16,11 @@ export default class TimelineContainer extends PureComponent {
     garally: PropTypes.node.isRequired,
     header: PropTypes.node,
     isLogin: PropTypes.bool,
-    withComposeFrom: PropTypes.bool,
+    withComposeForm: PropTypes.bool,
   }
 
   static defaultProps = {
-    withComposeFrom: true,
+    withComposeForm: true,
   }
 
   scrollTop = () => {
@@ -46,12 +46,12 @@ export default class TimelineContainer extends PureComponent {
   }
 
   render () {
-    const { children, garally, withComposeFrom, isLogin } = this.props;
+    const { children, garally, withComposeForm, isLogin } = this.props;
 
     return (
       <div className='timeline'>
         <div className='timeline-column'>
-          {withComposeFrom && isLogin ? <ComposeFormContainer /> : null}
+          {withComposeForm && isLogin ? <ComposeFormContainer /> : null}
           <div className='timeline-content' ref={this.setRef} onWheel={this.handleWheel}>
             {children}
           </div>
