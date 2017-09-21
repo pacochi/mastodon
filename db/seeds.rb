@@ -14,7 +14,6 @@ if Rails.env.development?
 
   music_attachment = MusicAttachment.create!(
     music: File.open(Rails.root.join('spec', 'fixtures', 'files', 'aint_we_got_fun_billy_jones1921.mp3')),
-    image: File.open(Rails.root.join('spec', 'fixtures', 'files', 'attachment.jpg')),
     duration: 1.minute,
     title: "Ain't We Got Fun",
     artist: 'Billy Jones',

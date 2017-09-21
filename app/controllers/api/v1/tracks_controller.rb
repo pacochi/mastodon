@@ -7,7 +7,7 @@ class Api::V1::TracksController < Api::BaseController
   respond_to :json
 
   def create
-    params.require [:title, :artist, :music, :image]
+    params.require [:title, :artist, :music]
     attributes = prepare_music_attributes
 
     ApplicationRecord.transaction do
@@ -59,6 +59,10 @@ class Api::V1::TracksController < Api::BaseController
       attributes.merge! duration: music_duration.ceil
     end
 
+    if params.dig('video', 'image')
+      attributes.merge!(video_image: params.dig('video', 'image'))
+    end
+
     if params.dig('video', 'blur')
       attributes.merge!(
         video_blur_movement_band_bottom: params.dig('video', 'blur', 'movement', 'band', 'bottom'),
@@ -90,7 +94,7 @@ class Api::V1::TracksController < Api::BaseController
   end
 
   def music_params
-    params.permit :title, :artist, :music, :image
+    params.permit :title, :artist, :description, :music
   end
 
   def update_music

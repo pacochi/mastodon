@@ -4,9 +4,12 @@ class MusicConvertService < BaseService
     begin
       music.music.copy_to_local_file :original, music_file.path
 
-      image_file = Tempfile.new
+      image_file = nil
       begin
-        music.image.copy_to_local_file :original, image_file.path
+        if music.video_image.present?
+          image_file = Tempfile.new
+          music.video_image.copy_to_local_file :original, image_file.path
+        end
 
         albumart = open_albumart(music, music_file, image_file)
 
@@ -19,7 +22,7 @@ class MusicConvertService < BaseService
           raise
         end
       ensure
-        image_file.unlink
+        image_file&.unlink
       end
     ensure
       music_file.unlink
@@ -32,8 +35,11 @@ class MusicConvertService < BaseService
     args = [
       Rails.root.join('node_modules', '.bin', 'electron'), 'albumart-video', '--',
       music_file.path, '--text-title', music.title, '--text-sub', music.artist,
-      '--image', image_file.path,
     ]
+
+    if image_file.present?
+      args.push '--image', image_file.path
+    end
 
     if music.video_blur_movement_band_top != 0 && music.video_blur_blink_band_top != 0
       args.push(

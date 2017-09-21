@@ -12,9 +12,10 @@ class CreateMusicTables < ActiveRecord::Migration[5.1]
       t.integer :duration, null: false
       t.string :title, null: false
       t.string :artist, null: false
+      t.string :description, default: '', null: false
       t.attachment :music
-      t.attachment :image
       t.attachment :video
+      t.attachment :video_image
       t.integer :video_blur_movement_band_bottom, default: 0, null: false
       t.integer :video_blur_movement_band_top, default: 0, null: false
       t.integer :video_blur_movement_threshold, default: 0, null: false

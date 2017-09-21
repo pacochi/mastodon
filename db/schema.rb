@@ -197,18 +197,19 @@ ActiveRecord::Schema.define(version: 20170830000000) do
     t.integer "duration", null: false
     t.string "title", null: false
     t.string "artist", null: false
+    t.string "description", default: "", null: false
     t.string "music_file_name"
     t.string "music_content_type"
     t.integer "music_file_size"
     t.datetime "music_updated_at"
-    t.string "image_file_name"
-    t.string "image_content_type"
-    t.integer "image_file_size"
-    t.datetime "image_updated_at"
     t.string "video_file_name"
     t.string "video_content_type"
     t.integer "video_file_size"
     t.datetime "video_updated_at"
+    t.string "video_image_file_name"
+    t.string "video_image_content_type"
+    t.integer "video_image_file_size"
+    t.datetime "video_image_updated_at"
     t.integer "video_blur_movement_band_bottom", default: 0, null: false
     t.integer "video_blur_movement_band_top", default: 0, null: false
     t.integer "video_blur_movement_threshold", default: 0, null: false

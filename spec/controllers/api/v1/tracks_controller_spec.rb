@@ -24,14 +24,7 @@ describe Api::V1::TracksController, type: :controller do
 
       it 'returns http unprocessable entity when a non-audio file is uploaded as a music' do
         post :create,
-             params: { title: 'title', artist: Faker::Name.name, music: unknown, image: image }
-
-        expect(response).to have_http_status :unprocessable_entity
-      end
-
-      it 'raises when a non-image file is uploaded as an album art' do
-        post :create,
-             params: { title: 'title', artist: Faker::Name.name, music: music, image: unknown }
+             params: { title: 'title', artist: Faker::Name.name, music: unknown, video_image: image }
 
         expect(response).to have_http_status :unprocessable_entity
       end
@@ -53,13 +46,14 @@ describe Api::V1::TracksController, type: :controller do
         }
 
         post :create,
-             params: { title: 'title', artist: 'artist', music: music, image: image, video: video_params }
+             params: { title: 'title', artist: 'artist', description: 'description', music: music, video_image: image, video: video_params }
 
         music_attachment = MusicAttachment.find_by!(
           id: body_as_json[:id],
           status: body_as_json[:status][:id],
           title: 'title',
           artist: 'artist',
+          description: 'description',
           duration: 177,
           video_blur_movement_band_bottom: 50,
           video_blur_movement_band_top: 300,
@@ -78,6 +72,7 @@ describe Api::V1::TracksController, type: :controller do
         expect(music_attachment.status.text).to eq short_account_track_url(user.account.username, music_attachment)
         expect(body_as_json[:title]).to eq 'title'
         expect(body_as_json[:artist]).to eq 'artist'
+        expect(body_as_json[:description]).to eq 'description'
         expect(body_as_json[:status][:text]).to eq short_account_track_url(user.account.username, music_attachment)
         expect(body_as_json[:video]).to eq video_params
       end
@@ -86,7 +81,7 @@ describe Api::V1::TracksController, type: :controller do
         skip 'the output of ruby-mp3info messes up `file -b --mime`, used by Paperclip'
 
         post :create,
-             params: { title: 'title', artist: Faker::Name.name, music: music_with_picture, image: image }
+             params: { title: 'title', artist: Faker::Name.name, music: music_with_picture, video_image: image }
 
         tempfile = Tempfile.new
         begin
@@ -99,7 +94,7 @@ describe Api::V1::TracksController, type: :controller do
 
       it 'returns http success' do
         post :create,
-             params: { title: 'title', artist: Faker::Name.name, music: music, image: image }
+             params: { title: 'title', artist: Faker::Name.name, music: music, video_image: image }
 
         expect(response).to have_http_status :success
       end
@@ -108,7 +103,7 @@ describe Api::V1::TracksController, type: :controller do
     context 'without write scope' do
       it 'returns http unauthorized' do
         post :create,
-             params: { title: 'title', artist: Faker::Name.name, music: music, image: image }
+             params: { title: 'title', artist: Faker::Name.name, music: music, video_image: image }
 
         expect(response).to have_http_status :unauthorized
       end
@@ -143,11 +138,12 @@ describe Api::V1::TracksController, type: :controller do
         }
 
         patch :update,
-              params: { id: music_attachment.id, title: 'updated title', artist: 'updated artist', music: another_music, video: video_params }
+              params: { id: music_attachment.id, title: 'updated title', artist: 'updated artist', description: 'updated description', music: another_music, video: video_params }
 
         music_attachment.reload
         expect(music_attachment.title).to eq 'updated title'
         expect(music_attachment.artist).to eq 'updated artist'
+        expect(music_attachment.description).to eq 'updated description'
         expect(music_attachment.duration).to eq 181
         expect(music_attachment.video_blur_movement_band_bottom).to eq 50
         expect(music_attachment.video_blur_movement_band_top).to eq 300
@@ -165,6 +161,7 @@ describe Api::V1::TracksController, type: :controller do
         expect(body_as_json[:id]).to eq music_attachment.id
         expect(body_as_json[:title]).to eq 'updated title'
         expect(body_as_json[:artist]).to eq 'updated artist'
+        expect(body_as_json[:description]).to eq 'updated description'
         expect(body_as_json[:video]).to eq video_params
       end
 
@@ -221,10 +218,11 @@ describe Api::V1::TracksController, type: :controller do
         :music_attachment,
         title: 'title',
         artist: 'artist',
+        description: 'description',
         duration: 1.minute,
         music: music,
-        image: image,
         video: video,
+        video_image: image,
         video_blur_movement_band_bottom: 50,
         video_blur_movement_band_top: 300,
         video_blur_movement_threshold: 165,
@@ -243,6 +241,7 @@ describe Api::V1::TracksController, type: :controller do
 
       expect(body_as_json[:title]).to eq 'title'
       expect(body_as_json[:artist]).to eq 'artist'
+      expect(body_as_json[:description]).to eq 'description'
 
       expect(body_as_json[:video][:url]).to be_a String
 
