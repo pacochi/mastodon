@@ -19,7 +19,7 @@ import NotificationsContainer from '../../../mastodon/features/ui/containers/not
 import ModalContainer from '../../../mastodon/features/ui/containers/modal_container';
 import AccountFollowersContainer from '../account_followers';
 import AccountFollowingContainer from '../account_following';
-
+import StatusThreadContainer from '../status_thread';
 
 const mapStateToProps = state => ({
   isLogin: !!state.getIn(['meta', 'me']),
@@ -71,6 +71,7 @@ export default class App extends PureComponent {
               <Route path='/tags/:id' exact component={HashtagTimelineContainer} />
               <Route path='/favourites' component={FavouritedStatusesContainer} />
               <Route path='/@:acct' exact component={AccountTimelineContainer} />
+              <Route path='/@:acct/:id' exact component={StatusThreadContainer} />
               <Route path='/users/:acct/followers' exact component={AccountFollowersContainer} />
               <Route path='/users/:acct/following' exact component={AccountFollowingContainer} />
             </Switch>
