@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
-import ScrollableList from '../../components/scrollable_list';
+import ScrollableList from '../scrollable_list';
 import AccountContainer from '../../containers/account';
 
 export default class AccountList extends ImmutablePureComponent {

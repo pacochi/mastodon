@@ -429,6 +429,7 @@ ja:
     delete: アカウントの削除
     edit_profile: プロフィールを編集
     export: データのエクスポート
+    follow_requests: フォローリクエスト
     followers: 信頼済みのインスタンス
     import: データのインポート
     oauth_authentications: pixivアカウント連携

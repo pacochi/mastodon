@@ -9,13 +9,13 @@ function onDomContentLoaded(callback) {
 }
 
 function loaded() {
-  const TimelineSettingsEntry = require('../pawoo_music/entries/timeline_settings').default;
+  const SettingsEntry = require('../pawoo_music/entries/settings').default;
   const React = require('react');
   const ReactDOM = require('react-dom');
-  const mountNode = document.getElementById('pawoo-music-timeline-settings');
+  const mountNode = document.getElementById('pawoo-music-settings');
   const props = JSON.parse(mountNode.getAttribute('data-props'));
 
-  ReactDOM.render(<TimelineSettingsEntry {...props} />, mountNode);
+  ReactDOM.render(<SettingsEntry {...props} />, mountNode);
 }
 
 function main() {

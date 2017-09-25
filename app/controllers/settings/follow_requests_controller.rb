@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-class Settings::TimelinesController < ApplicationController
+class Settings::FollowRequestsController < ApplicationController
   include TimelineConcern
 
   layout 'settings'

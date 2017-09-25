@@ -9,6 +9,7 @@ SimpleNavigation::Configuration.run do |navigation|
       settings.item :preferences, safe_join([fa_icon('sliders fw'), t('settings.preferences')]), settings_preferences_url
       settings.item :password, safe_join([fa_icon('lock fw'), t('auth.change_password')]), edit_user_registration_url, highlights_on: %r{/auth/edit|/settings/delete}
       settings.item :timeline, safe_join([fa_icon('globe fw'), t('settings.timeline')]), settings_timeline_url
+      settings.item :follow_requests, safe_join([fa_icon('users fw'), t('settings.follow_requests')]), settings_follow_requests_url
       settings.item :two_factor_authentication, safe_join([fa_icon('mobile fw'), t('settings.two_factor_authentication')]), settings_two_factor_authentication_url, highlights_on: %r{/settings/two_factor_authentication}
       settings.item :import, safe_join([fa_icon('cloud-upload fw'), t('settings.import')]), settings_import_url
       settings.item :export, safe_join([fa_icon('cloud-download fw'), t('settings.export')]), settings_export_url

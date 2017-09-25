@@ -429,6 +429,7 @@ en:
     delete: Account deletion
     edit_profile: Edit profile
     export: Data export
+    follow_requests: Follow Requests
     followers: Authorized followers
     import: Import
     oauth_authentications: pixiv Login
