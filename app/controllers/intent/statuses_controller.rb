@@ -10,8 +10,4 @@ class Intent::StatusesController < ApplicationController
 
   def new
   end
-
-  def authenticate_user!
-    redirect_to(find_redirect_path_from_request) unless user_signed_in?
-  end
 end
