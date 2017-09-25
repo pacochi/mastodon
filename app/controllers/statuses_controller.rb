@@ -2,12 +2,14 @@
 
 class StatusesController < ApplicationController
   include Authorization
+  include TimelineConcern
 
-  layout 'public'
+  layout 'timeline'
 
   before_action :set_account
   before_action :set_status
   before_action :check_account_suspension
+  before_action :set_initial_state_data, only: :show
 
   def show
     respond_to do |format|

@@ -12,9 +12,9 @@ export const getLinks = response => {
 };
 
 export default getState => axios.create({
-  headers: {
+  headers: (getState().getIn(['meta', 'access_token']) ? {
     'Authorization': `Bearer ${getState().getIn(['meta', 'access_token'], '')}`,
-  },
+  } : {}),
 
   transformResponse: [function (data) {
     try {

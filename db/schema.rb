@@ -177,6 +177,7 @@ ActiveRecord::Schema.define(version: 20170830000000) do
     t.string "shortcode"
     t.integer "type", default: 0, null: false
     t.json "file_meta"
+    t.json "music_info"
     t.index ["account_id"], name: "index_media_attachments_on_account_id"
     t.index ["shortcode"], name: "index_media_attachments_on_shortcode", unique: true
     t.index ["status_id"], name: "index_media_attachments_on_status_id"

@@ -1,7 +1,8 @@
-import React, { PureComponent } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import Immutable from 'immutable';
+import ImmutablePropTypes from 'react-immutable-proptypes';
+import ImmutablePureComponent from 'react-immutable-pure-component';
 import { connect } from 'react-redux';
 import { debounce } from 'lodash';
 import { fetchAccount, fetchFollowers, expandFollowers } from '../../../mastodon/actions/accounts';
@@ -24,7 +25,7 @@ const mapStateToProps = (state, props) => {
 };
 
 @connect(mapStateToProps)
-export default class AccountFollowers extends PureComponent {
+export default class AccountFollowers extends ImmutablePureComponent {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
