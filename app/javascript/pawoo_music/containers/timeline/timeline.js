@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import ComposeFormContainer from '../../../mastodon/features/compose/containers/compose_form_container';
+import { mountCompose, unmountCompose } from '../../../mastodon/actions/compose';
 import scrollTop from '../../../mastodon/scroll';
 
 const mapStateToProps = state => ({
@@ -17,10 +18,35 @@ export default class Timeline extends PureComponent {
     header: PropTypes.node,
     isLogin: PropTypes.bool,
     withComposeForm: PropTypes.bool,
+    dispatch: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
     withComposeForm: true,
+  }
+
+  componentDidMount () {
+    const { dispatch, withComposeForm } = this.props;
+    if (withComposeForm) {
+      dispatch(mountCompose());
+    }
+  }
+
+  componentDidUpdate (prevProps) {
+    const { dispatch, withComposeForm } = this.props;
+
+    if (prevProps.withComposeForm !== withComposeForm) {
+      if (withComposeForm) {
+        dispatch(mountCompose());
+      } else {
+        dispatch(unmountCompose());
+      }
+    }
+  }
+
+  componentWillUnmount () {
+    const { dispatch } = this.props;
+    dispatch(unmountCompose());
   }
 
   scrollTop = () => {

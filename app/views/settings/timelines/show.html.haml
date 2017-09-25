@@ -1,11 +1,10 @@
 - content_for :header_tags do
   %script#initial-state{ type: 'application/json' }!= json_escape(render(file: 'home/initial_state.json', formats: :json))
-  = stylesheet_pack_tag 'scheduled_statuses', media: 'all'
-  = javascript_pack_tag 'scheduled_statuses', integrity: true, crossorigin: 'anonymous'
-
+  = stylesheet_pack_tag 'timeline_settings', media: 'all'
+  = javascript_pack_tag 'timeline_settings', integrity: true, crossorigin: 'anonymous'
 
 - content_for :page_title do
-  = t('admin.scheduled_statuses.title')
+  = t('settings.timeline')
 
 - content_for :content do
   .admin-wrapper
@@ -16,9 +15,9 @@
 
         = render_navigation
     .content-wrapper
-      .content.scheduled_statuses__container
+      .content
         %h2= yield :page_title
 
         = render 'application/flashes'
 
-        #pawoo-music-scheduled-statuses{ data: { props: Oj.dump(default_props) } }
+        #pawoo-music-timeline-settings{ data: { props: Oj.dump(default_props) } }

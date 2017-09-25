@@ -1,0 +1,10 @@
+# frozen_string_literal: true
+
+class Settings::TimelinesController < ApplicationController
+  include TimelineConcern
+
+  before_action :authenticate_user!
+  before_action :set_initial_state_data, only: :show
+
+  def show; end
+end
