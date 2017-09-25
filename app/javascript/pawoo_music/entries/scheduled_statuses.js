@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { connect, Provider } from 'react-redux';
+import { Provider } from 'react-redux';
 import { BrowserRouter, Route } from 'react-router-dom';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { ScrollContext } from 'react-router-scroll';
@@ -19,7 +19,7 @@ const store = configureStore();
 const initialState = JSON.parse(document.getElementById('initial-state').textContent);
 store.dispatch(hydrateStore(initialState));
 
-export default class ScheduledStatuses extends React.PureComponent {
+export default class ScheduledStatusesEntry extends React.PureComponent {
 
   static propTypes = {
     locale: PropTypes.string.isRequired,

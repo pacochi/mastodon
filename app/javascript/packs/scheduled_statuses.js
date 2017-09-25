@@ -9,13 +9,13 @@ function onDomContentLoaded(callback) {
 }
 
 function loaded() {
-  const ScheduledStatuses = require('../pawoo_music/entries/scheduled_statuses').default;
+  const ScheduledStatusesEntry = require('../pawoo_music/entries/scheduled_statuses').default;
   const React = require('react');
   const ReactDOM = require('react-dom');
   const mountNode = document.getElementById('pawoo-music-scheduled-statuses');
   const props = JSON.parse(mountNode.getAttribute('data-props'));
 
-  ReactDOM.render(<ScheduledStatuses {...props} />, mountNode);
+  ReactDOM.render(<ScheduledStatusesEntry {...props} />, mountNode);
 }
 
 function main() {

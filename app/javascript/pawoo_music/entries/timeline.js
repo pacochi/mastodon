@@ -17,7 +17,7 @@ const store = configureStore();
 const initialState = JSON.parse(document.getElementById('initial-state').textContent);
 store.dispatch(hydrateStore(initialState));
 
-export default class Timeline extends React.PureComponent {
+export default class TimelineEntry extends React.PureComponent {
 
   static propTypes = {
     locale: PropTypes.string.isRequired,
