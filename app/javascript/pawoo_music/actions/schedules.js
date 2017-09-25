@@ -1,4 +1,4 @@
-import api, { getLinks } from '../api';
+import api, { getLinks } from '../../mastodon/api';
 
 export const SCHEDULED_STATUSES_FETCH_REQUEST = 'SCHEDULED_STATUSES_FETCH_REQUEST';
 export const SCHEDULED_STATUSES_FETCH_SUCCESS = 'SCHEDULED_STATUSES_FETCH_SUCCESS';

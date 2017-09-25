@@ -1,7 +1,7 @@
 import api from '../api';
 
 import { openModal } from './modal';
-import { addScheduledStatuses } from './schedules';
+import { addScheduledStatuses } from '../../pawoo_music/actions/schedules';
 import { updateTimeline } from './timelines';
 
 import * as emojione from 'emojione';

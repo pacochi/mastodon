@@ -9,7 +9,7 @@ const mapStateToProps = state => ({
 });
 
 @connect(mapStateToProps)
-export default class TimelineContainer extends PureComponent {
+export default class Timeline extends PureComponent {
 
   static propTypes = {
     children: PropTypes.node.isRequired,

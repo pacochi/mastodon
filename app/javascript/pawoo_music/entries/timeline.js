@@ -5,10 +5,10 @@ import { BrowserRouter, Route } from 'react-router-dom';
 import { IntlProvider, addLocaleData } from 'react-intl';
 import { ScrollContext } from 'react-router-scroll';
 
-import { hydrateStore } from '../mastodon/actions/store';
-import configureStore from '../mastodon/store/configureStore';
-import { getLocale } from '../mastodon/locales';
-import App from './containers/app';
+import { hydrateStore } from '../../mastodon/actions/store';
+import configureStore from '../../mastodon/store/configureStore';
+import { getLocale } from '../../mastodon/locales';
+import App from '../containers/app';
 
 const { localeData, messages } = getLocale();
 addLocaleData(localeData);
@@ -17,7 +17,7 @@ const store = configureStore();
 const initialState = JSON.parse(document.getElementById('initial-state').textContent);
 store.dispatch(hydrateStore(initialState));
 
-export default class Mastodon extends React.PureComponent {
+export default class TimelineEntry extends React.PureComponent {
 
   static propTypes = {
     locale: PropTypes.string.isRequired,
