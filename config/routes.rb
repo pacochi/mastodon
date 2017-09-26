@@ -83,6 +83,8 @@ Rails.application.routes.draw do
     resource :delete, only: [:show, :destroy]
     resource :timeline, only: [:show]
     resource :follow_requests, only: [:show]
+    resource :mutes, only: [:show]
+    resource :blocks, only: [:show]
   end
 
   resources :media, only: [:show]

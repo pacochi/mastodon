@@ -426,12 +426,14 @@ en:
   settings:
     authorized_apps: Authorized apps
     back: Back to Mastodon
+    blocked_users: Blocked users
     delete: Account deletion
     edit_profile: Edit profile
     export: Data export
     follow_requests: Follow Requests
     followers: Authorized followers
     import: Import
+    muted_users: Muted users
     oauth_authentications: pixiv Login
     preferences: Preferences
     push_notification_preferences: Notification Preferences

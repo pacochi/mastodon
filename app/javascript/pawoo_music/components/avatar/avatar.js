@@ -2,7 +2,7 @@ import React from 'react';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
-import { Link } from 'react-router-dom';
+import Link from '../link_wrapper';
 import classNames from 'classnames';
 
 export default class Avatar extends ImmutablePureComponent {

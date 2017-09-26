@@ -25,17 +25,25 @@ export default class ScheduledStatusesEntry extends React.PureComponent {
     locale: PropTypes.string.isRequired,
   };
 
+  static childContextTypes = {
+    disableReactRouterLnik: PropTypes.bool,
+  };
+
+  getChildContext() {
+    return { disableReactRouterLnik: true };
+  }
+
   render () {
     const { locale } = this.props;
 
     return (
       <IntlProvider locale={locale} messages={messages}>
         <Provider store={store}>
-          <BrowserRouter basename='/admin/scheduled_statuses'>
+          <BrowserRouter basename='/'>
             <ScrollContext>
               <UI className='scheduled_statuses__container' intent>
                 <Compose schedule />
-                <Route path='*' component={ScheduledStatusesContainer} />
+                <Route path='/admin/scheduled_statuses' component={ScheduledStatusesContainer} />
               </UI>
             </ScrollContext>
           </BrowserRouter>

@@ -2,7 +2,6 @@
   %script#initial-state{ type: 'application/json' }!= json_escape(render(file: 'home/initial_state.json', formats: :json))
   = javascript_pack_tag 'scheduled_statuses', integrity: true, crossorigin: 'anonymous'
 
-
 - content_for :page_title do
   = t('admin.scheduled_statuses.title')
 

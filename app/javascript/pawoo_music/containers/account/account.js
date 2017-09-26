@@ -4,7 +4,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import Link from '../../components/link_wrapper';
 import Avatar from '../../components/avatar';
 import DisplayName from '../../components/display_name';
 import FollowButton from '../../components/follow_button/';
@@ -13,11 +13,11 @@ import { openModal } from '../../../mastodon/actions/modal';
 import { followAccount, unfollowAccount } from '../../../mastodon/actions/accounts';
 
 const mapStateToProps = (state, props) => {
-  const { accountId, account } = props;
+  const { id, account } = props;
   const getAccount = makeGetAccount();
 
   return {
-    account: account || getAccount(state, accountId),
+    account: account || getAccount(state, id),
     me: state.getIn(['meta', 'me']),
     autoPlayGif: state.getIn(['meta', 'auto_play_gif']),
   };

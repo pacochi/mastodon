@@ -24,13 +24,21 @@ export default class TimelineSettingsEntry extends React.PureComponent {
     locale: PropTypes.string.isRequired,
   };
 
+  static childContextTypes = {
+    disableReactRouterLnik: PropTypes.bool,
+  };
+
+  getChildContext() {
+    return { disableReactRouterLnik: true };
+  }
+
   render () {
     const { locale } = this.props;
 
     return (
       <IntlProvider locale={locale} messages={messages}>
         <Provider store={store}>
-          <BrowserRouter basename='/settings'>
+          <BrowserRouter basename='/'>
             <ScrollContext>
               <UI className='settings' intent>
                 <Route path='/' component={Settings} />

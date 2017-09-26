@@ -25,7 +25,7 @@ export default class AccountList extends ImmutablePureComponent {
 
     const scrollableContent = (isLoading || accountIds.size > 0) ? (
       accountIds.map((accountId) => (
-        <AccountContainer key={accountId} accountId={accountId} />
+        <AccountContainer key={accountId} id={accountId} />
       ))
     ) : (
       null
