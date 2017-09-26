@@ -1,0 +1,24 @@
+- content_for :header_tags do
+  %script#initial-state{ type: 'application/json' }!= json_escape(render(file: 'home/initial_state.json', formats: :json))
+  = stylesheet_pack_tag 'settings', media: 'all'
+  = javascript_pack_tag 'settings', integrity: true, crossorigin: 'anonymous'
+
+- content_for :content do
+  .admin-wrapper
+    .sidebar-wrapper
+      .sidebar
+        = link_to root_path do
+          = image_tag asset_pack_path('logo.png'), class: 'logo'
+
+        = render_navigation
+    .content-wrapper
+      .content.settigs-wrapper
+        %h2= yield :page_title
+
+        = render 'application/flashes'
+
+        #pawoo-music-settings{ data: { props: Oj.dump(default_props) } }
+
+        = yield
+
+= render template: 'layouts/application', locals: { body_classes: 'admin' }

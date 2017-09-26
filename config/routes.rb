@@ -81,6 +81,10 @@ Rails.application.routes.draw do
 
     resource :follower_domains, only: [:show, :update]
     resource :delete, only: [:show, :destroy]
+    resource :timeline, only: [:show]
+    resource :follow_requests, only: [:show]
+    resource :mutes, only: [:show]
+    resource :blocks, only: [:show]
   end
 
   resources :media, only: [:show]

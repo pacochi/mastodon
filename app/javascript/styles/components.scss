@@ -679,6 +679,16 @@
   }
 }
 
+.settigs-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  > #pawoo-music-settings {
+    flex: 1;
+  }
+}
+
 .detailed-status__action-bar-dropdown {
   flex: 1 1 auto;
   display: flex;

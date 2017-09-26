@@ -2,7 +2,7 @@ import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
-import { Link } from 'react-router-dom';
+import Link from '../../components/link_wrapper';
 import { changeSetting } from '../../../mastodon/actions/settings';
 import { expandHomeTimeline } from '../../../mastodon/actions/timelines';
 import StatusTimelineContainer from '../../containers/status_timeline';
