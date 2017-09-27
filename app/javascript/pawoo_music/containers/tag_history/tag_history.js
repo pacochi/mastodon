@@ -5,6 +5,9 @@ import { connect }   from 'react-redux';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 import HashtagLink from '../../components/hashtag_link';
+import TagBox from '../../components/tag_box';
+
+// TODO: 現在はピンしたタグを表示している
 
 const messages = defineMessages({
   title: { id: 'pinned_tags.title', defaultMessage: 'Pinned tags' },
@@ -18,7 +21,7 @@ const mapStateToProps = state => {
 
 @injectIntl
 @connect(mapStateToProps)
-export default class PinnedTags extends ImmutablePureComponent {
+export default class TagHistory extends ImmutablePureComponent {
 
   static propTypes = {
     tags: ImmutablePropTypes.list.isRequired,
@@ -29,10 +32,7 @@ export default class PinnedTags extends ImmutablePureComponent {
     const { tags, intl } = this.props;
 
     return (
-      <div className='pinned-tags'>
-        <div className='header'>
-          {intl.formatMessage(messages.title)}
-        </div>
+      <TagBox className='tag-history' heading={intl.formatMessage(messages.title)}>
         <ul className='rows'>
           {tags.map(tag => (
             <li key={tag} className='hashtag'>
@@ -40,7 +40,7 @@ export default class PinnedTags extends ImmutablePureComponent {
             </li>
           ))}
         </ul>
-      </div>
+      </TagBox>
     );
   }
 

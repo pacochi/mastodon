@@ -2,6 +2,7 @@ import React, { PureComponent } from 'react';
 import Immutable from 'immutable';
 import { FormattedDate } from 'react-intl';
 import HashtagLink from '../hashtag_link';
+import TagBox from '../tag_box';
 
 const events = Immutable.fromJS([
   {
@@ -25,17 +26,14 @@ export default class EventCalendar extends PureComponent {
 
   render () {
     return (
-      <div className='event-calendar'>
-        <div className='header'>
-          イベントカレンダー
-        </div>
-        <ul className='rows'>
+      <TagBox className='event-calendar' heading='イベントカレンダー'>{/* TODO: ローカライズ */}
+        <ul>
           {events.map(event => (
             <li key={event.get('hashtag')} className='event'>
               <div className='hashtag'>
                 <HashtagLink hashtag={event.get('hashtag')} />
               </div>
-              <div className='date'>
+              <div className='right-box date'>
                 <FormattedDate key='start_date' value={event.get('start_date')} month='2-digit' day='2-digit' />
                 {event.get('end_date') && ([
                   '-',
@@ -45,7 +43,7 @@ export default class EventCalendar extends PureComponent {
             </li>
           ))}
         </ul>
-      </div>
+      </TagBox>
     );
   }
 

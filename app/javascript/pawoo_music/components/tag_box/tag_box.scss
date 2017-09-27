@@ -1,0 +1,31 @@
+.tag-box {
+  display: block;
+
+  h2 {
+    margin:         var(--verticalspace30);
+    color:          var(--strong2);
+    font-weight:    bold;
+  }
+
+  ul {
+    margin:         var(--verticalspace10);
+
+    li {
+      margin:         var(--verticalspace10);
+      display:        flex;
+
+      .hashtag {
+        flex: 1;
+
+        a {
+          display:    block;
+          width:      100%;
+        }
+      }
+
+      .right-box {
+        margin-left: auto;
+      }
+    }
+  }
+}

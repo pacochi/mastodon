@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
+import GlobalNavi from '../../components/global_navi';
 import ComposeFormContainer from '../../../mastodon/features/compose/containers/compose_form_container';
 import { mountCompose, unmountCompose } from '../../../mastodon/actions/compose';
 import scrollTop from '../../../mastodon/scroll';
@@ -76,8 +77,11 @@ export default class Timeline extends PureComponent {
 
     return (
       <div className='timeline'>
+        <div className='navigation-column'>
+          <GlobalNavi isLogin={isLogin} />
+        </div>
         <div className='timeline-column'>
-          {withComposeForm && isLogin ? <ComposeFormContainer /> : null}
+          {withComposeForm && isLogin && <ComposeFormContainer />}
           <div className='timeline-content' ref={this.setRef} onWheel={this.handleWheel}>
             {children}
           </div>

@@ -1,4 +1,4 @@
 import TimelineContainer from './timeline';
-import './timeline.sass';
+import './timeline.scss';
 
 export default TimelineContainer;

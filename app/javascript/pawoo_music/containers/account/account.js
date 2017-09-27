@@ -62,9 +62,9 @@ export default class Account extends ImmutablePureComponent {
       return null;
     }
 
-    const lockedIcon = account.get('locked') ? <i className='fa fa-lock' /> : null;
+    const lockedIcon = account.get('locked') && <i className='fa fa-lock' />;
     const attachments = account.get('media_attachments');
-    const media = (attachments && attachments.size > 0) ? (
+    const media = (attachments && attachments.size > 0) && (
       <div className='media'>
         {attachments.filter((attachment) => attachment.get('type') !== 'unknown').map((attachment, index) => {
           const width = (100 - (attachments.size - 1)) / attachments.size;
@@ -91,7 +91,7 @@ export default class Account extends ImmutablePureComponent {
           );
         })}
       </div>
-    ) : null;
+    );
 
     return (
       <div className='account'>
