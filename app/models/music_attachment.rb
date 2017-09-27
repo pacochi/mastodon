@@ -56,6 +56,10 @@ class MusicAttachment < ApplicationRecord
   validates_attachment_content_type :video_image,
                                     content_type: ['image/jpeg', 'image/png']
 
+  def display_title
+    "#{title} - #{artist}"
+  end
+
   private
 
   def truncate_title

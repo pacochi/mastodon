@@ -24,7 +24,7 @@ describe Api::V1::TracksController, type: :controller do
 
       it 'returns http unprocessable entity when a non-audio file is uploaded as a music' do
         post :create,
-             params: { title: 'title', artist: Faker::Name.name, music: unknown, video_image: image }
+             params: { title: 'title', artist: Faker::Name.name, music: unknown }
 
         expect(response).to have_http_status :unprocessable_entity
       end
@@ -46,7 +46,7 @@ describe Api::V1::TracksController, type: :controller do
         }
 
         post :create,
-             params: { title: 'title', artist: 'artist', description: 'description', music: music, video_image: image, video: video_params }
+             params: { title: 'title', artist: 'artist', description: 'description', music: music, video: video_params }
 
         music_attachment = MusicAttachment.find_by!(
           id: body_as_json[:id],
@@ -81,7 +81,7 @@ describe Api::V1::TracksController, type: :controller do
         skip 'the output of ruby-mp3info messes up `file -b --mime`, used by Paperclip'
 
         post :create,
-             params: { title: 'title', artist: Faker::Name.name, music: music_with_picture, video_image: image }
+             params: { title: 'title', artist: Faker::Name.name, music: music_with_picture }
 
         tempfile = Tempfile.new
         begin
@@ -94,7 +94,7 @@ describe Api::V1::TracksController, type: :controller do
 
       it 'returns http success' do
         post :create,
-             params: { title: 'title', artist: Faker::Name.name, music: music, video_image: image }
+             params: { title: 'title', artist: Faker::Name.name, music: music }
 
         expect(response).to have_http_status :success
       end
@@ -103,7 +103,7 @@ describe Api::V1::TracksController, type: :controller do
     context 'without write scope' do
       it 'returns http unauthorized' do
         post :create,
-             params: { title: 'title', artist: Faker::Name.name, music: music, video_image: image }
+             params: { title: 'title', artist: Faker::Name.name, music: music }
 
         expect(response).to have_http_status :unauthorized
       end
@@ -119,9 +119,10 @@ describe Api::V1::TracksController, type: :controller do
       end
 
       let(:user) { Fabricate(:user) }
-      let(:music_attachment) { Fabricate(:music_attachment, status: Fabricate(:status, account: user.account)) }
 
       it 'updates and renders music attributes' do
+        music_attachment = Fabricate(:music_attachment, status: Fabricate(:status, account: user.account))
+
         video_params = {
           blur: {
             movement: { band: { bottom: 50, top: 300 }, threshold: 165 },
@@ -165,7 +166,122 @@ describe Api::V1::TracksController, type: :controller do
         expect(body_as_json[:video]).to eq video_params
       end
 
+      it 'unsets video blur parameters if empty string is given' do
+        music_attachment = Fabricate(
+          :music_attachment,
+          status: Fabricate(:status, account: user.account),
+          video_blur_movement_band_bottom: 50,
+          video_blur_movement_band_top: 300,
+          video_blur_movement_threshold: 165,
+          video_blur_blink_band_bottom: 2000,
+          video_blur_blink_band_top: 15000,
+          video_blur_blink_threshold: 165
+        )
+
+        patch :update, params: { id: music_attachment, video: { blur: '' } }
+
+        music_attachment.reload
+        expect(music_attachment.video_blur_movement_band_bottom).to eq 0
+        expect(music_attachment.video_blur_movement_band_top).to eq 0
+        expect(music_attachment.video_blur_movement_threshold).to eq 0
+        expect(music_attachment.video_blur_blink_band_bottom).to eq 0
+        expect(music_attachment.video_blur_blink_band_top).to eq 0
+        expect(music_attachment.video_blur_blink_threshold).to eq 0
+      end
+
+      it 'does not change video blur parameters if nothing is given' do
+        music_attachment = Fabricate(
+          :music_attachment,
+          status: Fabricate(:status, account: user.account),
+          video_blur_movement_band_bottom: 50,
+          video_blur_movement_band_top: 300,
+          video_blur_movement_threshold: 165,
+          video_blur_blink_band_bottom: 2000,
+          video_blur_blink_band_top: 15000,
+          video_blur_blink_threshold: 165
+        )
+
+        patch :update, params: { id: music_attachment }
+
+        music_attachment.reload
+        expect(music_attachment.video_blur_movement_band_bottom).to eq 50
+        expect(music_attachment.video_blur_movement_band_top).to eq 300
+        expect(music_attachment.video_blur_movement_threshold).to eq 165
+        expect(music_attachment.video_blur_blink_band_bottom).to eq 2000
+        expect(music_attachment.video_blur_blink_band_top).to eq 15000
+        expect(music_attachment.video_blur_blink_threshold).to eq 165
+      end
+
+      it 'unsets video particle parameters if empty string is given' do
+        music_attachment = Fabricate(
+          :music_attachment,
+          status: Fabricate(:status, account: user.account),
+          video_particle_limit_band_bottom: 0,
+          video_particle_limit_band_top: 0,
+          video_particle_limit_threshold: 0,
+          video_particle_color: nil
+        )
+
+        patch :update, params: { id: music_attachment, video: { particle: '' } }
+
+        music_attachment.reload
+        expect(music_attachment.video_particle_limit_band_bottom).to eq 0
+        expect(music_attachment.video_particle_limit_band_top).to eq 0
+        expect(music_attachment.video_particle_limit_threshold).to eq 0
+        expect(music_attachment.video_particle_color).to eq nil
+      end
+
+      it 'does not change video particle parameters if nothing is given' do
+        music_attachment = Fabricate(
+          :music_attachment,
+          status: Fabricate(:status, account: user.account),
+          video_particle_limit_band_bottom: 300,
+          video_particle_limit_band_top: 2000,
+          video_particle_limit_threshold: 165,
+          video_particle_color: 0xff0000
+        )
+
+        patch :update, params: { id: music_attachment }
+
+        music_attachment.reload
+        expect(music_attachment.video_particle_limit_band_bottom).to eq 300
+        expect(music_attachment.video_particle_limit_band_top).to eq 2000
+        expect(music_attachment.video_particle_limit_threshold).to eq 165
+        expect(music_attachment.video_particle_color).to eq 0xff0000
+      end
+
+      it 'unsets video spectrum parameters if empty string is given' do
+        music_attachment = Fabricate(
+          :music_attachment,
+          status: Fabricate(:status, account: user.account),
+          video_spectrum_mode: 0,
+          video_spectrum_color: 0xff0000
+        )
+
+        patch :update, params: { id: music_attachment, video: { spectrum: '' } }
+
+        music_attachment.reload
+        expect(music_attachment.video_spectrum_mode).to eq nil
+        expect(music_attachment.video_spectrum_color).to eq nil
+      end
+
+      it 'does not change video particle parameters if nothing is given' do
+        music_attachment = Fabricate(
+          :music_attachment,
+          status: Fabricate(:status, account: user.account),
+          video_spectrum_mode: 0,
+          video_spectrum_color: 0xff0000
+        )
+
+        patch :update, params: { id: music_attachment }
+
+        music_attachment.reload
+        expect(music_attachment.video_spectrum_mode).to eq 0
+        expect(music_attachment.video_spectrum_color).to eq 0xff0000
+      end
+
       it 'returns http success' do
+        music_attachment = Fabricate(:music_attachment, status: Fabricate(:status, account: user.account))
         patch :update, params: { id: music_attachment.id }
         expect(response).to have_http_status :success
       end
@@ -297,6 +413,8 @@ describe Api::V1::TracksController, type: :controller do
   end
 
   describe 'POST #prepare_video' do
+    around { |example| Sidekiq::Testing.fake! &example }
+
     context 'with write scope' do
       before do
         allow(controller).to receive(:doorkeeper_token) do
@@ -308,10 +426,8 @@ describe Api::V1::TracksController, type: :controller do
       let(:music_attachment) { Fabricate(:music_attachment, status: Fabricate(:status, account: user.account)) }
 
       it 'queues rendering' do
-        Sidekiq::Testing.fake! do
-          post :prepare_video, params: { id: music_attachment }
-          expect(VideoPreparingWorker).to have_enqueued_sidekiq_job music_attachment.id
-        end
+        post :prepare_video, params: { id: music_attachment }
+        expect(VideoPreparingWorker).to have_enqueued_sidekiq_job music_attachment.id
       end
 
       it 'returns http success' do

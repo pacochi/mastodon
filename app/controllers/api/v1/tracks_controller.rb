@@ -59,11 +59,26 @@ class Api::V1::TracksController < Api::BaseController
       attributes.merge! duration: music_duration.ceil
     end
 
-    if params.dig('video', 'image')
+    case params.dig('video', 'image')
+    when nil
+    when ''
+      attributes.merge!(video_image: nil)
+    else
       attributes.merge!(video_image: params.dig('video', 'image'))
     end
 
-    if params.dig('video', 'blur')
+    case params.dig('video', 'blur')
+    when nil
+    when ''
+      attributes.merge!(
+        video_blur_movement_band_bottom: 0,
+        video_blur_movement_band_top: 0,
+        video_blur_movement_threshold: 0,
+        video_blur_blink_band_bottom: 0,
+        video_blur_blink_band_top: 0,
+        video_blur_blink_threshold: 0
+      )
+    else
       attributes.merge!(
         video_blur_movement_band_bottom: params.dig('video', 'blur', 'movement', 'band', 'bottom'),
         video_blur_movement_band_top: params.dig('video', 'blur', 'movement', 'band', 'top'),
@@ -74,7 +89,16 @@ class Api::V1::TracksController < Api::BaseController
       )
     end
 
-    if params.dig('video', 'particle')
+    case params.dig('video', 'particle')
+    when nil
+    when ''
+      attributes.merge!(
+        video_particle_limit_band_bottom: 0,
+        video_particle_limit_band_top: 0,
+        video_particle_limit_threshold: 0,
+        video_particle_color: nil,
+      )
+    else
       attributes.merge!(
         video_particle_limit_band_bottom: params.dig('video', 'particle', 'limit', 'band', 'bottom'),
         video_particle_limit_band_top: params.dig('video', 'particle', 'limit', 'band', 'top'),
@@ -83,7 +107,14 @@ class Api::V1::TracksController < Api::BaseController
       )
     end
 
-    if params.dig('video', 'spectrum')
+    case params.dig('video', 'spectrum')
+    when nil
+    when ''
+      attributes.merge!(
+        video_spectrum_mode: nil,
+        video_spectrum_color: nil,
+      )
+    else
       attributes.merge!(
         video_spectrum_mode: params.dig('video', 'spectrum', 'mode'),
         video_spectrum_color: params.dig('video', 'spectrum', 'color'),

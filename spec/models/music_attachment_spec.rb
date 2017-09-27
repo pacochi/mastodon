@@ -3,6 +3,13 @@
 require 'rails_helper'
 
 describe MusicAttachment, type: :model do
+  describe '#display_title' do
+    it 'returns title for display' do
+      music = Fabricate(:music_attachment, title: 'title', artist: 'artist')
+      expect(music.display_title).to eq 'title - artist'
+    end
+  end
+
   it 'does not truncate title when it is not changed' do
     music = Fabricate(:music_attachment)
     music.update! artist: Faker::Name.name
