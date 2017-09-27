@@ -13,7 +13,7 @@ import { makeGetAccount } from '../../../mastodon/selectors';
 
 const mapStateToProps = (state, props) => {
   const acct = props.match.params.acct;
-  const accountId = Number(state.getIn(['acct_map', acct]));
+  const accountId = Number(state.getIn(['pawoo_music', 'acct_map', acct]));
   const getAccount = makeGetAccount();
 
   return {
