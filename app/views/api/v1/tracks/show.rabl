@@ -2,7 +2,7 @@ object @track
 
 attribute :id, :title, :artist, :description
 
-node :music { |track| full_asset_url(track.music.url(:original)) }
+node(:music) { |track| full_asset_url(track.music.url(:original)) }
 
 node :video do |track|
   hash = {}
@@ -52,4 +52,4 @@ node :video do |track|
   hash
 end
 
-child :status { extends 'api/v1/statuses/show' }
+child(:status) { extends 'api/v1/statuses/show' }
