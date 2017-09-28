@@ -2,7 +2,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Canvas } from 'albumart-video';
+import { Canvas } from 'musicvideo-generator';
 import { ChromePicker } from 'react-color';
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
@@ -30,7 +30,7 @@ const messages = defineMessages({
   preview: { id: 'track_compose.preview', defaultMessage: 'Video preview' },
 });
 
-function constructAlbumArtOptions(track, image) {
+function constructGeneratorOptions(track, image) {
   const video = track.get('video');
   const blur = video.get('blur');
   const particle = video.get('particle');
@@ -172,14 +172,14 @@ export default class TrackCompose extends ImmutablePureComponent {
       image: image && URL.createObjectURL(image),
     };
 
-    this.albumArt = new Canvas(audioContext, constructAlbumArtOptions(track, this.state.image));
-    this.albumArt.audioAnalyserNode.connect(audioContext.destination);
-    this.albumArt.start();
+    this.generator = new Canvas(audioContext, constructGeneratorOptions(track, this.state.image));
+    this.generator.audioAnalyserNode.connect(audioContext.destination);
+    this.generator.start();
   }
 
   componentWillUnmount () {
-    this.albumArt.stop();
-    this.albumArt.audioAnalyserNode.context.close();
+    this.generator.stop();
+    this.generator.audioAnalyserNode.context.close();
     URL.revokeObjectURL(this.state.music);
     URL.revokeObjectURL(this.state.image);
   }
@@ -206,11 +206,11 @@ export default class TrackCompose extends ImmutablePureComponent {
       URL.revokeObjectURL(image);
     }
 
-    this.albumArt.changeParams(constructAlbumArtOptions(this.props.track, this.state.image));
+    this.generator.changeParams(constructGeneratorOptions(this.props.track, this.state.image));
   }
 
   handleCanvasContainerRef = (ref) => {
-    const { view } = this.albumArt.getRenderer();
+    const { view } = this.generator.getRenderer();
     const { parent } = view;
 
     if (!ref) {
@@ -225,7 +225,7 @@ export default class TrackCompose extends ImmutablePureComponent {
   }
 
   handleAudioRef = (ref) => {
-    const { audioAnalyserNode } = this.albumArt;
+    const { audioAnalyserNode } = this.generator;
 
     if (!ref) {
       return;

@@ -12,7 +12,7 @@ onunhandledrejection = event => {
   return true;
 };
 
-const { RgbaEmitter } = require('albumart-video');
+const { RgbaEmitter } = require('musicvideo-generator');
 const { webFrame } = require('electron');
 const path = require('path');
 const url = require('url');

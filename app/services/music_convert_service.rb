@@ -11,11 +11,11 @@ class MusicConvertService < BaseService
           music.video_image.copy_to_local_file :original, image_file.path
         end
 
-        albumart = open_albumart(music, music_file, image_file)
+        musicvideo = open_musicvideo(music, music_file, image_file)
 
         video_file = Tempfile.new(['music-', '.mp4'])
         begin
-          create_mp4 music, music_file, albumart, video_file
+          create_mp4 music, music_file, musicvideo, video_file
           video_file
         rescue
           video_file.unlink
@@ -31,9 +31,9 @@ class MusicConvertService < BaseService
 
   private
 
-  def open_albumart(music, music_file, image_file)
+  def open_musicvideo(music, music_file, image_file)
     args = [
-      Rails.root.join('node_modules', '.bin', 'electron'), 'albumart-video', '--',
+      Rails.root.join('node_modules', '.bin', 'electron'), 'genmv', '--',
       music_file.path, '--text-title', music.title, '--text-sub', music.artist,
     ]
 
@@ -70,7 +70,7 @@ class MusicConvertService < BaseService
     IO.popen args.map(&:to_s)
   end
 
-  def create_mp4(music, music_file, albumart, video_file)
+  def create_mp4(music, music_file, musicvideo, video_file)
     args = [
       '-v', '-8', '-y',  '-i', music_file.path, '-f', 'rawvideo',
       '-framerate', '30', '-pixel_format', 'bgr32', '-video_size', '600x600',
@@ -80,7 +80,7 @@ class MusicConvertService < BaseService
       video_file.path,
     ]
 
-    Process.waitpid spawn('ffmpeg', *args, in: albumart)
+    Process.waitpid spawn('ffmpeg', *args, in: musicvideo)
     raise Mastodon::FFmpegError, $?.inspect unless $?.success?
   end
 end
