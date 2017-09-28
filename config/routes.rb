@@ -285,6 +285,7 @@ Rails.application.routes.draw do
   get '/@:account_username/albums/:album_id/tracks/:id', to: 'albums/tracks#show'
   get '/@:account_username/tracks/:id', to: 'tracks#show', as: :short_account_track
 
+  resources :albums, only: :new
   resources :tracks, only: :new
 
   match '*unmatched_route',
