@@ -12,12 +12,11 @@ class Api::V1::Accounts::AlbumsController < Api::BaseController
   private
 
   def account_albums
-    Album.joins(:status)
-         .where(statuses: { account_id: params.require(:account_id) })
+    Album.where(account_id: params.require(:account_id))
          .paginate_by_max_id(
            limit_param(DEFAULT_ALBUMS_LIMIT),
            params[:max_id],
-           params[:since_id],
+           params[:since_id]
          )
   end
 

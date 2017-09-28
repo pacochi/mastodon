@@ -21,8 +21,9 @@ describe Api::V1::AlbumsController, type: :controller do
         post :create,
              params: { title: 'title', description: 'description', image: image }
 
-        album = Album.find_by(
+        album = Album.find_by!(
           id: body_as_json[:id],
+          account: user.account,
           status: body_as_json[:status][:id],
           title: 'title',
           description: 'description',

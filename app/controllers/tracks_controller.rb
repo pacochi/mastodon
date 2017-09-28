@@ -12,9 +12,9 @@ class TracksController < ApplicationController
   end
 
   def show
-    @music_attachment = MusicAttachment.preload(status: :account).joins(status: :account).find_by!(
+    @music_attachment = MusicAttachment.joins(:account).find_by!(
       id: params.require(:id),
-      statuses: { accounts: { username: params.require(:account_username) } },
+      accounts: { username: params.require(:account_username) }
     )
   end
 

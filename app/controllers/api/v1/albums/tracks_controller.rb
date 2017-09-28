@@ -42,7 +42,7 @@ class Api::V1::Albums::TracksController < Api::BaseController
       index_scope = index_scope.where('position < ?', index_range[1])
     end
 
-    @tracks = MusicAttachment.joins(:album_music_attachment)
+    @tracks = MusicAttachment.joins(:album_music_attachments)
                              .merge(index_scope)
                              .limit(limit_param(DEFAULT_TRACKS_LIMIT))
 

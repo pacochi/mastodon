@@ -23,12 +23,12 @@ class Api::V1::TracksController < Api::BaseController
 
   def update
     attributes = prepare_music_attributes
-    @track = MusicAttachment.joins(:status).find_by!(id: params.require(:id), statuses: { account: current_account })
+    @track = MusicAttachment.find_by!(id: params.require(:id), account: current_account)
     @track.update! attributes
   end
 
   def destroy
-    music = MusicAttachment.joins(:status).find_by!(id: params.require(:id), statuses: { account: current_account })
+    music = MusicAttachment.find_by!(id: params.require(:id), account: current_account)
 
     music.destroy!
     RemovalWorker.perform_async music.status_id
@@ -41,7 +41,7 @@ class Api::V1::TracksController < Api::BaseController
   end
 
   def prepare_video
-    track = MusicAttachment.joins(:status).find_by!(id: params.require(:id), statuses: { account: current_account })
+    track = MusicAttachment.find_by!(id: params.require(:id), account: current_account)
     VideoPreparingWorker.perform_async track.id
 
     render_empty
@@ -53,6 +53,7 @@ class Api::V1::TracksController < Api::BaseController
     return @prepared_music_attributes if @prepared_music_attributes
 
     attributes = music_params
+    attributes.merge! account: current_account
 
     if music_params[:music].present?
       music_duration = update_music

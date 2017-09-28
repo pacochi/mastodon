@@ -17,6 +17,7 @@ if Rails.env.development?
     duration: 1.minute,
     title: "Ain't We Got Fun",
     artist: 'Billy Jones',
+    account: music_attachment_status.account,
     status: music_attachment_status
   )
 
@@ -28,6 +29,7 @@ if Rails.env.development?
   album = Album.create!(
     image: File.open(Rails.root.join('spec', 'fixtures', 'files', 'attachment.jpg')),
     title: 'Digital History',
+    account: album_status.account,
     status: album_status
   )
 

@@ -74,6 +74,7 @@ ActiveRecord::Schema.define(version: 20170830000000) do
   end
 
   create_table "albums", force: :cascade do |t|
+    t.bigint "account_id", null: false
     t.bigint "status_id", null: false
     t.string "title", null: false
     t.text "description", default: "", null: false
@@ -81,6 +82,7 @@ ActiveRecord::Schema.define(version: 20170830000000) do
     t.string "image_content_type"
     t.integer "image_file_size"
     t.datetime "image_updated_at"
+    t.index ["account_id"], name: "index_albums_on_account_id"
     t.index ["status_id"], name: "index_albums_on_status_id"
   end
 
@@ -193,6 +195,7 @@ ActiveRecord::Schema.define(version: 20170830000000) do
   end
 
   create_table "music_attachments", force: :cascade do |t|
+    t.bigint "account_id", null: false
     t.bigint "status_id", null: false
     t.integer "duration", null: false
     t.string "title", null: false
@@ -222,6 +225,7 @@ ActiveRecord::Schema.define(version: 20170830000000) do
     t.integer "video_particle_color"
     t.integer "video_spectrum_mode"
     t.integer "video_spectrum_color"
+    t.index ["account_id"], name: "index_music_attachments_on_account_id"
     t.index ["status_id"], name: "index_music_attachments_on_status_id"
   end
 
@@ -518,6 +522,7 @@ ActiveRecord::Schema.define(version: 20170830000000) do
   add_foreign_key "account_domain_blocks", "accounts", on_delete: :cascade
   add_foreign_key "album_music_attachments", "albums", on_update: :cascade, on_delete: :cascade
   add_foreign_key "album_music_attachments", "music_attachments", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "albums", "accounts", on_update: :cascade, on_delete: :cascade
   add_foreign_key "albums", "statuses", on_update: :cascade, on_delete: :cascade
   add_foreign_key "blocks", "accounts", column: "target_account_id", on_delete: :cascade
   add_foreign_key "blocks", "accounts", on_delete: :cascade
@@ -534,6 +539,7 @@ ActiveRecord::Schema.define(version: 20170830000000) do
   add_foreign_key "media_attachments", "statuses", on_delete: :nullify
   add_foreign_key "mentions", "accounts", on_delete: :cascade
   add_foreign_key "mentions", "statuses", on_delete: :cascade
+  add_foreign_key "music_attachments", "accounts", on_update: :cascade, on_delete: :cascade
   add_foreign_key "music_attachments", "statuses", on_update: :cascade, on_delete: :cascade
   add_foreign_key "mutes", "accounts", column: "target_account_id", on_delete: :cascade
   add_foreign_key "mutes", "accounts", on_delete: :cascade

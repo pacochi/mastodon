@@ -50,6 +50,7 @@ describe Api::V1::TracksController, type: :controller do
 
         music_attachment = MusicAttachment.find_by!(
           id: body_as_json[:id],
+          account: user.account,
           status: body_as_json[:status][:id],
           title: 'title',
           artist: 'artist',

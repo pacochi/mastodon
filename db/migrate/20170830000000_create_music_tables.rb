@@ -1,6 +1,7 @@
 class CreateMusicTables < ActiveRecord::Migration[5.1]
   def change
     create_table :albums do |t|
+      t.belongs_to :account, foreign_key: { on_delete: :cascade, on_update: :cascade }, null: false
       t.belongs_to :status, foreign_key: { on_delete: :cascade, on_update: :cascade }, null: false
       t.string :title, null: false
       t.text :description, default: '', null: false
@@ -8,6 +9,7 @@ class CreateMusicTables < ActiveRecord::Migration[5.1]
     end
 
     create_table :music_attachments do |t|
+      t.belongs_to :account, foreign_key: { on_delete: :cascade, on_update: :cascade }, null: false
       t.belongs_to :status, foreign_key: { on_delete: :cascade, on_update: :cascade }, null: false
       t.integer :duration, null: false
       t.string :title, null: false

@@ -3,6 +3,7 @@
 # Table name: music_attachments
 #
 #  id                               :integer          not null, primary key
+#  account_id                       :integer          not null
 #  status_id                        :integer          not null
 #  duration                         :integer          not null
 #  title                            :string           not null
@@ -35,13 +36,15 @@
 #
 
 class MusicAttachment < ApplicationRecord
+  include Paginable
 
   before_save :truncate_title,       if: :title_changed?
   before_save :truncate_artist,      if: :artist_changed?
   before_save :truncate_description, if: :description_changed?
 
-  belongs_to :status
-  has_one :album_music_attachment
+  belongs_to :account, inverse_of: :music_attachments
+  belongs_to :status, inverse_of: :music_attachment
+  has_many :album_music_attachments, inverse_of: :music_attachment
 
   has_attached_file :music
   has_attached_file :video

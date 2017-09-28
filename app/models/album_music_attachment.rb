@@ -10,8 +10,8 @@
 #
 
 class AlbumMusicAttachment < ApplicationRecord
-  belongs_to :album
-  belongs_to :music_attachment
+  belongs_to :album, inverse_of: :album_music_attachments
+  belongs_to :music_attachment, inverse_of: :album_music_attachments
 
   MIN_POSITION = BigDecimal(0)
   MAX_POSITION = BigDecimal(1)

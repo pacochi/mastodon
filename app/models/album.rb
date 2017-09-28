@@ -4,6 +4,7 @@
 # Table name: albums
 #
 #  id                 :integer          not null, primary key
+#  account_id         :integer          not null
 #  status_id          :integer          not null
 #  title              :string           not null
 #  description        :text             default(""), not null
@@ -18,8 +19,9 @@ class Album < ApplicationRecord
 
   before_save :truncate_title,  if: :title_changed?
 
-  belongs_to :status
-  has_one :album_music_attachment
+  belongs_to :account, inverse_of: :albums
+  belongs_to :status, inverse_of: :album
+  has_many :album_music_attachments, inverse_of: :album
 
   has_attached_file :image
 

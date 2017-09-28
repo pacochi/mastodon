@@ -12,9 +12,9 @@ class AlbumsController < ApplicationController
   end
 
   def show
-    @album = Album.preload(status: :account).joins(status: :account).find_by!(
+    @album = Album.joins(:account).find_by!(
       id: params.require(:id),
-      statuses: { accounts: { username: params.require(:account_username) } },
+      accounts: { username: params.require(:account_username) },
     )
   end
 
