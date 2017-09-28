@@ -91,12 +91,12 @@ export default class StatusThread extends ImmutablePureComponent {
       return null;
     }
 
-    const ancestors = (ancestorsIds && ancestorsIds.size > 0) ? (
+    const ancestors = (ancestorsIds && ancestorsIds.size > 0) && (
       <div>{this.renderChildren(ancestorsIds)}</div>
-    ) : null;
-    const descendants = (descendantsIds && descendantsIds.size > 0) ? (
+    );
+    const descendants = (descendantsIds && descendantsIds.size > 0) && (
       <div>{this.renderChildren(descendantsIds)}</div>
-    ) : null;
+    );
 
     const Garally = (
       <div className='garally'>

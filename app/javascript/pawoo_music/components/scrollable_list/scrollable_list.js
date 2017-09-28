@@ -111,9 +111,9 @@ export default class ScrollableList extends PureComponent {
           </IntersectionObserverItem>
         ))}
 
-        {(!isLoading && hasChildren && hasMore) ? (
+        {(!isLoading && hasChildren && hasMore) && (
           <LoadMore onClick={this.handleLoadMore} />
-        ): null}
+        )}
       </div>
     ) : (
       <div className='empty-column-indicator'>

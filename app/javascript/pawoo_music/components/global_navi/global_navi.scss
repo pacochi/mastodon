@@ -1,0 +1,74 @@
+.global-navi {  // 200px
+  display: flex;
+  flex-direction: column;
+
+  padding:    var(--padding20);
+  min-height: calc(100vh - var(--height-deck) - var(--padding20) * 2);
+
+  background-color:       var(--color1);
+
+  background-image:       url('../../../images/pawoo_music/character.png');
+  background-repeat:      no-repeat;
+  background-position:    right bottom;
+
+  .global-navi-center {
+    flex: 1;
+
+    .logo {
+      width: 100%;
+    }
+
+    .global-navi-links {
+      display: block;
+
+      font-size:      var(--text30-font);
+      line-height:    var(--text30-line);
+
+      ul {
+        margin:  var(--verticalspace30);
+
+        li {
+          margin:  var(--verticalspace10);
+
+          a {
+            color:          var(--textcolor);
+            display: block;
+            padding: 0 0 0 calc(var(--grid) * 4);
+
+            &.active {
+              padding:     0 0 0 calc(var(--grid) * 4 - 3px);
+              border-left: 3px var(--strong1) solid;
+              font-weight:    bold;
+              color:          var(--strong2);
+            }
+          }
+
+          a:hover {
+            color:          var(--strong1);
+          }
+        }
+      }
+    }
+  }
+
+  .global-navi-bottom {
+    .settings-link {
+      display: block;
+      margin:  var(--verticalspace20);
+      display: table;
+
+      .settings-link-icon {
+        display:    table-cell;
+        width:      var(--iconsize10);
+        padding:    var(--rightspace10);
+      }
+
+      .settings-link-text {
+        display:        table-cell;
+        vertical-align: middle;
+        font-size:      var(--text20-font);
+      }
+    }
+
+  }
+}

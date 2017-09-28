@@ -64,6 +64,7 @@
     "mark-loader": "^0.1.6",
     "marky": "^1.2.0",
     "mkdirp": "^0.5.1",
+    "mobile-detect": "/Users/abcang1.3.7",
     "moment": "^2.18.1",
     "node-sass": "^4.5.2",
     "npmlog": "^4.1.2",

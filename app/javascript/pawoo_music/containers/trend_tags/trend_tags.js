@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 import { refreshTrendTags } from '../../actions/trend_tags';
 import HashtagLink from '../../components/hashtag_link';
+import TagBox from '../../components/tag_box';
 
 const messages = defineMessages({
   title: { id: 'trend_tags.title', defaultMessage: 'Suggested tags' },
@@ -44,18 +45,15 @@ export default class TrendTags extends ImmutablePureComponent {
     const { tags, intl } = this.props;
 
     return (
-      <div className='trend-tags'>
-        <div className='header'>
-          {intl.formatMessage(messages.title)}
-        </div>
-        <ul className='rows'>
+      <TagBox className='trend-tags' heading={intl.formatMessage(messages.title)}>
+        <ul>
           {tags.map(tag => (
             <li key={tag.get('name')} className='hashtag'>
               <HashtagLink hashtag={tag.get('name')} />
             </li>
           ))}
         </ul>
-      </div>
+      </TagBox>
     );
   }
 

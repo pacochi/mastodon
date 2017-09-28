@@ -155,8 +155,8 @@ export default class AccountHeader extends ImmutablePureComponent {
     }
 
     const menu = this.createMenu();
-    const lockedIcon = account.get('locked') ? <i className='fa fa-lock' /> : null;
-    const extraInfo = (account.get('acct') !== account.get('username')) ? <abbr title={intl.formatMessage(messages.disclaimer)}>*</abbr> : null;
+    const lockedIcon = account.get('locked') && <i className='fa fa-lock' />;
+    const extraInfo = (account.get('acct') !== account.get('username')) && <abbr title={intl.formatMessage(messages.disclaimer)}>*</abbr>;
     const note = { __html: emojify(account.get('note')) };
     let followed = null;
 
@@ -197,7 +197,7 @@ export default class AccountHeader extends ImmutablePureComponent {
             <span><FormattedMessage id='account.follows' defaultMessage='Follows' /></span>
             <strong><FormattedNumber value={account.get('following_count')} /> {extraInfo}</strong>
           </NavLink>
-          {menu.length > 0 ? <DropdownMenu items={menu} icon='bars' size={24} direction='right' /> : null}
+          {menu.length > 0 && <DropdownMenu items={menu} icon='bars' size={24} direction='right' />}
         </div>
 
       </div>

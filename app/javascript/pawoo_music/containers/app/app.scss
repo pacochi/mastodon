@@ -1,0 +1,273 @@
+@font-face {
+  font-family:    'Noto-Emoji';
+  src:    url('../../../fonts/noto-emoji/Noto-Emoji.ttf.woff'          )  format('woff'),
+  url('../../../fonts/noto-emoji/Noto-Emoji.ttf.svg#Noto-Emoji')  format('svg'),
+  url('../../../fonts/noto-emoji/Noto-Emoji.ttf.eot'           ),
+  url('../../../fonts/noto-emoji/Noto-Emoji.ttf.eot?#iefix'    )  format('embedded-opentype');
+  font-weight:    normal;
+  font-style:     normal;
+}
+
+
+
+// ------------------------------------------------------
+//  CSS Vars
+body {
+  // Color Scheme
+  --textcolor:        #555555;
+  --linkcolor:        #888888;
+
+  --strong1:          #dd0000;
+  --strong2:          #000000;
+
+  --color1:           #ffffff;
+  --color2:           #eaeaea;
+  --color3:           #d0d0d0;
+
+  --tootcolor:        #00b0dd;
+
+
+  // Basic Grid
+  --grid:             5px;
+
+
+  // Vertical Spaces for 'margin' and 'padding'
+  --verticalspace10:  calc(var(--grid) * 1)  0 0 0;
+  --verticalspace20:  calc(var(--grid) * 2)  0 0 0;
+  --verticalspace30:  calc(var(--grid) * 4)  0 0 0;
+  --verticalspace40:  calc(var(--grid) * 16) 0 0 0;
+  --verticalspace30-both: calc(var(--grid) * 4) 0 calc(var(--grid) * 4) 0;
+
+
+  // Horizontal Spaces for 'margin' and 'padding'
+  --rightspace5:      0 calc(var(--grid) * 1) 0 0;
+  --rightspace10:     0 calc(var(--grid) * 2) 0 0;
+
+
+  // 'padding'
+  --padding5:         calc(var(--grid) * 1);
+  --padding10:        calc(var(--grid) * 2);
+  --padding20:        calc(var(--grid) * 4);
+
+
+  // 'font-size' and 'line-height'
+  --text10-font:      9px;
+  --text10-line:      calc(var(--grid) * 3);
+
+  --text20-font:      11px;
+  --text20-line:      calc(var(--grid) * 3);
+
+  --text30-font:      13px;
+  --text30-line:      calc(var(--grid) * 4);
+
+  --text40-font:      18px;
+  --text40-line:      calc(var(--grid) * 6);
+
+  --iconsize10:       calc(var(--grid) * 4);
+  --iconsize15:       calc(var(--grid) * 5);
+  --iconsize20:       calc(var(--grid) * 6);
+  --iconsize30:       calc(var(--grid) * 8);
+  --iconsize40:       calc(var(--grid) * 12);
+
+
+  // 'radius'
+  --radius:           20px;
+
+
+  // dropshadow
+  --shadow:           calc(var(--grid) * 0.5)
+  calc(var(--grid) * 4)
+  calc(var(--grid) * 8)
+  calc(var(--grid) * 2)
+  rgba(0, 0, 0, .12);
+
+  --shadow2:          calc(var(--grid) * 0.1)
+  calc(var(--grid) * 1)
+  calc(var(--grid) * 4)
+  calc(var(--grid) * 0.5)
+  rgba(0, 0, 0, .25);
+
+
+  // hover action
+  --hover-opacity:    0.2;
+  --hover-transition: 0.25s;
+
+
+  // lightbox
+  --lightbox-opacity: 0.5;
+  --lightbox-z-index: 1000000;
+  --lightbox-width:   100vw;
+  --lightbox-height:  100vh;
+
+
+  // mordal-z-index
+  --mordal-z-index:  1000;
+}
+
+
+
+// ------------------------------------------------
+
+.app-body {
+  display:    block;
+  width:      100%;
+  height:     100vh;
+
+  color:          var(--textcolor);
+  font-size:      var(--text30-font);
+  line-height:    var(--text30-line);
+
+  font-family:    "游ゴシック Medium", "游ゴシック体", "Yu Gothic Medium", YuGothic,
+  "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN",
+  "メイリオ", Meiryo, Helvetica, Arial, sans-serif;
+
+  a, a:link, a:visited {
+    color:              var(--linkcolor);
+    text-decoration:    none;
+    cursor:             pointer;
+  }
+
+  a:hover {
+    color:          var(--strong1);
+    font-weight:    bold;
+  }
+}
+
+.app {
+  display:    block;
+  width:      100%;
+  height:     100vh;
+  z-index:    1;
+
+  // huge icon size
+  --iconsize50:           calc(var(--grid) * 36);
+
+  // block width and height
+  --width-globalnavi:     calc(var(--grid) * 40);
+  --width-lobby:          calc(var(--grid) * 60);
+  --width-gallary:        calc(var(--grid) * 95);
+
+  --width-ago:            calc(var(--grid) * 6);
+  --width-contextmenu:    calc(var(--grid) * 26);
+  --height-deck:          56px;
+
+  .app-center {
+    z-index:        1;
+
+    overflow: hidden;
+    height:         calc(100% - var(--height-deck));
+  }
+
+  .app-bottom {
+    height:     var(--height-deck);
+
+    // デッキフィールドだよとわかりやすくするための、pawoo-team 内部での指示用の色。
+    // TODO: 本番でこの色つかわないでね〜〜。
+    background-color:   var(--strong1);
+    color:              var(--color1);
+  }
+}
+
+
+// -------------------------
+//  SP
+.app.sp {
+  // huge icon size
+  --iconsize50:           calc(var(--grid) * 20);
+
+  // block width and height
+  --width-globalnavi:     100vw;
+  --width-lobby:          100vw;
+  --width-gallary-slide:  100vw;
+  --width-gallary:        calc(100vw - var(--grid) * 4);
+
+  --width-ago:            calc(var(--grid) * 6);
+  --width-contextmenu:    calc(var(--grid) * 26);
+  --height-deck:          56px;
+
+  .app-top {
+    height:         var(--height-deck);  // height - border
+  }
+
+  .app-center {
+    height:         calc(100% - var(--height-deck) * 2);
+  }
+}
+
+// ---------------------------------------------------------
+// --width-lobby の 値を 0px にすると、 lobby を畳めます。
+
+/*
+// TODO
+// -------------
+// SP
+
+topnavi {
+  display:        flex;
+  height:         var(--height-deck);  // height - border
+
+  align-items:        center;
+  justify-content:    space-between;
+  background-color:   var(--color1);
+  border-bottom:      2px solid var(--color2);
+
+  a {
+    display:    block;
+    font-size:      var(--text20-font);
+    line-height:    var(--text20-line);
+  }
+}
+
+
+slide {
+  display:    block;
+  position:   relative;
+  left:       var(--slide-position);
+  transition: var(--hover-transition);
+}
+
+slide:nth-child(1) {
+  flex-shrink:    0;
+  flex-grow:      0;
+  flex-basis:     var(--width-globalnavi);
+  overflow-y:     scroll;
+}
+
+slide:nth-child(2) {
+  flex-shrink:    0;
+  flex-grow:      0;
+  flex-basis:     var(--width-lobby);
+  overflow-y:     scroll;
+}
+
+slide:nth-child(3) {
+  flex-shrink:    0;
+  flex-grow:      0;
+  flex-basis:     var(--width-gallary-slide);
+  overflow-y:     scroll;
+}
+
+bottomnavi {
+  display:        flex;
+  height:         var(--height-deck);  // height - border
+  text-align:     center;
+
+  align-items:        center;
+  justify-content:    space-between;
+  background-color:   var(--color1);
+  border-top:         2px solid var(--color2);
+
+  a {
+    display:    block;
+    height:     calc(var(--height-deck) - 3px);  // height - border
+    width:      calc(100% / 2);
+
+    font-size:      var(--text20-font);
+    line-height:    var(--text20-line);
+  }
+
+  .selected {
+    border-top: 3px solid var(--strong1);
+  }
+}
+*/
