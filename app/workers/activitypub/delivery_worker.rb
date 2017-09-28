@@ -2,8 +2,13 @@
 
 class ActivityPub::DeliveryWorker
   include Sidekiq::Worker
+  using RequestShortTimeout
 
   sidekiq_options queue: 'push', retry: 5, dead: false
+
+  sidekiq_retry_in do |count|
+    1.minute * (count + 1)
+  end
 
   HEADERS = { 'Content-Type' => 'application/activity+json' }.freeze
 
