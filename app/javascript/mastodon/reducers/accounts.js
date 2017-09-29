@@ -53,6 +53,12 @@ const normalizeAccount = (state, account) => {
   delete account.following_count;
   delete account.statuses_count;
 
+  // media_attachmentsが設定されていない場合は保持する
+  const mediaAttachments = state.getIn([account.id, 'media_attachments']);
+  if (!account.media_attachments && mediaAttachments) {
+    account.media_attachments = mediaAttachments.toJS();
+  }
+
   return state.set(account.id, Immutable.fromJS(account));
 };
 

@@ -5,7 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import AccountContainer from '../account';
-import StatusContainer from '../../../mastodon/containers/status_container';
+import StatusContainer from '../..//containers/status';
 import HashtagLink from '../../components/hashtag_link/';
 import { changeSearch, clearSearch, submitSearch } from '../../../mastodon/actions/search';
 

@@ -26,17 +26,3 @@
   -# - サイレンスされている
   - if (@stream_entry.status.present? && @stream_entry.status.text.length < 100 && @stream_entry.status.media_attachments.empty? && @stream_entry.status.pixiv_cards.empty?) || @account.silenced
     %meta{ name: 'robots', content: 'noindex,follow' }/
-
-= render 'accounts/service_logo'
-
-- if show_landing_strip?
-  = render partial: 'shared/landing_strip', locals: { account: @stream_entry.account }
-
-.activity-stream.activity-stream-headless.h-entry
-  = render partial: "stream_entries/#{@type}", locals: { @type.to_sym => @stream_entry.activity, include_threads: true }
-
-.pagination
-  - if @status_pagination&.next
-    = link_to safe_join([t('pagination.next'), fa_icon('chevron-right')], ' '), short_account_status_path(@account, @status_pagination.next), class: 'next', rel: 'next'
-  - if @status_pagination&.previous
-    = link_to safe_join([fa_icon('chevron-left'), t('pagination.prev')], ' '), short_account_status_path(@account, @status_pagination.previous), class: 'prev', rel: 'prev'

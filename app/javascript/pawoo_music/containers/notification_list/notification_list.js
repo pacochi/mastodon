@@ -9,7 +9,7 @@ import { debounce } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 import { expandNotifications, scrollTopNotifications } from '../../../mastodon/actions/notifications';
 import NotificationContainer from '../../../mastodon/features/notifications/containers/notification_container';
-import Timeline from '../timeline';
+import Timeline from '../../components/timeline';
 import ScrollableList from '../../components/scrollable_list';
 
 const getNotifications = createSelector([

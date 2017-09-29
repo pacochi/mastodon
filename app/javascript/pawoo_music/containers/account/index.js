@@ -1,4 +1,4 @@
 import AccountContainer from './account';
-import './account.sass';
+import './account.scss';
 
 export default AccountContainer;

@@ -11,20 +11,25 @@ import { makeGetAccount } from '../../../mastodon/selectors';
 import AccountTimelineContainer from '../account_timeline';
 import AccountList from '../../components/account_list';
 
-const mapStateToProps = (state, props) => {
-  const acct = props.match.params.acct;
-  const accountId = Number(state.getIn(['pawoo_music', 'acct_map', acct]));
+const makeMapStateToProps = () => {
   const getAccount = makeGetAccount();
 
-  return {
-    accountId,
-    account: getAccount(state, accountId),
-    accountIds: state.getIn(['user_lists', 'following', accountId, 'items'], Immutable.List()),
-    hasMore: !!state.getIn(['user_lists', 'following', accountId, 'next']),
+  const mapStateToProps = (state, props) => {
+    const acct = props.match.params.acct;
+    const accountId = Number(state.getIn(['pawoo_music', 'acct_map', acct]));
+
+    return {
+      accountId,
+      account: getAccount(state, accountId),
+      accountIds: state.getIn(['user_lists', 'following', accountId, 'items'], Immutable.List()),
+      hasMore: !!state.getIn(['user_lists', 'following', accountId, 'next']),
+    };
   };
+
+  return mapStateToProps;
 };
 
-@connect(mapStateToProps)
+@connect(makeMapStateToProps)
 export default class AccountFollowing extends ImmutablePureComponent {
 
   static propTypes = {
@@ -70,6 +75,8 @@ export default class AccountFollowing extends ImmutablePureComponent {
           hasMore={hasMore}
           prepend={<AccountHeaderContainer account={account} />}
           onScrollToBottom={this.handleScrollToBottom}
+          withButton
+          withMedia
         />
       </div>
     );

@@ -66,6 +66,7 @@ export default class HomeTimeline extends PureComponent {
         loadMore={this.handleLoadMore}
         header={header}
         emptyMessage={emptyMessage}
+        withComposeForm
       />
     );
   }

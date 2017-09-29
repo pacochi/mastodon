@@ -1,0 +1,45 @@
+.account {
+  .info {
+    display: flex;
+
+    .account-link {
+      display:    block;
+      flex: 1;
+
+      text-overflow:  ellipsis;
+      white-space:    nowrap;
+      overflow:       hidden;
+
+      .display-name {
+        display:        block;
+        font-weight:    bold;
+
+        text-overflow:  ellipsis;
+        white-space:    nowrap;
+        overflow:       hidden;
+
+        color: var(--strong2);
+      }
+
+      .acct {
+        display:        block;
+        font-size:      9px;
+
+        text-overflow:  ellipsis;
+        white-space:    nowrap;
+        overflow:       hidden;
+      }
+
+      &:hover {
+        .display-name, .acct {
+          color: var(--strong1);
+        }
+      }
+    }
+  }
+
+
+  .media {
+    display: flex;
+  }
+}

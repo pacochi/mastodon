@@ -62,6 +62,7 @@ export default class PublicTimeline extends PureComponent {
         loadMore={this.handleLoadMore}
         header={header}
         emptyMessage={<FormattedMessage id='empty_column.public' defaultMessage='There is nothing here! Write something publicly, or manually follow users from other instances to fill it up' />}
+        withComposeForm
       />
     );
   }

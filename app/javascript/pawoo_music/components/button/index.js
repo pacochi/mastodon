@@ -1,4 +1,4 @@
 import Button from './button';
-import './button.sass';
+import './button.scss';
 
 export default Button;

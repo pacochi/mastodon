@@ -1,0 +1,10 @@
+.avatar {
+  display:        block;
+  overflow:       hidden;
+  margin:         0 calc(var(--grid) * 2) 0 0;
+
+  background-size: var(--iconsize30)  var(--iconsize30);
+  width:           var(--iconsize30);
+  height:          var(--iconsize30);
+  border-radius:   var(--radius);
+}

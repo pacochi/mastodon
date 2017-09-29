@@ -25,7 +25,7 @@ export default class VideoPlayer extends React.PureComponent {
   };
 
   static defaultProps = {
-    width: 239,
+    width: 'auto',
     height: 239,
   };
 

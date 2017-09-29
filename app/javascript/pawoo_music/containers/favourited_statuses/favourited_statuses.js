@@ -6,7 +6,7 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 import { debounce } from 'lodash';
 import { defineMessages, injectIntl } from 'react-intl';
 import { fetchFavouritedStatuses, expandFavouritedStatuses } from '../../../mastodon/actions/favourites';
-import Timeline from '../timeline';
+import Timeline from '../../components/timeline';
 import StatusList from '../../components/status_list';
 import TimelineHeader from '../../components/timeline_header';
 
