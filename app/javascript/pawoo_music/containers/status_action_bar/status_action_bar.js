@@ -214,8 +214,9 @@ export default class StatusActionBar extends ImmutablePureComponent {
     const mutingConversation = status.get('muted');
 
     let menu = [];
-    let reblogIcon = 'retweet';
-    let replyIcon;
+    // TODO: アイコンの設定
+    // let reblogIcon = 'retweet';
+    // let replyIcon;
     let replyTitle;
 
     menu.push({ text: intl.formatMessage(messages.open), to: `/@${status.getIn(['account', 'acct'])}/${status.get('id')}` });
@@ -245,16 +246,16 @@ export default class StatusActionBar extends ImmutablePureComponent {
     }
 
     if (status.get('visibility') === 'direct') {
-      reblogIcon = 'envelope';
+      // reblogIcon = 'envelope';
     } else if (status.get('visibility') === 'private') {
-      reblogIcon = 'lock';
+      // reblogIcon = 'lock';
     }
 
     if (status.get('in_reply_to_id', null) === null) {
-      replyIcon = 'reply';
+      // replyIcon = 'reply';
       replyTitle = intl.formatMessage(messages.reply);
     } else {
-      replyIcon = 'reply-all';
+      // replyIcon = 'reply-all';
       replyTitle = intl.formatMessage(messages.replyAll);
     }
 
