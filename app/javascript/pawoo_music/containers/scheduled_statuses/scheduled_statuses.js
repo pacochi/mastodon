@@ -21,6 +21,14 @@ export default class ScheduledStatuses extends ImmutablePureComponent {
     loaded: PropTypes.bool,
   };
 
+  static childContextTypes = {
+    schedule: PropTypes.bool,
+  };
+
+  getChildContext() {
+    return { schedule: true };
+  }
+
   componentWillMount () {
     this.props.dispatch(fetchScheduledStatuses());
   }
@@ -33,7 +41,7 @@ export default class ScheduledStatuses extends ImmutablePureComponent {
     const { loaded } = this.props;
 
     return loaded ?
-            (<StatusList {...this.props} scrollKey='scheduledStatuses' standalone={false} schedule onScrollToBottom={this.handleScrollToBottom} />) :
+            (<StatusList {...this.props} scrollKey='scheduledStatuses' onScrollToBottom={this.handleScrollToBottom} />) :
             (<LoadingIndicator />);
   }
 

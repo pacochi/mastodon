@@ -4,14 +4,14 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
-import { FormattedMessage } from 'react-intl';
+import { FormattedDate, FormattedNumber } from 'react-intl';
 import { makeGetStatus } from '../../../mastodon/selectors';
 import Timestamp from '../../../mastodon/components/timestamp';
 import StatusContent from '../../../mastodon/components/status_content';
 import StatusActionBar from '../status_action_bar';
 import AccountContainer from '../account';
-import DisplayName from '../../components/display_name';
 import StatusMedia from '../status_media';
+import Link from '../../components/link_wrapper';
 
 const makeMapStateToProps = () => {
   const getStatus = makeGetStatus();
@@ -28,12 +28,10 @@ const makeMapStateToProps = () => {
 };
 
 @connect(makeMapStateToProps)
-export default class Status extends ImmutablePureComponent {
+export default class DetailedStatus extends ImmutablePureComponent {
 
   static contextTypes = {
     router: PropTypes.object,
-    displayPinned: PropTypes.bool,
-    schedule: PropTypes.bool,
   };
 
   static propTypes = {
@@ -61,55 +59,60 @@ export default class Status extends ImmutablePureComponent {
   }
 
   render () {
-    const { muted } = this.props;
+    const { status, muted } = this.props;
     const { isExpanded } = this.state;
-    const { displayPinned, schedule } = this.context;
-    let { status } = this.props;
-    let prepend = null;
+    let applicationLink = null;
 
     if (!status) {
       return null;
     }
 
-    if (status.get('reblog', null) !== null && typeof status.get('reblog') === 'object') {
-      const name = (
-        <a
-          onClick={this.handleAccountClick}
-          data-id={status.getIn(['account', 'id'])}
-          href={status.getIn(['account', 'url'])}
-        >
-          <DisplayName account={status.get('account')} />
-        </a>
-      );
+    if (status.get('application')) {
+      const website = status.getIn(['application', 'website']);
+      const name = status.getIn(['application', 'name']);
 
-      prepend = (
-        <div className='prepend-inline'>
-          <i className='fa fa-fw fa-retweet status__prepend-icon' />
-          <FormattedMessage id='status.reblogged_by' defaultMessage='{name} boosted' values={{ name }} />
-        </div>
-      );
-      status = status.get('reblog');
-    } else if (displayPinned && status.get('pinned')) {
-      prepend = (
-        <div className='prepend-inline'>
-          <i className='fa fa-fw fa-thumb-tack' />
-          <FormattedMessage id='status.pinned' defaultMessage='Pinned Toot' className='status__display-name muted' />
-        </div>
+      applicationLink = (
+        <span>
+          {' · '}
+          {website ? (
+            <a className='application' href={website} target='_blank' rel='noopener'>
+              {name}
+            </a>
+          ) : (
+            name
+          )}
+        </span>
       );
     }
 
     return (
-      <div className={classNames('status', { muted }, `status-${status.get('visibility')}`)} data-id={status.get('id')}>
-        {prepend}
+      <div className={classNames('detailed-status', { muted }, `status-${status.get('visibility')}`)} data-id={status.get('id')}>
         <div className='status-head'>
           <AccountContainer account={status.get('account')} />
           <a href={status.get('url')} className='status-time' target='_blank' rel='noopener'>
-            <Timestamp schedule={schedule} timestamp={status.get('created_at')} />
+            <Timestamp timestamp={status.get('created_at')} />
           </a>
         </div>
+
+        <StatusMedia status={status} detail />
         <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} />
 
-        <StatusMedia status={status} />
+        <div className='meta'>
+          <a className='absolute-time' href={status.get('url')} target='_blank' rel='noopener'>
+            <FormattedDate value={new Date(status.get('created_at'))} hour12={false} year='numeric' month='short' day='2-digit' hour='2-digit' minute='2-digit' />
+          </a>
+          {applicationLink}
+          {' · '}
+          <Link to={`/@${status.getIn(['account', 'acct'])}/${status.get('id')}/reblogs`}>
+            <i className='fa fa-retweet' />
+            <FormattedNumber value={status.get('reblogs_count')} />
+          </Link>
+          {' · '}
+          <Link to={`/@${status.getIn(['account', 'acct'])}/${status.get('id')}/favourites`}>
+            <i className='fa fa-star' />
+            <FormattedNumber value={status.get('favourites_count')} />
+          </Link>
+        </div>
 
         <StatusActionBar status={status} />
       </div>

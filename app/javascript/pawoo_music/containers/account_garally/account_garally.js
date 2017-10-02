@@ -6,27 +6,38 @@ import { connect } from 'react-redux';
 import { debounce } from 'lodash';
 import { fetchAccount } from '../../../mastodon/actions/accounts';
 import { refreshAccountTimeline, expandAccountTimeline, refreshPinnedStatusTimeline } from '../../../mastodon/actions/timelines';
-import ScrollableList from '../../components/status_list';
-import Timeline from '../../components/timeline';
+import AccountHeaderContainer from '../account_header';
+import AccountTimelineContainer from '../account_timeline';
+import StatusList from '../../components/status_list';
+import { makeGetAccount } from '../../../mastodon/selectors';
 
-const mapStateToProps = (state, props) => {
-  const { accountId } = props;
+const makeMapStateToProps = () => {
+  const getAccount = makeGetAccount();
 
-  return {
-    accountId,
-    statusIds: state.getIn(['timelines', `account:${accountId}`, 'items'], Immutable.List()),
-    isLoading: state.getIn(['timelines', `account:${accountId}`, 'isLoading']),
-    hasMore: !!state.getIn(['timelines', `account:${accountId}`, 'next']),
-    pinnedStatusIds: state.getIn(['timelines', `account:${accountId}:pinned_status`, 'items'], Immutable.List()),
+  const mapStateToProps = (state, props) => {
+    const acct = props.match.params.acct;
+    const accountId = Number(state.getIn(['pawoo_music', 'acct_map', acct]));
+
+    return {
+      accountId,
+      account: getAccount(state, accountId),
+      statusIds: state.getIn(['timelines', `account:${accountId}`, 'items'], Immutable.List()),
+      isLoading: state.getIn(['timelines', `account:${accountId}`, 'isLoading']),
+      hasMore: !!state.getIn(['timelines', `account:${accountId}`, 'next']),
+      pinnedStatusIds: state.getIn(['timelines', `account:${accountId}:pinned_status`, 'items'], Immutable.List()),
+    };
   };
+
+  return mapStateToProps;
 };
 
-@connect(mapStateToProps)
-export default class AccountTimeline extends PureComponent {
+@connect(makeMapStateToProps)
+export default class AccountGarally extends PureComponent {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
     accountId: PropTypes.number.isRequired,
+    account: ImmutablePropTypes.map.isRequired,
     statusIds: ImmutablePropTypes.list.isRequired,
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
@@ -70,22 +81,25 @@ export default class AccountTimeline extends PureComponent {
   }, 300, { leading: true })
 
   render () {
-    const { statusIds, pinnedStatusIds, isLoading, hasMore, garally } = this.props;
-    const header = null;
-    const prepend = null;
+    const { accountId, account, statusIds, pinnedStatusIds, isLoading, hasMore } = this.props;
     const uniqueStatusIds = pinnedStatusIds.concat(statusIds).toOrderedSet().toList();
 
-    return (
-      <Timeline garally={garally} header={header}>
-        <ScrollableList
-          scrollKey='account_timeline'
+    const Garally = (
+      <div className='garally'>
+        <StatusList
+          scrollKey='account_garally'
           statusIds={uniqueStatusIds}
-          isLoading={isLoading}
           hasMore={hasMore}
-          prepend={prepend}
+          isLoading={isLoading}
+          detail
+          prepend={<AccountHeaderContainer account={account} />}
           onScrollToBottom={this.handleScrollToBottom}
         />
-      </Timeline>
+      </div>
+    );
+
+    return (
+      <AccountTimelineContainer accountId={accountId} garally={Garally} />
     );
   }
 

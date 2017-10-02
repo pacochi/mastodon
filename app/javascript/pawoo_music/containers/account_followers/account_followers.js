@@ -66,7 +66,7 @@ export default class AccountFollowers extends ImmutablePureComponent {
   }, 300, { leading: true });
 
   render () {
-    const { account, accountIds, hasMore } = this.props;
+    const { accountId, account, accountIds, hasMore } = this.props;
 
     const Garally = (
       <div className='garally'>
@@ -81,7 +81,7 @@ export default class AccountFollowers extends ImmutablePureComponent {
     );
 
     return (
-      <AccountTimelineContainer garally={Garally} {...this.props} />
+      <AccountTimelineContainer accountId={accountId} garally={Garally} />
     );
   }
 

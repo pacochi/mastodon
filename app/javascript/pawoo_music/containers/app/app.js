@@ -11,7 +11,7 @@ import NotificationListContainer from '../notification_list';
 import CommunityTimelineContainer from '../community_timeline';
 import PublicTimelineContainer from '../public_timeline';
 import HashtagTimelineContainer from '../hashtag_timeline';
-import AccountTimelineContainer from '../account_timeline';
+import AccountGarallyContainer from '../account_garally';
 import FavouritedStatusesContainer from '../favourited_statuses';
 import Intent from '../../components/intent';
 import MusicPlayer from '../../components/dummy';
@@ -81,7 +81,7 @@ export default class App extends PureComponent {
             <Route path='/timelines/public' exact component={PublicTimelineContainer} />
             <Route path='/tags/:id' exact component={HashtagTimelineContainer} />
             <Route path='/favourites' component={FavouritedStatusesContainer} />
-            <Route path='/@:acct' exact component={AccountTimelineContainer} />
+            <Route path='/@:acct' exact component={AccountGarallyContainer} />
             <Route path='/@:acct/:id' exact component={StatusThreadContainer} />
             <Route path='/users/:acct/followers' exact component={AccountFollowersContainer} />
             <Route path='/users/:acct/following' exact component={AccountFollowingContainer} />

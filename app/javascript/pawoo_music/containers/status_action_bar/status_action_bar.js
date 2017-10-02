@@ -77,12 +77,12 @@ export default class StatusActionBar extends ImmutablePureComponent {
 
   static contextTypes = {
     router: PropTypes.object,
+    schedule: PropTypes.bool,
   };
 
   static propTypes = {
     status: ImmutablePropTypes.map.isRequired,
     me: PropTypes.number,
-    schedule: PropTypes.bool,
     withDismiss: PropTypes.bool,
     boostModal: PropTypes.bool,
     deleteModal: PropTypes.bool,
@@ -208,7 +208,8 @@ export default class StatusActionBar extends ImmutablePureComponent {
   }
 
   render () {
-    const { status, me, intl, schedule, withDismiss } = this.props;
+    const { status, me, intl, withDismiss } = this.props;
+    const { schedule } = this.context;
     const favouriteDisabled = schedule;
     const reblogDisabled = status.get('visibility') === 'private' || status.get('visibility') === 'direct' || schedule;
     const mutingConversation = status.get('muted');
