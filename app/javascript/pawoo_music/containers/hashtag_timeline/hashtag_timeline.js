@@ -104,6 +104,7 @@ export default class HashtagTimeline extends PureComponent {
         loadMore={this.handleLoadMore}
         header={header}
         emptyMessage={<FormattedMessage id='empty_column.hashtag' defaultMessage='There is nothing in this hashtag yet.' />}
+        withComposeForm
       />
     );
   }

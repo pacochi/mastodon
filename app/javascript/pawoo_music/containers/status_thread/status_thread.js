@@ -9,33 +9,38 @@ import { fetchStatus } from '../../../mastodon/actions/statuses';
 import { fetchAccount, fetchFollowers, expandFollowers } from '../../../mastodon/actions/accounts';
 import AccountHeaderContainer from '../account_header';
 import { makeGetAccount, makeGetStatus } from '../../../mastodon/selectors';
-import StatusContainer from '../../../mastodon/containers/status_container';
+import StatusContainer from '../..//containers/status';
 import DetailedStatus from '../../../mastodon/features/status/components/detailed_status';
 import ActionBar from '../../../mastodon/features/status/components/action_bar';
 import AccountTimelineContainer from '../account_timeline';
 
-const mapStateToProps = (state, props) => {
-  const acct = props.match.params.acct;
-  const statusId = Number(props.match.params.id);
-  const accountId = Number(state.getIn(['acct_map', acct]));
+const makeMapStateToProps = () => {
   const getAccount = makeGetAccount();
   const getStatus = makeGetStatus();
 
-  return {
-    accountId,
-    statusId,
-    account: getAccount(state, accountId),
-    status: getStatus(state, statusId),
-    ancestorsIds: state.getIn(['contexts', 'ancestors', statusId]),
-    descendantsIds: state.getIn(['contexts', 'descendants', statusId]),
-    me: state.getIn(['meta', 'me']),
-    boostModal: state.getIn(['meta', 'boost_modal']),
-    deleteModal: state.getIn(['meta', 'delete_modal']),
-    autoPlayGif: state.getIn(['meta', 'auto_play_gif']),
+  const mapStateToProps = (state, props) => {
+    const acct = props.match.params.acct;
+    const statusId = Number(props.match.params.id);
+    const accountId = Number(state.getIn(['pawoo_music', 'acct_map', acct]));
+
+    return {
+      accountId,
+      statusId,
+      account: getAccount(state, accountId),
+      status: getStatus(state, statusId),
+      ancestorsIds: state.getIn(['contexts', 'ancestors', statusId]),
+      descendantsIds: state.getIn(['contexts', 'descendants', statusId]),
+      me: state.getIn(['meta', 'me']),
+      boostModal: state.getIn(['meta', 'boost_modal']),
+      deleteModal: state.getIn(['meta', 'delete_modal']),
+      autoPlayGif: state.getIn(['meta', 'auto_play_gif']),
+    };
   };
+
+  return mapStateToProps;
 };
 
-@connect(mapStateToProps)
+@connect(makeMapStateToProps)
 export default class StatusThread extends ImmutablePureComponent {
 
   static propTypes = {

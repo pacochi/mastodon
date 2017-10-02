@@ -1,0 +1,40 @@
+.status {
+  display:    block;
+  text-align: left;
+
+  padding:    var(--padding20);
+  margin:     var(--verticalspace10);
+
+  border-radius:      var(--radius);
+  background-color:   var(--color1);
+
+  color:          var(--textcolor);
+  font-size:      var(--text30-font);
+  line-height:    var(--text30-line);
+
+  .prepend-inline {
+    .display-name {
+      display: inline;
+    }
+  }
+
+  .status-head {
+    display: flex;
+
+    .status-time {
+      flex: 1;
+      margin-left: auto;
+      white-space: nowrap;
+
+      display:    block;
+      font-size:  9px;
+      text-align: right;
+    }
+  }
+
+  .status__content {
+    display:    block;
+    margin:     var(--verticalspace10);
+    text-align: justify;
+  }
+}

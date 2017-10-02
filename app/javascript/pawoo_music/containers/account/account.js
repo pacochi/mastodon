@@ -12,26 +12,38 @@ import { makeGetAccount } from '../../../mastodon/selectors';
 import { openModal } from '../../../mastodon/actions/modal';
 import { followAccount, unfollowAccount } from '../../../mastodon/actions/accounts';
 
-const mapStateToProps = (state, props) => {
-  const { id, account } = props;
+const makeMapStateToProps = () => {
   const getAccount = makeGetAccount();
 
-  return {
-    account: account || getAccount(state, id),
-    me: state.getIn(['meta', 'me']),
-    autoPlayGif: state.getIn(['meta', 'auto_play_gif']),
+  const mapStateToProps = (state, props) => {
+    const { id, account } = props;
+
+    return {
+      account: account || getAccount(state, id),
+      me: state.getIn(['meta', 'me']),
+      autoPlayGif: state.getIn(['meta', 'auto_play_gif']),
+    };
   };
+
+  return mapStateToProps;
 };
 
-@connect(mapStateToProps)
+@connect(makeMapStateToProps)
 export default class Account extends ImmutablePureComponent {
 
   static propTypes = {
     account: ImmutablePropTypes.map,
     me: PropTypes.number,
     autoPlayGif: PropTypes.bool,
+    withButton: PropTypes.bool,
+    withMedia: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
   };
+
+  static defaultProps = {
+    withButton: false,
+    withMedia: false,
+  }
 
   handleFollow = (account) => {
     const { dispatch } = this.props;
@@ -56,7 +68,7 @@ export default class Account extends ImmutablePureComponent {
   }
 
   render () {
-    const { account, me, autoPlayGif } = this.props;
+    const { account, me, autoPlayGif, withButton, withMedia } = this.props;
 
     if (!account) {
       return null;
@@ -64,7 +76,7 @@ export default class Account extends ImmutablePureComponent {
 
     const lockedIcon = account.get('locked') && <i className='fa fa-lock' />;
     const attachments = account.get('media_attachments');
-    const media = (attachments && attachments.size > 0) && (
+    const media = (withMedia && attachments && attachments.size > 0) && (
       <div className='media'>
         {attachments.filter((attachment) => attachment.get('type') !== 'unknown').map((attachment, index) => {
           const width = (100 - (attachments.size - 1)) / attachments.size;
@@ -99,10 +111,10 @@ export default class Account extends ImmutablePureComponent {
           <Avatar className='thumb' account={account} autoPlayGif={autoPlayGif} />
           <Link className='account-link' to={`/@${account.get('acct')}`}>
             <DisplayName account={account} />
-            <span className='username'>@{account.get('acct')} {lockedIcon}</span>
+            <span className='acct'>@{account.get('acct')} {lockedIcon}</span>
           </Link>
 
-          <FollowButton me={me} account={account} onFollow={this.handleFollow} />
+          {withButton && <FollowButton me={me} account={account} onFollow={this.handleFollow} />}
         </div>
 
         {media}

@@ -1,4 +1,4 @@
 import Avatar from './avatar';
-import './avatar.sass';
+import './avatar.scss';
 
 export default Avatar;

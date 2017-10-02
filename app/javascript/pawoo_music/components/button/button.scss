@@ -1,0 +1,25 @@
+.button, a.button:visited, a.button:link  {
+  border: 1px solid var(--strong1);
+
+  color:           var(--strong1);
+  font-size:       var(--text30-font);
+  line-height:     var(--text30-line);
+  text-decoration: none;
+
+  border-radius:    var(--radius);
+  background-color: var(--color1);
+
+  &.fit-width {
+    width: calc(100% - (1px * 2));
+  }
+
+  &:hover {
+    color:              var(--color1 );
+    background-color:   var(--strong1);
+    transition:         var(--hover-transition);
+  }
+}
+
+a.button {
+  padding: 4px 0;
+}

@@ -6,9 +6,11 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { createSelector } from 'reselect';
 import { debounce } from 'lodash';
-import TimelineContainer from '../timeline';
+import Timeline from '../../components/timeline';
 import StatusList from '../../components/status_list';
 import { scrollTopTimeline } from '../../../mastodon/actions/timelines';
+import { mountCompose, unmountCompose } from '../../../mastodon/actions/compose';
+import ComposeFormContainer from '../../../mastodon/features/compose/containers/compose_form_container';
 
 const makeGetStatusIds = () => createSelector([
   (state, { type }) => state.getIn(['settings', type], Immutable.Map()),
@@ -57,50 +59,75 @@ const makeMapStateToProps = () => {
     statusIds: getStatusIds(state, { type: timelineId }),
     isLoading: state.getIn(['timelines', timelineId, 'isLoading'], true),
     hasMore: !!state.getIn(['timelines', timelineId, 'next']),
+    isLogin: !!state.getIn(['meta', 'me']),
   });
 
   return mapStateToProps;
 };
 
-const mapDispatchToProps = (dispatch, { timelineId, loadMore }) => ({
-
-  onScrollToBottom: debounce(() => {
-    dispatch(scrollTopTimeline(timelineId, false));
-    loadMore();
-  }, 300, { leading: true }),
-
-  onScrollToTop: debounce(() => {
-    dispatch(scrollTopTimeline(timelineId, true));
-  }, 100),
-
-  onScroll: debounce(() => {
-    dispatch(scrollTopTimeline(timelineId, false));
-  }, 100),
-
-});
-
-@connect(makeMapStateToProps, mapDispatchToProps)
+@connect(makeMapStateToProps)
 export default class StatusTimeline extends ImmutablePureComponent {
 
   static propTypes = {
     timelineId: PropTypes.string.isRequired,
     statusIds: ImmutablePropTypes.list.isRequired,
-    onScrollToBottom: PropTypes.func,
-    onScrollToTop: PropTypes.func,
-    onScroll: PropTypes.func,
+    loadMore: PropTypes.func,
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
-    prepend: PropTypes.node,
     emptyMessage: PropTypes.node,
     withComposeForm: PropTypes.bool,
+    isLogin: PropTypes.bool.isRequired,
+    dispatch: PropTypes.func.isRequired,
   }
 
   static defaultProps = {
-    withComposeForm: true,
+    withComposeForm: false,
   }
 
+  componentDidMount () {
+    const { dispatch, withComposeForm } = this.props;
+    if (withComposeForm) {
+      dispatch(mountCompose());
+    }
+  }
+
+  componentDidUpdate (prevProps) {
+    const { dispatch, withComposeForm } = this.props;
+
+    if (prevProps.withComposeForm !== withComposeForm) {
+      if (withComposeForm) {
+        dispatch(mountCompose());
+      } else {
+        dispatch(unmountCompose());
+      }
+    }
+  }
+
+  componentWillUnmount () {
+    const { dispatch } = this.props;
+    dispatch(unmountCompose());
+  }
+
+  handleScrollToBottom = debounce(() => {
+    const { dispatch, timelineId, loadMore } = this.props;
+    dispatch(scrollTopTimeline(timelineId, false));
+    if (loadMore) {
+      loadMore();
+    }
+  }, 300, { leading: true })
+
+  handleScrollToTop = debounce(() => {
+    const { dispatch, timelineId } = this.props;
+    dispatch(scrollTopTimeline(timelineId, true));
+  }, 100)
+
+  handleScroll = debounce(() => {
+    const { dispatch, timelineId } = this.props;
+    dispatch(scrollTopTimeline(timelineId, false));
+  }, 100)
+
   render () {
-    const { timelineId, withComposeForm, ...other } = this.props;
+    const { timelineId, withComposeForm, isLogin, ...other } = this.props;
 
     const Garally = (
       <div>
@@ -108,10 +135,19 @@ export default class StatusTimeline extends ImmutablePureComponent {
       </div>
     );
 
+    const prepend = withComposeForm && isLogin && <ComposeFormContainer />;
+
     return (
-      <TimelineContainer garally={Garally} withComposeForm={withComposeForm}>
-        <StatusList scrollKey={`${timelineId}_timeline`} {...other} />
-      </TimelineContainer>
+      <Timeline garally={Garally}>
+        <StatusList
+          scrollKey={`${timelineId}_timeline`}
+          prepend={prepend}
+          onScrollToBottom={this.handleScrollToBottom}
+          onScrollToTop={this.handleScrollToTop}
+          onScroll={this.handleScroll}
+          {...other}
+        />
+      </Timeline>
     );
   }
 

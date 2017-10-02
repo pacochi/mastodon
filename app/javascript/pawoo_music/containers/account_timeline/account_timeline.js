@@ -8,25 +8,30 @@ import { fetchAccount } from '../../../mastodon/actions/accounts';
 import { refreshAccountTimeline, expandAccountTimeline, refreshPinnedStatusTimeline } from '../../../mastodon/actions/timelines';
 import ScrollableList from '../../components/status_list';
 import AccountHeaderContainer from '../account_header';
-import TimelineContainer from '../timeline';
+import Timeline from '../../components/timeline';
 import { makeGetAccount } from '../../../mastodon/selectors';
 
-const mapStateToProps = (state, props) => {
-  const acct = props.match.params.acct;
-  const accountId = Number(state.getIn(['pawoo_music', 'acct_map', acct]));
+const makeMapStateToProps = () => {
   const getAccount = makeGetAccount();
 
-  return {
-    accountId,
-    account: getAccount(state, accountId),
-    statusIds: state.getIn(['timelines', `account:${accountId}`, 'items'], Immutable.List()),
-    isLoading: state.getIn(['timelines', `account:${accountId}`, 'isLoading']),
-    hasMore: !!state.getIn(['timelines', `account:${accountId}`, 'next']),
-    pinnedStatusIds: state.getIn(['timelines', `account:${accountId}:pinned_status`, 'items'], Immutable.List()),
+  const mapStateToProps = (state, props) => {
+    const acct = props.match.params.acct;
+    const accountId = Number(state.getIn(['pawoo_music', 'acct_map', acct]));
+
+    return {
+      accountId,
+      account: getAccount(state, accountId),
+      statusIds: state.getIn(['timelines', `account:${accountId}`, 'items'], Immutable.List()),
+      isLoading: state.getIn(['timelines', `account:${accountId}`, 'isLoading']),
+      hasMore: !!state.getIn(['timelines', `account:${accountId}`, 'next']),
+      pinnedStatusIds: state.getIn(['timelines', `account:${accountId}:pinned_status`, 'items'], Immutable.List()),
+    };
   };
+
+  return mapStateToProps;
 };
 
-@connect(mapStateToProps)
+@connect(makeMapStateToProps)
 export default class AccountTimeline extends PureComponent {
 
   static propTypes = {
@@ -90,7 +95,7 @@ export default class AccountTimeline extends PureComponent {
     const uniqueStatusIds = pinnedStatusIds.concat(statusIds).toOrderedSet().toList();
 
     return (
-      <TimelineContainer garally={Garally} header={header} withComposeForm={false}>
+      <Timeline garally={Garally} header={header}>
         <ScrollableList
           scrollKey='account_timeline'
           statusIds={uniqueStatusIds}
@@ -99,7 +104,7 @@ export default class AccountTimeline extends PureComponent {
           prepend={prepend}
           onScrollToBottom={this.handleScrollToBottom}
         />
-      </TimelineContainer>
+      </Timeline>
     );
   }
 

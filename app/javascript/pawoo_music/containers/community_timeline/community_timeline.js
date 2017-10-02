@@ -62,6 +62,7 @@ export default class CommunityTimelineContainer extends PureComponent {
         loadMore={this.handleLoadMore}
         header={header}
         emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />}
+        withComposeForm
       />
     );
   }

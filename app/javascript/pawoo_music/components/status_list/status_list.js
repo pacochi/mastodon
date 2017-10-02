@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
-import StatusContainer from '../../../mastodon/containers/status_container';
+import StatusContainer from '../../containers/status';
 import ScrollableList from '../../components/scrollable_list';
 
 export default class StatusList extends ImmutablePureComponent {

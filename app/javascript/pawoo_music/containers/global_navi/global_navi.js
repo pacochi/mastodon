@@ -1,12 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { defineMessages, injectIntl } from 'react-intl';
-import SearchBox from '../../containers/search_box';
-import LoginBox from '../login_box';
-import EventCalendar from '../event_calendar';
-import TagHistoryContainer from '../../containers/tag_history';
-import TrendTagsContainer from '../../containers/trend_tags';
+import SearchBox from '..//search_box';
+import LoginBox from '../../components/login_box';
+import EventCalendar from '../../components/event_calendar';
+import TagHistoryContainer from '../tag_history';
+import TrendTagsContainer from '../trend_tags';
 import { isMobile } from '../../util/is_mobile';
 
 import logo from '../../../images/pawoo_music/logo.png';
@@ -26,7 +27,12 @@ const navLinkParams = [
 
 const filteredNavLinkParams = navLinkParams.filter(({ requireLogin }) => !requireLogin);
 
+const mapStateToProps = state => ({
+  isLogin: !!state.getIn(['meta', 'me']),
+});
+
 @injectIntl
+@connect(mapStateToProps)
 export default class GlobalNavi extends PureComponent {
 
   static propTypes = {
