@@ -69,8 +69,13 @@ export default class VideoPlayer extends React.PureComponent {
 
   handleExpand = (e) => {
     e.stopPropagation();
-    this.video.pause();
-    this.props.onOpenVideo(this.props.media, this.video.currentTime);
+    let time = 0;
+    if (this.video) {
+      this.video.pause();
+      time = this.video.currentTime;
+    }
+
+    this.props.onOpenVideo(this.props.media, time);
   }
 
   setRef = (c) => {
@@ -154,6 +159,7 @@ export default class VideoPlayer extends React.PureComponent {
         <div role='button' tabIndex='0' className='media-spoiler-video' style={{ width: `${width}px`, height: `${height}px`, backgroundImage: `url(${media.get('preview_url')})` }} onClick={this.handleOpen}>
           {spoilerButton}
           <div className='media-spoiler-video-play-icon'><i className='fa fa-play' /></div>
+          {expandButton}
         </div>
       );
     }
@@ -177,8 +183,8 @@ export default class VideoPlayer extends React.PureComponent {
     return (
       <div className={`status__video-player ${this.video && this.state.paused ? ' is-paused' : ''}`} style={{ width: `${width}px`, height: `${height}px` }} onClick={this.handleVideoClick}>
         {spoilerButton}
-        {expandButton}
         {videoOverlayElement}
+        {expandButton}
         <video
           className='status__video-player-video'
           role='button'
