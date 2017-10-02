@@ -21,9 +21,12 @@
   .status-head {
     display: flex;
 
-    .status-time {
+    .account {
       flex: 1;
-      margin-left: auto;
+    }
+
+    .status-time {
+      justify-content: flex-end;
       white-space: nowrap;
 
       display:    block;

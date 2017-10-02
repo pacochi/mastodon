@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import ScrollableList from '../scrollable_list';
-import AccountContainer from '../../containers/account';
+import DetailedAccountContainer from '../../containers/detailed_account';
 
 export default class AccountList extends ImmutablePureComponent {
 
@@ -16,18 +16,16 @@ export default class AccountList extends ImmutablePureComponent {
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
     prepend: PropTypes.node,
-    withButton: PropTypes.bool,
-    withMedia: PropTypes.bool,
     emptyMessage: PropTypes.node,
   };
 
   render () {
-    const { accountIds, withButton, withMedia, ...other } = this.props;
+    const { accountIds, ...other } = this.props;
     const { isLoading } = other;
 
     const scrollableContent = (isLoading || accountIds.size > 0) ? (
       accountIds.map((accountId) => (
-        <AccountContainer key={accountId} id={accountId} {...{ withButton, withMedia }} />
+        <DetailedAccountContainer key={accountId} id={accountId} />
       ))
     ) : (
       null

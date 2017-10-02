@@ -1,25 +1,57 @@
 .button, a.button:visited, a.button:link  {
-  border: 1px solid var(--strong1);
+  display: block;
 
-  color:           var(--strong1);
+  border-radius:   var(--radius);
   font-size:       var(--text30-font);
-  line-height:     var(--text30-line);
+  height:          28px;
+  line-height:     28px;
   text-decoration: none;
+  padding: 0 10px;
 
-  border-radius:    var(--radius);
-  background-color: var(--color1);
+  background-color:   var(--color1);
+  color:              var(--tootcolor);
+  border:             1px solid var(--tootcolor);
 
   &.fit-width {
-    width: calc(100% - (1px * 2));
+    width: calc(100% - (11px * 2));
+  }
+
+  &.red, &.confirmation-modal__cancel-button {
+    background-color: var(--color1);
+    color:            var(--strong1);
+    border: 1px solid var(--strong1);
+
+    &:hover {
+      color:              var(--color1 );
+      background-color:   var(--strong1);
+    }
   }
 
   &:hover {
-    color:              var(--color1 );
-    background-color:   var(--strong1);
+    background-color:   var(--tootcolor);
+    color:              var(--color1);
     transition:         var(--hover-transition);
   }
-}
 
-a.button {
-  padding: 4px 0;
+  &.follow {
+    background-color:   var(--color1);
+    color:              var(--tootcolor);
+    border:             1px solid var(--tootcolor);
+
+    &:hover {
+      background-color:   var(--tootcolor);
+      color:              var(--color1);
+    }
+  }
+
+  &.unfollow {
+    background-color:   var(--tootcolor);
+    color:              var(--color1);
+    border:             1px solid var(--tootcolor);
+
+    &:hover{
+      background-color:   var(--strong1);
+      border:             1px solid var(--strong1);
+    }
+  }
 }

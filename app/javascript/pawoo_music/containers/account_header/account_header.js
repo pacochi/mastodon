@@ -9,9 +9,11 @@ import { NavLink } from 'react-router-dom';
 import emojify from '../../../mastodon/emoji';
 import Avatar from '../../components/avatar';
 import DisplayName from '../../components/display_name';
-import Button from '../../components/button';
+import FollowButton from '../follow_button';
 import { followAccount, unfollowAccount } from '../../../mastodon/actions/accounts';
-import DropdownMenu from '../../../mastodon/components/dropdown_menu';
+import DropdownMenu from '../../components/dropdown_menu';
+
+import testicon from '../../../images/pawoo_music/testicon.png';
 
 const messages = defineMessages({
   mention: { id: 'account.mention', defaultMessage: 'Mention @{name}' },
@@ -103,48 +105,16 @@ export default class AccountHeader extends ImmutablePureComponent {
 
       if (provider === 'pixiv') {
         return (
-          <a key={provider} href={`https://www.pixiv.net/member.php?id=${oauth_authentication.get('uid')}`} target='_blank' rel='noopener'>
-            <div className='oauth-authentication pixiv' />
-          </a>
+          <li key={provider}>
+            <a href={`https://www.pixiv.net/member.php?id=${oauth_authentication.get('uid')}`} target='_blank' rel='noopener'>
+              <div className='oauth-authentication pixiv' />
+            </a>
+          </li>
         );
       }
 
       return <div key={provider} />;
     });
-  }
-
-  renderFollowButton () {
-    const { account, me } = this.props;
-
-    if (!me) {
-      return (
-        <Button href={`/users/${account.get('acct')}/remote_follow`}>
-          <FormattedMessage id='account.remote_follow' defaultMessage='Remote follow' />
-        </Button>
-      );
-    }
-
-    if (me !== account.get('id')) {
-      if (account.getIn(['relationship', 'requested'])) {
-        return (
-          <Button disabled>
-            <FormattedMessage id='account.requested' defaultMessage='Awaiting approval' />
-          </Button>
-        );
-      } else if (!account.getIn(['relationship', 'blocking'])) {
-        return (
-          <Button onClick={this.handleFollowClick}>
-            {account.getIn(['relationship', 'following']) ? (
-              <FormattedMessage id='account.unfollow' defaultMessage='Unfollow' />
-            ) : (
-              <FormattedMessage id='account.follow' defaultMessage='Follow' />
-            )}
-          </Button>
-        );
-      }
-    }
-
-    return null;
   }
 
   render () {
@@ -171,17 +141,17 @@ export default class AccountHeader extends ImmutablePureComponent {
     return (
       <div className='account-header'>
         <div className='content'>
-          <Avatar className='medium' account={account} autoPlayGif={autoPlayGif} />
+          <Avatar className='size50' account={account} autoPlayGif={autoPlayGif} />
           <div className='info'>
             <DisplayName account={account} />
-            <span className='username'>@{account.get('acct')} {lockedIcon}</span>
+            <span className='acct'>@{account.get('acct')} {lockedIcon}</span>
             {followed}
             <div className='note' dangerouslySetInnerHTML={note} />
             <div className='action-buttons'>
-              {this.renderFollowButton()}
-              <div className='oauth-authentications'>
+              <FollowButton me={me} account={account} onFollow={this.handleFollowClick} />
+              <ul className='oauth-authentications'>
                 {this.renderProviderIcons()}
-              </div>
+              </ul>
             </div>
           </div>
         </div>
@@ -197,7 +167,7 @@ export default class AccountHeader extends ImmutablePureComponent {
             <span><FormattedMessage id='account.follows' defaultMessage='Follows' /></span>
             <strong><FormattedNumber value={account.get('following_count')} /> {extraInfo}</strong>
           </NavLink>
-          {menu.length > 0 && <DropdownMenu items={menu} icon='bars' size={24} direction='right' />}
+          {menu.length > 0 && <DropdownMenu items={menu} src={testicon} />}
         </div>
 
       </div>

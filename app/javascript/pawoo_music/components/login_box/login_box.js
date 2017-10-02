@@ -8,9 +8,9 @@ export default class LoginBox extends PureComponent {
   render () {
     return (
       <div className='login-box'>
-        <Button className='fit-width' href='/auth/sign_up'>新規登録</Button>
+        <Button className='red fit-width' href='/auth/sign_up'>新規登録</Button>
         <div>または</div>
-        <Button className='fit-width' href='/auth/sign_in'>ログイン</Button>
+        <Button className='red fit-width' href='/auth/sign_in'>ログイン</Button>
       </div>
     );
   }

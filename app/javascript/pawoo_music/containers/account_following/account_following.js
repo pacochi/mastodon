@@ -59,8 +59,10 @@ export default class AccountFollowing extends ImmutablePureComponent {
   }
 
   handleScrollToBottom = debounce(() => {
-    const { dispatch, accountId } = this.props;
-    dispatch(expandFollowing(accountId));
+    const { dispatch, accountId, hasMore } = this.props;
+    if (hasMore) {
+      dispatch(expandFollowing(accountId));
+    }
   }, 300, { leading: true });
 
 
@@ -75,8 +77,6 @@ export default class AccountFollowing extends ImmutablePureComponent {
           hasMore={hasMore}
           prepend={<AccountHeaderContainer account={account} />}
           onScrollToBottom={this.handleScrollToBottom}
-          withButton
-          withMedia
         />
       </div>
     );

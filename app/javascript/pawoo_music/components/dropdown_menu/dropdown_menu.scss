@@ -14,13 +14,15 @@
     line-height:    var(--text20-line);
 
     box-shadow:     var(--shadow2);
+    font-weight:    normal;
+    text-align:     left;
+
 
     ul {
       display: block;
 
       li {
         display: block;
-        float:   none !important;
         margin:  var(--padding5);
 
         &.dropdown-sep {
