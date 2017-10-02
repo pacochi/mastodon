@@ -377,6 +377,19 @@ $button-icon-scale-ration-on-pc: 0.85;
   cursor: pointer;
 }
 
+.invisible {
+  font-size: 0;
+  line-height: 0;
+  display: inline-block;
+  width: 0;
+}
+
+.ellipsis {
+  &::after {
+    content: "…";
+  }
+}
+
 /* Media Gallery */
 .media-gallery {
   box-sizing: border-box;
