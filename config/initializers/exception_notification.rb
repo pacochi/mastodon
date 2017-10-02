@@ -20,6 +20,7 @@ ExceptionNotification.configure do |config|
     Pubsubhubbub::ConfirmationWorker
     Pubsubhubbub::DistributionWorker
     Pubsubhubbub::SubscribeWorker
+    ActivityPub::DeliveryWorker
     LinkCrawlWorker
   ].freeze
 
