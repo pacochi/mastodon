@@ -26,7 +26,7 @@ const makeMapStateToProps = () => {
 };
 
 @connect(makeMapStateToProps)
-export default class Account extends ImmutablePureComponent {
+export default class DetailedAccount extends ImmutablePureComponent {
 
   static propTypes = {
     account: ImmutablePropTypes.map,

@@ -1,18 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { connect } from 'react-redux';
-import { debounce } from 'lodash';
-import { ScrollContainer } from 'react-router-scroll';
 import { fetchStatus } from '../../../mastodon/actions/statuses';
-import { fetchAccount, fetchFollowers, expandFollowers } from '../../../mastodon/actions/accounts';
 import AccountHeaderContainer from '../account_header';
 import { makeGetAccount, makeGetStatus } from '../../../mastodon/selectors';
 import StatusContainer from '../..//containers/status';
-import DetailedStatus from '../../../mastodon/features/status/components/detailed_status';
-import ActionBar from '../../../mastodon/features/status/components/action_bar';
+import DetailedStatusContainer from '../detailed_status';
 import AccountTimelineContainer from '../account_timeline';
+import ScrollableList from '../../components/scrollable_list';
 
 const makeMapStateToProps = () => {
   const getAccount = makeGetAccount();
@@ -24,12 +22,12 @@ const makeMapStateToProps = () => {
     const accountId = Number(state.getIn(['pawoo_music', 'acct_map', acct]));
 
     return {
-      accountId,
       statusId,
+      accountId,
       account: getAccount(state, accountId),
       status: getStatus(state, statusId),
-      ancestorsIds: state.getIn(['contexts', 'ancestors', statusId]),
-      descendantsIds: state.getIn(['contexts', 'descendants', statusId]),
+      ancestorsIds: state.getIn(['contexts', 'ancestors', statusId], Immutable.List()),
+      descendantsIds: state.getIn(['contexts', 'descendants', statusId], Immutable.List()),
       me: state.getIn(['meta', 'me']),
       boostModal: state.getIn(['meta', 'boost_modal']),
       deleteModal: state.getIn(['meta', 'delete_modal']),
@@ -51,10 +49,6 @@ export default class StatusThread extends ImmutablePureComponent {
     status: ImmutablePropTypes.map,
     ancestorsIds: ImmutablePropTypes.list,
     descendantsIds: ImmutablePropTypes.list,
-    me: PropTypes.number,
-    boostModal: PropTypes.bool,
-    deleteModal: PropTypes.bool,
-    autoPlayGif: PropTypes.bool,
   };
 
   componentWillMount () {
@@ -62,82 +56,49 @@ export default class StatusThread extends ImmutablePureComponent {
 
 
   componentDidMount () {
-    const { dispatch, accountId, statusId } = this.props;
+    const { dispatch, statusId } = this.props;
 
-    dispatch(fetchAccount(accountId));
-    dispatch(fetchFollowers(accountId));
     dispatch(fetchStatus(statusId));
   }
 
   componentWillReceiveProps (nextProps) {
     const { dispatch } = this.props;
 
-    if (nextProps.accountId !== this.props.accountId && nextProps.accountId) {
-      const accountId = nextProps.accountId;
+    if (nextProps.statusId !== this.props.statusId && nextProps.statusId) {
+      const statusId = nextProps.statusId;
 
-      dispatch(fetchAccount(accountId));
-      dispatch(fetchFollowers(accountId));
+      dispatch(fetchStatus(statusId));
     }
   }
-
-  handleScrollToBottom = debounce(() => {
-    const { dispatch, accountId } = this.props;
-    dispatch(expandFollowers(accountId));
-  }, 300, { leading: true });
 
   renderChildren (list) {
     return list.map(id => <StatusContainer key={id} id={id} />);
   }
 
   render () {
-    const { status, account, ancestorsIds, descendantsIds, me, autoPlayGif } = this.props;
+    const { status, accountId, account, ancestorsIds, descendantsIds } = this.props;
 
     if (!status) {
       return null;
     }
 
-    const ancestors = (ancestorsIds && ancestorsIds.size > 0) && (
-      <div>{this.renderChildren(ancestorsIds)}</div>
-    );
-    const descendants = (descendantsIds && descendantsIds.size > 0) && (
-      <div>{this.renderChildren(descendantsIds)}</div>
-    );
+    const ancestors = this.renderChildren(ancestorsIds);
+    const descendants = this.renderChildren(descendantsIds);
+
+    const content = ancestors.push(
+      <DetailedStatusContainer key={status.get('id')} status={status} />
+    ).concat(descendants);
 
     const Garally = (
       <div className='garally'>
-        <ScrollContainer scrollKey='thread'>
-          <div className='scrollable'>
-            <AccountHeaderContainer account={account} />
-            {ancestors}
-
-            <DetailedStatus
-              status={status}
-              autoPlayGif={autoPlayGif}
-              me={me}
-              onOpenVideo={this.handleOpenVideo}
-              onOpenMedia={this.handleOpenMedia}
-            />
-
-            {/* TODO */}
-            <ActionBar
-              status={status}
-              me={me}
-              onReply={this.handleReplyClick}
-              onFavourite={this.handleFavouriteClick}
-              onReblog={this.handleReblogClick}
-              onDelete={this.handleDeleteClick}
-              onMention={this.handleMentionClick}
-              onReport={this.handleReport}
-            />
-
-            {descendants}
-          </div>
-        </ScrollContainer>
+        <ScrollableList scrollKey='thread' prepend={<AccountHeaderContainer account={account} />} >
+          {content}
+        </ScrollableList>
       </div>
     );
 
     return (
-      <AccountTimelineContainer garally={Garally} {...this.props} />
+      <AccountTimelineContainer accountId={accountId} garally={Garally} />
     );
   }
 

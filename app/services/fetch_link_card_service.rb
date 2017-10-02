@@ -86,10 +86,23 @@ class FetchLinkCardService < BaseService
     html = response.to_s
     page = Nokogiri::HTML(html, nil, NKF.guess(html).to_s)
 
-    card.type             = :link
+    if meta_property(page, 'twitter:player')
+      card.type   = :video
+      card.width  = meta_property(page, 'twitter:player:width') || 0
+      card.height = meta_property(page, 'twitter:player:height') || 0
+      card.html   = content_tag(:iframe, nil, src: meta_property(page, 'twitter:player'),
+                                               width: card.width,
+                                               height: card.height,
+                                               allowtransparency: 'true',
+                                               scrolling: 'no',
+                                               frameborder: '0')
+    else
+      card.type             = :link
+      card.image_remote_url = meta_property(page, 'og:image') if meta_property(page, 'og:image')
+    end
+
     card.title            = meta_property(page, 'og:title') || page.at_xpath('//title')&.content
     card.description      = meta_property(page, 'og:description') || meta_property(page, 'description')
-    card.image_remote_url = meta_property(page, 'og:image') if meta_property(page, 'og:image')
 
     return if card.title.blank?
 
