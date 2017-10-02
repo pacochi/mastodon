@@ -16,7 +16,7 @@ export default class VideoPlayer extends React.PureComponent {
 
   static propTypes = {
     media: ImmutablePropTypes.map.isRequired,
-    width: PropTypes.number,
+    width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     height: PropTypes.number,
     sensitive: PropTypes.bool,
     intl: PropTypes.object.isRequired,

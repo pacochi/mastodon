@@ -6,6 +6,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { FormattedMessage } from 'react-intl';
+import { openModal } from '../../../mastodon/actions/modal';
 import { makeGetStatus } from '../../../mastodon/selectors';
 import Timestamp from '../../../mastodon/components/timestamp';
 import StatusContent from '../../../mastodon/components/status_content';
@@ -24,7 +25,7 @@ const makeMapStateToProps = () => {
     return {
       status: status || getStatus(state, id),
       me: state.getIn(['meta', 'me']),
-      autoPlayGif: state.getIn(['meta', 'auto_play_gif']),
+      autoPlayGif: state.getIn(['meta', 'auto_play_gif']) || false,
     };
   };
 
@@ -41,23 +42,14 @@ export default class Status extends ImmutablePureComponent {
 
   static propTypes = {
     status: ImmutablePropTypes.map,
-    onReply: PropTypes.func,
-    onFavourite: PropTypes.func,
-    onReblog: PropTypes.func,
-    onDelete: PropTypes.func,
-    onOpenMedia: PropTypes.func,
-    onOpenVideo: PropTypes.func,
-    onBlock: PropTypes.func,
     me: PropTypes.number,
-    boostModal: PropTypes.bool,
     autoPlayGif: PropTypes.bool,
     muted: PropTypes.bool,
     expandMedia: PropTypes.bool,
     squareMedia: PropTypes.bool,
     schedule: PropTypes.bool,
-    onPin: PropTypes.func,
-    fetchBoothItem: PropTypes.func,
-    boothItem: ImmutablePropTypes.map,
+    // fetchBoothItem: PropTypes.func,
+    // boothItem: ImmutablePropTypes.map,
     dispatch: PropTypes.func.isRequired,
   };
 
@@ -76,6 +68,16 @@ export default class Status extends ImmutablePureComponent {
     }
 
     this.context.router.history.push(`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`);
+  }
+
+  handleOpenMedia = (media, index) => {
+    const { dispatch } = this.props;
+    dispatch(openModal('MEDIA', { media, index }));
+  }
+
+  handleOpenVideo = (media, time) => {
+    const { dispatch } = this.props;
+    dispatch(openModal('VIDEO', { media, time }));
   }
 
   render () {
@@ -135,9 +137,9 @@ export default class Status extends ImmutablePureComponent {
       if (attachments.some(item => item.get('type') === 'unknown')) {
 
       } else if (attachments.first().get('type') === 'video') {
-        media = <VideoPlayer media={attachments.first()} sensitive={status.get('sensitive')} onOpenVideo={this.props.onOpenVideo} />;
+        media = <VideoPlayer media={attachments.first()} sensitive={status.get('sensitive')} onOpenVideo={this.handleOpenVideo} />;
       } else {
-        media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={132} onOpenMedia={this.props.onOpenMedia} autoPlayGif={this.props.autoPlayGif} />;
+        media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={132} onOpenMedia={this.handleOpenMedia} autoPlayGif={this.props.autoPlayGif} />;
       }
     }
 

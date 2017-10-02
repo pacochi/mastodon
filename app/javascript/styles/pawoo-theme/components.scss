@@ -254,6 +254,54 @@ $button-icon-scale-ration-on-pc: 0.85;
   z-index: 9999;
 }
 
+.media-modal {
+  max-width: 80vw;
+  max-height: 80vh;
+  position: relative;
+
+  img,
+  canvas,
+  video {
+    max-width: 80vw;
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+  }
+
+  img,
+  canvas {
+    display: block;
+    background: url('../images/void.png') repeat;
+  }
+}
+
+.media-modal__close {
+  position: absolute;
+  right: 4px;
+  top: 4px;
+  z-index: 100;
+}
+
+.image-loader {
+  position: relative;
+
+  &.image-loader--loading {
+    .image-loader__preview-canvas {
+      filter: blur(2px);
+    }
+  }
+
+  .image-loader__img {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    width: 100%;
+    height: 100%;
+    background-image: none;
+  }
+}
+
 .load-more {
   width:      100%;
   display:    block;

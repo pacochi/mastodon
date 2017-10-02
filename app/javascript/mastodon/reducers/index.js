@@ -13,6 +13,7 @@ import media_attachments from './media_attachments';
 import relationships from './relationships';
 import search from './search';
 import notifications from './notifications';
+import height_cache from './height_cache';
 import settings from './settings';
 import status_lists from './status_lists';
 import cards from './cards';
@@ -39,6 +40,7 @@ export default combineReducers({
   relationships,
   search,
   notifications,
+  height_cache,
   settings,
   cards,
   reports,
