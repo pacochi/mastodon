@@ -3,12 +3,11 @@
 class Pubsubhubbub::DeliveryWorker
   include Sidekiq::Worker
   include RoutingHelper
-  using RequestShortTimeout
 
   sidekiq_options queue: 'push', retry: 3, dead: false
 
   sidekiq_retry_in do |count|
-    1.minute * (count + 1)
+    5 * (count + 1)
   end
 
   attr_reader :subscription, :payload
