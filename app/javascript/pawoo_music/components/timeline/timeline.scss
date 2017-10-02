@@ -35,6 +35,39 @@
 
     .garally {
       height: 100%;
+      display:    block;
+      text-align: center;
+
+      background-color:   var(--color1);
+
+      .scrollable {
+        .item-list {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          padding:    0 0 calc(var(--grid) * 4) 0;
+
+          article {
+            width:      var(--width-gallary);
+          }
+        }
+
+      }
+
+      h3 {
+        margin:         var(--verticalspace30);
+        border-top:     1px solid var(--color2);
+        padding:        var(--verticalspace30);
+        font-size:      var(--text40-font);
+        line-height:    var(--text40-line);
+        font-weight:    bold;
+      }
+
+      // user ページ用。 background-imageをはめたときにいい感じにする
+      background-position:    center center;
+      background-attachment:  fixed;
+      background-size:        cover;
+      background-repeat:      no-repeat;
     }
   }
 }

@@ -1,48 +1,41 @@
 .account {
   max-width: 100%;
   overflow: hidden;
+  display: flex;
 
-  .info {
-    display: flex;
+  .account-link {
+    display:    block;
+    flex: 1;
+    text-align: left;
 
-    .account-link {
-      display:    block;
-      flex: 1;
+    text-overflow:  ellipsis;
+    white-space:    nowrap;
+    overflow:       hidden;
+
+    .display-name {
+      display:        block;
+      font-weight:    bold;
 
       text-overflow:  ellipsis;
       white-space:    nowrap;
       overflow:       hidden;
 
-      .display-name {
-        display:        block;
-        font-weight:    bold;
+      color: var(--strong2);
+    }
 
-        text-overflow:  ellipsis;
-        white-space:    nowrap;
-        overflow:       hidden;
+    .acct {
+      display:        block;
+      font-size:      9px;
 
-        color: var(--strong2);
-      }
+      text-overflow:  ellipsis;
+      white-space:    nowrap;
+      overflow:       hidden;
+    }
 
-      .acct {
-        display:        block;
-        font-size:      9px;
-
-        text-overflow:  ellipsis;
-        white-space:    nowrap;
-        overflow:       hidden;
-      }
-
-      &:hover {
-        .display-name, .acct {
-          color: var(--strong1);
-        }
+    &:hover {
+      .display-name, .acct {
+        color: var(--strong1);
       }
     }
-  }
-
-
-  .media {
-    display: flex;
   }
 }

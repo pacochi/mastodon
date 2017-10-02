@@ -6,5 +6,12 @@
   background-size: var(--iconsize30)  var(--iconsize30);
   width:           var(--iconsize30);
   height:          var(--iconsize30);
-  border-radius:   var(--radius);
+  border-radius:   var(--iconsize30);
+
+  &.size50 {
+    background-size: var(--iconsize50)  var(--iconsize50);
+    width:           var(--iconsize50);
+    height:          var(--iconsize50);
+    border-radius:   var(--iconsize50);
+  }
 }

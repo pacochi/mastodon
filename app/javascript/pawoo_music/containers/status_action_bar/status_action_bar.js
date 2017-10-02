@@ -263,14 +263,12 @@ export default class StatusActionBar extends ImmutablePureComponent {
     const favouriteTitle = favouriteDisabled ? intl.formatMessage(messages.cannot_favourite) : intl.formatMessage(messages.favourite);
 
     return (
-      <div className='status-action-bar'>
-        <ul>
-          <li><IconButton title={replyTitle} src={testicon} onClick={this.handleReplyClick} /></li>
-          <li><IconButton title={reblogTitle} src={testicon} onClick={this.handleReblogClick} disabled={reblogDisabled} active={status.get('reblogged')} /></li>
-          <li><IconButton title={favouriteTitle} src={testicon} onClick={this.handleFavouriteClick} disabled={favouriteDisabled} active={status.get('favourited')} /></li>
-          <li><DropdownMenu items={menu} src={testicon} /></li>
-        </ul>
-      </div>
+      <ul className='status-action-bar'>
+        <li><IconButton title={replyTitle} src={testicon} onClick={this.handleReplyClick} /></li>
+        <li><IconButton title={reblogTitle} src={testicon} onClick={this.handleReblogClick} disabled={reblogDisabled} active={status.get('reblogged')} /></li>
+        <li><IconButton title={favouriteTitle} src={testicon} onClick={this.handleFavouriteClick} disabled={favouriteDisabled} active={status.get('favourited')} /></li>
+        <li><DropdownMenu items={menu} src={testicon} /></li>
+      </ul>
     );
   }
 
