@@ -1,6 +1,8 @@
 plugins:
   postcss-smart-import: {}
-  precss: {}
+  precss:
+    properties:
+      disable: true # use CSS Variables
   autoprefixer:
     browsers:
       - last 2 versions
