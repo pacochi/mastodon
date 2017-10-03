@@ -1,46 +1,35 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import { refreshHashtagTimeline, expandHashtagTimeline } from '../../../mastodon/actions/timelines';
-import { addColumn, removeColumn } from '../../../mastodon/actions/columns';
 import StatusTimelineContainer from '../../containers/status_timeline';
 import { connectHashtagStream } from '../../actions/streaming';
-import TimelineHeader from '../../components/timeline_header';
 
-const mapStateToProps = (state, props) => {
-  const params = props.match.params;
-  return {
-    params,
-    hasUnread: state.getIn(['timelines', `hashtag:${params.id}`, 'unread']) > 0,
-    column: state.getIn(['settings', 'columns']).find((column) => column.get('id') === 'HASHTAG' && column.getIn(['params', 'id']) === params.id),
-  };
-};
+const mapStateToProps = (state, props) => ({
+  hashtag: props.match.params.id,
+});
 
 @connect(mapStateToProps)
 export default class HashtagTimeline extends PureComponent {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
-    params: PropTypes.object.isRequired,
-    column: ImmutablePropTypes.map,
-    hasUnread: PropTypes.bool,
+    hashtag: PropTypes.string.isRequired,
   };
 
   componentDidMount () {
-    const { dispatch } = this.props;
-    const { id } = this.props.params;
+    const { dispatch, hashtag } = this.props;
 
-    dispatch(refreshHashtagTimeline(id));
-    this._subscribe(dispatch, id);
+    dispatch(refreshHashtagTimeline(hashtag));
+    this._subscribe(dispatch, hashtag);
   }
 
   componentWillReceiveProps (nextProps) {
-    if (nextProps.params.id !== this.props.params.id) {
-      this.props.dispatch(refreshHashtagTimeline(nextProps.params.id));
+    if (nextProps.hashtag !== this.props.hashtag) {
+      this.props.dispatch(refreshHashtagTimeline(nextProps.hashtag));
       this._unsubscribe();
-      this._subscribe(this.props.dispatch, nextProps.params.id);
+      this._subscribe(this.props.dispatch, nextProps.hashtag);
     }
   }
 
@@ -49,17 +38,7 @@ export default class HashtagTimeline extends PureComponent {
   }
 
   handleLoadMore = () => {
-    this.props.dispatch(expandHashtagTimeline(this.props.params.id));
-  }
-
-  handlePin = () => {
-    const { column, dispatch } = this.props;
-
-    if (column) {
-      dispatch(removeColumn(column.get('uuid')));
-    } else {
-      dispatch(addColumn('HASHTAG', { id: this.props.params.id }));
-    }
+    this.props.dispatch(expandHashtagTimeline(this.props.hashtag));
   }
 
   _subscribe (dispatch, id) {
@@ -74,35 +53,12 @@ export default class HashtagTimeline extends PureComponent {
   }
 
   render () {
-    const { params: { id }, column, hasUnread } = this.props;
-
-    const header = (
-      <TimelineHeader
-        icon='hashtag'
-        active={hasUnread}
-        title={id}
-      >
-        <button key='pin-button' className='text-btn pin-button' onClick={this.handlePin}>
-          {column ? (
-            <i className='fa fa-times' />
-          ) : (
-            <i className='fa fa-plus' />
-          )}
-          {column ? (
-            <FormattedMessage id='column_header.unpin' defaultMessage='Unpin' />
-          ) : (
-            <FormattedMessage id='column_header.pin' defaultMessage='Pin' />
-          )}
-        </button>
-      </TimelineHeader>
-
-    );
+    const { hashtag } = this.props;
 
     return (
       <StatusTimelineContainer
-        timelineId={`hashtag:${id}`}
+        timelineId={`hashtag:${hashtag}`}
         loadMore={this.handleLoadMore}
-        header={header}
         emptyMessage={<FormattedMessage id='empty_column.hashtag' defaultMessage='There is nothing in this hashtag yet.' />}
         withComposeForm
       />

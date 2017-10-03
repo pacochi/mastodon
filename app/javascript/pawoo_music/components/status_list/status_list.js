@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import StatusContainer from '../../containers/status';
-import DetailedStatusContainer from '../../containers/detailed_status';
 import ScrollableList from '../../components/scrollable_list';
 
 export default class StatusList extends ImmutablePureComponent {
@@ -26,11 +25,7 @@ export default class StatusList extends ImmutablePureComponent {
     const { isLoading } = other;
 
     const scrollableContent = (isLoading || statusIds.size > 0) ? (
-      statusIds.map((statusId) => (detail ? (
-        <DetailedStatusContainer key={statusId} id={statusId} />
-      ) : (
-        <StatusContainer key={statusId} id={statusId} />
-      )))
+      statusIds.map((statusId) => <StatusContainer key={statusId} id={statusId} detail={detail} />)
     ) : (
       null
     );

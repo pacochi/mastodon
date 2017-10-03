@@ -17,7 +17,7 @@ export default class Button extends PureComponent {
 
   render () {
     const { href, onClick, target, reactRouter, disabled, className, children } = this.props;
-    const buttonClassName = classNames('button', className);
+    const buttonClassName = classNames('button', className, { disabled });
 
     if (href && !disabled) {
       if (reactRouter) {
@@ -25,10 +25,8 @@ export default class Button extends PureComponent {
       } else {
         return <a className={buttonClassName} href={href} onClick={onClick} target={target} >{children}</a>;
       }
-    } else if (onClick) {
-      return <button className={buttonClassName} onClick={onClick} disabled={disabled}>{children}</button>;
     } else {
-      return null;
+      return <button className={buttonClassName} onClick={onClick} disabled={disabled}>{children}</button>;
     }
   }
 

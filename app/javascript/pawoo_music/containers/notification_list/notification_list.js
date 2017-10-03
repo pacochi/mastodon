@@ -8,8 +8,9 @@ import { createSelector } from 'reselect';
 import { debounce } from 'lodash';
 import { FormattedMessage } from 'react-intl';
 import { expandNotifications, scrollTopNotifications } from '../../../mastodon/actions/notifications';
-import NotificationContainer from '../../../mastodon/features/notifications/containers/notification_container';
+import NotificationContainer from '../notification';
 import Timeline from '../../components/timeline';
+import StatusList from '../../components/status_list';
 import ScrollableList from '../../components/scrollable_list';
 
 const getNotifications = createSelector([
@@ -31,9 +32,12 @@ export default class NotificationList extends ImmutablePureComponent {
     notifications: ImmutablePropTypes.list.isRequired,
     dispatch: PropTypes.func.isRequired,
     isLoading: PropTypes.bool,
-    hasUnread: PropTypes.bool,
     hasMore: PropTypes.bool,
   };
+
+  handleLoadMore = debounce(() => {
+    this.props.dispatch(expandNotifications());
+  }, 300, { leading: true });
 
   handleScrollToBottom = debounce(() => {
     this.props.dispatch(scrollTopNotifications(false));
@@ -64,10 +68,18 @@ export default class NotificationList extends ImmutablePureComponent {
     this.scrollableContent = scrollableContent;
 
     const emptyMessage = <FormattedMessage id='empty_column.notifications' defaultMessage="You don't have any notifications yet. Interact with others to start the conversation." />;
+    const uniqueStatusIds = notifications.map((notification) => notification.get('status')).filter((status) => status).toOrderedSet().toList();
 
     const Garally = (
-      <div>
-        Garally
+      <div className='garally'>
+        <StatusList
+          scrollKey='account_garally'
+          statusIds={uniqueStatusIds}
+          hasMore={hasMore}
+          isLoading={isLoading}
+          detail
+          onScrollToBottom={this.handleLoadMore}
+        />
       </div>
     );
 

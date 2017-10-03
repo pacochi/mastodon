@@ -148,7 +148,7 @@ export default class AccountHeader extends ImmutablePureComponent {
             {followed}
             <div className='note' dangerouslySetInnerHTML={note} />
             <div className='action-buttons'>
-              <FollowButton me={me} account={account} onFollow={this.handleFollowClick} />
+              <FollowButton account={account} />
               <ul className='oauth-authentications'>
                 {this.renderProviderIcons()}
               </ul>

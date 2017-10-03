@@ -10,6 +10,7 @@ import AccountHeaderContainer from '../account_header';
 import AccountTimelineContainer from '../account_timeline';
 import StatusList from '../../components/status_list';
 import { makeGetAccount } from '../../../mastodon/selectors';
+import MediaPostButton from '../../components/media_post_button';
 
 const makeMapStateToProps = () => {
   const getAccount = makeGetAccount();
@@ -22,6 +23,7 @@ const makeMapStateToProps = () => {
       accountId,
       account: getAccount(state, accountId),
       statusIds: state.getIn(['timelines', `account:${accountId}`, 'items'], Immutable.List()),
+      me: state.getIn(['meta', 'me']),
       isLoading: state.getIn(['timelines', `account:${accountId}`, 'isLoading']),
       hasMore: !!state.getIn(['timelines', `account:${accountId}`, 'next']),
       pinnedStatusIds: state.getIn(['timelines', `account:${accountId}:pinned_status`, 'items'], Immutable.List()),
@@ -39,6 +41,7 @@ export default class AccountGarally extends PureComponent {
     accountId: PropTypes.number.isRequired,
     account: ImmutablePropTypes.map.isRequired,
     statusIds: ImmutablePropTypes.list.isRequired,
+    me: PropTypes.number,
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
     garally: PropTypes.node,
@@ -81,8 +84,15 @@ export default class AccountGarally extends PureComponent {
   }, 300, { leading: true })
 
   render () {
-    const { accountId, account, statusIds, pinnedStatusIds, isLoading, hasMore } = this.props;
+    const { accountId, account, statusIds, me, pinnedStatusIds, isLoading, hasMore } = this.props;
     const uniqueStatusIds = pinnedStatusIds.concat(statusIds).toOrderedSet().toList();
+
+    const prepend = (
+      <div className='prepend'>
+        <AccountHeaderContainer account={account} />
+        {me === accountId && <MediaPostButton />}
+      </div>
+    );
 
     const Garally = (
       <div className='garally'>
@@ -92,7 +102,7 @@ export default class AccountGarally extends PureComponent {
           hasMore={hasMore}
           isLoading={isLoading}
           detail
-          prepend={<AccountHeaderContainer account={account} />}
+          prepend={prepend}
           onScrollToBottom={this.handleScrollToBottom}
         />
       </div>

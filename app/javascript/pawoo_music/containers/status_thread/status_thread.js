@@ -7,8 +7,7 @@ import { connect } from 'react-redux';
 import { fetchStatus } from '../../../mastodon/actions/statuses';
 import AccountHeaderContainer from '../account_header';
 import { makeGetAccount, makeGetStatus } from '../../../mastodon/selectors';
-import StatusContainer from '../..//containers/status';
-import DetailedStatusContainer from '../detailed_status';
+import StatusContainer from '../status';
 import AccountTimelineContainer from '../account_timeline';
 import ScrollableList from '../../components/scrollable_list';
 
@@ -86,7 +85,7 @@ export default class StatusThread extends ImmutablePureComponent {
     const descendants = this.renderChildren(descendantsIds);
 
     const content = ancestors.push(
-      <DetailedStatusContainer key={status.get('id')} status={status} />
+      <StatusContainer detail key={status.get('id')} status={status} />
     ).concat(descendants);
 
     const Garally = (
