@@ -9,6 +9,7 @@ import ConfirmationModal from './confirmation_modal';
 import ReportModal from './report_modal';
 import TransitionMotion from 'react-motion/lib/TransitionMotion';
 import spring from 'react-motion/lib/spring';
+import StatusFromModalContainer from '../../../../pawoo_music/containers/status_form_modal';
 
 const MODAL_COMPONENTS = {
   'MEDIA': MediaModal,
@@ -18,6 +19,7 @@ const MODAL_COMPONENTS = {
   'MUSIC': MusicModal,
   'CONFIRM': ConfirmationModal,
   'REPORT': ReportModal,
+  'STATUS_FORM': StatusFromModalContainer,
 };
 
 export default class ModalRoot extends React.PureComponent {

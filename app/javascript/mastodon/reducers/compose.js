@@ -27,6 +27,9 @@ import {
   COMPOSE_EMOJI_INSERT,
   COMPOSE_TAG_INSERT,
   COMPOSE_FILE_KEY_RESET,
+  COMPOSE_BACKUPDATA_SAVE,
+  COMPOSE_BACKUPDATA_RESTORE,
+  COMPOSE_BACKUPDATA_RESET,
 } from '../actions/compose';
 import { TIMELINE_DELETE } from '../actions/timelines';
 import { STORE_HYDRATE } from '../actions/store';
@@ -55,6 +58,7 @@ const initialState = Immutable.Map({
   default_privacy: 'public',
   resetFileKey: Math.floor((Math.random() * 0x10000)),
   idempotencyKey: null,
+  backup: null,
 });
 
 function statusToTextMentions(state, status) {
@@ -82,6 +86,20 @@ function clearAll(state) {
     map.set('idempotencyKey', uuid());
   });
 };
+
+function restoreOrClear(state) {
+  const backup = state.get('backup');
+  if (backup) {
+    return backup;
+  }
+
+  return clearAll(state);
+}
+
+function backupAndClear(state) {
+  const backup = state.set('backup', null);
+  return clearAll(state).set('backup', backup);
+}
 
 function appendMedia(state, media) {
   return state.withMutations(map => {
@@ -192,7 +210,7 @@ export default function compose(state = initialState, action) {
       .set('text', action.text)
       .set('idempotencyKey', uuid());
   case COMPOSE_REPLY:
-    return state.withMutations(map => {
+    return backupAndClear(state).withMutations(map => {
       map.set('in_reply_to', action.status.get('id'));
       map.set('text', statusToTextMentions(state, action.status));
       map.set('privacy', privacyPreference(action.status.get('visibility'), state.get('default_privacy')));
@@ -220,7 +238,7 @@ export default function compose(state = initialState, action) {
   case COMPOSE_SUBMIT_REQUEST:
     return state.set('is_submitting', true);
   case COMPOSE_SUBMIT_SUCCESS:
-    return clearAll(state);
+    return restoreOrClear(state);
   case COMPOSE_SUBMIT_FAIL:
     return state.set('is_submitting', false);
   case COMPOSE_UPLOAD_REQUEST:
@@ -236,7 +254,7 @@ export default function compose(state = initialState, action) {
   case COMPOSE_UPLOAD_PROGRESS:
     return state.set('progress', Math.round((action.loaded / action.total) * 100));
   case COMPOSE_MENTION:
-    return state
+    return backupAndClear(state)
       .update('text', text => `${text}@${action.account.get('acct')} `)
       .set('focusDate', new Date())
       .set('idempotencyKey', uuid());
@@ -264,6 +282,13 @@ export default function compose(state = initialState, action) {
     return insertTag(state, action.tag);
   case COMPOSE_FILE_KEY_RESET:
     return state.set('resetFileKey', Math.floor((Math.random() * 0x10000)));
+  case COMPOSE_BACKUPDATA_SAVE:
+    return state.set('backup', state.set('backup', null));
+  case COMPOSE_BACKUPDATA_RESTORE:
+    const backup = state.get('backup');
+    return backup ? backup : state;
+  case COMPOSE_BACKUPDATA_RESET:
+    return state.set('backup', null);
   default:
     return state;
   }

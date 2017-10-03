@@ -2,7 +2,7 @@ import React from 'react';
 import Compose from '../../../mastodon/features/compose';
 import UI from '../../../mastodon/features/ui';
 
-export default class IntentContainer extends React.PureComponent {
+export default class Intent extends React.PureComponent {
 
   render () {
     return (

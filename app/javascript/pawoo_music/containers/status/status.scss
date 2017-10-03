@@ -12,6 +12,11 @@
   font-size:      var(--text30-font);
   line-height:    var(--text30-line);
 
+  &.highlight {
+    border:         1px dashed var(--strong1);
+    background:     var(--color2);
+  }
+
   .prepend-inline {
     .display-name {
       display: inline;

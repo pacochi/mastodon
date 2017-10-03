@@ -13,7 +13,7 @@ const messages = defineMessages({
 
 const dropdownStyle = {
   position: 'absolute',
-  right: '3px',
+  right: '-2px',
   top: '35px',
 };
 

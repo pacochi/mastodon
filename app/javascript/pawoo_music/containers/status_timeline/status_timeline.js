@@ -10,7 +10,8 @@ import Timeline from '../../components/timeline';
 import StatusList from '../../components/status_list';
 import { scrollTopTimeline } from '../../../mastodon/actions/timelines';
 import { mountCompose, unmountCompose } from '../../../mastodon/actions/compose';
-import ComposeFormContainer from '../../../mastodon/features/compose/containers/compose_form_container';
+import StatusFormContainer from '../status_form';
+import AccountContainer from '../account';
 
 const makeGetStatusIds = () => createSelector([
   (state, { type }) => state.getIn(['settings', type], Immutable.Map()),
@@ -59,7 +60,7 @@ const makeMapStateToProps = () => {
     statusIds: getStatusIds(state, { type: timelineId }),
     isLoading: state.getIn(['timelines', timelineId, 'isLoading'], true),
     hasMore: !!state.getIn(['timelines', timelineId, 'next']),
-    isLogin: !!state.getIn(['meta', 'me']),
+    me: state.getIn(['meta', 'me']),
   });
 
   return mapStateToProps;
@@ -77,7 +78,7 @@ export default class StatusTimeline extends ImmutablePureComponent {
     emptyMessage: PropTypes.node,
     garallyPrepend: PropTypes.node,
     withComposeForm: PropTypes.bool,
-    isLogin: PropTypes.bool.isRequired,
+    me: PropTypes.number,
     dispatch: PropTypes.func.isRequired,
   }
 
@@ -135,7 +136,7 @@ export default class StatusTimeline extends ImmutablePureComponent {
   }, 100)
 
   render () {
-    const { timelineId, withComposeForm, isLogin, garallyPrepend, ...other } = this.props;
+    const { timelineId, withComposeForm, me, garallyPrepend, ...other } = this.props;
     const { statusIds, hasMore, isLoading } = other;
 
     const Garally = (
@@ -152,7 +153,12 @@ export default class StatusTimeline extends ImmutablePureComponent {
       </div>
     );
 
-    const prepend = withComposeForm && isLogin && <ComposeFormContainer />;
+    const prepend = withComposeForm && me && (
+      <div className='prepend'>
+        <AccountContainer id={me} />
+        <StatusFormContainer useBackup />
+      </div>
+    );
 
     return (
       <Timeline garally={Garally}>

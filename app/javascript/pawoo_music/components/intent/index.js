@@ -1,3 +1,3 @@
-import IntentContainer from './intent';
+import Intent from './intent';
 
-export default IntentContainer;
+export default Intent;
