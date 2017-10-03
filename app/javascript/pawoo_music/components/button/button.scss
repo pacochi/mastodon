@@ -16,6 +16,11 @@
     width: calc(100% - (11px * 2));
   }
 
+  &.disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+
   &.red, &.confirmation-modal__cancel-button {
     background-color: var(--color1);
     color:            var(--strong1);

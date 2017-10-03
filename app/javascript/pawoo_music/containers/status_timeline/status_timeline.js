@@ -75,6 +75,7 @@ export default class StatusTimeline extends ImmutablePureComponent {
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
     emptyMessage: PropTypes.node,
+    garallyPrepend: PropTypes.node,
     withComposeForm: PropTypes.bool,
     isLogin: PropTypes.bool.isRequired,
     dispatch: PropTypes.func.isRequired,
@@ -108,6 +109,13 @@ export default class StatusTimeline extends ImmutablePureComponent {
     dispatch(unmountCompose());
   }
 
+  handleLoadMore = debounce(() => {
+    const { loadMore } = this.props;
+    if (loadMore) {
+      loadMore();
+    }
+  }, 300, { leading: true })
+
   handleScrollToBottom = debounce(() => {
     const { dispatch, timelineId, loadMore } = this.props;
     dispatch(scrollTopTimeline(timelineId, false));
@@ -127,11 +135,20 @@ export default class StatusTimeline extends ImmutablePureComponent {
   }, 100)
 
   render () {
-    const { timelineId, withComposeForm, isLogin, ...other } = this.props;
+    const { timelineId, withComposeForm, isLogin, garallyPrepend, ...other } = this.props;
+    const { statusIds, hasMore, isLoading } = other;
 
     const Garally = (
-      <div>
-        Garally
+      <div className='garally'>
+        <StatusList
+          scrollKey={`${timelineId}_garally`}
+          statusIds={statusIds}
+          hasMore={hasMore}
+          isLoading={isLoading}
+          detail
+          prepend={garallyPrepend}
+          onScrollToBottom={this.handleLoadMore}
+        />
       </div>
     );
 
