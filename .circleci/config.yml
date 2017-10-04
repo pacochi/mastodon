@@ -51,6 +51,7 @@ jobs:
       # yarn
       - restore_cache:
           key: yarn/{{ checksum ".nvmrc" }}.{{ checksum "yarn.lock" }}/1
+      - run: (echo "Host github.com"; echo "  User git") >> ~/.ssh/config
       - run: yarn install
       - save_cache:
           key: yarn/{{ checksum ".nvmrc" }}.{{ checksum "yarn.lock" }}/1
