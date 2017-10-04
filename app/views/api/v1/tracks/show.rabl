@@ -1,14 +1,14 @@
 object @track
 
-attribute :id, :title, :artist
+attribute :id, :title, :artist, :text
 
-node :music { |track| full_asset_url(track.music.url(:original)) }
-node :image { |track| full_asset_url(track.image.url(:original)) }
+node(:music) { |track| full_asset_url(track.music.url(:original)) }
 
 node :video do |track|
   hash = {}
 
   hash[:url] = full_asset_url(track.video.url(:original)) if track.video.present?
+  hash[:image] = full_asset_url(track.video_image.url(:original)) if track.video_image.present?
 
   if track.video_blur_movement_band_top != 0 && track.video_blur_blink_band_top != 0
     hash[:blur] = {
@@ -52,4 +52,4 @@ node :video do |track|
   hash
 end
 
-child :status { extends 'api/v1/statuses/show' }
+child(:status) { extends 'api/v1/statuses/show' }

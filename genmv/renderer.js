@@ -12,7 +12,7 @@ onunhandledrejection = event => {
   return true;
 };
 
-const { createRgbaEmitter } = require('albumart-video');
+const { RgbaEmitter } = require('musicvideo-generator');
 const { webFrame } = require('electron');
 const path = require('path');
 const url = require('url');
@@ -53,7 +53,7 @@ const spectrum =
 const text = argv.textTitle === undefined && argv.textSub === undefined ?
   undefined : { title: argv.textTitle, sub: argv.textSub };
 
-const image = url.format({
+const image = argv.image === undefined ? undefined : url.format({
   pathname: path.resolve(argv.image),
   protocol: 'file:',
 });
@@ -62,8 +62,13 @@ webFrame.registerURLSchemeAsPrivileged('file');
 
 fetch(url.format({ pathname: path.resolve(argv._[0]), protocol: 'file:' }))
   .then(response => response.arrayBuffer())
-  .then(audio => createRgbaEmitter({ audio, image, blur, particle, spectrum, text }))
-  .then(emitter => {
+  .then(audio => {
+    const audioContext = new AudioContext;
+    return audioContext.decodeAudioData(audio);
+  })
+  .then(audio => {
+    const emitter = new RgbaEmitter(audio, { image, blur, particle, spectrum, text });
+
     // XXX: The documentation says the default value of end is true, but somehow
     // it does not trigger finish event nor flush the stream. Ignore it.
     emitter.pipe(process.stdout, { end: false });

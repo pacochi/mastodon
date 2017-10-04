@@ -8,8 +8,9 @@ class Api::V1::AlbumsController < Api::BaseController
 
   def create
     attributes = {
+      account: current_account,
       title: params.require(:title),
-      description: params.require(:description),
+      text: params.require(:text),
       image: params.require(:image),
     }
 
@@ -25,12 +26,12 @@ class Api::V1::AlbumsController < Api::BaseController
   end
 
   def update
-    @album = Album.joins(:status).find_by!(id: params.require(:id), statuses: { account: current_account })
-    @album.update! params.permit(:title, :description, :image)
+    @album = Album.find_by!(id: params.require(:id), account: current_account)
+    @album.update! params.permit(:title, :text, :image)
   end
 
   def destroy
-    Album.joins(:status).find_by!(id: params.require(:id), statuses: { account: current_account }).destroy!
+    Album.find_by!(id: params.require(:id), account: current_account).destroy!
     render_empty
   end
 

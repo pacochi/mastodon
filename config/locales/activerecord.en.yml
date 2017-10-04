@@ -28,7 +28,7 @@ en:
             image:
               in_between: Your cover image must be less than :max
               invalid: The cover image file is invalid
-        music_attachment:
+        track:
           attributes:
             music:
               invalid: The music file is invalid

@@ -8,18 +8,18 @@ class Api::V1::Albums::TracksController < Api::BaseController
   respond_to :json
 
   def update
-    position = AlbumMusicAttachment.position_between(*entry_range)
+    position = AlbumTrack.position_between(*entry_range)
 
     if request.put?
-      AlbumMusicAttachment.create!(
+      AlbumTrack.create!(
         album_id: params.require(:album_id),
-        music_attachment_id: params.require(:id),
+        track_id: params.require(:id),
         position: position,
       )
     else
-      AlbumMusicAttachment.find_by!(
+      AlbumTrack.find_by!(
         album_id: params.require(:album_id),
-        music_attachment_id: params.require(:id),
+        track_id: params.require(:id),
       ).update! position: position
     end
 
@@ -27,7 +27,7 @@ class Api::V1::Albums::TracksController < Api::BaseController
   end
 
   def destroy
-    scope.find_by!(music_attachment_id: params.require(:id)).destroy!
+    scope.find_by!(track_id: params.require(:id)).destroy!
     render_empty
   end
 
@@ -42,9 +42,9 @@ class Api::V1::Albums::TracksController < Api::BaseController
       index_scope = index_scope.where('position < ?', index_range[1])
     end
 
-    @tracks = MusicAttachment.joins(:album_music_attachment)
-                             .merge(index_scope)
-                             .limit(limit_param(DEFAULT_TRACKS_LIMIT))
+    @tracks = Track.joins(:album_tracks)
+                   .merge(index_scope)
+                   .limit(limit_param(DEFAULT_TRACKS_LIMIT))
 
     insert_pagination_headers
   end
@@ -60,8 +60,8 @@ class Api::V1::Albums::TracksController < Api::BaseController
 
     relative_to_id = params[:relative_to]
     above = ActiveRecord::Type.lookup(:boolean).cast(params[:above])
-    lower_position = AlbumMusicAttachment::MIN_POSITION
-    upper_position = AlbumMusicAttachment::MAX_POSITION
+    lower_position = AlbumTrack::MIN_POSITION
+    upper_position = AlbumTrack::MAX_POSITION
 
     if relative_to_id.nil?
       if above
@@ -72,7 +72,7 @@ class Api::V1::Albums::TracksController < Api::BaseController
         lower_position = lower.position if lower
       end
     else
-      relative_to = scope.find_by!(music_attachment_id: relative_to_id)
+      relative_to = scope.find_by!(track_id: relative_to_id)
 
       if above
         lower = scope.find_by('position < ?', relative_to.position)
@@ -99,8 +99,8 @@ class Api::V1::Albums::TracksController < Api::BaseController
     lower_position = nil
     upper_position = nil
 
-    positioning_attributes = scope.where(music_attachment_id: positioning_ids)
-                                  .pluck(:music_attachment_id, :position)
+    positioning_attributes = scope.where(track_id: positioning_ids)
+                                  .pluck(:track_id, :position)
 
     if positioning_attributes.size < positioning_ids.size
       raise Mastodon::TrackNotFoundError
@@ -123,7 +123,7 @@ class Api::V1::Albums::TracksController < Api::BaseController
   end
 
   def scope
-    AlbumMusicAttachment.where album_id: params.require(:album_id)
+    AlbumTrack.where album_id: params.require(:album_id)
   end
 
   def pagination_params(core_params)

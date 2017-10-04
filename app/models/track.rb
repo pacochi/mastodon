@@ -1,24 +1,26 @@
 # == Schema Information
 #
-# Table name: music_attachments
+# Table name: tracks
 #
 #  id                               :integer          not null, primary key
-#  status_id                        :integer          not null
+#  account_id                       :integer          not null
+#  status_id                        :integer
 #  duration                         :integer          not null
 #  title                            :string           not null
 #  artist                           :string           not null
+#  text                             :string           default(""), not null
 #  music_file_name                  :string
 #  music_content_type               :string
 #  music_file_size                  :integer
 #  music_updated_at                 :datetime
-#  image_file_name                  :string
-#  image_content_type               :string
-#  image_file_size                  :integer
-#  image_updated_at                 :datetime
 #  video_file_name                  :string
 #  video_content_type               :string
 #  video_file_size                  :integer
 #  video_updated_at                 :datetime
+#  video_image_file_name            :string
+#  video_image_content_type         :string
+#  video_image_file_size            :integer
+#  video_image_updated_at           :datetime
 #  video_blur_movement_band_bottom  :integer          default(0), not null
 #  video_blur_movement_band_top     :integer          default(0), not null
 #  video_blur_movement_threshold    :integer          default(0), not null
@@ -33,29 +35,32 @@
 #  video_spectrum_color             :integer
 #
 
-class MusicAttachment < ApplicationRecord
+class Track < ApplicationRecord
+  include Paginable
 
-  before_save :truncate_title,  if: :title_changed?
-  before_save :truncate_artist, if: :artist_changed?
+  before_save :truncate_title,       if: :title_changed?
+  before_save :truncate_artist,      if: :artist_changed?
 
-  belongs_to :status
-  has_one :album_music_attachment
+  belongs_to :account, inverse_of: :tracks
+  belongs_to :status, inverse_of: :track
+  has_many :album_tracks, inverse_of: :track
 
   has_attached_file :music
-  has_attached_file :image
   has_attached_file :video
+  has_attached_file :video_image
 
-  validates_attachment_presence :music, :image
-
-  validates_attachment_size :music,
-                            :image,
-                            less_than: 7.megabytes
+  validates_attachment_presence :music
+  validates_attachment_size :music, :video_image, less_than: 7.megabytes
 
   validates_attachment_content_type :music,
-                                    content_type: ['audio/mp3', 'audio/mpeg']
+                                    content_type: ['audio/mpeg']
 
-  validates_attachment_content_type :image,
+  validates_attachment_content_type :video_image,
                                     content_type: ['image/jpeg', 'image/png']
+
+  def display_title
+    "#{title} - #{artist}"
+  end
 
   private
 

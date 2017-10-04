@@ -336,8 +336,9 @@ ja:
     validations:
       images_and_video: 既に画像が追加されているため、動画を追加することはできません。
       too_many: 追加できるファイルは4つまでです。
-  music_attachments:
+  tracks:
     invalid_mp3: 音楽ファイルが無効なMP3になっています
+    invalid_visibility: 表示範囲は非収載と公開のみ選択できます
   notification_mailer:
     digest:
       body: "%{instance} での最後のログインからの出来事:"
@@ -363,9 +364,9 @@ ja:
     reblog:
       body: 'あなたのトゥートが %{name} さんにブーストされました:'
       subject: あなたのトゥートが %{name} さんにブーストされました
-    video_prepared:
-      body: '楽曲『%{title}』の動画の生成が完了しました:'
-      subject: 楽曲『%{title}』の動画の生成が完了しました
+    track:
+      body: 'トラック『%{title}』の動画の生成が完了しました:'
+      subject: トラック『%{title}』の動画の生成が完了しました
   oauth_authentications:
     link: 連携する
     unlink: 解除する

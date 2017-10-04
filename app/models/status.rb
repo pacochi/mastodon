@@ -28,6 +28,7 @@ class Status < ApplicationRecord
   include Paginable
   include Streamable
   include Cacheable
+  include StatusPawooMusicConcern
   include StatusThreadingConcern
   include StatusSearchable
 
@@ -49,9 +50,6 @@ class Status < ApplicationRecord
   has_many :media_attachments, dependent: :destroy
   has_many :pixiv_cards, dependent: :destroy
   has_and_belongs_to_many :tags
-
-  has_one :album, dependent: :destroy
-  has_one :music_attachment, dependent: :destroy
 
   has_one :notification, as: :activity, dependent: :destroy
   has_one :preview_card, dependent: :destroy

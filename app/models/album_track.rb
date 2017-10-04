@@ -1,17 +1,17 @@
 # frozen_string_literal: true
 # == Schema Information
 #
-# Table name: album_music_attachments
+# Table name: album_tracks
 #
-#  id                  :integer          not null, primary key
-#  album_id            :integer          not null
-#  music_attachment_id :integer          not null
-#  position            :decimal(, )      not null
+#  id       :integer          not null, primary key
+#  album_id :integer          not null
+#  track_id :integer          not null
+#  position :decimal(, )      not null
 #
 
-class AlbumMusicAttachment < ApplicationRecord
-  belongs_to :album
-  belongs_to :music_attachment
+class AlbumTrack < ApplicationRecord
+  belongs_to :album, inverse_of: :album_tracks
+  belongs_to :track, inverse_of: :album_tracks
 
   MIN_POSITION = BigDecimal(0)
   MAX_POSITION = BigDecimal(1)

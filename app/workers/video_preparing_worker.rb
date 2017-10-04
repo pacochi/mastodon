@@ -6,16 +6,16 @@ class VideoPreparingWorker
   sidekiq_options queue: :video_preparer, unique_for: 16.minutes
 
   def perform(id)
-    music_attachment = MusicAttachment.joins(:status).includes(status: :account).find(id)
+    track = Track.joins(:status).includes(status: :account).find(id)
 
-    video = MusicConvertService.new.call(music_attachment)
+    video = MusicConvertService.new.call(track)
     begin
-      music_attachment.update! video: video
+      track.update! video: video
     ensure
       video.unlink
     end
 
-    NotifyService.new.call(music_attachment.status.account, music_attachment)
+    NotifyService.new.call(track.status.account, track)
   rescue ActiveRecord::RecordNotFound
     nil
   end

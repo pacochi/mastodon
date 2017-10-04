@@ -336,8 +336,9 @@ en:
     validations:
       images_and_video: Cannot attach a video to a status that already contains images
       too_many: Cannot attach more than 4 files
-  music_attachments:
+  tracks:
     invalid_mp3: The music file is an invalid MP3
+    invalid_visibility: Only unlisted and public visibility are accepted
   notification_mailer:
     digest:
       body: 'Here is a brief summary of what you missed on %{instance} since your last visit on %{since}:'
@@ -364,8 +365,8 @@ en:
       body: 'Your status was boosted by %{name}:'
       subject: "%{name} boosted your status"
     video_prepared:
-      body: 'The video for your music, %{title}, was generated:'
-      subject: The video for your music, %{title}, was generated
+      body: 'The video for your track, %{title}, was generated:'
+      subject: The video for your track, %{title}, was generated
   oauth_authentications:
     link: Link
     unlink: Unlink

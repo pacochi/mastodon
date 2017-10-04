@@ -4,9 +4,10 @@
 # Table name: albums
 #
 #  id                 :integer          not null, primary key
-#  status_id          :integer          not null
+#  account_id         :integer          not null
+#  status_id          :integer
 #  title              :string           not null
-#  description        :text             default(""), not null
+#  text               :text             default(""), not null
 #  image_file_name    :string
 #  image_content_type :string
 #  image_file_size    :integer
@@ -18,8 +19,9 @@ class Album < ApplicationRecord
 
   before_save :truncate_title,  if: :title_changed?
 
-  belongs_to :status
-  has_one :album_music_attachment
+  belongs_to :account, inverse_of: :albums
+  belongs_to :status, inverse_of: :album
+  has_many :album_tracks, inverse_of: :album
 
   has_attached_file :image
 
@@ -27,8 +29,6 @@ class Album < ApplicationRecord
                        presence: true,
                        content_type: { content_type: ['image/jpeg', 'image/png'] },
                        size: { less_than: 7.megabytes }
-
-  validates_with AlbumLengthValidator
 
   private
 

@@ -9,19 +9,19 @@ if Rails.env.development?
   # Additional seeds of Pawoo Music
   account = User.find_by!(email: "admin@#{domain}").account
 
-  music_attachment_status = Status.new(account: account, text: '', visibility: :unlisted)
-  music_attachment_status.save! validate: false
+  track_status = Status.new(account: account, text: '', visibility: :unlisted)
+  track_status.save! validate: false
 
-  music_attachment = MusicAttachment.create!(
+  track = Track.create!(
     music: File.open(Rails.root.join('spec', 'fixtures', 'files', 'aint_we_got_fun_billy_jones1921.mp3')),
-    image: File.open(Rails.root.join('spec', 'fixtures', 'files', 'attachment.jpg')),
     duration: 1.minute,
     title: "Ain't We Got Fun",
     artist: 'Billy Jones',
-    status: music_attachment_status
+    account: track_status.account,
+    status: track_status
   )
 
-  music_attachment_status.update! text: Rails.application.routes.url_helpers.short_account_track_url(account.username, music_attachment)
+  track_status.update! text: Rails.application.routes.url_helpers.short_account_track_url(account.username, track)
 
   album_status = Status.new(account: account, text: '', visibility: :unlisted)
   album_status.save! validate: false
@@ -29,14 +29,11 @@ if Rails.env.development?
   album = Album.create!(
     image: File.open(Rails.root.join('spec', 'fixtures', 'files', 'attachment.jpg')),
     title: 'Digital History',
+    account: album_status.account,
     status: album_status
   )
 
   album_status.update! text: Rails.application.routes.url_helpers.short_account_album_url(account.username, album)
 
-  AlbumMusicAttachment.create!(
-    album: album,
-    music_attachment: music_attachment,
-    position: '0.5'
-  )
+  AlbumTrack.create! album: album, track: track, position: '0.5'
 end
