@@ -14,7 +14,6 @@ import HashtagTimelineContainer from '../hashtag_timeline';
 import AccountGarallyContainer from '../account_garally';
 import FavouritedStatusesContainer from '../favourited_statuses';
 import Intent from '../../components/intent';
-import MusicPlayer from '../../components/dummy';
 import LoadingBarContainer from '../../../mastodon/features/ui/containers/loading_bar_container';
 import NotificationsContainer from '../../../mastodon/features/ui/containers/notifications_container';
 import ModalContainer from '../../../mastodon/features/ui/containers/modal_container';
@@ -23,6 +22,7 @@ import AccountFollowingContainer from '../account_following';
 import StatusThreadContainer from '../status_thread';
 import { isMobile } from '../../util/is_mobile';
 import StatusPostButtonContainer from '../status_post_button';
+import PlayControlContainer from '../../../mastodon/features/ui/containers/play_control_container';
 
 const mapStateToProps = state => ({
   isLogin: !!state.getIn(['meta', 'me']),
@@ -97,7 +97,7 @@ export default class App extends PureComponent {
               */}
             </bottomnavi>
           ) : (
-            <MusicPlayer>music player</MusicPlayer>
+            <PlayControlContainer />
           )}
         </div>
         <NotificationsContainer />
