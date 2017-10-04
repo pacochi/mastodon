@@ -19,25 +19,24 @@ describe Api::V1::AlbumsController, type: :controller do
 
       it 'creates and renders albums and status' do
         post :create,
-             params: { title: 'title', description: 'description', image: image }
+             params: { title: 'title', text: 'text', image: image }
 
         album = Album.find_by!(
           id: body_as_json[:id],
           account: user.account,
           status: body_as_json[:status][:id],
           title: 'title',
-          description: 'description',
+          text: 'text',
         )
 
         expect(album.status.text).to eq short_account_album_url(user.account.username, album)
         expect(body_as_json[:title]).to eq 'title'
-        expect(body_as_json[:description]).to eq 'description'
+        expect(body_as_json[:text]).to eq 'text'
         expect(body_as_json[:status][:text]).to eq short_account_album_url(user.account.username, album)
       end
 
       it 'returns http success' do
-        post :create,
-             params: { title: 'title', description: 'description', image: image }
+        post :create, params: { title: 'title', text: 'text', image: image }
 
         expect(response).to have_http_status :success
       end
@@ -45,8 +44,7 @@ describe Api::V1::AlbumsController, type: :controller do
 
     context 'without write scope' do
       it 'returns http unauthorized' do
-        post :create,
-             params: { title: 'title', description: 'description', image: image }
+        post :create, params: { title: 'title', text: 'text', image: image }
 
         expect(response).to have_http_status :unauthorized
       end
@@ -66,14 +64,14 @@ describe Api::V1::AlbumsController, type: :controller do
 
       it 'updates and renders albums' do
         patch :update,
-              params: { id: album.id, title: 'updated title', description: 'updated description' }
+              params: { id: album.id, title: 'updated title', text: 'updated text' }
 
         album.reload
         expect(album.title).to eq 'updated title'
-        expect(album.description).to eq 'updated description'
+        expect(album.text).to eq 'updated text'
         expect(body_as_json[:id]).to eq album.id
         expect(body_as_json[:title]).to eq 'updated title'
-        expect(body_as_json[:description]).to eq 'updated description'
+        expect(body_as_json[:text]).to eq 'updated text'
       end
 
       it 'returns http success' do
@@ -124,18 +122,13 @@ describe Api::V1::AlbumsController, type: :controller do
 
   describe 'GET #show' do
     it 'renders albums' do
-      album = Fabricate(
-        :album,
-        title: 'title',
-        description: 'description',
-        image: image,
-      )
+      album = Fabricate(:album, title: 'title', text: 'text', image: image)
 
       get :show, params: { id: album.id }
 
       expect(body_as_json[:id]).to eq album.id
       expect(body_as_json[:title]).to eq 'title'
-      expect(body_as_json[:description]).to eq 'description'
+      expect(body_as_json[:text]).to eq 'text'
       expect(body_as_json[:status][:id]).to eq album.status_id
     end
 

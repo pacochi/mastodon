@@ -4,11 +4,11 @@
 #
 #  id                               :integer          not null, primary key
 #  account_id                       :integer          not null
-#  status_id                        :integer          not null
+#  status_id                        :integer
 #  duration                         :integer          not null
 #  title                            :string           not null
 #  artist                           :string           not null
-#  description                      :string           default(""), not null
+#  text                             :string           default(""), not null
 #  music_file_name                  :string
 #  music_content_type               :string
 #  music_file_size                  :integer
@@ -40,7 +40,6 @@ class Track < ApplicationRecord
 
   before_save :truncate_title,       if: :title_changed?
   before_save :truncate_artist,      if: :artist_changed?
-  before_save :truncate_description, if: :description_changed?
 
   belongs_to :account, inverse_of: :tracks
   belongs_to :status, inverse_of: :track
@@ -71,10 +70,6 @@ class Track < ApplicationRecord
 
   def truncate_artist
     self.artist = self.artist.slice(0, 128)
-  end
-
-  def truncate_description
-    self.description = self.description.slice(0, 500)
   end
 
 end

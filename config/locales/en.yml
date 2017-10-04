@@ -338,6 +338,7 @@ en:
       too_many: Cannot attach more than 4 files
   tracks:
     invalid_mp3: The music file is an invalid MP3
+    invalid_visibility: Only unlisted and public visibility are accepted
   notification_mailer:
     digest:
       body: 'Here is a brief summary of what you missed on %{instance} since your last visit on %{since}:'

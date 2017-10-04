@@ -338,6 +338,7 @@ ja:
       too_many: 追加できるファイルは4つまでです。
   tracks:
     invalid_mp3: 音楽ファイルが無効なMP3になっています
+    invalid_visibility: 表示範囲は非収載と公開のみ選択できます
   notification_mailer:
     digest:
       body: "%{instance} での最後のログインからの出来事:"

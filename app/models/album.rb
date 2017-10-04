@@ -5,9 +5,9 @@
 #
 #  id                 :integer          not null, primary key
 #  account_id         :integer          not null
-#  status_id          :integer          not null
+#  status_id          :integer
 #  title              :string           not null
-#  description        :text             default(""), not null
+#  text               :text             default(""), not null
 #  image_file_name    :string
 #  image_content_type :string
 #  image_file_size    :integer
@@ -29,8 +29,6 @@ class Album < ApplicationRecord
                        presence: true,
                        content_type: { content_type: ['image/jpeg', 'image/png'] },
                        size: { less_than: 7.megabytes }
-
-  validates_with AlbumLengthValidator
 
   private
 

@@ -8,23 +8,32 @@ class Api::V1::TracksController < Api::BaseController
 
   def create
     params.require [:title, :artist, :music]
-    attributes = prepare_track_attributes
 
-    ApplicationRecord.transaction do
-      status = Status.new(account: current_account, text: '', visibility: :unlisted)
-      status.save! validate: false
+    @track = Track.create!(track_attributes)
 
-      attributes.merge!(status: status)
-      @track = Track.create!(attributes)
-
-      status.update! text: short_account_track_url(current_account.username, @track)
+    status_text = short_account_track_url(current_account.username, @track)
+    unless status_params[:text].blank?
+      status_text = [status_params[:text], status_text].join(' ')
     end
+
+    begin
+      status = PostStatusService.new.call(
+        current_account,
+        status_text,
+        nil,
+        visibility: status_params[:visibility]
+      )
+    rescue
+      @track.destroy!
+      raise
+    end
+
+    @track.update! status: status
   end
 
   def update
-    attributes = prepare_track_attributes
     @track = Track.find_by!(id: params.require(:id), account: current_account)
-    @track.update! attributes
+    @track.update! track_attributes
   end
 
   def destroy
@@ -49,8 +58,8 @@ class Api::V1::TracksController < Api::BaseController
 
   private
 
-  def prepare_track_attributes
-    return @prepared_track_attributes if @prepared_track_attributes
+  def track_attributes
+    return @track_attributes if @track_attributes
 
     attributes = track_params
     attributes.merge! account: current_account
@@ -122,11 +131,21 @@ class Api::V1::TracksController < Api::BaseController
       )
     end
 
-    @prepared_track_attributes = attributes
+    @track_attributes = attributes
+  end
+
+  def status_params
+    permitted = params.permit :text, :visibility
+
+    if ['public', 'unlisted'].exclude? permitted[:visibility]
+      raise Mastodon::ValidationError, I18n.t('tracks.invalid_visibility')
+    end
+
+    permitted
   end
 
   def track_params
-    params.permit :title, :artist, :description, :music
+    params.permit :title, :artist, :text, :music
   end
 
   def update_music

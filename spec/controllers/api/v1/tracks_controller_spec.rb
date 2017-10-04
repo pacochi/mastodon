@@ -15,6 +15,7 @@ describe Api::V1::TracksController, type: :controller do
   describe 'POST #create' do
     context 'with write scope' do
       before do
+        stub_request(:head, %r{^http://test\.host/.*}).to_return status: 400
         allow(controller).to receive(:doorkeeper_token) do
           Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: 'write')
         end
@@ -46,7 +47,7 @@ describe Api::V1::TracksController, type: :controller do
         }
 
         post :create,
-             params: { title: 'title', artist: 'artist', description: 'description', music: music, video: video_params }
+             params: { title: 'title', artist: 'artist', text: 'text', visibility: 'public', music: music, video: video_params }
 
         track = Track.find_by!(
           id: body_as_json[:id],
@@ -54,7 +55,7 @@ describe Api::V1::TracksController, type: :controller do
           status: body_as_json[:status][:id],
           title: 'title',
           artist: 'artist',
-          description: 'description',
+          text: 'text',
           duration: 177,
           video_blur_movement_band_bottom: 50,
           video_blur_movement_band_top: 300,
@@ -70,19 +71,40 @@ describe Api::V1::TracksController, type: :controller do
           video_spectrum_color: 0xff0000,
         )
 
-        expect(track.status.text).to eq short_account_track_url(user.account.username, track)
         expect(body_as_json[:title]).to eq 'title'
         expect(body_as_json[:artist]).to eq 'artist'
-        expect(body_as_json[:description]).to eq 'description'
-        expect(body_as_json[:status][:text]).to eq short_account_track_url(user.account.username, track)
+        expect(body_as_json[:text]).to eq 'text'
+        expect(body_as_json[:status][:visibility]).to eq 'public'
         expect(body_as_json[:video]).to eq video_params
+      end
+
+      it 'joins given text and URL to create status text' do
+        post :create,
+             params: { title: 'title', artist: Faker::Name.name, text: 'text', visibility: 'public', music: music }
+
+        track = Track.find_by!(title: 'title', text: 'text')
+        expect(track.status.text).to eq 'text ' + short_account_track_url(user.account.username, track)
+      end
+
+      it 'uses URL as status text if the given text is blank' do
+        post :create,
+             params: { title: 'title', artist: Faker::Name.name, text: '', visibility: 'public', music: music }
+
+        track = Track.find_by!(title: 'title', text: '')
+        expect(track.status.text).to eq short_account_track_url(user.account.username, track)
+      end
+
+      it 'destroys track if it failed to create status' do
+        expect do
+          post :create, params: { title: 'title', artist: Faker::Name.name, text: Faker::Lorem.characters(501), music: music_with_picture }
+        end.not_to change { Track.count }
       end
 
       it 'removes pictures in ID3v2 tag' do
         skip 'the output of ruby-mp3info messes up `file -b --mime`, used by Paperclip'
 
         post :create,
-             params: { title: 'title', artist: Faker::Name.name, music: music_with_picture }
+             params: { title: 'title', artist: Faker::Name.name, visibility: 'public', music: music_with_picture }
 
         tempfile = Tempfile.new
         begin
@@ -95,7 +117,7 @@ describe Api::V1::TracksController, type: :controller do
 
       it 'returns http success' do
         post :create,
-             params: { title: 'title', artist: Faker::Name.name, music: music }
+             params: { title: 'title', artist: Faker::Name.name, visibility: 'public', music: music }
 
         expect(response).to have_http_status :success
       end
@@ -104,7 +126,7 @@ describe Api::V1::TracksController, type: :controller do
     context 'without write scope' do
       it 'returns http unauthorized' do
         post :create,
-             params: { title: 'title', artist: Faker::Name.name, music: music }
+             params: { title: 'title', artist: Faker::Name.name, visibility: 'public', music: music }
 
         expect(response).to have_http_status :unauthorized
       end
@@ -140,12 +162,12 @@ describe Api::V1::TracksController, type: :controller do
         }
 
         patch :update,
-              params: { id: track.id, title: 'updated title', artist: 'updated artist', description: 'updated description', music: another_music, video: video_params }
+              params: { id: track.id, title: 'updated title', artist: 'updated artist', text: 'updated text', music: another_music, video: video_params }
 
         track.reload
         expect(track.title).to eq 'updated title'
         expect(track.artist).to eq 'updated artist'
-        expect(track.description).to eq 'updated description'
+        expect(track.text).to eq 'updated text'
         expect(track.duration).to eq 181
         expect(track.video_blur_movement_band_bottom).to eq 50
         expect(track.video_blur_movement_band_top).to eq 300
@@ -163,7 +185,7 @@ describe Api::V1::TracksController, type: :controller do
         expect(body_as_json[:id]).to eq track.id
         expect(body_as_json[:title]).to eq 'updated title'
         expect(body_as_json[:artist]).to eq 'updated artist'
-        expect(body_as_json[:description]).to eq 'updated description'
+        expect(body_as_json[:text]).to eq 'updated text'
         expect(body_as_json[:video]).to eq video_params
       end
 
@@ -335,7 +357,7 @@ describe Api::V1::TracksController, type: :controller do
         :track,
         title: 'title',
         artist: 'artist',
-        description: 'description',
+        text: 'text',
         duration: 1.minute,
         music: music,
         video: video,
@@ -358,7 +380,7 @@ describe Api::V1::TracksController, type: :controller do
 
       expect(body_as_json[:title]).to eq 'title'
       expect(body_as_json[:artist]).to eq 'artist'
-      expect(body_as_json[:description]).to eq 'description'
+      expect(body_as_json[:text]).to eq 'text'
 
       expect(body_as_json[:video][:url]).to be_a String
 

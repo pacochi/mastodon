@@ -5,7 +5,7 @@ export const TRACK_COMPOSE_BASIC_TAB_FOCUS = 'TRACK_COMPOSE_BASIC_TAB_FOCUS';
 export const TRACK_COMPOSE_VIDEO_TAB_FOCUS = 'TRACK_COMPOSE_VIDEO_TAB_FOCUS';
 export const TRACK_COMPOSE_TRACK_TITLE_CHANGE = 'TRACK_COMPOSE_TRACK_TITLE_CHANGE';
 export const TRACK_COMPOSE_TRACK_ARTIST_CHANGE = 'TRACK_COMPOSE_TRACK_ARTIST_CHANGE';
-export const TRACK_COMPOSE_TRACK_DESCRPITION_CHANGE = 'TRACK_COMPOSE_TRACK_DESCRPITION_CHANGE';
+export const TRACK_COMPOSE_TRACK_TEXT_CHANGE = 'TRACK_COMPOSE_TRACK_TEXT_CHANGE';
 export const TRACK_COMPOSE_TRACK_MUSIC_CHANGE = 'TRACK_COMPOSE_TRACK_MUSIC_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_IMAGE_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_IMAGE_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_BLUR_VISIBLITY_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_BLUR_VISIBLITY_CHANGE';
@@ -47,7 +47,7 @@ export function submitTrackCompose() {
     formData.append('music', track.get('music'));
     formData.append('title', track.get('title'));
     formData.append('artist', track.get('artist'));
-    formData.append('description', track.get('description'));
+    formData.append('text', track.get('text'));
 
     if (image) {
       formData.append('video[image]', image);
@@ -107,9 +107,9 @@ export function changeTrackComposeTrackArtist(value) {
   };
 };
 
-export function changeTrackComposeTrackDescription(value) {
+export function changeTrackComposeTrackText(value) {
   return {
-    type: TRACK_COMPOSE_TRACK_DESCRPITION_CHANGE,
+    type: TRACK_COMPOSE_TRACK_TEXT_CHANGE,
     value,
   };
 };

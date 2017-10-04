@@ -75,9 +75,9 @@ ActiveRecord::Schema.define(version: 20170830000000) do
 
   create_table "albums", force: :cascade do |t|
     t.bigint "account_id", null: false
-    t.bigint "status_id", null: false
+    t.bigint "status_id"
     t.string "title", null: false
-    t.text "description", default: "", null: false
+    t.text "text", default: "", null: false
     t.string "image_file_name"
     t.string "image_content_type"
     t.integer "image_file_size"
@@ -435,11 +435,11 @@ ActiveRecord::Schema.define(version: 20170830000000) do
 
   create_table "tracks", force: :cascade do |t|
     t.bigint "account_id", null: false
-    t.bigint "status_id", null: false
+    t.bigint "status_id"
     t.integer "duration", null: false
     t.string "title", null: false
     t.string "artist", null: false
-    t.string "description", default: "", null: false
+    t.string "text", default: "", null: false
     t.string "music_file_name"
     t.string "music_content_type"
     t.integer "music_file_size"

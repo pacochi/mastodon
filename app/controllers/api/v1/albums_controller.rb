@@ -10,7 +10,7 @@ class Api::V1::AlbumsController < Api::BaseController
     attributes = {
       account: current_account,
       title: params.require(:title),
-      description: params.require(:description),
+      text: params.require(:text),
       image: params.require(:image),
     }
 
@@ -27,7 +27,7 @@ class Api::V1::AlbumsController < Api::BaseController
 
   def update
     @album = Album.find_by!(id: params.require(:id), account: current_account)
-    @album.update! params.permit(:title, :description, :image)
+    @album.update! params.permit(:title, :text, :image)
   end
 
   def destroy

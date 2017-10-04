@@ -31,15 +31,4 @@ describe Track, type: :model do
     track = Fabricate(:track, artist: 'This is a text which is longer than 128 characters. A string, "hello!!!!!!" should be stripped from the end of the whole string. hello!!!!!!')
     expect(track.artist).to eq 'This is a text which is longer than 128 characters. A string, "hello!!!!!!" should be stripped from the end of the whole string.'
   end
-
-  it 'truncates description after 500 characters after it is changed' do
-    track = Fabricate(:track, description: Faker::Lorem.characters(501))
-    expect(track.description.size).to eq 500
-  end
-
-  it 'does not truncate description when it is not changed' do
-    track = Fabricate(:track)
-    track.update! title: Faker::Name.name
-    expect(track.previous_changes[:description]).to eq nil
-  end
 end

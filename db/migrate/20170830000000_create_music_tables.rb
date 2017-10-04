@@ -2,19 +2,19 @@ class CreateMusicTables < ActiveRecord::Migration[5.1]
   def change
     create_table :albums do |t|
       t.belongs_to :account, foreign_key: { on_delete: :cascade, on_update: :cascade }, null: false
-      t.belongs_to :status, foreign_key: { on_delete: :cascade, on_update: :cascade }, null: false
+      t.belongs_to :status, foreign_key: { on_delete: :cascade, on_update: :cascade }
       t.string :title, null: false
-      t.text :description, default: '', null: false
+      t.text :text, default: '', null: false
       t.attachment :image
     end
 
     create_table :tracks do |t|
       t.belongs_to :account, foreign_key: { on_delete: :cascade, on_update: :cascade }, null: false
-      t.belongs_to :status, foreign_key: { on_delete: :cascade, on_update: :cascade }, null: false
+      t.belongs_to :status, foreign_key: { on_delete: :cascade, on_update: :cascade }
       t.integer :duration, null: false
       t.string :title, null: false
       t.string :artist, null: false
-      t.string :description, default: '', null: false
+      t.string :text, default: '', null: false
       t.attachment :music
       t.attachment :video
       t.attachment :video_image

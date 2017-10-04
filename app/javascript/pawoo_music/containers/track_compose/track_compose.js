@@ -11,7 +11,7 @@ import {
   focusTrackComposeVideoTab,
   changeTrackComposeTrackTitle,
   changeTrackComposeTrackArtist,
-  changeTrackComposeTrackDescription,
+  changeTrackComposeTrackText,
   changeTrackComposeTrackMusic,
   changeTrackComposeTrackVideoImage,
   changeTrackComposeTrackVideoBlurVisibility,
@@ -79,8 +79,8 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(changeTrackComposeTrackArtist(value));
   },
 
-  onChangeTrackDescription (value) {
-    dispatch(changeTrackComposeTrackDescription(value));
+  onChangeTrackText (value) {
+    dispatch(changeTrackComposeTrackText(value));
   },
 
   onChangeTrackMusic (value) {
@@ -141,7 +141,7 @@ export default class TrackCompose extends ImmutablePureComponent {
     onFocusVideoTab: PropTypes.func.isRequired,
     onChangeTrackTitle: PropTypes.func.isRequired,
     onChangeTrackArtist: PropTypes.func.isRequired,
-    onChangeTrackDescription: PropTypes.func.isRequired,
+    onChangeTrackText: PropTypes.func.isRequired,
     onChangeTrackMusic: PropTypes.func.isRequired,
     onChangeTrackVideoImage: PropTypes.func.isRequired,
     onChangeTrackVideoBlurVisibility: PropTypes.func.isRequired,
@@ -251,8 +251,8 @@ export default class TrackCompose extends ImmutablePureComponent {
     this.props.onChangeTrackArtist(target.value);
   }
 
-  handleChangeTrackDescription = ({ target }) => {
-    this.props.onChangeTrackDescription(target.value);
+  handleChangeTrackText = ({ target }) => {
+    this.props.onChangeTrackText(target.value);
   }
 
   handleChangeTrackVideoImage = ({ target }) => {
@@ -398,8 +398,8 @@ export default class TrackCompose extends ImmutablePureComponent {
                 </span>
                 <textarea
                   maxLength='500'
-                  onChange={this.handleChangeTrackDescription}
-                  value={this.props.track.get('description')}
+                  onChange={this.handleChangeTrackText}
+                  value={this.props.track.get('text')}
                 />
               </label>
             </fieldset>
