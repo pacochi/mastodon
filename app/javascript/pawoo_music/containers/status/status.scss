@@ -8,19 +8,13 @@
   border-radius:      var(--radius);
   background-color:   var(--color1);
 
-  color:          var(--textcolor);
-  font-size:      var(--text30-font);
-  line-height:    var(--text30-line);
+  color:        var(--textcolor);
+  font-size:    var(--text30-font);
+  line-height:  var(--text30-line);
 
   &.highlight {
-    border:         1px dashed var(--strong1);
-    background:     var(--color2);
-  }
-
-  .prepend-inline {
-    .display-name {
-      display: inline;
-    }
+    border:     1px dashed var(--strong1);
+    background: var(--color2);
   }
 
   .status-head {
@@ -42,7 +36,37 @@
 
   .status__content {
     display:    block;
-    margin:     var(--verticalspace10);
+    margin:     var(--verticalspace20);
     text-align: justify;
+
+    word-break: break-all;
+  }
+
+  .prepend-inline,
+  .meta {
+    font-size:    var(--text10-font);
+    line-height:  var(--text10-line);
+
+    .fa {
+      letter-spacing: var(--grid);
+    }
+  }
+  
+  .prepend-inline {
+    margin:       0 0 calc(var(--grid) * 2) 0;
+  }
+
+  .status-media {
+    .status-card-video {
+      padding-bottom: calc(100% * 9/16 + var(--grid) * 8);
+      position:       relative;
+
+      iframe {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+      }
+    }
   }
 }

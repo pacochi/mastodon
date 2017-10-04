@@ -2,4 +2,8 @@
   display: flex;
   position: relative;
   margin:  var(--verticalspace20);
+
+  li {
+    height: var(--iconsize15);
+  }
 }

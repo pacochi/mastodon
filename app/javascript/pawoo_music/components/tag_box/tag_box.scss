@@ -5,14 +5,19 @@
     margin:         var(--verticalspace30);
     color:          var(--strong2);
     font-weight:    bold;
+    font-size:      var(--text20-font);
+    line-height:    var(--text20-line);
   }
 
   ul {
-    margin:         var(--verticalspace10);
+    margin:         var(--verticalspace30);
 
     li {
       margin:         var(--verticalspace10);
       display:        flex;
+
+      font-size:      var(--text10-font);
+      line-height:    var(--text10-line);
 
       .hashtag {
         flex: 1;
