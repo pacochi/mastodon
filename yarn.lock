@@ -3291,6 +3291,12 @@ getpass@^0.1.1:
   dependencies:
     assert-plus "^1.0.0"
 
+"musicvideo-generator@github.com:pixiv/musicvideo-generator.git":
+  version "1.0.0"
+  resolved "github.com:pixiv/musicvideo-generator.git#8e43149ca6125c6c878dc3baf788e7c51795d222"
+  dependencies:
+    pixi.js "^4.5.4"
+
 glamor@^2.20.25:
   version "2.20.25"
   resolved "https://registry.yarnpkg.com/glamor/-/glamor-2.20.25.tgz#71b84b82b67a9327771ac59de53ee915d148a4a3"
@@ -4731,11 +4737,6 @@ multicast-dns@^6.0.1:
   dependencies:
     dns-packet "^1.0.1"
     thunky "^0.1.0"
-
-"musicvideo-generator@file:../musicvideo-generator":
-  version "1.0.0"
-  dependencies:
-    pixi.js "^4.5.4"
 
 mute-stream@0.0.5:
   version "0.0.5"
