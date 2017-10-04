@@ -6,6 +6,7 @@ import { createSelector } from 'reselect';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import { OrderedSet } from 'immutable';
+import { switchCompose } from '../../../selectors';
 
 const getMentionedUsernames = createSelector(state => state.getIn(['compose', 'text']), text => text.match(/(?:^|[^\/\w])@([a-z0-9_]+@[a-z0-9\.\-]+)/ig));
 
@@ -13,7 +14,8 @@ const getMentionedDomains = createSelector(getMentionedUsernames, mentionedUsern
   return OrderedSet(mentionedUsernamesWithDomains !== null ? mentionedUsernamesWithDomains.map(item => item.split('@')[2]) : []);
 });
 
-const mapStateToProps = state => {
+const mapStateToProps = (state, props) => {
+  state = switchCompose(state, props);
   const mentionedUsernames = getMentionedUsernames(state);
   const mentionedUsernamesWithDomains = getMentionedDomains(state);
 

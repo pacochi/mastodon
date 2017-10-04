@@ -7,15 +7,20 @@ import { changeComposeSensitivity } from '../../../actions/compose';
 import Motion from 'react-motion/lib/Motion';
 import spring from 'react-motion/lib/spring';
 import { injectIntl, defineMessages } from 'react-intl';
+import { switchCompose } from '../../../selectors';
 
 const messages = defineMessages({
   title: { id: 'compose_form.sensitive', defaultMessage: 'Mark media as sensitive' },
 });
 
-const mapStateToProps = state => ({
-  visible: state.getIn(['compose', 'media_attachments']).size > 0,
-  active: state.getIn(['compose', 'sensitive']),
-});
+const mapStateToProps = (state, props) => {
+  state = switchCompose(state, props);
+
+  return {
+    visible: state.getIn(['compose', 'media_attachments']).size > 0,
+    active: state.getIn(['compose', 'sensitive']),
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
 

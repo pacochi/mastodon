@@ -16,6 +16,7 @@ export default class UploadForm extends React.PureComponent {
 
   static propTypes = {
     media: ImmutablePropTypes.list.isRequired,
+    useModal: PropTypes.bool,
     onRemoveFile: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
   };
@@ -26,7 +27,7 @@ export default class UploadForm extends React.PureComponent {
   }
 
   render () {
-    const { intl, media } = this.props;
+    const { intl, media, useModal } = this.props;
 
     const uploads = media.map(attachment =>
       <div className='compose-form__upload' key={attachment.get('id')}>
@@ -42,7 +43,7 @@ export default class UploadForm extends React.PureComponent {
 
     return (
       <div className='compose-form__upload-wrapper'>
-        <UploadProgressContainer />
+        <UploadProgressContainer useModal={useModal} />
         <div className='compose-form__uploads-wrapper'>{uploads}</div>
       </div>
     );
