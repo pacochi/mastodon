@@ -1,11 +1,16 @@
 import { connect } from 'react-redux';
 import UploadButton from '../components/upload_button';
 import { uploadCompose } from '../../../actions/compose';
+import { switchCompose } from '../../../selectors';
 
-const mapStateToProps = state => ({
-  disabled: state.getIn(['compose', 'is_uploading']) || (state.getIn(['compose', 'media_attachments']).size > 3 || state.getIn(['compose', 'media_attachments']).some(m => m.get('type') === 'video')),
-  resetFileKey: state.getIn(['compose', 'resetFileKey']),
-});
+const mapStateToProps = (state, props) => {
+  state = switchCompose(state, props);
+
+  return {
+    disabled: state.getIn(['compose', 'is_uploading']) || (state.getIn(['compose', 'media_attachments']).size > 3 || state.getIn(['compose', 'media_attachments']).some(m => m.get('type') === 'video')),
+    resetFileKey: state.getIn(['compose', 'resetFileKey']),
+  };
+};
 
 const mapDispatchToProps = dispatch => ({
 

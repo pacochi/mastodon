@@ -43,6 +43,7 @@ export const COMPOSE_TAG_INSERT = 'COMPOSE_TAG_INSERT';
 export const COMPOSE_FILE_KEY_RESET = 'COMPOSE_FILE_KEY_RESET';
 
 export const COMPOSE_BACKUPDATA_SAVE = 'COMPOSE_BACKUPDATA_SAVE';
+export const COMPOSE_BACKUPDATA_SAVE_AND_CLEAR = 'COMPOSE_BACKUPDATA_SAVE_AND_CLEAR';
 export const COMPOSE_BACKUPDATA_RESTORE = 'COMPOSE_BACKUPDATA_RESTORE';
 export const COMPOSE_BACKUPDATA_RESET = 'COMPOSE_BACKUPDATA_RESET';
 
@@ -77,6 +78,13 @@ export function mentionCompose(account) {
       type: COMPOSE_MENTION,
       account: account,
     });
+    dispatch(openModal('STATUS_FORM', {}));
+  };
+};
+
+export function openModalFormCompose() {
+  return (dispatch) => {
+    dispatch(saveAndClearBackupData());
     dispatch(openModal('STATUS_FORM', {}));
   };
 };
@@ -428,6 +436,12 @@ export function selectMusicFileFail(error) {
 export function saveBackupData() {
   return {
     type: COMPOSE_BACKUPDATA_SAVE,
+  };
+};
+
+export function saveAndClearBackupData() {
+  return {
+    type: COMPOSE_BACKUPDATA_SAVE_AND_CLEAR,
   };
 };
 

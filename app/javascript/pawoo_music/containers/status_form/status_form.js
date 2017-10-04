@@ -38,7 +38,7 @@ import {
   fetchComposeHashTagSuggestions,
   selectComposeHashTagSuggestion,
 } from '../../../mastodon/actions/compose';
-
+import { switchCompose } from '../../../mastodon/selectors';
 
 // TODO: i18n
 // Moment is used by react-datetime, which is imported only by this module.
@@ -55,34 +55,23 @@ const messages = defineMessages({
 });
 
 const mapStateToProps = (state, props) => {
-  const { useBackup } = props;
-  let compose = state.get('compose');
-
-  console.log(useBackup, compose.get('backup'));
-
-  if (useBackup) {
-    const backup = compose.get('backup');
-    if (backup) {
-      compose = backup;
-    }
-  }
+  state = switchCompose(state, props);
 
   return {
-    text: compose.get('text'),
-    published: compose.get('published'),
-    suggestion_token: compose.get('suggestion_token'),
-    suggestions: compose.get('suggestions'),
-    spoiler: compose.get('spoiler'),
-    spoiler_text: compose.get('spoiler_text'),
-    privacy: compose.get('privacy'),
-    focusDate: compose.get('focusDate'),
-    preselectDate: compose.get('preselectDate'),
-    is_submitting: compose.get('is_submitting'),
-    is_uploading: compose.get('is_uploading'),
-    me: compose.get('me'),
-    showSearch: compose.get('submitted') && !compose.get('hidden'),
-    hash_tag_suggestions: compose.get('hash_tag_suggestions'),
-    hash_tag_token: compose.get('hash_tag_token'),
+    text: state.getIn(['compose', 'text']),
+    published: state.getIn(['compose', 'published']),
+    suggestion_token: state.getIn(['compose', 'suggestion_token']),
+    suggestions: state.getIn(['compose', 'suggestions']),
+    spoiler: state.getIn(['compose', 'spoiler']),
+    spoiler_text: state.getIn(['compose', 'spoiler_text']),
+    privacy: state.getIn(['compose', 'privacy']),
+    focusDate: state.getIn(['compose', 'focusDate']),
+    preselectDate: state.getIn(['compose', 'preselectDate']),
+    is_submitting: state.getIn(['compose', 'is_submitting']),
+    is_uploading: state.getIn(['compose', 'is_uploading']),
+    me: state.getIn(['compose', 'me']),
+    hash_tag_suggestions: state.getIn(['compose', 'hash_tag_suggestions']),
+    hash_tag_token: state.getIn(['compose', 'hash_tag_token']),
   };
 };
 
@@ -167,6 +156,7 @@ export default class StatusForm extends ImmutablePureComponent {
     is_submitting: PropTypes.bool,
     is_uploading: PropTypes.bool,
     me: PropTypes.number,
+    useModal: PropTypes.bool,
     onChange: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     onClearSuggestions: PropTypes.func.isRequired,
@@ -176,17 +166,12 @@ export default class StatusForm extends ImmutablePureComponent {
     onChangeSpoilerText: PropTypes.func.isRequired,
     onPaste: PropTypes.func.isRequired,
     onPickEmoji: PropTypes.func.isRequired,
-    showSearch: PropTypes.bool,
     hash_tag_suggestions: ImmutablePropTypes.list,
     hash_tag_token: PropTypes.string,
     onHashTagSuggestionsClearRequested: PropTypes.func.isRequired,
     onHashTagSuggestionsFetchRequested: PropTypes.func.isRequired,
     onHashTagSuggestionsSelected: PropTypes.func.isRequired,
     onSelectTimeLimit: PropTypes.func.isRequired,
-  };
-
-  static defaultProps = {
-    showSearch: false,
   };
 
   _restoreCaret = null;
@@ -309,7 +294,7 @@ export default class StatusForm extends ImmutablePureComponent {
   }
 
   render () {
-    const { scheduling, intl, onPaste, showSearch } = this.props;
+    const { scheduling, intl, onPaste, useModal } = this.props;
     const disabled = this.props.is_submitting;
     const text = [this.props.spoiler_text, this.props.text].join('');
 
@@ -329,9 +314,9 @@ export default class StatusForm extends ImmutablePureComponent {
           </div>
         </Collapsable>
 
-        <WarningContainer />
+        <WarningContainer useModal={useModal} />
 
-        <ReplyIndicatorContainer />
+        <ReplyIndicatorContainer useModal={useModal} />
 
         <div className='compose-form__autosuggest-wrapper'>
           <AutosuggestTextarea
@@ -346,7 +331,7 @@ export default class StatusForm extends ImmutablePureComponent {
             onSuggestionsClearRequested={this.onSuggestionsClearRequested}
             onSuggestionSelected={this.onSuggestionSelected}
             onPaste={onPaste}
-            autoFocus={!showSearch}
+            autoFocus
             hash_tag_suggestions={this.props.hash_tag_suggestions}
             onHashTagSuggestionsFetchRequested={this.onHashTagSuggestionsFetchRequested}
             onHashTagSuggestionsClearRequested={this.onHashTagSuggestionsClearRequested}
@@ -358,15 +343,15 @@ export default class StatusForm extends ImmutablePureComponent {
         </div>
 
         <div className='compose-form__modifiers'>
-          <UploadFormContainer />
+          <UploadFormContainer useModal={useModal} />
         </div>
 
         <div className='compose-form__buttons-wrapper'>
           <div className='compose-form__buttons'>
-            <UploadButtonContainer />
-            <PrivacyDropdownContainer />
-            <SensitiveButtonContainer />
-            <SpoilerButtonContainer />
+            <UploadButtonContainer useModal={useModal} />
+            <PrivacyDropdownContainer useModal={useModal} />
+            <SensitiveButtonContainer useModal={useModal} />
+            <SpoilerButtonContainer useModal={useModal} />
           </div>
 
           {
@@ -389,7 +374,7 @@ export default class StatusForm extends ImmutablePureComponent {
           </div>
         </div>
 
-        <SensitiveGuideContainer />
+        <SensitiveGuideContainer useModal={useModal} />
       </div>
     );
   }

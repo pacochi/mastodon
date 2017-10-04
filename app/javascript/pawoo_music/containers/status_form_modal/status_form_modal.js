@@ -10,7 +10,7 @@ const mapStateToProps = (state) => ({
 });
 
 @connect(mapStateToProps)
-export default class ConfirmationModal extends React.PureComponent {
+export default class StatusFormModal extends React.PureComponent {
 
   static propTypes = {
     me: PropTypes.number,
@@ -27,7 +27,7 @@ export default class ConfirmationModal extends React.PureComponent {
     return (
       <div className='modal-root__modal status-form-modal'>
         <AccountContainer />
-        <StatusFormContainer />
+        <StatusFormContainer useModal />
       </div>
     );
   }

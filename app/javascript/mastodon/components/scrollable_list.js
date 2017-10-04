@@ -195,8 +195,13 @@ export default class ScrollableList extends PureComponent {
       );
     } else {
       scrollableArea = (
-        <div className='empty-column-indicator' ref={this.setRef}>
-          {emptyMessage}
+        <div className='scrollable' ref={this.setRef} onMouseMove={this.handleMouseMove} onMouseLeave={this.handleMouseLeave}>
+          <div role='feed' className='item-list' onKeyDown={this.handleKeyDown}>
+            {prepend}
+          </div>
+          <div className='empty-column-indicator' ref={this.setRef}>
+            {emptyMessage}
+          </div>
         </div>
       );
     }

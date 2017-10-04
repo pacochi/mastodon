@@ -156,7 +156,7 @@ export default class StatusTimeline extends ImmutablePureComponent {
     const prepend = withComposeForm && me && (
       <div className='prepend'>
         <AccountContainer id={me} />
-        <StatusFormContainer useBackup />
+        <StatusFormContainer />
       </div>
     );
 

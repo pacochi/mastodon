@@ -28,6 +28,7 @@ import {
   COMPOSE_TAG_INSERT,
   COMPOSE_FILE_KEY_RESET,
   COMPOSE_BACKUPDATA_SAVE,
+  COMPOSE_BACKUPDATA_SAVE_AND_CLEAR,
   COMPOSE_BACKUPDATA_RESTORE,
   COMPOSE_BACKUPDATA_RESET,
 } from '../actions/compose';
@@ -36,12 +37,12 @@ import { STORE_HYDRATE } from '../actions/store';
 import Immutable from 'immutable';
 import uuid from '../uuid';
 
-const initialState = Immutable.Map({
+export const initialState = Immutable.Map({
   mounted: false,
   sensitive: false,
   spoiler: false,
   spoiler_text: '',
-  privacy: null,
+  privacy: 'public',
   published: null,
   text: '',
   focusDate: null,
@@ -284,6 +285,8 @@ export default function compose(state = initialState, action) {
     return state.set('resetFileKey', Math.floor((Math.random() * 0x10000)));
   case COMPOSE_BACKUPDATA_SAVE:
     return state.set('backup', state.set('backup', null));
+  case COMPOSE_BACKUPDATA_SAVE_AND_CLEAR:
+    return backupAndClear(state);
   case COMPOSE_BACKUPDATA_RESTORE:
     const backup = state.get('backup');
     return backup ? backup : state;
