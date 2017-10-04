@@ -48,7 +48,7 @@ RSpec.describe Api::V1::NotificationsController, type: :controller do
       @mention_from_status = mentioning_status.mentions.first
       @favourite = FavouriteService.new.call(other.account, first_status)
       @follow = FollowService.new.call(other.account, 'alice')
-      @video_prepared = Fabricate(:music_attachment)
+      @video_prepared = Fabricate(:track)
       Fabricate(:notification, account: user.account, activity: @video_prepared)
     end
 

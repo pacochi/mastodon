@@ -21,7 +21,7 @@ class Album < ApplicationRecord
 
   belongs_to :account, inverse_of: :albums
   belongs_to :status, inverse_of: :album
-  has_many :album_music_attachments, inverse_of: :album
+  has_many :album_tracks, inverse_of: :album
 
   has_attached_file :image
 

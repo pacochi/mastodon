@@ -8,40 +8,40 @@ class Api::V1::TracksController < Api::BaseController
 
   def create
     params.require [:title, :artist, :music]
-    attributes = prepare_music_attributes
+    attributes = prepare_track_attributes
 
     ApplicationRecord.transaction do
       status = Status.new(account: current_account, text: '', visibility: :unlisted)
       status.save! validate: false
 
       attributes.merge!(status: status)
-      @track = MusicAttachment.create!(attributes)
+      @track = Track.create!(attributes)
 
       status.update! text: short_account_track_url(current_account.username, @track)
     end
   end
 
   def update
-    attributes = prepare_music_attributes
-    @track = MusicAttachment.find_by!(id: params.require(:id), account: current_account)
+    attributes = prepare_track_attributes
+    @track = Track.find_by!(id: params.require(:id), account: current_account)
     @track.update! attributes
   end
 
   def destroy
-    music = MusicAttachment.find_by!(id: params.require(:id), account: current_account)
+    track = Track.find_by!(id: params.require(:id), account: current_account)
 
-    music.destroy!
-    RemovalWorker.perform_async music.status_id
+    track.destroy!
+    RemovalWorker.perform_async track.status_id
 
     render_empty
   end
 
   def show
-    @track = MusicAttachment.find(params.require(:id))
+    @track = Track.find(params.require(:id))
   end
 
   def prepare_video
-    track = MusicAttachment.find_by!(id: params.require(:id), account: current_account)
+    track = Track.find_by!(id: params.require(:id), account: current_account)
     VideoPreparingWorker.perform_async track.id
 
     render_empty
@@ -49,13 +49,13 @@ class Api::V1::TracksController < Api::BaseController
 
   private
 
-  def prepare_music_attributes
-    return @prepared_music_attributes if @prepared_music_attributes
+  def prepare_track_attributes
+    return @prepared_track_attributes if @prepared_track_attributes
 
-    attributes = music_params
+    attributes = track_params
     attributes.merge! account: current_account
 
-    if music_params[:music].present?
+    if track_params[:music].present?
       music_duration = update_music
       attributes.merge! duration: music_duration.ceil
     end
@@ -122,21 +122,21 @@ class Api::V1::TracksController < Api::BaseController
       )
     end
 
-    @prepared_music_attributes = attributes
+    @prepared_track_attributes = attributes
   end
 
-  def music_params
+  def track_params
     params.permit :title, :artist, :description, :music
   end
 
   def update_music
     return @updated_music_duration if @updated_music_duration
 
-    Mp3Info.open music_params[:music].path do |m|
+    Mp3Info.open track_params[:music].path do |m|
       m.tag2.remove_pictures
       @updated_music_duration = m.length
     end
   rescue Mp3InfoError
-    raise Mastodon::ValidationError, I18n.t('music_attachments.invalid_mp3')
+    raise Mastodon::ValidationError, I18n.t('tracks.invalid_mp3')
   end
 end

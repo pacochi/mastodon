@@ -103,8 +103,8 @@ RSpec.describe NotificationMailer, type: :mailer do
   end
 
   describe 'video_prepared' do
-    let(:music_attachment) { Fabricate(:music_attachment, title: 'title') }
-    let(:mail) { NotificationMailer.video_prepared(receiver.account, Notification.create!(account: receiver.account, activity: music_attachment)) }
+    let(:track) { Fabricate(:track, title: 'title') }
+    let(:mail) { NotificationMailer.video_prepared(receiver.account, Notification.create!(account: receiver.account, activity: track)) }
 
     include_examples 'localized subject', 'notification_mailer.video_prepared.subject', title: 'title'
 

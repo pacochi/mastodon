@@ -1,4 +1,4 @@
-Fabricator(:music_attachment) do
+Fabricator(:track) do
   duration 1.minute
   title 'title'
   artist { Faker::Name.name }

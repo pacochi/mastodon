@@ -20,8 +20,8 @@ describe TracksController, type: :controller do
 
   describe 'GET #show' do
     it 'returns http success' do
-      music_attachment = Fabricate(:music_attachment)
-      get :show, params: { account_username: music_attachment.status.account.username, id: music_attachment }
+      track = Fabricate(:track)
+      get :show, params: { account_username: track.status.account.username, id: track }
       expect(response).to have_http_status :success
     end
   end

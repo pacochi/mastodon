@@ -87,8 +87,8 @@ RSpec.describe NotifyService do
     end
   end
 
-  context 'when the activity is music attachment' do
-    let(:activity) { Fabricate(:music_attachment) }
+  context 'when the activity is track' do
+    let(:activity) { Fabricate(:track) }
 
     it { is_expected.to change(Notification, :count).by(1) }
 

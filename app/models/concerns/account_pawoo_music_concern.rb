@@ -5,6 +5,6 @@ module AccountPawooMusicConcern
 
   included do
     has_many :albums, inverse_of: :account
-    has_many :music_attachments, inverse_of: :account, dependent: :destroy
+    has_many :tracks, inverse_of: :account, dependent: :destroy
   end
 end

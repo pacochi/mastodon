@@ -41,31 +41,31 @@ class QueueItem
 
     def pawoo_link(link)
       begin
-        music_attachment = find_music_attachment(MusicAttachment.includes(status: :account), link)
+        track = find_track(Track.includes(status: :account), link)
       rescue ActiveRecord::ActiveRecordError
         raise Mastodon::MusicSourceFetchFailedError
       end
 
-      return nil if music_attachment.nil?
+      return nil if track.nil?
 
-      cache = find_cache('pawoo-music', music_attachment.id)
+      cache = find_cache('pawoo-music', track.id)
       return cache if cache
 
       item = new(
-        info: music_attachment.display_title,
+        info: track.display_title,
         thumbnail_url: nil,
         music_url: nil,
         video_url: nil,
         link: nil,
-        duration: music_attachment.duration,
+        duration: track.duration,
         source_type: 'pawoo-music',
-        source_id: music_attachment.id
+        source_id: track.id
       )
 
-      cache_item('pawoo-music', music_attachment.id, item)
+      cache_item('pawoo-music', track.id, item)
     end
 
-    def find_music_attachment(scope, link)
+    def find_track(scope, link)
       matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/((@\w+)|(web/statuses))/(?<status_id>\d+)})
       return scope.find_by!(status_id: matched[:status_id]) if matched
 

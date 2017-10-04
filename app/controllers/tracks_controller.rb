@@ -12,7 +12,7 @@ class TracksController < ApplicationController
   end
 
   def show
-    @music_attachment = MusicAttachment.joins(:account).find_by!(
+    @track = Track.joins(:account).find_by!(
       id: params.require(:id),
       accounts: { username: params.require(:account_username) }
     )

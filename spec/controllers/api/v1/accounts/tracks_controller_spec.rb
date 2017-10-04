@@ -9,8 +9,8 @@ describe Api::V1::Accounts::TracksController, type: :controller do
     let(:account) { Fabricate(:account) }
 
     it 'returns tracks of a specific account' do
-      self_track = Fabricate(:music_attachment, status: Fabricate(:status, account: account))
-      anothers_track = Fabricate(:music_attachment)
+      self_track = Fabricate(:track, status: Fabricate(:status, account: account))
+      anothers_track = Fabricate(:track)
 
       get :index, params: { account_id: account.id }
 
@@ -19,7 +19,7 @@ describe Api::V1::Accounts::TracksController, type: :controller do
 
     it 'returns ordered tracks with id constraints' do
       tracks = 3.times.map do
-        Fabricate(:music_attachment, status: Fabricate(:status, account: account))
+        Fabricate(:track, status: Fabricate(:status, account: account))
       end
 
       get :index, params: { account_id: account.id, since_id: tracks[0], max_id: tracks[2] }
@@ -29,7 +29,7 @@ describe Api::V1::Accounts::TracksController, type: :controller do
 
     it 'returns ordered tracks with limit constraint' do
       tracks = 2.times.map do
-        Fabricate(:music_attachment, status: Fabricate(:status, account: account))
+        Fabricate(:track, status: Fabricate(:status, account: account))
       end
 
       get :index, params: { account_id: account.id, limit: 1 }
@@ -40,7 +40,7 @@ describe Api::V1::Accounts::TracksController, type: :controller do
 
     it 'inserts pagination headers if necessary' do
       tracks = 3.times.map do
-        Fabricate(:music_attachment, status: Fabricate(:status, account: account))
+        Fabricate(:track, status: Fabricate(:status, account: account))
       end
 
       get :index, params: { account_id: account.id, max_id: tracks[2], limit: 1 }

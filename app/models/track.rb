@@ -1,6 +1,6 @@
 # == Schema Information
 #
-# Table name: music_attachments
+# Table name: tracks
 #
 #  id                               :integer          not null, primary key
 #  account_id                       :integer          not null
@@ -35,16 +35,16 @@
 #  video_spectrum_color             :integer
 #
 
-class MusicAttachment < ApplicationRecord
+class Track < ApplicationRecord
   include Paginable
 
   before_save :truncate_title,       if: :title_changed?
   before_save :truncate_artist,      if: :artist_changed?
   before_save :truncate_description, if: :description_changed?
 
-  belongs_to :account, inverse_of: :music_attachments
-  belongs_to :status, inverse_of: :music_attachment
-  has_many :album_music_attachments, inverse_of: :music_attachment
+  belongs_to :account, inverse_of: :tracks
+  belongs_to :status, inverse_of: :track
+  has_many :album_tracks, inverse_of: :track
 
   has_attached_file :music
   has_attached_file :video

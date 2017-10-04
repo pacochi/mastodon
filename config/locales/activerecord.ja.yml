@@ -30,7 +30,7 @@ ja:
             image:
               in_between: 画像ファイルのサイズは:max未満である必要があります
               invalid: 画像ファイルの形式が無効です
-        music_attachment:
+        track:
           attributes:
             music:
               invalid: 音楽ファイルの形式が無効です

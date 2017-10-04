@@ -12,9 +12,9 @@ class Api::V1::Accounts::TracksController < Api::BaseController
   private
 
   def account_tracks
-    MusicAttachment.joins(:status)
-                   .where(account_id: params.require(:account_id))
-                   .paginate_by_max_id(
+    Track.joins(:status)
+         .where(account_id: params.require(:account_id))
+         .paginate_by_max_id(
       limit_param(DEFAULT_TRACKS_LIMIT),
       params[:max_id],
       params[:since_id]

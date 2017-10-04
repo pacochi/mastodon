@@ -5,6 +5,6 @@ module StatusPawooMusicConcern
 
   included do
     has_one :album, inverse_of: :status
-    has_one :music_attachment, inverse_of: :status, dependent: :destroy
+    has_one :track, inverse_of: :status, dependent: :destroy
   end
 end
