@@ -109,12 +109,12 @@ RSpec.describe NotificationMailer, type: :mailer do
     include_examples 'localized subject', 'notification_mailer.video_prepared.subject', title: 'title'
 
     it 'renders the headers' do
-      expect(mail.subject).to eq 'The video for your music, title, was generated'
+      expect(mail.subject).to eq 'The video for your track, title, was generated'
       expect(mail.to).to eq [receiver.email]
     end
 
     it 'renders the body' do
-      expect(mail.body.encoded).to include 'The video for your music, title, was generated:'
+      expect(mail.body.encoded).to include 'The video for your track, title, was generated:'
     end
   end
 

@@ -363,9 +363,9 @@ ja:
     reblog:
       body: 'あなたのトゥートが %{name} さんにブーストされました:'
       subject: あなたのトゥートが %{name} さんにブーストされました
-    video_prepared:
-      body: '楽曲『%{title}』の動画の生成が完了しました:'
-      subject: 楽曲『%{title}』の動画の生成が完了しました
+    track:
+      body: 'トラック『%{title}』の動画の生成が完了しました:'
+      subject: トラック『%{title}』の動画の生成が完了しました
   oauth_authentications:
     link: 連携する
     unlink: 解除する
