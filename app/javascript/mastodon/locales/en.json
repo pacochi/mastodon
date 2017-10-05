@@ -210,7 +210,7 @@
   "pawoo_music.track_compose.save": "Save",
   "pawoo_music.track_compose.video": "Video",
   "pawoo_music.track_compose.video.blink_threshold": "Threshold triggering blink",
-  "pawoo_music.track_compose.video.blur": "Threshold triggering blur",
+  "pawoo_music.track_compose.video.blur": "Blur",
   "pawoo_music.track_compose.video.bottom_columns": "Columns at the bottom",
   "pawoo_music.track_compose.video.bottom_fill": "Filled graph at the bottom",
   "pawoo_music.track_compose.video.circle": "Circle",
