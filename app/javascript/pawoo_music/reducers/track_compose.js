@@ -36,13 +36,16 @@ const initialState = Immutable.fromJS({
       blur: {
         visible: false,
         params: {
-          movement: { band: { bottom: 50, top: 300 } },
-          blink: { band: { bottom: 2000, top: 15000 } },
+          movement: { threshold: 150, band: { bottom: 50, top: 300 } },
+          blink: { threshold: 150, band: { bottom: 2000, top: 15000 } },
         },
       },
       particle: {
         visible: false,
-        params: { color: 0xffffff, limit: { band: { bottom: 300, top: 2000 } } },
+        params: {
+          color: 0xffffff,
+          limit: { threshold: 150, band: { bottom: 300, top: 2000 } },
+       },
       },
       spectrum: { visible: true, params: { mode: 2, color: 0xffffff } },
     },
