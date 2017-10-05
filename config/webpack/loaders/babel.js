@@ -3,7 +3,7 @@ module.exports = {
   // include react-intl because transform-react-remove-prop-types needs to apply to it
   exclude: {
     test: /node_modules/,
-    exclude: /react-intl[\/\\](?!locale-data)/,
+    exclude: /(react-intl[\/\\](?!locale-data))|(musicvideo-generator)/,
   },
   loader: 'babel-loader',
   options: {
