@@ -254,7 +254,7 @@ Rails.application.routes.draw do
       end
 
       resources :tracks, only: [:show, :create, :update, :destroy] do
-        collection do
+        member do
           post :prepare_video
         end
       end
