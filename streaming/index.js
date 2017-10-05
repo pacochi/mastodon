@@ -78,12 +78,11 @@ const startWorker = (workerId) => {
 
   const pgConfigs = {
     development: {
-//      user:     process.env.DB_USER || pg.defaults.user,
-//      password: process.env.DB_PASS || pg.defaults.password,
+      user:     process.env.DB_USER || pg.defaults.user,
+      password: process.env.DB_PASS || pg.defaults.password,
       database: 'pawoo_music_development',
-      host:     '/var/run/postgresql',
-//      host:     process.env.DB_HOST || pg.defaults.host,
-//      port:     process.env.DB_PORT || pg.defaults.port,
+      host:     process.env.DB_HOST || pg.defaults.host,
+      port:     process.env.DB_PORT || pg.defaults.port,
       max:      10,
     },
 

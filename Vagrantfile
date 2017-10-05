@@ -84,7 +84,7 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.vm.box = "ubuntu/trusty64"
 
   config.vm.provider :virtualbox do |vb|
-    vb.name = "pawoo music"
+    vb.name = "mastodon"
     vb.customize ["modifyvm", :id, "--memory", "2048"]
 
     # Disable VirtualBox DNS proxy to skip long-delay IPv6 resolutions.
