@@ -4,6 +4,7 @@ import {
   TRACK_COMPOSE_TRACK_TITLE_CHANGE,
   TRACK_COMPOSE_TRACK_ARTIST_CHANGE,
   TRACK_COMPOSE_TRACK_TEXT_CHANGE,
+  TRACK_COMPOSE_TRACK_VISIBILITY_CHANGE,
   TRACK_COMPOSE_TRACK_MUSIC_CHANGE,
   TRACK_COMPOSE_TRACK_VIDEO_IMAGE_CHANGE,
   TRACK_COMPOSE_TRACK_VIDEO_BLUR_VISIBLITY_CHANGE,
@@ -29,6 +30,7 @@ const initialState = Immutable.fromJS({
     title: '',
     artist: '',
     text: '',
+    visibility: 'public',
     video: {
       image: null,
       blur: {
@@ -59,6 +61,8 @@ export default function track_compose(state = initialState, action) {
     return state.setIn(['track', 'artist'], action.value);
   case TRACK_COMPOSE_TRACK_TEXT_CHANGE:
     return state.setIn(['track', 'text'], action.value);
+  case TRACK_COMPOSE_TRACK_VISIBILITY_CHANGE:
+    return state.setIn(['track', 'visibility'], action.value);
   case TRACK_COMPOSE_TRACK_MUSIC_CHANGE:
     return state.setIn(['track', 'music'], action.value);
   case TRACK_COMPOSE_TRACK_VIDEO_IMAGE_CHANGE:
