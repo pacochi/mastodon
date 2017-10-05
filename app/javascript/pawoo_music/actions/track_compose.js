@@ -6,6 +6,7 @@ export const TRACK_COMPOSE_VIDEO_TAB_FOCUS = 'TRACK_COMPOSE_VIDEO_TAB_FOCUS';
 export const TRACK_COMPOSE_TRACK_TITLE_CHANGE = 'TRACK_COMPOSE_TRACK_TITLE_CHANGE';
 export const TRACK_COMPOSE_TRACK_ARTIST_CHANGE = 'TRACK_COMPOSE_TRACK_ARTIST_CHANGE';
 export const TRACK_COMPOSE_TRACK_TEXT_CHANGE = 'TRACK_COMPOSE_TRACK_TEXT_CHANGE';
+export const TRACK_COMPOSE_TRACK_VISIBILITY_CHANGE = 'TRACK_COMPOSE_TRACK_VISIBILITY_CHANGE';
 export const TRACK_COMPOSE_TRACK_MUSIC_CHANGE = 'TRACK_COMPOSE_TRACK_MUSIC_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_IMAGE_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_IMAGE_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_BLUR_VISIBLITY_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_BLUR_VISIBLITY_CHANGE';
@@ -48,6 +49,7 @@ export function submitTrackCompose() {
     formData.append('title', track.get('title'));
     formData.append('artist', track.get('artist'));
     formData.append('text', track.get('text'));
+    formData.append('visibility', track.get('visibility'));
 
     if (image) {
       formData.append('video[image]', image);
@@ -163,7 +165,7 @@ export function changeTrackComposeTrackVideoParticleParamLimitThreshold(value) {
   };
 };
 
-export function changeTrackComposeTrackVieoSpectrumVisiblity(value) {
+export function changeTrackComposeTrackVideoSpectrumVisiblity(value) {
   return {
     type: TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_VISIBLITY_CHANGE,
     value,

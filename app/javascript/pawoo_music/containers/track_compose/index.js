@@ -1,4 +1,4 @@
 import TrackComposeContainer from './track_compose';
-import './track_compose.sass';
+import './track_compose.scss';
 
 export default TrackComposeContainer;
