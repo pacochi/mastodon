@@ -271,69 +271,104 @@
 }
 
 .compose-form__buttons-wrapper {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-}
+  display:          flex;
+  justify-content:  space-between;
+  position:         relative;
+  margin:           var(--verticalspace20);
 
-.compose-form__buttons {
-  padding: 10px;
-  background: darken($simple-background-color, 8%);
-  box-shadow: inset 0 5px 5px rgba($base-shadow-color, 0.05);
-  border-radius: 0 0 4px 4px;
-  display: flex;
+  .compose-form__buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  .icon-button {
-    box-sizing: content-box;
-    padding: 0 3px;
+    .compose-form__buttons > div, .compose-form__buttons > button {
+      width:  var(--iconsize20);
+      height: var(--iconsize20);
+
+      .privacy-dropdown__value,
+      .compose-form__upload-button-icon {
+        font-size:  var(--iconsize10);
+        display:    block;
+        width:      100%;
+        height:     100%;
+
+      }
+
+      i {
+        display:  flex;
+        width:    100%;
+        height:   100%;
+        justify-content:  center;
+        align-items:      center;
+        text-align:       center;
+      }
+    }
+
+    .compose-form__sensitive-button {
+      display: none;
+
+      &.compose-form__sensitive-button--visible {
+        display: block;
+      }
+
+      .compose-form__sensitive-button__icon {
+        line-height: 27px;
+      }
+    }
+
+    .compose-form__upload-wrapper {
+      overflow: hidden;
+    }
+
+    .compose-form__uploads-wrapper {
+      display: flex;
+      padding: 5px;
+    }
+
+    .compose-form__upload {
+      flex: 1 1 0;
+      margin: 5px;
+    }
+
+    .compose-form__upload-thumbnail {
+      border-radius: 4px;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      height: 100px;
+      width: 100%;
+    }
+
+    .compose-form__upload-cancel {
+      background-size: cover;
+      border-radius: 4px;
+      height: 100px;
+      width: 100px;
+    }
+  }
+
+  .compose-form__publish {
+    display: flex;
+    min-width: 0;
+
+    .character-counter__wrapper {
+      display:      flex;
+      align-items:  center;
+      font-size:    var(--text10-font);
+      width:        calc(var(--grid) * 5);
+    }
+
+    .compose-form__publish-button-wrapper {
+      button {
+        padding:  var(--padding5);
+        display:  block;
+        width:    calc(var(--grid) * 12);
+      }
+    }
   }
 }
 
-.compose-form__upload-button-icon {
-  line-height: 27px;
-}
 
-.compose-form__sensitive-button {
-  display: none;
-
-  &.compose-form__sensitive-button--visible {
-    display: block;
-  }
-
-  .compose-form__sensitive-button__icon {
-    line-height: 27px;
-  }
-}
-
-.compose-form__upload-wrapper {
-  overflow: hidden;
-}
-
-.compose-form__uploads-wrapper {
-  display: flex;
-  padding: 5px;
-}
-
-.compose-form__upload {
-  flex: 1 1 0;
-  margin: 5px;
-}
-
-.compose-form__upload-thumbnail {
-  border-radius: 4px;
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  height: 100px;
-  width: 100%;
-}
-
-.compose-form__upload-cancel {
-  background-size: cover;
-  border-radius: 4px;
-  height: 100px;
-  width: 100px;
-}
 
 .compose-form__label {
   display: block;
@@ -377,16 +412,6 @@
       right: 8px;
     }
   }
-}
-
-.compose-form__publish {
-  display: flex;
-  min-width: 0;
-}
-
-.compose-form__publish-button-wrapper {
-  overflow: hidden;
-  padding-top: 10px;
 }
 
 .emojione {
@@ -1828,21 +1853,6 @@
   strong {
     font-weight: 500;
   }
-}
-
-.character-counter__wrapper {
-  line-height: 36px;
-  margin: 0 8px;
-  padding-top: 10px;
-}
-
-.character-counter {
-  cursor: default;
-  font-size: 16px;
-}
-
-.character-counter--over {
-  color: $warning-red;
 }
 
 .getting-started__wrapper {
