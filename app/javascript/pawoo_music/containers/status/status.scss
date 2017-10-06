@@ -3,7 +3,7 @@
   text-align: left;
 
   padding:    var(--padding20);
-  margin:     var(--verticalspace10);
+  margin:     var(--verticalspace20);
 
   border-radius:      var(--radius);
   background-color:   var(--color1);
@@ -51,14 +51,13 @@
       letter-spacing: var(--grid);
     }
   }
-  
+
   .prepend-inline {
     margin:       0 0 calc(var(--grid) * 2) 0;
   }
 
   .status-media {
     .status-card-video {
-      padding-bottom: calc(100% * 9/16 + var(--grid) * 8);
       position:       relative;
 
       iframe {
