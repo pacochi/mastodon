@@ -199,7 +199,7 @@ export default class ScrollableList extends PureComponent {
           <div role='feed' className='item-list' onKeyDown={this.handleKeyDown}>
             {prepend}
           </div>
-          <div className='empty-column-indicator' ref={this.setRef}>
+          <div className='empty-column-indicator'>
             {emptyMessage}
           </div>
         </div>
