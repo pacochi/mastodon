@@ -51,5 +51,3 @@ node :video do |track|
 
   hash
 end
-
-child(:status) { extends 'api/v1/statuses/show' }
