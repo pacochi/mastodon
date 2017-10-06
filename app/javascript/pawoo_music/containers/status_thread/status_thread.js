@@ -8,6 +8,7 @@ import { fetchStatus } from '../../../mastodon/actions/statuses';
 import AccountHeaderContainer from '../account_header';
 import { makeGetAccount, makeGetStatus } from '../../../mastodon/selectors';
 import StatusContainer from '../status';
+import TrackStatusContainer from '../track_status';
 import AccountTimelineContainer from '../account_timeline';
 import ScrollableList from '../../components/scrollable_list';
 
@@ -83,9 +84,10 @@ export default class StatusThread extends ImmutablePureComponent {
 
     const ancestors = this.renderChildren(ancestorsIds);
     const descendants = this.renderChildren(descendantsIds);
+    const Component = status.get('track') ? TrackStatusContainer : StatusContainer;
 
     const content = ancestors.push(
-      <StatusContainer detail key={status.get('id')} status={status} />
+      <Component detail key={status.get('id')} status={status} />
     ).concat(descendants);
 
     const Garally = (

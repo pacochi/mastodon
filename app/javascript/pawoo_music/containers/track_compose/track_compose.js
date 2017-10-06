@@ -25,41 +25,12 @@ import {
   changeTrackComposeTrackVideoSpectrumParamColor,
   submitTrackCompose,
 } from '../../actions/track_compose';
+import { convertToRgbObject, constructGeneratorOptions } from '../../util/musicvideo';
 import GlovalNaviContainer from '../global_navi';
 
 const messages = defineMessages({
   preview: { id: 'track_compose.preview', defaultMessage: 'Video preview' },
 });
-
-const convertToRgbObject = (color) => {
-  return { r: (0xff & (color >> 16)), g: (0xff & (color >> 8)), b: (0xff & color) };
-};
-
-function constructGeneratorOptions(track, image) {
-  const video = track.get('video');
-  const blur = video.get('blur');
-  const particle = video.get('particle');
-  const spectrum = video.get('spectrum');
-
-  const options = {
-    image,
-    text: { title: track.get('title'), sub: track.get('artist') },
-  };
-
-  if (blur.get('visible')) {
-    options.blur = blur.get('params').toJS();
-  }
-
-  if (particle.get('visible')) {
-    options.particle = particle.get('params').toJS();
-  }
-
-  if (spectrum.get('visible')) {
-    options.spectrum = spectrum.get('params').toJS();
-  }
-
-  return options;
-}
 
 const mapStateToProps = (state) => ({
   tab: state.getIn(['pawoo_music', 'track_compose', 'tab']),
