@@ -146,7 +146,7 @@ export default class StatusTimeline extends ImmutablePureComponent {
           statusIds={statusIds}
           hasMore={hasMore}
           isLoading={isLoading}
-          detail
+          isGarally
           prepend={garallyPrepend}
           onScrollToBottom={this.handleLoadMore}
         />
