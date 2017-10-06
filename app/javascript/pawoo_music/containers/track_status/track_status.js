@@ -5,13 +5,13 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { makeGetStatus } from '../../../mastodon/selectors';
-import Timestamp from '../../../mastodon/components/timestamp';
 import StatusContent from '../../../mastodon/components/status_content';
 import StatusActionBar from '../status_action_bar';
 import AccountContainer from '../account';
-import StatusMedia from '../status_media';
 import StatusMeta from '../../components/status_meta';
 import StatusPrepend from '../../components/status_prepend';
+
+import Track from '../../components/track';
 
 const makeMapStateToProps = () => {
   const getStatus = makeGetStatus();
@@ -28,27 +28,19 @@ const makeMapStateToProps = () => {
 };
 
 @connect(makeMapStateToProps)
-export default class Status extends ImmutablePureComponent {
+export default class TrackStatus extends ImmutablePureComponent {
 
   static contextTypes = {
     router: PropTypes.object,
-    schedule: PropTypes.bool,
   };
 
   static propTypes = {
     status: ImmutablePropTypes.map,
     muted: PropTypes.bool,
-    detail: PropTypes.bool,
-    hidden: PropTypes.bool,
     prepend: PropTypes.node,
-    // fetchBoothItem: PropTypes.func,
-    // boothItem: ImmutablePropTypes.map,
+    hidden: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
   };
-
-  static defaultProps = {
-    detail: false,
-  }
 
   state = {
     isExpanded: false,
@@ -68,9 +60,8 @@ export default class Status extends ImmutablePureComponent {
   }
 
   render () {
-    const { muted, detail, hidden, prepend: prepsPrepend, status: originalStatus } = this.props;
+    const { muted, hidden, prepend: prepsPrepend, status: originalStatus } = this.props;
     const { isExpanded } = this.state;
-    const { schedule } = this.context;
 
     if (!originalStatus) {
       return null;
@@ -86,31 +77,27 @@ export default class Status extends ImmutablePureComponent {
         <div>
           {status.getIn(['account', 'display_name']) || status.getIn(['account', 'username'])}
           {status.get('content')}
+          {status.getIn(['track', 'artist'])}
+          {status.getIn(['track', 'title'])}
         </div>
       );
     }
 
-    const highlight = detail || status.get('visibility') === 'direct';
     const prepend = prepsPrepend || <StatusPrepend status={status} />;
 
     return (
-      <div className={classNames('status', { muted, highlight })} data-id={status.get('id')}>
+      <div className={classNames('track-status', { muted })} data-id={status.get('id')}>
         {prepend && <div className='prepend-inline'>{prepend}</div>}
         <div className='status-head'>
           <AccountContainer account={status.get('account')} />
-          {!detail && (
-            <a href={status.get('url')} className='status-time' target='_blank' rel='noopener'>
-              <Timestamp schedule={schedule} timestamp={status.get('created_at')} />
-            </a>
-          )}
         </div>
 
-        <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} />
-        <StatusMedia   status={status} detail={detail} />
-
-        {detail && <StatusMeta status={status} />}
-
+        <Track track={status.get('track')} />
         <StatusActionBar status={status} />
+
+        <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} />
+
+        <StatusMeta status={status} />
       </div>
     );
   }

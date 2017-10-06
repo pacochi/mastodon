@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import StatusContainer from '../../containers/status';
+import TrackStatusContainer from '../../containers/track_status';
 import ScrollableList from '../../components/scrollable_list';
 
 export default class StatusList extends ImmutablePureComponent {
@@ -16,16 +17,18 @@ export default class StatusList extends ImmutablePureComponent {
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
     detail: PropTypes.bool,
+    isGarally: PropTypes.bool,
     prepend: PropTypes.node,
     emptyMessage: PropTypes.node,
   };
 
   render () {
-    const { statusIds, detail, ...other } = this.props;
+    const { statusIds, detail, isGarally, ...other } = this.props;
     const { isLoading } = other;
+    const Component = isGarally ? TrackStatusContainer : StatusContainer;
 
     const scrollableContent = (isLoading || statusIds.size > 0) ? (
-      statusIds.map((statusId) => <StatusContainer key={statusId} id={statusId} detail={detail} />)
+      statusIds.map((statusId) => <Component key={statusId} id={statusId} detail={detail} />)
     ) : (
       null
     );
