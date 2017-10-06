@@ -10,13 +10,11 @@
     padding: 8px;
     line-height: 18px;
     vertical-align: top;
-    border-top: 1px solid $ui-base-color;
     text-align: left;
   }
 
   & > thead > tr > th {
     vertical-align: bottom;
-    border-bottom: 2px solid $ui-base-color;
     border-top: 0;
     font-weight: 500;
   }
@@ -27,20 +25,7 @@
 
   & > tbody > tr:nth-child(odd) > td,
   & > tbody > tr:nth-child(odd) > th {
-    background: $ui-base-color;
-  }
-
-  a {
-    color: $ui-highlight-color;
-    text-decoration: underline;
-
-    &:hover {
-      text-decoration: none;
-    }
-  }
-
-  strong {
-    font-weight: 500;
+    background: var(--color2);
   }
 
   &.inline-table {

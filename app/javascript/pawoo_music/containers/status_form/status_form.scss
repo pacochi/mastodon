@@ -25,7 +25,7 @@
 
     @media screen and (max-width: 600px) {
       height: 100px !important; // prevent auto-resize textarea
-      resize: vertical;
+      resize: none;
     }
   }
 
@@ -127,96 +127,7 @@
 
 
   // ---------------------------------------------------------------
-  // Dropdown Menu (Privacy, Time Limit)
-
-  .time-limit-dropdown {
-    .dropdown__content {
-      position: relative;
-    }
-
-    .icon-button {
-      font-size:    var(--iconsize15);
-    }
-
-    .time-limit-dropdown__dropdown {
-      display:        none;
-      position:       absolute;
-      left:           0;
-
-      width:          var(--width-contextmenu);
-      background:     var(--color1);
-      border-radius:  var(--radius);
-      color:          var(--textcolor);
-
-      overflow:       hidden;
-      box-shadow:     var(--shadow2);
-
-      word-break:     break-all;
-
-      z-index:        2;
-
-      left:   calc(var(--width-contextmenu) * -1 + var(--iconsize10));
-      top:    0;
-
-      .time-limit-dropdown__header {
-        padding:        var(--padding20);
-        border-bottom:  1px solid var(--color3);
-
-        font-size:    var(--text30-font);
-        line-height:  var(--text30-line);
-
-        .time-limit-dropdown__header_note {
-          margin:       var(--verticalspace20);
-
-          font-size:    var(--text10-font);
-          line-height:  var(--text10-line);
-        }
-
-        strong {
-          color:        var(--strong2);
-        }
-      }
-
-      .time-limit-dropdown__options {
-
-        .time-limit-dropdown__option {
-          padding:  var(--padding-dropdown-option);
-          cursor:   pointer;
-          display:  flex;
-
-          &:hover,
-          &.active {
-            background: var(--tootcolor);
-            color:      var(--color1);
-
-            .time-limit-dropdown__option__content {
-              color: var(--color1);
-
-              strong {
-                color: var(--color1);
-              }
-            }
-          }
-
-          &.active:hover {
-            background: var(--tootcolor);
-          }
-        }
-      }
-    }
-  }
-
-  .time-limit-dropdown.dropdown--active {
-    .time-limit-dropdown__dropdown {
-      display: block;
-    }
-
-    .dropdown__trigger {
-      color: var(--strong1);
-    }
-  }
-
-
+  // Privacy Dropdown
 
   .privacy-dropdown {
     position: relative;
@@ -236,7 +147,7 @@
 
         word-break:     break-all;
 
-        z-index:        2;
+        z-index:        200;
     }
 
     .privacy-dropdown__option {
@@ -301,17 +212,15 @@
   }
 
   .autosuggest-textarea__textarea {
-    display: block;
-    box-sizing: border-box;
-    width: 100%;
-    margin: 0;
-    color: $ui-base-color;
-    padding: 10px;
-    font-family: inherit;
-    font-size: 14px;
-    resize: vertical;
-    border: 0;
-    outline: 0;
+    display:      block;
+    width:        100%;
+    color:        var(--textcolor);
+    padding:      var(--padding10);
+    font-family:  inherit;
+    font-size:    var(--text30-font);
+    line-height:  var(--text30-line);
+    resize:       none;
+    box-sizing:   border-box;
 
     &:focus {
       outline: 0;
@@ -327,7 +236,7 @@
     position: absolute;
     top: 100%;
     width: 100%;
-    z-index: 99;
+    z-index: 200;
     background: $ui-secondary-color;
     color: $ui-base-color;
     font-size: 14px;
@@ -370,71 +279,154 @@
     }
   }
 
-  .emoji-picker__dropdown {
-    position: absolute;
-    right: 5px;
-    top: 5px;
+  // -------------------------------------------------
+  // Pickers (Time Limit, Emoji)
 
-    &.dropdown--active::after {
-      border-color: transparent transparent $base-border-color;
-      bottom: -1px;
-      right: 8px;
+  .compose-form__pickers {
+    position: absolute;
+    right:    calc(var(--grid) * 2);
+    top:      0;
+    width:    var(--iconsize10);
+
+    .emoji-picker__dropdown {
+      margin:   var(--verticalspace20);
+
+      &.dropdown--active::after {
+        bottom: 0;
+        right:  var(--iconsize10);
+      }
+
+      &.dropdown--active .dropdown__content {
+        position:     absolute;
+        display:      block;
+        line-height:  18px;
+        max-width:    311px;
+        right:        0;
+        text-align:   left;
+        z-index:      200;
+
+        & > ul {
+          list-style:     none;
+          background:     $ui-secondary-color;
+          padding:        4px 0;
+          border-radius:  4px;
+          min-width:      140px;
+          position:       relative;
+        }
+
+        &.dropdown__right {
+          right: 0;
+        }
+
+        &.dropdown__left {
+          & > ul {
+            left: -98px;
+          }
+        }
+
+        & > ul > li > a {
+          font-size:    13px;
+          line-height:  18px;
+          display:      block;
+          padding:      4px 14px;
+          box-sizing:   border-box;
+          width:        150px;
+          overflow:     hidden;
+        }
+      }
     }
 
-    &.dropdown--active .dropdown__content {
-      position: absolute;
-      display: block;
-      line-height: 18px;
-      max-width: 311px;
-      right: 0;
-      text-align: left;
-      z-index: 9999;
+    .time-limit-dropdown {
+      margin:   var(--verticalspace10);
 
-      & > ul {
-        list-style: none;
-        background: $ui-secondary-color;
-        padding: 4px 0;
-        border-radius: 4px;
-        min-width: 140px;
+      .dropdown__content {
         position: relative;
       }
 
-      &.dropdown__right {
-        right: 0;
+      .icon-button {
+        font-size:    var(--iconsize15);
       }
 
-      &.dropdown__left {
-        & > ul {
-          left: -98px;
+      .time-limit-dropdown__dropdown {
+        display:        none;
+        position:       absolute;
+        left:           0;
+
+        width:          var(--width-contextmenu);
+        background:     var(--color1);
+        border-radius:  var(--radius);
+        color:          var(--textcolor);
+
+        overflow:       hidden;
+        box-shadow:     var(--shadow2);
+        word-break:     break-all;
+        z-index:        200;
+
+        left:           calc(var(--width-contextmenu) * -1 + var(--iconsize10));
+        top:            0;
+
+        .time-limit-dropdown__header {
+          padding:        var(--padding20);
+          border-bottom:  1px solid var(--color3);
+
+          font-size:    var(--text30-font);
+          line-height:  var(--text30-line);
+
+          .time-limit-dropdown__header_note {
+            margin:       var(--verticalspace20);
+
+            font-size:    var(--text10-font);
+            line-height:  var(--text10-line);
+          }
+
+          strong {
+            color:        var(--strong2);
+          }
+        }
+
+        .time-limit-dropdown__options {
+
+          .time-limit-dropdown__option {
+            padding:  var(--padding-dropdown-option);
+            cursor:   pointer;
+            display:  flex;
+
+            &:hover,
+            &.active {
+              background: var(--tootcolor);
+              color:      var(--color1);
+
+              .time-limit-dropdown__option__content {
+                color: var(--color1);
+
+              }
+            }
+
+            &.active:hover {
+              background: var(--tootcolor);
+            }
+          }
         }
       }
 
-      & > ul > li > a {
-        font-size: 13px;
-        line-height: 18px;
+      .fa-fw {
+        width: var(--iconsize10) !important;
+      }
+    }
+
+    .time-limit-dropdown.dropdown--active {
+      .time-limit-dropdown__dropdown {
         display: block;
-        padding: 4px 14px;
-        box-sizing: border-box;
-        width: 150px;
-        text-decoration: none;
-        background: $ui-secondary-color;
-        color: $ui-base-color;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        white-space: nowrap;
+      }
 
-        &:focus {
-          outline: 0;
-        }
-
-        &:hover {
-          background: $ui-highlight-color;
-          color: $ui-secondary-color;
-        }
+      .dropdown__trigger {
+        color: var(--strong1);
       }
     }
   }
 
+  // ------------------------------------------------------
+  // Uploading File Preview
   .compose-form__upload-wrapper {
     overflow: hidden;
   }
@@ -583,7 +575,7 @@
         button {
           padding:  var(--padding5) !important;
           display:  block;
-          width:    calc(var(--grid) * 12);
+          width:    auto;
 
           height:       100% !important;
           line-height:  var(--text30-line) !important;
@@ -619,35 +611,36 @@
 
     border-radius:    var(--radius);
     background-color: var(--color1);
-  }
 
-  .reply-indicator__header {
-    margin-bottom: 5px;
-    overflow: hidden;
-  }
 
-  .reply-indicator__cancel {
-    float: right;
-    line-height: 24px;
-  }
+    .reply-indicator__content {
+      margin: var(--verticalspace20);
+    }
 
-  .reply-indicator__display-name {
-    color: $ui-base-color;
-    display: block;
-    max-width: 100%;
-    line-height: 24px;
-    overflow: hidden;
-    padding-right: 25px;
-    text-decoration: none;
-  }
+    .reply-indicator__cancel {
+      float: right;
+      line-height: 24px;
+    }
 
-  .reply-indicator__display-avatar {
-    float: left;
-    margin-right: 5px;
-  }
+    .reply-indicator__display-name {
+      color:            var(--color1);
+      display:          block;
+      max-width:        100%;
+      font-size:        var(--text30-font);
+      line-height:      var(--text30-line);
+      overflow:         hidden;
+      padding-right:    calc(var(--iconsize10) + var(--grid) * 2);
+      text-decoration:  none;
+    }
 
-  .status__content--with-action {
-    cursor: pointer;
+    .reply-indicator__display-avatar {
+      float: left;
+      margin-right: var(--rightspace10);
+    }
+
+    .status__content--with-action {
+      cursor: pointer;
+    }
   }
 
 
@@ -693,6 +686,7 @@
       }
     }
   }
+
 
   // ---------------------------------------------------------------------------------------------------
   // Emoji Dialog

@@ -675,7 +675,7 @@ $button-icon-scale-ration-on-pc: 0.85;
   justify-content: center;
   position: relative;
   text-align: center;
-  z-index: 100;
+  z-index: 2;
 }
 
 .media-spoiler__warning {
@@ -690,12 +690,14 @@ $button-icon-scale-ration-on-pc: 0.85;
 }
 
 .spoiler-button {
-  display: none;
-  left: 4px;
-  position: absolute;
-  text-shadow: 0 1px 1px $base-shadow-color, 1px 0 1px $base-shadow-color;
-  top: 4px;
-  z-index: 100;
+  display:    none;
+  position:   absolute;
+  left:       var(--grid);
+  top:        var(--grid);
+  z-index:    100;
+
+  text-shadow:    0 1px 1px $base-shadow-color, 1px 0 1px $base-shadow-color;
+  border-radius:  var(--radius);
 
   &.spoiler-button--visible {
     display: block;
@@ -760,7 +762,7 @@ button.icon-button {
     box-sizing: content-box;
     background: rgba($base-overlay-background, 0.6);
     color: rgba($primary-text-color, 0.7);
-    border-radius: 4px;
+    border-radius: var(--radius);
     padding: 2px;
 
     &:hover {
