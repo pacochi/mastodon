@@ -2,34 +2,34 @@
   = site_hostname
 
 .wrapper.thicc
-  .sidebar-layout
-    .main
-      .panel
-        %h2.about-more-header
-          = link_to site_hostname, root_path
+  .main
+    .panel
+      %h2
+        = link_to site_hostname, root_path
 
-        - unless @instance_presenter.site_description.blank?
-          %p!= @instance_presenter.site_description
+      - unless @instance_presenter.site_description.blank?
+        %p!=   @instance_presenter.site_description
 
-      .information-board
-        .section
-          %span= t 'about.user_count_before'
-          %strong= number_with_delimiter @instance_presenter.user_count
-          %span= t 'about.user_count_after'
-        .section
-          %span= t 'about.status_count_before'
-          %strong= number_with_delimiter @instance_presenter.status_count
-          %span= t 'about.status_count_after'
-        .section
-          %span= t 'about.domain_count_before'
-          %strong= number_with_delimiter @instance_presenter.domain_count
-          %span= t 'about.domain_count_after'
+    .information-board
+      .section
+        %span.count_before= t 'about.user_count_before'
+        %strong=            number_with_delimiter @instance_presenter.user_count
+        %span.count_after=  t 'about.user_count_after'
+      .section
+        %span.count_before= t 'about.status_count_before'
+        %strong=            number_with_delimiter @instance_presenter.status_count
+        %span.count_after=  t 'about.status_count_after'
+      .section
+        %span.count_before= t 'about.domain_count_before'
+        %strong=            number_with_delimiter @instance_presenter.domain_count
+        %span.count_after=  t 'about.domain_count_after'
 
+    .content_body
       = render 'header'
       = render 'notice'
       = render 'contact'
 
-    .sidebar
-      = render 'contact', contact: @instance_presenter
-      = render 'links', instance: @instance_presenter
-      = render 'version', version: @instance_presenter
+  .sidebar
+    = render 'contact', contact: @instance_presenter
+    = render 'links', instance: @instance_presenter
+    = render 'version', version: @instance_presenter

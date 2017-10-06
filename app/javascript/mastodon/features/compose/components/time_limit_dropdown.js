@@ -11,12 +11,6 @@ const messages = defineMessages({
   time_limit_note: { id: 'time_limit.time_limit_note', defaultMessage: 'Note: If specified, it will not be delivered to external instances.' },
 });
 
-const dropdownStyle = {
-  position: 'absolute',
-  right: '-2px',
-  top: '35px',
-};
-
 @injectIntl
 export default class TimeLimitDropdown extends React.PureComponent {
 
@@ -48,7 +42,7 @@ export default class TimeLimitDropdown extends React.PureComponent {
     ];
 
     return (
-      <Dropdown className='time-limit-dropdown' ref={this.setRef} style={dropdownStyle}>
+      <Dropdown className='time-limit-dropdown' ref={this.setRef}>
         <DropdownTrigger className='icon-button inverted' title={intl.formatMessage(messages.select_time_limit)}>
           <i className='fa fa-fw fa-clock-o' aria-hidden='true' />
         </DropdownTrigger>

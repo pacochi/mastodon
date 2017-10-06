@@ -66,6 +66,9 @@ body {
   --text40-font:      18px;
   --text40-line:      calc(var(--grid) * 6);
 
+  --text50-font:      25px;
+  --text50-line:      calc(var(--grid) * 8);
+
   --iconsize10:       calc(var(--grid) * 4);
   --iconsize15:       calc(var(--grid) * 5);
   --iconsize20:       calc(var(--grid) * 6);
@@ -190,11 +193,11 @@ a:hover {
   --height-deck:          56px;
 
   .app-top {
-    height:         var(--height-deck);  // height - border
+    height: var(--height-deck);  // height - border
   }
 
   .app-center {
-    height:         calc(100% - var(--height-deck) * 2);
+    height: calc(100% - var(--height-deck) * 2);
   }
 }
 

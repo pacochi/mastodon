@@ -1,35 +1,165 @@
-code {
-  font-family: 'mastodon-font-monospace', monospace;
-  font-weight: 400;
+.simple_form {
+  color:      var(--textcolor);
+  margin:     var(--verticalspace30);
+  max-width:  400px;
+
+  h3 {
+    font-size:    var(--text40-font);
+    line-height:  var(--text40-line);
+    font-weight:  bold;
+  }
+
+  & > p {
+    margin:       var(--verticalspace30);
+    font-size:    var(--text30-font);
+    line-height:  var(--text30-line);
+    color:        var(--textcolor);
+    background-color:  var(--color1);
+
+    strong {
+      color:        var(--strong2);
+      font-weight:  bold;
+    }
+  }
+
+  input,
+  textarea,
+  select {
+    margin:         var(--verticalspace20);
+    border:         1px solid var(--color3);
+    border-radius:  var(--radius);
+    color:          var(--textcolor);
+    font-size:      var(--text30-font);
+    line-height:    var(--text30-line);
+    padding:        var(--padding5);
+    background-color: var(--color1);
+  }
+
+  input::placeholder {
+    color:          var(--color3);
+  }
+
+  input[type='file'] {
+    border: 0;
+  }
+
+  input[type='text'],
+  input[type='password'],
+  input[type='email'],
+  textarea {
+    width:          100%;
+    box-sizing:     border-box;
+  }
+
+  input[type='radio'],
+  input[type='checkbox'] {
+    margin:           var(--rightspace10);
+  }
+
+  button {
+    margin:           var(--verticalspace30);
+    background-color: var(--tootcolor);
+    color:            var(--color1);
+    font-size:        var(--text30-font);
+    line-height:      var(--text30-line);
+    width:            100%;
+    border-radius:    var(--radius);
+    border:           0;
+    padding:          var(--padding5);
+  }
+
+  textarea {
+    height:         calc(var(--grid) * 20);
+    resize:         none;
+  }
+
+
+  // --------------------------------------------
+
+  .field_with_hint,
+  .fields-group {
+    margin:   var(--verticalspace30);
+  }
+
+  .labe_input, label {
+    font-size:    var(--text30-font);
+    line-height:  var(--text30-line);
+  }
+
+  label.file.optional,
+  label.check_boxes.optional,
+  label.radio_buttons.optional {
+    display:      block;
+    margin:       var(--verticalspace30);
+    font-size:    var(--text40-font);
+    line-height:  var(--text40-line);
+    font-weight:  bold;
+  }
+
+  label.select.optional {
+    margin:       var(--verticalspace30);
+    font-size:    var(--text40-font);
+    line-height:  var(--text40-line);
+    font-weight:  bold;
+  }
+
+  .hint {
+    display:        block;
+    font-weight:    normal;
+    font-size:      var(--text20-font);
+    line-height:    var(--text20-line);
+    color:          var(--linkcolor);
+  }
+
+  .muted-hint {
+    color: var(--linkcolor);
+  }
+
+  .positive-hint {
+    color: var(--textcolor);
+  }
+
+  ul {
+    margin: var(--verticalspace20);
+
+    li.radio {
+      margin: var(--verticalspace20);
+    }
+  }
+
+
+  .label_input {
+    label.select {
+      width: 50%;
+    }
+
+    select {
+      width: 50%;
+      float: right;
+    }
+  }
 }
 
-.form-container {
-  max-width: 400px;
-  padding: 20px;
-  margin: 0 auto;
-}
-
+/*
 .simple_form {
   .input {
-    margin-bottom: 15px;
-    overflow: hidden;
+    margin-top: var(--verticalspace10);
+    overflow:   hidden;
   }
 
   .omniauth {
     .label {
-      display: inline-block;
-      margin-top: 10px;
-    }
-    .label, label {
-      opacity: 0.7;
+      display:    inline-block;
+      margin:     var(--verticalspace20);
     }
   }
 
   span.hint {
-    display: block;
-    color: $ui-primary-color;
-    font-size: 12px;
-    margin-top: 4px;
+    display:      block;
+    color:        $ui-primary-color;
+    font-size:    var(--text30-font);
+    line-height:  var(--text30-line);
+    margin:       var(--verticalspace10);
   }
 
   p.hint {
@@ -404,3 +534,4 @@ code {
     width: 50%;
   }
 }
+*/

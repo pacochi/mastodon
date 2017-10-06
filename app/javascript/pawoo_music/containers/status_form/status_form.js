@@ -338,8 +338,10 @@ export default class StatusForm extends ImmutablePureComponent {
             onHashTagSuggestionsSelected={this.onHashTagSuggestionsSelected}
           />
 
-          <EmojiPickerDropdown onPickEmoji={this.handleEmojiPick} />
-          <TimeLimitDropdown onSelectTimeLimit={this.handleSelectTimeLimit} />
+          <div className='compose-form__pickers'>
+            <EmojiPickerDropdown onPickEmoji={this.handleEmojiPick} />
+            <TimeLimitDropdown   onSelectTimeLimit={this.handleSelectTimeLimit} />
+          </div>
         </div>
 
         <div className='compose-form__modifiers'>
