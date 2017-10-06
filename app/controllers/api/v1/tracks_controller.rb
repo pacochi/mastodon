@@ -17,23 +17,27 @@ class Api::V1::TracksController < Api::BaseController
     end
 
     begin
-      status = PostStatusService.new.call(
+      @status = PostStatusService.new.call(
         current_account,
         status_text,
         nil,
-        visibility: status_params[:visibility]
+        visibility: status_params[:visibility],
+        application: doorkeeper_token.application
       )
     rescue
       @track.destroy!
       raise
     end
 
-    @track.update! status: status
+    @track.update! status: @status
+    render 'api/v1/statuses/show'
   end
 
   def update
     @track = Track.find_by!(id: params.require(:id), account: current_account)
     @track.update! track_attributes
+    @status = @track.status
+    render 'api/v1/statuses/show'
   end
 
   def destroy
@@ -47,6 +51,8 @@ class Api::V1::TracksController < Api::BaseController
 
   def show
     @track = Track.find(params.require(:id))
+    @status = @track.status
+    render 'api/v1/statuses/show'
   end
 
   def prepare_video
@@ -135,7 +141,7 @@ class Api::V1::TracksController < Api::BaseController
   end
 
   def status_params
-    permitted = params.permit :text, :visibility
+    permitted = params.permit :title, :artist, :text, :visibility
 
     if ['public', 'unlisted'].exclude? permitted[:visibility]
       raise Mastodon::ValidationError, I18n.t('tracks.invalid_visibility')

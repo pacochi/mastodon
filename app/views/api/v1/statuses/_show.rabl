@@ -36,3 +36,7 @@ end
 child :tags, object_root: false do
   extends 'api/v1/statuses/_tags'
 end
+
+child :track do
+  extends 'api/v1/tracks/_show'
+end
