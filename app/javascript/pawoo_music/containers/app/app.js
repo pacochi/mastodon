@@ -40,6 +40,14 @@ export default class App extends PureComponent {
     isLogin: PropTypes.bool,
   }
 
+  constructor(props) {
+    super(props);
+    this.state = {
+      appCenterView : 'lobby',
+      left          : { 'left' : 'calc(100vw * -1)' },
+    };
+  }
+
   componentDidMount () {
     const { dispatch, isLogin } = this.props;
 
@@ -62,22 +70,38 @@ export default class App extends PureComponent {
     }
   }
 
+  handleClickGlobalNavi = () => {
+    this.setState({ appCenterView : 'globalNavi' });
+    this.setState({ left : { 'left' : 'calc(100vw * -0)' } });
+  }
+
+  handleClickLobby = () => {
+    this.setState({ appCenterView : 'lobby' });
+    this.setState({ left : { 'left' : 'calc(100vw * -1)' } });
+  }
+
+  handleClickGarally = () => {
+    this.setState({ appCenterView : 'garally' });
+    this.setState({ left : { 'left' : 'calc(100vw * -2)' } });
+  }
+
   render () {
     const mobile = isMobile();
+    let appCenterView = this.state.appCenterView;
+    let left          = this.state.left;
+
     return (
       <div className={classNames('app', { sp: mobile })}>
         {mobile && (
           <div className='app-top'>
             <topnavi>
-              { // TODO
-                // <a ref='0' onClick={() => {this.slide(0)}} className='selected'>≡</a>
-              }
+              <button className={classNames({ selected: appCenterView === 'globalNavi' })} onClick={this.handleClickGlobalNavi}>≡</button>
               <a href='/投稿するURL'>[ぱうロゴ]</a>
               <a href='/投稿するURL'>[投稿アイコン]</a>
             </topnavi>
           </div>
         )}
-        <div className='app-center'>
+        <div className='app-center' style={left}>
           <Switch>
             <Route path='/' exact component={HomeTimelineContainer} />
             <Route path='/intent/statuses/new' exact component={Intent} />
@@ -99,10 +123,8 @@ export default class App extends PureComponent {
         <div className='app-bottom'>
           {mobile ? (
             <bottomnavi>
-              {/* TODO
-                <a ref='1' onClick={() => {this.slide(1)}} className='selected'>[アイコン] <br />作品</a>
-                <a ref='2' onClick={() => {this.slide(2)}}                     >[アイコン] <br />チャット</a>
-              */}
+              <button className={classNames({ selected: appCenterView === 'lobby' })} onClick={this.handleClickLobby}>チャット</button>
+              <button className={classNames({ selected: appCenterView === 'garally' })} onClick={this.handleClickGarally}>作品</button>
             </bottomnavi>
           ) : (
             <PlayControlContainer />

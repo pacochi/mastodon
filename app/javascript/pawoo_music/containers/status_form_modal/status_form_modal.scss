@@ -1,2 +1,11 @@
 .status-form-modal {
+  width: var(--width-gallary);
+
+  .compose-form__buttons,
+  .character-counter__wrapper {
+    padding: var(--padding10);
+    border-radius: var(--radius);
+    background-color: var(--color1);
+    height: var(--iconsize20);
+  }
 }

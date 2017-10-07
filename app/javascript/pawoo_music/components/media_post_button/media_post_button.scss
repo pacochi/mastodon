@@ -2,7 +2,7 @@
   display:    inline-block;
   text-align: center;
 
-  width:              var(--width-gallary);
+  width:              100%;
   height:             calc(var(--grid) * 17 - 2px); // - boreder * 2
   background-color:   var(--color1);
 
