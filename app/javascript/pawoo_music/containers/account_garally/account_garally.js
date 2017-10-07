@@ -101,7 +101,7 @@ export default class AccountGarally extends PureComponent {
           statusIds={uniqueStatusIds}
           hasMore={hasMore}
           isLoading={isLoading}
-          detail
+          isGarally
           prepend={prepend}
           onScrollToBottom={this.handleScrollToBottom}
         />
