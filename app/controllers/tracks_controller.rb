@@ -6,7 +6,7 @@ class TracksController < ApplicationController
   before_action :authenticate_user!, except: :show
   before_action :set_initial_state_data
 
-  layout 'timeline'
+  layout 'upload'
 
   def new
   end
