@@ -23,7 +23,16 @@
     background-color: var(--color2);
 
     .scrollable {
-      padding: var(--padding20);
+      padding: var(--padding30);
+
+      .item-list {
+        .prepend {
+          margin-bottom: var(--padding30);
+        }
+        article {
+          margin-bottom: calc(var(--grid) / 2);
+        }
+      }
     }
   }
 

@@ -10,7 +10,7 @@ import TagHistoryContainer from '../tag_history';
 import TrendTagsContainer from '../trend_tags';
 import { isMobile } from '../../util/is_mobile';
 
-import logo from '../../../images/pawoo_music/logo.png';
+import logo from '../../../images/pawoo_music/pawoo_music.svg';
 import settingsIcon from '../../../images/pawoo_music/settings.png';
 
 const messages = defineMessages({
