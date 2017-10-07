@@ -2,7 +2,6 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { Canvas } from 'musicvideo-generator';
 import { ChromePicker } from 'react-color';
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
@@ -25,7 +24,8 @@ import {
   changeTrackComposeTrackVideoSpectrumParamColor,
   submitTrackCompose,
 } from '../../actions/track_compose';
-import { convertToRgbObject, constructGeneratorOptions } from '../../util/musicvideo';
+import Musicvideo from '../../components/musicvideo';
+import { convertToRgbObject } from '../../util/musicvideo';
 import GlovalNaviContainer from '../global_navi';
 
 const messages = defineMessages({
@@ -136,85 +136,6 @@ export default class TrackCompose extends ImmutablePureComponent {
     intl: PropTypes.object.isRequired,
   }
 
-  constructor ({ track }) {
-    const audioContext = new AudioContext;
-    const music = track.get('music');
-    const image = track.getIn(['video', 'image']);
-
-    super();
-
-    this.state = {
-      music: music && URL.createObjectURL(music),
-      image: image && URL.createObjectURL(image),
-    };
-
-    this.generator = new Canvas(audioContext, constructGeneratorOptions(track, this.state.image));
-    this.generator.audioAnalyserNode.connect(audioContext.destination);
-    this.generator.start();
-  }
-
-  componentWillUnmount () {
-    this.generator.stop();
-    this.generator.audioAnalyserNode.context.close();
-    URL.revokeObjectURL(this.state.music);
-    URL.revokeObjectURL(this.state.image);
-  }
-
-  componentWillReceiveProps ({ track }) {
-    const music = track.get('music');
-    const image = track.getIn(['video', 'image']);
-
-    if (music && music !== this.props.track.get('music')) {
-      this.setState({ music: URL.createObjectURL(music) });
-    }
-
-    if (image && image !== this.props.track.getIn(['video', 'image'])) {
-      this.setState({ image: URL.createObjectURL(image) });
-    }
-  }
-
-  componentDidUpdate (_, { music, image }) {
-    if (music !== this.state.music) {
-      URL.revokeObjectURL(music);
-    }
-
-    if (image !== this.state.image) {
-      URL.revokeObjectURL(image);
-    }
-
-    this.generator.changeParams(constructGeneratorOptions(this.props.track, this.state.image));
-  }
-
-  handleCanvasContainerRef = (ref) => {
-    const { view } = this.generator.getRenderer();
-    const { parent } = view;
-
-    if (!ref) {
-      return;
-    }
-
-    if (parent) {
-      parent.removeChild(view);
-    }
-
-    ref.appendChild(view);
-  }
-
-  handleAudioRef = (ref) => {
-    const { audioAnalyserNode } = this.generator;
-
-    if (!ref) {
-      return;
-    }
-
-    if (this.audioNode) {
-      this.audioNode.disconnect();
-    }
-
-    this.audioNode = audioAnalyserNode.context.createMediaElementSource(ref);
-    this.audioNode.connect(audioAnalyserNode);
-  }
-
   handleChangeTrackMusic = ({ target }) => {
     this.props.onChangeTrackMusic(target.files[0]);
   }
@@ -279,20 +200,15 @@ export default class TrackCompose extends ImmutablePureComponent {
   }
 
   render () {
+    const { track } = this.props;
+
     return (
       <div className='track-compose'>
         <div className='navigation-column'>
           <GlovalNaviContainer />
         </div>
         <div className='content'>
-          <div className='video'>
-            <div
-              aria-label={this.props.intl.formatMessage(messages.preview)}
-              className='canvas-container'
-              ref={this.handleCanvasContainerRef}
-            />
-            <audio controls ref={this.handleAudioRef} src={this.state.music} />
-          </div>
+          <Musicvideo track={track} label={this.props.intl.formatMessage(messages.preview)} autoPlay={false} />
           <div className='form-content'>
             <div role='tablist'>
               <button

@@ -6,11 +6,20 @@ import classNames from 'classnames';
 import { Canvas } from 'musicvideo-generator';
 import { constructGeneratorOptions } from '../../util/musicvideo';
 
+function convertURL(file) {
+  if (file instanceof File) {
+    return URL.createObjectURL(file);
+  } else {
+    return file;
+  }
+}
+
 class Musicvideo extends ImmutablePureComponent {
 
   static propTypes = {
     track:  ImmutablePropTypes.map.isRequired,
     autoPlay: PropTypes.bool,
+    label: PropTypes.string,
   };
 
   static defaultProps = {
@@ -19,13 +28,16 @@ class Musicvideo extends ImmutablePureComponent {
 
   state = {
     paused: true,
+    image: convertURL(this.props.track.getIn(['video', 'image'])),
+    music: convertURL(this.props.track.get('music')),
   }
 
   componentDidMount () {
     const { track } = this.props;
+    const { image } = this.state;
 
     const audioContext = new AudioContext;
-    this.generator = new Canvas(audioContext, constructGeneratorOptions(track, track.getIn(['video', 'image'])));
+    this.generator = new Canvas(audioContext, constructGeneratorOptions(track, image));
 
     // オーディオ接続
     const { audioAnalyserNode } = this.generator;
@@ -53,7 +65,40 @@ class Musicvideo extends ImmutablePureComponent {
     this.timer = setInterval(this.updateSeek, 500);
   }
 
+  componentWillReceiveProps ({ track }) {
+    const music = track.get('music');
+    const image = track.getIn(['video', 'image']);
+    const newState = {};
+
+    if (music !== this.props.track.get('music')) {
+      newState.music = convertURL(music);
+    }
+
+    if (image !== this.props.track.getIn(['video', 'image'])) {
+      newState.image = convertURL(image);
+    }
+
+    if (Object.keys(newState).length > 0) {
+      this.setState(newState);
+    }
+  }
+
+  componentDidUpdate ({ track }, { music, image }) {
+    if ((track.get('music') instanceof File) && music !== this.state.music) {
+      URL.revokeObjectURL(music);
+    }
+
+    if ((track.getIn(['video', 'image']) instanceof File) && image !== this.state.image) {
+      URL.revokeObjectURL(image);
+    }
+
+    this.generator.changeParams(constructGeneratorOptions(this.props.track, this.state.image));
+  }
+
   componentWillUnmount () {
+    const { track } = this.props;
+    const { music, image } = this.state;
+
     clearInterval(this.timer);
 
     if (this.generator) {
@@ -64,20 +109,14 @@ class Musicvideo extends ImmutablePureComponent {
     if (this.audioAnalyser) {
       this.audioAnalyser.disconnect();
     }
-  }
 
-  updateSeek = () => {
-    const audioElement = this.audioElement;
-
-    if (audioElement) {
-      if (!audioElement.paused  && !audioElement.seeking) {
-        this.seekbar.value = 100 * this.audioElement.currentTime / this.audioElement.duration;
-      }
+    if ((track.get('music') instanceof File)) {
+      URL.revokeObjectURL(music);
     }
-  }
 
-  setAudioRef = (ref) => {
-    this.audioElement = ref;
+    if ((track.getIn(['video', 'image']) instanceof File)) {
+      URL.revokeObjectURL(image);
+    }
   }
 
   handleToggle = () => {
@@ -91,6 +130,10 @@ class Musicvideo extends ImmutablePureComponent {
     }
   }
 
+  setAudioRef = (ref) => {
+    this.audioElement = ref;
+  }
+
   setCanvasContainerRef = (ref) => {
     this.canvasContainer = ref;
   }
@@ -99,14 +142,24 @@ class Musicvideo extends ImmutablePureComponent {
     this.seekbar = ref;
   }
 
+  updateSeek = () => {
+    const audioElement = this.audioElement;
+
+    if (audioElement) {
+      if (!audioElement.paused  && !audioElement.seeking) {
+        this.seekbar.value = 100 * this.audioElement.currentTime / this.audioElement.duration;
+      }
+    }
+  }
+
   render() {
-    const { track, autoPlay } = this.props;
-    const { paused } = this.state;
+    const { autoPlay, label } = this.props;
+    const { music, paused } = this.state;
 
     return (
       <div className='musicvideo'>
-        <div className='canvas-container' ref={this.setCanvasContainerRef} />
-        <audio autoPlay={autoPlay} ref={this.setAudioRef} src={track.get('music')} />
+        <div className='canvas-container' ref={this.setCanvasContainerRef} aria-label={label} />
+        <audio autoPlay={autoPlay} ref={this.setAudioRef} src={music} />
         <div className='controls'>
           <div className={classNames('toggle', { paused })} onClick={this.handleToggle} role='button' tabIndex='0' aria-pressed='false'>▶︎</div>
           <input className='seekbar' type='range' min='0' max='100' step='0.1' ref={this.setSeekbarRef} />
