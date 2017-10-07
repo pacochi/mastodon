@@ -4,12 +4,9 @@
 
   padding:    var(--padding15);
 
-  border-radius:      var(--radius);
   background-color:   var(--color1);
 
   color:        var(--textcolor);
-  font-size:    var(--text30-font);
-  line-height:  var(--text30-line);
 
   &.highlight {
     border:     1px dashed var(--strong1);
@@ -28,7 +25,7 @@
       white-space: nowrap;
 
       display:    block;
-      font-size:  9px;
+      font-size:  var(--text10-font);
       text-align: right;
     }
   }
@@ -36,8 +33,9 @@
   .status__content {
     display:    block;
     margin:     var(--verticalspace20);
-    text-align: justify;
 
+    font-size:    var(--text20-font);
+    line-height:  var(--text20-line);
     word-break: break-all;
   }
 
