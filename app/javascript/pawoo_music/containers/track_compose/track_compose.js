@@ -26,7 +26,6 @@ import {
 } from '../../actions/track_compose';
 import Musicvideo from '../../components/musicvideo';
 import { convertToRgbObject } from '../../util/musicvideo';
-import GlovalNaviContainer from '../global_navi';
 
 const messages = defineMessages({
   preview: { id: 'track_compose.preview', defaultMessage: 'Video preview' },
@@ -204,13 +203,10 @@ export default class TrackCompose extends ImmutablePureComponent {
 
     return (
       <div className='track-compose'>
-        <div className='navigation-column'>
-          <GlovalNaviContainer />
-        </div>
         <div className='content'>
           <Musicvideo track={track} label={this.props.intl.formatMessage(messages.preview)} autoPlay={false} />
           <div className='form-content'>
-            <div role='tablist'>
+            <div className='tablist' role='tablist'>
               <button
                 id='pawoo-music-basic-tab'
                 aria-controls='pawoo-music-basic-tabpanel'
@@ -241,86 +237,103 @@ export default class TrackCompose extends ImmutablePureComponent {
                 aria-labelledby='pawoo-music-basic-tab'
                 style={{ display: this.props.tab === 'basic' || 'none' }}
               >
-                <label>
-                  <span className='text'>
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.basic.music'
-                      defaultMessage='Audio'
+                <legend>
+                  <label className='horizontal'>
+                    <span className='text'>
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.basic.music'
+                        defaultMessage='Audio'
+                      />
+                    </span>
+                    <input
+                      accept='audio/mpeg'
+                      onChange={this.handleChangeTrackMusic}
+                      required
+                      type='file'
                     />
-                  </span>
-                  <input
-                    accept='audio/mpeg'
-                    onChange={this.handleChangeTrackMusic}
-                    required
-                    type='file'
-                  />
-                </label>
-                <label>
-                  <span className='text'>
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.basic.title'
-                      defaultMessage='Title'
+                  </label>
+                </legend>
+
+                <legend>
+                  <label className='horizontal'>
+                    <span className='text'>
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.basic.title'
+                        defaultMessage='Title'
+                      />
+                    </span>
+                    <input
+                      maxLength='128'
+                      onChange={this.handleChangeTrackTitle}
+                      required
+                      size='32'
+                      type='text'
+                      value={this.props.track.get('title')}
                     />
-                  </span>
-                  <input
-                    maxLength='128'
-                    onChange={this.handleChangeTrackTitle}
-                    required
-                    size='32'
-                    value={this.props.track.get('title')}
-                  />
-                </label>
-                <label>
-                  <span className='text'>
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.basic.artist'
-                      defaultMessage='Artist'
+                  </label>
+                </legend>
+
+                <legend>
+                  <label className='horizontal'>
+                    <span className='text'>
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.basic.artist'
+                        defaultMessage='Artist'
+                      />
+                    </span>
+                    <input
+                      maxLength='128'
+                      onChange={this.handleChangeTrackArtist}
+                      required
+                      size='32'
+                      type='text'
+                      value={this.props.track.get('artist')}
                     />
-                  </span>
-                  <input
-                    maxLength='128'
-                    onChange={this.handleChangeTrackArtist}
-                    required
-                    size='32'
-                    value={this.props.track.get('artist')}
-                  />
-                </label>
-                <label>
-                  <span className='text'>
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.basic.details'
-                      defaultMessage='Details'
+                  </label>
+                </legend>
+
+                <legend>
+                  <label className='horizontal'>
+                    <span className='text'>
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.basic.details'
+                        defaultMessage='Details'
+                      />
+                    </span>
+                    <textarea
+                      maxLength='500'
+                      onChange={this.handleChangeTrackText}
+                      value={this.props.track.get('text')}
                     />
-                  </span>
-                  <textarea
-                    maxLength='500'
-                    onChange={this.handleChangeTrackText}
-                    value={this.props.track.get('text')}
-                  />
-                </label>
+                  </label>
+                </legend>
               </fieldset>
+
               <fieldset
                 id='pawoo-music-video-tabpanel'
                 aria-expanded={(this.props.tab === 'video').toString()}
                 aria-labelledby='pawoo-music-video-tab'
                 style={{ display: this.props.tab === 'video' || 'none' }}
               >
-                <label>
-                  <span className='text'>
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.image'
-                      defaultMessage='Image'
+                <legend>
+                  <label className='horizontal'>
+                    <span className='text'>
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.video.image'
+                        defaultMessage='Image'
+                      />
+                    </span>
+                    <input
+                      accept='image/jpeg,image/png'
+                      onChange={this.handleChangeTrackVideoImage}
+                      type='file'
                     />
-                  </span>
-                  <input
-                    accept='image/jpeg,image/png'
-                    onChange={this.handleChangeTrackVideoImage}
-                    type='file'
-                  />
-                </label>
+                  </label>
+                </legend>
+
                 <fieldset>
                   <legend>
-                    <label>
+                    <label className='horizontal'>
                       <input
                         checked={this.props.track.getIn(['video', 'blur', 'visible'])}
                         onChange={this.handleChangeTrackVideoBlurVisibility}
@@ -332,7 +345,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                       />
                     </label>
                   </legend>
-                  <label>
+                  <label className='horizontal'>
                     <span className='text'>
                       <FormattedMessage
                         id='pawoo_music.track_compose.video.movement_threshold'
@@ -347,7 +360,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                       value={this.props.track.getIn(['video', 'blur', 'params', 'movement', 'threshold'])}
                     />
                   </label>
-                  <label>
+                  <label className='horizontal'>
                     <span className='text'>
                       <FormattedMessage
                         id='pawoo_music.track_compose.video.blink_threshold'
@@ -363,9 +376,10 @@ export default class TrackCompose extends ImmutablePureComponent {
                     />
                   </label>
                 </fieldset>
+
                 <fieldset>
                   <legend>
-                    <label>
+                    <label className='horizontal'>
                       <input
                         checked={this.props.track.getIn(['video', 'particle', 'visible'])}
                         onChange={this.handleChangeTrackVideoParticleVisibility}
@@ -377,7 +391,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                       />
                     </label>
                   </legend>
-                  <label>
+                  <label className='horizontal'>
                     <span className='text'>
                       <FormattedMessage
                         id='pawoo_music.track_compose.video.limit_threshold'
@@ -398,9 +412,10 @@ export default class TrackCompose extends ImmutablePureComponent {
                     onChange={this.handleChangeTrackVideoParticleParamColor}
                   />
                 </fieldset>
+
                 <fieldset>
                   <legend>
-                    <label>
+                    <label className='horizontal'>
                       <input
                         checked={this.props.track.getIn(['video', 'spectrum', 'visible'])}
                         onChange={this.handleChangeTrackVideoSpectrumVisibility}
@@ -412,82 +427,88 @@ export default class TrackCompose extends ImmutablePureComponent {
                       />
                     </label>
                   </legend>
-                  <fieldset>
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.mode'
-                      defaultMessage='Mode'
+                  <label>
+                    <input
+                      checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 0}
+                      name='video-spectrum-mode'
+                      onClick={this.handleChangeTrackVideoSpectrumParamMode}
+                      type='radio'
+                      value='0'
                     />
-                    <label>
-                      <input
-                        checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 0}
-                        name='video-spectrum-mode'
-                        onClick={this.handleChangeTrackVideoSpectrumParamMode}
-                        type='radio'
-                        value='0'
-                      />
-                      <FormattedMessage
-                        id='pawoo_music.track_compose.video.bottom_columns'
-                        defaultMessage='Columns at the bottom'
-                      />
-                    </label>
-                    <label>
-                      <input
-                        checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 1}
-                        name='video-spectrum-mode'
-                        onChange={this.handleChangeTrackVideoSpectrumParamMode}
-                        type='radio'
-                        value='1'
-                      />
-                      <FormattedMessage
-                        id='pawoo_music.track_compose.video.circle_columns'
-                        defaultMessage='Columns around circle'
-                      />
-                    </label>
-                    <label>
-                      <input
-                        checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 2}
-                        name='video-spectrum-mode'
-                        onChange={this.handleChangeTrackVideoSpectrumParamMode}
-                        type='radio'
-                        value='2'
-                      />
-                      <FormattedMessage
-                        id='pawoo_music.track_compose.video.circle'
-                        defaultMessage='Circle'
-                      />
-                    </label>
-                    <label>
-                      <input
-                        checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 3}
-                        name='video-spectrum-mode'
-                        onChange={this.handleChangeTrackVideoSpectrumParamMode}
-                        type='radio'
-                        value='3'
-                      />
-                      <FormattedMessage
-                        id='pawoo_music.track_compose.video.bottom_fill'
-                        defaultMessage='Filled graph at the bottom'
-                      />
-                    </label>
-                  </fieldset>
-                  <ChromePicker
-                    color={convertToRgbObject(this.props.track.getIn(['video', 'spectrum', 'params', 'color']))}
-                    disableAlpha
-                    onChange={this.handleChangeTrackVideoSpectrumParamColor}
-                  />
+                    <FormattedMessage
+                      id='pawoo_music.track_compose.video.bottom_columns'
+                      defaultMessage='Columns at the bottom'
+                    />
+                  </label>
+                  <label>
+                    <input
+                      checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 1}
+                      name='video-spectrum-mode'
+                      onChange={this.handleChangeTrackVideoSpectrumParamMode}
+                      type='radio'
+                      value='1'
+                    />
+                    <FormattedMessage
+                      id='pawoo_music.track_compose.video.circle_columns'
+                      defaultMessage='Columns around circle'
+                    />
+                  </label>
+                  <label>
+                    <input
+                      checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 2}
+                      name='video-spectrum-mode'
+                      onChange={this.handleChangeTrackVideoSpectrumParamMode}
+                      type='radio'
+                      value='2'
+                    />
+                    <FormattedMessage
+                      id='pawoo_music.track_compose.video.circle'
+                      defaultMessage='Circle'
+                    />
+                  </label>
+                  <label>
+                    <input
+                      checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 3}
+                      name='video-spectrum-mode'
+                      onChange={this.handleChangeTrackVideoSpectrumParamMode}
+                      type='radio'
+                      value='3'
+                    />
+                    <FormattedMessage
+                      id='pawoo_music.track_compose.video.bottom_fill'
+                      defaultMessage='Filled graph at the bottom'
+                    />
+                  </label>
                 </fieldset>
-              </fieldset>
-              <button
-                disabled={this.props.isSubmitting}
-                onClick={this.handleSubmit}
-              >
-                <FormattedMessage
-                  id='pawoo_music.track_compose.save'
-                  defaultMessage='Save'
+
+                <ChromePicker
+                  color={convertToRgbObject(this.props.track.getIn(['video', 'spectrum', 'params', 'color']))}
+                  disableAlpha
+                  onChange={this.handleChangeTrackVideoSpectrumParamColor}
                 />
-              </button>
+              </fieldset>
             </form>
           </div>
+        </div>
+
+        <div className='actions'>
+          <button
+            disabled={this.props.isSubmitting}
+            onClick={this.handleSubmit}
+          >
+            <FormattedMessage
+              id='pawoo_music.track_compose.save'
+              defaultMessage='Save'
+            />
+          </button>
+          <a href='/'>
+            <button>
+              <FormattedMessage
+                id='column_back_button.label'
+                defaultMessage='Back'
+              />
+            </button>
+          </a>
         </div>
       </div>
     );
