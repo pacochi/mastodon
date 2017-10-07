@@ -13,7 +13,7 @@ describe MusicConvertService do
       title: 'title',
       artist: 'artist',
       music: fixture_file_upload('files/aint_we_got_fun_billy_jones1921.mp3'),
-      image: fixture_file_upload('files/attachment.jpg'),
+      video_image: fixture_file_upload('files/attachment.jpg'),
     )
 
     file = MusicConvertService.new.call(track)
