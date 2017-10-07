@@ -29,6 +29,9 @@ class Api::V1::Accounts::StatusesController < Api::BaseController
   def account_statuses
     default_statuses.tap do |statuses|
       statuses.merge!(only_media_scope) if params[:only_media]
+      statuses.merge!(only_musics_scope) if params[:only_musics]
+      statuses.merge!(only_tracks_scope) if params[:only_tracks]
+      statuses.merge!(only_albums_scope) if params[:only_albums]
       statuses.merge!(no_replies_scope) if params[:exclude_replies]
     end
   end
@@ -47,6 +50,18 @@ class Api::V1::Accounts::StatusesController < Api::BaseController
 
   def only_media_scope
     Status.where(id: account_media_status_ids)
+  end
+
+  def only_musics_scope
+    Status.where.not(music_type: nil)
+  end
+
+  def only_tracks_scope
+    Status.where(music_type: 'Track')
+  end
+
+  def only_albums_scope
+    Status.where(music_type: 'Album')
   end
 
   def account_media_status_ids

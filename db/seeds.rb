@@ -9,31 +9,31 @@ if Rails.env.development?
   # Additional seeds of Pawoo Music
   account = User.find_by!(email: "admin@#{domain}").account
 
-  track_status = Status.new(account: account, text: '', visibility: :unlisted)
-  track_status.save! validate: false
-
   track = Track.create!(
     music: File.open(Rails.root.join('spec', 'fixtures', 'files', 'aint_we_got_fun_billy_jones1921.mp3')),
     duration: 1.minute,
     title: "Ain't We Got Fun",
-    artist: 'Billy Jones',
-    account: track_status.account,
-    status: track_status
+    artist: 'Billy Jones'
   )
 
-  track_status.update! text: Rails.application.routes.url_helpers.short_account_track_url(account.username, track)
-
-  album_status = Status.new(account: account, text: '', visibility: :unlisted)
-  album_status.save! validate: false
+  Status.create!(
+    account: account,
+    music: track,
+    text: Rails.application.routes.url_helpers.short_account_track_url(account.username, track),
+    visibility: :unlisted
+  )
 
   album = Album.create!(
     image: File.open(Rails.root.join('spec', 'fixtures', 'files', 'attachment.jpg')),
-    title: 'Digital History',
-    account: album_status.account,
-    status: album_status
+    title: 'Digital History'
   )
 
-  album_status.update! text: Rails.application.routes.url_helpers.short_account_album_url(account.username, album)
+  Status.create!(
+    account: account,
+    music: album,
+    text: Rails.application.routes.url_helpers.short_account_album_url(account.username, album),
+    visibility: :unlisted
+  )
 
   AlbumTrack.create! album: album, track: track, position: '0.5'
 end

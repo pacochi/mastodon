@@ -1,41 +1,45 @@
 # frozen_string_literal: true
 
 class Api::V1::AlbumsController < Api::BaseController
-  before_action -> { doorkeeper_authorize! :write }, except: :show
-  before_action :require_user!, except: :show
+  before_action -> { doorkeeper_authorize! :write }
+  before_action :require_user!
 
   respond_to :json
 
   def create
-    attributes = {
-      account: current_account,
+    album = Album.create!(
       title: params.require(:title),
       text: params.require(:text),
-      image: params.require(:image),
-    }
+      image: params.require(:image)
+    )
 
-    ApplicationRecord.transaction do
-      status = Status.new(account: current_account, text: '', visibility: :unlisted)
-      status.save! validate: false
+    begin
+      status_id = Status.next_id
+      status_text = short_account_status_url(current_account.username, status_id)
+      unless params[:text].blank?
+        status_text = [params[:text], status_text].join(' ')
+      end
 
-      attributes.merge!(status: status)
-      @album = Album.create!(attributes)
-
-      status.update! text: short_account_album_url(current_account.username, @album)
+      @status = PostStatusService.new.call(
+        current_account,
+        status_text,
+        nil,
+        id: status_id,
+        music: album,
+        visibility: params[:visibility]
+      )
+    rescue
+      album.destroy!
+      raise
     end
+
+    render 'api/v1/statuses/show'
   end
 
   def update
-    @album = Album.find_by!(id: params.require(:id), account: current_account)
-    @album.update! params.permit(:title, :text, :image)
-  end
+    @status = Status.find_by!(id: params.require(:id), account: current_account, music_type: 'Album')
+    @status.music.update! params.permit(:title, :text, :image)
 
-  def destroy
-    Album.find_by!(id: params.require(:id), account: current_account).destroy!
-    render_empty
-  end
-
-  def show
-    @album = Album.find(params.require(:id))
+    render 'api/v1/statuses/show'
   end
 end

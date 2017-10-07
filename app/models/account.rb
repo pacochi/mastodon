@@ -45,7 +45,6 @@ class Account < ApplicationRecord
   include AccountFinderConcern
   include AccountHeader
   include AccountInteractions
-  include AccountPawooMusicConcern
   include Attachmentable
   include Remotable
 

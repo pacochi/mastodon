@@ -17,12 +17,4 @@ describe TracksController, type: :controller do
       expect(response).to redirect_to 'http://test.host/about'
     end
   end
-
-  describe 'GET #show' do
-    it 'returns http success' do
-      track = Fabricate(:track)
-      get :show, params: { account_username: track.status.account.username, id: track }
-      expect(response).to have_http_status :success
-    end
-  end
 end

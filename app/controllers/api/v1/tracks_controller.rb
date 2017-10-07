@@ -9,55 +9,42 @@ class Api::V1::TracksController < Api::BaseController
   def create
     params.require [:title, :artist, :music]
 
-    @track = Track.create!(track_attributes)
-
-    status_text = short_account_track_url(current_account.username, @track)
-    unless status_params[:text].blank?
-      status_text = [status_params[:text], status_text].join(' ')
-    end
+    track = Track.create!(track_attributes)
 
     begin
+      status_id = Status.next_id
+      status_text = short_account_status_url(current_account.username, status_id)
+      unless status_params[:text].blank?
+        status_text = [status_params[:text], status_text].join(' ')
+      end
+
       @status = PostStatusService.new.call(
         current_account,
         status_text,
         nil,
+        id: status_id,
+        music: track,
         visibility: status_params[:visibility],
         application: doorkeeper_token.application
       )
     rescue
-      @track.destroy!
+      track.destroy!
       raise
     end
 
-    @track.update! status: @status
     render 'api/v1/statuses/show'
   end
 
   def update
-    @track = Track.find_by!(id: params.require(:id), account: current_account)
-    @track.update! track_attributes
-    @status = @track.status
-    render 'api/v1/statuses/show'
-  end
+    @status = Status.find_by!(id: params.require(:id), account: current_account, music_type: 'Track')
+    @status.music.update! track_attributes
 
-  def destroy
-    track = Track.find_by!(id: params.require(:id), account: current_account)
-
-    track.destroy!
-    RemovalWorker.perform_async track.status_id
-
-    render_empty
-  end
-
-  def show
-    @track = Track.find(params.require(:id))
-    @status = @track.status
     render 'api/v1/statuses/show'
   end
 
   def prepare_video
-    track = Track.find_by!(id: params.require(:id), account: current_account)
-    VideoPreparingWorker.perform_async track.id
+    @status = Status.find_by!(id: params.require(:id), account: current_account, music_type: 'Track')
+    VideoPreparingWorker.perform_async @status.id
 
     render_empty
   end
@@ -67,8 +54,7 @@ class Api::V1::TracksController < Api::BaseController
   def track_attributes
     return @track_attributes if @track_attributes
 
-    attributes = track_params
-    attributes.merge! account: current_account
+    attributes = track_params.dup
 
     if track_params[:music].present?
       music_duration = update_music

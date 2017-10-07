@@ -33,7 +33,7 @@ class Api::V1::Timelines::HomeController < Api::BaseController
   end
 
   def account_home_feed
-    Feed.new(:home, current_account)
+    (params[:only_musics] ? MusicFeed : Feed).new(:home, current_account)
   end
 
   def insert_pagination_headers
@@ -41,7 +41,7 @@ class Api::V1::Timelines::HomeController < Api::BaseController
   end
 
   def pagination_params(core_params)
-    params.permit(:local, :limit).merge(core_params)
+    params.permit(:local, :only_musics, :limit).merge(core_params)
   end
 
   def next_path

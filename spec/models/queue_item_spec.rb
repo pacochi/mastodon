@@ -54,13 +54,13 @@ RSpec.describe QueueItem do
     end
 
     context 'given pawoo link' do
-      let(:track) { Fabricate(:track) }
+      let(:status) { Fabricate(:status, music: Fabricate(:track)) }
 
-      context 'if link is for status with music attachment' do
+      context 'if link is for status with track' do
         context 'when it is not a link for an existent' do
           let(:url) do
             Rails.application.routes.url_helpers.short_account_status_url(
-              track.status.account,
+              status.account,
               1,
             )
           end
@@ -71,24 +71,9 @@ RSpec.describe QueueItem do
         context 'when it is a link for an existent' do
           let(:url) do
             Rails.application.routes.url_helpers.short_account_status_url(
-              track.status.account,
-              track.status,
+              status.account,
+              status,
             )
-          end
-
-          it { is_expected.to be_present }
-        end
-      end
-
-      context 'if link is for music' do
-        context 'when it is not a link for an existent' do
-          let(:url) { Rails.application.routes.url_helpers.short_account_track_url('unknown', 1) }
-          it { expect{ subject }.to raise_error(Mastodon::MusicSourceFetchFailedError) }
-        end
-
-        context 'when it is a link for an existent' do
-          let(:url) do
-            Rails.application.routes.url_helpers.short_account_track_url track.status.account.username, track
           end
 
           it { is_expected.to be_present }
@@ -229,10 +214,10 @@ RSpec.describe QueueItem do
 
     context 'given same link' do
       let(:url) do
-        Rails.application.routes.url_helpers.short_account_track_url track.status.account.username, track
+        Rails.application.routes.url_helpers.short_account_status_url status.account.username, status
       end
 
-      let!(:track) { Fabricate(:track, title: 'title', duration: 1) }
+      let(:status) { Fabricate(:status, music: Fabricate(:track)) }
       let(:another_account) { Fabricate(:account) }
       let(:another_queue) { described_class.create_from_link(url, another_account) }
 
