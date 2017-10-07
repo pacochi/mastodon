@@ -36,7 +36,7 @@ export default class FavouritedStatus extends ImmutablePureComponent {
         <StatusList
           scrollKey='favourited_garally'
           statusIds={statusIds}
-          detail
+          isGarally
           onScrollToBottom={this.handleScrollToBottom}
         />
       </div>
