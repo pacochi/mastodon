@@ -2,8 +2,7 @@
   display:    block;
   text-align: left;
 
-  padding:    var(--padding20);
-  margin:     var(--verticalspace20);
+  margin:     var(--verticalspace40);
 
   border-radius:      var(--radius);
   background-color:   var(--color1);
@@ -62,6 +61,15 @@
         top: 0;
         left: 0;
       }
+    }
+  }
+
+  .meta {
+    font-size:      var(--text10-font);
+    line-height:    var(--text10-line);
+
+    i {
+      margin:       var(--rightspace5);
     }
   }
 }
