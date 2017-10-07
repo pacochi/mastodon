@@ -1,5 +1,4 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import classNames from 'classnames';
@@ -8,17 +7,15 @@ import { constructGeneratorOptions } from '../../util/musicvideo';
 
 import playIcon from '../../../images/pawoo_music/play.png';
 
-// たかしへ。 toggle の display を block にすると、そこのキャンバスが使えます。 お母さんより。
 class Track extends ImmutablePureComponent {
 
   static propTypes = {
-    track:  ImmutablePropTypes.map
+    track:  ImmutablePropTypes.map,
   };
 
   state = {
-    timer: null,
     thumbnailView: true,
-    paused: true
+    paused: true,
   }
 
   componentDidMount () {
@@ -28,8 +25,7 @@ class Track extends ImmutablePureComponent {
       return;
     }
 
-    let timer = setInterval(() => {this.seek(this.audioElement)}, 500);
-    this.setState({timer: timer});
+    this.timer = setInterval(this.updateSeek, 500);
 
     const audioContext = new AudioContext;
     this.generator = new Canvas(audioContext, constructGeneratorOptions(track, track.getIn(['video', 'image'])));
@@ -37,16 +33,30 @@ class Track extends ImmutablePureComponent {
   }
 
   componentWillUnmount () {
-    clearInterval(this.state.timer);
+    clearInterval(this.timer);
 
     if (this.generator) {
       this.generator.stop();
       this.generator.audioAnalyserNode.context.close();
     }
+
+    this.setState({
+      thumbnailView: false,
+    });
+  }
+
+  updateSeek = () => {
+    const audioElement = this.audioElement;
+
+    if (audioElement) {
+      if (!audioElement.paused  && !audioElement.seeking) {
+        this.seekbar.value = 100 * this.audioElement.currentTime / this.audioElement.duration;
+      }
+    }
   }
 
   handlePlayClick = () => {
-    const { thumbnailView, timer } = this.state;
+    const { thumbnailView } = this.state;
     this.setState({
       thumbnailView: !thumbnailView,
     });
@@ -74,16 +84,15 @@ class Track extends ImmutablePureComponent {
       return;
     }
 
-    this.generator.start();
     const { view } = this.generator.getRenderer();
     const { parent } = view;
-
 
     if (parent) {
       parent.removeChild(view);
     }
 
     ref.appendChild(view);
+    this.generator.start();
   }
 
   handleSeekbarRef = (ref) => {
@@ -100,21 +109,13 @@ class Track extends ImmutablePureComponent {
     };
   }
 
-  toggle = () => {
-    this.setState({paused: !this.audioElement.paused});
+  handleToggle = () => {
+    this.setState({ paused: !this.audioElement.paused });
 
     if(this.audioElement.paused) {
       this.audioElement.play();
     } else {
       this.audioElement.pause();
-    }
-  }
-
-  seek(audioElement) {
-    if(audioElement) {
-      if(!audioElement.paused  && !audioElement.seeking) {
-        this.seekbar.value = 100 * this.audioElement.currentTime / this.audioElement.duration;
-      }
     }
   }
 
@@ -133,7 +134,7 @@ class Track extends ImmutablePureComponent {
               <div className='canvas-container' ref={this.handleCanvasContainerRef} />
               <audio autoPlay ref={this.handleAudioRef} src={track.get('music')} />
               <div className='controls'>
-                <a className={classNames('toggle', { paused })} onClick={this.toggle}>▶︎</a>
+                <a className={classNames('toggle', { paused })} onClick={this.handleToggle}>▶︎</a>
                 <input className='seekbar' type='range' min='0' max='100' step='0.1' ref={this.handleSeekbarRef} />
               </div>
             </div>
