@@ -1,6 +1,8 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
+import classNames from 'classnames';
 import { Canvas } from 'musicvideo-generator';
 import { constructGeneratorOptions } from '../../util/musicvideo';
 
@@ -10,11 +12,13 @@ import playIcon from '../../../images/pawoo_music/play.png';
 class Track extends ImmutablePureComponent {
 
   static propTypes = {
-    track: ImmutablePropTypes.map,
-  }
+    track:  ImmutablePropTypes.map
+  };
 
   state = {
-    isPlay: false,
+    timer: null,
+    thumbnailView: true,
+    paused: true
   }
 
   componentDidMount () {
@@ -24,12 +28,17 @@ class Track extends ImmutablePureComponent {
       return;
     }
 
+    let timer = setInterval(() => {this.seek(this.audioElement)}, 500);
+    this.setState({timer: timer});
+
     const audioContext = new AudioContext;
     this.generator = new Canvas(audioContext, constructGeneratorOptions(track, track.getIn(['video', 'image'])));
     this.generator.audioAnalyserNode.connect(audioContext.destination);
   }
 
   componentWillUnmount () {
+    clearInterval(this.state.timer);
+
     if (this.generator) {
       this.generator.stop();
       this.generator.audioAnalyserNode.context.close();
@@ -37,18 +46,20 @@ class Track extends ImmutablePureComponent {
   }
 
   handlePlayClick = () => {
-    const { isPlay } = this.state;
+    const { thumbnailView, timer } = this.state;
     this.setState({
-      isPlay: !isPlay,
+      thumbnailView: !thumbnailView,
     });
   }
 
   handleAudioRef = (ref) => {
-    const { audioAnalyserNode } = this.generator;
-
     if (!ref) {
       return;
     }
+
+    this.audioElement = ref;
+    const { audioAnalyserNode } = this.generator;
+
 
     if (this.audioNode) {
       this.audioNode.disconnect();
@@ -59,13 +70,14 @@ class Track extends ImmutablePureComponent {
   }
 
   handleCanvasContainerRef = (ref) => {
+    if (!ref) {
+      return;
+    }
+
     this.generator.start();
     const { view } = this.generator.getRenderer();
     const { parent } = view;
 
-    if (!ref) {
-      return;
-    }
 
     if (parent) {
       parent.removeChild(view);
@@ -74,10 +86,41 @@ class Track extends ImmutablePureComponent {
     ref.appendChild(view);
   }
 
+  handleSeekbarRef = (ref) => {
+    if(!ref) {
+      return;
+    }
+
+    this.seekbar = ref;
+
+    this.seekbar.onchange = () => {
+      let time = this.audioElement.duration * this.seekbar.value / 100;
+      this.audioElement.currentTime = 0;
+      this.audioElement.currentTime = time;
+    };
+  }
+
+  toggle = () => {
+    this.setState({paused: !this.audioElement.paused});
+
+    if(this.audioElement.paused) {
+      this.audioElement.play();
+    } else {
+      this.audioElement.pause();
+    }
+  }
+
+  seek(audioElement) {
+    if(audioElement) {
+      if(!audioElement.paused  && !audioElement.seeking) {
+        this.seekbar.value = 100 * this.audioElement.currentTime / this.audioElement.duration;
+      }
+    }
+  }
+
   render() {
     const { track } = this.props;
-    const { isPlay } = this.state;
-
+    const { thumbnailView, paused } = this.state;
     if (!track) {
       return null;
     }
@@ -85,15 +128,19 @@ class Track extends ImmutablePureComponent {
     return (
       <div className='track'>
         <div className='musicvideo'>
-          {isPlay ? (
+          {!thumbnailView ? (
             <div className='video'>
               <div className='canvas-container' ref={this.handleCanvasContainerRef} />
-              <audio autoPlay controls ref={this.handleAudioRef} src={track.get('music')} />
+              <audio autoPlay ref={this.handleAudioRef} src={track.get('music')} />
+              <div className='controls'>
+                <a className={classNames('toggle', { paused })} onClick={this.toggle}>▶︎</a>
+                <input className='seekbar' type='range' min='0' max='100' step='0.1' ref={this.handleSeekbarRef} />
+              </div>
             </div>
           ) : (
             <div className='thumbnail'>
-              <img src={track.getIn(['video', 'image'])} alt='albumart' />
-              <img className='playbutton' src={playIcon} alt='playbutton' role='button' tabIndex='0' aria-pressed='false' onClick={this.handlePlayClick} />
+              <img className='albumart'   src={track.getIn(['video', 'image'])} alt='albumart' />
+              <img className='playbutton' src={playIcon}                        alt='playbutton' role='button' tabIndex='0' aria-pressed='false' onClick={this.handlePlayClick} />
             </div>
           )}
         </div>
