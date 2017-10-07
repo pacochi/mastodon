@@ -1,8 +1,8 @@
 .status-form {
   display: block;
 
-  line-height:    var(--text30-line);
-  font-size:      var(--text30-font);
+  line-height:    var(--text20-line);
+  font-size:      var(--text20-font);
   word-break:     break-all;
   text-align:     justify;
 
@@ -13,8 +13,8 @@
     height:             calc(var(--text30-line) * 4);
     border-radius:      var(--radius);
     background-color:   var(--color1);
-    line-height:        var(--text30-line);
-    font-size:          var(--text30-font);
+    line-height:        var(--text20-line);
+    font-size:          var(--text20-font);
     color:              var(--textcolor);
     text-align:         justify;
 
@@ -38,7 +38,7 @@
 
     input {
         border:         0;
-        line-height:    var(--text30-line);
+        line-height:    var(--text20-line);
         font-size:      var(--text20-font);
         color:          var(--textcolor);
         height:         calc(var(--grid) * 5);
@@ -215,10 +215,10 @@
     display:      block;
     width:        100%;
     color:        var(--textcolor);
-    padding:      var(--padding10);
+    padding:      var(--padding15);
     font-family:  inherit;
-    font-size:    var(--text30-font);
-    line-height:  var(--text30-line);
+    font-size:    var(--text20-font);
+    line-height:  var(--text20-line);
     resize:       none;
     box-sizing:   border-box;
 
@@ -567,13 +567,13 @@
       .character-counter__wrapper {
         display:      flex;
         align-items:  center;
-        font-size:    var(--text10-font);
-        width:        calc(var(--grid) * 5);
+        font-size:    var(--text20-font);
+        margin:       var(--padding10);
       }
 
       .compose-form__publish-button-wrapper {
         button {
-          padding:  var(--padding5) !important;
+          padding:  var(--padding10) !important;
           display:  block;
           width:    auto;
 

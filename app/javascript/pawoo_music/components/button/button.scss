@@ -1,15 +1,15 @@
 .button, a.button:visited, a.button:link  {
   display: block;
 
-  border-radius:   var(--radius);
+  border-radius:   calc(var(--radius) * 3);
   font-size:       var(--text30-font);
   height:          28px;
   line-height:     28px;
   text-decoration: none;
   padding: 0 10px;
 
-  background-color:   var(--color1);
-  color:              var(--tootcolor);
+  background-color:   var(--tootcolor);
+  color:              var(--color1);
   border:             1px solid var(--tootcolor);
 
   &.fit-width {
