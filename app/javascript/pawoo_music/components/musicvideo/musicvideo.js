@@ -6,7 +6,11 @@ import classNames from 'classnames';
 import { Canvas } from 'musicvideo-generator';
 import { constructGeneratorOptions } from '../../util/musicvideo';
 
-window.AudioContext = window.AudioContext||window.webkitAudioContext;
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                            window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+
 
 function convertURL(file) {
   if (file instanceof File) {

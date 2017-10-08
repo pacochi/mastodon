@@ -40,13 +40,10 @@ export default class App extends PureComponent {
     isLogin: PropTypes.bool,
   }
 
-  constructor(props) {
-    super(props);
-    this.state = {
-      appCenterView : 'lobby',
-      left          : { 'left' : 'calc(100vw * -1)' },
-    };
-  }
+  state = {
+    appCenterView: 'lobby',
+    left         : 'calc(100vw * -1)',
+  };
 
   componentDidMount () {
     const { dispatch, isLogin } = this.props;
@@ -71,24 +68,29 @@ export default class App extends PureComponent {
   }
 
   handleClickGlobalNavi = () => {
-    this.setState({ appCenterView : 'globalNavi' });
-    this.setState({ left : { 'left' : 'calc(100vw * -0)' } });
+    this.setState({
+      appCenterView: 'globalNavi',
+      left: 'calc(100vw * -0)',
+    });
   }
 
   handleClickLobby = () => {
-    this.setState({ appCenterView : 'lobby' });
-    this.setState({ left : { 'left' : 'calc(100vw * -1)' } });
+    this.setState({
+      appCenterView: 'lobby',
+      left: 'calc(100vw * -1)',
+    });
   }
 
   handleClickGarally = () => {
-    this.setState({ appCenterView : 'garally' });
-    this.setState({ left : { 'left' : 'calc(100vw * -2)' } });
+    this.setState({
+      appCenterView: 'garally',
+      left: 'calc(100vw * -2)',
+    });
   }
 
   render () {
     const mobile = isMobile();
-    let appCenterView = this.state.appCenterView;
-    let left          = this.state.left;
+    const { appCenterView, left } = this.state;
 
     return (
       <div className={classNames('app', { sp: mobile })}>
@@ -97,11 +99,11 @@ export default class App extends PureComponent {
             <topnavi>
               <button className={classNames({ selected: appCenterView === 'globalNavi' })} onClick={this.handleClickGlobalNavi}>≡</button>
               <a href='/投稿するURL'>[ぱうロゴ]</a>
-              <a href='/投稿するURL'>[投稿アイコン]</a>
+              <StatusPostButtonContainer />
             </topnavi>
           </div>
         )}
-        <div className='app-center' style={left}>
+        <div className='app-center' style={{ left }}>
           <Switch>
             <Route path='/' exact component={HomeTimelineContainer} />
             <Route path='/intent/statuses/new' exact component={Intent} />
@@ -132,7 +134,7 @@ export default class App extends PureComponent {
         </div>
         <NotificationsContainer />
         <LoadingBarContainer className='loading-bar' />
-        <StatusPostButtonContainer />
+        {!mobile && <StatusPostButtonContainer fixed />}
         <ModalContainer />
       </div>
     );
