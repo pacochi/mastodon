@@ -38,7 +38,6 @@
   .navigation-column {
     flex-shrink:    0;
     flex-grow:      0;
-    flex-basis:     var(--width-globalnavi);
     width: var(--width-globalnavi);
     overflow-y: scroll;
   }
@@ -46,7 +45,6 @@
   .lobby-column {
     flex-shrink:    0;
     flex-grow:      0;
-    flex-basis:     var(--width-lobby);
     width: var(--width-lobby);
 
     display: flex;
@@ -78,47 +76,29 @@
   }
 
   .gallery-column {
-    display: flex;
-
     flex-shrink:    0;
     flex-grow:      0;
-    flex-basis:     var(--width-gallery-view);
     width: var(--width-gallery-view);
-    justify-content: center;
+
+    display: flex;
+    flex-direction: column;
 
     .scrollable {
-      background-color:   var(--color1);
-      display: flex;
-      justify-content: center;
+      text-align: center;
 
       .item-list {
-        padding: 0 0 calc(var(--grid) * 4) 0;
+        display: inline-block;
         width: var(--width-gallery);
-        height: max-content;
 
-        .prepend {
-          width: 100%;
-        }
-
-        article {
-          width: 100%;
+        h3 {
+          margin:         var(--verticalspace30);
+          border-top:     1px solid var(--color2);
+          padding:        var(--verticalspace30);
+          font-size:      var(--text40-font);
+          line-height:    var(--text40-line);
+          font-weight:    bold;
         }
       }
-
-      h3 {
-        margin:         var(--verticalspace30);
-        border-top:     1px solid var(--color2);
-        padding:        var(--verticalspace30);
-        font-size:      var(--text40-font);
-        line-height:    var(--text40-line);
-        font-weight:    bold;
-      }
-
-      // user ページ用。 background-imageをはめたときにいい感じにする
-      background-position:    center center;
-      background-attachment:  fixed;
-      background-size:        cover;
-      background-repeat:      no-repeat;
     }
   }
 }
