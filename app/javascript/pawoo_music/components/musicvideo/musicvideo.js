@@ -92,7 +92,7 @@ class Musicvideo extends ImmutablePureComponent {
         URL.revokeObjectURL(this.image.src);
       }
 
-      this.image.src = convertURL(image);
+      this.image.src = convertURL(image) || defaultArtwork;
     }
   }
 
