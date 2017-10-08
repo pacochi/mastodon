@@ -3,7 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { defineMessages, injectIntl } from 'react-intl';
-import SearchBox from '..//search_box';
+import ScrollArea from 'react-scrollbar';
+import SearchBox from '../search_box';
 import LoginBox from '../../components/login_box';
 import EventCalendar from '../../components/event_calendar';
 import TagHistoryContainer from '../tag_history';
@@ -65,7 +66,7 @@ export default class GlobalNavi extends PureComponent {
     const mobile = isMobile();
 
     return (
-      <div className='global-navi'>
+      <ScrollArea className='global-navi'>
         <div className='global-navi-center'>
           {!mobile && (
             <img className='logo' src={logo} alt='logo' />
@@ -89,7 +90,7 @@ export default class GlobalNavi extends PureComponent {
             </a>
           )}
         </div>
-      </div>
+      </ScrollArea>
     );
   }
 

@@ -40,14 +40,12 @@ export default class ScrollableList extends PureComponent {
 
   handleScroll = throttle((value) => {
     const { topPosition, realHeight, containerHeight } = value;
-    console.log(value);
     if (typeof topPosition !== 'number' || typeof realHeight !== 'number' || typeof containerHeight !== 'number') {
       return;
     }
 
     const offset = realHeight - topPosition - containerHeight;
     this._oldScrollPosition = realHeight - topPosition;
-    console.log(value, offset, this._oldScrollPosition);
 
     if (400 > offset && this.props.onScrollToBottom && !this.props.isLoading) {
       this.props.onScrollToBottom();
@@ -195,7 +193,9 @@ export default class ScrollableList extends PureComponent {
 
     if (trackScroll) {
       return (
-        scrollableArea
+        <ScrollContainer scrollKey={scrollKey} shouldUpdateScroll={shouldUpdateScroll}>
+          {scrollableArea}
+        </ScrollContainer>
       );
     } else {
       return scrollableArea;
