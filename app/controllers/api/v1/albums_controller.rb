@@ -26,7 +26,8 @@ class Api::V1::AlbumsController < Api::BaseController
         nil,
         id: status_id,
         music: album,
-        visibility: params[:visibility]
+        visibility: params[:visibility],
+        application: doorkeeper_token.application
       )
     rescue
       album.destroy!
