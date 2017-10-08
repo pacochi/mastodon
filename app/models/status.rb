@@ -22,6 +22,8 @@
 #  reblogs_count          :integer          default(0), not null
 #  language               :string
 #  conversation_id        :integer
+#  music_type             :string
+#  music_id               :integer
 #
 
 class Status < ApplicationRecord
@@ -146,14 +148,14 @@ class Status < ApplicationRecord
                                                    .published
     end
 
-    def as_public_timeline(account = nil, local_only = false)
-      query = timeline_scope(local_only).without_replies
+    def as_public_timeline(account = nil, local_only = false, musics_only = false)
+      query = timeline_scope(local_only, musics_only).without_replies
 
       apply_timeline_filters(query, account, local_only)
     end
 
-    def as_tag_timeline(tag, account = nil, local_only = false)
-      query = timeline_scope(local_only).tagged_with(tag)
+    def as_tag_timeline(tag, account = nil, local_only = false, musics_only = false)
+      query = timeline_scope(local_only, musics_only).tagged_with(tag)
 
       apply_timeline_filters(query, account, local_only)
     end
@@ -213,8 +215,9 @@ class Status < ApplicationRecord
 
     private
 
-    def timeline_scope(local_only = false)
+    def timeline_scope(local_only = false, musics_only = false)
       starting_scope = local_only ? Status.local_only : Status
+      starting_scope = starting_scope.musics_only if musics_only
       starting_scope
         .with_public_visibility
         .without_reblogs

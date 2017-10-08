@@ -9,6 +9,14 @@ RSpec.describe FeedManager do
     end
   end
 
+  describe '#music_key' do
+    subject { FeedManager.instance.music_key(:home, 1) }
+
+    it 'returns a string' do
+      expect(subject).to be_a String
+    end
+  end
+
   describe '#filter?' do
     let(:alice) { Fabricate(:account, username: 'alice') }
     let(:bob)   { Fabricate(:account, username: 'bob', domain: 'example.com') }
@@ -165,6 +173,17 @@ RSpec.describe FeedManager do
       FeedManager.instance.push('type', account, status)
 
       expect(Redis.current.zcard("feed:type:#{account.id}")).to eq FeedManager::MAX_ITEMS
+    end
+
+    it 'trims music timelines if they will have more than FeedManager::MAX_ITEMS' do
+      status.update! music: Fabricate(:album)
+      account = Fabricate(:account)
+      members = FeedManager::MAX_ITEMS.times.map { |count| [count, count] }
+      Redis.current.zadd("feed:music:type:#{account.id}", members)
+
+      FeedManager.instance.push('type', account, status)
+
+      expect(Redis.current.zcard("feed:music:type:#{account.id}")).to eq FeedManager::MAX_ITEMS
     end
   end
 end

@@ -29,7 +29,14 @@ module UserTrackingConcern
   end
 
   def regenerate_feed!
+    regenerate_music_feed!
+
     Redis.current.setnx("account:#{current_user.account_id}:regeneration", true) == 1 && Redis.current.expire("account:#{current_user.account_id}:regeneration", 3_600 * 24)
     RegenerationWorker.perform_async(current_user.account_id)
+  end
+
+  def regenerate_music_feed!
+    Redis.current.setnx("account:#{current_user.account_id}:music:regeneration", true) == 1 && Redis.current.expire("account:#{current_user.account_id}:music:regeneration", 3_600 * 24)
+    MusicRegenerationWorker.perform_async(current_user.account_id)
   end
 end

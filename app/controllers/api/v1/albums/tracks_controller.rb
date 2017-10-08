@@ -11,15 +11,24 @@ class Api::V1::Albums::TracksController < Api::BaseController
     position = AlbumTrack.position_between(*entry_range)
 
     if request.put?
-      AlbumTrack.create!(
-        album_id: params.require(:album_id),
-        track_id: params.require(:id),
-        position: position,
+      album_track = AlbumTrack.find_by(
+        album: album_status.music,
+        track: track_status.music
       )
+
+      if album_track.nil?
+        AlbumTrack.create!(
+          album: album_status.music,
+          track: track_status.music,
+          position: position
+        )
+      else
+        album_track.update! position: position
+      end
     else
       AlbumTrack.find_by!(
-        album_id: params.require(:album_id),
-        track_id: params.require(:id),
+        album: album_status.music,
+        track: track_status.music
       ).update! position: position
     end
 
@@ -27,12 +36,15 @@ class Api::V1::Albums::TracksController < Api::BaseController
   end
 
   def destroy
-    scope.find_by!(track_id: params.require(:id)).destroy!
+    album_track_scope.joins(track: :statuses).find_by!(
+      track: { statuses: { id: params.require(:id), reblog: nil } }
+    ).destroy!
+
     render_empty
   end
 
   def index
-    index_scope = scope.order(:position)
+    index_scope = album_track_scope.order(:position)
 
     if index_range[0].present?
       index_scope = index_scope.where('position > ?', index_range[0])
@@ -42,11 +54,15 @@ class Api::V1::Albums::TracksController < Api::BaseController
       index_scope = index_scope.where('position < ?', index_range[1])
     end
 
-    @tracks = Track.joins(:album_tracks)
-                   .merge(index_scope)
-                   .limit(limit_param(DEFAULT_TRACKS_LIMIT))
+    @statuses = Status.reorder(nil).where(
+      reblog: nil,
+      music: Track.joins(:album_tracks)
+                  .merge(index_scope)
+                  .limit(limit_param(DEFAULT_TRACKS_LIMIT))
+    )
 
     insert_pagination_headers
+    render 'api/v1/statuses/index'
   end
 
   private
@@ -65,21 +81,23 @@ class Api::V1::Albums::TracksController < Api::BaseController
 
     if relative_to_id.nil?
       if above
-        upper = scope.order(:position).first
+        upper = album_track_scope.order(:position).first
         upper_position = upper.position if upper
       else
-        lower = scope.order(:position).last
+        lower = album_track_scope.order(:position).last
         lower_position = lower.position if lower
       end
     else
-      relative_to = scope.find_by!(track_id: relative_to_id)
+      relative_to = album_track_scope.joins(track: :statuses).find_by!(
+        track: { statuses: { id: relative_to_id, reblog: nil } }
+      )
 
       if above
-        lower = scope.find_by('position < ?', relative_to.position)
+        lower = album_track_scope.find_by('position < ?', relative_to.position)
         lower_position = lower.position if lower
         upper_position = relative_to.position
       else
-        upper = scope.find_by('position > ?', relative_to.position)
+        upper = album_track_scope.find_by('position > ?', relative_to.position)
         lower_position = relative_to.position
         upper_position = upper.position if upper
       end
@@ -99,8 +117,8 @@ class Api::V1::Albums::TracksController < Api::BaseController
     lower_position = nil
     upper_position = nil
 
-    positioning_attributes = scope.where(track_id: positioning_ids)
-                                  .pluck(:track_id, :position)
+    positioning_attributes = album_track_scope.where(track_id: positioning_ids)
+                                              .pluck(:track_id, :position)
 
     if positioning_attributes.size < positioning_ids.size
       raise Mastodon::TrackNotFoundError
@@ -122,8 +140,24 @@ class Api::V1::Albums::TracksController < Api::BaseController
     @index_range = [lower_position, upper_position]
   end
 
-  def scope
-    AlbumTrack.where album_id: params.require(:album_id)
+  def album_track_scope
+    AlbumTrack.where(album: album_status.music)
+  end
+
+  def album_status
+    @album_status ||= Status.find_by!(
+      id: params.require(:album_id),
+      music_type: 'Album',
+      reblog: nil
+    )
+  end
+
+  def track_status
+    @track_status = Status.find_by!(
+      id: params.require(:id),
+      music_type: 'Track',
+      reblog: nil
+    )
   end
 
   def pagination_params(core_params)
@@ -135,7 +169,7 @@ class Api::V1::Albums::TracksController < Api::BaseController
   end
 
   def next_path
-    unless @tracks.empty?
+    unless @statuses.empty?
       api_v1_album_tracks_url pagination_params(since_id: pagination_since_id)
     end
   end
@@ -147,15 +181,15 @@ class Api::V1::Albums::TracksController < Api::BaseController
   end
 
   def records_continue?
-    @tracks.size == limit_param(DEFAULT_TRACKS_LIMIT)
+    @statuses.size == limit_param(DEFAULT_TRACKS_LIMIT)
   end
 
   def pagination_max_id
-    @tracks.last.id
+    @statuses.last.id
   end
 
   def pagination_since_id
-    @tracks.first.id
+    @statuses.first.id
   end
 
   def insert_pagination_headers

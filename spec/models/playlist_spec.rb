@@ -9,10 +9,10 @@ RSpec.describe Playlist, type: :model do
   let(:admin) { false }
 
   let(:link) do
-    Rails.application.routes.url_helpers.short_account_track_url(track.status.account.username, track)
+    Rails.application.routes.url_helpers.short_account_status_url(status.account.username, status)
   end
 
-  let!(:track) { Fabricate(:track, title: 'title', duration: 10) }
+  let!(:status) { Fabricate(:status, music: Fabricate(:track, title: 'title', duration: 10)) }
 
   let(:settings) { { 'max_add_count' => 10, 'max_queue_size' => 10, 'max_skip_count' => 2, 'skip_limit_time' => 0 } }
 

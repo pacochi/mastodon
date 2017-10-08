@@ -53,6 +53,7 @@ class NotificationMailer < ApplicationMailer
   def video_prepared(recipient, notification)
     @me = recipient
     @track = notification.activity
+    @status = @track.statuses.find_by!(reblog: nil)
 
     locale_for_account(@me) do
       mail to: @me.user.email, subject: I18n.t('notification_mailer.video_prepared.subject', title: @track.title)

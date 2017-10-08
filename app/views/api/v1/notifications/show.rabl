@@ -10,6 +10,6 @@ node(:status, if: lambda { |n| [:favourite, :reblog, :mention].include?(n.type) 
   partial 'api/v1/statuses/show', object: n.target_status
 end
 
-node :track, if: lambda { |n| n.type == :video_prepared } do |n|
-  partial 'api/v1/tracks/show', object: n.activity
+node :status, if: lambda { |n| n.type == :video_prepared } do |n|
+  partial 'api/v1/statuses/show', object: n.activity.statuses.find_by!(reblog: nil)
 end

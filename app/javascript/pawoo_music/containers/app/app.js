@@ -7,12 +7,10 @@ import { connectUserStream } from '../../actions/streaming';
 import { changeTargetColmun } from '../../actions/colmun';
 import { refreshHomeTimeline } from '../../../mastodon/actions/timelines';
 import { refreshNotifications } from '../../../mastodon/actions/notifications';
-import AlbumComposeContainer from '../album_compose';
 import HomeTimelineContainer from '../home_timeline';
 import NotificationListContainer from '../notification_list';
 import CommunityTimelineContainer from '../community_timeline';
 import PublicTimelineContainer from '../public_timeline';
-import TrackComposeContainer from '../track_compose';
 import HashtagTimelineContainer from '../hashtag_timeline';
 import AccountGalleryContainer from '../account_gallery';
 import FavouritedStatusesContainer from '../favourited_statuses';
@@ -20,8 +18,6 @@ import Intent from '../../components/intent';
 import LoadingBarContainer from '../../../mastodon/features/ui/containers/loading_bar_container';
 import NotificationsContainer from '../../../mastodon/features/ui/containers/notifications_container';
 import ModalContainer from '../../../mastodon/features/ui/containers/modal_container';
-import AccountAlbumContainer from '../account_album';
-import AccountTrackContainer from '../account_track';
 import AccountFollowersContainer from '../account_followers';
 import AccountFollowingContainer from '../account_following';
 import StatusThreadContainer from '../status_thread';
@@ -92,14 +88,10 @@ export default class App extends PureComponent {
         <Route path='/notifications' component={NotificationListContainer} />
         <Route path='/timelines/public/local' component={CommunityTimelineContainer} />
         <Route path='/timelines/public' exact component={PublicTimelineContainer} />
-        <Route path='/albums/new' exact component={AlbumComposeContainer} />
-        <Route path='/tracks/new' exact component={TrackComposeContainer} />
         <Route path='/tags/:id' exact component={HashtagTimelineContainer} />
         <Route path='/favourites' component={FavouritedStatusesContainer} />
         <Route path='/@:acct' exact component={AccountGalleryContainer} />
         <Route path='/@:acct/:id' exact component={StatusThreadContainer} />
-        <Route path='/@:acct/albums/:id' exact component={AccountAlbumContainer} />
-        <Route path='/@:acct/tracks/:id' exact component={AccountTrackContainer} />
         <Route path='/users/:acct/followers' exact component={AccountFollowersContainer} />
         <Route path='/users/:acct/following' exact component={AccountFollowingContainer} />
       </Switch>

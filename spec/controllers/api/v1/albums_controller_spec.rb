@@ -15,25 +15,28 @@ describe Api::V1::AlbumsController, type: :controller do
         allow(controller).to receive(:doorkeeper_token) do
           Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: 'write')
         end
+
+        stub_request(:head, %r{^http://test\.host/.*}).to_return status: 400
       end
 
       it 'creates and renders albums and status' do
         post :create,
              params: { title: 'title', text: 'text', image: image }
 
-        album = Album.find_by!(
+        status = Status.find_by!(
           id: body_as_json[:id],
           account: user.account,
-          status: body_as_json[:status][:id],
-          title: 'title',
-          text: 'text',
+          music_type: 'Album'
         )
 
-        expect(album.status.text).to eq short_account_album_url(user.account.username, album)
-        expect(body_as_json[:title]).to eq 'title'
-        expect(body_as_json[:text]).to eq 'text'
-        expect(body_as_json[:status][:text]).to eq short_account_album_url(user.account.username, album)
+        expect(status.music.title).to eq 'title'
+        expect(status.music.text).to eq 'text'
+        expect(body_as_json[:album][:title]).to eq 'title'
+        expect(body_as_json[:album][:text]).to eq 'text'
       end
+
+      it 'joins given text and URL to create status text'
+      it 'uses URL as status text if the given text is blank'
 
       it 'returns http success' do
         post :create, params: { title: 'title', text: 'text', image: image }
@@ -60,22 +63,23 @@ describe Api::V1::AlbumsController, type: :controller do
       end
 
       let(:user) { Fabricate(:user) }
-      let(:album) { Fabricate(:album, status: Fabricate(:status, account: user.account)) }
+      let(:album) { Fabricate(:album) }
+      let(:status) { Fabricate(:status, account: user.account, music: album) }
 
       it 'updates and renders albums' do
         patch :update,
-              params: { id: album.id, title: 'updated title', text: 'updated text' }
+              params: { id: status.id, title: 'updated title', text: 'updated text' }
 
         album.reload
         expect(album.title).to eq 'updated title'
         expect(album.text).to eq 'updated text'
-        expect(body_as_json[:id]).to eq album.id
-        expect(body_as_json[:title]).to eq 'updated title'
-        expect(body_as_json[:text]).to eq 'updated text'
+        expect(body_as_json[:id]).to eq status.id
+        expect(body_as_json[:album][:title]).to eq 'updated title'
+        expect(body_as_json[:album][:text]).to eq 'updated text'
       end
 
       it 'returns http success' do
-        patch :update, params: { id: album.id }
+        patch :update, params: { id: status.id }
         expect(response).to have_http_status :success
       end
     end
@@ -86,56 +90,6 @@ describe Api::V1::AlbumsController, type: :controller do
         patch :update, params: { id: album.id }
         expect(response).to have_http_status :unauthorized
       end
-    end
-  end
-
-  describe 'DELETE #destroy' do
-    context 'with write scope' do
-      before do
-        allow(controller).to receive(:doorkeeper_token) do
-          Fabricate(:accessible_access_token, resource_owner_id: user.id, scopes: 'write')
-        end
-      end
-
-      let(:user) { Fabricate(:user) }
-      let(:album) { Fabricate(:album, status: Fabricate(:status, account: user.account)) }
-
-      it 'destroys albums' do
-        delete :destroy, params: { id: album.id }
-        expect { album.reload }.to raise_error ActiveRecord::RecordNotFound
-      end
-
-      it 'returns http success' do
-        delete :destroy, params: { id: album.id }
-        expect(response).to have_http_status :success
-      end
-    end
-
-    context 'without write scope' do
-      it 'returns http unauthorized' do
-        album = Fabricate(:album)
-        delete :destroy, params: { id: album.id }
-        expect(response).to have_http_status :unauthorized
-      end
-    end
-  end
-
-  describe 'GET #show' do
-    it 'renders albums' do
-      album = Fabricate(:album, title: 'title', text: 'text', image: image)
-
-      get :show, params: { id: album.id }
-
-      expect(body_as_json[:id]).to eq album.id
-      expect(body_as_json[:title]).to eq 'title'
-      expect(body_as_json[:text]).to eq 'text'
-      expect(body_as_json[:status][:id]).to eq album.status_id
-    end
-
-    it 'returns http success' do
-      album = Fabricate(:album)
-      get :show, params: { id: album.id }
-      expect(response).to have_http_status :success
     end
   end
 end

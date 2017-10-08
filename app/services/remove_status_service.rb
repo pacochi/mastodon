@@ -60,8 +60,16 @@ class RemoveStatusService < BaseService
   def unpush(type, receiver, status)
     if status.reblog? && !redis.zscore(FeedManager.instance.key(type, receiver.id), status.reblog_of_id).nil?
       redis.zadd(FeedManager.instance.key(type, receiver.id), status.reblog_of_id, status.reblog_of_id)
+
+      if status.music.present?
+        redis.zadd(FeedManager.instance.music_key(type, receiver.id), status.reblog_of_id, status.reblog_of_id)
+      end
     else
       redis.zremrangebyscore(FeedManager.instance.key(type, receiver.id), status.id, status.id)
+
+      if status.music.present?
+        redis.zremrangebyscore(FeedManager.instance.music_key(type, receiver.id), status.id, status.id)
+      end
     end
 
     Redis.current.publish("timeline:#{receiver.id}", @payload)

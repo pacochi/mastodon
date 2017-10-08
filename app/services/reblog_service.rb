@@ -17,7 +17,11 @@ class ReblogService < BaseService
 
     return reblog unless reblog.nil?
 
-    reblog = account.statuses.create!(reblog: reblogged_status, text: '')
+    reblog = account.statuses.create!(
+      music: reblogged_status.music,
+      reblog: reblogged_status,
+      text: ''
+    )
 
     DistributionWorker.perform_async(reblog.id)
     Pubsubhubbub::DistributionWorker.perform_async(reblog.stream_entry.id)

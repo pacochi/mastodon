@@ -28,6 +28,30 @@ describe Api::V1::Accounts::StatusesController do
     end
   end
 
+  describe 'GET #index with only musics' do
+    it 'returns http success' do
+      get :index, params: { account_id: user.account.id, only_musics: true }
+
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe 'GET #index with only tracks' do
+    it 'returns http success' do
+      get :index, params: { account_id: user.account.id, only_tracks: true }
+
+      expect(response).to have_http_status(:success)
+    end
+  end
+
+  describe 'GET #index with only albums' do
+    it 'returns http success' do
+      get :index, params: { account_id: user.account.id, only_albums: true }
+
+      expect(response).to have_http_status(:success)
+    end
+  end
+
   describe 'GET #index with exclude replies' do
     it 'returns http success' do
       get :index, params: { account_id: user.account.id, exclude_replies: true }
