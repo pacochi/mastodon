@@ -8,6 +8,11 @@ import { constructGeneratorOptions } from '../../util/musicvideo';
 
 import defaultArtwork from '../../../images/pawoo_music/default_artwork.png';
 
+window.AudioContext = window.AudioContext || window.webkitAudioContext;
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
+                            window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
+
 function convertURL(file) {
   if (file instanceof File) {
     return URL.createObjectURL(file);
@@ -162,6 +167,7 @@ class Musicvideo extends ImmutablePureComponent {
       <div className='musicvideo'>
         <div className='canvas-container' ref={this.setCanvasContainerRef} aria-label={label} />
         <audio autoPlay={autoPlay} ref={this.setAudioRef} src={music} />
+
         <div className='controls'>
           <div className={classNames('toggle', { paused })} onClick={this.handleToggle} role='button' tabIndex='0' aria-pressed='false'>▶︎</div>
           <input className='seekbar' type='range' min='0' max='100' step='0.1' ref={this.setSeekbarRef} />
