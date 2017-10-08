@@ -6,6 +6,8 @@
   .account-link {
     display:    block;
     flex: 1;
+    padding-top: 3px;
+    line-height: 1.2;
     text-align: left;
 
     text-overflow:  ellipsis;
@@ -14,6 +16,7 @@
 
     .display-name {
       display:        block;
+      font-size:      var(--text10-font);
       font-weight:    bold;
 
       text-overflow:  ellipsis;
@@ -25,7 +28,7 @@
 
     .acct {
       display:        block;
-      font-size:      9px;
+      font-size:      var(--text10-font);
 
       text-overflow:  ellipsis;
       white-space:    nowrap;

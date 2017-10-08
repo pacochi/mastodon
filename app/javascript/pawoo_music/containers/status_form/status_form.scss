@@ -57,7 +57,7 @@
 
   .compose-form__autosuggest-wrapper {
     position:   relative;
-    margin:     var(--verticalspace20);
+    margin:     var(--verticalspace25);
   }
 
   .compose-form__modifiers {
@@ -100,16 +100,16 @@
   // emoji-button
   .emoji-button {
     display:      block;
-    width:        var(--iconsize10);
-    height:       var(--iconsize10);
-    font-size:    var(--iconsize10);
+    width:        var(--iconsize15);
+    height:       var(--iconsize15);
+    font-size:    var(--iconsize15);
 
     img {
       filter:   grayscale(100%);
       display:  block;
       margin:   0;
-      width:    var(--iconsize10);
-      height:   var(--iconsize10);
+      width:    var(--iconsize15);
+      height:   var(--iconsize15);
     }
 
     &:hover,
@@ -284,12 +284,12 @@
 
   .compose-form__pickers {
     position: absolute;
-    right:    calc(var(--grid) * 2);
+    right:    var(--padding15);
     top:      0;
-    width:    var(--iconsize10);
+    width:    var(--iconsize15);
 
     .emoji-picker__dropdown {
-      margin:   var(--verticalspace20);
+      margin:   var(--verticalspace25);
 
       &.dropdown--active::after {
         bottom: 0;
@@ -410,7 +410,7 @@
       }
 
       .fa-fw {
-        width: var(--iconsize10) !important;
+        width: var(--iconsize15) !important;
       }
     }
 
@@ -474,7 +474,6 @@
       .privacy-dropdown,
       .compose-form__sensitive-button,
       .text-icon-button {
-        width:  var(--iconsize20);
         height: var(--iconsize20);
 
         .privacy-dropdown__value,
@@ -568,15 +567,12 @@
         display:      flex;
         align-items:  center;
         font-size:    var(--text20-font);
-        margin:       var(--padding10);
+        margin:       0 var(--padding10);
       }
 
       .compose-form__publish-button-wrapper {
         button {
-          padding:  var(--padding10) !important;
-          display:  block;
-          width:    auto;
-
+          padding:  var(--padding10) var(--padding15) !important;
           height:       100% !important;
           line-height:  var(--text30-line) !important;
           font-size:    var(--text30-font) !important;
