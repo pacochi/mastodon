@@ -1,13 +1,13 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import GlovalNaviContainer from '../../containers/global_navi';
+import classNames from 'classnames';
 
 export default class Timeline extends PureComponent {
 
   static propTypes = {
     children: PropTypes.node.isRequired,
     garally: PropTypes.node.isRequired,
-    isLogin: PropTypes.bool,
   }
 
 
@@ -15,7 +15,7 @@ export default class Timeline extends PureComponent {
     const { children, garally } = this.props;
 
     return (
-      <div className='timeline'>
+      <div className={classNames('timeline', { mobile : left })}>
         <div className='navigation-column'>
           <GlovalNaviContainer />
         </div>

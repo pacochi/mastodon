@@ -40,6 +40,14 @@ export default class App extends PureComponent {
     isLogin: PropTypes.bool,
   }
 
+  constructor (props) {
+    super(props);
+
+    this.state = {
+      centerView: 'lobby',
+    };
+  }
+
   componentDidMount () {
     const { dispatch, isLogin } = this.props;
 
@@ -62,57 +70,81 @@ export default class App extends PureComponent {
     }
   }
 
+  handleClickGlobalNaviButton = (ref) => {
+    this.grobalNaviButton = ref;
+    this.setState({ centerView: 'globalNavi' });
+  }
+
+  handleClickLobbyButton = (ref) => {
+    this.lobbyButton = ref;
+    this.setState({ centerView: 'lobby' });
+  }
+
+  handleClickGarallyButton = (ref) => {
+    this.garallyButton = ref;
+    this.setState({ centerView: 'garally' });
+  }
+
   render () {
     const mobile = isMobile();
+    const centerView = this.state.centerView;
+    const routes = (
+      <Switch>
+        <Route path='/' exact component={HomeTimelineContainer} />
+        <Route path='/intent/statuses/new' exact component={Intent} />
+        <Route path='/notifications' component={NotificationListContainer} />
+        <Route path='/timelines/public/local' component={CommunityTimelineContainer} />
+        <Route path='/timelines/public' exact component={PublicTimelineContainer} />
+        <Route path='/albums/new' exact component={AlbumComposeContainer} />
+        <Route path='/tracks/new' exact component={TrackComposeContainer} />
+        <Route path='/tags/:id' exact component={HashtagTimelineContainer} />
+        <Route path='/favourites' component={FavouritedStatusesContainer} />
+        <Route path='/@:acct' exact component={AccountGarallyContainer} />
+        <Route path='/@:acct/:id' exact component={StatusThreadContainer} />
+        <Route path='/@:acct/albums/:id' exact component={AccountAlbumContainer} />
+        <Route path='/@:acct/tracks/:id' exact component={AccountTrackContainer} />
+        <Route path='/users/:acct/followers' exact component={AccountFollowersContainer} />
+        <Route path='/users/:acct/following' exact component={AccountFollowingContainer} />
+      </Switch>
+    );
+
     return (
-      <div className={classNames('app', { sp: mobile })}>
-        {mobile && (
+      mobile ? (
+        <div className={classNames('app', 'sp')}>
+          <div className='app-center'>
+            {routes}
+          </div>
           <div className='app-top'>
             <topnavi>
-              { // TODO
-                // <a ref='0' onClick={() => {this.slide(0)}} className='selected'>≡</a>
-              }
+              <button className={classNames({ 'selected': centerView === 'globalNavi' })} onClick={this.handleClickGlobalNaviButton}>≡</button>
               <a href='/投稿するURL'>[ぱうロゴ]</a>
               <StatusPostButtonContainer />
             </topnavi>
           </div>
-        )}
-        <div className='app-center'>
-          <Switch>
-            <Route path='/' exact component={HomeTimelineContainer} />
-            <Route path='/intent/statuses/new' exact component={Intent} />
-            <Route path='/notifications' component={NotificationListContainer} />
-            <Route path='/timelines/public/local' component={CommunityTimelineContainer} />
-            <Route path='/timelines/public' exact component={PublicTimelineContainer} />
-            <Route path='/albums/new' exact component={AlbumComposeContainer} />
-            <Route path='/tracks/new' exact component={TrackComposeContainer} />
-            <Route path='/tags/:id' exact component={HashtagTimelineContainer} />
-            <Route path='/favourites' component={FavouritedStatusesContainer} />
-            <Route path='/@:acct' exact component={AccountGarallyContainer} />
-            <Route path='/@:acct/:id' exact component={StatusThreadContainer} />
-            <Route path='/@:acct/albums/:id' exact component={AccountAlbumContainer} />
-            <Route path='/@:acct/tracks/:id' exact component={AccountTrackContainer} />
-            <Route path='/users/:acct/followers' exact component={AccountFollowersContainer} />
-            <Route path='/users/:acct/following' exact component={AccountFollowingContainer} />
-          </Switch>
+          <div className='app-bottom'>
+            <div className='buttons'>
+              <button className={classNames({ 'selected': centerView === 'lobby'   })} onClick={this.handleClickLobbyButton}  >チャット</button>
+              <button className={classNames({ 'selected': centerView === 'garally' })} onClick={this.handleClickGarallyButton}>作品</button>
+            </div>
+          </div>
+          <NotificationsContainer />
+          <LoadingBarContainer className='loading-bar' />
+          <ModalContainer />
         </div>
-        <div className='app-bottom'>
-          {mobile ? (
-            <bottomnavi>
-              {/* TODO
-                <a ref='1' onClick={() => {this.slide(1)}} className='selected'>[アイコン] <br />作品</a>
-                <a ref='2' onClick={() => {this.slide(2)}}                     >[アイコン] <br />チャット</a>
-              */}
-            </bottomnavi>
-          ) : (
+      ) : (
+        <div className={classNames('app', { sp: mobile })}>
+          <div className='app-center'>
+            {routes}
+          </div>
+          <div className='app-bottom'>
             <PlayControlContainer />
-          )}
+          </div>
+          <NotificationsContainer />
+          <LoadingBarContainer className='loading-bar' />
+          <StatusPostButtonContainer fixed />
+          <ModalContainer />
         </div>
-        <NotificationsContainer />
-        <LoadingBarContainer className='loading-bar' />
-        {!mobile && <StatusPostButtonContainer fixed />}
-        <ModalContainer />
-      </div>
+      )
     );
   }
 

@@ -1,3 +1,10 @@
+.app.sp {
+  .timeline {
+    display: flex;
+    height: calc(100vh - var(--height-deck) * 2);
+  }
+}
+
 .timeline {
   display: flex;
   flex-direction: row;
