@@ -73,7 +73,7 @@ export default class App extends PureComponent {
                 // <a ref='0' onClick={() => {this.slide(0)}} className='selected'>≡</a>
               }
               <a href='/投稿するURL'>[ぱうロゴ]</a>
-              <a href='/投稿するURL'>[投稿アイコン]</a>
+              <StatusPostButtonContainer />
             </topnavi>
           </div>
         )}
@@ -110,7 +110,7 @@ export default class App extends PureComponent {
         </div>
         <NotificationsContainer />
         <LoadingBarContainer className='loading-bar' />
-        <StatusPostButtonContainer />
+        {!mobile && <StatusPostButtonContainer fixed />}
         <ModalContainer />
       </div>
     );
