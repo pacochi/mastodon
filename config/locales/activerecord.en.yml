@@ -31,10 +31,11 @@ en:
         track:
           attributes:
             music:
+              in_between: Your music file must be less than :max
               invalid: The music file is invalid
             image:
+              in_between: Your cover image file must be less than :max
               invalid: The cover image file is invalid
-          in_between: Your mp3 and cover image must be less than :max for each
         status:
           attributes:
             reblog:

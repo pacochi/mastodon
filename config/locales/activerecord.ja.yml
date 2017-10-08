@@ -33,10 +33,11 @@ ja:
         track:
           attributes:
             music:
+              in_between: 音楽ファイルのサイズは:max未満である必要があります
               invalid: 音楽ファイルの形式が無効です
             image:
+              in_between: M画像ファイルのサイズは:max未満である必要があります
               invalid: 画像ファイルの形式が無効です
-          in_between: MP3ファイルと画像ファイルのサイズはそれぞれ:max未満である必要があります
         status:
           attributes:
             reblog:

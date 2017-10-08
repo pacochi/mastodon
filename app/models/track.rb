@@ -46,14 +46,14 @@ class Track < ApplicationRecord
   has_attached_file :video
   has_attached_file :video_image
 
-  validates_attachment_presence :music
-  validates_attachment_size :music, :video_image, less_than: 7.megabytes
+  validates_attachment :music,
+                       presence: true,
+                       content_type: { content_type: ['audio/mpeg'] },
+                       size: { less_than: 16.megabytes }
 
-  validates_attachment_content_type :music,
-                                    content_type: ['audio/mpeg']
-
-  validates_attachment_content_type :video_image,
-                                    content_type: ['image/jpeg', 'image/png']
+  validates_attachment :video_image,
+                       content_type: { content_type: ['image/jpeg', 'image/png'] },
+                       size: { less_than: 7.megabytes }
 
   def display_title
     "#{title} - #{artist}"
