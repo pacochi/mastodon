@@ -66,7 +66,7 @@ body {
   --text20-line:      calc(var(--text10-font) * 1.5);
 
   --text30-font:      16px;
-  --text30-line:      calc(var(--grid) * 5);
+  --text30-line:      calc(var(--grid) * 4);
 
   --text40-font:      18px;
   --text40-line:      calc(var(--grid) * 6);
@@ -161,17 +161,17 @@ a:hover {
 
   --width-ago:            calc(var(--grid) * 6);
   --width-contextmenu:    calc(var(--grid) * 46);
-  --height-header_footer: 56px;
+  --height-deck:          56px;
 
   .app-center {
     z-index:        1;
 
     overflow: hidden;
-    height:         calc(100% - var(--height-header_footer));
+    height:         calc(100% - var(--height-deck));
   }
 
   .app-bottom {
-    height:     var(--height-header_footer);
+    height:     var(--height-deck);
 
     // デッキフィールドだよとわかりやすくするための、pawoo-team 内部での指示用の色。
     // TODO: 本番でこの色つかわないでね〜〜。
@@ -191,55 +191,95 @@ a:hover {
   --width-globalnavi:     100vw;
   --width-lobby:          100vw;
   --width-gallary-slide:  100vw;
-  --width-gallary:        100vw;
+  --width-gallary:        calc(100vw - var(--grid) * 4);
 
   --width-ago:            calc(var(--grid) * 6);
   --width-contextmenu:    calc(var(--grid) * 26);
-  --height-header_footer: 56px;
-
-  position: relative;
+  --height-deck:          56px;
 
   .app-top {
-    position: fixed;
-    width: 100vw;
-    top: 0;
-    left: 0;
-    height: var(--height-header_footer);
-    background-color: var(--color1);
-    z-index: 1000;
+    height: var(--height-deck);  // height - border
   }
 
   .app-center {
-    position: absolute;
-    top: var(--height-header_footer);
-    height: calc(100% - var(--height-header_footer) * 2);
-
-    transition: var(--hover-transition);
-  }
-
-  .app-bottom {
-    position: fixed;
-    width: 100vw;
-    bottom: 0;
-    left: 0;
-    height: var(--height-header_footer);
-    background-color: var(--color1);
-    z-index: 1000;
-
-    bottomnavi {
-      display: flex;
-      height: 100%;
-
-      button {
-        width: 50%;
-        height: 100%;
-        border: 0;
-        background-color: var(--color1);
-      }
-
-      button.selected {
-        border-top: 3px solid var(--strong1);
-      }
-    }
+    height: calc(100% - var(--height-deck) * 2);
   }
 }
+
+// ---------------------------------------------------------
+// --width-lobby の 値を 0px にすると、 lobby を畳めます。
+
+/*
+// TODO
+// -------------
+// SP
+
+topnavi {
+  display:        flex;
+  height:         var(--height-deck);  // height - border
+
+  align-items:        center;
+  justify-content:    space-between;
+  background-color:   var(--color1);
+  border-bottom:      2px solid var(--color2);
+
+  a {
+    display:    block;
+    font-size:      var(--text20-font);
+    line-height:    var(--text20-line);
+  }
+}
+
+
+slide {
+  display:    block;
+  position:   relative;
+  left:       var(--slide-position);
+  transition: var(--hover-transition);
+}
+
+slide:nth-child(1) {
+  flex-shrink:    0;
+  flex-grow:      0;
+  flex-basis:     var(--width-globalnavi);
+  overflow-y:     scroll;
+}
+
+slide:nth-child(2) {
+  flex-shrink:    0;
+  flex-grow:      0;
+  flex-basis:     var(--width-lobby);
+  overflow-y:     scroll;
+}
+
+slide:nth-child(3) {
+  flex-shrink:    0;
+  flex-grow:      0;
+  flex-basis:     var(--width-gallary-slide);
+  overflow-y:     scroll;
+}
+
+bottomnavi {
+  display:        flex;
+  height:         var(--height-deck);  // height - border
+  text-align:     center;
+
+  align-items:        center;
+  justify-content:    space-between;
+  background-color:   var(--color1);
+  border-top:         2px solid var(--color2);
+
+  a {
+    display:    block;
+    height:     calc(var(--height-deck) - 3px);  // height - border
+    width:      calc(100% / 2);
+
+    font-size:      var(--text20-font);
+    line-height:    var(--text20-line);
+  }
+
+  .selected {
+    border-top: 3px solid var(--strong1);
+  }
+}
+*/

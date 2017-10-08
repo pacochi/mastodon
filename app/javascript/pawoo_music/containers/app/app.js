@@ -40,11 +40,6 @@ export default class App extends PureComponent {
     isLogin: PropTypes.bool,
   }
 
-  state = {
-    appCenterView: 'lobby',
-    left         : 'calc(100vw * -1)',
-  };
-
   componentDidMount () {
     const { dispatch, isLogin } = this.props;
 
@@ -67,43 +62,22 @@ export default class App extends PureComponent {
     }
   }
 
-  handleClickGlobalNavi = () => {
-    this.setState({
-      appCenterView: 'globalNavi',
-      left: 'calc(100vw * -0)',
-    });
-  }
-
-  handleClickLobby = () => {
-    this.setState({
-      appCenterView: 'lobby',
-      left: 'calc(100vw * -1)',
-    });
-  }
-
-  handleClickGarally = () => {
-    this.setState({
-      appCenterView: 'garally',
-      left: 'calc(100vw * -2)',
-    });
-  }
-
   render () {
     const mobile = isMobile();
-    const { appCenterView, left } = this.state;
-
     return (
       <div className={classNames('app', { sp: mobile })}>
         {mobile && (
           <div className='app-top'>
             <topnavi>
-              <button className={classNames({ selected: appCenterView === 'globalNavi' })} onClick={this.handleClickGlobalNavi}>≡</button>
+              { // TODO
+                // <a ref='0' onClick={() => {this.slide(0)}} className='selected'>≡</a>
+              }
               <a href='/投稿するURL'>[ぱうロゴ]</a>
-              <StatusPostButtonContainer />
+              <a href='/投稿するURL'>[投稿アイコン]</a>
             </topnavi>
           </div>
         )}
-        <div className='app-center' style={{ left }}>
+        <div className='app-center'>
           <Switch>
             <Route path='/' exact component={HomeTimelineContainer} />
             <Route path='/intent/statuses/new' exact component={Intent} />
@@ -125,8 +99,10 @@ export default class App extends PureComponent {
         <div className='app-bottom'>
           {mobile ? (
             <bottomnavi>
-              <button className={classNames({ selected: appCenterView === 'lobby' })} onClick={this.handleClickLobby}>チャット</button>
-              <button className={classNames({ selected: appCenterView === 'garally' })} onClick={this.handleClickGarally}>作品</button>
+              {/* TODO
+                <a ref='1' onClick={() => {this.slide(1)}} className='selected'>[アイコン] <br />作品</a>
+                <a ref='2' onClick={() => {this.slide(2)}}                     >[アイコン] <br />チャット</a>
+              */}
             </bottomnavi>
           ) : (
             <PlayControlContainer />
@@ -134,7 +110,7 @@ export default class App extends PureComponent {
         </div>
         <NotificationsContainer />
         <LoadingBarContainer className='loading-bar' />
-        {!mobile && <StatusPostButtonContainer fixed />}
+        <StatusPostButtonContainer />
         <ModalContainer />
       </div>
     );
