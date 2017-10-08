@@ -37,12 +37,12 @@ child :tags, object_root: false do
   extends 'api/v1/statuses/_tags'
 end
 
-child({ music: :album }, if: ->(status) { !status.reblog? && Album === status.music }) do
+child({ music: :album }, if: ->(status) { !status.reblog? && status.music.is_a?(Album) }) do
   attribute :title, :text
   node(:image) { |album| full_asset_url(album.image.url(:original)) }
 end
 
-child({ music: :track }, if: ->(status) { !status.reblog? && Track === status.music }) do
+child({ music: :track }, if: ->(status) { !status.reblog? && status.music.is_a?(Track) }) do
   attribute :title, :artist, :text
 
   node(:music) { |track| full_asset_url(track.music.url(:original)) }
