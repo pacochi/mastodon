@@ -157,7 +157,8 @@ a:hover {
   // block width and height
   --width-globalnavi:     calc(var(--grid) * 50);
   --width-lobby:          calc(var(--grid) * 80);
-  --width-gallary:        calc(var(--grid) * 120);
+  --width-gallery-view:   calc(100vw - var(--width-globalnavi) - var(--width-lobby));
+  --width-gallery:        calc(var(--grid) * 120);
 
   --width-ago:            calc(var(--grid) * 6);
   --width-contextmenu:    calc(var(--grid) * 46);
@@ -192,8 +193,8 @@ a:hover {
   // block width and height
   --width-globalnavi:     100vw;
   --width-lobby:          100vw;
-  --width-gallary-slide:  100vw;
-  --width-gallary:        calc(100vw - var(--grid) * 4);
+  --width-gallery-slide:  100vw;
+  --width-gallery:        100vw;
 
   --width-ago:            calc(var(--grid) * 6);
   --width-contextmenu:    calc(var(--grid) * 26);
@@ -303,7 +304,7 @@ slide:nth-child(2) {
 slide:nth-child(3) {
   flex-shrink:    0;
   flex-grow:      0;
-  flex-basis:     var(--width-gallary-slide);
+  flex-basis:     var(--width-gallery-slide);
   overflow-y:     scroll;
 }
 

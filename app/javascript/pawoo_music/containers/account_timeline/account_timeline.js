@@ -30,7 +30,7 @@ export default class AccountTimeline extends PureComponent {
     statusIds: ImmutablePropTypes.list.isRequired,
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
-    garally: PropTypes.node,
+    gallery: PropTypes.node,
     pinnedStatusIds: ImmutablePropTypes.list,
   };
 
@@ -70,13 +70,13 @@ export default class AccountTimeline extends PureComponent {
   }, 300, { leading: true })
 
   render () {
-    const { statusIds, pinnedStatusIds, isLoading, hasMore, garally } = this.props;
+    const { statusIds, pinnedStatusIds, isLoading, hasMore, gallery } = this.props;
     const header = null;
     const prepend = null;
     const uniqueStatusIds = pinnedStatusIds.concat(statusIds).toOrderedSet().toList();
 
     return (
-      <Timeline garally={garally} header={header}>
+      <Timeline gallery={gallery} header={header}>
         <ScrollableList
           scrollKey='account_timeline'
           statusIds={uniqueStatusIds}

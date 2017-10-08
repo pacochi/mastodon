@@ -2,8 +2,32 @@
   .timeline {
     display: flex;
     height: calc(100vh - var(--height-deck) * 2);
+    position: absolute;
+
+    .gallery-column {
+      width: var(--width-gallery);
+
+      .scrollable .item-list {
+        padding: 0 calc(var(--grid) * 4) calc(var(--grid) * 4);
+        width: calc(var(--width-gallery) - var(--grid) * 8);
+        box-sizing: content-box;
+      }
+    }
+  }
+
+  .timeline.globalNavi {
+    left: calc( 100vw * -0 );
+  }
+
+  .timeline.lobby {
+    left: calc( 100vw * -1 );
+  }
+
+  .timeline.gallery {
+    left: calc( 100vw * -2 );
   }
 }
+
 
 .timeline {
   display: flex;
@@ -53,35 +77,32 @@
     }
   }
 
-  .garally-column {
+  .gallery-column {
+    display: flex;
+
     flex-shrink:    0;
     flex-grow:      0;
-    flex-basis:     calc(100vw - var(--width-globalnavi) - var(--width-lobby));
-    width: calc(100vw - var(--width-globalnavi) - var(--width-lobby));
+    flex-basis:     var(--width-gallery-view);
+    width: var(--width-gallery-view);
+    justify-content: center;
 
-    .garally {
-      height: 100%;
-      display:    block;
-      text-align: center;
-
+    .scrollable {
       background-color:   var(--color1);
+      display: flex;
+      justify-content: center;
 
-      .scrollable {
-        .item-list {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          padding:    0 0 calc(var(--grid) * 4) 0;
+      .item-list {
+        padding: 0 0 calc(var(--grid) * 4) 0;
+        width: var(--width-gallery);
+        height: max-content;
 
-          .prepend {
-            width: 100%;
-          }
-
-          article {
-            width:      var(--width-gallary);
-          }
+        .prepend {
+          width: 100%;
         }
 
+        article {
+          width: 100%;
+        }
       }
 
       h3 {

@@ -34,7 +34,7 @@ const makeMapStateToProps = () => {
 };
 
 @connect(makeMapStateToProps)
-export default class AccountGarally extends PureComponent {
+export default class AccountGallery extends PureComponent {
 
   static propTypes = {
     dispatch: PropTypes.func.isRequired,
@@ -44,7 +44,7 @@ export default class AccountGarally extends PureComponent {
     me: PropTypes.number,
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
-    garally: PropTypes.node,
+    gallery: PropTypes.node,
     pinnedStatusIds: ImmutablePropTypes.list,
   };
 
@@ -94,22 +94,20 @@ export default class AccountGarally extends PureComponent {
       </div>
     );
 
-    const Garally = (
-      <div className='garally'>
-        <StatusList
-          scrollKey='account_garally'
-          statusIds={uniqueStatusIds}
-          hasMore={hasMore}
-          isLoading={isLoading}
-          isGarally
-          prepend={prepend}
-          onScrollToBottom={this.handleScrollToBottom}
-        />
-      </div>
+    const gallery = (
+      <StatusList
+        scrollKey='account_gallery'
+        statusIds={uniqueStatusIds}
+        hasMore={hasMore}
+        isLoading={isLoading}
+        isGallery
+        prepend={prepend}
+        onScrollToBottom={this.handleScrollToBottom}
+      />
     );
 
     return (
-      <AccountTimelineContainer accountId={accountId} garally={Garally} />
+      <AccountTimelineContainer accountId={accountId} gallery={gallery} />
     );
   }
 

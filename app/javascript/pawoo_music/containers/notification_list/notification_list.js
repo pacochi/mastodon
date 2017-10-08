@@ -70,21 +70,19 @@ export default class NotificationList extends ImmutablePureComponent {
     const emptyMessage = <FormattedMessage id='empty_column.notifications' defaultMessage="You don't have any notifications yet. Interact with others to start the conversation." />;
     const uniqueStatusIds = notifications.map((notification) => notification.get('status')).filter((status) => status).toOrderedSet().toList();
 
-    const Garally = (
-      <div className='garally'>
-        <StatusList
-          scrollKey='account_garally'
-          statusIds={uniqueStatusIds}
-          hasMore={hasMore}
-          isLoading={isLoading}
-          detail
-          onScrollToBottom={this.handleLoadMore}
-        />
-      </div>
+    const gallery = (
+      <StatusList
+        scrollKey='account_gallery'
+        statusIds={uniqueStatusIds}
+        hasMore={hasMore}
+        isLoading={isLoading}
+        detail
+        onScrollToBottom={this.handleLoadMore}
+      />
     );
 
     return (
-      <Timeline garally={Garally}>
+      <Timeline gallery={gallery}>
         <ScrollableList
           scrollKey='notifications'
           isLoading={isLoading}

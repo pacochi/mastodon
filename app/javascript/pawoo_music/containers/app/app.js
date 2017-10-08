@@ -14,7 +14,7 @@ import CommunityTimelineContainer from '../community_timeline';
 import PublicTimelineContainer from '../public_timeline';
 import TrackComposeContainer from '../track_compose';
 import HashtagTimelineContainer from '../hashtag_timeline';
-import AccountGarallyContainer from '../account_garally';
+import AccountGalleryContainer from '../account_gallery';
 import FavouritedStatusesContainer from '../favourited_statuses';
 import Intent from '../../components/intent';
 import LoadingBarContainer from '../../../mastodon/features/ui/containers/loading_bar_container';
@@ -35,6 +35,7 @@ const mapStateToProps = state => ({
 });
 
 @connect(mapStateToProps)
+
 export default class App extends PureComponent {
 
   static propTypes = {
@@ -75,9 +76,9 @@ export default class App extends PureComponent {
     dispatch(changeTargetColmun('lobby'));
   }
 
-  handleClickGarallyButton = () => {
+  handleClickGalleryButton = () => {
     const { dispatch } = this.props;
-    dispatch(changeTargetColmun('garally'));
+    dispatch(changeTargetColmun('gallery'));
   }
 
   render () {
@@ -95,7 +96,7 @@ export default class App extends PureComponent {
         <Route path='/tracks/new' exact component={TrackComposeContainer} />
         <Route path='/tags/:id' exact component={HashtagTimelineContainer} />
         <Route path='/favourites' component={FavouritedStatusesContainer} />
-        <Route path='/@:acct' exact component={AccountGarallyContainer} />
+        <Route path='/@:acct' exact component={AccountGalleryContainer} />
         <Route path='/@:acct/:id' exact component={StatusThreadContainer} />
         <Route path='/@:acct/albums/:id' exact component={AccountAlbumContainer} />
         <Route path='/@:acct/tracks/:id' exact component={AccountTrackContainer} />
@@ -120,7 +121,7 @@ export default class App extends PureComponent {
           <div className='app-bottom'>
             <div className='buttons'>
               <button className={classNames({ 'selected': target === 'lobby'   })} onClick={this.handleClickLobbyButton}  >チャット</button>
-              <button className={classNames({ 'selected': target === 'garally' })} onClick={this.handleClickGarallyButton}>作品</button>
+              <button className={classNames({ 'selected': target === 'gallery' })} onClick={this.handleClickGalleryButton}>作品</button>
             </div>
           </div>
           <NotificationsContainer />
