@@ -14,9 +14,21 @@ class VideoPreparingWorker
     ensure
       video.unlink
     end
-
-    NotifyService.new.call(status.account, status.music)
   rescue ActiveRecord::RecordNotFound
     nil
+  rescue
+    Rails.logger.error 'failed to convert track id: ' + status.music_id
+
+    error = VideoPreparationError.create!(track: status.music)
+    begin
+      NotifyService.new.call(status.account, error)
+    rescue => e
+      Rails.logger.error e
+      error.destroy!
+    end
+
+    raise
+  else
+    NotifyService.new.call(status.account, status.music)
   end
 end

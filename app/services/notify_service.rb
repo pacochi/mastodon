@@ -10,7 +10,10 @@ class NotifyService < BaseService
 
     create_notification
     send_email if email_enabled?
-    send_firebase_cloud_messaging if @notification.type != :video_prepared && firebase_cloud_messaging_enabled?
+    if [:video_preparation_error, :video_preparation_success].exclude?(@notification.type) &&
+       firebase_cloud_messaging_enabled?
+      send_firebase_cloud_messaging
+    end
   rescue ActiveRecord::RecordInvalid
     return
   end

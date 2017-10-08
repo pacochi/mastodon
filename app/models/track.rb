@@ -41,6 +41,7 @@ class Track < ApplicationRecord
 
   has_many :album_tracks, inverse_of: :track
   has_many :statuses, as: :music
+  has_many :video_preparation_errors, inverse_of: :track
 
   has_attached_file :music
   has_attached_file :video

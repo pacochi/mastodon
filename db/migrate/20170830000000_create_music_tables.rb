@@ -37,6 +37,10 @@ class CreateMusicTables < ActiveRecord::Migration[5.1]
       t.index [:album_id, :position], unique: true
     end
 
+    create_table :video_preparation_errors do |t|
+      t.belongs_to :track, foreign_key: { on_delete: :cascade, on_update: :cascade }, null: false
+    end
+
     add_belongs_to :statuses, :music, index: false, polymorphic: true
 
     # To query musics of an account.
