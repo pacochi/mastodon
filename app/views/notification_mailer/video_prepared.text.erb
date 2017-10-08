@@ -1,5 +1,5 @@
 <%= display_name(@me) %>,
 
-<%= raw t('notification_mailer.video_prepared.body', title: @status.music.title) %>
+<%= raw t('notification_mailer.video_prepared.body', title: @track.title) %>
 
 <%= raw t('application_mailer.view')%> <%= short_account_status_url(@me.username, @status) %>
