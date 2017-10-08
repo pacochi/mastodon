@@ -144,7 +144,6 @@ class Api::V1::TracksController < Api::BaseController
     return @updated_music_duration if @updated_music_duration
 
     Mp3Info.open track_params[:music].path do |m|
-      m.tag2.remove_pictures
       @updated_music_duration = m.length
     end
   rescue Mp3InfoError
