@@ -7,12 +7,10 @@ import { connectUserStream } from '../../actions/streaming';
 import { changeTargetColmun } from '../../actions/colmun';
 import { refreshHomeTimeline } from '../../../mastodon/actions/timelines';
 import { refreshNotifications } from '../../../mastodon/actions/notifications';
-import AlbumComposeContainer from '../album_compose';
 import HomeTimelineContainer from '../home_timeline';
 import NotificationListContainer from '../notification_list';
 import CommunityTimelineContainer from '../community_timeline';
 import PublicTimelineContainer from '../public_timeline';
-import TrackComposeContainer from '../track_compose';
 import HashtagTimelineContainer from '../hashtag_timeline';
 import AccountGalleryContainer from '../account_gallery';
 import FavouritedStatusesContainer from '../favourited_statuses';
@@ -94,8 +92,6 @@ export default class App extends PureComponent {
         <Route path='/favourites' component={FavouritedStatusesContainer} />
         <Route path='/@:acct' exact component={AccountGalleryContainer} />
         <Route path='/@:acct/:id' exact component={StatusThreadContainer} />
-        <Route path='/@:acct/albums/:id' exact component={AccountAlbumContainer} />
-        <Route path='/@:acct/tracks/:id' exact component={AccountTrackContainer} />
         <Route path='/users/:acct/followers' exact component={AccountFollowersContainer} />
         <Route path='/users/:acct/following' exact component={AccountFollowingContainer} />
       </Switch>
