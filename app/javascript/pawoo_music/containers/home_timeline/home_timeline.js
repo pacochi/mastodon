@@ -46,7 +46,7 @@ export default class HomeTimeline extends PureComponent {
         timelineId='home'
         loadMore={this.handleLoadMore}
         emptyMessage={emptyMessage}
-        garallyPrepend={<MediaPostButton />}
+        galleryPrepend={<MediaPostButton />}
         withComposeForm
       />
     );

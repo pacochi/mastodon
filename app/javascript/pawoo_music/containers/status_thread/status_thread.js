@@ -90,16 +90,14 @@ export default class StatusThread extends ImmutablePureComponent {
       <Component detail key={status.get('id')} status={status} />
     ).concat(descendants);
 
-    const Garally = (
-      <div className='garally'>
-        <ScrollableList scrollKey='thread' prepend={<AccountHeaderContainer account={account} />} >
-          {content}
-        </ScrollableList>
-      </div>
+    const gallery = (
+      <ScrollableList scrollKey='thread' prepend={<AccountHeaderContainer account={account} />} >
+        {content}
+      </ScrollableList>
     );
 
     return (
-      <AccountTimelineContainer accountId={accountId} garally={Garally} />
+      <AccountTimelineContainer accountId={accountId} gallery={gallery} />
     );
   }
 
