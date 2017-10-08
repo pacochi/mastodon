@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import classNames from 'classnames';
 import { connectUserStream } from '../../actions/streaming';
+import { changeTargetColmun } from '../../actions/colmun';
 import { refreshHomeTimeline } from '../../../mastodon/actions/timelines';
 import { refreshNotifications } from '../../../mastodon/actions/notifications';
 import AlbumComposeContainer from '../album_compose';
@@ -30,22 +31,16 @@ import PlayControlContainer from '../../../mastodon/features/ui/containers/play_
 
 const mapStateToProps = state => ({
   isLogin: !!state.getIn(['meta', 'me']),
+  target: state.getIn(['pawoo_music', 'column', 'target']),
 });
 
 @connect(mapStateToProps)
 export default class App extends PureComponent {
 
   static propTypes = {
+    target: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
     isLogin: PropTypes.bool,
-  }
-
-  constructor (props) {
-    super(props);
-
-    this.state = {
-      centerView: 'lobby',
-    };
   }
 
   componentDidMount () {
@@ -70,24 +65,25 @@ export default class App extends PureComponent {
     }
   }
 
-  handleClickGlobalNaviButton = (ref) => {
-    this.grobalNaviButton = ref;
-    this.setState({ centerView: 'globalNavi' });
+  handleClickGlobalNaviButton = () => {
+    const { dispatch } = this.props;
+    dispatch(changeTargetColmun('globalNavi'));
   }
 
-  handleClickLobbyButton = (ref) => {
-    this.lobbyButton = ref;
-    this.setState({ centerView: 'lobby' });
+  handleClickLobbyButton = () => {
+    const { dispatch } = this.props;
+    dispatch(changeTargetColmun('lobby'));
   }
 
-  handleClickGarallyButton = (ref) => {
-    this.garallyButton = ref;
-    this.setState({ centerView: 'garally' });
+  handleClickGarallyButton = () => {
+    const { dispatch } = this.props;
+    dispatch(changeTargetColmun('garally'));
   }
 
   render () {
     const mobile = isMobile();
-    const centerView = this.state.centerView;
+    const { target } = this.props;
+
     const routes = (
       <Switch>
         <Route path='/' exact component={HomeTimelineContainer} />
@@ -116,15 +112,15 @@ export default class App extends PureComponent {
           </div>
           <div className='app-top'>
             <topnavi>
-              <button className={classNames({ 'selected': centerView === 'globalNavi' })} onClick={this.handleClickGlobalNaviButton}>≡</button>
+              <button className={classNames({ 'selected': target === 'globalNavi' })} onClick={this.handleClickGlobalNaviButton}>≡</button>
               <a href='/投稿するURL'>[ぱうロゴ]</a>
               <StatusPostButtonContainer />
             </topnavi>
           </div>
           <div className='app-bottom'>
             <div className='buttons'>
-              <button className={classNames({ 'selected': centerView === 'lobby'   })} onClick={this.handleClickLobbyButton}  >チャット</button>
-              <button className={classNames({ 'selected': centerView === 'garally' })} onClick={this.handleClickGarallyButton}>作品</button>
+              <button className={classNames({ 'selected': target === 'lobby'   })} onClick={this.handleClickLobbyButton}  >チャット</button>
+              <button className={classNames({ 'selected': target === 'garally' })} onClick={this.handleClickGarallyButton}>作品</button>
             </div>
           </div>
           <NotificationsContainer />
