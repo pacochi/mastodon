@@ -30,16 +30,23 @@ class Musicvideo extends ImmutablePureComponent {
 
   state = {
     paused: true,
-    image: convertURL(this.props.track.getIn(['video', 'image'])),
     music: convertURL(this.props.track.get('music')),
+  }
+
+  constructor(props) {
+    super(props);
+
+    this.image = new Image;
+    this.image.crossOrigin = 'anonymous';
+    this.image.src = convertURL(props.track.getIn(['video', 'image'])) || defaultArtwork;
   }
 
   componentDidMount () {
     const { track } = this.props;
-    const { image } = this.state;
 
     const audioContext = new AudioContext;
-    this.generator = new Canvas(audioContext, constructGeneratorOptions(track, image || defaultArtwork));
+    this.generator = new Canvas(audioContext, constructGeneratorOptions(track, this.image));
+    this.image.addEventListener('load', this.updateCanvas, { once: false });
 
     // オーディオ接続
     const { audioAnalyserNode } = this.generator;
@@ -70,36 +77,31 @@ class Musicvideo extends ImmutablePureComponent {
   componentWillReceiveProps ({ track }) {
     const music = track.get('music');
     const image = track.getIn(['video', 'image']);
-    const newState = {};
 
     if (music !== this.props.track.get('music')) {
-      newState.music = convertURL(music);
+      this.setState({ music: convertURL(music) });
     }
 
     if (image !== this.props.track.getIn(['video', 'image'])) {
-      newState.image = convertURL(image);
-    }
+      if (track.getIn(['video', 'image']) instanceof File) {
+        URL.revokeObjectURL(this.image.src);
+      }
 
-    if (Object.keys(newState).length > 0) {
-      this.setState(newState);
+      this.image.src = convertURL(image);
     }
   }
 
-  componentDidUpdate ({ track }, { music, image }) {
+  componentDidUpdate ({ track }, { music }) {
     if ((track.get('music') instanceof File) && music !== this.state.music) {
       URL.revokeObjectURL(music);
     }
 
-    if ((track.getIn(['video', 'image']) instanceof File) && image !== this.state.image) {
-      URL.revokeObjectURL(image);
-    }
-
-    this.generator.changeParams(constructGeneratorOptions(this.props.track, this.state.image || defaultArtwork));
+    this.updateCanvas();
   }
 
   componentWillUnmount () {
     const { track } = this.props;
-    const { music, image } = this.state;
+    const { music } = this.state;
 
     clearInterval(this.timer);
 
@@ -117,7 +119,7 @@ class Musicvideo extends ImmutablePureComponent {
     }
 
     if ((track.getIn(['video', 'image']) instanceof File)) {
-      URL.revokeObjectURL(image);
+      URL.revokeObjectURL(this.image.src);
     }
   }
 
@@ -142,6 +144,10 @@ class Musicvideo extends ImmutablePureComponent {
 
   setSeekbarRef = (ref) => {
     this.seekbar = ref;
+  }
+
+  updateCanvas = () => {
+    this.generator.changeParams(constructGeneratorOptions(this.props.track, this.image));
   }
 
   updateSeek = () => {
