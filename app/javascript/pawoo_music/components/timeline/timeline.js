@@ -1,29 +1,37 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import GlovalNaviContainer from '../../containers/global_navi';
+import classNames from 'classnames';
+import { isMobile } from '../../util/is_mobile';
+const mapStateToProps = state => ({
+  target: state.getIn(['pawoo_music', 'column', 'target']),
+});
 
+@connect(mapStateToProps)
 export default class Timeline extends PureComponent {
 
   static propTypes = {
+    target: PropTypes.string.isRequired,
     children: PropTypes.node.isRequired,
-    garally: PropTypes.node.isRequired,
-    isLogin: PropTypes.bool,
+    gallery: PropTypes.node.isRequired,
   }
 
 
   render () {
-    const { children, garally } = this.props;
+    const { target, children, gallery } = this.props;
+    const mobile = isMobile();
 
     return (
-      <div className='timeline'>
+      <div className={classNames('timeline', { [target] : mobile })}>
         <div className='navigation-column'>
           <GlovalNaviContainer />
         </div>
         <div className='lobby-column'>
           {children}
         </div>
-        <div className='garally-column'>
-          {garally}
+        <div className='gallery-column'>
+          {gallery}
         </div>
       </div>
     );

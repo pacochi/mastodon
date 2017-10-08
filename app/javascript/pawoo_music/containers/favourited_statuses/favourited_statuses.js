@@ -31,19 +31,17 @@ export default class FavouritedStatus extends ImmutablePureComponent {
   render () {
     const { statusIds } = this.props;
 
-    const Garally = (
-      <div className='garally'>
-        <StatusList
-          scrollKey='favourited_garally'
-          statusIds={statusIds}
-          isGarally
-          onScrollToBottom={this.handleScrollToBottom}
-        />
-      </div>
+    const gallery = (
+      <StatusList
+        scrollKey='favourited_gallery'
+        statusIds={statusIds}
+        isGallery
+        onScrollToBottom={this.handleScrollToBottom}
+      />
     );
 
     return (
-      <Timeline garally={Garally}>
+      <Timeline gallery={gallery}>
         <StatusList scrollKey='favourited_statuses' statusIds={statusIds} onScrollToBottom={this.handleScrollToBottom} />
       </Timeline>
     );
