@@ -7,16 +7,16 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { refreshTrendTags } from '../../actions/trend_tags';
 import HashtagLink from '../../components/hashtag_link';
 import TagBox from '../../components/tag_box';
+import { changeTargetColmun } from '../../actions/colmun';
 
 const messages = defineMessages({
   title: { id: 'trend_tags.title', defaultMessage: 'Suggested tags' },
 });
 
-const mapStateToProps = state => {
-  return {
-    tags: state.getIn(['trend_tags', 'tags']),
-  };
-};
+const mapStateToProps = state => ({
+  tags: state.getIn(['trend_tags', 'tags']),
+  target: state.getIn(['pawoo_music', 'column', 'target']),
+});
 
 @injectIntl
 @connect(mapStateToProps)
@@ -41,6 +41,11 @@ export default class TrendTags extends ImmutablePureComponent {
     clearInterval(this.interval);
   }
 
+  handleClick = () => {
+    const { dispatch } = this.props;
+    dispatch(changeTargetColmun('lobby'));
+  }
+
   render () {
     const { tags, intl } = this.props;
 
@@ -49,7 +54,7 @@ export default class TrendTags extends ImmutablePureComponent {
         <ul>
           {tags.map(tag => (
             <li key={tag.get('name')} className='hashtag'>
-              <HashtagLink hashtag={tag.get('name')} />
+              <HashtagLink hashtag={tag.get('name')} onClick={this.handleClick} />
             </li>
           ))}
         </ul>

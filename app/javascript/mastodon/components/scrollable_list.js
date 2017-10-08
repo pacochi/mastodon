@@ -6,6 +6,7 @@ import LoadMore from './load_more';
 import IntersectionObserverWrapper from '../features/ui/util/intersection_observer_wrapper';
 import { throttle } from 'lodash';
 import { List as ImmutableList } from 'immutable';
+import ScrollArea from 'react-scrollbar';
 
 export default class ScrollableList extends PureComponent {
 
@@ -37,38 +38,28 @@ export default class ScrollableList extends PureComponent {
 
   intersectionObserverWrapper = new IntersectionObserverWrapper();
 
-  handleScroll = throttle(() => {
-    if (this.node) {
-      const { scrollTop, scrollHeight, clientHeight } = this.node;
-      const offset = scrollHeight - scrollTop - clientHeight;
-      this._oldScrollPosition = scrollHeight - scrollTop;
+  handleScroll = throttle((value) => {
+    const { topPosition, realHeight, containerHeight } = value;
+    if (typeof topPosition !== 'number' || typeof realHeight !== 'number' || typeof containerHeight !== 'number') {
+      return;
+    }
 
-      if (400 > offset && this.props.onScrollToBottom && !this.props.isLoading) {
-        this.props.onScrollToBottom();
-      } else if (scrollTop < 100 && this.props.onScrollToTop) {
-        this.props.onScrollToTop();
-      } else if (this.props.onScroll) {
-        this.props.onScroll();
-      }
+    const offset = realHeight - topPosition - containerHeight;
+    this._oldScrollPosition = realHeight - topPosition;
+
+    if (400 > offset && this.props.onScrollToBottom && !this.props.isLoading) {
+      this.props.onScrollToBottom();
+    } else if (topPosition < 100 && this.props.onScrollToTop) {
+      this.props.onScrollToTop();
+    } else if (this.props.onScroll) {
+      this.props.onScroll();
     }
   }, 150, {
     trailing: true,
   });
 
-  handleMouseMove = throttle(() => {
-    this._lastMouseMove = new Date();
-  }, 300);
-
-  handleMouseLeave = () => {
-    this._lastMouseMove = null;
-  }
-
   componentDidMount () {
-    this.attachScrollListener();
     this.attachIntersectionObserver();
-
-    // Handle initial scroll posiiton
-    this.handleScroll();
   }
 
   componentDidUpdate (prevProps) {
@@ -78,39 +69,30 @@ export default class ScrollableList extends PureComponent {
 
     // Reset the scroll position when a new child comes in in order not to
     // jerk the scrollbar around if you're already scrolled down the page.
-    if (someItemInserted && this._oldScrollPosition && this.node.scrollTop > 0) {
-      const newScrollTop = this.node.scrollHeight - this._oldScrollPosition;
+    if (someItemInserted && this._oldScrollPosition && this.scrollArea.state.topPosition > 0) {
+      const newScrollTop = this.content.scrollHeight - this._oldScrollPosition;
 
-      if (this.node.scrollTop !== newScrollTop) {
-        this.node.scrollTop = newScrollTop;
+      if (this.scrollArea.state.topPosition !== newScrollTop) {
+        this.scrollArea.scrollYTo(newScrollTop);
       }
     } else {
-      this._oldScrollPosition = this.node.scrollHeight - this.node.scrollTop;
+      this._oldScrollPosition = this.content.scrollHeight - this.scrollArea.state.topPosition;
     }
   }
 
   componentWillUnmount () {
-    this.detachScrollListener();
     this.detachIntersectionObserver();
   }
 
   attachIntersectionObserver () {
     this.intersectionObserverWrapper.connect({
-      root: this.node,
+      root: this.wrapper,
       rootMargin: '300% 0px',
     });
   }
 
   detachIntersectionObserver () {
     this.intersectionObserverWrapper.disconnect();
-  }
-
-  attachScrollListener () {
-    this.node.addEventListener('scroll', this.handleScroll);
-  }
-
-  detachScrollListener () {
-    this.node.removeEventListener('scroll', this.handleScroll);
   }
 
   getFirstChildKey (props) {
@@ -125,16 +107,19 @@ export default class ScrollableList extends PureComponent {
   }
 
   setRef = (c) => {
-    this.node = c;
+    this.scrollArea = c;
+    if (c) {
+      this.content = c.content;
+      this.wrapper = c.wrapper;
+    } else {
+      this.content = null;
+      this.wrapper = null;
+    }
   }
 
   handleLoadMore = (e) => {
     e.preventDefault();
     this.props.onScrollToBottom();
-  }
-
-  _recentlyMoved () {
-    return this._lastMouseMove !== null && ((new Date()) - this._lastMouseMove < 600);
   }
 
   handleKeyDown = (e) => {
@@ -146,9 +131,9 @@ export default class ScrollableList extends PureComponent {
         case 'PageUp':
           return e.target.nodeName === 'ARTICLE' && e.target.previousElementSibling;
         case 'End':
-          return this.node.querySelector('[role="feed"] > article:last-of-type');
+          return this.content.querySelector('[role="feed"] > article:last-of-type');
         case 'Home':
-          return this.node.querySelector('[role="feed"] > article:first-of-type');
+          return this.content.querySelector('[role="feed"] > article:first-of-type');
         default:
           return null;
         }
@@ -172,7 +157,7 @@ export default class ScrollableList extends PureComponent {
 
     if (isLoading || childrenCount > 0 || !emptyMessage) {
       scrollableArea = (
-        <div className='scrollable' ref={this.setRef} onMouseMove={this.handleMouseMove} onMouseLeave={this.handleMouseLeave}>
+        <ScrollArea contentClassName='scrollable' ref={this.setRef} onScroll={this.handleScroll}>
           <div role='feed' className='item-list' onKeyDown={this.handleKeyDown}>
             {prepend}
 
@@ -191,18 +176,18 @@ export default class ScrollableList extends PureComponent {
 
             {loadMore}
           </div>
-        </div>
+        </ScrollArea>
       );
     } else {
       scrollableArea = (
-        <div className='scrollable' ref={this.setRef} onMouseMove={this.handleMouseMove} onMouseLeave={this.handleMouseLeave}>
+        <ScrollArea contentClassName='scrollable' ref={this.setRef} onScroll={this.handleScroll}>
           <div role='feed' className='item-list' onKeyDown={this.handleKeyDown}>
             {prepend}
           </div>
           <div className='empty-column-indicator'>
             {emptyMessage}
           </div>
-        </div>
+        </ScrollArea>
       );
     }
 

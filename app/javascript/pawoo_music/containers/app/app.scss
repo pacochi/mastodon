@@ -179,10 +179,14 @@ a:hover {
     background-color:   var(--strong1);
     color:              var(--color1);
   }
+
+  .scrollarea .scrollbar-container {
+    opacity: 0;
+  }
 }
 
 
-// -------------------------
+// ----------------------------------------------------------------------------------------
 //  SP
 .app.sp {
   display: block;
@@ -201,9 +205,11 @@ a:hover {
   --height-deck:          56px;
 
   .app-top {
+    display: flex;
     position: fixed;
     height: var(--height-deck);
     width: 100vw;
+
 
     background-color: var(--color1);
     border-bottom: 1px var(--color3) solid;
@@ -212,6 +218,32 @@ a:hover {
     left: 0;
 
     z-index: 10000;
+
+    .to_global_navi,
+    .post_status,
+    .post_track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+
+      width: var(--iconsize40);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+
+      text-align: center;
+      width: 100%;
+    }
+    .to_global_navi.selected {
+      border-bottom: 3px solid var(--strong1);
+      box-sizing: border-box;
+    }
+
   }
 
   .app-center {
@@ -254,81 +286,3 @@ a:hover {
     }
   }
 }
-
-// ---------------------------------------------------------
-// --width-lobby の 値を 0px にすると、 lobby を畳めます。
-
-/*
-// TODO
-// -------------
-// SP
-
-topnavi {
-  display:        flex;
-  height:         var(--height-deck);  // height - border
-
-  align-items:        center;
-  justify-content:    space-between;
-  background-color:   var(--color1);
-  border-bottom:      2px solid var(--color2);
-
-  a {
-    display:    block;
-    font-size:      var(--text20-font);
-    line-height:    var(--text20-line);
-  }
-}
-
-
-slide {
-  display:    block;
-  position:   relative;
-  left:       var(--slide-position);
-  transition: var(--hover-transition);
-}
-
-slide:nth-child(1) {
-  flex-shrink:    0;
-  flex-grow:      0;
-  flex-basis:     var(--width-globalnavi);
-  overflow-y:     scroll;
-}
-
-slide:nth-child(2) {
-  flex-shrink:    0;
-  flex-grow:      0;
-  flex-basis:     var(--width-lobby);
-  overflow-y:     scroll;
-}
-
-slide:nth-child(3) {
-  flex-shrink:    0;
-  flex-grow:      0;
-  flex-basis:     var(--width-gallery-slide);
-  overflow-y:     scroll;
-}
-
-bottomnavi {
-  display:        flex;
-  height:         var(--height-deck);  // height - border
-  text-align:     center;
-
-  align-items:        center;
-  justify-content:    space-between;
-  background-color:   var(--color1);
-  border-top:         2px solid var(--color2);
-
-  a {
-    display:    block;
-    height:     calc(var(--height-deck) - 3px);  // height - border
-    width:      calc(100% / 2);
-
-    font-size:      var(--text20-font);
-    line-height:    var(--text20-line);
-  }
-
-  .selected {
-    border-top: 3px solid var(--strong1);
-  }
-}
-*/
