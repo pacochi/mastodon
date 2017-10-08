@@ -100,21 +100,6 @@ describe Api::V1::TracksController, type: :controller do
         end.not_to change { Track.count }
       end
 
-      it 'removes pictures in ID3v2 tag' do
-        skip 'the output of ruby-mp3info messes up `file -b --mime`, used by Paperclip'
-
-        post :create,
-             params: { title: 'title', artist: Faker::Name.name, visibility: 'public', music: music_with_picture }
-
-        tempfile = Tempfile.new
-        begin
-          Track.find(body_as_json[:id]).music.copy_to_local_file :original, tempfile.path
-          expect(Mp3Info.open(tempfile.path) { |m| m.tag2.pictures }).to be_empty
-        ensure
-          tempfile.unlink
-        end
-      end
-
       it 'returns http success' do
         post :create,
              params: { title: 'title', artist: Faker::Name.name, visibility: 'public', music: music }
