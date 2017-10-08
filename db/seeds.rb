@@ -16,10 +16,13 @@ if Rails.env.development?
     artist: 'Billy Jones'
   )
 
+  track_status_id = Status.next_id
+
   Status.create!(
+    id: track_status_id,
     account: account,
     music: track,
-    text: Rails.application.routes.url_helpers.short_account_track_url(account.username, track),
+    text: Rails.application.routes.url_helpers.short_account_status_url(account.username, track_status_id),
     visibility: :unlisted
   )
 
@@ -28,10 +31,13 @@ if Rails.env.development?
     title: 'Digital History'
   )
 
+  album_status_id = Status.next_id
+
   Status.create!(
+    id: album_status_id,
     account: account,
     music: album,
-    text: Rails.application.routes.url_helpers.short_account_album_url(account.username, album),
+    text: Rails.application.routes.url_helpers.short_account_status_url(account.username, album_status_id),
     visibility: :unlisted
   )
 
