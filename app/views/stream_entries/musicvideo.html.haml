@@ -1,0 +1,4 @@
+- content_for :header_tags do
+  = javascript_pack_tag 'musicvideo', integrity: true, crossorigin: 'anonymous'
+
+#pawoo-music-musicvideo{ data: { props: json_escape(render(file: 'api/v1/statuses/show', formats: :json)) } }
