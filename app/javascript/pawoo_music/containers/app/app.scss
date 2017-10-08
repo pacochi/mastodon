@@ -14,10 +14,10 @@
 //  CSS Vars
 body {
   // Color Scheme
-  --textcolor:        #555555;
-  --linkcolor:        #888888;
+  --textcolor:        #313131;
+  --linkcolor:        #9B9B9B;
 
-  --strong1:          #dd0000;
+  --strong1:          #D0021B;
   --strong2:          #000000;
 
   --color1:           #ffffff;
@@ -35,6 +35,7 @@ body {
   // Vertical Spaces for 'margin' and 'padding'
   --verticalspace10:  calc(var(--grid) * 1)  0 0 0;
   --verticalspace20:  calc(var(--grid) * 2)  0 0 0;
+  --verticalspace25:  calc(var(--grid) * 3)  0 0 0;
   --verticalspace30:  calc(var(--grid) * 6)  0 0 0;
   --verticalspace40:  calc(var(--grid) * 16) 0 0 0;
 
@@ -62,7 +63,7 @@ body {
   --text10-line:      calc(var(--grid) * 3);
 
   --text20-font:      14px;
-  --text20-line:      calc(var(--grid) * 4);
+  --text20-line:      calc(var(--text10-font) * 1.5);
 
   --text30-font:      16px;
   --text30-line:      calc(var(--grid) * 5);
@@ -77,11 +78,13 @@ body {
   --iconsize15:       calc(var(--grid) * 5);
   --iconsize20:       calc(var(--grid) * 6);
   --iconsize30:       calc(var(--grid) * 8);
+  --iconsize35:       calc(var(--grid) * 10);
   --iconsize40:       calc(var(--grid) * 12);
 
 
   // 'radius'
   --radius:           8px;
+  --radius-big:       16px;
 
 
   // dropshadow
@@ -128,9 +131,7 @@ body.app-body {
   font-size:        var(--text30-font);
   line-height:      var(--text30-line);
 
-  font-family:    "游ゴシック Medium", "游ゴシック体", "Yu Gothic Medium", YuGothic,
-  "ヒラギノ角ゴ ProN", "Hiragino Kaku Gothic ProN",
-  "メイリオ", Meiryo, Helvetica, Arial, sans-serif;
+  font-family: Helvetica, Arial, sans-serif;
 }
 
 a, a:link, a:visited {

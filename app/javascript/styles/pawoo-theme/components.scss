@@ -401,14 +401,14 @@ $button-icon-scale-ration-on-pc: 0.85;
   display:    block;
   text-align: center;
 
-  padding:    var(--padding10);
-  margin:     var(--verticalspace10);
+  padding:    var(--padding15);
+  margin:     var(--verticalspace25);
 
   border:           0;
   border-radius:    var(--radius);
   background-color: var(--color1);
 
-  color:          var(--textcolor);
+  color:          var(--tootcolor);
   font-size:      var(--text30-font);
   line-height:    var(--text30-line);
 }
@@ -972,5 +972,18 @@ button.icon-button {
 
   > #pawoo-music-settings {
     flex: 1;
+  }
+}
+
+.emojione {
+  display: inline-block;
+  font-size: inherit;
+  vertical-align: middle;
+  margin: -.2ex .15em .2ex;
+  width: 16px;
+  height: 16px;
+
+  img {
+    width: auto;
   }
 }

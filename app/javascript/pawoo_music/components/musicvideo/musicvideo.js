@@ -6,11 +6,12 @@ import classNames from 'classnames';
 import { Canvas } from 'musicvideo-generator';
 import { constructGeneratorOptions } from '../../util/musicvideo';
 
+import defaultArtwork from '../../../images/pawoo_music/default_artwork.png';
+
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
 window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
                             window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
-
 
 function convertURL(file) {
   if (file instanceof File) {
@@ -43,7 +44,7 @@ class Musicvideo extends ImmutablePureComponent {
     const { image } = this.state;
 
     const audioContext = new AudioContext;
-    this.generator = new Canvas(audioContext, constructGeneratorOptions(track, image));
+    this.generator = new Canvas(audioContext, constructGeneratorOptions(track, image || defaultArtwork));
 
     // オーディオ接続
     const { audioAnalyserNode } = this.generator;
@@ -98,7 +99,7 @@ class Musicvideo extends ImmutablePureComponent {
       URL.revokeObjectURL(image);
     }
 
-    this.generator.changeParams(constructGeneratorOptions(this.props.track, this.state.image));
+    this.generator.changeParams(constructGeneratorOptions(this.props.track, this.state.image || defaultArtwork));
   }
 
   componentWillUnmount () {

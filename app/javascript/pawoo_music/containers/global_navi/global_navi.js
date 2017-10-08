@@ -14,15 +14,20 @@ import logo from '../../../images/pawoo_music/pawoo_music.svg';
 import settingsIcon from '../../../images/pawoo_music/settings.png';
 
 const messages = defineMessages({
+  home: { id: 'tabs_bar.home', defaultMessage: 'Home' },
+  notifications: { id: 'tabs_bar.notifications', defaultMessage: 'Notifications' },
+  local_timeline: { id: 'tabs_bar.local_timeline', defaultMessage: 'Local' },
+  federated_timeline: { id: 'tabs_bar.federated_timeline', defaultMessage: 'Federated' },
+  favourites: { id: 'navigation_bar.favourites', defaultMessage: 'Favourites' },
   preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },
 });
 
 const navLinkParams = [
-  { to: '/', node: 'Home', requireLogin: true, exact: true },
-  { to: '/notifications', node: 'Notifications', requireLogin: true },
-  { to: '/timelines/public/local', node: 'CommunityTimeline', exact: true },
-  { to: '/timelines/public', node: 'PublicTimeline', exact: true },
-  { to: '/favourites', node: 'Favourites', requireLogin: true },
+  { to: '/', messageKey: 'home', requireLogin: true, exact: true },
+  { to: '/notifications', messageKey: 'notifications', requireLogin: true },
+  { to: '/timelines/public/local', messageKey: 'local_timeline', exact: true },
+  { to: '/timelines/public', messageKey: 'federated_timeline', exact: true },
+  { to: '/favourites', messageKey: 'favourites', requireLogin: true },
 ];
 
 const filteredNavLinkParams = navLinkParams.filter(({ requireLogin }) => !requireLogin);
@@ -41,15 +46,15 @@ export default class GlobalNavi extends PureComponent {
   }
 
   renderNavLinks () {
-    const { isLogin } = this.props;
+    const { intl, isLogin } = this.props;
     const params = isLogin ? navLinkParams : filteredNavLinkParams;
 
     return (
       <ul>
         {params.map((param) => {
-          const { requireLogin, node, ...other } = param;
+          const { requireLogin, messageKey, ...other } = param;
 
-          return <li key={other.to}><NavLink {...other}>{node}</NavLink></li>;
+          return <li key={other.to}><NavLink {...other}>{intl.formatMessage(messages[messageKey])}</NavLink></li>;
         })}
       </ul>
     );

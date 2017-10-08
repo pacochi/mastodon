@@ -4,6 +4,7 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 import Musicvideo from '../musicvideo';
 
 import playIcon from '../../../images/pawoo_music/play.png';
+import defaultArtwork from '../../../images/pawoo_music/default_artwork.png';
 
 class Track extends ImmutablePureComponent {
 
@@ -42,7 +43,7 @@ class Track extends ImmutablePureComponent {
             <Musicvideo track={track} />
           ) : (
             <div className='thumbnail'>
-              <img className='albumart'   src={track.getIn(['video', 'image'])} alt='albumart' />
+              <img className='albumart'   src={track.getIn(['video', 'image']) || defaultArtwork} alt='albumart' />
               <img className='playbutton' src={playIcon}                        alt='playbutton' role='button' tabIndex='0' aria-pressed='false' onClick={this.handlePlayClick} />
             </div>
           )}
