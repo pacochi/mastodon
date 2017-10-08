@@ -57,7 +57,6 @@ class Api::V1::TracksController < Api::BaseController
     attributes = track_params.dup
 
     if track_params[:music].present?
-      music_duration = update_music
       attributes.merge! duration: music_duration.ceil
     end
 
@@ -140,11 +139,11 @@ class Api::V1::TracksController < Api::BaseController
     params.permit :title, :artist, :text, :music
   end
 
-  def update_music
-    return @updated_music_duration if @updated_music_duration
+  def music_duration
+    return @music_duration if @music_duration
 
-    Mp3Info.open track_params[:music].path do |m|
-      @updated_music_duration = m.length
+    Mp3Info.open track_params.require(:music).path do |m|
+      @music_duration = m.length
     end
   rescue Mp3InfoError
     raise Mastodon::ValidationError, I18n.t('tracks.invalid_mp3')
