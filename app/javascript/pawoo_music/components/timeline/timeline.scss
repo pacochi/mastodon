@@ -35,6 +35,17 @@
   height: 100%;
   width: 100%;
 
+  .navigation-column,
+  .lobby-column,
+  .gallery-column {
+    position: relative;
+
+    .scrollarea {
+      position: absolute !important;
+      width: 100% !important;
+    }
+  }
+
   .navigation-column {
     flex-shrink:    0;
     flex-grow:      0;

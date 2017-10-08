@@ -66,29 +66,31 @@ export default class GlobalNavi extends PureComponent {
     const mobile = isMobile();
 
     return (
-      <ScrollArea className='global-navi'>
-        <div className='global-navi-center'>
-          {!mobile && (
-            <img className='logo' src={logo} alt='logo' />
-          )}
-          <SearchBox />
-          {!isLogin && <LoginBox />}
-          <div className='global-navi-links'>
-            {this.renderNavLinks()}
+      <ScrollArea>
+        <div className='global-navi'>
+          <div className='global-navi-center'>
+            {!mobile && (
+              <img className='logo' src={logo} alt='logo' />
+            )}
+            <SearchBox />
+            {!isLogin && <LoginBox />}
+            <div className='global-navi-links'>
+              {this.renderNavLinks()}
+            </div>
+            <EventCalendar />
+            {isLogin && <TagHistoryContainer />}
+            <TrendTagsContainer />
           </div>
-          <EventCalendar />
-          {isLogin && <TagHistoryContainer />}
-          <TrendTagsContainer />
-        </div>
-        <div className='global-navi-bottom'>
-          {isLogin && (
-            <a className='settings-link' href='/settings/preferences'>
-              <img className='settings-link-icon' src={settingsIcon} alt='settings' />
-              <div className='settings-link-text'>
-                {intl.formatMessage(messages.preferences)}
-              </div>
-            </a>
-          )}
+          <div className='global-navi-bottom'>
+            {isLogin && (
+              <a className='settings-link' href='/settings/preferences'>
+                <img className='settings-link-icon' src={settingsIcon} alt='settings' />
+                <div className='settings-link-text'>
+                  {intl.formatMessage(messages.preferences)}
+                </div>
+              </a>
+            )}
+          </div>
         </div>
       </ScrollArea>
     );
