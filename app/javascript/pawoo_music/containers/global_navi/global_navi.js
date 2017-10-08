@@ -10,6 +10,7 @@ import EventCalendar from '../../components/event_calendar';
 import TagHistoryContainer from '../tag_history';
 import TrendTagsContainer from '../trend_tags';
 import { isMobile } from '../../util/is_mobile';
+import { changeTargetColmun } from '../../actions/colmun';
 
 import logo from '../../../images/pawoo_music/pawoo_music.svg';
 import settingsIcon from '../../../images/pawoo_music/settings.png';
@@ -35,6 +36,7 @@ const filteredNavLinkParams = navLinkParams.filter(({ requireLogin }) => !requir
 
 const mapStateToProps = state => ({
   isLogin: !!state.getIn(['meta', 'me']),
+  target: state.getIn(['pawoo_music', 'column', 'target']),
 });
 
 @injectIntl
@@ -43,7 +45,13 @@ export default class GlobalNavi extends PureComponent {
 
   static propTypes = {
     intl: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
     isLogin: PropTypes.bool,
+  }
+
+  handleClick = () => {
+    const { dispatch } = this.props;
+    dispatch(changeTargetColmun('lobby'));
   }
 
   renderNavLinks () {
@@ -55,7 +63,7 @@ export default class GlobalNavi extends PureComponent {
         {params.map((param) => {
           const { requireLogin, messageKey, ...other } = param;
 
-          return <li key={other.to}><NavLink {...other}>{intl.formatMessage(messages[messageKey])}</NavLink></li>;
+          return <li key={other.to}><NavLink {...other} onClick={this.handleClick}>{intl.formatMessage(messages[messageKey])}</NavLink></li>;
         })}
       </ul>
     );

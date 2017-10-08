@@ -4,6 +4,10 @@
     height: calc(100vh - var(--height-deck) * 2);
     position: absolute;
 
+    .scrollarea-content {
+      height: inherit;
+    }
+
     .gallery-column {
       width: var(--width-gallery);
 
@@ -15,16 +19,19 @@
     }
   }
 
-  .timeline.globalNavi {
+  .timeline.global_navi {
     left: calc( 100vw * -0 );
+    transition: var(--hover-transition);
   }
 
   .timeline.lobby {
     left: calc( 100vw * -1 );
+    transition: var(--hover-transition);
   }
 
   .timeline.gallery {
     left: calc( 100vw * -2 );
+    transition: var(--hover-transition);
   }
 }
 

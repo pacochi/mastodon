@@ -205,9 +205,11 @@ a:hover {
   --height-deck:          56px;
 
   .app-top {
+    display: flex;
     position: fixed;
     height: var(--height-deck);
     width: 100vw;
+
 
     background-color: var(--color1);
     border-bottom: 1px var(--color3) solid;
@@ -216,6 +218,32 @@ a:hover {
     left: 0;
 
     z-index: 10000;
+
+    .to_global_navi,
+    .post_status,
+    .post_track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+
+      width: var(--iconsize40);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+
+      text-align: center;
+      width: 100%;
+    }
+    .to_global_navi.selected {
+      border-bottom: 3px solid var(--strong1);
+      box-sizing: border-box;
+    }
+
   }
 
   .app-center {

@@ -75,6 +75,7 @@
   "empty_column.notifications": "まだ通知がありません。他の人とふれ合って会話を始めましょう。",
   "empty_column.public": "ここにはまだ何もありません！公開で何かを投稿したり、他のインスタンスのユーザーをフォローしたりしていっぱいにしましょう！",
   "empty_column.search_toots": "トゥートが見つかりませんでした。",
+  "event_calendar.title": "イベントのタグタイムライン",
   "follow_request.authorize": "許可",
   "follow_request.reject": "拒否",
   "getting_started.appsshort": "アプリ",
@@ -195,7 +196,7 @@
   "time_limit.minutes": "{minutes, number}分後",
   "time_limit.select_time_limit": "自動消滅の時間を指定（実験中）",
   "time_limit.time_limit_note": "※指定した場合は外部インスタンスには配信されません",
-  "trend_tags.title": "おすすめタグ",
+  "trend_tags.title": "おすすめタグタイムライン",
   "upload_area.title": "ドラッグ＆ドロップでアップロード",
   "upload_button.label": "メディアを追加",
   "upload_form.undo": "やり直す",
@@ -222,5 +223,6 @@
   "pawoo_music.track_compose.video.mode": "表示方法",
   "pawoo_music.track_compose.video.movement_threshold": "動作発動のしきい値",
   "pawoo_music.track_compose.video.particle": "パーティクル",
-  "pawoo_music.track_compose.video.spectrum": "スペクトラム"
+  "pawoo_music.track_compose.video.spectrum": "スペクトラム",
+  "pinned_tags.title": "ピン留めしたタグのタイムライン"
 }

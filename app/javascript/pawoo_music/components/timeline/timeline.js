@@ -17,7 +17,6 @@ export default class Timeline extends PureComponent {
     gallery: PropTypes.node.isRequired,
   }
 
-
   render () {
     const { target, children, gallery } = this.props;
     const mobile = isMobile();

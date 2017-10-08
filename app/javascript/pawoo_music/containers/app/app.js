@@ -28,6 +28,9 @@ import StatusThreadContainer from '../status_thread';
 import { isMobile } from '../../util/is_mobile';
 import StatusPostButtonContainer from '../status_post_button';
 import PlayControlContainer from '../../../mastodon/features/ui/containers/play_control_container';
+import { openModalFormCompose } from '../../../mastodon/actions/compose';
+
+import logo from '../../../images/pawoo_music/pawoo_music.svg';
 
 const mapStateToProps = state => ({
   isLogin: !!state.getIn(['meta', 'me']),
@@ -68,7 +71,7 @@ export default class App extends PureComponent {
 
   handleClickGlobalNaviButton = () => {
     const { dispatch } = this.props;
-    dispatch(changeTargetColmun('globalNavi'));
+    dispatch(changeTargetColmun('global_navi'));
   }
 
   handleClickLobbyButton = () => {
@@ -79,6 +82,11 @@ export default class App extends PureComponent {
   handleClickGalleryButton = () => {
     const { dispatch } = this.props;
     dispatch(changeTargetColmun('gallery'));
+  }
+
+  handleClickStatusPostButton = () => {
+    const { dispatch } = this.props;
+    dispatch(openModalFormCompose());
   }
 
   render () {
@@ -112,11 +120,10 @@ export default class App extends PureComponent {
             {routes}
           </div>
           <div className='app-top'>
-            <topnavi>
-              <button className={classNames({ 'selected': target === 'globalNavi' })} onClick={this.handleClickGlobalNaviButton}>≡</button>
-              <a href='/投稿するURL'>[ぱうロゴ]</a>
-              <StatusPostButtonContainer />
-            </topnavi>
+            <div className={classNames('to_global_navi', { 'selected': target === 'global_navi' })} role='button' tabIndex='0' onClick={this.handleClickGlobalNaviButton}>≡</div>
+            <div className='logo'><img alt='logo' src={logo} /></div>
+            <div className='post_status' role='button' tabIndex='0' onClick={this.handleClickStatusPostButton}>+</div>
+            <a   className='post_track' href='/tracks/new'>💿</a>
           </div>
           <div className='app-bottom'>
             <div className='buttons'>
@@ -129,7 +136,7 @@ export default class App extends PureComponent {
           <ModalContainer />
         </div>
       ) : (
-        <div className={classNames('app', { sp: mobile })}>
+        <div className='app'>
           <div className='app-center'>
             {routes}
           </div>
