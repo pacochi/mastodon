@@ -50,6 +50,7 @@
     "escape-html": "^1.0.3",
     "express": "^4.15.2",
     "extract-text-webpack-plugin": "^2.1.2",
+    "feather-icons": "^3.2.2",
     "file-loader": "^0.11.2",
     "font-awesome": "^4.7.0",
     "glob": "^7.1.1",
