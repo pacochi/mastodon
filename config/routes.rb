@@ -242,21 +242,15 @@ Rails.application.routes.draw do
           post :mute
           post :unmute
         end
-
-        # Pawoo Music
-        resources :albums, only: :index, controller: 'accounts/albums'
-        resources :tracks, only: :index, controller: 'accounts/tracks'
       end
 
       # Pawoo Music
-      resources :albums, only: [:show, :create, :update, :destroy] do
+      resources :albums, only: [:create, :update] do
         resources :tracks, only: [:index, :update, :destroy], controller: 'albums/tracks'
       end
 
-      resources :tracks, only: [:show, :create, :update, :destroy] do
-        member do
-          post :prepare_video
-        end
+      resources :tracks, only: [:create, :update] do
+        post :prepare_video, on: :member
       end
     end
 
@@ -279,11 +273,6 @@ Rails.application.routes.draw do
   root 'home#index'
   get '/notifications', to: 'home#index'
   get '/favourites',    to: 'home#index'
-
-  # Pawoo Music
-  get '/@:account_username/albums/:id', to: 'albums#show', as: :short_account_album
-  get '/@:account_username/albums/:album_id/tracks/:id', to: 'albums/tracks#show'
-  get '/@:account_username/tracks/:id', to: 'tracks#show', as: :short_account_track
 
   resources :albums, only: :new
   resources :tracks, only: :new

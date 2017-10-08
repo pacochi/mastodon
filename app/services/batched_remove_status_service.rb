@@ -88,6 +88,7 @@ class BatchedRemoveStatusService < BaseService
 
   def unpush(follower_id, statuses)
     key = FeedManager.instance.key(:home, follower_id)
+    music_key = FeedManager.instance.music_key(:home, follower_id)
 
     originals = statuses.reject(&:reblog?)
     reblogs   = statuses.reject { |s| !s.reblog? }
@@ -96,6 +97,7 @@ class BatchedRemoveStatusService < BaseService
     redis.pipelined do
       originals.each do |status|
         redis.zremrangebyscore(key, status.id, status.id)
+        redis.zremrangebyscore(music_key, status.id, status.id)
         redis.publish("timeline:#{follower_id}", @json_payloads[status.id])
       end
     end
@@ -103,7 +105,14 @@ class BatchedRemoveStatusService < BaseService
     # For reblogs, re-add original status to feed, unless the reblog
     # was not in the feed in the first place
     reblogs.each do |status|
-      redis.zadd(key, status.reblog_of_id, status.reblog_of_id) unless redis.zscore(key, status.reblog_of_id).nil?
+      unless redis.zscore(key, status.reblog_of_id).nil?
+        redis.zadd(key, status.reblog_of_id, status.reblog_of_id)
+
+        if status.reblog.albums.present? || status.reblog.tracks.present?
+          redis.zadd(music_key, status.reblog_of_id, status.reblog_of_id)
+        end
+      end
+
       redis.publish("timeline:#{follower_id}", @json_payloads[status.id])
     end
   end

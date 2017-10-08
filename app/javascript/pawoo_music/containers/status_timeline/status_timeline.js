@@ -76,7 +76,7 @@ export default class StatusTimeline extends ImmutablePureComponent {
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
     emptyMessage: PropTypes.node,
-    garallyPrepend: PropTypes.node,
+    galleryPrepend: PropTypes.node,
     withComposeForm: PropTypes.bool,
     me: PropTypes.number,
     dispatch: PropTypes.func.isRequired,
@@ -136,21 +136,19 @@ export default class StatusTimeline extends ImmutablePureComponent {
   }, 100)
 
   render () {
-    const { timelineId, withComposeForm, me, garallyPrepend, ...other } = this.props;
+    const { timelineId, withComposeForm, me, galleryPrepend, ...other } = this.props;
     const { statusIds, hasMore, isLoading } = other;
 
-    const Garally = (
-      <div className='garally'>
-        <StatusList
-          scrollKey={`${timelineId}_garally`}
-          statusIds={statusIds}
-          hasMore={hasMore}
-          isLoading={isLoading}
-          isGarally
-          prepend={garallyPrepend}
-          onScrollToBottom={this.handleLoadMore}
-        />
-      </div>
+    const gallery = (
+      <StatusList
+        scrollKey={`${timelineId}_gallery`}
+        statusIds={statusIds}
+        hasMore={hasMore}
+        isLoading={isLoading}
+        isGallery
+        prepend={galleryPrepend}
+        onScrollToBottom={this.handleLoadMore}
+      />
     );
 
     const prepend = withComposeForm && me && (
@@ -161,7 +159,7 @@ export default class StatusTimeline extends ImmutablePureComponent {
     );
 
     return (
-      <Timeline garally={Garally}>
+      <Timeline gallery={gallery}>
         <StatusList
           scrollKey={`${timelineId}_timeline`}
           prepend={prepend}

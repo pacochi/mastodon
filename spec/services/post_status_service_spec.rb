@@ -94,6 +94,22 @@ RSpec.describe PostStatusService do
     expect(status.visibility).to eq "private"
   end
 
+  it 'creates a status with the given id' do
+    id = Status.next_id
+    status = create_status_with_options(id: id)
+
+    expect(status).to be_persisted
+    expect(status.id).to eq id
+  end
+
+  it 'creates a status with the given music' do
+    music = Fabricate(:album)
+    status = create_status_with_options(music: music)
+
+    expect(status).to be_persisted
+    expect(status.music).to eq music
+  end
+
   it 'creates a status for the given application' do
     application = Fabricate(:application)
 

@@ -1,3 +1,34 @@
+.app.sp {
+  .timeline {
+    display: flex;
+    height: calc(100vh - var(--height-deck) * 2);
+    position: absolute;
+
+    .gallery-column {
+      width: var(--width-gallery);
+
+      .scrollable .item-list {
+        padding: 0 calc(var(--grid) * 4) calc(var(--grid) * 4);
+        width: calc(var(--width-gallery) - var(--grid) * 8);
+        box-sizing: content-box;
+      }
+    }
+  }
+
+  .timeline.globalNavi {
+    left: calc( 100vw * -0 );
+  }
+
+  .timeline.lobby {
+    left: calc( 100vw * -1 );
+  }
+
+  .timeline.gallery {
+    left: calc( 100vw * -2 );
+  }
+}
+
+
 .timeline {
   display: flex;
   flex-direction: row;
@@ -7,7 +38,6 @@
   .navigation-column {
     flex-shrink:    0;
     flex-grow:      0;
-    flex-basis:     var(--width-globalnavi);
     width: var(--width-globalnavi);
     overflow-y: scroll;
   }
@@ -15,7 +45,6 @@
   .lobby-column {
     flex-shrink:    0;
     flex-grow:      0;
-    flex-basis:     var(--width-lobby);
     width: var(--width-lobby);
 
     display: flex;
@@ -46,51 +75,30 @@
     }
   }
 
-  .garally-column {
+  .gallery-column {
     flex-shrink:    0;
     flex-grow:      0;
-    flex-basis:     calc(100vw - var(--width-globalnavi) - var(--width-lobby));
-    width: calc(100vw - var(--width-globalnavi) - var(--width-lobby));
+    width: var(--width-gallery-view);
 
-    .garally {
-      height: 100%;
-      display:    block;
+    display: flex;
+    flex-direction: column;
+
+    .scrollable {
       text-align: center;
 
-      background-color:   var(--color1);
+      .item-list {
+        display: inline-block;
+        width: var(--width-gallery);
 
-      .scrollable {
-        .item-list {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          padding:    0 0 calc(var(--grid) * 4) 0;
-
-          .prepend {
-            width: 100%;
-          }
-
-          article {
-            width:      var(--width-gallary);
-          }
+        h3 {
+          margin:         var(--verticalspace30);
+          border-top:     1px solid var(--color2);
+          padding:        var(--verticalspace30);
+          font-size:      var(--text40-font);
+          line-height:    var(--text40-line);
+          font-weight:    bold;
         }
-
       }
-
-      h3 {
-        margin:         var(--verticalspace30);
-        border-top:     1px solid var(--color2);
-        padding:        var(--verticalspace30);
-        font-size:      var(--text40-font);
-        line-height:    var(--text40-line);
-        font-weight:    bold;
-      }
-
-      // user ページ用。 background-imageをはめたときにいい感じにする
-      background-position:    center center;
-      background-attachment:  fixed;
-      background-size:        cover;
-      background-repeat:      no-repeat;
     }
   }
 }

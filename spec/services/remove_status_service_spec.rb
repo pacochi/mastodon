@@ -25,6 +25,18 @@ RSpec.describe RemoveStatusService do
     expect(Feed.new(:home, jeff).get(10)).to_not include(@status.id)
   end
 
+  it 'removes status from author\'s music home feed' do
+    status_with_music = PostStatusService.new.call(alice, 'Hello @bob@example.com', nil, music: Fabricate(:album))
+    subject.call(status_with_music)
+    expect(Feed.new(:home, alice).get(10)).to_not include(status_with_music.id)
+  end
+
+  it 'removes status from local follower\'s music home feed' do
+    status_with_music = PostStatusService.new.call(alice, 'Hello @bob@example.com', nil, music: Fabricate(:album))
+    subject.call(status_with_music)
+    expect(Feed.new(:home, jeff).get(10)).to_not include(status_with_music.id)
+  end
+
   it 'sends PuSH update to PuSH subscribers' do
     expect(a_request(:post, 'http://example.com/push').with { |req|
       req.body.match(TagManager::VERBS[:delete])

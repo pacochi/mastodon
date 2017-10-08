@@ -17,15 +17,15 @@ export default class StatusList extends ImmutablePureComponent {
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
     detail: PropTypes.bool,
-    isGarally: PropTypes.bool,
+    isGallery: PropTypes.bool,
     prepend: PropTypes.node,
     emptyMessage: PropTypes.node,
   };
 
   render () {
-    const { statusIds, detail, isGarally, ...other } = this.props;
+    const { statusIds, detail, isGallery, ...other } = this.props;
     const { isLoading } = other;
-    const Component = isGarally ? TrackStatusContainer : StatusContainer;
+    const Component = isGallery ? TrackStatusContainer : StatusContainer;
 
     const scrollableContent = (isLoading || statusIds.size > 0) ? (
       statusIds.map((statusId) => <Component key={statusId} id={statusId} detail={detail} />)

@@ -69,20 +69,18 @@ export default class AccountFollowing extends ImmutablePureComponent {
   render () {
     const { accountId, account, accountIds, hasMore } = this.props;
 
-    const Garally = (
-      <div className='garally'>
-        <AccountList
-          scrollKey='account_followers'
-          accountIds={accountIds}
-          hasMore={hasMore}
-          prepend={<AccountHeaderContainer account={account} />}
-          onScrollToBottom={this.handleScrollToBottom}
-        />
-      </div>
+    const gallery = (
+      <AccountList
+        scrollKey='account_followers'
+        accountIds={accountIds}
+        hasMore={hasMore}
+        prepend={<AccountHeaderContainer account={account} />}
+        onScrollToBottom={this.handleScrollToBottom}
+      />
     );
 
     return (
-      <AccountTimelineContainer accountId={accountId} garally={Garally} />
+      <AccountTimelineContainer accountId={accountId} gallery={gallery} />
     );
   }
 

@@ -73,7 +73,7 @@ class MusicConvertService < BaseService
   def create_mp4(music, music_file, musicvideo, video_file)
     args = [
       '-v', '-8', '-y',  '-i', music_file.path, '-f', 'rawvideo',
-      '-framerate', '30', '-pixel_format', 'bgr32', '-video_size', '600x600',
+      '-framerate', '30', '-pixel_format', 'bgr32', '-video_size', '720x720',
       '-i', 'pipe:', '-vf', 'format=yuv420p,vflip', '-c:v', 'libx264', '-ar',
       '44100', '-c:a', 'libfdk_aac', '-metadata', "title=#{music.title}",
       '-metadata', "artist=#{music.artist}",

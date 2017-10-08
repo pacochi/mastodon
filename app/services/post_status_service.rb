@@ -26,14 +26,21 @@ class PostStatusService < BaseService
 
     status = nil
     ApplicationRecord.transaction do
-      status = account.statuses.create!(text: text,
-                                        thread: in_reply_to,
-                                        created_at: published,
-                                        sensitive: options[:sensitive],
-                                        spoiler_text: options[:spoiler_text] || '',
-                                        visibility: options[:visibility],
-                                        language: detect_language_for(text, account),
-                                        application: options[:application])
+      attributes = {
+        text: text,
+        thread: in_reply_to,
+        created_at: published,
+        sensitive: options[:sensitive],
+        spoiler_text: options[:spoiler_text] || '',
+        visibility: options[:visibility],
+        language: detect_language_for(text, account),
+        application: options[:application],
+        music: options[:music],
+      }
+
+      attributes[:id] = options[:id] if options.key?(:id)
+
+      status = account.statuses.create!(attributes)
       attach_media(status, media)
       attach_pixiv_cards(status)
     end
