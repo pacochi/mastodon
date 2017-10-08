@@ -10,6 +10,9 @@ import AccountHeaderContainer from '../account_header';
 import { makeGetAccount } from '../../../mastodon/selectors';
 import AccountTimelineContainer from '../account_timeline';
 import AccountList from '../../components/account_list';
+import { updateTimelineTitle } from '../../actions/timeline';
+import { changeFooterType } from '../../actions/footer';
+import { changeTargetColumn } from '../../actions/column';
 
 const makeMapStateToProps = () => {
   const getAccount = makeGetAccount();
@@ -41,10 +44,18 @@ export default class AccountFollowing extends ImmutablePureComponent {
   };
 
   componentDidMount () {
-    const { dispatch, accountId } = this.props;
+    const { dispatch, accountId, account } = this.props;
+    let displayName = account.get('display_name').length === 0 ? account.get('username') : account.get('display_name');
+
+    if(10 < displayName.length) {
+      displayName = displayName.substring(0, 10) + '…';
+    }
 
     dispatch(fetchAccount(accountId));
     dispatch(fetchFollowing(accountId));
+    dispatch(changeTargetColumn('gallery'));
+    dispatch(updateTimelineTitle(`${displayName} のフォロー`)); /* TODO: intl */
+    dispatch(changeFooterType('back_to_user'));
   }
 
   componentWillReceiveProps (nextProps) {

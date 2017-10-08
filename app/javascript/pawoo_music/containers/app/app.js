@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import { Route, Switch } from 'react-router-dom';
 import classNames from 'classnames';
 import { connectUserStream } from '../../actions/streaming';
-import { changeTargetColmun } from '../../actions/colmun';
+import { changeTargetColumn } from '../../actions/column';
 import { refreshHomeTimeline } from '../../../mastodon/actions/timelines';
 import { refreshNotifications } from '../../../mastodon/actions/notifications';
 import HomeTimelineContainer from '../home_timeline';
@@ -31,14 +31,17 @@ import logo from '../../../images/pawoo_music/pawoo_music.svg';
 const mapStateToProps = state => ({
   isLogin: !!state.getIn(['meta', 'me']),
   target: state.getIn(['pawoo_music', 'column', 'target']),
+  title: state.getIn(['pawoo_music', 'timeline', 'title']),
+  footerType: state.getIn(['pawoo_music', 'footer', 'footerType']),
 });
 
 @connect(mapStateToProps)
-
 export default class App extends PureComponent {
 
   static propTypes = {
+    title: PropTypes.string.isRequired,
     target: PropTypes.string.isRequired,
+    footerType: PropTypes.string.isRequired,
     dispatch: PropTypes.func.isRequired,
     isLogin: PropTypes.bool,
   }
@@ -67,17 +70,22 @@ export default class App extends PureComponent {
 
   handleClickGlobalNaviButton = () => {
     const { dispatch } = this.props;
-    dispatch(changeTargetColmun('global_navi'));
+    dispatch(changeTargetColumn('global_navi'));
   }
 
   handleClickLobbyButton = () => {
     const { dispatch } = this.props;
-    dispatch(changeTargetColmun('lobby'));
+    dispatch(changeTargetColumn('lobby'));
   }
 
   handleClickGalleryButton = () => {
     const { dispatch } = this.props;
-    dispatch(changeTargetColmun('gallery'));
+    dispatch(changeTargetColumn('gallery'));
+  }
+
+  handleClickHistoryBackButton = () => {
+    // History Back があればそれに戻る。
+    // History Back がない、または History Back がこのドメインの外の場合は、/users/:id に戻る
   }
 
   handleClickStatusPostButton = () => {
@@ -85,9 +93,10 @@ export default class App extends PureComponent {
     dispatch(openModalFormCompose());
   }
 
+
   render () {
     const mobile = isMobile();
-    const { target } = this.props;
+    const { title, target, footerType } = this.props;
 
     const routes = (
       <Switch>
@@ -105,24 +114,51 @@ export default class App extends PureComponent {
       </Switch>
     );
 
+    let buttons = null;
+
+    if(mobile) {
+      if(footerType === 'lobby_gallery') {
+        buttons = (
+          <div className='buttons'>
+            <button className={classNames({ 'selected': target === 'lobby'   })} onClick={this.handleClickLobbyButton}  >チャット</button>
+            <button className={classNames({ 'selected': target === 'gallery' })} onClick={this.handleClickGalleryButton}>作品</button>
+          </div>
+        );
+
+      } else if(footerType === 'back_to_user') {
+        buttons = (
+          <div className='buttons'>
+            <a href='./' className='selected'>戻る</a>
+          </div>
+        );
+
+      } else { // Do same action as (footerType === 'history_back')
+        buttons = (
+          <div className='buttons'>
+            <button className='selected' onClick={this.handleClickHistoryBackButton}>戻る</button>
+          </div>
+        );
+      }
+    }
+
     return (
       mobile ? (
         <div className={classNames('app', 'sp')}>
-          <div className='app-center'>
-            {routes}
-          </div>
+
+          <div className='app-center'>{routes}</div>
+
           <div className='app-top'>
             <div className={classNames('to_global_navi', { 'selected': target === 'global_navi' })} role='button' tabIndex='0' onClick={this.handleClickGlobalNaviButton}>≡</div>
-            <div className='logo'><img alt='logo' src={logo} /></div>
+            <div className='logo'>
+              <img alt='logo' src={logo} />
+              <div className='timeline_title'>{title}</div>
+            </div>
             <div className='post_status' role='button' tabIndex='0' onClick={this.handleClickStatusPostButton}>+</div>
             <a   className='post_track' href='/tracks/new'>💿</a>
           </div>
-          <div className='app-bottom'>
-            <div className='buttons'>
-              <button className={classNames({ 'selected': target === 'lobby'   })} onClick={this.handleClickLobbyButton}  >チャット</button>
-              <button className={classNames({ 'selected': target === 'gallery' })} onClick={this.handleClickGalleryButton}>作品</button>
-            </div>
-          </div>
+
+          <div className='app-bottom'>{buttons}</div>
+
           <NotificationsContainer />
           <LoadingBarContainer className='loading-bar' />
           <ModalContainer />

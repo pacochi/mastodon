@@ -10,7 +10,7 @@ import EventCalendar from '../../components/event_calendar';
 import TagHistoryContainer from '../tag_history';
 import TrendTagsContainer from '../trend_tags';
 import { isMobile } from '../../util/is_mobile';
-import { changeTargetColmun } from '../../actions/colmun';
+import { changeTargetColumn } from '../../actions/column';
 
 import logo from '../../../images/pawoo_music/pawoo_music.svg';
 import settingsIcon from '../../../images/pawoo_music/settings.png';
@@ -51,7 +51,7 @@ export default class GlobalNavi extends PureComponent {
 
   handleClick = () => {
     const { dispatch } = this.props;
-    dispatch(changeTargetColmun('lobby'));
+    dispatch(changeTargetColumn('lobby'));
   }
 
   renderNavLinks () {
@@ -72,35 +72,41 @@ export default class GlobalNavi extends PureComponent {
   render () {
     const { intl, isLogin } = this.props;
     const mobile = isMobile();
+    const globalNavi = (
+      <div className='global-navi'>
+        <div className='global-navi-center'>
+          {!mobile && (
+            <img className='logo' src={logo} alt='logo' />
+          )}
+          <SearchBox />
+          {!isLogin && <LoginBox />}
+          <div className='global-navi-links'>
+            {this.renderNavLinks()}
+          </div>
+          <EventCalendar />
+          {isLogin && <TagHistoryContainer />}
+          <TrendTagsContainer />
+        </div>
+        <div className='global-navi-bottom'>
+          {isLogin && (
+            <a className='settings-link' href='/settings/preferences'>
+              <img className='settings-link-icon' src={settingsIcon} alt='settings' />
+              <div className='settings-link-text'>
+                {intl.formatMessage(messages.preferences)}
+              </div>
+            </a>
+          )}
+        </div>
+      </div>
+    );
 
     return (
-      <ScrollArea>
-        <div className='global-navi'>
-          <div className='global-navi-center'>
-            {!mobile && (
-              <img className='logo' src={logo} alt='logo' />
-            )}
-            <SearchBox />
-            {!isLogin && <LoginBox />}
-            <div className='global-navi-links'>
-              {this.renderNavLinks()}
-            </div>
-            <EventCalendar />
-            {isLogin && <TagHistoryContainer />}
-            <TrendTagsContainer />
-          </div>
-          <div className='global-navi-bottom'>
-            {isLogin && (
-              <a className='settings-link' href='/settings/preferences'>
-                <img className='settings-link-icon' src={settingsIcon} alt='settings' />
-                <div className='settings-link-text'>
-                  {intl.formatMessage(messages.preferences)}
-                </div>
-              </a>
-            )}
-          </div>
-        </div>
-      </ScrollArea>
+      /*
+      mobile
+        ? (<ScrollArea>{ globalNavi }</ScrollArea>)
+        : { globalNavi }
+      */
+      <ScrollArea>{ globalNavi }</ScrollArea>
     );
   }
 

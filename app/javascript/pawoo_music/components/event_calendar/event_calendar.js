@@ -6,7 +6,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { FormattedDate } from 'react-intl';
 import HashtagLink from '../hashtag_link';
 import TagBox from '../tag_box';
-import { changeTargetColmun } from '../../actions/colmun';
+import { changeTargetColumn } from '../../actions/column';
 
 const messages = defineMessages({
   title: { id: 'event_calendar.title', defaultMessage: 'Event Tag Timeline' },
@@ -45,7 +45,7 @@ export default class EventCalendar extends PureComponent {
 
   handleClick = () => {
     const { dispatch } = this.props;
-    dispatch(changeTargetColmun('lobby'));
+    dispatch(changeTargetColumn('lobby'));
   }
 
   render () {

@@ -5,6 +5,7 @@ import IntersectionObserverArticleContainer from '../containers/intersection_obs
 import LoadMore from './load_more';
 import IntersectionObserverWrapper from '../features/ui/util/intersection_observer_wrapper';
 import { throttle } from 'lodash';
+import { isMobile } from '../../pawoo_music/util/is_mobile';
 import { List as ImmutableList } from 'immutable';
 import ScrollArea from 'react-scrollbar';
 
@@ -151,54 +152,63 @@ export default class ScrollableList extends PureComponent {
   render () {
     const { children, scrollKey, trackScroll, shouldUpdateScroll, isLoading, hasMore, prepend, emptyMessage } = this.props;
     const childrenCount = React.Children.count(children);
+    const mobile = isMobile();
 
     const loadMore     = (hasMore && childrenCount > 0) ? <LoadMore visible={!isLoading} onClick={this.handleLoadMore} /> : null;
-    let scrollableArea = null;
+    let contentArea    = null;
 
     if (isLoading || childrenCount > 0 || !emptyMessage) {
-      scrollableArea = (
-        <ScrollArea contentClassName='scrollable' ref={this.setRef} onScroll={this.handleScroll}>
-          <div role='feed' className='item-list' onKeyDown={this.handleKeyDown}>
-            {prepend}
+      contentArea = (
+        <div role='feed' className='item-list' onKeyDown={this.handleKeyDown}>
+          {prepend}
 
-            {React.Children.map(this.props.children, (child, index) => (
-              <IntersectionObserverArticleContainer
-                key={child.key}
-                id={child.key}
-                index={index}
-                listLength={childrenCount}
-                intersectionObserverWrapper={this.intersectionObserverWrapper}
-                saveHeightKey={trackScroll ? `${this.context.router.route.location.key}:${scrollKey}` : null}
-              >
-                {child}
-              </IntersectionObserverArticleContainer>
-            ))}
+          {React.Children.map(this.props.children, (child, index) => (
+            <IntersectionObserverArticleContainer
+              key={child.key}
+              id={child.key}
+              index={index}
+              listLength={childrenCount}
+              intersectionObserverWrapper={this.intersectionObserverWrapper}
+              saveHeightKey={trackScroll ? `${this.context.router.route.location.key}:${scrollKey}` : null}
+            >
+              {child}
+            </IntersectionObserverArticleContainer>
+          ))}
 
-            {loadMore}
-          </div>
-        </ScrollArea>
+          {loadMore}
+        </div>
       );
     } else {
-      scrollableArea = (
-        <ScrollArea contentClassName='scrollable' ref={this.setRef} onScroll={this.handleScroll}>
-          <div role='feed' className='item-list' onKeyDown={this.handleKeyDown}>
-            {prepend}
-          </div>
+      contentArea = (
+        <div role='feed' className='item-list' onKeyDown={this.handleKeyDown}>
+          {prepend}
+
           <div className='empty-column-indicator'>
             {emptyMessage}
           </div>
-        </ScrollArea>
+        </div>
       );
     }
 
     if (trackScroll) {
       return (
         <ScrollContainer scrollKey={scrollKey} shouldUpdateScroll={shouldUpdateScroll}>
-          {scrollableArea}
+          <ScrollArea contentClassName='scrollable' ref={this.setRef} onScroll={this.handleScroll}>
+            { contentArea }
+          </ScrollArea>
         </ScrollContainer>
       );
     } else {
-      return scrollableArea;
+      /*
+      return mobile
+        ? ({ contentArea })
+        : (<ScrollArea contentClassName='scrollable' ref={this.setRef} onScroll={this.handleScroll}>{ contentArea }</ScrollArea>);
+      */
+      return (
+        <ScrollArea contentClassName='scrollable' ref={this.setRef} onScroll={this.handleScroll}>
+          { contentArea }
+        </ScrollArea>
+      );
     }
   }
 

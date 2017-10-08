@@ -7,7 +7,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { refreshTrendTags } from '../../actions/trend_tags';
 import HashtagLink from '../../components/hashtag_link';
 import TagBox from '../../components/tag_box';
-import { changeTargetColmun } from '../../actions/colmun';
+import { changeTargetColumn } from '../../actions/column';
 
 const messages = defineMessages({
   title: { id: 'trend_tags.title', defaultMessage: 'Suggested tags' },
@@ -43,7 +43,7 @@ export default class TrendTags extends ImmutablePureComponent {
 
   handleClick = () => {
     const { dispatch } = this.props;
-    dispatch(changeTargetColmun('lobby'));
+    dispatch(changeTargetColumn('lobby'));
   }
 
   render () {

@@ -11,6 +11,9 @@ import StatusContainer from '../status';
 import TrackStatusContainer from '../track_status';
 import AccountTimelineContainer from '../account_timeline';
 import ScrollableList from '../../components/scrollable_list';
+import { updateTimelineTitle } from '../../actions/timeline';
+import { changeFooterType } from '../../actions/footer';
+import { changeTargetColumn } from '../../actions/column';
 
 const makeMapStateToProps = () => {
   const getAccount = makeGetAccount();
@@ -51,14 +54,18 @@ export default class StatusThread extends ImmutablePureComponent {
     descendantsIds: ImmutablePropTypes.list,
   };
 
-  componentWillMount () {
-  }
-
-
   componentDidMount () {
-    const { dispatch, statusId } = this.props;
+    const { dispatch, statusId, account } = this.props;
+    let displayName = account.get('display_name').length === 0 ? account.get('username') : account.get('display_name');
+
+    if(10 < displayName.length) {
+      displayName = displayName.substring(0, 10) + '…';
+    }
 
     dispatch(fetchStatus(statusId));
+    dispatch(changeTargetColumn('gallery'));
+    dispatch(updateTimelineTitle(`${displayName} のトゥート`)); /* TODO: intl */
+    dispatch(changeFooterType('history_back'));
   }
 
   componentWillReceiveProps (nextProps) {
