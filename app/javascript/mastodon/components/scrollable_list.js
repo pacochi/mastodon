@@ -5,7 +5,7 @@ import IntersectionObserverArticleContainer from '../containers/intersection_obs
 import LoadMore from './load_more';
 import IntersectionObserverWrapper from '../features/ui/util/intersection_observer_wrapper';
 import { throttle } from 'lodash';
-import { isMobile } from '../../pawoo_music/util/is_mobile';
+// import { isMobile } from '../../pawoo_music/util/is_mobile';
 import { List as ImmutableList } from 'immutable';
 import ScrollArea from 'react-scrollbar';
 
@@ -152,7 +152,7 @@ export default class ScrollableList extends PureComponent {
   render () {
     const { children, scrollKey, trackScroll, shouldUpdateScroll, isLoading, hasMore, prepend, emptyMessage } = this.props;
     const childrenCount = React.Children.count(children);
-    const mobile = isMobile();
+    // const mobile = isMobile();
 
     const loadMore     = (hasMore && childrenCount > 0) ? <LoadMore visible={!isLoading} onClick={this.handleLoadMore} /> : null;
     let contentArea    = null;
