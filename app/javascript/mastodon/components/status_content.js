@@ -64,7 +64,7 @@ export default class StatusContent extends React.PureComponent {
 
     if (e.button === 0) {
       e.preventDefault();
-      this.context.router.history.push(`/timelines/tag/${hashtag}`);
+      this.context.router.history.push(`/tags/${hashtag}`);
     }
   }
 

@@ -4,7 +4,6 @@ import Immutable from 'immutable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { connect } from 'react-redux';
 import { debounce } from 'lodash';
-import { fetchAccount } from '../../../mastodon/actions/accounts';
 import { refreshAccountTimeline, expandAccountTimeline, refreshPinnedStatusTimeline } from '../../../mastodon/actions/timelines';
 import AccountHeaderContainer from '../account_header';
 import AccountTimelineContainer from '../account_timeline';
@@ -25,11 +24,11 @@ const makeMapStateToProps = () => {
     return {
       accountId,
       account: getAccount(state, accountId),
-      statusIds: state.getIn(['timelines', `account:${accountId}`, 'items'], Immutable.List()),
+      statusIds: state.getIn(['timelines', `account:${accountId}:music`, 'items'], Immutable.List()),
       me: state.getIn(['meta', 'me']),
-      isLoading: state.getIn(['timelines', `account:${accountId}`, 'isLoading']),
-      hasMore: !!state.getIn(['timelines', `account:${accountId}`, 'next']),
-      pinnedStatusIds: state.getIn(['timelines', `account:${accountId}:pinned_status`, 'items'], Immutable.List()),
+      isLoading: state.getIn(['timelines', `account:${accountId}:music`, 'isLoading']),
+      hasMore: !!state.getIn(['timelines', `account:${accountId}:music`, 'next']),
+      pinnedStatusIds: state.getIn(['timelines', `account:${accountId}:pinned_status:music`, 'items'], Immutable.List()),
     };
   };
 
@@ -63,9 +62,8 @@ export default class AccountGallery extends PureComponent {
     const { dispatch, accountId, account } = this.props;
     const displayName = displayNameEllipsis(account);
 
-    dispatch(fetchAccount(accountId));
-    dispatch(refreshPinnedStatusTimeline(accountId));
-    dispatch(refreshAccountTimeline(accountId));
+    dispatch(refreshPinnedStatusTimeline(accountId, { onlyMusics: true }));
+    dispatch(refreshAccountTimeline(accountId, { onlyMusics: true }));
     dispatch(updateTimelineTitle(`${displayName} のタイムライン`)); /* TODO: intl */
     dispatch(changeFooterType('lobby_gallery'));
   }
@@ -77,9 +75,8 @@ export default class AccountGallery extends PureComponent {
       const { accountId, account } = nextProps;
       const displayName = displayNameEllipsis(account);
 
-      dispatch(fetchAccount(accountId));
-      dispatch(refreshPinnedStatusTimeline(accountId));
-      dispatch(refreshAccountTimeline(accountId));
+      dispatch(refreshPinnedStatusTimeline(accountId, { onlyMusics: true }));
+      dispatch(refreshAccountTimeline(accountId, { onlyMusics: true }));
       dispatch(updateTimelineTitle(`${displayName} のタイムライン`)); /* TODO: intl */
     }
   }
@@ -87,7 +84,7 @@ export default class AccountGallery extends PureComponent {
   handleScrollToBottom = debounce(() => {
     const { dispatch, isLoading, hasMore, accountId } = this.props;
     if (!isLoading && hasMore) {
-      dispatch(expandAccountTimeline(accountId));
+      dispatch(expandAccountTimeline(accountId, { onlyMusics: true }));
     }
   }, 300, { leading: true })
 

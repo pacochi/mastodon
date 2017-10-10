@@ -58,8 +58,11 @@ const makeMapStateToProps = () => {
 
   const mapStateToProps = (state, { timelineId }) => ({
     statusIds: getStatusIds(state, { type: timelineId }),
+    galleryStatusIds: getStatusIds(state, { type: `${timelineId}:music` }),
     isLoading: state.getIn(['timelines', timelineId, 'isLoading'], true),
+    galleryIsLoading: state.getIn(['timelines', `${timelineId}:music`, 'isLoading'], true),
     hasMore: !!state.getIn(['timelines', timelineId, 'next']),
+    galleryHasMore: !!state.getIn(['timelines', `${timelineId}:music`, 'next']),
     me: state.getIn(['meta', 'me']),
   });
 
@@ -72,9 +75,12 @@ export default class StatusTimeline extends ImmutablePureComponent {
   static propTypes = {
     timelineId: PropTypes.string.isRequired,
     statusIds: ImmutablePropTypes.list.isRequired,
+    galleryStatusIds: ImmutablePropTypes.list.isRequired,
     loadMore: PropTypes.func,
     isLoading: PropTypes.bool,
+    galleryIsLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
+    galleryHasMore: PropTypes.bool,
     emptyMessage: PropTypes.node,
     galleryPrepend: PropTypes.node,
     withComposeForm: PropTypes.bool,
@@ -110,10 +116,10 @@ export default class StatusTimeline extends ImmutablePureComponent {
     dispatch(unmountCompose());
   }
 
-  handleLoadMore = debounce(() => {
+  handleGalleryLoadMore = debounce(() => {
     const { loadMore } = this.props;
     if (loadMore) {
-      loadMore();
+      loadMore({ onlyMusics: true });
     }
   }, 300, { leading: true })
 
@@ -136,18 +142,17 @@ export default class StatusTimeline extends ImmutablePureComponent {
   }, 100)
 
   render () {
-    const { timelineId, withComposeForm, me, galleryPrepend, ...other } = this.props;
-    const { statusIds, hasMore, isLoading } = other;
+    const { timelineId, galleryStatusIds, withComposeForm, me, galleryPrepend, galleryIsLoading, galleryHasMore, ...other } = this.props;
 
     const gallery = (
       <StatusList
         scrollKey={`${timelineId}_gallery`}
-        statusIds={statusIds}
-        hasMore={hasMore}
-        isLoading={isLoading}
+        statusIds={galleryStatusIds}
+        hasMore={galleryHasMore}
+        isLoading={galleryIsLoading}
         isGallery
         prepend={galleryPrepend}
-        onScrollToBottom={this.handleLoadMore}
+        onScrollToBottom={this.handleGalleryLoadMore}
       />
     );
 

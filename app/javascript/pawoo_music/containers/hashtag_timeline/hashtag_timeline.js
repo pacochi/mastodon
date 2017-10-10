@@ -25,6 +25,7 @@ export default class HashtagTimeline extends PureComponent {
     const { dispatch, hashtag } = this.props;
 
     dispatch(refreshHashtagTimeline(hashtag));
+    dispatch(refreshHashtagTimeline(hashtag, { onlyMusics: true }));
     dispatch(updateTimelineTitle(`#${hashtag} タイムライン`)); /* TODO: intl */
     dispatch(changeFooterType('lobby_gallery'));
     this._subscribe(dispatch, hashtag);
@@ -34,6 +35,7 @@ export default class HashtagTimeline extends PureComponent {
     if (nextProps.hashtag !== this.props.hashtag) {
       const { dispatch, hashtag } = nextProps;
       dispatch(refreshHashtagTimeline(hashtag));
+      dispatch(refreshHashtagTimeline(hashtag, { onlyMusics: true }));
       dispatch(updateTimelineTitle(`#${hashtag} タイムライン`)); /* TODO: intl */
       this._unsubscribe();
       this._subscribe(this.props.dispatch, nextProps.hashtag);
@@ -44,8 +46,8 @@ export default class HashtagTimeline extends PureComponent {
     this._unsubscribe();
   }
 
-  handleLoadMore = () => {
-    this.props.dispatch(expandHashtagTimeline(this.props.hashtag));
+  handleLoadMore = (options) => {
+    this.props.dispatch(expandHashtagTimeline(this.props.hashtag, options));
   }
 
   _subscribe (dispatch, id) {

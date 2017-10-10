@@ -23,6 +23,7 @@ export function connectTimelineStream (timelineId, path, { shouldUpdateTimeline 
     let subscription = null;
 
     const setupPolling = () => {
+      clearPolling();
       polling = setInterval(() => {
         pollingRefresh(dispatch);
       }, 20000);
@@ -46,7 +47,7 @@ export function connectTimelineStream (timelineId, path, { shouldUpdateTimeline 
         },
 
         disconnected () {
-          if (pollingRefresh) {
+          if (pollingRefresh && subscription) {
             setupPolling();
           }
           dispatch(disconnectTimeline(timelineId));
@@ -58,6 +59,9 @@ export function connectTimelineStream (timelineId, path, { shouldUpdateTimeline 
             const status = JSON.parse(data.payload);
             if (!shouldUpdateTimeline || shouldUpdateTimeline(status)) {
               dispatch(updateTimeline(timelineId, status));
+              if (status.track || status.album) {
+                dispatch(updateTimeline(`${timelineId}:music`, status));
+              }
             }
             break;
           case 'delete':
@@ -87,6 +91,7 @@ export function connectTimelineStream (timelineId, path, { shouldUpdateTimeline 
     const disconnect = () => {
       if (subscription) {
         subscription.close();
+        subscription = null;
       }
       clearPolling();
     };

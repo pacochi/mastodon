@@ -20,6 +20,7 @@ export default class PublicTimeline extends PureComponent {
     dispatch(updateTimelineTitle('連合 タイムライン')); /* TODO: intl */
     dispatch(changeFooterType('lobby_gallery'));
     dispatch(refreshPublicTimeline());
+    dispatch(refreshPublicTimeline({ onlyMusics: true }));
     this.disconnect = dispatch(connectPublicStream());
   }
 
@@ -30,8 +31,8 @@ export default class PublicTimeline extends PureComponent {
     }
   }
 
-  handleLoadMore = () => {
-    this.props.dispatch(expandPublicTimeline());
+  handleLoadMore = (options) => {
+    this.props.dispatch(expandPublicTimeline(options));
   }
 
   render () {
