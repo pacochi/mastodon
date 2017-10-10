@@ -30,18 +30,11 @@ export default class HashtagTimeline extends PureComponent {
     this._subscribe(dispatch, hashtag);
   }
 
-  componentDidUpdate () {
-    const { dispatch, hashtag } = this.props;
-
-    dispatch(refreshHashtagTimeline(hashtag));
-    dispatch(updateTimelineTitle(`#${hashtag} タイムライン`)); /* TODO: intl */
-    dispatch(changeFooterType('lobby_gallery'));
-    this._subscribe(dispatch, hashtag);
-  }
-
   componentWillReceiveProps (nextProps) {
     if (nextProps.hashtag !== this.props.hashtag) {
-      this.props.dispatch(refreshHashtagTimeline(nextProps.hashtag));
+      const { dispatch, hashtag } = nextProps;
+      dispatch(refreshHashtagTimeline(hashtag));
+      dispatch(updateTimelineTitle(`#${hashtag} タイムライン`)); /* TODO: intl */
       this._unsubscribe();
       this._subscribe(this.props.dispatch, nextProps.hashtag);
     }

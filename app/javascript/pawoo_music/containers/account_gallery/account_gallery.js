@@ -13,6 +13,7 @@ import { makeGetAccount } from '../../../mastodon/selectors';
 import MediaPostButton from '../../components/media_post_button';
 import { updateTimelineTitle } from '../../actions/timeline';
 import { changeFooterType } from '../../actions/footer';
+import { displayNameEllipsis } from '../../util/displayname_ellipsis';
 
 const makeMapStateToProps = () => {
   const getAccount = makeGetAccount();
@@ -60,11 +61,7 @@ export default class AccountGallery extends PureComponent {
 
   componentWillMount () {
     const { dispatch, accountId, account } = this.props;
-    let displayName = account.get('display_name').length === 0 ? account.get('username') : account.get('display_name');
-
-    if(10 < displayName.length) {
-      displayName = displayName.substring(0, 10) + '…';
-    }
+    const displayName = displayNameEllipsis(account);
 
     dispatch(fetchAccount(accountId));
     dispatch(refreshPinnedStatusTimeline(accountId));
@@ -77,11 +74,13 @@ export default class AccountGallery extends PureComponent {
     const { dispatch } = this.props;
 
     if (nextProps.accountId !== this.props.accountId && nextProps.accountId) {
-      const accountId = nextProps.accountId;
+      const { accountId, account } = nextProps;
+      const displayName = displayNameEllipsis(account);
 
       dispatch(fetchAccount(accountId));
       dispatch(refreshPinnedStatusTimeline(accountId));
       dispatch(refreshAccountTimeline(accountId));
+      dispatch(updateTimelineTitle(`${displayName} のタイムライン`)); /* TODO: intl */
     }
   }
 

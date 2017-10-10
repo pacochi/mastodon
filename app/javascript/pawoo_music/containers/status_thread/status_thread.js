@@ -14,6 +14,7 @@ import ScrollableList from '../../components/scrollable_list';
 import { updateTimelineTitle } from '../../actions/timeline';
 import { changeFooterType } from '../../actions/footer';
 import { changeTargetColumn } from '../../actions/column';
+import { displayNameEllipsis } from '../../util/displayname_ellipsis';
 
 const makeMapStateToProps = () => {
   const getAccount = makeGetAccount();
@@ -56,11 +57,7 @@ export default class StatusThread extends ImmutablePureComponent {
 
   componentDidMount () {
     const { dispatch, statusId, account } = this.props;
-    let displayName = account.get('display_name').length === 0 ? account.get('username') : account.get('display_name');
-
-    if(10 < displayName.length) {
-      displayName = displayName.substring(0, 10) + '…';
-    }
+    const displayName = displayNameEllipsis(account);
 
     dispatch(fetchStatus(statusId));
     dispatch(changeTargetColumn('gallery'));

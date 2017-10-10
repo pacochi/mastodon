@@ -25,6 +25,7 @@ import { isMobile } from '../../util/is_mobile';
 import StatusPostButtonContainer from '../status_post_button';
 import PlayControlContainer from '../../../mastodon/features/ui/containers/play_control_container';
 import { openModalFormCompose } from '../../../mastodon/actions/compose';
+import Link from '../../components/link_wrapper';
 
 import logo from '../../../images/pawoo_music/pawoo_music.svg';
 
@@ -33,6 +34,7 @@ const mapStateToProps = state => ({
   target: state.getIn(['pawoo_music', 'column', 'target']),
   title: state.getIn(['pawoo_music', 'timeline', 'title']),
   footerType: state.getIn(['pawoo_music', 'footer', 'footerType']),
+  backTo: state.getIn(['pawoo_music', 'footer', 'backTo']),
 });
 
 @connect(mapStateToProps)
@@ -42,9 +44,14 @@ export default class App extends PureComponent {
     title: PropTypes.string.isRequired,
     target: PropTypes.string.isRequired,
     footerType: PropTypes.string.isRequired,
+    backTo: PropTypes.string,
     dispatch: PropTypes.func.isRequired,
     isLogin: PropTypes.bool,
   }
+
+  static contextTypes = {
+    router: PropTypes.object,
+  };
 
   componentDidMount () {
     const { dispatch, isLogin } = this.props;
@@ -84,8 +91,8 @@ export default class App extends PureComponent {
   }
 
   handleClickHistoryBackButton = () => {
-    // History Back があればそれに戻る。
-    // History Back がない、または History Back がこのドメインの外の場合は、/users/:id に戻る
+    if (window.history && window.history.length === 1) this.context.router.history.push('/');
+    else this.context.router.history.goBack();
   }
 
   handleClickStatusPostButton = () => {
@@ -96,7 +103,7 @@ export default class App extends PureComponent {
 
   render () {
     const mobile = isMobile();
-    const { title, target, footerType } = this.props;
+    const { title, target, footerType, backTo } = this.props;
 
     const routes = (
       <Switch>
@@ -128,7 +135,7 @@ export default class App extends PureComponent {
       } else if(footerType === 'back_to_user') {
         buttons = (
           <div className='buttons'>
-            <a href='./' className='selected'>戻る</a>
+            <Link className='selected' to={backTo} >戻る</Link>
           </div>
         );
 

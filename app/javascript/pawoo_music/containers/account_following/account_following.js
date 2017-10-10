@@ -13,6 +13,7 @@ import AccountList from '../../components/account_list';
 import { updateTimelineTitle } from '../../actions/timeline';
 import { changeFooterType } from '../../actions/footer';
 import { changeTargetColumn } from '../../actions/column';
+import { displayNameEllipsis } from '../../util/displayname_ellipsis';
 
 const makeMapStateToProps = () => {
   const getAccount = makeGetAccount();
@@ -45,27 +46,25 @@ export default class AccountFollowing extends ImmutablePureComponent {
 
   componentDidMount () {
     const { dispatch, accountId, account } = this.props;
-    let displayName = account.get('display_name').length === 0 ? account.get('username') : account.get('display_name');
-
-    if(10 < displayName.length) {
-      displayName = displayName.substring(0, 10) + '…';
-    }
+    const displayName = displayNameEllipsis(account);
 
     dispatch(fetchAccount(accountId));
     dispatch(fetchFollowing(accountId));
     dispatch(changeTargetColumn('gallery'));
     dispatch(updateTimelineTitle(`${displayName} のフォロー`)); /* TODO: intl */
-    dispatch(changeFooterType('back_to_user'));
+    dispatch(changeFooterType('back_to_user', `/@${account.get('acct')}`));
   }
 
   componentWillReceiveProps (nextProps) {
     const { dispatch } = this.props;
 
     if (nextProps.accountId !== this.props.accountId && nextProps.accountId) {
-      const accountId = nextProps.accountId;
+      const { accountId, account } = nextProps;
+      const displayName = displayNameEllipsis(account);
 
       dispatch(fetchAccount(accountId));
       dispatch(fetchFollowing(accountId));
+      dispatch(updateTimelineTitle(`${displayName} のフォロー`)); /* TODO: intl */
     }
   }
 
