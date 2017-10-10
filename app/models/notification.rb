@@ -17,12 +17,13 @@ class Notification < ApplicationRecord
   include Cacheable
 
   TYPE_CLASS_MAP = {
-    mention:        'Mention',
-    reblog:         'Status',
-    follow:         'Follow',
-    follow_request: 'FollowRequest',
-    favourite:      'Favourite',
-    video_prepared: 'Track',
+    mention:                   'Mention',
+    reblog:                    'Status',
+    follow:                    'Follow',
+    follow_request:            'FollowRequest',
+    favourite:                 'Favourite',
+    video_preparation_error:   'VideoPreparationError',
+    video_preparation_success: 'Track',
   }.freeze
 
   STATUS_INCLUDES = [:stream_entry, :media_attachments, :tags, mentions: { account: :oauth_authentications },
@@ -84,10 +85,16 @@ class Notification < ApplicationRecord
     end
   end
 
+  before_destroy :destroy_activity, if: ->(notification) { notification.type == :video_preparation_error }
+
   after_initialize :set_from_account
   before_validation :set_from_account
 
   private
+
+  def destroy_activity
+    self.activity.destroy!
+  end
 
   def set_from_account
     return unless new_record?

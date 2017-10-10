@@ -364,7 +364,10 @@ en:
     reblog:
       body: 'Your status was boosted by %{name}:'
       subject: "%{name} boosted your status"
-    video_prepared:
+    video_preparation_error:
+      body: 'Unfortuntely, the video genration for your track, %{title}, was failed:'
+      subject: The video generation for your track, %{title}, was failed
+    video_preparation_success:
       body: 'The video for your track, %{title}, was generated:'
       subject: The video for your track, %{title}, was generated
   oauth_authentications:

@@ -506,6 +506,11 @@ ActiveRecord::Schema.define(version: 20170830000000) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "video_preparation_errors", force: :cascade do |t|
+    t.bigint "track_id", null: false
+    t.index ["track_id"], name: "index_video_preparation_errors_on_track_id"
+  end
+
   create_table "web_settings", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.json "data"
@@ -557,5 +562,6 @@ ActiveRecord::Schema.define(version: 20170830000000) do
   add_foreign_key "stream_entries", "accounts", on_delete: :cascade
   add_foreign_key "subscriptions", "accounts", on_delete: :cascade
   add_foreign_key "users", "accounts", on_delete: :cascade
+  add_foreign_key "video_preparation_errors", "tracks", on_update: :cascade, on_delete: :cascade
   add_foreign_key "web_settings", "users", on_delete: :cascade
 end

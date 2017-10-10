@@ -364,7 +364,10 @@ ja:
     reblog:
       body: 'あなたのトゥートが %{name} さんにブーストされました:'
       subject: あなたのトゥートが %{name} さんにブーストされました
-    track:
+    video_preparation_error:
+      body: 'トラック『%{title}』の動画の生成に失敗しました:'
+      subject: トラック『%{title}』の動画の生成に失敗しました
+    video_preparation_success:
       body: 'トラック『%{title}』の動画の生成が完了しました:'
       subject: トラック『%{title}』の動画の生成が完了しました
   oauth_authentications:
