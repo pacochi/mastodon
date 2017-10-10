@@ -3,6 +3,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
+import classNames from 'classnames';
 import DisplayName from '../../components/display_name';
 import Link from '../../components/link_wrapper';
 
@@ -14,10 +15,11 @@ export default class StatusPrepend extends ImmutablePureComponent {
 
   static propTypes = {
     status: ImmutablePropTypes.map.isRequired,
+    className: PropTypes.string,
   };
 
   render () {
-    const { status } = this.props;
+    const { status, className } = this.props;
     const { displayPinned } = this.context;
 
     if (status.get('reblog', null) !== null && typeof status.get('reblog') === 'object') {
@@ -28,14 +30,14 @@ export default class StatusPrepend extends ImmutablePureComponent {
       );
 
       return (
-        <div className='status-prepend'>
+        <div className={classNames('status-prepend', className)}>
           <i className='fa fa-fw fa-retweet' />
           <FormattedMessage id='status.reblogged_by' defaultMessage='{name} boosted' values={{ name }} />
         </div>
       );
     } else if (displayPinned && status.get('pinned')) {
       return (
-        <div className='status-prepend'>
+        <div className={classNames('status-prepend', className)}>
           <i className='fa fa-fw fa-thumb-tack' />
           <FormattedMessage id='status.pinned' defaultMessage='Pinned Toot' />
         </div>
