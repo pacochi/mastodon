@@ -16,10 +16,11 @@ module AccountControllerConcern
 
   def set_account
     username, domain = (params[:account_username] || '').split('@')
-    @account = Account.find_by(username: username, domain: domain)
+    @account = Account.find_by!(username: username, domain: domain)
   end
 
   def set_link_headers
+    return unless @account.local?
     response.headers['Link'] = LinkHeader.new(
       [
         webfinger_account_link,
