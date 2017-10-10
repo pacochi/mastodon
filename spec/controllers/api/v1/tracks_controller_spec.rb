@@ -6,7 +6,6 @@ describe Api::V1::TracksController, type: :controller do
   render_views
 
   let(:music) { fixture_file_upload('files/aint_we_got_fun_billy_jones1921.mp3') }
-  let(:music_with_picture) { fixture_file_upload('files/aint_we_got_fun_billy_jones1921_with_picture.mp3') }
   let(:another_music) { fixture_file_upload('files/aprilshowers.mp3') }
   let(:image) { fixture_file_upload('files/attachment.jpg') }
   let(:video) { fixture_file_upload('files/aint_we_got_fun_billy_jones1921.mp4') }
@@ -96,12 +95,6 @@ describe Api::V1::TracksController, type: :controller do
         track = Track.find_by!(title: 'title', text: '')
         status = track.statuses.find_by!(reblog: nil)
         expect(status.text).to eq short_account_status_url(user.account.username, status)
-      end
-
-      it 'destroys track if it failed to create status' do
-        expect do
-          post :create, params: { title: 'title', artist: Faker::Name.name, text: Faker::Lorem.characters(501), music: music_with_picture }
-        end.not_to change { Track.count }
       end
 
       it 'returns http success' do
