@@ -2,15 +2,10 @@ import React from 'react';
 import ReactSwipeable from 'react-swipeable';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import ExtendedVideoPlayer from '../../../components/extended_video_player';
-import { defineMessages, injectIntl } from 'react-intl';
-import IconButton from '../../../components/icon_button';
+import ExtendedVideoPlayer from '../../../mastodon/components/extended_video_player';
+import { injectIntl } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
-import ImageLoader from './image_loader';
-
-const messages = defineMessages({
-  close: { id: 'lightbox.close', defaultMessage: 'Close' },
-});
+import ImageLoader from '../../../mastodon/features/ui/components/image_loader';
 
 @injectIntl
 export default class MediaModal extends ImmutablePureComponent {
@@ -18,8 +13,8 @@ export default class MediaModal extends ImmutablePureComponent {
   static propTypes = {
     media: ImmutablePropTypes.list.isRequired,
     index: PropTypes.number.isRequired,
-    onClose: PropTypes.func.isRequired,
     intl: PropTypes.object.isRequired,
+    onClose: PropTypes.func.isRequired,
   };
 
   state = {
@@ -58,7 +53,7 @@ export default class MediaModal extends ImmutablePureComponent {
   }
 
   render () {
-    const { media, intl, onClose } = this.props;
+    const { media, onClose } = this.props;
 
     const index = this.getIndex();
     const attachment = media.get(index);
@@ -80,16 +75,11 @@ export default class MediaModal extends ImmutablePureComponent {
     }
 
     return (
-      <div className='modal-root__modal media-modal'>
+      <div role='button' tabIndex='0' className='media-modal' onClick={onClose}>
+        <ReactSwipeable onSwipedRight={this.handlePrevClick} onSwipedLeft={this.handleNextClick}>
+          {content}
+        </ReactSwipeable>
         {leftNav}
-
-        <div className='media-modal__content'>
-          <IconButton className='media-modal__close' title={intl.formatMessage(messages.close)} icon='times' onClick={onClose} size={16} />
-          <ReactSwipeable onSwipedRight={this.handlePrevClick} onSwipedLeft={this.handleNextClick}>
-            {content}
-          </ReactSwipeable>
-        </div>
-
         {rightNav}
       </div>
     );

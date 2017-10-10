@@ -6,7 +6,6 @@ import NotificationsContainer from './containers/notifications_container';
 import PropTypes from 'prop-types';
 import LoadingBarContainer from './containers/loading_bar_container';
 import TabsBar from './components/tabs_bar';
-import ModalContainer from './containers/modal_container';
 import PlayControlContainer from './containers/play_control_container';
 import { connect } from 'react-redux';
 import { isMobile } from '../../is_mobile';
