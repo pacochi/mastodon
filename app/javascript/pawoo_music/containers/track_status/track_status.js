@@ -63,7 +63,7 @@ export default class TrackStatus extends ImmutablePureComponent {
     const { muted, hidden, prepend: prepsPrepend, status: originalStatus } = this.props;
     const { isExpanded } = this.state;
 
-    if (!originalStatus) {
+    if (!originalStatus || (!originalStatus.has('track') && !originalStatus.has('album'))) {
       return null;
     }
 

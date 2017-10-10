@@ -5,7 +5,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { connect } from 'react-redux';
 import { debounce } from 'lodash';
-import { fetchAccount, fetchFollowers, expandFollowers } from '../../../mastodon/actions/accounts';
+import { fetchFollowers, expandFollowers } from '../../../mastodon/actions/accounts';
 import AccountHeaderContainer from '../account_header';
 import { makeGetAccount } from '../../../mastodon/selectors';
 import AccountTimelineContainer from '../account_timeline';
@@ -48,7 +48,6 @@ export default class AccountFollowers extends ImmutablePureComponent {
     const { dispatch, accountId, account } = this.props;
     const displayName = displayNameEllipsis(account);
 
-    dispatch(fetchAccount(accountId));
     dispatch(fetchFollowers(accountId));
     dispatch(changeTargetColumn('gallery'));
     dispatch(updateTimelineTitle(`${displayName} のフォロワー`)); /* TODO: intl */
@@ -62,7 +61,6 @@ export default class AccountFollowers extends ImmutablePureComponent {
       const { accountId, account } = nextProps;
       const displayName = displayNameEllipsis(account);
 
-      dispatch(fetchAccount(accountId));
       dispatch(fetchFollowers(accountId));
       dispatch(updateTimelineTitle(`${displayName} のフォロワー`)); /* TODO: intl */
     }

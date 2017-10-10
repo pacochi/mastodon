@@ -76,7 +76,6 @@ const makeMapStateToProps = () => {
 export default class StatusActionBar extends ImmutablePureComponent {
 
   static contextTypes = {
-    router: PropTypes.object,
     schedule: PropTypes.bool,
   };
 
@@ -100,7 +99,7 @@ export default class StatusActionBar extends ImmutablePureComponent {
 
   handleReplyClick = () => {
     const { dispatch, status } = this.props;
-    dispatch(replyCompose(status, this.context.router.history));
+    dispatch(replyCompose(status));
   }
 
   handleFavouriteClick = () => {
@@ -160,7 +159,7 @@ export default class StatusActionBar extends ImmutablePureComponent {
 
   handleMentionClick = () => {
     const { dispatch, status } = this.props;
-    dispatch(mentionCompose(status.get('account'), this.context.router.history));
+    dispatch(mentionCompose(status.get('account')));
   }
 
   handleMuteClick = () => {
@@ -183,8 +182,6 @@ export default class StatusActionBar extends ImmutablePureComponent {
       confirm: intl.formatMessage(messages.blockConfirm),
       onConfirm: () => dispatch(blockAccount(account.get('id'))),
     }));
-
-    this.props.onBlock(this.props.status.get('account'));
   }
 
   handleReport = () => {
