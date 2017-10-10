@@ -127,22 +127,22 @@ export default class App extends PureComponent {
       if(footerType === 'lobby_gallery') {
         buttons = (
           <div className='buttons'>
-            <div role='button' tabIndex='0' className={classNames({ 'selected': target === 'lobby'   })} onClick={this.handleClickLobbyButton}  >チャット</div>
-            <div role='button' tabIndex='0' className={classNames({ 'selected': target === 'gallery' })} onClick={this.handleClickGalleryButton}>作品</div>
+            <div role='button' tabIndex='0' className={classNames('app-bottom_button', { 'selected': target === 'lobby'   })} onClick={this.handleClickLobbyButton}  >チャット</div>
+            <div role='button' tabIndex='0' className={classNames('app-bottom_button', { 'selected': target === 'gallery' })} onClick={this.handleClickGalleryButton}>作品</div>
           </div>
         );
 
       } else if(footerType === 'back_to_user') {
         buttons = (
           <div className='buttons'>
-            <Link className='selected' to={backTo} >戻る</Link>
+            <Link className='app-bottom_button selected' to={backTo} >戻る</Link>
           </div>
         );
 
       } else { // Do same action as (footerType === 'history_back')
         buttons = (
           <div className='buttons'>
-            <div role='button' tabIndex='0' className='selected' onClick={this.handleClickHistoryBackButton}>戻る</div>
+            <div className='app-bottom_button selected' role='button' tabIndex='0' onClick={this.handleClickHistoryBackButton}>戻る</div>
           </div>
         );
       }

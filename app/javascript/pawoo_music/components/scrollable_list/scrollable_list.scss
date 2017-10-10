@@ -1,10 +1,8 @@
 .scrollarea {
   height: 100%;
-
-  .scrollable {
-  }
 }
 
 .sp .scrollable {
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }

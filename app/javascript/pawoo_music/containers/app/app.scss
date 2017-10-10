@@ -103,7 +103,7 @@ body {
 
   // hover action
   --hover-opacity:    0.2;
-  --hover-transition: 0.25s;
+  --hover-transition: 0.1s;
 
 
   // lightbox
@@ -288,19 +288,19 @@ a:hover {
       justify-content: center;
       height: 100%;
 
-      div {
+      .app-bottom_button {
         display: flex;
         align-items: center;
         justify-content: center;
         width: 100%;
         background-color: transparent;
         border: 0;
-        color:  var(--strong2);
+        color: var(--strong2);
         height: 100%;
-      }
 
-      div.selected {
-        border-top: 3px var(--strong1) solid;
+        &.selected {
+          border-top: 3px var(--strong1) solid;
+        }
       }
     }
   }
