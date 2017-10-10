@@ -1,13 +1,15 @@
 import React, { PureComponent } from 'react';
 import { ScrollContainer } from 'react-router-scroll';
 import PropTypes from 'prop-types';
-import IntersectionObserverArticleContainer from '../containers/intersection_observer_article_container';
-import LoadMore from './load_more';
-import IntersectionObserverWrapper from '../features/ui/util/intersection_observer_wrapper';
+import IntersectionObserverArticleContainer from '../../../mastodon/containers/intersection_observer_article_container';
+import LoadMore from '../../../mastodon/components/load_more';
+import IntersectionObserverWrapper from '../../../mastodon/features/ui/util/intersection_observer_wrapper';
 import { throttle } from 'lodash';
-// import { isMobile } from '../../pawoo_music/util/is_mobile';
+import { isMobile } from '../../util/is_mobile';
 import { List as ImmutableList } from 'immutable';
 import ScrollArea from 'react-scrollbar';
+
+const mobile = isMobile();
 
 export default class ScrollableList extends PureComponent {
 
@@ -40,17 +42,31 @@ export default class ScrollableList extends PureComponent {
   intersectionObserverWrapper = new IntersectionObserverWrapper();
 
   handleScroll = throttle((value) => {
-    const { topPosition, realHeight, containerHeight } = value;
-    if (typeof topPosition !== 'number' || typeof realHeight !== 'number' || typeof containerHeight !== 'number') {
-      return;
-    }
+    let offset, scrollTop;
 
-    const offset = realHeight - topPosition - containerHeight;
-    this._oldScrollPosition = realHeight - topPosition;
+    if (mobile) {
+      if (!this.content) {
+        return;
+      }
+
+      const { scrollHeight, clientHeight } = this.content;
+      scrollTop = this.content.scrollTop;
+      offset = scrollHeight - scrollTop - clientHeight;
+      this._oldScrollPosition = scrollHeight - scrollTop;
+    } else {
+      const { topPosition, realHeight, containerHeight } = value;
+      if (typeof topPosition !== 'number' || typeof realHeight !== 'number' || typeof containerHeight !== 'number') {
+        return;
+      }
+
+      scrollTop = topPosition;
+      offset = realHeight - topPosition - containerHeight;
+      this._oldScrollPosition = realHeight - topPosition;
+    }
 
     if (400 > offset && this.props.onScrollToBottom && !this.props.isLoading) {
       this.props.onScrollToBottom();
-    } else if (topPosition < 100 && this.props.onScrollToTop) {
+    } else if (scrollTop < 100 && this.props.onScrollToTop) {
       this.props.onScrollToTop();
     } else if (this.props.onScroll) {
       this.props.onScroll();
@@ -60,6 +76,9 @@ export default class ScrollableList extends PureComponent {
   });
 
   componentDidMount () {
+    if (mobile) {
+      this.attachScrollListener();
+    }
     this.attachIntersectionObserver();
   }
 
@@ -70,18 +89,26 @@ export default class ScrollableList extends PureComponent {
 
     // Reset the scroll position when a new child comes in in order not to
     // jerk the scrollbar around if you're already scrolled down the page.
-    if (someItemInserted && this._oldScrollPosition && this.scrollArea.state.topPosition > 0) {
+    const scrollTop = mobile ? this.content.scrollTop : this.scrollArea.state.topPosition;
+    if (someItemInserted && this._oldScrollPosition && scrollTop > 0) {
       const newScrollTop = this.content.scrollHeight - this._oldScrollPosition;
 
-      if (this.scrollArea.state.topPosition !== newScrollTop) {
-        this.scrollArea.scrollYTo(newScrollTop);
+      if (scrollTop !== newScrollTop) {
+        if (mobile) {
+          this.content.scrollTop = newScrollTop;
+        } else {
+          this.scrollArea.scrollYTo(newScrollTop);
+        }
       }
     } else {
-      this._oldScrollPosition = this.content.scrollHeight - this.scrollArea.state.topPosition;
+      this._oldScrollPosition = this.content.scrollHeight - scrollTop;
     }
   }
 
   componentWillUnmount () {
+    if (mobile) {
+      this.detachScrollListener();
+    }
     this.detachIntersectionObserver();
   }
 
@@ -96,6 +123,14 @@ export default class ScrollableList extends PureComponent {
     this.intersectionObserverWrapper.disconnect();
   }
 
+  attachScrollListener () {
+    this.wrapper.addEventListener('scroll', this.handleScroll);
+  }
+
+  detachScrollListener () {
+    this.wrapper.removeEventListener('scroll', this.handleScroll);
+  }
+
   getFirstChildKey (props) {
     const { children } = props;
     let firstChild = children;
@@ -108,6 +143,12 @@ export default class ScrollableList extends PureComponent {
   }
 
   setRef = (c) => {
+    this.scrollArea = c;
+    this.content = c;
+    this.wrapper = c;
+  }
+
+  setScrollAreaRef = (c) => {
     this.scrollArea = c;
     if (c) {
       this.content = c.content;
@@ -152,7 +193,6 @@ export default class ScrollableList extends PureComponent {
   render () {
     const { children, scrollKey, trackScroll, shouldUpdateScroll, isLoading, hasMore, prepend, emptyMessage } = this.props;
     const childrenCount = React.Children.count(children);
-    // const mobile = isMobile();
 
     const loadMore     = (hasMore && childrenCount > 0) ? <LoadMore visible={!isLoading} onClick={this.handleLoadMore} /> : null;
     let contentArea    = null;
@@ -190,25 +230,20 @@ export default class ScrollableList extends PureComponent {
       );
     }
 
+    const content = mobile ? (
+      <div className='scrollable' ref={this.setRef}>{contentArea}</div>
+    ) : (
+      <ScrollArea contentClassName='scrollable' ref={this.setScrollAreaRef} onScroll={this.handleScroll}>{contentArea}</ScrollArea>
+    );
+
     if (trackScroll) {
       return (
         <ScrollContainer scrollKey={scrollKey} shouldUpdateScroll={shouldUpdateScroll}>
-          <ScrollArea contentClassName='scrollable' ref={this.setRef} onScroll={this.handleScroll}>
-            { contentArea }
-          </ScrollArea>
+          { content }
         </ScrollContainer>
       );
     } else {
-      /*
-      return mobile
-        ? ({ contentArea })
-        : (<ScrollArea contentClassName='scrollable' ref={this.setRef} onScroll={this.handleScroll}>{ contentArea }</ScrollArea>);
-      */
-      return (
-        <ScrollArea contentClassName='scrollable' ref={this.setRef} onScroll={this.handleScroll}>
-          { contentArea }
-        </ScrollArea>
-      );
+      return content;
     }
   }
 
