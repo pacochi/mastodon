@@ -12,6 +12,7 @@ import NotificationContainer from '../notification';
 import Timeline from '../../components/timeline';
 import StatusList from '../../components/status_list';
 import ScrollableList from '../../components/scrollable_list';
+import { updateTimelineTitle } from '../../actions/timeline';
 
 const getNotifications = createSelector([
   state => Immutable.List(state.getIn(['settings', 'notifications', 'shows']).filter(item => !item).keys()),
@@ -34,6 +35,11 @@ export default class NotificationList extends ImmutablePureComponent {
     isLoading: PropTypes.bool,
     hasMore: PropTypes.bool,
   };
+
+  componentDidMount () {
+    const { dispatch } = this.props;
+    dispatch(updateTimelineTitle('通知')); /* TODO: intl */
+  }
 
   handleLoadMore = debounce(() => {
     this.props.dispatch(expandNotifications());

@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 import HashtagLink from '../../components/hashtag_link';
 import TagBox from '../../components/tag_box';
-import { changeTargetColmun } from '../../actions/colmun';
+import { changeTargetColumn } from '../../actions/column';
 
 // TODO: 現在はピンしたタグを表示している
 
@@ -31,7 +31,7 @@ export default class TagHistory extends ImmutablePureComponent {
 
   handleClick = () => {
     const { dispatch } = this.props;
-    dispatch(changeTargetColmun('lobby'));
+    dispatch(changeTargetColumn('lobby'));
   }
 
   render () {

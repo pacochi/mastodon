@@ -7,6 +7,8 @@ import { debounce } from 'lodash';
 import { fetchFavouritedStatuses, expandFavouritedStatuses } from '../../../mastodon/actions/favourites';
 import Timeline from '../../components/timeline';
 import StatusList from '../../components/status_list';
+import { updateTimelineTitle } from '../../actions/timeline';
+import { changeFooterType } from '../../actions/footer';
 
 const mapStateToProps = state => ({
   statusIds: state.getIn(['status_lists', 'favourites', 'items']),
@@ -21,7 +23,10 @@ export default class FavouritedStatus extends ImmutablePureComponent {
   };
 
   componentDidMount () {
-    this.props.dispatch(fetchFavouritedStatuses());
+    const { dispatch } = this.props;
+    dispatch(updateTimelineTitle('お気に入り')); /* TODO: intl */
+    dispatch(changeFooterType('lobby_gallery'));
+    dispatch(fetchFavouritedStatuses());
   }
 
   handleScrollToBottom = debounce(() => {

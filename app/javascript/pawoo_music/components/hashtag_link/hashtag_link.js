@@ -1,6 +1,6 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
-import Link from 'react-router-dom/Link';
+import Link from '../link_wrapper';
 
 export default class HashtagLink extends PureComponent {
 
