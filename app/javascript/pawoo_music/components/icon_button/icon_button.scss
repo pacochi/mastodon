@@ -1,6 +1,21 @@
 .icon-button {
   display: inline-block;
-  height:  var(--iconsize15);
-  margin:  var(--rightspace5);
-  cursor:  pointer;
+  width: var(--iconsize10);
+  height: var(--iconsize10);
+  cursor: pointer;
+
+  svg {
+    width: var(--iconsize10);
+    height: var(--iconsize10);
+    stroke: var(--linkcolor);
+    transition: all 0.2s ease;
+  }
+
+  &:hover {
+    svg {
+      stroke-width: 2px;
+      transform: scale(1.3);
+      stroke: var(--strong1);
+    }
+  }
 }

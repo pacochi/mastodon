@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
+import feather from 'feather-icons';
 
 export default class IconButton extends PureComponent {
 
@@ -27,7 +28,13 @@ export default class IconButton extends PureComponent {
     const { src, title, className } = this.props;
 
     return (
-      <img src={src} alt={title} className={classNames('icon-button', className)} role='button' tabIndex='0' aria-pressed='false' onClick={this.handleClick} />
+      <span dangerouslySetInnerHTML={{
+        __html: feather.toSvg(src, {
+          'stroke-width': 1,
+        }),
+      }}
+      className={classNames('icon-button', className)} alt={title} role='button' tabIndex='0' aria-pressed='false' onClick={this.handleClick}
+      />
     );
   }
 
