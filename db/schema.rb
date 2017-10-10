@@ -63,7 +63,7 @@ ActiveRecord::Schema.define(version: 20170830000000) do
     t.index ["username", "domain"], name: "index_accounts_on_username_and_domain", unique: true
   end
 
-  create_table "album_tracks", force: :cascade do |t|
+  create_table "album_tracks", id: false, force: :cascade do |t|
     t.bigint "album_id", null: false
     t.bigint "track_id", null: false
     t.decimal "position", null: false
@@ -74,16 +74,12 @@ ActiveRecord::Schema.define(version: 20170830000000) do
   end
 
   create_table "albums", force: :cascade do |t|
-    t.bigint "account_id", null: false
-    t.bigint "status_id"
     t.string "title", null: false
     t.text "text", default: "", null: false
     t.string "image_file_name"
     t.string "image_content_type"
     t.integer "image_file_size"
     t.datetime "image_updated_at"
-    t.index ["account_id"], name: "index_albums_on_account_id"
-    t.index ["status_id"], name: "index_albums_on_status_id"
   end
 
   create_table "blocks", id: :serial, force: :cascade do |t|
@@ -378,10 +374,13 @@ ActiveRecord::Schema.define(version: 20170830000000) do
     t.integer "reblogs_count", default: 0, null: false
     t.string "language"
     t.bigint "conversation_id"
+    t.string "music_type"
+    t.bigint "music_id"
     t.index ["account_id", "id"], name: "index_statuses_on_account_id_id"
     t.index ["conversation_id"], name: "index_statuses_on_conversation_id"
     t.index ["in_reply_to_id"], name: "index_statuses_on_in_reply_to_id"
-    t.index ["reblog_of_id"], name: "index_statuses_on_reblog_of_id"
+    t.index ["music_type", "account_id"], name: "index_statuses_on_music_type_and_account_id"
+    t.index ["reblog_of_id", "music_type", "music_id"], name: "index_statuses_on_reblog_of_id_and_music_type_and_music_id"
     t.index ["uri"], name: "index_statuses_on_uri", unique: true
   end
 
@@ -434,8 +433,6 @@ ActiveRecord::Schema.define(version: 20170830000000) do
   end
 
   create_table "tracks", force: :cascade do |t|
-    t.bigint "account_id", null: false
-    t.bigint "status_id"
     t.integer "duration", null: false
     t.string "title", null: false
     t.string "artist", null: false
@@ -464,8 +461,6 @@ ActiveRecord::Schema.define(version: 20170830000000) do
     t.integer "video_particle_color"
     t.integer "video_spectrum_mode"
     t.integer "video_spectrum_color"
-    t.index ["account_id"], name: "index_tracks_on_account_id"
-    t.index ["status_id"], name: "index_tracks_on_status_id"
   end
 
   create_table "trend_ng_words", id: :serial, force: :cascade do |t|
@@ -511,6 +506,11 @@ ActiveRecord::Schema.define(version: 20170830000000) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "video_preparation_errors", force: :cascade do |t|
+    t.bigint "track_id", null: false
+    t.index ["track_id"], name: "index_video_preparation_errors_on_track_id"
+  end
+
   create_table "web_settings", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.json "data"
@@ -522,8 +522,6 @@ ActiveRecord::Schema.define(version: 20170830000000) do
   add_foreign_key "account_domain_blocks", "accounts", on_delete: :cascade
   add_foreign_key "album_tracks", "albums", on_update: :cascade, on_delete: :cascade
   add_foreign_key "album_tracks", "tracks", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "albums", "accounts", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "albums", "statuses", on_update: :cascade, on_delete: :cascade
   add_foreign_key "blocks", "accounts", column: "target_account_id", on_delete: :cascade
   add_foreign_key "blocks", "accounts", on_delete: :cascade
   add_foreign_key "conversation_mutes", "accounts", on_delete: :cascade
@@ -563,8 +561,7 @@ ActiveRecord::Schema.define(version: 20170830000000) do
   add_foreign_key "statuses_tags", "tags", on_delete: :cascade
   add_foreign_key "stream_entries", "accounts", on_delete: :cascade
   add_foreign_key "subscriptions", "accounts", on_delete: :cascade
-  add_foreign_key "tracks", "accounts", on_update: :cascade, on_delete: :cascade
-  add_foreign_key "tracks", "statuses", on_update: :cascade, on_delete: :cascade
   add_foreign_key "users", "accounts", on_delete: :cascade
+  add_foreign_key "video_preparation_errors", "tracks", on_update: :cascade, on_delete: :cascade
   add_foreign_key "web_settings", "users", on_delete: :cascade
 end

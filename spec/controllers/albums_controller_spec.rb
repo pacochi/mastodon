@@ -17,10 +17,4 @@ describe AlbumsController, type: :controller do
       expect(response).to redirect_to 'http://test.host/about'
     end
   end
-
-  it 'returns http success' do
-    album = Fabricate(:album)
-    get :show, params: { account_username: album.status.account.username, id: album }
-    expect(response).to have_http_status :success
-  end
 end

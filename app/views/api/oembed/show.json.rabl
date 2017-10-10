@@ -2,6 +2,7 @@
 object @stream_entry
 
 node(:type) { 'rich' }
+node(:type) { |entry| entry.status.music.is_a?(Track) ? 'video' : 'rich' }
 node(:version) { '1.0' }
 node(:title, &:title)
 node(:author_name) { |entry| entry.account.display_name.blank? ? entry.account.username : entry.account.display_name }

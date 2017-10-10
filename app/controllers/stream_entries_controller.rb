@@ -34,7 +34,12 @@ class StreamEntriesController < ApplicationController
     response.headers['X-Frame-Options'] = 'ALLOWALL'
     return gone if @stream_entry.activity.nil?
 
-    render layout: 'embedded'
+    if @stream_entry.status.music.is_a?(Track)
+      @status = @stream_entry.status
+      render 'musicvideo', layout: 'embedded'
+    else
+      render layout: 'embedded'
+    end
   end
 
   private

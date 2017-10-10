@@ -50,12 +50,23 @@ class NotificationMailer < ApplicationMailer
     end
   end
 
-  def video_prepared(recipient, notification)
+  def video_preparation_success(recipient, notification)
     @me = recipient
     @track = notification.activity
+    @status = @track.statuses.find_by!(reblog: nil)
 
     locale_for_account(@me) do
-      mail to: @me.user.email, subject: I18n.t('notification_mailer.video_prepared.subject', title: @track.title)
+      mail to: @me.user.email, subject: I18n.t('notification_mailer.video_preparation_success.subject', title: @track.title)
+    end
+  end
+
+  def video_preparation_error(recipient, notification)
+    @me = recipient
+    @track = notification.activity.track
+    @status = @track.statuses.find_by!(reblog: nil)
+
+    locale_for_account(@me) do
+      mail to: @me.user.email, subject: I18n.t('notification_mailer.video_preparation_error.subject', title: @track.title)
     end
   end
 

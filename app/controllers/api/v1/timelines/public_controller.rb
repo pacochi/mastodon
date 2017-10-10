@@ -39,7 +39,7 @@ class Api::V1::Timelines::PublicController < Api::BaseController
   end
 
   def public_timeline_statuses
-    Status.as_public_timeline(current_account, params[:local])
+    Status.as_public_timeline(current_account, params[:local], params[:only_musics])
   end
 
   def insert_pagination_headers
@@ -47,7 +47,7 @@ class Api::V1::Timelines::PublicController < Api::BaseController
   end
 
   def pagination_params(core_params)
-    params.permit(:local, :limit).merge(core_params)
+    params.permit(:local, :only_musics, :limit).merge(core_params)
   end
 
   def next_path

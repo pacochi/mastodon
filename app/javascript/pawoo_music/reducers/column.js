@@ -1,4 +1,4 @@
-import { COLMUN_CHANGE_TARGET } from '../actions/colmun';
+import { COLUMN_CHANGE_TARGET } from '../actions/column';
 import Immutable from 'immutable';
 
 const initialState = Immutable.Map({
@@ -7,7 +7,7 @@ const initialState = Immutable.Map({
 
 export default function column(state = initialState, action) {
   switch(action.type) {
-  case COLMUN_CHANGE_TARGET:
+  case COLUMN_CHANGE_TARGET:
     return state.set('target', action.target);
   default:
     return state;

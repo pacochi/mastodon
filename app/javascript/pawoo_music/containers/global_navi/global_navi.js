@@ -3,12 +3,14 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { defineMessages, injectIntl } from 'react-intl';
-import SearchBox from '..//search_box';
+import ScrollArea from 'react-scrollbar';
+import SearchBox from '../search_box';
 import LoginBox from '../../components/login_box';
 import EventCalendar from '../../components/event_calendar';
 import TagHistoryContainer from '../tag_history';
 import TrendTagsContainer from '../trend_tags';
 import { isMobile } from '../../util/is_mobile';
+import { changeTargetColumn } from '../../actions/column';
 
 import logo from '../../../images/pawoo_music/pawoo_music.svg';
 import settingsIcon from '../../../images/pawoo_music/settings.png';
@@ -34,6 +36,7 @@ const filteredNavLinkParams = navLinkParams.filter(({ requireLogin }) => !requir
 
 const mapStateToProps = state => ({
   isLogin: !!state.getIn(['meta', 'me']),
+  target: state.getIn(['pawoo_music', 'column', 'target']),
 });
 
 @injectIntl
@@ -42,7 +45,13 @@ export default class GlobalNavi extends PureComponent {
 
   static propTypes = {
     intl: PropTypes.object.isRequired,
+    dispatch: PropTypes.func.isRequired,
     isLogin: PropTypes.bool,
+  }
+
+  handleClick = () => {
+    const { dispatch } = this.props;
+    dispatch(changeTargetColumn('lobby'));
   }
 
   renderNavLinks () {
@@ -54,7 +63,7 @@ export default class GlobalNavi extends PureComponent {
         {params.map((param) => {
           const { requireLogin, messageKey, ...other } = param;
 
-          return <li key={other.to}><NavLink {...other}>{intl.formatMessage(messages[messageKey])}</NavLink></li>;
+          return <li key={other.to}><NavLink {...other} onClick={this.handleClick}>{intl.formatMessage(messages[messageKey])}</NavLink></li>;
         })}
       </ul>
     );
@@ -63,8 +72,7 @@ export default class GlobalNavi extends PureComponent {
   render () {
     const { intl, isLogin } = this.props;
     const mobile = isMobile();
-
-    return (
+    const globalNavi = (
       <div className='global-navi'>
         <div className='global-navi-center'>
           {!mobile && (
@@ -90,6 +98,15 @@ export default class GlobalNavi extends PureComponent {
           )}
         </div>
       </div>
+    );
+
+    return (
+      /*
+      mobile
+        ? (<ScrollArea>{ globalNavi }</ScrollArea>)
+        : { globalNavi }
+      */
+      <ScrollArea>{ globalNavi }</ScrollArea>
     );
   }
 

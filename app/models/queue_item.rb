@@ -40,39 +40,32 @@ class QueueItem
     end
 
     def pawoo_link(link)
-      begin
-        track = find_track(Track.includes(status: :account), link)
-      rescue ActiveRecord::ActiveRecordError
-        raise Mastodon::MusicSourceFetchFailedError
-      end
+      status_id = find_status_id(link)
+      return unless status_id
 
-      return nil if track.nil?
-
-      cache = find_cache('pawoo-music', track.id)
+      cache = find_cache('pawoo-music', status_id)
       return cache if cache
 
+      status = Status.find_by(id: status_id, music_type: 'Track', visibility: [:public, :unlisted])
+      raise Mastodon::MusicSourceFetchFailedError if status.nil?
+
       item = new(
-        info: track.display_title,
+        info: status.music.display_title,
         thumbnail_url: nil,
         music_url: nil,
         video_url: nil,
         link: nil,
-        duration: track.duration,
+        duration: status.music.duration,
         source_type: 'pawoo-music',
-        source_id: track.id
+        source_id: status_id
       )
 
-      cache_item('pawoo-music', track.id, item)
+      cache_item('pawoo-music', status_id, item)
     end
 
-    def find_track(scope, link)
+    def find_status_id(link)
       matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/((@\w+)|(web/statuses))/(?<status_id>\d+)})
-      return scope.find_by!(status_id: matched[:status_id]) if matched
-
-      matched = link.match(%r{https?://#{Rails.configuration.x.local_domain}/(@\w+)/tracks/(?<track_id>\d+)})
-      return scope.find(matched[:track_id]) if matched
-
-      return nil
+      matched ? matched[:status_id] : nil
     end
 
     def apollo_link(link)

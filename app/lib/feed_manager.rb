@@ -31,6 +31,10 @@ class FeedManager
   end
 
   def insert_and_check(timeline_type, status, account)
+    if status.reblog&.music.present? || status.music.present?
+      insert_music timeline_type, status, account
+    end
+
     timeline_key = key(timeline_type, account.id)
 
     if status.reblog?
@@ -55,6 +59,8 @@ class FeedManager
   end
 
   def merge_into_timeline(from_account, into_account)
+    merge_into_music_timeline from_account, into_account
+
     timeline_key = key(:home, into_account.id)
     query        = from_account.statuses.limit(FeedManager::MAX_ITEMS / 4)
 
@@ -74,6 +80,8 @@ class FeedManager
   end
 
   def unmerge_from_timeline(from_account, into_account)
+    unmerge_from_music_timeline from_account, into_account
+
     timeline_key = key(:home, into_account.id)
     oldest_home_score = redis.zrange(timeline_key, 0, 0, with_scores: true)&.first&.last&.to_i || 0
 
@@ -88,6 +96,8 @@ class FeedManager
   end
 
   def clear_from_timeline(account, target_account)
+    clear_from_music_timeline account, target_account
+
     timeline_key = key(:home, account.id)
     timeline_status_ids = redis.zrange(timeline_key, 0, -1)
     target_status_ids = Status.where(id: timeline_status_ids, account: target_account).ids
@@ -95,10 +105,73 @@ class FeedManager
     redis.zrem(timeline_key, target_status_ids) if target_status_ids.present?
   end
 
+  def music_key(type, id)
+    "feed:music:#{type}:#{id}"
+  end
+
+  def trim_music(type, account_id)
+    redis.zremrangebyrank(music_key(type, account_id), '0', (-(FeedManager::MAX_ITEMS + 1)).to_s)
+  end
+
   private
 
   def redis
     Redis.current
+  end
+
+  def insert_music(timeline_type, status, account)
+    timeline_key = music_key(timeline_type, account.id)
+
+    if status.reblog?
+      # If the original status is within 40 statuses from top, do not re-insert it into the feed
+      rank = redis.zrevrank(timeline_key, status.reblog_of_id)
+      return if !rank.nil? && rank < 40
+      redis.zadd(timeline_key, status.id, status.reblog_of_id)
+    else
+      redis.zadd(timeline_key, status.id, status.id)
+      trim_music(timeline_type, account.id)
+    end
+  end
+
+  def merge_into_music_timeline(from_account, into_account)
+    timeline_key = music_key(:home, into_account.id)
+    query        = from_account.statuses.where.not(music_type: nil).limit(FeedManager::MAX_ITEMS / 4)
+
+    if redis.zcard(timeline_key) >= FeedManager::MAX_ITEMS / 4
+      oldest_home_score = redis.zrange(timeline_key, 0, 0, with_scores: true)&.first&.last&.to_i || 0
+      query = query.where('id > ?', oldest_home_score)
+    end
+
+    redis.pipelined do
+      query.each do |status|
+        next if status.direct_visibility? || filter?(:home, status, into_account)
+        redis.zadd(timeline_key, status.id, status.id)
+      end
+    end
+
+    trim_music(:home, into_account.id)
+  end
+
+  def unmerge_from_music_timeline(from_account, into_account)
+    timeline_key = music_key(:home, into_account.id)
+    oldest_home_score = redis.zrange(timeline_key, 0, 0, with_scores: true)&.first&.last&.to_i || 0
+
+    from_account.statuses.select('id').where('id > ?', oldest_home_score).where.not(music_type: nil).reorder(nil).find_in_batches do |statuses|
+      redis.pipelined do
+        statuses.each do |status|
+          redis.zrem(timeline_key, status.id)
+          redis.zremrangebyscore(timeline_key, status.id, status.id)
+        end
+      end
+    end
+  end
+
+  def clear_from_music_timeline(account, target_account)
+    timeline_key = music_key(:home, account.id)
+    timeline_status_ids = redis.zrange(timeline_key, 0, -1)
+    target_status_ids = Status.where(id: timeline_status_ids, account: target_account).ids
+
+    redis.zrem(timeline_key, target_status_ids) if target_status_ids.present?
   end
 
   def filter_from_home?(status, receiver_id)

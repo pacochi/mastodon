@@ -10,6 +10,10 @@ import AccountHeaderContainer from '../account_header';
 import { makeGetAccount } from '../../../mastodon/selectors';
 import AccountTimelineContainer from '../account_timeline';
 import AccountList from '../../components/account_list';
+import { updateTimelineTitle } from '../../actions/timeline';
+import { changeFooterType } from '../../actions/footer';
+import { changeTargetColumn } from '../../actions/column';
+import { displayNameEllipsis } from '../../util/displayname_ellipsis';
 
 const makeMapStateToProps = () => {
   const getAccount = makeGetAccount();
@@ -41,20 +45,26 @@ export default class AccountFollowing extends ImmutablePureComponent {
   };
 
   componentDidMount () {
-    const { dispatch, accountId } = this.props;
+    const { dispatch, accountId, account } = this.props;
+    const displayName = displayNameEllipsis(account);
 
     dispatch(fetchAccount(accountId));
     dispatch(fetchFollowing(accountId));
+    dispatch(changeTargetColumn('gallery'));
+    dispatch(updateTimelineTitle(`${displayName} のフォロー`)); /* TODO: intl */
+    dispatch(changeFooterType('back_to_user', `/@${account.get('acct')}`));
   }
 
   componentWillReceiveProps (nextProps) {
     const { dispatch } = this.props;
 
     if (nextProps.accountId !== this.props.accountId && nextProps.accountId) {
-      const accountId = nextProps.accountId;
+      const { accountId, account } = nextProps;
+      const displayName = displayNameEllipsis(account);
 
       dispatch(fetchAccount(accountId));
       dispatch(fetchFollowing(accountId));
+      dispatch(updateTimelineTitle(`${displayName} のフォロー`)); /* TODO: intl */
     }
   }
 

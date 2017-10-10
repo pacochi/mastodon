@@ -5,9 +5,12 @@ import { FormattedMessage } from 'react-intl';
 import { refreshHashtagTimeline, expandHashtagTimeline } from '../../../mastodon/actions/timelines';
 import StatusTimelineContainer from '../../containers/status_timeline';
 import { connectHashtagStream } from '../../actions/streaming';
+import { updateTimelineTitle } from '../../actions/timeline';
+import { changeFooterType } from '../../actions/footer';
 
 const mapStateToProps = (state, props) => ({
   hashtag: props.match.params.id,
+  title: state.getIn(['pawoo_music', 'timeline', 'title']),
 });
 
 @connect(mapStateToProps)
@@ -22,12 +25,16 @@ export default class HashtagTimeline extends PureComponent {
     const { dispatch, hashtag } = this.props;
 
     dispatch(refreshHashtagTimeline(hashtag));
+    dispatch(updateTimelineTitle(`#${hashtag} タイムライン`)); /* TODO: intl */
+    dispatch(changeFooterType('lobby_gallery'));
     this._subscribe(dispatch, hashtag);
   }
 
   componentWillReceiveProps (nextProps) {
     if (nextProps.hashtag !== this.props.hashtag) {
-      this.props.dispatch(refreshHashtagTimeline(nextProps.hashtag));
+      const { dispatch, hashtag } = nextProps;
+      dispatch(refreshHashtagTimeline(hashtag));
+      dispatch(updateTimelineTitle(`#${hashtag} タイムライン`)); /* TODO: intl */
       this._unsubscribe();
       this._subscribe(this.props.dispatch, nextProps.hashtag);
     }

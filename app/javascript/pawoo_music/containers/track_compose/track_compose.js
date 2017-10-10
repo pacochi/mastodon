@@ -135,6 +135,22 @@ export default class TrackCompose extends ImmutablePureComponent {
     intl: PropTypes.object.isRequired,
   }
 
+  trackMusicRef = null;
+  trackVideoImageRef = null;
+
+  componentWillReceiveProps ({ track }) {
+    if (track.get('music') === null && this.props.track.get('music') !== null &&
+        this.trackMusicRef !== null) {
+      this.trackMusicRef.value = '';
+    }
+
+    if (track.getIn(['video', 'image']) === null &&
+        this.props.track.getIn(['video', 'image']) !== null &&
+        this.trackVideoImageRef !== null) {
+      this.trackVideoImageRef.value = '';
+    }
+  }
+
   handleChangeTrackMusic = ({ target }) => {
     this.props.onChangeTrackMusic(target.files[0]);
   }
@@ -198,6 +214,14 @@ export default class TrackCompose extends ImmutablePureComponent {
     this.props.onSubmit();
   }
 
+  setTrackMusicRef = (ref) => {
+    this.trackMusicRef = ref;
+  }
+
+  setTrackVideoImageRef = (ref) => {
+    this.trackVideoImageRef = ref;
+  }
+
   render () {
     const { track } = this.props;
 
@@ -248,6 +272,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                     <input
                       accept='audio/mpeg'
                       onChange={this.handleChangeTrackMusic}
+                      ref={this.setTrackMusicRef}
                       required
                       type='file'
                     />
@@ -326,6 +351,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                     <input
                       accept='image/jpeg,image/png'
                       onChange={this.handleChangeTrackVideoImage}
+                      ref={this.setTrackVideoImageRef}
                       type='file'
                     />
                   </label>

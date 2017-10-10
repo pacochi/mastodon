@@ -9,6 +9,8 @@ RSpec.describe BatchedRemoveStatusService do
 
   let(:status1) { PostStatusService.new.call(alice, 'Hello @bob@example.com') }
   let(:status2) { PostStatusService.new.call(alice, 'Another status') }
+  let(:status_with_music1) { PostStatusService.new.call(alice, 'Hello @bob@example.com', nil, music: Fabricate(:album)) }
+  let(:status_with_music2) { PostStatusService.new.call(alice, 'Another status', nil, music: Fabricate(:album)) }
 
   before do
     allow(Redis.current).to receive_messages(publish: nil)
@@ -21,6 +23,8 @@ RSpec.describe BatchedRemoveStatusService do
 
     status1
     status2
+    status_with_music1
+    status_with_music2
 
     subject.call([status1, status2])
   end
@@ -31,6 +35,14 @@ RSpec.describe BatchedRemoveStatusService do
 
   it 'removes statuses from local follower\'s home feed' do
     expect(Feed.new(:home, jeff).get(10)).to_not include([status1.id, status2.id])
+  end
+
+  it 'removes statuses from author\'s music home feed' do
+    expect(MusicFeed.new(:home, alice).get(10)).to_not include([status_with_music1.id, status_with_music2.id])
+  end
+
+  it 'removes statuses from local follower\'s music home feed' do
+    expect(MusicFeed.new(:home, jeff).get(10)).to_not include([status_with_music1.id, status_with_music2.id])
   end
 
   it 'notifies streaming API of followers' do

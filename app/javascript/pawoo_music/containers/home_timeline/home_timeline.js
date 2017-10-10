@@ -7,6 +7,8 @@ import { changeSetting } from '../../../mastodon/actions/settings';
 import { expandHomeTimeline } from '../../../mastodon/actions/timelines';
 import StatusTimelineContainer from '../../containers/status_timeline';
 import MediaPostButton from '../../components/media_post_button';
+import { updateTimelineTitle } from '../../actions/timeline';
+import { changeFooterType } from '../../actions/footer';
 
 const mapStateToProps = state => ({
   hasFollows: state.getIn(['accounts_counters', state.getIn(['meta', 'me']), 'following_count']) > 0,
@@ -19,6 +21,12 @@ export default class HomeTimeline extends PureComponent {
     dispatch: PropTypes.func.isRequired,
     hasFollows: PropTypes.bool.isRequired,
   };
+
+  componentDidMount () {
+    const { dispatch } = this.props;
+    dispatch(updateTimelineTitle('ホーム タイムライン')); /* TODO: intl */
+    dispatch(changeFooterType('lobby_gallery'));
+  }
 
   handleLoadMore = () => {
     this.props.dispatch(expandHomeTimeline());

@@ -55,5 +55,16 @@ describe ApplicationController, type: :controller do
     def expect_updated_sign_in_at(user)
       expect(user.reload.current_sign_in_at).to be_within(1.0).of(Time.now.utc)
     end
+
+    it 'regenerates music feed when sign in is older than two weeks' do
+      Sidekiq::Testing.fake! do
+        user.update(current_sign_in_at: 3.weeks.ago)
+        sign_in user, scope: :user
+        get :show
+
+        expect_updated_sign_in_at(user)
+        expect(MusicRegenerationWorker).to have_enqueued_sidekiq_job user.account_id
+      end
+    end
   end
 end

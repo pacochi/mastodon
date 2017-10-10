@@ -357,6 +357,18 @@ RSpec.describe Status, type: :model do
       end
     end
 
+    context 'with a musics_only option set' do
+      let!(:status_with_music) { Fabricate(:status, music: Fabricate(:album)) }
+      let!(:status_without_music) { Fabricate(:status) }
+
+      subject { Status.as_public_timeline(nil, false, true) }
+
+      it 'does not include statuses without musics' do
+        expect(subject).to include(status_with_music)
+        expect(subject).not_to include(status_without_music)
+      end
+    end
+
     describe 'with an account passed in' do
       before do
         @account = Fabricate(:account)

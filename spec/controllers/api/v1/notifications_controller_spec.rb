@@ -48,8 +48,10 @@ RSpec.describe Api::V1::NotificationsController, type: :controller do
       @mention_from_status = mentioning_status.mentions.first
       @favourite = FavouriteService.new.call(other.account, first_status)
       @follow = FollowService.new.call(other.account, 'alice')
-      @video_prepared = Fabricate(:track)
-      Fabricate(:notification, account: user.account, activity: @video_prepared)
+      @video_preparation_error = Fabricate(:video_preparation_error)
+      Fabricate(:notification, account: user.account, activity: @video_preparation_error)
+      @video_preparation_success = Fabricate(:track)
+      Fabricate(:notification, account: user.account, activity: @video_preparation_success)
     end
 
     describe 'with no options' do
@@ -77,8 +79,12 @@ RSpec.describe Api::V1::NotificationsController, type: :controller do
         expect(assigns(:notifications).map(&:activity)).to include(@follow)
       end
 
-      it 'includes video_prepared' do
-        expect(assigns(:notifications).map(&:activity)).to include(@video_prepared)
+      it 'includes video_preparation_error' do
+        expect(assigns(:notifications).map(&:activity)).to include(@video_preparation_error)
+      end
+
+      it 'includes video_preparation_success' do
+        expect(assigns(:notifications).map(&:activity)).to include(@video_preparation_success)
       end
     end
 
@@ -107,8 +113,12 @@ RSpec.describe Api::V1::NotificationsController, type: :controller do
         expect(assigns(:notifications).map(&:activity)).to include(@follow)
       end
 
-      it 'includes video_prepared' do
-        expect(assigns(:notifications).map(&:activity)).to include(@video_prepared)
+      it 'includes video_preparation_error' do
+        expect(assigns(:notifications).map(&:activity)).to include(@video_preparation_error)
+      end
+
+      it 'includes video_preparation_success' do
+        expect(assigns(:notifications).map(&:activity)).to include(@video_preparation_success)
       end
     end
   end

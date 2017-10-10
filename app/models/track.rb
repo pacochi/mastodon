@@ -3,8 +3,6 @@
 # Table name: tracks
 #
 #  id                               :integer          not null, primary key
-#  account_id                       :integer          not null
-#  status_id                        :integer
 #  duration                         :integer          not null
 #  title                            :string           not null
 #  artist                           :string           not null
@@ -41,22 +39,22 @@ class Track < ApplicationRecord
   before_save :truncate_title,       if: :title_changed?
   before_save :truncate_artist,      if: :artist_changed?
 
-  belongs_to :account, inverse_of: :tracks
-  belongs_to :status, inverse_of: :track
   has_many :album_tracks, inverse_of: :track
+  has_many :statuses, as: :music
+  has_many :video_preparation_errors, inverse_of: :track
 
   has_attached_file :music
   has_attached_file :video
   has_attached_file :video_image
 
-  validates_attachment_presence :music
-  validates_attachment_size :music, :video_image, less_than: 7.megabytes
+  validates_attachment :music,
+                       presence: true,
+                       content_type: { content_type: ['audio/mpeg'] },
+                       size: { less_than: 16.megabytes }
 
-  validates_attachment_content_type :music,
-                                    content_type: ['audio/mpeg']
-
-  validates_attachment_content_type :video_image,
-                                    content_type: ['image/jpeg', 'image/png']
+  validates_attachment :video_image,
+                       content_type: { content_type: ['image/jpeg', 'image/png'] },
+                       size: { less_than: 7.megabytes }
 
   def display_title
     "#{title} - #{artist}"

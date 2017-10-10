@@ -5,6 +5,8 @@ import { FormattedMessage } from 'react-intl';
 import { refreshCommunityTimeline, expandCommunityTimeline } from '../../../mastodon/actions/timelines';
 import StatusTimelineContainer from '../../containers/status_timeline';
 import { connectCommunityStream } from '../../actions/streaming';
+import { updateTimelineTitle } from '../../actions/timeline';
+import { changeFooterType } from '../../actions/footer';
 
 @connect()
 export default class CommunityTimelineContainer extends PureComponent {
@@ -15,6 +17,8 @@ export default class CommunityTimelineContainer extends PureComponent {
 
   componentDidMount () {
     const { dispatch } = this.props;
+    dispatch(updateTimelineTitle('ローカル タイムライン')); /* TODO: intl */
+    dispatch(changeFooterType('lobby_gallery'));
     dispatch(refreshCommunityTimeline());
     this.disconnect = dispatch(connectCommunityStream());
   }
