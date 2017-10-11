@@ -3,8 +3,10 @@
   flex-direction:     column;
   padding:            var(--verticalspace30-both);
   background-color:   var(--color2);
+  position:           relative;
+  left:               calc((var(--width-gallery-view) - var(--width-gallery)) / -2);
 
-  width: 100%;
+  width:      var(--width-gallery-view);
   align-items: center;
 
   .content {

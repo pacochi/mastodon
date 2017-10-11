@@ -4,14 +4,11 @@
     height: calc(100vh - var(--height-deck) * 2);
     position: absolute;
 
-    .gallery-column {
-      width: var(--width-gallery);
 
-      .scrollable .item-list {
-        padding: 0 calc(var(--grid) * 4) calc(var(--grid) * 4);
-        width: calc(var(--width-gallery) - var(--grid) * 8);
-        box-sizing: content-box;
-      }
+    .scrollable .item-list {
+      padding: 0 calc(var(--grid) * 4) calc(var(--grid) * 4);
+      width: calc(var(--width-gallery) - var(--grid) * 8);
+      box-sizing: content-box;
     }
   }
 
@@ -37,6 +34,7 @@
   flex-direction: row;
   height: 100%;
   width: 100%;
+  position: relative;
 
   .navigation-column,
   .lobby-column,
