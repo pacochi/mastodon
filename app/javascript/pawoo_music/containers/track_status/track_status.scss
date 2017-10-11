@@ -2,14 +2,14 @@
   display:    block;
   text-align: left;
 
-  margin:     var(--verticalspace40);
-
   border-radius:      var(--radius);
   background-color:   var(--color1);
 
   color:        var(--textcolor);
   font-size:    var(--text20-font);
   line-height:  var(--text20-line);
+  
+  margin:     var(--verticalspace40);
 
   &.highlight {
     border:     1px dashed var(--strong1);
@@ -63,13 +63,4 @@
     }
   }
 
-  .meta {
-    margin: var(--verticalspace20);
-    font-size:      var(--text10-font);
-    line-height:    var(--text10-line);
-
-    i {
-      margin:       var(--rightspace5);
-    }
-  }
 }
