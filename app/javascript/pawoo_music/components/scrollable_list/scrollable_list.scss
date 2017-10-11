@@ -5,6 +5,15 @@
   }
 }
 
+.empty-column-indicator {
+  padding: var(--padding15);
+  font-size: var(--text20-font);
+  line-height: calc(var(--text20-font) * 1.5);
+  border-radius: var(--radius);
+  font-weight: bold;
+  background-color: var(--color1);
+}
+
 .sp .scrollable {
   overflow-y: scroll;
 }

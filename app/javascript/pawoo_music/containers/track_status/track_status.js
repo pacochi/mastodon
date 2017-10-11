@@ -95,9 +95,10 @@ export default class TrackStatus extends ImmutablePureComponent {
         </div>
 
         <Track track={status.get('track')} />
-        <StatusActionBar status={status} />
 
         <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} />
+
+        <StatusActionBar status={status} />
 
         <StatusMeta status={status} />
       </div>

@@ -25,7 +25,6 @@ import { openModal } from '../../../mastodon/actions/modal';
 import { blockDomain, unblockDomain } from '../../../mastodon/actions/domain_blocks';
 
 
-import testicon from '../../../images/pawoo_music/testicon.png';
 
 const messages = defineMessages({
   mention: { id: 'account.mention', defaultMessage: 'Mention @{name}' },
@@ -241,7 +240,7 @@ export default class AccountHeader extends ImmutablePureComponent {
             <span><FormattedMessage id='account.follows' defaultMessage='Follows' /></span>
             <strong><FormattedNumber value={account.get('following_count')} /> {extraInfo}</strong>
           </NavLink>
-          {menu.length > 0 && <DropdownMenu items={menu} src={testicon} />}
+          {menu.length > 0 && <DropdownMenu items={menu} src='more-horizontal' />}
         </div>
 
       </div>

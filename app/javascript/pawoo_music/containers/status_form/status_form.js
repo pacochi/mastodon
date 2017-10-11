@@ -308,7 +308,7 @@ export default class StatusForm extends ImmutablePureComponent {
 
     return (
       <div className='status-form'>
-        <Collapsable isVisible={this.props.spoiler} fullHeight={50}>
+        <Collapsable isVisible={this.props.spoiler} fullHeight={36}>
           <div className='spoiler-input'>
             <input placeholder={intl.formatMessage(messages.spoiler_placeholder)} value={this.props.spoiler_text} onChange={this.handleChangeSpoilerText} onKeyDown={this.handleKeyDown} type='text' className='spoiler-input__input'  id='cw-spoiler-input' />
           </div>
