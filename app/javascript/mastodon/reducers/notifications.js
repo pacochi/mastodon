@@ -25,7 +25,7 @@ const initialState = Immutable.Map({
 const notificationToMap = notification => Immutable.Map({
   id: notification.id,
   type: notification.type,
-  account: notification.account.id,
+  account: notification.account && notification.account.id,
   status: notification.status ? notification.status.id : null,
 });
 

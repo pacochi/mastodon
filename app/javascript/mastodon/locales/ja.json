@@ -110,6 +110,8 @@
   "notification.follow": "{name}さんにフォローされました",
   "notification.mention": "{name}さんがあなたに返信しました",
   "notification.reblog": "{name}さんがあなたのトゥートをブーストしました",
+  "notification.video_preparation_error": "トラックの動画の生成に失敗しました",
+  "notification.video_preparation_success": "トラックの動画の生成が完了しました",
   "notifications.clear": "通知を消去",
   "notifications.clear_confirmation": "本当に通知を消去しますか？",
   "notifications.column_settings.alert": "デスクトップ通知",

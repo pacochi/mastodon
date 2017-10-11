@@ -29,6 +29,9 @@ class VideoPreparingWorker
 
     raise
   else
+    # 再生成の場合は前回の通知を削除する
+    Notification.find_by(activity_type: 'Track', activity_id: status.music.id, account: status.account)&.destroy
+
     NotifyService.new.call(status.account, status.music)
   end
 end

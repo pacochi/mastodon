@@ -48,6 +48,8 @@ ja:
         follow_request: フォローリクエストを受けた時にメールで通知
         mention: 返信された時にメールで通知
         reblog: ブーストされた時にメールで通知
+        video_preparation_error: トラックの動画の生成に失敗した時にメールで通知
+        video_preparation_success: トラックの動画の生成が完了した時にメールで通知
       notification_firebase_cloud_messagings:
         favourite: お気に入りに登録された時にアプリで通知
         follow: フォローされた時にアプリで通知
