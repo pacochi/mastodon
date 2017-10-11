@@ -7,7 +7,7 @@ import IntersectionObserverWrapper from '../../../mastodon/features/ui/util/inte
 import { throttle } from 'lodash';
 import { isMobile } from '../../util/is_mobile';
 import { List as ImmutableList } from 'immutable';
-import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 
 const mobile = isMobile();
 
@@ -41,35 +41,19 @@ export default class ScrollableList extends PureComponent {
 
   intersectionObserverWrapper = new IntersectionObserverWrapper();
 
-  handleScroll = throttle((value) => {
-    let offset, scrollTop;
-
-    if (mobile) {
-      if (!this.content) {
-        return;
-      }
-
-      const { scrollHeight, clientHeight } = this.content;
-      scrollTop = this.content.scrollTop;
-      offset = scrollHeight - scrollTop - clientHeight;
+  handleScroll = throttle(() => {
+    if (this.node) {
+      const { scrollTop, scrollHeight, clientHeight } = this.node;
+      const offset = scrollHeight - scrollTop - clientHeight;
       this._oldScrollPosition = scrollHeight - scrollTop;
-    } else {
-      const { topPosition, realHeight, containerHeight } = value;
-      if (typeof topPosition !== 'number' || typeof realHeight !== 'number' || typeof containerHeight !== 'number') {
-        return;
+
+      if (400 > offset && this.props.onScrollToBottom && !this.props.isLoading) {
+        this.props.onScrollToBottom();
+      } else if (scrollTop < 100 && this.props.onScrollToTop) {
+        this.props.onScrollToTop();
+      } else if (this.props.onScroll) {
+        this.props.onScroll();
       }
-
-      scrollTop = topPosition;
-      offset = realHeight - topPosition - containerHeight;
-      this._oldScrollPosition = realHeight - topPosition;
-    }
-
-    if (400 > offset && this.props.onScrollToBottom && !this.props.isLoading && this.props.hasMore) {
-      this.props.onScrollToBottom();
-    } else if (scrollTop < 100 && this.props.onScrollToTop) {
-      this.props.onScrollToTop();
-    } else if (this.props.onScroll) {
-      this.props.onScroll();
     }
   }, 150, {
     trailing: true,
@@ -80,6 +64,9 @@ export default class ScrollableList extends PureComponent {
       this.attachScrollListener();
     }
     this.attachIntersectionObserver();
+
+    // Handle initial scroll posiiton
+    this.handleScroll();
   }
 
   componentDidUpdate (prevProps) {
@@ -89,19 +76,14 @@ export default class ScrollableList extends PureComponent {
 
     // Reset the scroll position when a new child comes in in order not to
     // jerk the scrollbar around if you're already scrolled down the page.
-    const scrollTop = mobile ? this.content.scrollTop : this.scrollArea.state.topPosition;
-    if (someItemInserted && this._oldScrollPosition && scrollTop > 0) {
-      const newScrollTop = this.content.scrollHeight - this._oldScrollPosition;
+    if (someItemInserted && this._oldScrollPosition && this.node.scrollTop > 0) {
+      const newScrollTop = this.node.scrollHeight - this._oldScrollPosition;
 
-      if (scrollTop !== newScrollTop) {
-        if (mobile) {
-          this.content.scrollTop = newScrollTop;
-        } else {
-          this.scrollArea.scrollYTo(newScrollTop);
-        }
+      if (this.node.scrollTop !== newScrollTop) {
+        this.node.scrollTop = newScrollTop;
       }
     } else {
-      this._oldScrollPosition = this.content.scrollHeight - scrollTop;
+      this._oldScrollPosition = this.node.scrollHeight - this.node.scrollTop;
     }
   }
 
@@ -143,20 +125,11 @@ export default class ScrollableList extends PureComponent {
   }
 
   setRef = (c) => {
-    this.scrollArea = c;
-    this.content = c;
-    this.wrapper = c;
+    this.node = c;
   }
 
-  setScrollAreaRef = (c) => {
-    this.scrollArea = c;
-    if (c) {
-      this.content = c.content;
-      this.wrapper = c.wrapper;
-    } else {
-      this.content = null;
-      this.wrapper = null;
-    }
+  setScrollbarsRef = (c) => {
+    this.node = c && c.view;
   }
 
   handleLoadMore = (e) => {
@@ -173,9 +146,9 @@ export default class ScrollableList extends PureComponent {
         case 'PageUp':
           return e.target.nodeName === 'ARTICLE' && e.target.previousElementSibling;
         case 'End':
-          return this.content.querySelector('[role="feed"] > article:last-of-type');
+          return this.node.querySelector('[role="feed"] > article:last-of-type');
         case 'Home':
-          return this.content.querySelector('[role="feed"] > article:first-of-type');
+          return this.node.querySelector('[role="feed"] > article:first-of-type');
         default:
           return null;
         }
@@ -233,7 +206,7 @@ export default class ScrollableList extends PureComponent {
     const content = mobile ? (
       <div className='scrollable' ref={this.setRef}>{contentArea}</div>
     ) : (
-      <ScrollArea contentClassName='scrollable' ref={this.setScrollAreaRef} onScroll={this.handleScroll}>{contentArea}</ScrollArea>
+      <Scrollbars className='scrollable' ref={this.setScrollbarsRef} onScroll={this.handleScroll}>{contentArea}</Scrollbars>
     );
 
     if (trackScroll) {
