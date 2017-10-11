@@ -3,7 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { defineMessages, injectIntl } from 'react-intl';
-import ScrollArea from 'react-scrollbar';
+import { Scrollbars } from 'react-custom-scrollbars';
 import SearchBox from '../search_box';
 import LoginBox from '../../components/login_box';
 import EventCalendar from '../../components/event_calendar';
@@ -100,13 +100,10 @@ export default class GlobalNavi extends PureComponent {
       </div>
     );
 
-    return (
-      /*
-      mobile
-        ? (<ScrollArea>{ globalNavi }</ScrollArea>)
-        : { globalNavi }
-      */
-      <ScrollArea>{ globalNavi }</ScrollArea>
+    return mobile ? (
+      globalNavi
+    ) : (
+      <Scrollbars>{globalNavi}</Scrollbars>
     );
   }
 
