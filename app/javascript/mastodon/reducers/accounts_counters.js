@@ -48,11 +48,17 @@ import {
 import { STORE_HYDRATE } from '../actions/store';
 import Immutable from 'immutable';
 
-const normalizeAccount = (state, account) => state.set(account.id, Immutable.fromJS({
-  followers_count: account.followers_count,
-  following_count: account.following_count,
-  statuses_count: account.statuses_count,
-}));
+const normalizeAccount = (state, account) => {
+  if (!account) {
+    return state;
+  }
+
+  return state.set(account.id, Immutable.fromJS({
+    followers_count: account.followers_count,
+    following_count: account.following_count,
+    statuses_count: account.statuses_count,
+  }));
+};
 
 const normalizeAccounts = (state, accounts) => {
   accounts.forEach(account => {

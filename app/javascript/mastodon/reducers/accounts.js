@@ -47,6 +47,10 @@ import { STORE_HYDRATE } from '../actions/store';
 import Immutable from 'immutable';
 
 const normalizeAccount = (state, account) => {
+  if (!account) {
+    return state;
+  }
+
   account = { ...account };
 
   delete account.followers_count;

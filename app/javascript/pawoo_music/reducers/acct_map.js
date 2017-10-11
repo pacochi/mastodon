@@ -46,7 +46,7 @@ import {
 import { STORE_HYDRATE } from '../../mastodon/actions/store';
 import Immutable from 'immutable';
 
-const normalizeAccount = (state, account) => state.set(account.acct, account.id);
+const normalizeAccount = (state, account) => account ? state.set(account.acct, account.id) : state;
 
 const normalizeAccounts = (state, accounts) => {
   accounts.forEach(account => {

@@ -69,10 +69,34 @@ export default class Notification extends ImmutablePureComponent {
     );
   }
 
+  renderVideoPreparationSuccess (notification) {
+    const prepend = (
+      <div className='prepend-inline'>
+        <FormattedMessage id='notification.video_preparation_success' defaultMessage='The video for your track was generated' />
+      </div>
+    );
+
+    return (
+      <StatusContainer id={notification.get('status')} prepend={prepend} muted withDismiss />
+    );
+  }
+
+  renderVideoPreparationError (notification) {
+    const prepend = (
+      <div className='prepend-inline'>
+        <FormattedMessage id='notification.video_preparation_error' defaultMessage='The video generation for your track was failed' />
+      </div>
+    );
+
+    return (
+      <StatusContainer id={notification.get('status')} prepend={prepend} muted withDismiss />
+    );
+  }
+
   render () {
     const { notification } = this.props;
     const account          = notification.get('account');
-    const link             = (
+    const link             = account && (
       <Link to={`/@${account.get('acct')}`}>
         <DisplayName account={account} />
       </Link>
@@ -87,6 +111,10 @@ export default class Notification extends ImmutablePureComponent {
       return this.renderFavourite(notification, link);
     case 'reblog':
       return this.renderReblog(notification, link);
+    case 'video_preparation_success':
+      return this.renderVideoPreparationSuccess(notification);
+    case 'video_preparation_error':
+      return this.renderVideoPreparationError(notification);
     }
 
     return null;

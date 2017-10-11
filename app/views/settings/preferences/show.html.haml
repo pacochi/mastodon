@@ -33,6 +33,8 @@
       = ff.input :favourite, as: :boolean, wrapper: :with_label
       = ff.input :mention, as: :boolean, wrapper: :with_label
       = ff.input :digest, as: :boolean, wrapper: :with_label
+      = ff.input :video_preparation_success, as: :boolean, wrapper: :with_label
+      = ff.input :video_preparation_error, as: :boolean, wrapper: :with_label
 
   .fields-group
     = f.simple_fields_for :interactions, hash_to_object(current_user.settings.interactions) do |ff|

@@ -85,7 +85,7 @@ class Notification < ApplicationRecord
     end
   end
 
-  before_destroy :destroy_activity, if: ->(notification) { notification.type == :video_preparation_error }
+  after_destroy :destroy_activity, if: ->(notification) { notification.type == :video_preparation_error }
 
   after_initialize :set_from_account
   before_validation :set_from_account
