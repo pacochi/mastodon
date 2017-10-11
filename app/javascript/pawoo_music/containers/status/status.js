@@ -68,7 +68,7 @@ export default class Status extends ImmutablePureComponent {
   }
 
   render () {
-    const { muted, detail, hidden, prepend: prepsPrepend, status: originalStatus } = this.props;
+    const { muted, detail, hidden, prepend, status: originalStatus } = this.props;
     const { isExpanded } = this.state;
     const { schedule } = this.context;
 
@@ -91,11 +91,10 @@ export default class Status extends ImmutablePureComponent {
     }
 
     const highlight = detail || status.get('visibility') === 'direct';
-    const prepend = prepsPrepend || <StatusPrepend status={status} />;
 
     return (
       <div className={classNames('status', { muted, highlight })} data-id={status.get('id')}>
-        {prepend && <div className='prepend-inline'>{prepend}</div>}
+        {prepend || <StatusPrepend className='prepend-inline' status={originalStatus} />}
         <div className='status-head'>
           <AccountContainer account={status.get('account')} />
           {!detail && (

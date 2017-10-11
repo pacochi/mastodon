@@ -64,7 +64,7 @@ export default class ScrollableList extends PureComponent {
       this._oldScrollPosition = realHeight - topPosition;
     }
 
-    if (400 > offset && this.props.onScrollToBottom && !this.props.isLoading) {
+    if (400 > offset && this.props.onScrollToBottom && !this.props.isLoading && this.props.hasMore) {
       this.props.onScrollToBottom();
     } else if (scrollTop < 100 && this.props.onScrollToTop) {
       this.props.onScrollToTop();

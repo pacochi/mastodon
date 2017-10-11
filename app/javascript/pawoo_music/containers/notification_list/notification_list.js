@@ -80,9 +80,7 @@ export default class NotificationList extends ImmutablePureComponent {
       <StatusList
         scrollKey='account_gallery'
         statusIds={uniqueStatusIds}
-        hasMore={hasMore}
-        isLoading={isLoading}
-        detail
+        isGallery
         onScrollToBottom={this.handleLoadMore}
       />
     );

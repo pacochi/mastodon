@@ -59,6 +59,7 @@ export default class App extends PureComponent {
     if (isLogin) {
       this.disconnect = dispatch(connectUserStream());
       dispatch(refreshHomeTimeline());
+      dispatch(refreshHomeTimeline({ onlyMusics: true }));
       dispatch(refreshNotifications());
 
       // Desktop notifications

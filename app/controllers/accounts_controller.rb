@@ -37,6 +37,6 @@ class AccountsController < ApplicationController
 
   def set_account
     username, domain = (params[:username] || '').split('@')
-    @account = Account.find_by(username: username, domain: domain)
+    @account = Account.find_by!(username: username, domain: domain)
   end
 end

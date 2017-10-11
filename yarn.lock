@@ -3019,6 +3019,10 @@ fd-slicer@~1.0.1:
   dependencies:
     pend "~1.2.0"
 
+feather-icons@^3.2.2:
+  version "3.2.2"
+  resolved "https://registry.yarnpkg.com/feather-icons/-/feather-icons-3.2.2.tgz#96c132e4a401d5cc18c03063c87999f47dce442b"
+
 figures@^1.3.5:
   version "1.7.0"
   resolved "https://registry.yarnpkg.com/figures/-/figures-1.7.0.tgz#cbe1e3affcf1cd44b80cadfed28dc793a9701d2e"
@@ -4755,7 +4759,7 @@ multicast-dns@^6.0.1:
 
 "musicvideo-generator@github.com:pixiv/musicvideo-generator.git":
   version "1.0.0"
-  resolved "github.com:pixiv/musicvideo-generator.git#21acf4629e8d509d4f3a9a40db361b269471e020"
+  resolved "github.com:pixiv/musicvideo-generator.git#00e8b58460f211bc3e4043aaa31dfc22b7f39eb3"
   dependencies:
     pixi.js "^4.5.4"
 
@@ -6189,10 +6193,6 @@ react-element-to-jsx-string@^5.0.0:
     sortobject "^1.0.0"
     stringify-object "2.4.0"
     traverse "^0.6.6"
-
-react-feather@abcang/react-feather#feature/stroke-width:
-  version "1.0.7"
-  resolved "https://codeload.github.com/abcang/react-feather/tar.gz/933df6c639347a93db47539b57c3ce10da3e6f36"
 
 react-html-attributes@^1.3.0:
   version "1.3.0"

@@ -46,6 +46,7 @@ body {
   // Horizontal Spaces for 'margin' and 'padding'
   --rightspace5:      0 calc(var(--grid) * 1) 0 0;
   --rightspace10:     0 calc(var(--grid) * 2) 0 0;
+  --rightspace15:     0 calc(var(--grid) * 3) 0 0;
 
 
   // 'padding'
@@ -63,7 +64,7 @@ body {
   --text10-line:      calc(var(--grid) * 3);
 
   --text20-font:      14px;
-  --text20-line:      calc(var(--text10-font) * 1.5);
+  --text20-line:      calc(var(--text20-font) * 1.3);
 
   --text30-font:      16px;
   --text30-line:      calc(var(--grid) * 4);
@@ -75,6 +76,7 @@ body {
   --text50-line:      calc(var(--grid) * 8);
 
   --iconsize10:       calc(var(--grid) * 4);
+  --iconsize13:       calc(var(--grid) * 4.5);
   --iconsize15:       calc(var(--grid) * 5);
   --iconsize20:       calc(var(--grid) * 6);
   --iconsize30:       calc(var(--grid) * 8);
@@ -88,22 +90,15 @@ body {
 
 
   // dropshadow
-  --shadow:           calc(var(--grid) * 0.5)
-                      calc(var(--grid) * 4)
-                      calc(var(--grid) * 8)
-                      calc(var(--grid) * 2)
-                      rgba(0, 0, 0, .12);
+  --shadow:           0 2px 64px 0 rgba(0, 0, 0, .1);
 
-  --shadow2:          calc(var(--grid) * 0.1)
-                      calc(var(--grid) * 1)
-                      calc(var(--grid) * 4)
-                      calc(var(--grid) * 0.5)
-                      rgba(0, 0, 0, .25);
+  --shadow2:          0 2px 16px 0 rgba(0, 0, 0, .15);
 
 
   // hover action
   --hover-opacity:    0.2;
-  --hover-transition: 0.1s;
+  --hover-transition: 0.25s;
+  --hover-timing: cubic-bezier(0, 0.97, 0.46, 1.33);
 
 
   // lightbox
@@ -141,8 +136,7 @@ a, a:link, a:visited {
 }
 
 a:hover {
-  color:          var(--strong1);
-  font-weight:    bold;
+  color:          var(--tootcolor);
 }
 
 .app {

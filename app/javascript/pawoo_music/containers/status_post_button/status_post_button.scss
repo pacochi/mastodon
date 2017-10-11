@@ -1,26 +1,35 @@
 .status-post-button {
-  display: block;
-  border-radius: var(--radius);
-
-  cursor: pointer;
-  text-align: center;
-  width: var(--iconsize30);
-  height: var(--iconsize30);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: var(--iconsize35);
+  height: var(--iconsize35);
+  border-radius: 100%;
+  background-color: var(--color1);
   box-shadow: var(--shadow2);
-  color: var(--tootcolor);
-  line-height: 36px;
-  font-size: 20px;
+  transition: all 0.4s var(--hover-timing);
+
+  svg {
+    width: var(--iconsize20);
+    height: var(--iconsize20);
+    stroke-width: 2px;
+    stroke: var(--tootcolor);
+    transition: all 0.4s var(--hover-timing);
+  }
 
   &:hover {
-    background-color:   var(--tootcolor);
-    color:              var(--color1);
-    transition:         var(--hover-transition);
-    font-weight: normal;
+    background-color: var(--tootcolor);
+    transform: scale(1.2);
+
+    svg {
+      transform: scale(1.4);
+      stroke: var(--color1);
+    }
   }
 
   &.fixed {
     position: fixed;
-    bottom: calc(var(--grid) * 4 + var(--height-deck));
-    right: calc(var(--grid) * 4);
+    bottom: calc(var(--grid) * 6 + var(--height-deck));
+    right: calc(var(--grid) * 6);
   }
 }

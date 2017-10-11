@@ -25,8 +25,6 @@ import { muteStatus, unmuteStatus, deleteStatus, pinStatus, unpinStatus } from '
 import { initReport } from '../../../mastodon/actions/reports';
 import { openModal } from '../../../mastodon/actions/modal';
 
-import testicon from '../../../images/pawoo_music/testicon.png';
-
 const messages = defineMessages({
   delete: { id: 'status.delete', defaultMessage: 'Delete' },
   mention: { id: 'status.mention', defaultMessage: 'Mention @{name}' },
@@ -76,7 +74,6 @@ const makeMapStateToProps = () => {
 export default class StatusActionBar extends ImmutablePureComponent {
 
   static contextTypes = {
-    router: PropTypes.object,
     schedule: PropTypes.bool,
   };
 
@@ -100,7 +97,7 @@ export default class StatusActionBar extends ImmutablePureComponent {
 
   handleReplyClick = () => {
     const { dispatch, status } = this.props;
-    dispatch(replyCompose(status, this.context.router.history));
+    dispatch(replyCompose(status));
   }
 
   handleFavouriteClick = () => {
@@ -160,7 +157,7 @@ export default class StatusActionBar extends ImmutablePureComponent {
 
   handleMentionClick = () => {
     const { dispatch, status } = this.props;
-    dispatch(mentionCompose(status.get('account'), this.context.router.history));
+    dispatch(mentionCompose(status.get('account')));
   }
 
   handleMuteClick = () => {
@@ -183,8 +180,6 @@ export default class StatusActionBar extends ImmutablePureComponent {
       confirm: intl.formatMessage(messages.blockConfirm),
       onConfirm: () => dispatch(blockAccount(account.get('id'))),
     }));
-
-    this.props.onBlock(this.props.status.get('account'));
   }
 
   handleReport = () => {
@@ -265,10 +260,10 @@ export default class StatusActionBar extends ImmutablePureComponent {
 
     return (
       <ul className='status-action-bar'>
-        <li><IconButton title={replyTitle} src={testicon} onClick={this.handleReplyClick} /></li>
-        <li><IconButton title={reblogTitle} src={testicon} onClick={this.handleReblogClick} disabled={reblogDisabled} active={status.get('reblogged')} /></li>
-        <li><IconButton title={favouriteTitle} src={testicon} onClick={this.handleFavouriteClick} disabled={favouriteDisabled} active={status.get('favourited')} /></li>
-        <li><DropdownMenu items={menu} src={testicon} /></li>
+        <li><IconButton title={replyTitle} src='message-square' onClick={this.handleReplyClick} /></li>
+        <li><IconButton title={reblogTitle} src='repeat' onClick={this.handleReblogClick} disabled={reblogDisabled} active={status.get('reblogged')} /></li>
+        <li><IconButton title={favouriteTitle} src='heart' onClick={this.handleFavouriteClick} disabled={favouriteDisabled} active={status.get('favourited')} /></li>
+        <li><DropdownMenu items={menu} src='more-horizontal' /></li>
       </ul>
     );
   }

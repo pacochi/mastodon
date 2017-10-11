@@ -10,10 +10,21 @@ import emojify from '../../../mastodon/emoji';
 import Avatar from '../../components/avatar';
 import DisplayName from '../../components/display_name';
 import FollowButton from '../follow_button';
-import { followAccount, unfollowAccount } from '../../../mastodon/actions/accounts';
 import DropdownMenu from '../../components/dropdown_menu';
+import {
+  followAccount,
+  unfollowAccount,
+  blockAccount,
+  unblockAccount,
+  muteAccount,
+  unmuteAccount,
+} from '../../../mastodon/actions/accounts';
+import { mentionCompose } from '../../../mastodon/actions/compose';
+import { initReport } from '../../../mastodon/actions/reports';
+import { openModal } from '../../../mastodon/actions/modal';
+import { blockDomain, unblockDomain } from '../../../mastodon/actions/domain_blocks';
 
-import testicon from '../../../images/pawoo_music/testicon.png';
+
 
 const messages = defineMessages({
   mention: { id: 'account.mention', defaultMessage: 'Mention @{name}' },
@@ -59,9 +70,71 @@ export default class AccountHeader extends ImmutablePureComponent {
     }
   }
 
+  handleMentionClick = () => {
+    const { dispatch, account } = this.props;
+    dispatch(mentionCompose(account));
+  }
+
+  handleMuteClick = () => {
+    const { dispatch, account, intl } = this.props;
+
+    if (account.getIn(['relationship', 'muting'])) {
+      dispatch(unmuteAccount(account.get('id')));
+    } else {
+      dispatch(openModal('CONFIRM', {
+        message: <FormattedMessage id='confirmations.mute.message' defaultMessage='Are you sure you want to mute {name}?' values={{ name: <strong>@{account.get('acct')}</strong> }} />,
+        confirm: intl.formatMessage(messages.muteConfirm),
+        onConfirm: () => dispatch(muteAccount(account.get('id'))),
+      }));
+    }
+  }
+
+  handleBlockClick = () => {
+    const { dispatch, account, intl } = this.props;
+
+    if (account.getIn(['relationship', 'blocking'])) {
+      dispatch(unblockAccount(account.get('id')));
+    } else {
+      dispatch(openModal('CONFIRM', {
+        message: <FormattedMessage id='confirmations.block.message' defaultMessage='Are you sure you want to block {name}?' values={{ name: <strong>@{account.get('acct')}</strong> }} />,
+        confirm: intl.formatMessage(messages.blockConfirm),
+        onConfirm: () => dispatch(blockAccount(account.get('id'))),
+      }));
+    }
+  }
+
+  handleReport = () => {
+    const { dispatch, account } = this.props;
+    dispatch(initReport(account));
+  }
+
+  handleBlockDomain = () => {
+    const { dispatch, account, intl } = this.props;
+    const accountId = account.get('id');
+    const domain = account.get('acct').split('@')[1];
+
+    dispatch(openModal('CONFIRM', {
+      message: <FormattedMessage id='confirmations.domain_block.message' defaultMessage='Are you really, really sure you want to block the entire {domain}? In most cases a few targeted blocks or mutes are sufficient and preferable.' values={{ domain: <strong>{domain}</strong> }} />,
+      confirm: intl.formatMessage(messages.blockDomainConfirm),
+      onConfirm: () => dispatch(blockDomain(domain, accountId)),
+    }));
+  }
+
+  handleUnblockDomain = () => {
+    const { dispatch, account } = this.props;
+    const accountId = account.get('id');
+    const domain = account.get('acct').split('@')[1];
+
+    dispatch(unblockDomain(domain, accountId));
+  }
+
+
   createMenu () {
     const { account, me, intl } = this.props;
     const menu = [];
+
+    menu.push({ text: intl.formatMessage(messages.mention, { name: account.get('username') }), action: this.handleMentionClick });
+    menu.push(null);
 
     if (!me) {
       return menu;
@@ -69,27 +142,27 @@ export default class AccountHeader extends ImmutablePureComponent {
       menu.push({ text: intl.formatMessage(messages.edit_profile), href: '/settings/profile' });
     } else {
       if (account.getIn(['relationship', 'muting'])) {
-        menu.push({ text: intl.formatMessage(messages.unmute, { name: account.get('username') }), action: this.props.onMute });
+        menu.push({ text: intl.formatMessage(messages.unmute, { name: account.get('username') }), action: this.handleMuteClick });
       } else {
-        menu.push({ text: intl.formatMessage(messages.mute, { name: account.get('username') }), action: this.props.onMute });
+        menu.push({ text: intl.formatMessage(messages.mute, { name: account.get('username') }), action: this.handleMuteClick });
       }
 
       if (account.getIn(['relationship', 'blocking'])) {
-        menu.push({ text: intl.formatMessage(messages.unblock, { name: account.get('username') }), action: this.props.onBlock });
+        menu.push({ text: intl.formatMessage(messages.unblock, { name: account.get('username') }), action: this.handleBlockClick });
       } else {
-        menu.push({ text: intl.formatMessage(messages.block, { name: account.get('username') }), action: this.props.onBlock });
+        menu.push({ text: intl.formatMessage(messages.block, { name: account.get('username') }), action: this.handleBlockClick });
       }
 
-      menu.push({ text: intl.formatMessage(messages.report, { name: account.get('username') }), action: this.props.onReport });
+      menu.push({ text: intl.formatMessage(messages.report, { name: account.get('username') }), action: this.handleReport });
 
       if (account.get('acct') !== account.get('username')) {
         const domain = account.get('acct').split('@')[1];
         menu.push(null);
 
         if (account.getIn(['relationship', 'domain_blocking'])) {
-          menu.push({ text: intl.formatMessage(messages.unblockDomain, { domain }), action: this.props.onUnblockDomain });
+          menu.push({ text: intl.formatMessage(messages.unblockDomain, { domain }), action: this.handleUnblockDomain });
         } else {
-          menu.push({ text: intl.formatMessage(messages.blockDomain, { domain }), action: this.props.onBlockDomain });
+          menu.push({ text: intl.formatMessage(messages.blockDomain, { domain }), action: this.handleBlockDomain });
         }
       }
     }
@@ -167,7 +240,7 @@ export default class AccountHeader extends ImmutablePureComponent {
             <span><FormattedMessage id='account.follows' defaultMessage='Follows' /></span>
             <strong><FormattedNumber value={account.get('following_count')} /> {extraInfo}</strong>
           </NavLink>
-          {menu.length > 0 && <DropdownMenu items={menu} src={testicon} />}
+          {menu.length > 0 && <DropdownMenu items={menu} src='more-horizontal' />}
         </div>
 
       </div>

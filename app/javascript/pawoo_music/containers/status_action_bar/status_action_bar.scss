@@ -1,9 +1,9 @@
 .status-action-bar {
   display: flex;
-  position: relative;
   margin:  var(--verticalspace20);
 
   li {
-    height: var(--iconsize15);
+    height: var(--iconsize13);
+    margin:  var(--rightspace15);
   }
 }
