@@ -6,7 +6,7 @@ class VideoPreparingWorker
   sidekiq_options queue: :video_preparer, unique_for: 16.minutes
 
   def perform(id)
-    status = Status.find(id)
+    status = Status.where(music_type: 'Track').find(id)
 
     video = MusicConvertService.new.call(status.music)
     begin
@@ -17,7 +17,7 @@ class VideoPreparingWorker
   rescue ActiveRecord::RecordNotFound
     nil
   rescue
-    Rails.logger.error 'failed to convert track id: ' + status.music_id
+    Rails.logger.error "failed to convert track id: #{status.music_id}"
 
     error = VideoPreparationError.create!(track: status.music)
     begin
