@@ -108,6 +108,10 @@ class Api::V1::TracksController < Api::BaseController
       )
     end
 
+    if params.dig('video', 'particle').present?
+      attributes.merge! video_lightleaks: params.dig('video', 'lightleaks') != ''
+    end
+
     case params.dig('video', 'spectrum')
     when nil
     when ''
