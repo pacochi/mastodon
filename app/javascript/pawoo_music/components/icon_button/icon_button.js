@@ -28,12 +28,13 @@ export default class IconButton extends PureComponent {
     const { src, title, className } = this.props;
 
     return (
-      <span dangerouslySetInnerHTML={{
-        __html: feather.toSvg(src, {
-          'stroke-width': 1,
-        }),
-      }}
-      className={classNames('icon-button', className)} alt={title} role='button' tabIndex='0' aria-pressed='false' onClick={this.handleClick}
+      <span
+        dangerouslySetInnerHTML={{
+          __html: feather.toSvg(src, {
+            'stroke-width': 1,
+          }),
+        }}
+      className={classNames('icon-button', className)} title={title} role='button' tabIndex='0' aria-pressed='false' onClick={this.handleClick}
       />
     );
   }

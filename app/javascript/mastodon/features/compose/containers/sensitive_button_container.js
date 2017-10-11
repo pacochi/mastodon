@@ -2,7 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
-import IconButton from '../../../components/icon_button';
+import IconButton from '../../../../pawoo_music/components/icon_button';
 import { changeComposeSensitivity } from '../../../actions/compose';
 import Motion from 'react-motion/lib/Motion';
 import spring from 'react-motion/lib/spring';
@@ -45,7 +45,7 @@ class SensitiveButton extends React.PureComponent {
     return (
       <Motion defaultStyle={{ scale: 0.87 }} style={{ scale: spring(visible ? 1 : 0.87, { stiffness: 200, damping: 3 }) }}>
         {({ scale }) => {
-          const icon = active ? 'eye-slash' : 'eye';
+          const icon = active ? 'eye-off' : 'eye';
           const className = classNames('compose-form__sensitive-button', {
             'compose-form__sensitive-button--visible': visible,
           });
@@ -54,12 +54,9 @@ class SensitiveButton extends React.PureComponent {
               <IconButton
                 className='compose-form__sensitive-button__icon'
                 title={intl.formatMessage(messages.title)}
-                icon={icon}
+                src={icon}
                 onClick={onClick}
-                size={18}
                 active={active}
-                style={{ lineHeight: null, height: null }}
-                inverted
               />
             </div>
           );
