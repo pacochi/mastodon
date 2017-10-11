@@ -76,6 +76,7 @@ body {
   --text50-line:      calc(var(--grid) * 8);
 
   --iconsize10:       calc(var(--grid) * 4);
+  --iconsize13:       calc(var(--grid) * 4.5);
   --iconsize15:       calc(var(--grid) * 5);
   --iconsize20:       calc(var(--grid) * 6);
   --iconsize30:       calc(var(--grid) * 8);
@@ -97,6 +98,7 @@ body {
   // hover action
   --hover-opacity:    0.2;
   --hover-transition: 0.25s;
+  --hover-timing: cubic-bezier(0, 0.97, 0.46, 1.33);
 
 
   // lightbox

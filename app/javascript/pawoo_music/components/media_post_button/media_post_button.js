@@ -1,13 +1,12 @@
 import React, { PureComponent } from 'react';
+import IconButton from '../icon_button';
 
 export default class MediaPostButton extends PureComponent {
 
   render () {
     return (
       <a className='media-post-button' href='/tracks/new'>
-        <span className='plus-button'>
-          +
-        </span>
+        <IconButton src='plus' />
       </a>
     );
   }

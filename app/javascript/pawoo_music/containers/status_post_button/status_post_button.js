@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
 import { openModalFormCompose } from '../../../mastodon/actions/compose';
+import IconButton from '../../components/icon_button';
 
 @connect()
 export default class StatusPostButton extends React.PureComponent {
@@ -21,9 +22,7 @@ export default class StatusPostButton extends React.PureComponent {
     const { fixed } = this.props;
 
     return (
-      <div className={classNames('status-post-button', { fixed })} role='button' tabIndex='0' aria-pressed='false' onClick={this.handleClick}>
-        +
-      </div>
+      <IconButton src='plus' className={classNames('status-post-button', { fixed })} role='button' tabIndex='0' aria-pressed='false' onClick={this.handleClick} />
     );
   }
 
