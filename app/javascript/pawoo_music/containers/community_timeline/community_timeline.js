@@ -20,6 +20,7 @@ export default class CommunityTimelineContainer extends PureComponent {
     dispatch(updateTimelineTitle('ローカル タイムライン')); /* TODO: intl */
     dispatch(changeFooterType('lobby_gallery'));
     dispatch(refreshCommunityTimeline());
+    dispatch(refreshCommunityTimeline({ onlyMusics: true }));
     this.disconnect = dispatch(connectCommunityStream());
   }
 
@@ -30,8 +31,8 @@ export default class CommunityTimelineContainer extends PureComponent {
     }
   }
 
-  handleLoadMore = () => {
-    this.props.dispatch(expandCommunityTimeline());
+  handleLoadMore = (options) => {
+    this.props.dispatch(expandCommunityTimeline(options));
   }
 
   render () {

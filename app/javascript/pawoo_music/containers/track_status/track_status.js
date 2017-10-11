@@ -60,7 +60,7 @@ export default class TrackStatus extends ImmutablePureComponent {
   }
 
   render () {
-    const { muted, hidden, prepend: prepsPrepend, status: originalStatus } = this.props;
+    const { muted, hidden, prepend, status: originalStatus } = this.props;
     const { isExpanded } = this.state;
 
     if (!originalStatus) {
@@ -70,6 +70,10 @@ export default class TrackStatus extends ImmutablePureComponent {
     let status = originalStatus;
     if (originalStatus.get('reblog', null) !== null && typeof originalStatus.get('reblog') === 'object') {
       status = originalStatus.get('reblog');
+    }
+
+    if (!status.has('track') && !status.has('album')) {
+      return null;
     }
 
     if (hidden) {
@@ -83,11 +87,9 @@ export default class TrackStatus extends ImmutablePureComponent {
       );
     }
 
-    const prepend = prepsPrepend || <StatusPrepend status={status} />;
-
     return (
       <div className={classNames('track-status', { muted })} data-id={status.get('id')}>
-        {prepend && <div className='prepend-inline'>{prepend}</div>}
+        {prepend || <StatusPrepend className='prepend-inline' status={originalStatus} />}
         <div className='status-head'>
           <AccountContainer account={status.get('account')} />
         </div>

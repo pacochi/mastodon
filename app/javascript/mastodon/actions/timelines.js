@@ -64,8 +64,9 @@ export function refreshTimelineRequest(timeline, skipLoading) {
   };
 };
 
-export function refreshTimeline(timelineId, path, params = {}) {
+export function refreshTimeline(timelineId, path, onlyMusics, params = {}) {
   return function (dispatch, getState) {
+    timelineId = onlyMusics ? `${timelineId}:music` : timelineId;
     const timeline = getState().getIn(['timelines', timelineId], Immutable.Map());
 
     if (timeline.get('isLoading') || timeline.get('online')) {
@@ -79,6 +80,10 @@ export function refreshTimeline(timelineId, path, params = {}) {
 
     if (newestId !== null) {
       params.since_id = newestId;
+    }
+
+    if (onlyMusics) {
+      params.only_musics = true;
     }
 
     dispatch(refreshTimelineRequest(timelineId, skipLoading));
@@ -95,14 +100,14 @@ export function refreshTimeline(timelineId, path, params = {}) {
   };
 };
 
-export const refreshHomeTimeline         = () => refreshTimeline('home', '/api/v1/timelines/home');
-export const refreshPublicTimeline       = () => refreshTimeline('public', '/api/v1/timelines/public');
-export const refreshCommunityTimeline    = () => refreshTimeline('community', '/api/v1/timelines/public', { local: true });
-export const refreshMediaTimeline        = () => refreshTimeline('media', '/api/v1/timelines/public', { local: true, media: true });
-export const refreshAccountTimeline      = accountId => refreshTimeline(`account:${accountId}`, `/api/v1/accounts/${accountId}/statuses`);
-export const refreshAccountMediaTimeline = accountId => refreshTimeline(`account:${accountId}:media`, `/api/v1/accounts/${accountId}/statuses`, { only_media: true });
-export const refreshHashtagTimeline      = hashtag => refreshTimeline(`hashtag:${hashtag}`, `/api/v1/timelines/tag/${hashtag}`);
-export const refreshPinnedStatusTimeline = accountId => refreshTimeline(`account:${accountId}:pinned_status`, `/api/v1/accounts/${accountId}/pinned_statuses`);
+export const refreshHomeTimeline         = ({ onlyMusics = null } = {}) => refreshTimeline('home', '/api/v1/timelines/home', onlyMusics);
+export const refreshPublicTimeline       = ({ onlyMusics = null } = {}) => refreshTimeline('public', '/api/v1/timelines/public', onlyMusics);
+export const refreshCommunityTimeline    = ({ onlyMusics = null } = {}) => refreshTimeline('community', '/api/v1/timelines/public', onlyMusics, { local: true });
+export const refreshMediaTimeline        = ({ onlyMusics = null } = {}) => refreshTimeline('media', '/api/v1/timelines/public', onlyMusics, { local: true, media: true });
+export const refreshAccountTimeline      = (accountId, { onlyMusics = null } = {}) => refreshTimeline(`account:${accountId}`, `/api/v1/accounts/${accountId}/statuses`, onlyMusics);
+export const refreshAccountMediaTimeline = (accountId, { onlyMusics = null } = {}) => refreshTimeline(`account:${accountId}:media`, `/api/v1/accounts/${accountId}/statuses`, onlyMusics, { only_media: true });
+export const refreshHashtagTimeline      = (hashtag, { onlyMusics = null } = {}) => refreshTimeline(`hashtag:${hashtag}`, `/api/v1/timelines/tag/${hashtag}`, onlyMusics);
+export const refreshPinnedStatusTimeline = (accountId, { onlyMusics = null } = {}) => refreshTimeline(`account:${accountId}:pinned_status`, `/api/v1/accounts/${accountId}/pinned_statuses`, onlyMusics);
 
 export function refreshTimelineFail(timeline, error, skipLoading) {
   return {
@@ -114,8 +119,9 @@ export function refreshTimelineFail(timeline, error, skipLoading) {
   };
 };
 
-export function expandTimeline(timelineId, path, params = {}) {
+export function expandTimeline(timelineId, path, onlyMusics, params = {}) {
   return (dispatch, getState) => {
+    timelineId = onlyMusics ? `${timelineId}:music` : timelineId;
     const timeline = getState().getIn(['timelines', timelineId], Immutable.Map());
     const ids      = timeline.get('items', Immutable.List());
 
@@ -135,6 +141,10 @@ export function expandTimeline(timelineId, path, params = {}) {
       params.limit  = 10;
     }
 
+    if (onlyMusics) {
+      params.only_musics = true;
+    }
+
     dispatch(expandTimelineRequest(timelineId));
 
     api(getState).get(path, { params }).then(response => {
@@ -149,14 +159,14 @@ export function expandTimeline(timelineId, path, params = {}) {
   };
 };
 
-export const expandHomeTimeline         = () => expandTimeline('home', '/api/v1/timelines/home');
-export const expandPublicTimeline       = () => expandTimeline('public', '/api/v1/timelines/public');
-export const expandCommunityTimeline    = () => expandTimeline('community', '/api/v1/timelines/public', { local: true });
-export const expandMediaTimeline        = () => expandTimeline('media', '/api/v1/timelines/public', { local: true, media: true });
-export const expandAccountTimeline      = accountId => expandTimeline(`account:${accountId}`, `/api/v1/accounts/${accountId}/statuses`);
-export const expandAccountMediaTimeline = accountId => expandTimeline(`account:${accountId}:media`, `/api/v1/accounts/${accountId}/statuses`, { only_media: true });
-export const expandHashtagTimeline      = hashtag => expandTimeline(`hashtag:${hashtag}`, `/api/v1/timelines/tag/${hashtag}`);
-export const expandPinnedStatusesTimeline = accountId => expandTimeline(`account:${accountId}:pinned_status`, `/api/v1/accounts/${accountId}/pinned_statuses`);
+export const expandHomeTimeline         = ({ onlyMusics = null } = {}) => expandTimeline('home', '/api/v1/timelines/home', onlyMusics);
+export const expandPublicTimeline       = ({ onlyMusics = null } = {}) => expandTimeline('public', '/api/v1/timelines/public', onlyMusics);
+export const expandCommunityTimeline    = ({ onlyMusics = null } = {}) => expandTimeline('community', '/api/v1/timelines/public', onlyMusics, { local: true });
+export const expandMediaTimeline        = ({ onlyMusics = null } = {}) => expandTimeline('media', '/api/v1/timelines/public', onlyMusics, { local: true, media: true });
+export const expandAccountTimeline      = (accountId, { onlyMusics = null } = {}) => expandTimeline(`account:${accountId}`, `/api/v1/accounts/${accountId}/statuses`, onlyMusics);
+export const expandAccountMediaTimeline = (accountId, { onlyMusics = null } = {}) => expandTimeline(`account:${accountId}:media`, `/api/v1/accounts/${accountId}/statuses`, onlyMusics, { only_media: true });
+export const expandHashtagTimeline      = (hashtag, { onlyMusics = null } = {}) => expandTimeline(`hashtag:${hashtag}`, `/api/v1/timelines/tag/${hashtag}`, onlyMusics);
+export const expandPinnedStatusesTimeline = (accountId, { onlyMusics = null } = {}) => expandTimeline(`account:${accountId}:pinned_status`, `/api/v1/accounts/${accountId}/pinned_statuses`, onlyMusics);
 
 export function expandTimelineRequest(timeline) {
   return {

@@ -3,7 +3,6 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { FormattedMessage } from 'react-intl';
 import Link from '../../components/link_wrapper';
-import { changeSetting } from '../../../mastodon/actions/settings';
 import { expandHomeTimeline } from '../../../mastodon/actions/timelines';
 import StatusTimelineContainer from '../../containers/status_timeline';
 import MediaPostButton from '../../components/media_post_button';
@@ -28,12 +27,8 @@ export default class HomeTimeline extends PureComponent {
     dispatch(changeFooterType('lobby_gallery'));
   }
 
-  handleLoadMore = () => {
-    this.props.dispatch(expandHomeTimeline());
-  }
-
-  handleChange = (key, value) => {
-    this.props.dispatch(changeSetting(['home', ...key], value));
+  handleLoadMore = (options) => {
+    this.props.dispatch(expandHomeTimeline(options));
   }
 
   render () {
