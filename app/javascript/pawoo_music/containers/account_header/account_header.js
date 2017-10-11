@@ -230,15 +230,15 @@ export default class AccountHeader extends ImmutablePureComponent {
         </div>
         <div className='tabs'>
           <NavLink to={`/@${account.get('acct')}`} exact>
-            0album 0trakcs{/* TODO: */}
+            0 album 0 trakcs{/* TODO: */}
           </NavLink>
           <NavLink to={`/users/${account.get('acct')}/followers`} exact>
+            <strong><FormattedNumber value={account.get('followers_count')} />{extraInfo} </strong>
             <span><FormattedMessage id='account.followers' defaultMessage='Followers' /></span>
-            <strong><FormattedNumber value={account.get('followers_count')} /> {extraInfo}</strong>
           </NavLink>
           <NavLink to={`/users/${account.get('acct')}/following`} exact>
+            <strong><FormattedNumber value={account.get('following_count')} />{extraInfo} </strong>
             <span><FormattedMessage id='account.follows' defaultMessage='Follows' /></span>
-            <strong><FormattedNumber value={account.get('following_count')} /> {extraInfo}</strong>
           </NavLink>
           {menu.length > 0 && <DropdownMenu items={menu} src='more-horizontal' />}
         </div>
