@@ -5,7 +5,7 @@ import AlbumComposeContainer from '../../containers/album_compose';
 import TrackComposeContainer from '../../containers/track_compose';
 import LoadingBarContainer from '../../../mastodon/features/ui/containers/loading_bar_container';
 import NotificationsContainer from '../../../mastodon/features/ui/containers/notifications_container';
-import ModalContainer from '../../../mastodon/features/ui/containers/modal_container';
+import ModalContainer from '../../containers/modal_container';
 import { isMobile } from '../../util/is_mobile';
 
 export default class Upload extends PureComponent {

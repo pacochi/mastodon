@@ -1,8 +1,5 @@
 .scrollarea {
   height: 100%;
-
-  .scrollable {
-  }
 }
 
 .empty-column-indicator {
@@ -16,4 +13,5 @@
 
 .sp .scrollable {
   overflow-y: scroll;
+  -webkit-overflow-scrolling: touch;
 }

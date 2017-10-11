@@ -17,7 +17,7 @@ import FavouritedStatusesContainer from '../favourited_statuses';
 import Intent from '../../components/intent';
 import LoadingBarContainer from '../../../mastodon/features/ui/containers/loading_bar_container';
 import NotificationsContainer from '../../../mastodon/features/ui/containers/notifications_container';
-import ModalContainer from '../../../mastodon/features/ui/containers/modal_container';
+import ModalContainer from '../modal_container';
 import AccountFollowersContainer from '../account_followers';
 import AccountFollowingContainer from '../account_following';
 import StatusThreadContainer from '../status_thread';
@@ -128,22 +128,22 @@ export default class App extends PureComponent {
       if(footerType === 'lobby_gallery') {
         buttons = (
           <div className='buttons'>
-            <button className={classNames({ 'selected': target === 'lobby'   })} onClick={this.handleClickLobbyButton}  >チャット</button>
-            <button className={classNames({ 'selected': target === 'gallery' })} onClick={this.handleClickGalleryButton}>作品</button>
+            <div role='button' tabIndex='0' className={classNames('app-bottom_button', { 'selected': target === 'lobby'   })} onClick={this.handleClickLobbyButton}  >チャット</div>
+            <div role='button' tabIndex='0' className={classNames('app-bottom_button', { 'selected': target === 'gallery' })} onClick={this.handleClickGalleryButton}>作品</div>
           </div>
         );
 
       } else if(footerType === 'back_to_user') {
         buttons = (
           <div className='buttons'>
-            <Link className='selected' to={backTo} >戻る</Link>
+            <Link className='app-bottom_button selected' to={backTo} >戻る</Link>
           </div>
         );
 
       } else { // Do same action as (footerType === 'history_back')
         buttons = (
           <div className='buttons'>
-            <button className='selected' onClick={this.handleClickHistoryBackButton}>戻る</button>
+            <div className='app-bottom_button selected' role='button' tabIndex='0' onClick={this.handleClickHistoryBackButton}>戻る</div>
           </div>
         );
       }
@@ -162,7 +162,7 @@ export default class App extends PureComponent {
               <div className='timeline_title'>{title}</div>
             </div>
             <div className='post_status' role='button' tabIndex='0' onClick={this.handleClickStatusPostButton}>+</div>
-            <a   className='post_track' href='/tracks/new'>💿</a>
+            <a className='post_track' href='/tracks/new'>💿</a>
           </div>
 
           <div className='app-bottom'>{buttons}</div>
