@@ -15,6 +15,7 @@
 
   .status-head {
     display: flex;
+    align-items: center;
 
     .account {
       flex: 1;
@@ -32,7 +33,7 @@
 
   .status__content {
     display:    block;
-    margin:     var(--verticalspace20);
+    margin:     var(--verticalspace10);
 
     font-size:    var(--text20-font);
     line-height:  var(--text20-line);
