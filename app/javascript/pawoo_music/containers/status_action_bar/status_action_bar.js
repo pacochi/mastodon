@@ -24,6 +24,7 @@ import {
 import { muteStatus, unmuteStatus, deleteStatus, pinStatus, unpinStatus } from '../../../mastodon/actions/statuses';
 import { initReport } from '../../../mastodon/actions/reports';
 import { openModal } from '../../../mastodon/actions/modal';
+import { generateTrackMv } from '../../actions/tracks';
 
 const messages = defineMessages({
   delete: { id: 'status.delete', defaultMessage: 'Delete' },
@@ -42,6 +43,10 @@ const messages = defineMessages({
   unmuteConversation: { id: 'status.unmute_conversation', defaultMessage: 'Unmute conversation' },
   pin: { id: 'status.pin', defaultMessage: 'Pin to account page' },
   unpin: { id: 'status.unpin', defaultMessage: 'Unpin from account page' },
+
+  generate_mv: { id: 'status.generate_mv', defaultMessage: 'Generate the video' },
+  regenerate_mv: { id: 'status.regenerate_mv', defaultMessage: 'Regenerate the video' },
+  download_mv: { id: 'status.download_mv', defaultMessage: 'Download generated video' },
 
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
   deleteMessage: { id: 'confirmations.delete.message', defaultMessage: 'Are you sure you want to delete this status?' },
@@ -202,6 +207,29 @@ export default class StatusActionBar extends ImmutablePureComponent {
     dispatch(reblog(status));
   }
 
+  handleGenerateMvClick = () => {
+    const { dispatch, status } = this.props;
+    dispatch(openModal('CONFIRM', {
+      message: <FormattedMessage id='confirmations.generate_mv.message' defaultMessage='Generating animation takes time. When generation is completed, a notification is sent by e-mail.' />,
+      confirm: <FormattedMessage id='confirmations.generate_mv.confirm' defaultMessage='Generate' />,
+      onConfirm: () => dispatch(generateTrackMv(status.get('id'))),
+    }));
+  }
+
+  handleDownloadMvClick = () => {
+    const { status } = this.props;
+    const url = status.getIn(['track', 'video', 'url']);
+
+    if (!url) {
+      return;
+    }
+
+    const a = document.createElement('a');
+    a.download = `${status.getIn(['track', 'artist'])} - ${status.getIn(['track', 'title'])}.mp4`;
+    a.href = url;
+    a.click();
+  }
+
   render () {
     const { status, me, intl, withDismiss } = this.props;
     const { schedule } = this.context;
@@ -233,6 +261,19 @@ export default class StatusActionBar extends ImmutablePureComponent {
       }
 
       menu.push({ text: intl.formatMessage(messages.delete), action: this.handleDeleteClick });
+
+      if (status.get('track')) {
+        const url = status.getIn(['track', 'video', 'url']);
+
+        menu.push(null);
+
+        if (url) {
+          menu.push({ text: intl.formatMessage(messages.download_mv), action: this.handleDownloadMvClick });
+          menu.push({ text: intl.formatMessage(messages.regenerate_mv), action: this.handleGenerateMvClick });
+        } else {
+          menu.push({ text: intl.formatMessage(messages.generate_mv), action: this.handleGenerateMvClick });
+        }
+      }
     } else {
       menu.push({ text: intl.formatMessage(messages.mention, { name: status.getIn(['account', 'username']) }), action: this.handleMentionClick });
       menu.push(null);
