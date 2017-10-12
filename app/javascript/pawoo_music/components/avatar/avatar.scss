@@ -1,10 +1,11 @@
 .avatar {
   display:        block;
   overflow:       hidden;
-  margin:         0 calc(var(--grid) * 1) 0 0;
+  margin:         var(--rightspace10);
 
   background-size: var(--iconsize30)  var(--iconsize30);
   width:           var(--iconsize30);
+  min-width:       var(--iconsize30);
   height:          var(--iconsize30);
   border-radius:   var(--iconsize30);
 
