@@ -4757,9 +4757,9 @@ multicast-dns@^6.0.1:
     dns-packet "^1.0.1"
     thunky "^0.1.0"
 
-"musicvideo-generator@github.com:pixiv/musicvideo-generator.git":
+"musicvideo-generator@git+ssh://git@github.com:pixiv/musicvideo-generator.git":
   version "1.0.0"
-  resolved "github.com:pixiv/musicvideo-generator.git#00e8b58460f211bc3e4043aaa31dfc22b7f39eb3"
+  resolved "git+ssh://git@github.com:pixiv/musicvideo-generator.git#f7fe855ae473cfbb2e9ec15cd431882fc163b3d0"
   dependencies:
     pixi.js "^4.5.4"
 
@@ -7610,6 +7610,10 @@ typed-function@0.10.5:
 typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
+
+ua-parser-js@^0.7.14:
+  version "0.7.14"
+  resolved "https://registry.yarnpkg.com/ua-parser-js/-/ua-parser-js-0.7.14.tgz#110d53fa4c3f326c121292bbeac904d2e03387ca"
 
 ua-parser-js@^0.7.9:
   version "0.7.13"

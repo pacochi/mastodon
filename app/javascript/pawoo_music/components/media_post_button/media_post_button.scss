@@ -2,11 +2,11 @@
   display: flex;
   justify-content: center;
   align-items: center;
-
   height: calc(var(--grid) * 18);
   background-color: var(--color2);
   border-radius: 0 0 var(--radius-big) var(--radius-big);
   transition: all 0.3s ease;
+  cursor: pointer;
 
   .icon-button {
     display: flex;
