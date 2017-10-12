@@ -47,7 +47,7 @@ export default class ScrollableList extends PureComponent {
       const offset = scrollHeight - scrollTop - clientHeight;
       this._oldScrollPosition = scrollHeight - scrollTop;
 
-      if (400 > offset && this.props.onScrollToBottom && !this.props.isLoading) {
+      if (400 > offset && this.props.onScrollToBottom && !this.props.isLoading && this.props.hasMore) {
         this.props.onScrollToBottom();
       } else if (scrollTop < 100 && this.props.onScrollToTop) {
         this.props.onScrollToTop();
@@ -96,7 +96,7 @@ export default class ScrollableList extends PureComponent {
 
   attachIntersectionObserver () {
     this.intersectionObserverWrapper.connect({
-      root: this.wrapper,
+      root: this.node,
       rootMargin: '300% 0px',
     });
   }
@@ -106,11 +106,11 @@ export default class ScrollableList extends PureComponent {
   }
 
   attachScrollListener () {
-    this.wrapper.addEventListener('scroll', this.handleScroll);
+    this.node.addEventListener('scroll', this.handleScroll);
   }
 
   detachScrollListener () {
-    this.wrapper.removeEventListener('scroll', this.handleScroll);
+    this.node.removeEventListener('scroll', this.handleScroll);
   }
 
   getFirstChildKey (props) {
