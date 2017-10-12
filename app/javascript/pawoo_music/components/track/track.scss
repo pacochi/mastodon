@@ -2,17 +2,16 @@
   margin:     var(--verticalspace20);
 
   .musicvideo-wrapper {
-    display:    block;
-    position:   relative;
+    display: block;
+    position: relative;
 
     box-shadow: var(--shadow);
 
     .thumbnail {
-      width:    100%;
-
-      .albumart {
-        width:    100% ;
-      }
+      width:  var(--width-gallery);
+      height: var(--width-gallery); // aspect ratio 1:1
+      background-size: cover;
+      background-position: center center;
 
       img {
         display: block;
