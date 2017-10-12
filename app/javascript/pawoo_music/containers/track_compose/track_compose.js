@@ -6,8 +6,6 @@ import { ChromePicker } from 'react-color';
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import {
-  // focusTrackComposeBasicTab,
-  // focusTrackComposeVideoTab,
   changeTrackComposeTrackTitle,
   changeTrackComposeTrackArtist,
   changeTrackComposeTrackText,
@@ -40,14 +38,6 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
-  // onFocusBasicTab () {
-  //   dispatch(focusTrackComposeBasicTab());
-  // },
-  //
-  // onFocusVideoTab () {
-  //   dispatch(focusTrackComposeVideoTab());
-  // },
-
   onChangeTrackTitle (value) {
     dispatch(changeTrackComposeTrackTitle(value));
   },
@@ -118,8 +108,6 @@ const mapDispatchToProps = (dispatch) => ({
 export default class TrackCompose extends ImmutablePureComponent {
 
   static propTypes = {
-    onFocusBasicTab: PropTypes.func.isRequired,
-    onFocusVideoTab: PropTypes.func.isRequired,
     onChangeTrackTitle: PropTypes.func.isRequired,
     onChangeTrackArtist: PropTypes.func.isRequired,
     onChangeTrackText: PropTypes.func.isRequired,
