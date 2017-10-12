@@ -139,6 +139,11 @@ export default class TrackCompose extends ImmutablePureComponent {
     track: ImmutablePropTypes.map.isRequired,
     isSubmitting: PropTypes.bool.isRequired,
     intl: PropTypes.object.isRequired,
+    onClose: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
+  }
+
+  static defaultProps = {
+    onClose: false,
   }
 
   trackMusicRef = null;
@@ -222,6 +227,15 @@ export default class TrackCompose extends ImmutablePureComponent {
   handleSubmit = (e) => {
     e.preventDefault();
     this.props.onSubmit();
+  }
+
+  handleCancel = (e) => {
+    e.preventDefault();
+    if (typeof this.props.onClose === 'function') {
+      this.props.onClose();
+    } else {
+      location.href = '/';
+    }
   }
 
   setTrackMusicRef = (ref) => {
@@ -549,14 +563,14 @@ export default class TrackCompose extends ImmutablePureComponent {
               defaultMessage='Save'
             />
           </button>
-          <a href='/'>
-            <button>
-              <FormattedMessage
-                id='column_back_button.label'
-                defaultMessage='Back'
-              />
-            </button>
-          </a>
+          <button
+            onClick={this.handleCancel}
+          >
+            <FormattedMessage
+              id='column_back_button.label'
+              defaultMessage='Back'
+            />
+          </button>
         </div>
       </div>
     );
