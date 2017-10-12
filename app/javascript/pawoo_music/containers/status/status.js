@@ -12,6 +12,7 @@ import AccountContainer from '../account';
 import StatusMedia from '../status_media';
 import StatusMeta from '../../components/status_meta';
 import StatusPrepend from '../../components/status_prepend';
+import Link from 'react-router-dom/Link';
 
 const makeMapStateToProps = () => {
   const getStatus = makeGetStatus();
@@ -63,8 +64,6 @@ export default class Status extends ImmutablePureComponent {
     if (status.get('reblog')) {
       status = status.get('reblog');
     }
-
-    this.context.router.history.push(`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`);
   }
 
   render () {
@@ -98,9 +97,9 @@ export default class Status extends ImmutablePureComponent {
         <div className='status-head'>
           <AccountContainer account={status.get('account')} />
           {!detail && (
-            <a href={status.get('url')} className='status-time' target='_blank' rel='noopener'>
+            <Link className='status-time' to={`/@${status.get('account').get('acct')}/${status.get('id')}`}>
               <Timestamp schedule={schedule} timestamp={status.get('created_at')} />
-            </a>
+            </Link>
           )}
         </div>
 

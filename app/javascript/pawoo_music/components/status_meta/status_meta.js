@@ -2,6 +2,7 @@ import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { FormattedDate, FormattedNumber } from 'react-intl';
+import Link from 'react-router-dom/Link';
 
 export default class StatusMeta extends ImmutablePureComponent {
 
@@ -33,9 +34,10 @@ export default class StatusMeta extends ImmutablePureComponent {
 
     return (
       <div className='meta'>
-        <a className='absolute-time' href={status.get('url')} target='_blank' rel='noopener'>
+
+        <Link className='absolute-time' to={`/@${status.get('account').get('acct')}/${status.get('id')}`}>
           <FormattedDate value={new Date(status.get('created_at'))} hour12={false} year='numeric' month='short' day='2-digit' hour='2-digit' minute='2-digit' />
-        </a>
+        </Link>
         {applicationLink}
         {' \u00A0 '}
         <span>
