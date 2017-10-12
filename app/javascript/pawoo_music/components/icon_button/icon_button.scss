@@ -3,7 +3,6 @@
   width: var(--iconsize13);
   height: var(--iconsize13);
   line-height: 0;
-  cursor: pointer;
 
   svg {
     width: var(--iconsize13);
@@ -12,11 +11,15 @@
     transition: all 0.2s var(--hover-timing);
   }
 
-  &:hover {
-    svg {
-      stroke-width: 2px;
-      transform: scale(1.4);
-      stroke: var(--strong1);
+  &.clickable {
+    cursor: pointer;
+
+    &:hover {
+      svg {
+        stroke-width: 2px;
+        transform: scale(1.4);
+        stroke: var(--strong1);
+      }
     }
   }
 }

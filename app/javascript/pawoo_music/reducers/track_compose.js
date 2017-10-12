@@ -13,6 +13,7 @@ import {
   TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_VISIBLITY_CHANGE,
   TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_COLOR_CHANGE,
   TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_LIMIT_THRESHOLD_CHANGE,
+  TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_VISIBILITY_CHANGE,
   TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_VISIBLITY_CHANGE,
   TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_MODE_CHANGE,
   TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_COLOR_CHANGE,
@@ -47,6 +48,7 @@ const initialState = Immutable.fromJS({
           limit: { threshold: 150, band: { bottom: 300, top: 2000 } },
        },
       },
+      lightleaks: { visible: false },
       spectrum: { visible: true, params: { mode: 2, color: 0xffffff } },
     },
   },
@@ -82,6 +84,8 @@ export default function track_compose(state = initialState, action) {
     return state.setIn(['track', 'video', 'particle', 'params', 'color'], action.value);
   case TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_LIMIT_THRESHOLD_CHANGE:
     return state.setIn(['track', 'video', 'particle', 'params', 'limit', 'threshold'], action.value);
+  case TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_VISIBILITY_CHANGE:
+    return state.setIn(['track', 'video', 'lightleaks'], action.value);
   case TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_VISIBLITY_CHANGE:
     return state.setIn(['track', 'video', 'spectrum', 'visible'], action.value);
   case TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_MODE_CHANGE:

@@ -12,15 +12,12 @@ class HomeController < ApplicationController
   end
 
   def web
-    # TODO: /webから始まるパスの場合、適切なパスにリダイレクトする
-    redirect_to root_path
+    redirect_to find_redirect_path_from_request
   end
 
   private
 
   def find_redirect_path_from_request
-    return account_path(Account.first) if single_user_mode?
-
     case request.path
     when %r{\A/web/statuses/(?<status_id>\d+)\z}
       status_id = Regexp.last_match[:status_id]
@@ -33,6 +30,6 @@ class HomeController < ApplicationController
     when %r{\A/web/timelines/tag/(?<tag>.+)\z}
       return tag_path(URI.decode(Regexp.last_match[:tag]))
     end
-    about_path
+    root_path
   end
 end

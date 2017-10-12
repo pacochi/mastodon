@@ -24,6 +24,7 @@ class CreateMusicTables < ActiveRecord::Migration[5.1]
       t.integer :video_particle_limit_band_top, default: 0, null: false
       t.integer :video_particle_limit_threshold, default: 0, null: false
       t.integer :video_particle_color
+      t.boolean :video_lightleaks, default: false, null: false
       t.integer :video_spectrum_mode
       t.integer :video_spectrum_color
     end

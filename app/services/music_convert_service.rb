@@ -60,6 +60,10 @@ class MusicConvertService < BaseService
       )
     end
 
+    if track.video_lightleaks
+      args.push '--lightleaks'
+    end
+
     if track.video_spectrum_mode.present? && track.video_spectrum_color.present?
       args.push(
         '--spectrum-mode', track.video_spectrum_mode,
