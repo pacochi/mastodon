@@ -38,7 +38,7 @@ export default class IconButton extends PureComponent {
         title={title}
         role={clickable ? 'button' : 'presentation'}
         tabIndex={tabindex}
-        ariaPressed='false'
+        aria-pressed='false'
       />
     );
   }
