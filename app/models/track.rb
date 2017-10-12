@@ -28,10 +28,14 @@
 #  video_particle_limit_band_bottom :integer          default(0), not null
 #  video_particle_limit_band_top    :integer          default(0), not null
 #  video_particle_limit_threshold   :integer          default(0), not null
-#  video_particle_color             :integer
-#  video_lightleaks                 :boolean          default(FALSE), not null
-#  video_spectrum_mode              :integer
-#  video_spectrum_color             :integer
+#  video_particle_alpha             :float            default(0.0), not null
+#  video_particle_color             :integer          default(0), not null
+#  video_lightleaks_alpha           :float            default(0.0), not null
+#  video_spectrum_mode              :integer          default(0), not null
+#  video_spectrum_alpha             :float            default(0.0), not null
+#  video_spectrum_color             :integer          default(0), not null
+#  video_text_alpha                 :float            default(0.0), not null
+#  video_text_color                 :integer          default(0), not null
 #
 
 class Track < ApplicationRecord

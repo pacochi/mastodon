@@ -43,17 +43,28 @@ const particleLimit = parseLimit('particleLimitBandBottom',
                                  'particleLimitBandTop',
                                  'particleLimitThreshold');
 
-const particle = particleLimit === undefined && argv.particleColor === undefined ?
-  undefined: { limit: particleLimit, color: argv.particleColor };
+const particle =
+  particleLimit === undefined &&
+  argv.particleAlpha === undefined && argv.particleColor === undefined ?
+    undefined :
+    { limit: particleLimit, alpha: argv.particleAlpha, color: argv.particleColor };
 
-const lightLeaks = argv.lightleaks === true;
+const lightLeaks =
+  argv.lightleaksAlpha === undefined && argv.lightleaksInterval === undefined ?
+    undefined :
+    { alpha: argv.lightleaksAlpha, interval: argv.lightleaksInterval };
 
 const spectrum =
-  argv.spectrumMode === undefined && argv.spectrumColor === undefined ?
-    undefined : { mode: argv.spectrumMode, color: argv.spectrumColor };
+  argv.spectrumMode === undefined && argv.spectrumAlpha === undefined &&
+  argv.spectrumColor === undefined ?
+    undefined :
+    { mode: argv.spectrumMode, alpha: argv.spectrumAlpha, color: argv.spectrumColor };
 
-const text = argv.textTitle === undefined && argv.textSub === undefined ?
-  undefined : { title: argv.textTitle, sub: argv.textSub };
+const text =
+  argv.textAlpha === undefined && argv.textColor === undefined ?
+  argv.textTitle === undefined && argv.textSub === undefined ?
+    undefined :
+    { alpha: argv.textAlpha, color: argv.textColor, title: argv.textTitle, sub: argv.textSub };
 
 const imageSrc = argv.image === undefined ? undefined : url.format({
   pathname: path.resolve(argv.image),

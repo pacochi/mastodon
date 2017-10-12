@@ -37,12 +37,20 @@ describe Api::V1::TracksController, type: :controller do
           },
           particle: {
             limit: { band: { bottom: 300, top: 2000 }, threshold: 165 },
+            alpha: 1,
             color: 0xff0000,
           },
-          lightleaks: true,
+          lightleaks: {
+            alpha: 1,
+          },
           spectrum: {
             mode: 0,
+            alpha: 1,
             color: 0xff0000,
+          },
+          text: {
+            alpha: 1,
+            color: 0xffffff,
           },
         }
 
@@ -69,10 +77,14 @@ describe Api::V1::TracksController, type: :controller do
         expect(status.music.video_particle_limit_band_bottom).to eq 300
         expect(status.music.video_particle_limit_band_top).to eq 2000
         expect(status.music.video_particle_limit_threshold).to eq 165
+        expect(status.music.video_particle_alpha).to eq 1
         expect(status.music.video_particle_color).to eq 0xff0000
-        expect(status.music.video_lightleaks).to eq true
+        expect(status.music.video_lightleaks_alpha).to eq 1
         expect(status.music.video_spectrum_mode).to eq 0
+        expect(status.music.video_spectrum_alpha).to eq 1
         expect(status.music.video_spectrum_color).to eq 0xff0000
+        expect(status.music.video_text_alpha).to eq 1
+        expect(status.music.video_text_color).to eq 0xffffff
 
         expect(body_as_json[:visibility]).to eq 'public'
         expect(body_as_json[:track][:title]).to eq 'title'
@@ -138,12 +150,20 @@ describe Api::V1::TracksController, type: :controller do
           },
           particle: {
             limit: { band: { bottom: 300, top: 2000 }, threshold: 165 },
+            alpha: 1,
             color: 0xff0000,
           },
-          lightleaks: true,
+          lightleaks: {
+            alpha: 1,
+          },
           spectrum: {
             mode: 0,
+            alpha: 1,
             color: 0xff0000,
+          },
+          text: {
+            alpha: 1,
+            color: 0xffffff,
           },
         }
 
@@ -164,10 +184,14 @@ describe Api::V1::TracksController, type: :controller do
         expect(track.video_particle_limit_band_bottom).to eq 300
         expect(track.video_particle_limit_band_top).to eq 2000
         expect(track.video_particle_limit_threshold).to eq 165
+        expect(track.video_particle_alpha).to eq 1
         expect(track.video_particle_color).to eq 0xff0000
-        expect(track.video_lightleaks).to eq true
+        expect(track.video_lightleaks_alpha).to eq 1
         expect(track.video_spectrum_mode).to eq 0
+        expect(track.video_spectrum_alpha).to eq 1
         expect(track.video_spectrum_color).to eq 0xff0000
+        expect(track.video_text_alpha).to eq 1
+        expect(track.video_text_color).to eq 0xffffff
 
         expect(body_as_json[:id]).to eq status.id
         expect(body_as_json[:track][:title]).to eq 'updated title'
@@ -225,10 +249,11 @@ describe Api::V1::TracksController, type: :controller do
       it 'unsets video particle parameters if empty string is given' do
         track = Fabricate(
           :track,
-          video_particle_limit_band_bottom: 0,
-          video_particle_limit_band_top: 0,
-          video_particle_limit_threshold: 0,
-          video_particle_color: nil
+          video_particle_limit_band_bottom: 300,
+          video_particle_limit_band_top: 2000,
+          video_particle_limit_threshold: 165,
+          video_particle_alpha: 1,
+          video_particle_color: 0xff0000
         )
         status = Fabricate(:status, account: user.account, music: track)
 
@@ -238,7 +263,8 @@ describe Api::V1::TracksController, type: :controller do
         expect(track.video_particle_limit_band_bottom).to eq 0
         expect(track.video_particle_limit_band_top).to eq 0
         expect(track.video_particle_limit_threshold).to eq 0
-        expect(track.video_particle_color).to eq nil
+        expect(track.video_particle_alpha).to eq 0
+        expect(track.video_particle_color).to eq 0
       end
 
       it 'does not change video particle parameters if nothing is given' do
@@ -247,6 +273,7 @@ describe Api::V1::TracksController, type: :controller do
           video_particle_limit_band_bottom: 300,
           video_particle_limit_band_top: 2000,
           video_particle_limit_threshold: 165,
+          video_particle_alpha: 1,
           video_particle_color: 0xff0000
         )
         status = Fabricate(:status, account: user.account, music: track)
@@ -257,33 +284,35 @@ describe Api::V1::TracksController, type: :controller do
         expect(track.video_particle_limit_band_bottom).to eq 300
         expect(track.video_particle_limit_band_top).to eq 2000
         expect(track.video_particle_limit_threshold).to eq 165
+        expect(track.video_particle_alpha).to eq 1
         expect(track.video_particle_color).to eq 0xff0000
       end
 
       it 'unsets video lightleaks parameters if empty string is given' do
-        track = Fabricate(:track, video_lightleaks: true)
+        track = Fabricate(:track, video_lightleaks_alpha: 1)
         status = Fabricate(:status, account: user.account, music: track)
 
         patch :update, params: { id: status, video: { lightleaks: '' } }
 
         track.reload
-        expect(track.video_lightleaks).to eq false
+        expect(track.video_lightleaks_alpha).to eq 0
       end
 
       it 'does not change video lightleaks parameters if nothing is given' do
-        track = Fabricate(:track, video_lightleaks: true)
+        track = Fabricate(:track, video_lightleaks_alpha: 1)
         status = Fabricate(:status, account: user.account, music: track)
 
         patch :update, params: { id: status }
 
         track.reload
-        expect(track.video_lightleaks).to eq true
+        expect(track.video_lightleaks_alpha).to eq 1
       end
 
       it 'unsets video spectrum parameters if empty string is given' do
         track = Fabricate(
           :track,
           video_spectrum_mode: 0,
+          video_spectrum_alpha: 1,
           video_spectrum_color: 0xff0000
         )
         status = Fabricate(:status, account: user.account, music: track)
@@ -291,14 +320,16 @@ describe Api::V1::TracksController, type: :controller do
         patch :update, params: { id: status, video: { spectrum: '' } }
 
         track.reload
-        expect(track.video_spectrum_mode).to eq nil
-        expect(track.video_spectrum_color).to eq nil
+        expect(track.video_spectrum_mode).to eq 0
+        expect(track.video_spectrum_alpha).to eq 0
+        expect(track.video_spectrum_color).to eq 0
       end
 
       it 'does not change video spectrum parameters if nothing is given' do
         track = Fabricate(
           :track,
           video_spectrum_mode: 0,
+          video_spectrum_alpha: 1,
           video_spectrum_color: 0xff0000
         )
         status = Fabricate(:status, account: user.account, music: track)
@@ -307,7 +338,36 @@ describe Api::V1::TracksController, type: :controller do
 
         track.reload
         expect(track.video_spectrum_mode).to eq 0
+        expect(track.video_spectrum_alpha).to eq 1
         expect(track.video_spectrum_color).to eq 0xff0000
+      end
+
+      it 'unsets video text parameter if empty string is given' do
+        track = Fabricate(:track,
+          video_text_alpha: 1,
+          video_text_color: 0xffffff
+        )
+        status = Fabricate(:status, account: user.account, music: track)
+
+        patch :update, params: { id: status, video: { text: '' } }
+
+        track.reload
+        expect(track.video_text_alpha).to eq 0
+        expect(track.video_text_color).to eq 0
+      end
+
+      it 'does not change video spectrum parameters if nothing is given' do
+        track = Fabricate(:track,
+          video_text_alpha: 1,
+          video_text_color: 0xffffff
+        )
+        status = Fabricate(:status, account: user.account, music: track)
+
+        patch :update, params: { id: status }
+
+        track.reload
+        expect(track.video_text_alpha).to eq 1
+        expect(track.video_text_color).to eq 0xffffff
       end
 
       it 'returns http success' do

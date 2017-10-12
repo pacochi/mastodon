@@ -72,7 +72,7 @@ child({ music: :track }, if: ->(status) { !status.reblog? && status.music.is_a?(
       }
     end
 
-    if track.video_particle_color.present?
+    if track.video_particle_alpha != 0
       hash[:particle] = {
         limit: {
           band: {
@@ -81,16 +81,30 @@ child({ music: :track }, if: ->(status) { !status.reblog? && status.music.is_a?(
           },
           threshold: track.video_particle_limit_threshold,
         },
+        alpha: track.video_particle_alpha,
         color: track.video_particle_color,
       }
     end
 
-    hash[:lightleaks] = true if track.video_lightleaks
+    if track.video_lightleaks_alpha != 0
+      hash[:lightleaks] = {
+        alpha: track.video_lightleaks_alpha,
+        interval: track.video_lightleaks_interval,
+      }
+    end
 
-    if track.video_spectrum_mode.present? && track.video_spectrum_color.present?
+    if track.video_spectrum_alpha != 0
       hash[:spectrum] = {
         mode: track.video_spectrum_mode,
+        alpha: track.video_spectrum_alpha,
         color: track.video_spectrum_color,
+      }
+    end
+
+    if track.video_text_alpha != 0
+      hash[:text] = {
+        alpha: track.video_text_alpha,
+        color: track.video_text_color,
       }
     end
 

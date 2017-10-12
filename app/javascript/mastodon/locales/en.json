@@ -219,6 +219,7 @@
   "pawoo_music.track_compose.video.circle": "Circle",
   "pawoo_music.track_compose.video.circle_columns": "Columns around circle",
   "pawoo_music.track_compose.video.image": "Image",
+  "pawoo_music.track_compose.video.interval": "Interval",
   "pawoo_music.track_compose.video.lightleaks": "Light leaks",
   "pawoo_music.track_compose.video.limit_threshold": "Threshold triggering change",
   "pawoo_music.track_compose.video.mode": "Mode",

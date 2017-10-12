@@ -97,32 +97,60 @@ class Api::V1::TracksController < Api::BaseController
         video_particle_limit_band_bottom: 0,
         video_particle_limit_band_top: 0,
         video_particle_limit_threshold: 0,
-        video_particle_color: nil,
+        video_particle_alpha: 0,
+        video_particle_color: 0,
       )
     else
       attributes.merge!(
         video_particle_limit_band_bottom: params.dig('video', 'particle', 'limit', 'band', 'bottom'),
         video_particle_limit_band_top: params.dig('video', 'particle', 'limit', 'band', 'top'),
         video_particle_limit_threshold: params.dig('video', 'particle', 'limit', 'threshold'),
+        video_particle_alpha: params.dig('video', 'particle', 'alpha'),
         video_particle_color: params.dig('video', 'particle', 'color'),
       )
     end
 
-    if params.dig('video', 'particle').present?
-      attributes.merge! video_lightleaks: params.dig('video', 'lightleaks') != ''
+    case params.dig('video', 'lightleaks')
+    when nil
+    when ''
+      attributes.merge!(
+        video_lightleaks_alpha: 0,
+        video_lightleaks_interval: 0
+      )
+    else
+      attributes.merge!(
+        video_lightleaks_alpha: params.dig('video', 'lightleaks', 'alpha'),
+        video_lightleaks_interval: params.dig('video', 'lightleaks', 'interval')
+      )
     end
 
     case params.dig('video', 'spectrum')
     when nil
     when ''
       attributes.merge!(
-        video_spectrum_mode: nil,
-        video_spectrum_color: nil,
+        video_spectrum_mode: 0,
+        video_spectrum_alpha: 0,
+        video_spectrum_color: 0,
       )
     else
       attributes.merge!(
         video_spectrum_mode: params.dig('video', 'spectrum', 'mode'),
+        video_spectrum_alpha: params.dig('video', 'spectrum', 'alpha'),
         video_spectrum_color: params.dig('video', 'spectrum', 'color'),
+      )
+    end
+
+    case params.dig('video', 'text')
+    when nil
+    when ''
+      attributes.merge!(
+        video_text_alpha: 0,
+        video_text_color: 0
+      )
+    else
+      attributes.merge!(
+        video_text_alpha: params.dig('video', 'text', 'alpha'),
+        video_text_color: params.dig('video', 'text', 'color')
       )
     end
 
