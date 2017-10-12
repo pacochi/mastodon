@@ -11,8 +11,12 @@
     "test": "npm run test:lint && npm run test:mocha",
     "test:lint": "eslint -c .eslintrc.yml --ext=js app/javascript/ config/webpack/ spec/javascript/ storybook/ streaming/",
     "test:mocha": "cross-env NODE_ENV=test mocha --require ./spec/javascript/setup.js --compilers js:babel-register ./spec/javascript/components/*.test.js",
-    "postinstall": "npm rebuild node-sass"
+    "postinstall": "npm rebuild node-sass",
+    "precommit": "./bin/precommit"
   },
+  "pre-commit": [
+    "precommit"
+  ],
   "repository": {
     "type": "git",
     "url": "https://github.com/tootsuite/mastodon.git"
@@ -137,8 +141,11 @@
     "eslint-plugin-import": "~2.7.0",
     "eslint-plugin-jsx-a11y": "^4.0.0",
     "eslint-plugin-react": "^6.10.3",
+    "imagemin-cli": "^3.0.0",
     "jsdom": "^11.0.0",
+    "jsonlint": "^1.6.2",
     "mocha": "^3.4.1",
+    "pre-commit": "^1.2.2",
     "react-intl-translations-manager": "^5.0.0",
     "react-test-renderer": "^15.6.1",
     "sinon": "^2.3.5",
