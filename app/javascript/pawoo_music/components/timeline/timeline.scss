@@ -63,9 +63,11 @@
     background-color: var(--color2);
 
     .scrollable {
-      padding: var(--padding30);
+      overflow: visible;
 
       .item-list {
+        padding: var(--padding30);
+
         .prepend {
           margin-bottom: var(--padding30);
         }
