@@ -21,11 +21,13 @@ export default class MediaModal extends ImmutablePureComponent {
     index: null,
   };
 
-  handleNextClick = () => {
+  handleNextClick = (e) => {
+    e.stopPropagation();
     this.setState({ index: (this.getIndex() + 1) % this.props.media.size });
   }
 
-  handlePrevClick = () => {
+  handlePrevClick = (e) => {
+    e.stopPropagation();
     this.setState({ index: (this.getIndex() - 1) % this.props.media.size });
   }
 

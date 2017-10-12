@@ -3054,32 +3054,18 @@ button.icon-button.active i.fa-retweet {
   z-index: 9999;
 }
 
-.media-modal {
-  max-width: 80vw;
-  max-height: 80vh;
-  position: relative;
-
-  img,
-  canvas,
-  video {
-    max-width: 80vw;
-    max-height: 80vh;
-    width: auto;
-    height: auto;
-  }
-
-  img,
-  canvas {
-    display: block;
-    background: url('../images/void.png') repeat;
-  }
-}
-
-.media-modal__close {
+.modal-container__nav {
+  align-items: center;
+  background: rgba($base-overlay-background, 0.5);
+  box-sizing: border-box;
+  color: $primary-text-color;
+  cursor: pointer;
+  display: flex;
+  font-size: 24px;
+  height: 100%;
+  padding: 30px 15px;
   position: absolute;
-  right: 4px;
-  top: 4px;
-  z-index: 100;
+  top: 0;
 }
 
 .onboarding-modal {

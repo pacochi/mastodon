@@ -1,4 +1,4 @@
 import MediaModal from './media_modal';
-import './media_post_button.scss';
+import './media_modal.scss';
 
 export default MediaModal;
