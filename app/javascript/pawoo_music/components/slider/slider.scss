@@ -1,0 +1,28 @@
+.rc-slider {
+  width: calc(100% - var(--padding10) * 2);
+
+  &.rc-slider-disabled {
+    background-color: transparent;
+    opacity: 0.5;
+  }
+
+  .rc-slider-rail {
+    background-color: black;
+  }
+
+  .rc-slider-track {
+    background-color: black;
+  }
+
+  .rc-slider-handle {
+    border: solid 2px #1F1F1F;
+    background-color: #585858;
+    box-shadow: none;
+    transition: transform 0.8s var(--hover-timing);
+
+    &:active {
+      cursor: none;
+      transform: scale(1.5);
+    }
+  }
+}

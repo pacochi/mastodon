@@ -2,6 +2,10 @@ export function convertToRgbObject (color) {
   return { r: (0xff & (color >> 16)), g: (0xff & (color >> 8)), b: (0xff & color) };
 };
 
+export function convertToRgbCode (color) {
+  return `rgb(${0xff & (color >> 16)},${0xff & (color >> 8)},${0xff & color})`;
+};
+
 export function constructGeneratorOptions(track, image) {
   const video = track.get('video');
   const lightleaks = video.get('lightleaks');

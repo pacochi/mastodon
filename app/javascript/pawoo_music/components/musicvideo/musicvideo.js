@@ -1,9 +1,12 @@
+import noop from 'lodash/noop';
+import classNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
-import classNames from 'classnames';
 import { Canvas } from 'musicvideo-generator';
+import IconButton from '../icon_button';
+import Slider from '../slider';
 import { constructGeneratorOptions } from '../../util/musicvideo';
 
 import defaultArtwork from '../../../images/pawoo_music/default_artwork.png';
@@ -71,13 +74,19 @@ class Musicvideo extends ImmutablePureComponent {
     this.generator.start();
 
     // シークバーのセットアップ
-    this.seekbar.onchange = () => {
-      const time = this.audioElement.duration * this.seekbar.value / 100;
-      this.audioElement.currentTime = 0; // TODO: 過去にシークできなかった。今は消してもいいかも？
-      this.audioElement.currentTime = time;
-    };
+    // this.seekbar.onchange = () => {
+    //   const time = this.audioElement.duration * this.seekbar.value / 100;
+    //   this.audioElement.currentTime = 0; // TODO: 過去にシークできなかった。今は消してもいいかも？
+    //   this.audioElement.currentTime = time;
+    // };
     this.timer = setInterval(this.updateSeek, 500);
   }
+
+  handleChangeSeekbar = (value) => {
+    const time = this.audioElement.duration * value / 100;
+    this.audioElement.currentTime = 0; // TODO: 過去にシークできなかった。今は消してもいいかも？
+    this.audioElement.currentTime = time;
+  };
 
   componentWillReceiveProps ({ track }) {
     const music = track.get('music');
@@ -174,8 +183,17 @@ class Musicvideo extends ImmutablePureComponent {
         <div className='canvas-container' ref={this.setCanvasContainerRef} aria-label={label} />
         <audio autoPlay={autoPlay} ref={this.setAudioRef} src={music} />
         <div className='controls'>
-          <div className={classNames('toggle', { paused })} onClick={this.handleToggle} role='button' tabIndex='0' aria-pressed='false'>▶︎</div>
-          <input className='seekbar' type='range' min='0' max='100' step='0.1' ref={this.setSeekbarRef} />
+          <div className={classNames('toggle', { disabled: !music })} onClick={music ? this.handleToggle : noop} role='button' tabIndex='0' aria-pressed='false'>
+            {paused ? <IconButton src='play' /> : <IconButton src='pause' />}
+          </div>
+          <Slider
+            min={0}
+            max={100}
+            step={0.1}
+            onChange={this.handleChangeSeekbar}
+            disabled={!music}
+            ref={this.setSeekbarRef}
+          />
         </div>
       </div>
     );

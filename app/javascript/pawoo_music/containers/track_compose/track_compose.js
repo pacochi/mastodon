@@ -2,7 +2,7 @@ import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import PropTypes from 'prop-types';
 import React from 'react';
-import { ChromePicker } from 'react-color';
+import { SketchPicker } from 'react-color';
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import {
@@ -25,7 +25,9 @@ import {
 } from '../../actions/track_compose';
 import IconButton from '../../components/icon_button';
 import Musicvideo from '../../components/musicvideo';
-import { convertToRgbObject } from '../../util/musicvideo';
+import Delay from '../../components/delay';
+import Slider from '../../components/slider';
+import { convertToRgbObject, convertToRgbCode } from '../../util/musicvideo';
 
 const messages = defineMessages({
   preview: { id: 'track_compose.preview', defaultMessage: 'Video preview' },
@@ -138,6 +140,14 @@ export default class TrackCompose extends ImmutablePureComponent {
   trackMusicRef = null;
   trackVideoImageRef = null;
 
+  constructor(props, context) {
+    super(props, context);
+    this.state = {
+      particleColorPickerVisible: false,
+      spectrumColorPickerVisible: false,
+    };
+  }
+
   componentWillReceiveProps ({ track }) {
     if (track.get('music') === null && this.props.track.get('music') !== null &&
         this.trackMusicRef !== null) {
@@ -175,20 +185,20 @@ export default class TrackCompose extends ImmutablePureComponent {
     this.props.onChangeTrackVideoBlurVisibility(target.checked);
   }
 
-  handleChangeTrackBlurParamMovementThreshold = ({ target }) => {
-    this.props.onChangeTrackVideoBlurParamMovementThreshold(target.value);
+  handleChangeTrackBlurParamMovementThreshold = (value) => {
+    this.props.onChangeTrackVideoBlurParamMovementThreshold(value);
   }
 
-  handleChangeTrackVideoBlurParamBlinkThreshold = ({ target }) => {
-    this.props.onChangeTrackVideoBlurParamBlinkThreshold(target.value);
+  handleChangeTrackVideoBlurParamBlinkThreshold = (value) => {
+    this.props.onChangeTrackVideoBlurParamBlinkThreshold(value);
   }
 
   handleChangeTrackVideoParticleVisibility = ({ target }) => {
     this.props.onChangeTrackVideoParticleVisibility(target.checked);
   }
 
-  handleChangeTrackVideoParticleParamLimitThreshold = ({ target }) => {
-    this.props.onChangeTrackVideoParticleParamLimitThreshold(target.value);
+  handleChangeTrackVideoParticleParamLimitThreshold = (value) => {
+    this.props.onChangeTrackVideoParticleParamLimitThreshold(value);
   }
 
   handleChangeTrackVideoParticleParamColor = ({ rgb }) => {
@@ -212,6 +222,20 @@ export default class TrackCompose extends ImmutablePureComponent {
   handleChangeTrackVideoSpectrumParamColor = ({ rgb }) => {
     this.props.onChangeTrackVideoSpectrumParamColor((rgb.r << 16) | (rgb.g << 8) | rgb.b);
   }
+
+  handleToggleParticleColorPickerVisible = () => {
+    this.setState({
+      particleColorPickerVisible: !this.state.particleColorPickerVisible,
+      spectrumColorPickerVisible: false,
+    });
+  };
+
+  handleToggleSpectrumColorPickerVisible = () => {
+    this.setState({
+      particleColorPickerVisible: false,
+      spectrumColorPickerVisible: !this.state.spectrumColorPickerVisible,
+    });
+  };
 
   handleSubmit = (e) => {
     e.preventDefault();
@@ -371,36 +395,37 @@ export default class TrackCompose extends ImmutablePureComponent {
                     />
                   </label>
                 </legend>
-                <label className='horizontal'>
-                  <span className='text'>
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.movement_threshold'
-                      defaultMessage='Threshold triggering movement'
+
+                <div className='track-compose-effect'>
+                  <label className='horizontal'>
+                    <span className='text'>
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.video.movement_threshold'
+                        defaultMessage='Threshold triggering movement'
+                      />
+                    </span>
+                    <Slider
+                      min={128}
+                      max={256}
+                      value={this.props.track.getIn(['video', 'blur', 'params', 'movement', 'threshold'])}
+                      onChange={this.handleChangeTrackBlurParamMovementThreshold}
                     />
-                  </span>
-                  <input
-                    min='128'
-                    max='256'
-                    onChange={this.handleChangeTrackBlurParamMovementThreshold}
-                    type='range'
-                    value={this.props.track.getIn(['video', 'blur', 'params', 'movement', 'threshold'])}
-                  />
-                </label>
-                <label className='horizontal'>
-                  <span className='text'>
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.blink_threshold'
-                      defaultMessage='Threshold triggering blink'
+                  </label>
+                  <label className='horizontal'>
+                    <span className='text'>
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.video.blink_threshold'
+                        defaultMessage='Threshold triggering blink'
+                      />
+                    </span>
+                    <Slider
+                      min={128}
+                      max={256}
+                      value={this.props.track.getIn(['video', 'blur', 'params', 'blink', 'threshold'])}
+                      onChange={this.handleChangeTrackVideoBlurParamBlinkThreshold}
                     />
-                  </span>
-                  <input
-                    min='128'
-                    max='256'
-                    onChange={this.handleChangeTrackVideoBlurParamBlinkThreshold}
-                    type='range'
-                    value={this.props.track.getIn(['video', 'blur', 'params', 'blink', 'threshold'])}
-                  />
-                </label>
+                  </label>
+                </div>
               </fieldset>
 
               <fieldset>
@@ -417,26 +442,54 @@ export default class TrackCompose extends ImmutablePureComponent {
                     />
                   </label>
                 </legend>
-                <label className='horizontal'>
-                  <span className='text'>
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.limit_threshold'
-                      defaultMessage='Threshold triggering change'
+
+                <div className='track-compose-effect'>
+                  <label className='horizontal'>
+                    <span className='text'>
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.video.limit_threshold'
+                        defaultMessage='Threshold triggering change'
+                      />
+                    </span>
+                    <Slider
+                      min={128}
+                      max={256}
+                      value={this.props.track.getIn(['video', 'particle', 'params', 'limit', 'threshold'])}
+                      onChange={this.handleChangeTrackVideoParticleParamLimitThreshold}
                     />
-                  </span>
-                  <input
-                    min='128'
-                    max='256'
-                    onChange={this.handleChangeTrackVideoParticleParamLimitThreshold}
-                    type='range'
-                    value={this.props.track.getIn(['video', 'particle', 'params', 'limit', 'threshold'])}
-                  />
-                </label>
-                <ChromePicker
-                  color={convertToRgbObject(this.props.track.getIn(['video', 'particle', 'params', 'color']))}
-                  disableAlpha
-                  onChange={this.handleChangeTrackVideoParticleParamColor}
-                />
+                  </label>
+
+                  <div className='track-compose-effect'>
+                    <label className='horizontal'>
+                      <span className='text'>
+                        <FormattedMessage
+                          id='pawoo_music.track_compose.video.limit_color'
+                          defaultMessage='Threshold triggering change'
+                        />
+                      </span>
+                      <div className='track-compose-effect-color'>
+                        <div
+                          className='track-compose-effect-color-trigger'
+                          style={{ backgroundColor: convertToRgbCode(this.props.track.getIn(['video', 'particle', 'params', 'color'])) }}
+                          onClick={this.handleToggleParticleColorPickerVisible}
+                          role='button'
+                          tabIndex='-1'
+                        />
+                        <Delay>
+                          {this.state.particleColorPickerVisible && (
+                            <div className='track-compose-effect-color-content'>
+                              <SketchPicker
+                                color={convertToRgbObject(this.props.track.getIn(['video', 'particle', 'params', 'color']))}
+                                disableAlpha
+                                onChange={this.handleChangeTrackVideoParticleParamColor}
+                              />
+                            </div>
+                          )}
+                        </Delay>
+                      </div>
+                    </label>
+                  </div>
+                </div>
               </fieldset>
 
               <label className='horizontal'>
@@ -465,65 +518,85 @@ export default class TrackCompose extends ImmutablePureComponent {
                     />
                   </label>
                 </legend>
-                <label>
-                  <input
-                    checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 0}
-                    name='video-spectrum-mode'
-                    onClick={this.handleChangeTrackVideoSpectrumParamMode}
-                    type='radio'
-                    value='0'
-                  />
-                  <FormattedMessage
-                    id='pawoo_music.track_compose.video.bottom_columns'
-                    defaultMessage='Columns at the bottom'
-                  />
-                </label>
-                <label>
-                  <input
-                    checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 1}
-                    name='video-spectrum-mode'
-                    onChange={this.handleChangeTrackVideoSpectrumParamMode}
-                    type='radio'
-                    value='1'
-                  />
-                  <FormattedMessage
-                    id='pawoo_music.track_compose.video.circle_columns'
-                    defaultMessage='Columns around circle'
-                  />
-                </label>
-                <label>
-                  <input
-                    checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 2}
-                    name='video-spectrum-mode'
-                    onChange={this.handleChangeTrackVideoSpectrumParamMode}
-                    type='radio'
-                    value='2'
-                  />
-                  <FormattedMessage
-                    id='pawoo_music.track_compose.video.circle'
-                    defaultMessage='Circle'
-                  />
-                </label>
-                <label>
-                  <input
-                    checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 3}
-                    name='video-spectrum-mode'
-                    onChange={this.handleChangeTrackVideoSpectrumParamMode}
-                    type='radio'
-                    value='3'
-                  />
-                  <FormattedMessage
-                    id='pawoo_music.track_compose.video.bottom_fill'
-                    defaultMessage='Filled graph at the bottom'
-                  />
-                </label>
+
+                <div className='track-compose-effect'>
+
+                  <label>
+                    <input
+                      checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 0}
+                      name='video-spectrum-mode'
+                      onClick={this.handleChangeTrackVideoSpectrumParamMode}
+                      type='radio'
+                      value='0'
+                    />
+                    <FormattedMessage
+                      id='pawoo_music.track_compose.video.bottom_columns'
+                      defaultMessage='Columns at the bottom'
+                    />
+                  </label>
+                  <label>
+                    <input
+                      checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 1}
+                      name='video-spectrum-mode'
+                      onChange={this.handleChangeTrackVideoSpectrumParamMode}
+                      type='radio'
+                      value='1'
+                    />
+                    <FormattedMessage
+                      id='pawoo_music.track_compose.video.circle_columns'
+                      defaultMessage='Columns around circle'
+                    />
+                  </label>
+                  <label>
+                    <input
+                      checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 2}
+                      name='video-spectrum-mode'
+                      onChange={this.handleChangeTrackVideoSpectrumParamMode}
+                      type='radio'
+                      value='2'
+                    />
+                    <FormattedMessage
+                      id='pawoo_music.track_compose.video.circle'
+                      defaultMessage='Circle'
+                    />
+                  </label>
+                  <label>
+                    <input
+                      checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 3}
+                      name='video-spectrum-mode'
+                      onChange={this.handleChangeTrackVideoSpectrumParamMode}
+                      type='radio'
+                      value='3'
+                    />
+                    <FormattedMessage
+                      id='pawoo_music.track_compose.video.bottom_fill'
+                      defaultMessage='Filled graph at the bottom'
+                    />
+                  </label>
+
+                  <div className='track-compose-effect-color'>
+                    <div
+                      className='track-compose-effect-color-trigger'
+                      style={{ backgroundColor: convertToRgbCode(this.props.track.getIn(['video', 'spectrum', 'params', 'color'])) }}
+                      onClick={this.handleToggleSpectrumColorPickerVisible}
+                      role='button'
+                      tabIndex='-1'
+                    />
+                    <Delay>
+                      {this.state.spectrumColorPickerVisible && (
+                        <div className='track-compose-effect-color-content'>
+                          <SketchPicker
+                            color={convertToRgbObject(this.props.track.getIn(['video', 'spectrum', 'params', 'color']))}
+                            disableAlpha
+                            onChange={this.handleChangeTrackVideoSpectrumParamColor}
+                          />
+                        </div>
+                      )}
+                    </Delay>
+                  </div>
+                </div>
               </fieldset>
 
-              <ChromePicker
-                color={convertToRgbObject(this.props.track.getIn(['video', 'spectrum', 'params', 'color']))}
-                disableAlpha
-                onChange={this.handleChangeTrackVideoSpectrumParamColor}
-              />
             </form>
           </div>
         </div>
