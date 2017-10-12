@@ -11,6 +11,7 @@ import TagHistoryContainer from '../tag_history';
 import TrendTagsContainer from '../trend_tags';
 import { isMobile } from '../../util/is_mobile';
 import { changeTargetColumn } from '../../actions/column';
+import Announcements from '../../components/announcements';
 
 import logo from '../../../images/pawoo_music/pawoo_music.svg';
 import settingsIcon from '../../../images/pawoo_music/settings.png';
@@ -86,6 +87,7 @@ export default class GlobalNavi extends PureComponent {
           <EventCalendar />
           {isLogin && <TagHistoryContainer />}
           <TrendTagsContainer />
+          <Announcements />
         </div>
         <div className='global-navi-bottom'>
           {isLogin && (
