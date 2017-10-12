@@ -1,6 +1,7 @@
 import UAParser from 'ua-parser-js';
 import React, { PureComponent } from 'react';
 import TrackComposeContainer from '../../containers/track_compose';
+import Delay from '../delay';
 import IconButton from '../icon_button';
 
 export default class MediaPost extends PureComponent {
@@ -29,13 +30,13 @@ export default class MediaPost extends PureComponent {
         <div className='media-post-body' role='button' tabIndex='-1' onClick={this.handleMediaPost}>
           <IconButton src='plus' />
         </div>
-        {this.state.compose && (
-          <div className='media-post-track-compose-modal'>
+        <Delay className='media-post-track-compose-modal'>
+          {this.state.compose && (
             <div className='media-post-track-compose-modal-body'>
               <TrackComposeContainer onClose={this.handleStopCompose} />
             </div>
-          </div>
-        )}
+          )}
+        </Delay>
       </div>
     );
   }
