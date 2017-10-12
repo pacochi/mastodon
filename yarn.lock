@@ -4750,7 +4750,7 @@ multicast-dns@^6.0.1:
 
 "musicvideo-generator@github.com:pixiv/musicvideo-generator.git":
   version "1.0.0"
-  resolved "github.com:pixiv/musicvideo-generator.git#00e8b58460f211bc3e4043aaa31dfc22b7f39eb3"
+  resolved "github.com:pixiv/musicvideo-generator.git#f7fe855ae473cfbb2e9ec15cd431882fc163b3d0"
   dependencies:
     pixi.js "^4.5.4"
 

@@ -29,6 +29,7 @@
 #  video_particle_limit_band_top    :integer          default(0), not null
 #  video_particle_limit_threshold   :integer          default(0), not null
 #  video_particle_color             :integer
+#  video_lightleaks                 :boolean          default(FALSE), not null
 #  video_spectrum_mode              :integer
 #  video_spectrum_color             :integer
 #

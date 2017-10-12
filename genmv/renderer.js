@@ -46,6 +46,8 @@ const particleLimit = parseLimit('particleLimitBandBottom',
 const particle = particleLimit === undefined && argv.particleColor === undefined ?
   undefined: { limit: particleLimit, color: argv.particleColor };
 
+const lightLeaks = argv.lightleaks === true;
+
 const spectrum =
   argv.spectrumMode === undefined && argv.spectrumColor === undefined ?
     undefined : { mode: argv.spectrumMode, color: argv.spectrumColor };
@@ -80,6 +82,7 @@ Promise.all([
     image,
     blur,
     particle,
+    lightLeaks,
     spectrum,
     text,
   });

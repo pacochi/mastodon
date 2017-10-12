@@ -19,6 +19,7 @@ import {
   changeTrackComposeTrackVideoParticleVisibility,
   changeTrackComposeTrackVideoParticleParamColor,
   changeTrackComposeTrackVideoParticleParamLimitThreshold,
+  changeTrackComposeTrackVideoLightLeaksVisibility,
   changeTrackComposeTrackVideoSpectrumVisiblity,
   changeTrackComposeTrackVideoSpectrumParamMode,
   changeTrackComposeTrackVideoSpectrumParamColor,
@@ -90,6 +91,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(changeTrackComposeTrackVideoParticleParamLimitThreshold(value));
   },
 
+  onChangeTrackVideoLightLeaksVisibility (value) {
+    dispatch(changeTrackComposeTrackVideoLightLeaksVisibility(value));
+  },
+
   onChangeTrackVideoSpectrumVisibility (value) {
     dispatch(changeTrackComposeTrackVideoSpectrumVisiblity(value));
   },
@@ -125,6 +130,7 @@ export default class TrackCompose extends ImmutablePureComponent {
     onChangeTrackVideoParticleVisibility: PropTypes.func.isRequired,
     onChangeTrackVideoParticleParamColor: PropTypes.func.isRequired,
     onChangeTrackVideoParticleParamLimitThreshold: PropTypes.func.isRequired,
+    onChangeTrackVideoLightLeaksVisibility: PropTypes.func.isRequired,
     onChangeTrackVideoSpectrumVisibility: PropTypes.func.isRequired,
     onChangeTrackVideoSpectrumParamMode: PropTypes.func.isRequired,
     onChangeTrackVideoSpectrumParamColor: PropTypes.func.isRequired,
@@ -193,6 +199,10 @@ export default class TrackCompose extends ImmutablePureComponent {
 
   handleChangeTrackVideoParticleParamColor = ({ rgb }) => {
     this.props.onChangeTrackVideoParticleParamColor((rgb.r << 16) | (rgb.g << 8) | rgb.b);
+  }
+
+  handleChangeTrackVideoLightLeaksVisibility = ({ target }) => {
+    this.props.onChangeTrackVideoLightLeaksVisibility(target.checked);
   }
 
   handleChangeTrackVideoSpectrumVisibility = ({ target }) => {
@@ -438,6 +448,18 @@ export default class TrackCompose extends ImmutablePureComponent {
                     onChange={this.handleChangeTrackVideoParticleParamColor}
                   />
                 </fieldset>
+
+                <label className='horizontal'>
+                  <input
+                    checked={this.props.track.getIn(['video', 'lightleaks', 'visible'])}
+                    onChange={this.handleChangeTrackVideoLightLeaksVisibility}
+                    type='checkbox'
+                  />
+                  <FormattedMessage
+                    id='pawoo_music.track_compose.video.lightleaks'
+                    defaultMessage='Light leaks'
+                  />
+                </label>
 
                 <fieldset>
                   <legend>

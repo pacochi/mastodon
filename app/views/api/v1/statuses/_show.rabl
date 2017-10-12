@@ -85,6 +85,8 @@ child({ music: :track }, if: ->(status) { !status.reblog? && status.music.is_a?(
       }
     end
 
+    hash[:lightleaks] = true if track.video_lightleaks
+
     if track.video_spectrum_mode.present? && track.video_spectrum_color.present?
       hash[:spectrum] = {
         mode: track.video_spectrum_mode,

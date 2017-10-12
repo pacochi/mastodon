@@ -4,6 +4,7 @@ export function convertToRgbObject (color) {
 
 export function constructGeneratorOptions(track, image) {
   const video = track.get('video');
+  const lightleaks = video.get('lightleaks');
   const blur = video.get('blur');
   const particle = video.get('particle');
   const spectrum = video.get('spectrum');
@@ -31,6 +32,14 @@ export function constructGeneratorOptions(track, image) {
       }
     } else {
       options.particle = particle.toJS();
+    }
+  }
+
+  if (lightleaks) {
+    if (lightleaks.has && lightleaks.has('visible')) {
+      options.lightLeaks = lightleaks.get('visible');
+    } else {
+      options.lightLeaks = lightleaks;
     }
   }
 

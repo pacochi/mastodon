@@ -39,6 +39,7 @@ describe Api::V1::TracksController, type: :controller do
             limit: { band: { bottom: 300, top: 2000 }, threshold: 165 },
             color: 0xff0000,
           },
+          lightleaks: true,
           spectrum: {
             mode: 0,
             color: 0xff0000,
@@ -69,6 +70,7 @@ describe Api::V1::TracksController, type: :controller do
         expect(status.music.video_particle_limit_band_top).to eq 2000
         expect(status.music.video_particle_limit_threshold).to eq 165
         expect(status.music.video_particle_color).to eq 0xff0000
+        expect(status.music.video_lightleaks).to eq true
         expect(status.music.video_spectrum_mode).to eq 0
         expect(status.music.video_spectrum_color).to eq 0xff0000
 
@@ -138,6 +140,7 @@ describe Api::V1::TracksController, type: :controller do
             limit: { band: { bottom: 300, top: 2000 }, threshold: 165 },
             color: 0xff0000,
           },
+          lightleaks: true,
           spectrum: {
             mode: 0,
             color: 0xff0000,
@@ -162,6 +165,7 @@ describe Api::V1::TracksController, type: :controller do
         expect(track.video_particle_limit_band_top).to eq 2000
         expect(track.video_particle_limit_threshold).to eq 165
         expect(track.video_particle_color).to eq 0xff0000
+        expect(track.video_lightleaks).to eq true
         expect(track.video_spectrum_mode).to eq 0
         expect(track.video_spectrum_color).to eq 0xff0000
 
@@ -256,6 +260,26 @@ describe Api::V1::TracksController, type: :controller do
         expect(track.video_particle_color).to eq 0xff0000
       end
 
+      it 'unsets video lightleaks parameters if empty string is given' do
+        track = Fabricate(:track, video_lightleaks: true)
+        status = Fabricate(:status, account: user.account, music: track)
+
+        patch :update, params: { id: status, video: { lightleaks: '' } }
+
+        track.reload
+        expect(track.video_lightleaks).to eq false
+      end
+
+      it 'does not change video lightleaks parameters if nothing is given' do
+        track = Fabricate(:track, video_lightleaks: true)
+        status = Fabricate(:status, account: user.account, music: track)
+
+        patch :update, params: { id: status }
+
+        track.reload
+        expect(track.video_lightleaks).to eq true
+      end
+
       it 'unsets video spectrum parameters if empty string is given' do
         track = Fabricate(
           :track,
@@ -271,7 +295,7 @@ describe Api::V1::TracksController, type: :controller do
         expect(track.video_spectrum_color).to eq nil
       end
 
-      it 'does not change video particle parameters if nothing is given' do
+      it 'does not change video spectrum parameters if nothing is given' do
         track = Fabricate(
           :track,
           video_spectrum_mode: 0,
