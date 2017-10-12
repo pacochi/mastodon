@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import feather from 'feather-icons';
 
-export default class Icon extends PureComponent {
+export default class IconButton extends PureComponent {
 
   static propTypes = {
     src: PropTypes.string.isRequired,
