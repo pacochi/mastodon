@@ -6,6 +6,7 @@ import VideoModal from '../../../mastodon/features/ui/components/video_modal';
 import BoostModal from '../../../mastodon/features/ui/components/boost_modal';
 import MusicModal from '../../../mastodon/features/ui/components/music_modal';
 import ConfirmationModal from '../../../mastodon/features/ui/components/confirmation_modal';
+import UniversalModal from '../universal_modal';
 import ReportModal from '../../../mastodon/features/ui/components/report_modal';
 import spring from 'react-motion/lib/spring';
 import StatusFromModalContainer from '../../containers/status_form_modal';
@@ -19,6 +20,7 @@ const MODAL_COMPONENTS = {
   'CONFIRM': ConfirmationModal,
   'REPORT': ReportModal,
   'STATUS_FORM': StatusFromModalContainer,
+  'UNIVERSAL': UniversalModal,
 };
 
 export default class ModalRoot extends React.PureComponent {
