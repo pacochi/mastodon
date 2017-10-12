@@ -7,7 +7,7 @@ import DisplayName from '../../../components/display_name';
 import emojify from '../../../emoji';
 import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
-import Link from 'react-router-dom/Link';
+import Link from '../../../../pawoo_music/components/link_wrapper';
 
 const messages = defineMessages({
   cancel: { id: 'reply_indicator.cancel', defaultMessage: 'Cancel' },
@@ -51,7 +51,7 @@ export default class ReplyIndicator extends ImmutablePureComponent {
         <div className='reply-indicator__header'>
           <div className='reply-indicator__cancel'><IconButton title={intl.formatMessage(messages.cancel)} icon='times' onClick={this.handleClick} /></div>
 
-          <Link className='reply-indicator__display-name' to={`/@${status.get('account').get('acct')}/${status.get('id')}`}>
+          <Link className='reply-indicator__display-name' to={`/@${status.get('account').get('acct')}`}>
             <div className='reply-indicator__display-avatar'><Avatar size={24} src={status.getIn(['account', 'avatar'])} staticSrc={status.getIn(['account', 'avatar_static'])} /></div>
             <DisplayName account={status.get('account')} />
           </Link>
