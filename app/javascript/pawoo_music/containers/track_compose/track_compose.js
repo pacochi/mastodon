@@ -36,6 +36,7 @@ const messages = defineMessages({
 const mapStateToProps = (state) => ({
   tab: state.getIn(['pawoo_music', 'track_compose', 'tab']),
   track: state.getIn(['pawoo_music', 'track_compose', 'track']),
+  error: state.getIn(['pawoo_music', 'track_compose', 'error']),
   isSubmitting: state.getIn(['pawoo_music', 'track_compose', 'is_submitting']),
 });
 
@@ -128,6 +129,7 @@ export default class TrackCompose extends ImmutablePureComponent {
     onSubmit: PropTypes.func.isRequired,
     tab: PropTypes.string.isRequired,
     track: ImmutablePropTypes.map.isRequired,
+    error: PropTypes.any,
     isSubmitting: PropTypes.bool.isRequired,
     intl: PropTypes.object.isRequired,
     onClose: PropTypes.oneOfType([PropTypes.func, PropTypes.bool]),
@@ -148,7 +150,7 @@ export default class TrackCompose extends ImmutablePureComponent {
     };
   }
 
-  componentWillReceiveProps ({ track }) {
+  componentWillReceiveProps ({ error, isSubmitting, track }) {
     if (track.get('music') === null && this.props.track.get('music') !== null &&
         this.trackMusicRef !== null) {
       this.trackMusicRef.value = '';
@@ -158,6 +160,11 @@ export default class TrackCompose extends ImmutablePureComponent {
         this.props.track.getIn(['video', 'image']) !== null &&
         this.trackVideoImageRef !== null) {
       this.trackVideoImageRef.value = '';
+    }
+
+    // アップロードに成功した
+    if (this.props.isSubmitting && !isSubmitting && !error) {
+      this.handleCancel();
     }
   }
 
@@ -242,8 +249,7 @@ export default class TrackCompose extends ImmutablePureComponent {
     this.props.onSubmit();
   }
 
-  handleCancel = (e) => {
-    e.preventDefault();
+  handleCancel = () => {
     if (typeof this.props.onClose === 'function') {
       this.props.onClose();
     } else {

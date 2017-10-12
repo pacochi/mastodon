@@ -69,8 +69,8 @@ export function submitTrackCompose() {
     }
 
     dispatch(submitTrackComposeRequest());
-    api(getState).post('/api/v1/tracks', formData).then(function () {
-      dispatch(submitTrackComposeSuccess());
+    api(getState).post('/api/v1/tracks', formData).then(function ({ data: { id } }) {
+      dispatch(submitTrackComposeSuccess(id));
     }).catch(function (error) {
       dispatch(submitTrackComposeFail(error));
     });
@@ -200,9 +200,10 @@ export function submitTrackComposeRequest() {
   };
 };
 
-export function submitTrackComposeSuccess() {
+export function submitTrackComposeSuccess(value) {
   return {
     type: TRACK_COMPOSE_SUBMIT_SUCCESS,
+    value,
   };
 };
 
