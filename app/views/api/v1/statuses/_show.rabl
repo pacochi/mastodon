@@ -42,6 +42,7 @@ child({ music: :album }, if: ->(status) { !status.reblog? && status.music.is_a?(
   node(:image) { |album| full_asset_url(album.image.url(:original)) }
 end
 
+root_status = root_object
 child({ music: :track }, if: ->(status) { !status.reblog? && status.music.is_a?(Track) }) do
   attribute :title, :artist, :text
 
@@ -50,7 +51,7 @@ child({ music: :track }, if: ->(status) { !status.reblog? && status.music.is_a?(
   node :video do |track|
     hash = {}
 
-    hash[:url] = full_asset_url(track.video.url(:original)) if track.video.present?
+    hash[:url] = full_asset_url(track.video.url(:original)) if track.video.present? && current_account && root_status.account_id == current_account.id
     hash[:image] = full_asset_url(track.video_image.url(:original)) if track.video_image.present?
 
     if track.video_blur_movement_band_top != 0 && track.video_blur_blink_band_top != 0
