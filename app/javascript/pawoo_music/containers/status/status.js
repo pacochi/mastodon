@@ -12,6 +12,7 @@ import AccountContainer from '../account';
 import StatusMedia from '../status_media';
 import StatusMeta from '../../components/status_meta';
 import StatusPrepend from '../../components/status_prepend';
+import Link from '../../components/link_wrapper';
 
 const makeMapStateToProps = () => {
   const getStatus = makeGetStatus();
@@ -58,15 +59,6 @@ export default class Status extends ImmutablePureComponent {
     this.setState({ isExpanded: !this.state.isExpanded });
   };
 
-  handleClick = () => {
-    let { status } = this.props;
-    if (status.get('reblog')) {
-      status = status.get('reblog');
-    }
-
-    this.context.router.history.push(`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`);
-  }
-
   render () {
     const { muted, detail, hidden, prepend, status: originalStatus } = this.props;
     const { isExpanded } = this.state;
@@ -98,13 +90,13 @@ export default class Status extends ImmutablePureComponent {
         <div className='status-head'>
           <AccountContainer account={status.get('account')} />
           {!detail && (
-            <a href={status.get('url')} className='status-time' target='_blank' rel='noopener'>
+            <Link className='status-time' to={`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`}>
               <Timestamp schedule={schedule} timestamp={status.get('created_at')} />
-            </a>
+            </Link>
           )}
         </div>
 
-        <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} />
+        <StatusContent status={status} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} />
         <StatusMedia   status={status} detail={detail} />
 
         {detail && <StatusMeta status={status} />}
