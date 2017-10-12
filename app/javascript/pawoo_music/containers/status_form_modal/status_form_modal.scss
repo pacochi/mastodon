@@ -1,2 +1,51 @@
 .status-form-modal {
+  .reply-indicator {
+    display:      block;
+    text-align:   left;
+
+    padding:      var(--padding20);
+    margin:       var(--verticalspace10);
+
+    color:        var(--textcolor);
+    font-size:    var(--text30-font);
+    line-height:  var(--text30-line);
+
+    border-radius:    var(--radius);
+    background-color: var(--color1);
+
+
+    .reply-indicator__content {
+      margin: var(--verticalspace20);
+    }
+
+    .reply-indicator__cancel {
+      float: right;
+      line-height: 24px;
+    }
+
+    .reply-indicator__display-name {
+      display:          flex;
+      align-items:      center;
+      max-width:        100%;
+      font-size:        var(--text30-font);
+      line-height:      var(--text30-line);
+      overflow:         hidden;
+      padding-right:    calc(var(--iconsize10) + var(--grid) * 2);
+      text-decoration:  none;
+    }
+
+    .reply-indicator__display-avatar {
+      margin: var(--rightspace10);
+
+      .account__avatar {
+        border-radius: var(--iconsize30);
+      }
+    }
+  }
+
+  .character-counter__wrapper {
+    background: var(--color1);
+    padding: var(--padding10);
+    border-radius: var(--radius);
+  }
 }
