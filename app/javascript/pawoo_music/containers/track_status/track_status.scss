@@ -8,7 +8,7 @@
   color:        var(--textcolor);
   font-size:    var(--text20-font);
   line-height:  var(--text20-line);
-  
+
   margin:     var(--verticalspace40);
 
   &.highlight {
@@ -60,6 +60,16 @@
         top: 0;
         left: 0;
       }
+    }
+  }
+
+  .meta {
+    margin: var(--verticalspace20);
+    font-size:      var(--text10-font);
+    line-height:    var(--text10-line);
+
+    i {
+      margin:       var(--rightspace5);
     }
   }
 

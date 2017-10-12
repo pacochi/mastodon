@@ -21,11 +21,13 @@ export default class MediaModal extends ImmutablePureComponent {
     index: null,
   };
 
-  handleNextClick = () => {
+  handleNextClick = (e) => {
+    e.stopPropagation();
     this.setState({ index: (this.getIndex() + 1) % this.props.media.size });
   }
 
-  handlePrevClick = () => {
+  handlePrevClick = (e) => {
+    e.stopPropagation();
     this.setState({ index: (this.getIndex() - 1) % this.props.media.size });
   }
 
@@ -65,7 +67,7 @@ export default class MediaModal extends ImmutablePureComponent {
 
     if (media.size > 1) {
       leftNav  = <div role='button' tabIndex='0' className='modal-container__nav modal-container__nav--left' onClick={this.handlePrevClick}><i className='fa fa-fw fa-chevron-left' /></div>;
-      rightNav = <div role='button' tabIndex='0' className='modal-container__nav  modal-container__nav--right' onClick={this.handleNextClick}><i className='fa fa-fw fa-chevron-right' /></div>;
+      rightNav = <div role='button' tabIndex='0' className='modal-container__nav modal-container__nav--right' onClick={this.handleNextClick}><i className='fa fa-fw fa-chevron-right' /></div>;
     }
 
     if (attachment.get('type') === 'image') {

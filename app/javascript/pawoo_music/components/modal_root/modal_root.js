@@ -1,6 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import MediaModal from '../media_modal/media_modal';
+import MediaModal from '../media_modal';
 import OnboardingModal from '../../../mastodon/features/ui/components/onboarding_modal';
 import VideoModal from '../../../mastodon/features/ui/components/video_modal';
 import BoostModal from '../../../mastodon/features/ui/components/boost_modal';
