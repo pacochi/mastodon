@@ -35,11 +35,11 @@ class Track extends ImmutablePureComponent {
     if (!track) {
       return null;
     }
-    const backgroundImage = (track.getIn(['video', 'image']))
-      ? { 'backgroundImage' : `url('${track.getIn(['video', 'image'])}')` }
-      : { 'backgroundImage' : `url('${defaultArtwork}')` };
 
-    console.log(backgroundImage);
+    const backgroundImage = (track.getIn(['video', 'image'])) ? track.getIn(['video', 'image']) : defaultArtwork;
+    const thumbnailStyle = {
+      backgroundImage: `url('${backgroundImage}')`,
+    };
 
     return (
       <div className='track'>
@@ -47,7 +47,7 @@ class Track extends ImmutablePureComponent {
           {!thumbnailView ? (
             <Musicvideo track={track} />
           ) : (
-            <div className='thumbnail' style={backgroundImage}>
+            <div className='thumbnail' style={thumbnailStyle}>
               <img className='playbutton' src={playIcon} alt='playbutton' role='button' tabIndex='0' aria-pressed='false' onClick={this.handlePlayClick} />
             </div>
           )}
