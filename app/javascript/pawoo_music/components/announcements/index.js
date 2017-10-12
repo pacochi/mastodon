@@ -1,4 +1,4 @@
-import Button from './announcements';
+import Announcements from './announcements';
 import './announcements.scss';
 
-export default Button;
+export default Announcements;
