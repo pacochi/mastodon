@@ -9,7 +9,6 @@ import TipsBalloonContainer from '../../../containers/tips_balloon_container';
 import TweetButton from '../../../components/tweet_button';
 import YouTubeArtwork from './youtube_artwork';
 import SoundCloudArtwork from './soundcloud_artwork';
-import VideoArtwork from './video_artwork';
 import AudioArtwork from './audio_artwork';
 
 const PlatformHelp = () => {
@@ -17,7 +16,7 @@ const PlatformHelp = () => {
     {
       icon: '/player/logos/pawoo-music.svg',
       title: 'Pawoo Music',
-      url: 'https://music.pawoo.net/web/statuses/[XXXXX…]',
+      url: 'https://music.pawoo.net/@[username]/[XXXXX…]',
     },
     {
       icon: '/player/logos/youtube.svg',
@@ -73,7 +72,7 @@ class PlaylistController extends React.PureComponent {
   static propTypes = {
     offsetStartTime: PropTypes.number.isRequired,
     isTop: PropTypes.bool.isRequired,
-    isAdmin: PropTypes.bool.isRequired,
+    isAdmin: PropTypes.bool,
     isActive: PropTypes.bool.isRequired,
     muted: PropTypes.bool.isRequired,
     volume: PropTypes.number.isRequired,
@@ -165,7 +164,7 @@ class PlaylistController extends React.PureComponent {
 class PlayControl extends React.PureComponent {
 
   static propTypes = {
-    accessToken: PropTypes.string.isRequired,
+    accessToken: PropTypes.string,
     streamingAPIBaseURL: PropTypes.string.isRequired,
     isAdmin: PropTypes.bool,
     isTop: PropTypes.bool.isRequired,
@@ -504,7 +503,6 @@ class PlayControl extends React.PureComponent {
     case 'soundcloud':
       return <SoundCloudArtwork muted={muted} volume={volume} timeOffset={timeOffset} sourceId={deckQueue.source_id} />;
     case 'pawoo-music':
-      return <VideoArtwork muted={muted} volume={volume} timeOffset={timeOffset} videoUrl={deckQueue.video_url} />;
     case 'booth':
     case 'apollo':
       return <AudioArtwork muted={muted} volume={volume} timeOffset={timeOffset} musicUrl={deckQueue.music_url} thumbnailUrl={deckQueue.thumbnail_url} />;
