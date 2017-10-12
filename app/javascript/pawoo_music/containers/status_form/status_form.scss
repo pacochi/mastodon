@@ -89,6 +89,17 @@
     }
   }
 
+  .sensitive_guide {
+    margin: var(--verticalspace5);
+
+    .sensitive_guide__message {
+      padding: var(--padding10);
+      background-color: var(--color1);
+      color: var(--strong1);
+      border-radius: var(--radius);
+    }
+  }
+
 
   // ---------------------------------------------------------------------------------------------------
   // Mastodon's default theme
@@ -467,8 +478,6 @@
       display:          flex;
       justify-content:  center;
       align-items:      center;
-      border:           none;
-      background:       transparent;
 
       .compose-form__upload-button,
       .privacy-dropdown,
@@ -579,49 +588,8 @@
     }
   }
 
-  .reply-indicator {
-    display:      block;
-    text-align:   left;
-
-    padding:      var(--padding20);
-    margin:       var(--verticalspace10);
-
-    color:        var(--textcolor);
-    font-size:    var(--text30-font);
-    line-height:  var(--text30-line);
-
-    border-radius:    var(--radius);
-    background-color: var(--color1);
-
-
-    .reply-indicator__content {
-      margin: var(--verticalspace20);
-    }
-
-    .reply-indicator__cancel {
-      float: right;
-      line-height: 24px;
-    }
-
-    .reply-indicator__display-name {
-      color:            var(--color1);
-      display:          block;
-      max-width:        100%;
-      font-size:        var(--text30-font);
-      line-height:      var(--text30-line);
-      overflow:         hidden;
-      padding-right:    calc(var(--iconsize10) + var(--grid) * 2);
-      text-decoration:  none;
-    }
-
-    .reply-indicator__display-avatar {
-      float: left;
-      margin-right: var(--rightspace10);
-    }
-
-    .status__content--with-action {
-      cursor: pointer;
-    }
+  .status__content--with-action {
+    cursor: pointer;
   }
 
 

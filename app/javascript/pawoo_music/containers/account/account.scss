@@ -4,11 +4,8 @@
   display: flex;
 
   .account-link {
-    display:    block;
-    flex: 1;
-    padding-top: 3px;
-    line-height: 1.2;
-    text-align: left;
+    display: flex;
+    align-items: center;
 
     text-overflow:  ellipsis;
     white-space:    nowrap;
@@ -16,7 +13,7 @@
 
     .display-name {
       display:        block;
-      font-size:      var(--text10-font);
+      font-size:      var(--text20-font);
       font-weight:    bold;
 
       text-overflow:  ellipsis;
@@ -27,12 +24,7 @@
     }
 
     .acct {
-      display:        block;
-      font-size:      var(--text10-font);
-
-      text-overflow:  ellipsis;
-      white-space:    nowrap;
-      overflow:       hidden;
+      display:        none;
     }
 
     &:hover {
