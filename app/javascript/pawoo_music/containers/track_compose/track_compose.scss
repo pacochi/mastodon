@@ -2,11 +2,12 @@
   --video-width: 600px;
   --form-width: 400px;
   --controls-height: 30px;
-  padding: var(--padding30);
+  padding: var(--padding40);
   color: #C3C3C3;
   background-color: #1F1F1F;
-  border-radius: var(--radius);
+  border-radius: var(--radius-big);
   text-align: left;
+  box-shadow: var(--shadow-strong);
 
   button {
     width: 100%;
@@ -66,17 +67,18 @@
     @media screen and (max-width: 1000px) {
       .form-content {
         width: calc(100% - var(--padding10) * 2);
+        margin: var(--padding10);
       }
     }
 
     @media screen and (min-width: 1001px) {
       .form-content {
         width: var(--form-width);
+        margin: 0 0 0 var(--padding40);
       }
     }
 
     .form-content {
-      margin: var(--padding10);
 
       .tablist {
         display: flex;
@@ -104,7 +106,7 @@
           width: 100%;
 
           & + legend {
-            padding-top: 20px;
+            margin-top: var(--padding15);
           }
         }
 
@@ -131,10 +133,8 @@
 
           input[type="text"] {
             display: block;
-            width: calc(100% - var(--padding10) * 2);
-            padding: var(--padding5);
-            border-radius: var(--radius);
-            // border: 1px solid var(--color3);
+            padding: var(--padding10);
+            border-radius: var(--grid);
 
             font-size: var(--text30-font);
             line-height: var(--text30-line);
@@ -142,11 +142,9 @@
 
           textarea {
             display: block;
-            width: calc(100% - var(--padding10) * 2);
-            height: calc(--grid * 10);
+            height: calc(var(--grid) * 10);
             padding: var(--padding10);
-            border-radius: var(--radius);
-            // border: 1px solid var(--color3);
+            border-radius: var(--grid);
             resize: none;
 
             font-size: var(--text30-font);
