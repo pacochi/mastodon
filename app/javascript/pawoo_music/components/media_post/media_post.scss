@@ -54,12 +54,11 @@
     align-items: center;
     justify-content: center;
     background-color: rgba(255, 255, 255, 0.75);
+    overflow-y: scroll;
 
     .media-post-track-compose-modal-body {
       box-sizing: border-box;
-      padding: var(--padding15);
       max-height: 100%;
-      overflow-y: scroll;
     }
   }
 }
