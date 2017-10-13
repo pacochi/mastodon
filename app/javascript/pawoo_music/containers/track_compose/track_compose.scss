@@ -225,7 +225,17 @@
 
       .icon-button {
         vertical-align: middle;
-        margin-right: 5px;
+        margin-right: var(--grid);
+        width: var(--iconsize20);
+        height: var(--iconsize20);
+
+        svg {
+          width: var(--iconsize20);
+          height: var(--iconsize20);
+        }
+      }
+      span {
+        vertical-align: middle;
       }
     }
 

@@ -11,7 +11,9 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    padding: var(--padding5);
+    padding: var(--padding15);
+    background-color: #000000;
+    border-radius: 0 0 var(--grid) var(--grid);
 
     .toggle {
       display:      block;
@@ -27,6 +29,25 @@
 
       &.disabled {
         cursor: not-allowed;
+      }
+    }
+
+    .icon-button {
+      svg {
+        stroke-width: 2px;
+        stroke: #585858;
+      }
+    }
+
+    .rc-slider {
+      .rc-slider-track {
+        background-color: #d6d6d6;
+      }
+      .rc-slider-rail {
+        background-color: #4a4a4a;
+      }
+      .rc-slider-handle {
+        border: solid 2px #000000;
       }
     }
   }
