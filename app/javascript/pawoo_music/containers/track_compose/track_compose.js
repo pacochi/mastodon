@@ -741,7 +741,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                   </label>
                 </legend>
 
-                <legend>
+                <legend className='track-compose-effect'>
                   <label className='horizontal'>
                     <span className='text'>
                       <FormattedMessage
