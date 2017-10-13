@@ -75,6 +75,7 @@ gem 'activerecord-import'
 
 gem 'elasticsearch-model', '~> 5.0'
 gem 'ruby-mp3info', require: 'mp3info'
+gem 'counter_culture', '~> 1.8'
 
 group :development, :test do
   gem 'spring'

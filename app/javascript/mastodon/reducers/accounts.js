@@ -56,6 +56,8 @@ const normalizeAccount = (state, account) => {
   delete account.followers_count;
   delete account.following_count;
   delete account.statuses_count;
+  delete account.tracks_count;
+  delete account.albums_count;
 
   // media_attachmentsが設定されていない場合は保持する
   const mediaAttachments = state.getIn([account.id, 'media_attachments']);
