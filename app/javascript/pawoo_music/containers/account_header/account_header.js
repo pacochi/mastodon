@@ -212,7 +212,7 @@ export default class AccountHeader extends ImmutablePureComponent {
     }
 
     return (
-      <div className='account-header'>
+      <div className='account-header-pm'>
         <div className='content'>
           <Avatar className='size50' account={account} autoPlayGif={autoPlayGif} />
           <div className='info'>

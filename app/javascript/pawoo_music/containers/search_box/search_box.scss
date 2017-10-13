@@ -13,8 +13,7 @@
     border-radius:  calc(var(--radius) * 4);
 
     padding-left:   calc(var(--grid) * 6);
-    margin:         0 calc(var(--minus-grid) * 2);
-    width:          calc(100% + calc(var(--grid) * 4));
+    width:          100%;
 
     background-image:       url();
     background-position:    left center;

@@ -195,11 +195,10 @@ a:hover {
   --width-lobby:          100vw;
   --width-gallery-slide:  100vw;
   --width-gallery-view:   100vw;
-  --width-gallery:        100vw;
+  --width-gallery:        calc(100vw - var(--grid) * 8);
 
   --width-ago:            calc(var(--grid) * 6);
   --width-contextmenu:    calc(var(--grid) * 26);
-  --height-deck:          56px;
 
   .app-top {
     display: flex;
@@ -259,9 +258,10 @@ a:hover {
   }
 
   .app-center {
-    position: relative;
     display: block;
-    padding: var(--height-deck) 0;
+    position: absolute;
+    top: var(--height-deck);
+    left: 0;
     height: calc(100% - var(--height-deck) * 2);
     width: 100vw;
   }
