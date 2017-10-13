@@ -36,6 +36,8 @@
 #  followers_count         :integer          default(0), not null
 #  following_count         :integer          default(0), not null
 #  last_webfingered_at     :datetime
+#  tracks_count            :integer          default(0), not null
+#  albums_count            :integer          default(0), not null
 #
 
 class Account < ApplicationRecord
@@ -80,6 +82,11 @@ class Account < ApplicationRecord
   # Report relationships
   has_many :reports
   has_many :targeted_reports, class_name: 'Report', foreign_key: :target_account_id
+
+  # Musics
+  has_many :music_statuses, -> { where(in_reply_to_id: nil).musics_only }, class_name: 'Status'
+  has_many :track_statuses, -> { where(in_reply_to_id: nil).tracks_only }, class_name: 'Status'
+  has_many :album_statuses, -> { where(in_reply_to_id: nil).albums_only }, class_name: 'Status'
 
   scope :remote, -> { where.not(domain: nil) }
   scope :local, -> { where(domain: nil) }

@@ -49,6 +49,9 @@ class CreateMusicTables < ActiveRecord::Migration[5.1]
 
     add_belongs_to :statuses, :music, index: false, polymorphic: true
 
+    add_column :accounts, :tracks_count, :bigint, :null => false, :default => 0
+    add_column :accounts, :albums_count, :bigint, :null => false, :default => 0
+
     # To query musics of an account.
     add_index :statuses, [:music_type, :account_id]
 

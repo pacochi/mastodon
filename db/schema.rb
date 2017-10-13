@@ -56,6 +56,8 @@ ActiveRecord::Schema.define(version: 20170830000000) do
     t.integer "followers_count", default: 0, null: false
     t.integer "following_count", default: 0, null: false
     t.datetime "last_webfingered_at"
+    t.bigint "tracks_count", default: 0, null: false
+    t.bigint "albums_count", default: 0, null: false
     t.index "(((setweight(to_tsvector('simple'::regconfig, (display_name)::text), 'A'::\"char\") || setweight(to_tsvector('simple'::regconfig, (username)::text), 'B'::\"char\")) || setweight(to_tsvector('simple'::regconfig, (COALESCE(domain, ''::character varying))::text), 'C'::\"char\")))", name: "search_index", using: :gin
     t.index "lower((username)::text), lower((domain)::text)", name: "index_accounts_on_username_and_domain_lower"
     t.index ["uri"], name: "index_accounts_on_uri"
