@@ -252,7 +252,6 @@ export default class TrackCompose extends ImmutablePureComponent {
   }
 
   handleChangeTrackVideoParticleParamColor = ({ rgb }) => {
-    console.log(rgb)
     this.props.onChangeTrackVideoParticleParamColor(extractRgbFromRgbObject(rgb));
     this.props.onChangeTrackVideoParticleParamAlpha(rgb.a);
   }
