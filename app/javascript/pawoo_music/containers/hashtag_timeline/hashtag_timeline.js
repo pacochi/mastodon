@@ -67,6 +67,7 @@ export default class HashtagTimeline extends PureComponent {
     return (
       <StatusTimelineContainer
         timelineId={`hashtag:${hashtag}`}
+        scrollKeyBase='hashtag_timeline'
         loadMore={this.handleLoadMore}
         emptyMessage={<FormattedMessage id='empty_column.hashtag' defaultMessage='There is nothing in this hashtag yet.' />}
         withComposeForm

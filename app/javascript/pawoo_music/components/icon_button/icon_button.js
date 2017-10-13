@@ -8,6 +8,7 @@ export default class IconButton extends PureComponent {
 
   static propTypes = {
     src: PropTypes.string.isRequired,
+    active: PropTypes.bool,
     onClick: PropTypes.func,
     title: PropTypes.string,
     tabindex: PropTypes.number,
@@ -26,19 +27,20 @@ export default class IconButton extends PureComponent {
   }
 
   render () {
-    const { src, title, tabindex, className, onClick } = this.props;
+    const { src, title, active, tabindex, className, onClick, ...other } = this.props;
     const svg = feather.toSvg(src, { 'stroke-width': 1 });
     const clickable = this.isClickable();
 
     return (
       <span
         dangerouslySetInnerHTML={{ __html: svg }}
-        className={classNames('icon-button', { clickable }, className)}
+        className={classNames('icon-button', `icon-button-${src}`, { clickable, active }, className)}
         onClick={clickable ? onClick : noop}
         title={title}
         role={clickable ? 'button' : 'presentation'}
         tabIndex={tabindex}
         aria-pressed='false'
+        {...other}
       />
     );
   }

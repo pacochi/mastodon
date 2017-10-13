@@ -22,4 +22,10 @@
       }
     }
   }
+
+  &.active {
+    svg {
+      stroke: var(--strong1);
+    }
+  }
 }
