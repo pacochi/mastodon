@@ -8,28 +8,20 @@ import { Canvas } from 'musicvideo-generator';
 import IconButton from '../icon_button';
 import Slider from '../slider';
 import { constructGeneratorOptions } from '../../util/musicvideo';
-
 import defaultArtwork from '../../../images/pawoo_music/default_artwork.png';
 
 window.AudioContext = window.AudioContext || window.webkitAudioContext;
-window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame ||
-                               window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
+window.requestAnimationFrame = window.requestAnimationFrame || window.mozRequestAnimationFrame || window.webkitRequestAnimationFrame || window.msRequestAnimationFrame;
 window.cancelAnimationFrame = window.cancelAnimationFrame || window.mozCancelAnimationFrame;
 
-function convertURL(file) {
-  if (file instanceof File) {
-    return URL.createObjectURL(file);
-  } else {
-    return file;
-  }
-}
+const convertToURL = (file) => ((file instanceof File) ? URL.createObjectURL(file) : file);
 
 class Musicvideo extends ImmutablePureComponent {
 
   static propTypes = {
-    track:  ImmutablePropTypes.map.isRequired,
-    autoPlay: PropTypes.bool,
+    track: ImmutablePropTypes.map.isRequired,
     label: PropTypes.string,
+    autoPlay: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -37,24 +29,25 @@ class Musicvideo extends ImmutablePureComponent {
   };
 
   state = {
+    time: 0,
+    music: convertToURL(this.props.track.get('music')),
     paused: true,
-    music: convertURL(this.props.track.get('music')),
-  }
+  };
 
-  constructor(props) {
-    super(props);
-
-    this.image = new Image;
-    this.image.crossOrigin = 'anonymous';
-    this.image.src = convertURL(props.track.getIn(['video', 'image'])) || defaultArtwork;
-  }
+  image = null;
 
   componentDidMount () {
     const { track } = this.props;
 
+    // ジャケット画像
+    this.image = new Image();
+    this.image.addEventListener('load', this.updateCanvas, { once: false });
+    this.image.crossOrigin = 'anonymous';
+    this.image.src = convertToURL(track.getIn(['video', 'image'])) || defaultArtwork;
+
+    // コンテキスト作成
     const audioContext = new AudioContext;
     this.generator = new Canvas(audioContext, constructGeneratorOptions(track, this.image));
-    this.image.addEventListener('load', this.updateCanvas, { once: false });
 
     // オーディオ接続
     const { audioAnalyserNode } = this.generator;
@@ -66,42 +59,27 @@ class Musicvideo extends ImmutablePureComponent {
     const { view } = this.generator.getRenderer();
     const { parent } = view;
 
-    if (parent) {
-      parent.removeChild(view);
-    }
+    if (parent) parent.removeChild(view);
 
     this.canvasContainer.appendChild(view);
     this.generator.start();
 
-    // シークバーのセットアップ
-    // this.seekbar.onchange = () => {
-    //   const time = this.audioElement.duration * this.seekbar.value / 100;
-    //   this.audioElement.currentTime = 0; // TODO: 過去にシークできなかった。今は消してもいいかも？
-    //   this.audioElement.currentTime = time;
-    // };
-    this.timer = setInterval(this.updateSeek, 500);
+    this.timer = setInterval(this.updateCurrentTime, 500);
   }
-
-  handleChangeSeekbar = (value) => {
-    const time = this.audioElement.duration * value / 100;
-    this.audioElement.currentTime = 0; // TODO: 過去にシークできなかった。今は消してもいいかも？
-    this.audioElement.currentTime = time;
-  };
 
   componentWillReceiveProps ({ track }) {
     const music = track.get('music');
     const image = track.getIn(['video', 'image']);
 
     if (music !== this.props.track.get('music')) {
-      this.setState({ music: convertURL(music) });
+      this.setState({ music: convertToURL(music) });
     }
 
     if (image !== this.props.track.getIn(['video', 'image'])) {
       if (track.getIn(['video', 'image']) instanceof File) {
         URL.revokeObjectURL(this.image.src);
       }
-
-      this.image.src = convertURL(image) || defaultArtwork;
+      this.image.src = convertToURL(image) || defaultArtwork;
     }
   }
 
@@ -109,7 +87,6 @@ class Musicvideo extends ImmutablePureComponent {
     if ((track.get('music') instanceof File) && music !== this.state.music) {
       URL.revokeObjectURL(music);
     }
-
     this.updateCanvas();
   }
 
@@ -137,7 +114,7 @@ class Musicvideo extends ImmutablePureComponent {
     }
   }
 
-  handleToggle = () => {
+  handleTogglePaused = () => {
     const paused = this.audioElement.paused;
     this.setState({ paused: !paused });
 
@@ -148,6 +125,13 @@ class Musicvideo extends ImmutablePureComponent {
     }
   }
 
+  handleChangeCurrentTime = (value) => {
+    const time = this.audioElement.duration * value / 100;
+    this.audioElement.currentTime = 0; // TODO: 過去にシークできなかった。今は消してもいいかも？
+    this.audioElement.currentTime = time;
+    this.setState({ time: value });
+  };
+
   setAudioRef = (ref) => {
     this.audioElement = ref;
   }
@@ -156,41 +140,38 @@ class Musicvideo extends ImmutablePureComponent {
     this.canvasContainer = ref;
   }
 
-  setSeekbarRef = (ref) => {
-    this.seekbar = ref;
-  }
-
   updateCanvas = () => {
     this.generator.changeParams(constructGeneratorOptions(this.props.track, this.image));
   }
 
-  updateSeek = () => {
+  updateCurrentTime = () => {
     const audioElement = this.audioElement;
 
     if (audioElement) {
       if (!audioElement.paused  && !audioElement.seeking) {
-        this.seekbar.value = 100 * this.audioElement.currentTime / this.audioElement.duration;
+        this.setState({ time: 100 * this.audioElement.currentTime / this.audioElement.duration });
       }
     }
   }
 
   render() {
     const { autoPlay, label } = this.props;
-    const { music, paused } = this.state;
+    const { music, paused, time } = this.state;
 
     return (
       <div className='musicvideo'>
         <div className='canvas-container' ref={this.setCanvasContainerRef} aria-label={label} />
         <audio autoPlay={autoPlay} ref={this.setAudioRef} src={music} />
         <div className='controls'>
-          <div className={classNames('toggle', { disabled: !music })} onClick={music ? this.handleToggle : noop} role='button' tabIndex='0' aria-pressed='false'>
+          <div className={classNames('toggle', { disabled: !music })} onClick={music ? this.handleTogglePaused : noop} role='button' tabIndex='0' aria-pressed='false'>
             {paused ? <IconButton src='play' /> : <IconButton src='pause' />}
           </div>
           <Slider
             min={0}
             max={100}
             step={0.1}
-            onChange={this.handleChangeSeekbar}
+            value={time}
+            onChange={this.handleChangeCurrentTime}
             disabled={!music}
             ref={this.setSeekbarRef}
           />
