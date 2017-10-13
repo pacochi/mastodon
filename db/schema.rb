@@ -461,6 +461,7 @@ ActiveRecord::Schema.define(version: 20170830000000) do
     t.float "video_particle_alpha", default: 0.0, null: false
     t.integer "video_particle_color", default: 0, null: false
     t.float "video_lightleaks_alpha", default: 0.0, null: false
+    t.integer "video_lightleaks_interval", default: 0, null: false
     t.integer "video_spectrum_mode", default: 0, null: false
     t.float "video_spectrum_alpha", default: 0.0, null: false
     t.integer "video_spectrum_color", default: 0, null: false

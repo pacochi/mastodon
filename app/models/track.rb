@@ -31,6 +31,7 @@
 #  video_particle_alpha             :float            default(0.0), not null
 #  video_particle_color             :integer          default(0), not null
 #  video_lightleaks_alpha           :float            default(0.0), not null
+#  video_lightleaks_interval        :integer          default(0), not null
 #  video_spectrum_mode              :integer          default(0), not null
 #  video_spectrum_alpha             :float            default(0.0), not null
 #  video_spectrum_color             :integer          default(0), not null
