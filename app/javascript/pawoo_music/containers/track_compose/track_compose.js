@@ -54,7 +54,6 @@ const mapStateToProps = (state) => ({
   tab: state.getIn(['pawoo_music', 'track_compose', 'tab']),
   track: state.getIn(['pawoo_music', 'track_compose', 'track']),
   error: state.getIn(['pawoo_music', 'track_compose', 'error']),
-  trackId: state.getIn(['pawoo_music', 'tracks', 'trackId']),
   isSubmitting: state.getIn(['pawoo_music', 'track_compose', 'is_submitting']),
 });
 
