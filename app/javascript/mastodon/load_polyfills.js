@@ -30,8 +30,6 @@ function loadPolyfills() {
     'object-fit' in (new Image()).style
   );
 
-  console.log('aabbdd');
-
   return Promise.all([
     needsBasePolyfills && importBasePolyfills(),
     needsExtraPolyfills && importExtraPolyfills(),

@@ -84,7 +84,7 @@ export default class GlobalNavi extends PureComponent {
           <div className='global-navi-links'>
             {this.renderNavLinks()}
           </div>
-          
+
           <h2>タグタイムライン</h2>
           <EventCalendar />
           {isLogin && <TagHistoryContainer />}
