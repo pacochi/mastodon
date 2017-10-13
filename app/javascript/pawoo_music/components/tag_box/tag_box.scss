@@ -31,6 +31,10 @@
       .right-box {
         margin-left: auto;
       }
+
+      .icon-button svg {
+        height: var(--text20-font);
+      }
     }
   }
 }

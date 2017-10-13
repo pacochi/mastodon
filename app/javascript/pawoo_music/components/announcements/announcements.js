@@ -79,7 +79,7 @@ class Announcements extends React.PureComponent {
               </p>
             </div>
             <div className='announcements__body__dismiss'>
-              <IconButton title={`${announcement.get('id')}`} src='plus' role='button' tabIndex='0' aria-pressed='false' onClick={this.handleDismiss} />
+              <IconButton title={`${announcement.get('id')}`} src='x-circle' role='button' tabIndex='0' aria-pressed='false' onClick={this.handleDismiss} />
             </div>
           </li>
         ))}
