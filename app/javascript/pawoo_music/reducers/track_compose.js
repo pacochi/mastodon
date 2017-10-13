@@ -128,7 +128,6 @@ export default function track_compose(state = initialState, action) {
   case TRACK_COMPOSE_SUBMIT_SUCCESS:
     return initialState;
   case TRACK_COMPOSE_SUBMIT_FAIL:
-    console.log(action.error);
     return state.set('is_submitting', false).set('error', action.error);
   default:
     return state;

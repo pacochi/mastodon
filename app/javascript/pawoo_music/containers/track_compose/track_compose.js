@@ -252,6 +252,7 @@ export default class TrackCompose extends ImmutablePureComponent {
   }
 
   handleChangeTrackVideoParticleParamColor = ({ rgb }) => {
+    console.log(rgb);
     this.props.onChangeTrackVideoParticleParamColor(extractRgbFromRgbObject(rgb));
     this.props.onChangeTrackVideoParticleParamAlpha(rgb.a);
   }
@@ -541,19 +542,14 @@ export default class TrackCompose extends ImmutablePureComponent {
                         />
                       </span>
                       <div className='track-compose-effect-color'>
-                        <div
-                          className='track-compose-effect-color-trigger'
-                          style={{ backgroundColor: constructRgbCode(this.props.track.getIn(['video', 'spectrum', 'params', 'color']), 1) }}
-                          onClick={this.handleToggleSpectrumColorPickerVisible}
-                          role='button'
-                          tabIndex='-1'
-                        />
+                        <div className='track-compose-effect-color-trigger' onClick={this.handleToggleSpectrumColorPickerVisible} role='button' tabIndex='-1'>
+                          <div className='track-compose-effect-color-trigger-body' style={{ backgroundColor: constructRgbCode(this.props.track.getIn(['video', 'spectrum', 'params', 'color']), this.props.track.getIn(['video', 'spectrum', 'params', 'alpha'])) }} />
+                        </div>
                         <Delay>
                           {this.state.spectrumColorPickerVisible && (
                             <div className='track-compose-effect-color-content'>
                               <SketchPicker
-                                color={constructRgbObject(this.props.track.getIn(['video', 'spectrum', 'params', 'color']), 1)}
-                                disableAlpha
+                                color={constructRgbObject(this.props.track.getIn(['video', 'spectrum', 'params', 'color']), this.props.track.getIn(['video', 'spectrum', 'params', 'alpha']))}
                                 onChange={this.handleChangeTrackVideoSpectrumParamColor}
                               />
                             </div>
@@ -653,20 +649,12 @@ export default class TrackCompose extends ImmutablePureComponent {
                         />
                       </span>
                       <div className='track-compose-effect-color'>
-                        <div
-                          className='track-compose-effect-color-trigger'
-                          style={{ backgroundColor: constructRgbCode(
-                            this.props.track.getIn(['video', 'particle', 'params', 'color']),
-                            this.props.track.getIn(['video', 'particle', 'params', 'alpha'])
-                          ) }}
-                          onClick={this.handleToggleParticleColorPickerVisible}
-                          role='button'
-                          tabIndex='-1'
-                        />
+                        <div className='track-compose-effect-color-trigger' onClick={this.handleToggleParticleColorPickerVisible} role='button' tabIndex='-1'>
+                          <div className='track-compose-effect-color-trigger-body' style={{ backgroundColor: constructRgbCode(this.props.track.getIn(['video', 'particle', 'params', 'color']), this.props.track.getIn(['video', 'particle', 'params', 'alpha'])) }} />
+                        </div>
                         <Delay>
                           {this.state.particleColorPickerVisible && (
                             <div className='track-compose-effect-color-content'>
-                              {console.log(this.props.track.getIn(['video', 'particle', 'params']).toJS())}
                               <SketchPicker
                                 color={constructRgbObject(this.props.track.getIn(['video', 'particle', 'params', 'color']), this.props.track.getIn(['video', 'particle', 'params', 'alpha']))}
                                 onChange={this.handleChangeTrackVideoParticleParamColor}

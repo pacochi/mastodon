@@ -177,6 +177,13 @@
         border: 2px solid black;
         cursor: pointer;
         transition: transform 0.8s var(--hover-timing);
+        background-image: url(data:image/gif;base64,R0lGODlhEAAQAPEBAAAAAL+/v////wAAACH5BAAAAAAALAAAAAAQABAAAAIfjG+iq4jM3IFLJipswNly/XkcBpIiVaInlLJr9FZWAQA7);
+        overflow: hidden;
+
+        .track-compose-effect-color-trigger-body {
+          width: 100%;
+          height: 100%;
+        }
 
         &:hover {
           transform: scale(1.2);
