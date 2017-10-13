@@ -1,14 +1,14 @@
-import UAParser from 'ua-parser-js';
 import React, { PureComponent } from 'react';
 import TrackComposeContainer from '../../containers/track_compose';
 import Delay from '../delay';
 import IconButton from '../icon_button';
+import { isMobile } from '../../util/is_mobile';
 
 export default class MediaPost extends PureComponent {
 
   constructor(props, context) {
     super(props, context);
-    this.mobile = ['mobile', 'tablet'].includes(new UAParser().getDevice().type);
+    this.mobile = isMobile();
     this.state = { compose: false };
   }
 
