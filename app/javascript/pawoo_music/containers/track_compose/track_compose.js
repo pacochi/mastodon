@@ -44,7 +44,7 @@ import {
 } from '../../util/musicvideo';
 
 const messages = defineMessages({
-  preview: { id: 'track_compose.preview', defaultMessage: 'Video preview' },
+  preview: { id: 'pawoo_music.track_compose.preview', defaultMessage: 'Video preview' },
 });
 
 const mapStateToProps = (state) => ({
@@ -173,8 +173,8 @@ export default class TrackCompose extends ImmutablePureComponent {
     onChangeTrackVideoSpectrumParamAlpha: PropTypes.func.isRequired,
     onChangeTrackVideoSpectrumParamColor: PropTypes.func.isRequired,
     onChangeTrackComposeTrackVideoTextVisibility: PropTypes.func.isRequired,
-    onChangeTrackComposeTrackVideoTextAlpha: PropTypes.func.isRequired,
-    onChangeTrackComposeTrackVideoTextColor: PropTypes.func.isRequired,
+    onChangeTrackComposeTrackVideoTextParamAlpha: PropTypes.func.isRequired,
+    onChangeTrackComposeTrackVideoTextParamColor: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     tab: PropTypes.string.isRequired,
     track: ImmutablePropTypes.map.isRequired,
@@ -314,8 +314,8 @@ export default class TrackCompose extends ImmutablePureComponent {
   }
 
   handleChangeTrackComposeTrackVideoTextParamColor = ({ rgb }) => {
-    this.props.onChangeTrackVideoTextParamAlpha(rgb.a);
-    this.props.onChangeTrackVideoTextParamColor(extractRgbFromRgbObject(rgb));
+    this.props.onChangeTrackComposeTrackVideoTextParamAlpha(rgb.a);
+    this.props.onChangeTrackComposeTrackVideoTextParamColor(extractRgbFromRgbObject(rgb));
   }
 
   handleToggleParticleColorPickerVisible = () => {
@@ -535,7 +535,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                         <input
                           checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 0}
                           name='video-spectrum-mode'
-                          onClick={this.handleChangeTrackVideoSpectrumParamMode}
+                          onChange={this.handleChangeTrackVideoSpectrumParamMode}
                           type='radio'
                           value='0'
                         />
@@ -639,7 +639,7 @@ export default class TrackCompose extends ImmutablePureComponent {
               {/* Particle */}
               <fieldset>
                 <legend>
-                  <div className='horizontal'>
+                  <label className='horizontal'>
                     <input
                       checked={this.props.track.getIn(['video', 'particle', 'visible'])}
                       onChange={this.handleChangeTrackVideoParticleVisibility}
@@ -649,11 +649,11 @@ export default class TrackCompose extends ImmutablePureComponent {
                       id='pawoo_music.track_compose.video.particle'
                       defaultMessage='Particle'
                     />
-                  </div>
+                  </label>
                 </legend>
 
                 <legend className='track-compose-effect'>
-                  <div className='horizontal'>
+                  <label className='horizontal'>
                     <span className='text'>
                       <FormattedMessage
                         id='pawoo_music.track_compose.video.limit_threshold'
@@ -666,8 +666,8 @@ export default class TrackCompose extends ImmutablePureComponent {
                       value={this.props.track.getIn(['video', 'particle', 'params', 'limit', 'threshold'])}
                       onChange={this.handleChangeTrackVideoParticleParamLimitThreshold}
                     />
-                  </div>
-                  <div className='track-compose-effect-color'>
+                  </label>
+                  <label className='track-compose-effect-color'>
                     <div className='horizontal'>
                       <span className='text'>
                         <FormattedMessage
@@ -691,7 +691,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                         </Delay>
                       </div>
                     </div>
-                  </div>
+                  </label>
                 </legend>
               </fieldset>
 
@@ -701,7 +701,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                   <label className='horizontal'>
                     <input
                       checked={this.props.track.getIn(['video', 'text', 'visible'])}
-                      onChange={this.handleChangeTrackVideoTextVisibility}
+                      onChange={this.handleChangeTrackComposeTrackVideoTextVisibility}
                       type='checkbox'
                     />
                     <FormattedMessage
@@ -728,7 +728,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                             <div className='track-compose-effect-color-content'>
                               <SketchPicker
                                 color={constructRgbObject(this.props.track.getIn(['video', 'text', 'params', 'color']), this.props.track.getIn(['video', 'text', 'params', 'alpha']))}
-                                onChange={this.handleChangeTrackVideoTextParamColor}
+                                onChange={this.handleChangeTrackComposeTrackVideoTextParamColor}
                               />
                             </div>
                           )}
