@@ -35,6 +35,7 @@ import IconButton from '../../components/icon_button';
 import Musicvideo from '../../components/musicvideo';
 import Delay from '../../components/delay';
 import Slider from '../../components/slider';
+import Checkbox from '../../components/checkbox';
 import {
   constructRgbObject,
   constructRgbCode,
@@ -743,10 +744,9 @@ export default class TrackCompose extends ImmutablePureComponent {
               <fieldset>
                 <legend>
                   <label className='horizontal'>
-                    <input
+                    <Checkbox
                       checked={this.props.track.getIn(['video', 'lightleaks', 'visible'])}
                       onChange={this.handleChangeTrackVideoLightLeaksVisibility}
-                      type='checkbox'
                     />
                     <FormattedMessage
                       id='pawoo_music.track_compose.video.lightleaks'
