@@ -10,8 +10,7 @@ import StatusActionBar from '../status_action_bar';
 import AccountContainer from '../account';
 import StatusMeta from '../../components/status_meta';
 import StatusPrepend from '../../components/status_prepend';
-
-import Track from '../../components/track';
+import Track from '../track';
 
 const makeMapStateToProps = () => {
   const getStatus = makeGetStatus();
