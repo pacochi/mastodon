@@ -208,9 +208,18 @@
     padding: 0 20px;
     height: 40px;
     border-radius: 20px;
-    background-color: white;
     color: var(--tootcolor);
+    background-color: white;
     overflow: hidden;
+
+    &.settled {
+      color: white;
+      background-color: var(--tootcolor);
+
+      svg {
+        stroke: white;
+      }
+    }
 
     .track-compose-file-upload-body {
       display: flex;
@@ -219,24 +228,8 @@
     }
 
     .text {
-      display: flex;
-      align-items: center;
+      margin-left: 5px;
       white-space: pre;
-
-      .icon-button {
-        vertical-align: middle;
-        margin-right: var(--grid);
-        width: var(--iconsize20);
-        height: var(--iconsize20);
-
-        svg {
-          width: var(--iconsize20);
-          height: var(--iconsize20);
-        }
-      }
-      span {
-        vertical-align: middle;
-      }
     }
 
     input {

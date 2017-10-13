@@ -48,3 +48,14 @@ export function constructGeneratorOptions(track, image) {
 
   return options;
 }
+
+export function validateIsFileMp3(file) {
+  return new Promise((resolve) => {
+    const reader = new FileReader();
+    reader.onloadend = (progress) => {
+      const buf = new Uint8Array(progress.target.result);
+      resolve((buf[0] === 73 && buf[1] === 68 && buf[2] === 51) || (buf[0] === 255 && (buf[1] === 251 || buf[1] === 250)));
+    };
+    reader.readAsArrayBuffer(file);
+  });
+}

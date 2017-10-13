@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import PropTypes from 'prop-types';
@@ -34,7 +35,7 @@ import IconButton from '../../components/icon_button';
 import Musicvideo from '../../components/musicvideo';
 import Delay from '../../components/delay';
 import Slider from '../../components/slider';
-import { constructRgbObject, constructRgbCode, extractRgbFromRgbObject } from '../../util/musicvideo';
+import { constructRgbObject, constructRgbCode, extractRgbFromRgbObject, validateIsFileMp3 } from '../../util/musicvideo';
 
 const messages = defineMessages({
   preview: { id: 'track_compose.preview', defaultMessage: 'Video preview' },
@@ -182,6 +183,7 @@ export default class TrackCompose extends ImmutablePureComponent {
   }
 
   state = {
+    trackMusicTitle: '',
     visibleColorPicker: null,
   };
 
@@ -207,8 +209,17 @@ export default class TrackCompose extends ImmutablePureComponent {
   }
 
   handleChangeTrackMusic = ({ target }) => {
-    this.props.onChangeTrackMusic(target.files[0]);
-  }
+    const file = target.files[0];
+    if (file) {
+      validateIsFileMp3(file).then((isMp3) => {
+        if (isMp3) {
+          this.setState({ trackMusicTitle: file.name }, () => {
+            this.props.onChangeTrackMusic(file);
+          });
+        }
+      });
+    }
+  };
 
   handleChangeTrackTitle = ({ target }) => {
     this.props.onChangeTrackTitle(target.value);
@@ -326,6 +337,8 @@ export default class TrackCompose extends ImmutablePureComponent {
 
   render () {
     const { track } = this.props;
+    const { trackMusicTitle } = this.state;
+    console.log(track.get('music'));
 
     return (
       <div className='track-compose'>
@@ -337,15 +350,17 @@ export default class TrackCompose extends ImmutablePureComponent {
               {/* 音楽選択から画像選択まで */}
               <fieldset>
                 <legend>
-                  <div className='track-compose-file-upload'>
+                  <div className={classNames('track-compose-file-upload', { settled: track.get('music') instanceof File })}>
                     <div className='track-compose-file-upload-body'>
                       <label className='horizontal'>
+                        <IconButton src='music' />
                         <span className='text'>
-                          <IconButton src='music' />
-                          <FormattedMessage
-                            id='pawoo_music.track_compose.basic.music'
-                            defaultMessage='Select audio'
-                          />
+                          {trackMusicTitle ? trackMusicTitle : (
+                            <FormattedMessage
+                              id='pawoo_music.track_compose.basic.music'
+                              defaultMessage='Select audio'
+                            />
+                          )}
                         </span>
                         <input
                           accept='audio/mpeg'
@@ -429,8 +444,8 @@ export default class TrackCompose extends ImmutablePureComponent {
                   <div className='track-compose-file-upload'>
                     <div className='track-compose-file-upload-body'>
                       <label className='horizontal'>
+                        <IconButton src='image' />
                         <span className='text'>
-                          <IconButton src='image' />
                           <FormattedMessage
                             id='pawoo_music.track_compose.video.image'
                             defaultMessage='Image'
