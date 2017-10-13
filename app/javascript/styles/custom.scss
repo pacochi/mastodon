@@ -1,14 +1,5 @@
 @import 'application';
 
-// @import 'mixins';
-// @import 'variables';
-// @import 'reset';
-// @import 'fonts/roboto';
-// @import 'fonts/roboto-mono';
-// @import 'fonts/montserrat';
-
-@import "pawoo-theme/reset.scss";
 @import "pawoo-theme/about";
-@import "pawoo-theme/theme";
 @import "pawoo-theme/oauth_authentications";
-@import "pawoo-theme/react-datetime";
+@import "pawoo-theme/theme";

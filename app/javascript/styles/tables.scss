@@ -3,18 +3,19 @@
   max-width: 100%;
   border-spacing: 0;
   border-collapse: collapse;
-  margin-bottom: 20px;
 
   th,
   td {
     padding: 8px;
     line-height: 18px;
     vertical-align: top;
+    border-top: 1px solid $ui-base-color;
     text-align: left;
   }
 
   & > thead > tr > th {
     vertical-align: bottom;
+    border-bottom: 2px solid $ui-base-color;
     border-top: 0;
     font-weight: 500;
   }
@@ -25,20 +26,35 @@
 
   & > tbody > tr:nth-child(odd) > td,
   & > tbody > tr:nth-child(odd) > th {
-    background: var(--color2);
+    background: $ui-base-color;
   }
 
-  &.inline-table {
-    td,
-    th {
-      padding: 8px 0;
-    }
+  a {
+    color: $ui-highlight-color;
+    text-decoration: underline;
 
-    & > tbody > tr:nth-child(odd) > td,
-    & > tbody > tr:nth-child(odd) > th {
-      background: transparent;
+    &:hover {
+      text-decoration: none;
     }
   }
+
+  strong {
+    font-weight: 500;
+  }
+
+  &.inline-table > tbody > tr:nth-child(odd) > td,
+  &.inline-table > tbody > tr:nth-child(odd) > th {
+    background: transparent;
+  }
+}
+
+.table-wrapper {
+  overflow: auto;
+  margin-bottom: 20px;
+}
+
+samp {
+  font-family: 'mastodon-font-monospace', monospace;
 }
 
 a.table-action-link {

@@ -1,102 +1,176 @@
 .admin-wrapper {
-  display:          flex;
-  justify-content:  center;
-  height:           100%;
-
-  font-size:        var(--text30-font);
-  line-height:      var(--text30-line);
+  display: flex;
+  justify-content: center;
+  height: 100%;
 
   .sidebar-wrapper {
-    flex:             1;
-    height:           100%;
-    background:       var(--color2);
-    display:          flex;
-    justify-content:  flex-end;
+    flex: 1;
+    height: 100%;
+    background: $ui-base-color;
+    display: flex;
+    justify-content: flex-end;
+  }
 
-    .sidebar {
-      flex-basis: 240px;
-      height:     100%;
-      padding:    0;
-      overflow-y: auto;
+  .sidebar {
+    width: 240px;
+    height: 100%;
+    padding: 0;
+    overflow-y: auto;
 
-      .logo {
-        display:  block;
-        margin:   var(--iconsize40) auto;
-        width:    100px;
-        height:   100px;
+    .logo {
+      display: block;
+      margin: 40px auto;
+      width: 100px;
+      height: 100px;
+    }
+
+    ul {
+      list-style: none;
+      border-radius: 4px 0 0 4px;
+      overflow: hidden;
+      margin-bottom: 20px;
+
+      a {
+        display: block;
+        padding: 15px;
+        color: rgba($primary-text-color, 0.7);
+        text-decoration: none;
+        transition: all 200ms linear;
+        border-radius: 4px 0 0 4px;
+
+        i.fa {
+          margin-right: 5px;
+        }
+
+        &:hover {
+          color: $primary-text-color;
+          background-color: darken($ui-base-color, 5%);
+          transition: all 100ms linear;
+        }
+
+        &.selected {
+          background: darken($ui-base-color, 2%);
+          border-radius: 4px 0 0;
+        }
       }
 
       ul {
-        list-style:     none;
-        overflow:       hidden;
-        margin-bottom:  20px;
+        background: darken($ui-base-color, 4%);
+        border-radius: 0 0 0 4px;
+        margin: 0;
 
         a {
-          display:          block;
-          padding:          10px 15px;
-          background:       var(--color3);
-          text-decoration:  none;
-
-          i.fa {
-            margin:         var(--rightspace5);
-          }
-
-          &:hover {
-            font-weight:      normal;
-            color:            var(--color1);
-            background-color: var(--tootcolor);
-          }
+          border: 0;
+          padding: 15px 35px;
 
           &.selected {
-            background:       var(--tootcolor);
-            color:            var(--color1);
+            color: $primary-text-color;
+            background-color: $ui-highlight-color;
+            border-bottom: 0;
+            border-radius: 0;
+
+            &:hover {
+              background-color: lighten($ui-highlight-color, 5%);
+            }
           }
         }
       }
     }
   }
 
-
   .content-wrapper {
-    flex:     2;
+    flex: 2;
     overflow: auto;
+  }
 
-    a, a:link, a:visited {
-      color:  var(--linkcolor);
+  .content {
+    max-width: 700px;
+    padding: 20px 15px;
+    padding-top: 60px;
+    padding-left: 25px;
+
+    h2 {
+      color: $ui-secondary-color;
+      font-size: 24px;
+      line-height: 28px;
+      font-weight: 400;
+      margin-bottom: 40px;
     }
 
-    a:hover {
-      color:  var(--strong1);
+    h3 {
+      color: $ui-secondary-color;
+      font-size: 20px;
+      line-height: 28px;
+      font-weight: 400;
+      margin-bottom: 30px;
     }
 
+    h6 {
+      font-size: 16px;
+      color: $ui-secondary-color;
+      line-height: 28px;
+      font-weight: 400;
+    }
 
-    .content {
-      box-sizing:   border-box;
-      max-width:    700px;
-      padding:      20px 15px;
-      padding-top:  60px;
-      padding-left: 25px;
+    & > p {
+      font-size: 14px;
+      line-height: 18px;
+      color: $ui-secondary-color;
+      margin-bottom: 20px;
 
-      h2 {
-        color:        var(--strong2);
-        font-size:    var(--text50-font);
-        line-height:  var(--text50-line);
+      strong {
+        color: $primary-text-color;
+        font-weight: 500;
       }
+    }
 
-      h6 { // Where does this used?
-        font-size:    16px;
-        color:        var(--textcolor);
-        line-height:  28px;
-        font-weight:  normal;
+    hr {
+      margin: 20px 0;
+      border: 0;
+      background: transparent;
+      border-bottom: 1px solid $ui-base-color;
+    }
+
+    .muted-hint {
+      color: $ui-primary-color;
+
+      a {
+        color: $ui-highlight-color;
       }
+    }
+
+    .positive-hint {
+      color: $valid-value-color;
+      font-weight: 500;
     }
   }
 
+  .simple_form {
+    max-width: 400px;
+
+    &.edit_user,
+    &.new_form_admin_settings,
+    &.new_form_two_factor_confirmation,
+    &.new_form_delete_confirmation,
+    &.new_import,
+    &.new_domain_block,
+    &.edit_domain_block {
+      max-width: none;
+    }
+
+    .form_two_factor_confirmation_code,
+    .form_delete_confirmation_password {
+      max-width: 400px;
+    }
+
+    .actions {
+      max-width: 400px;
+    }
+  }
 
   @media screen and (max-width: 600px) {
     display: block;
     overflow-y: auto;
-    overflow-x: hidden;
     -webkit-overflow-scrolling: touch;
 
     .sidebar-wrapper,
@@ -107,7 +181,6 @@
     }
 
     .sidebar {
-      flex-basis: 100vw !important;
       width: 100%;
       padding: 10px 0;
       height: auto;
@@ -121,44 +194,19 @@
       padding-top: 20px;
     }
   }
-
-  .warning {
-    padding:          var(--padding10);
-    font-size:        var(--text20-font);
-    line-height:      var(--text20-line);
-    color:            var(--color1);
-    background-color: var(--strong2);
-    border-radius:    var(--radius);
-    margin-bottom:    var(--padding20);
-
-    strong {
-      display:        block;
-      font-weight:    bold;
-      font-size:      var(--text30-font);
-      line-height:    var(--text30-line);
-      margin-bottom:  var(--padding10);
-    }
-  }
-
-  hr {
-    margin: var(--verticalspace30-both);
-    border: 0;
-    border-bottom: 1px solid var(--color2);
-  }
 }
-
-
-
-// ---------------------------------------------------------------------------
-// For Administrator
 
 .filters {
   display: flex;
-  margin-bottom: 20px;
+  flex-wrap: wrap;
 
   .filter-subset {
     flex: 0 0 auto;
-    margin-right: 40px;
+    margin: 0 40px 10px 0;
+
+    &:last-child {
+      margin-bottom: 20px;
+    }
 
     ul {
       margin-top: 5px;
@@ -200,28 +248,22 @@
 
 .report-accounts {
   display: flex;
+  flex-wrap: wrap;
   margin-bottom: 20px;
 }
 
 .report-accounts__item {
-  flex: 1 1 0;
   display: flex;
+  flex: 250px;
   flex-direction: column;
+  margin: 0 5px;
 
   & > strong {
     display: block;
-    margin-bottom: 10px;
+    margin: 0 0 10px -5px;
     font-weight: 500;
     font-size: 14px;
     line-height: 18px;
-    color: $ui-secondary-color;
-  }
-
-  &:first-child {
-    margin-right: 10px;
-  }
-
-  a {
     color: $ui-secondary-color;
   }
 
@@ -238,6 +280,11 @@
   .activity-stream {
     flex: 2 0 0;
     margin-right: 20px;
+    max-width: calc(100% - 60px);
+
+    .entry {
+      border-radius: 4px;
+    }
   }
 }
 
@@ -257,11 +304,16 @@
 
 .batch-form-box {
   display: flex;
-  margin-bottom: 10px;
+  flex-wrap: wrap;
+  margin-bottom: 5px;
 
   #form_status_batch_action {
-    margin-right: 5px;
+    margin: 0 5px 5px 0;
     font-size: 14px;
+  }
+
+  input.button {
+    margin: 0 5px 5px 0;
   }
 
   .media-spoiler-toggle-buttons {
@@ -269,6 +321,8 @@
 
     .button {
       overflow: visible;
+      margin: 0 0 5px 5px;
+      float: right;
     }
   }
 }
