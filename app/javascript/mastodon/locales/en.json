@@ -215,6 +215,7 @@
   "pawoo_music.track_compose.basic.details": "Details",
   "pawoo_music.track_compose.basic.music": "Select audio file",
   "pawoo_music.track_compose.basic.title": "Title",
+  "pawoo_music.track_compose.preview": "Video preview",
   "pawoo_music.track_compose.save": "Save",
   "pawoo_music.track_compose.video": "Video",
   "pawoo_music.track_compose.video.blink_threshold": "Threshold triggering blink",
