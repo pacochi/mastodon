@@ -138,6 +138,112 @@
       float: right;
     }
   }
+
+
+  button,
+  .button,
+  .block-button {
+    display: block;
+    width: 100%;
+    border: 0;
+    border-radius: 4px;
+    background: $ui-highlight-color;
+    color: $primary-text-color;
+    font-size: 18px;
+    line-height: inherit;
+    height: auto;
+    padding: 10px;
+    text-transform: uppercase;
+    text-decoration: none;
+    text-align: center;
+    box-sizing: border-box;
+    cursor: pointer;
+    font-weight: 500;
+    outline: 0;
+    margin-bottom: 10px;
+    margin-right: 10px;
+
+    &:last-child {
+      margin-right: 0;
+    }
+
+    &:hover {
+      background-color: lighten($ui-highlight-color, 5%);
+    }
+
+    &:active,
+    &:focus {
+      position: relative;
+      top: 1px;
+      background-color: darken($ui-highlight-color, 5%);
+    }
+
+    &.negative {
+      background: $error-value-color;
+
+      &:hover {
+        background-color: lighten($error-value-color, 5%);
+      }
+
+      &:active,
+      &:focus {
+        background-color: darken($error-value-color, 5%);
+      }
+    }
+
+    &.omniauth-pixiv {
+      margin-top: 20px;
+      height: 60px;
+      line-height: 40px;
+      text-transform: none;
+      font-family: "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, sans-serif;
+    }
+  }
+}
+
+
+.form-container {
+  max-width: 400px;
+  margin: 100px auto;
+  margin-bottom: 0;
+  cursor: default;
+
+  @media screen and (max-width: 360px) {
+    margin: 30px auto;
+  }
+
+  .flash-message {
+    background: var(--color2);
+    border-radius: 4px;
+    padding: 15px 10px;
+    margin-bottom: 30px;
+    text-align: center;
+
+    font-size: var(--text20-font);
+    line-height: var(--text20-line);
+  }
+
+  .input.field_with_errors {
+    label {
+      color: var(--strong1);
+    }
+
+    .error {
+      display: block;
+      font-weight: 500;
+      color: var(--strong1);
+      margin-top: 4px;
+    }
+  }
+
+  .form-footer {
+    margin-top: 30px;
+    text-align: center;
+    font-family: "ヒラギノ角ゴ ProN W3", Hiragino Kaku Gothic ProN, Arial, "メイリオ", Meiryo, -apple-system, BlinkMacSystemFont, "Helvetica Neue", "Yu Gothic", YuGothic, sans-serif;
+
+    font-size: var(--text20-font);
+    line-height: var(--text20-line);
+  }
 }
 
 /*
@@ -284,87 +390,10 @@
     }
   }
 
-  .input.field_with_errors {
-    label {
-      color: $error-value-color;
-    }
-
-    input[type=text],
-    input[type=email],
-    input[type=password] {
-      border-bottom-color: $error-value-color;
-    }
-
-    .error {
-      display: block;
-      font-weight: 500;
-      color: $error-value-color;
-      margin-top: 4px;
-    }
-  }
-
   .actions {
     margin-top: 30px;
     display: flex;
   }
-
-  button,
-  .button,
-  .block-button {
-    display: block;
-    width: 100%;
-    border: 0;
-    border-radius: 4px;
-    background: $ui-highlight-color;
-    color: $primary-text-color;
-    font-size: 18px;
-    line-height: inherit;
-    height: auto;
-    padding: 10px;
-    text-transform: uppercase;
-    text-decoration: none;
-    text-align: center;
-    box-sizing: border-box;
-    cursor: pointer;
-    font-weight: 500;
-    outline: 0;
-    margin-bottom: 10px;
-    margin-right: 10px;
-
-    &:last-child {
-      margin-right: 0;
-    }
-
-    &:hover {
-      background-color: lighten($ui-highlight-color, 5%);
-    }
-
-    &:active,
-    &:focus {
-      position: relative;
-      top: 1px;
-      background-color: darken($ui-highlight-color, 5%);
-    }
-
-    &.negative {
-      background: $error-value-color;
-
-      &:hover {
-        background-color: lighten($error-value-color, 5%);
-      }
-
-      &:active,
-      &:focus {
-        background-color: darken($error-value-color, 5%);
-      }
-    }
-
-    &.omniauth-pixiv {
-      margin-top: 20px;
-      height: 60px;
-      line-height: 40px;
-      text-transform: none;
-    }
   }
 
   select {
@@ -375,21 +404,6 @@
     font-size: 16px;
   }
 }
-
-.flash-message {
-  background: $ui-base-color;
-  color: $ui-primary-color;
-  border-radius: 4px;
-  padding: 15px 10px;
-  margin-bottom: 30px;
-  box-shadow: 0 0 5px rgba($base-shadow-color, 0.2);
-  text-align: center;
-
-  strong {
-    font-weight: 500;
-  }
-}
-
 .form-footer {
   margin-top: 30px;
   text-align: center;

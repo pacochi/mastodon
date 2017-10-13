@@ -4,8 +4,8 @@
   margin-top: 40px;
 
   @media screen and (max-width: 700px) {
-    width: 100%;
-    margin: 0;
+    width: calc(100% - 40px);
+    margin: 20px;
   }
 }
 
@@ -55,7 +55,6 @@
       display: block;
       font-size: 12px;
       font-weight: 400;
-      font-family: 'mastodon-font-monospace', monospace;
     }
   }
 }
