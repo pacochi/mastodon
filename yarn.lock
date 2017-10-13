@@ -5454,7 +5454,7 @@ multipipe@^0.1.2:
 
 "musicvideo-generator@github:pixiv/musicvideo-generator":
   version "1.0.0"
-  resolved "git+ssh://git@github.com/pixiv/musicvideo-generator.git#da28add509106ea9fbc4cec6f33393295543de3f"
+  resolved "git+ssh://git@github.com/pixiv/musicvideo-generator.git#3ffe04671f8fa0abd11ad701173927a0f921c170"
   dependencies:
     pixi.js "^4.5.4"
 
