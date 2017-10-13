@@ -166,8 +166,12 @@
     }
 
     .track-compose-effect-color {
-      z-index: var(--mordal-z-index);
       position: relative;
+      z-index: var(--mordal-z-index);
+
+      .track-compose-effect-color-wrap {
+        position: relative;
+      }
 
       .track-compose-effect-color-trigger {
         box-sizing: border-box;
