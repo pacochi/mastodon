@@ -153,7 +153,7 @@ a:hover {
   // block width and height
   --width-globalnavi:     calc(var(--grid) * 50);
   --width-lobby:          calc(var(--grid) * 80);
-  --width-gallery-view:   calc(100vw - var(--width-globalnavi) - var(--width-lobby));
+  --width-gallery-view:   calc(100vw - var(--grid) * 130);
   --width-gallery:        calc(var(--grid) * 120);
 
   --width-ago:            calc(var(--grid) * 6);

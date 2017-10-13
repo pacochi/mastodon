@@ -4673,9 +4673,9 @@ interpret@^1.0.0:
   version "1.0.4"
   resolved "https://registry.yarnpkg.com/interpret/-/interpret-1.0.4.tgz#820cdd588b868ffb191a809506d6c9c8f212b1b0"
 
-intersection-observer@^0.3.2:
-  version "0.3.4"
-  resolved "https://registry.yarnpkg.com/intersection-observer/-/intersection-observer-0.3.4.tgz#9329a76966820afb04ae4cc039b670f3f0b3d6e3"
+intersection-observer@^0.4.2:
+  version "0.4.2"
+  resolved "https://registry.yarnpkg.com/intersection-observer/-/intersection-observer-0.4.2.tgz#24100ed620baf6a427072996d4d73366e9ec93ef"
 
 intl-format-cache@^2.0.5:
   version "2.0.5"
