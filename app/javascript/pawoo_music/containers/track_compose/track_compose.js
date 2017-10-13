@@ -251,10 +251,9 @@ export default class TrackCompose extends ImmutablePureComponent {
     this.props.onChangeTrackVideoParticleParamLimitThreshold(value);
   }
 
-  handleChangeTrackVideoParticleParamColor = ({ rgb }) => {
-    console.log(rgb);
-    this.props.onChangeTrackVideoParticleParamColor(extractRgbFromRgbObject(rgb));
+  handleChangeTrackVideoParticleParamColor = ({ rgb }) => { // FIXME Alphaがバグる
     this.props.onChangeTrackVideoParticleParamAlpha(rgb.a);
+    this.props.onChangeTrackVideoParticleParamColor(extractRgbFromRgbObject(rgb));
   }
 
   handleChangeTrackVideoLightLeaksVisibility = ({ target }) => {

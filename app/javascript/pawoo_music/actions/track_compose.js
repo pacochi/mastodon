@@ -195,21 +195,21 @@ export function changeTrackComposeTrackVideoLightLeaksVisibility(value) {
     type: TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_VISIBILITY_CHANGE,
     value,
   };
-}
+};
 
 export function changeTrackComposeTrackVideoLightLeaksParamAlpha(value) {
   return {
     type: TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_ALPHA_CHANGE,
     value,
   };
-}
+};
 
 export function changeTrackComposeTrackVideoLightLeaksParamInterval(value) {
   return {
     type: TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_INTERVAL_CHANGE,
     value,
   };
-}
+};
 
 export function changeTrackComposeTrackVideoSpectrumVisiblity(value) {
   return {
@@ -244,21 +244,21 @@ export function changeTrackComposeTrackVideoTextVisibility(value) {
     type: TRACK_COMPOSE_TRACK_VIDEO_TEXT_VISIBILITY_CHANGE,
     value,
   };
-}
+};
 
 export function changeTrackComposeTrackVideoTextParamAlpha(value) {
   return {
     type: TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_ALPHA_CHANGE,
     value,
   };
-}
+};
 
 export function changeTrackComposeTrackVideoTextParamColor(value) {
   return {
     type: TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_COLOR_CHANGE,
     value,
   };
-}
+};
 
 export function submitTrackComposeRequest() {
   return {
