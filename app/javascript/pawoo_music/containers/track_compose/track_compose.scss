@@ -37,7 +37,7 @@
     // overflow-y: scroll;
 
     > div {
-      max-width: var(----video-width);
+      max-width: var(--video-width);
     }
 
     > .musicvideo {
@@ -114,7 +114,7 @@
           display: block;
         }
 
-        label.horizontal {
+        .horizontal {
           display: flex;
           align-items: center;
 

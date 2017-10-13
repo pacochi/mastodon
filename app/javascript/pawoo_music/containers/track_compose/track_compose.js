@@ -391,6 +391,118 @@ export default class TrackCompose extends ImmutablePureComponent {
                 <legend>
                   <label className='horizontal'>
                     <input
+                      checked={this.props.track.getIn(['video', 'spectrum', 'visible'])}
+                      onChange={this.handleChangeTrackVideoSpectrumVisibility}
+                      type='checkbox'
+                    />
+                    <FormattedMessage
+                      id='pawoo_music.track_compose.video.spectrum'
+                      defaultMessage='Spectrum'
+                    />
+                  </label>
+                </legend>
+
+                <div className='track-compose-effect'>
+                  <div className='horizontal'>
+                    <span className='text'>
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.video.spectrum_mode'
+                        defaultMessage='Threshold triggering change'
+                      />
+                    </span>
+                    <div className='horizontal'>
+                      <label>
+                        <input
+                          checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 1}
+                          name='video-spectrum-mode'
+                          onChange={this.handleChangeTrackVideoSpectrumParamMode}
+                          type='radio'
+                          value='1'
+                        />
+                        <FormattedMessage
+                          id='pawoo_music.track_compose.video.circle_columns'
+                          defaultMessage='Columns around circle'
+                        />
+                      </label>
+                      <label>
+                        <input
+                          checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 2}
+                          name='video-spectrum-mode'
+                          onChange={this.handleChangeTrackVideoSpectrumParamMode}
+                          type='radio'
+                          value='2'
+                        />
+                        <FormattedMessage
+                          id='pawoo_music.track_compose.video.circle'
+                          defaultMessage='Circle'
+                        />
+                      </label>
+                      <label>
+                        <input
+                          checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 0}
+                          name='video-spectrum-mode'
+                          onClick={this.handleChangeTrackVideoSpectrumParamMode}
+                          type='radio'
+                          value='0'
+                        />
+                        <FormattedMessage
+                          id='pawoo_music.track_compose.video.bottom_columns'
+                          defaultMessage='Columns at the bottom'
+                        />
+                      </label>
+                      <label>
+                        <input
+                          checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 3}
+                          name='video-spectrum-mode'
+                          onChange={this.handleChangeTrackVideoSpectrumParamMode}
+                          type='radio'
+                          value='3'
+                        />
+                        <FormattedMessage
+                          id='pawoo_music.track_compose.video.bottom_fill'
+                          defaultMessage='Filled graph at the bottom'
+                        />
+                      </label>
+                    </div>
+                  </div>
+
+                  <div className='track-compose-effect-color'>
+                    <label className='horizontal'>
+                      <span className='text'>
+                        <FormattedMessage
+                          id='pawoo_music.track_compose.video.limit_color'
+                          defaultMessage='Threshold triggering change'
+                        />
+                      </span>
+                      <div className='track-compose-effect-color'>
+                        <div
+                          className='track-compose-effect-color-trigger'
+                          style={{ backgroundColor: convertToRgbCode(this.props.track.getIn(['video', 'spectrum', 'params', 'color'])) }}
+                          onClick={this.handleToggleSpectrumColorPickerVisible}
+                          role='button'
+                          tabIndex='-1'
+                        />
+                        <Delay>
+                          {this.state.spectrumColorPickerVisible && (
+                            <div className='track-compose-effect-color-content'>
+                              <SketchPicker
+                                color={convertToRgbObject(this.props.track.getIn(['video', 'spectrum', 'params', 'color']))}
+                                disableAlpha
+                                onChange={this.handleChangeTrackVideoSpectrumParamColor}
+                              />
+                            </div>
+                          )}
+                        </Delay>
+                      </div>
+                    </label>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset>
+                <legend>
+                  <label className='horizontal'>
+                    <input
                       checked={this.props.track.getIn(['video', 'blur', 'visible'])}
                       onChange={this.handleChangeTrackVideoBlurVisibility}
                       type='checkbox'
@@ -509,99 +621,6 @@ export default class TrackCompose extends ImmutablePureComponent {
                   defaultMessage='Light leaks'
                 />
               </label>
-
-              <fieldset>
-                <legend>
-                  <label className='horizontal'>
-                    <input
-                      checked={this.props.track.getIn(['video', 'spectrum', 'visible'])}
-                      onChange={this.handleChangeTrackVideoSpectrumVisibility}
-                      type='checkbox'
-                    />
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.spectrum'
-                      defaultMessage='Spectrum'
-                    />
-                  </label>
-                </legend>
-
-                <div className='track-compose-effect'>
-
-                  <label>
-                    <input
-                      checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 0}
-                      name='video-spectrum-mode'
-                      onClick={this.handleChangeTrackVideoSpectrumParamMode}
-                      type='radio'
-                      value='0'
-                    />
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.bottom_columns'
-                      defaultMessage='Columns at the bottom'
-                    />
-                  </label>
-                  <label>
-                    <input
-                      checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 1}
-                      name='video-spectrum-mode'
-                      onChange={this.handleChangeTrackVideoSpectrumParamMode}
-                      type='radio'
-                      value='1'
-                    />
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.circle_columns'
-                      defaultMessage='Columns around circle'
-                    />
-                  </label>
-                  <label>
-                    <input
-                      checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 2}
-                      name='video-spectrum-mode'
-                      onChange={this.handleChangeTrackVideoSpectrumParamMode}
-                      type='radio'
-                      value='2'
-                    />
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.circle'
-                      defaultMessage='Circle'
-                    />
-                  </label>
-                  <label>
-                    <input
-                      checked={this.props.track.getIn(['video', 'spectrum', 'params', 'mode']) === 3}
-                      name='video-spectrum-mode'
-                      onChange={this.handleChangeTrackVideoSpectrumParamMode}
-                      type='radio'
-                      value='3'
-                    />
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.bottom_fill'
-                      defaultMessage='Filled graph at the bottom'
-                    />
-                  </label>
-
-                  <div className='track-compose-effect-color'>
-                    <div
-                      className='track-compose-effect-color-trigger'
-                      style={{ backgroundColor: convertToRgbCode(this.props.track.getIn(['video', 'spectrum', 'params', 'color'])) }}
-                      onClick={this.handleToggleSpectrumColorPickerVisible}
-                      role='button'
-                      tabIndex='-1'
-                    />
-                    <Delay>
-                      {this.state.spectrumColorPickerVisible && (
-                        <div className='track-compose-effect-color-content'>
-                          <SketchPicker
-                            color={convertToRgbObject(this.props.track.getIn(['video', 'spectrum', 'params', 'color']))}
-                            disableAlpha
-                            onChange={this.handleChangeTrackVideoSpectrumParamColor}
-                          />
-                        </div>
-                      )}
-                    </Delay>
-                  </div>
-                </div>
-              </fieldset>
 
             </form>
           </div>
