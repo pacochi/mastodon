@@ -12,21 +12,17 @@
       height: var(--width-gallery); // aspect ratio 1:1
       background-size: cover;
       background-position: center center;
-
-      img {
-        display: block;
-      }
+      display: flex;
+      justify-content: center;
+      align-items: center;
 
       .playbutton {
-        cursor:     pointer;
+        display: block;
+        cursor: pointer;
 
-        position:   absolute;
-        top:        0;
-        left:       0;
         height:     var(--iconsize40);
         width:      var(--iconsize40);
-        top:        calc((100% - var(--iconsize40))/ 2);
-        left:       calc((100% - var(--iconsize40))/ 2);
+
 
         &:hover {
           opacity:    var(--hover-opacity);
