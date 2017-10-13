@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import Immutable from 'immutable';
-import Track from '../components/track';
+import Track from '../containers/track';
 
 export default class MusicvideoEntry extends React.PureComponent {
 

@@ -22,10 +22,12 @@ class Musicvideo extends ImmutablePureComponent {
     track: ImmutablePropTypes.map.isRequired,
     label: PropTypes.string,
     autoPlay: PropTypes.bool,
+    onEnded: PropTypes.func,
   };
 
   static defaultProps = {
     autoPlay: true,
+    onEnded: noop,
   };
 
   state = {
@@ -65,6 +67,7 @@ class Musicvideo extends ImmutablePureComponent {
     this.generator.start();
 
     this.timer = setInterval(this.updateCurrentTime, 500);
+    this.audioElement.addEventListener('ended', this.props.onEnded);
   }
 
   componentWillReceiveProps ({ track }) {
@@ -95,6 +98,14 @@ class Musicvideo extends ImmutablePureComponent {
     const { music } = this.state;
 
     clearInterval(this.timer);
+
+    if (this.image) {
+      this.image.removeEventListener('load', this.updateCanvas);
+    }
+
+    if (this.audioElement) {
+      this.audioElement.removeEventListener('ended', this.props.onEnded);
+    }
 
     if (this.generator) {
       this.generator.stop();
@@ -149,7 +160,7 @@ class Musicvideo extends ImmutablePureComponent {
 
     if (audioElement) {
       if (!audioElement.paused  && !audioElement.seeking) {
-        this.setState({ time: 100 * this.audioElement.currentTime / this.audioElement.duration });
+        this.setState({ paused: audioElement.paused, time: 100 * this.audioElement.currentTime / this.audioElement.duration });
       }
     }
   }
