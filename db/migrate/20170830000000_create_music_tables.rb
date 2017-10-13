@@ -23,10 +23,15 @@ class CreateMusicTables < ActiveRecord::Migration[5.1]
       t.integer :video_particle_limit_band_bottom, default: 0, null: false
       t.integer :video_particle_limit_band_top, default: 0, null: false
       t.integer :video_particle_limit_threshold, default: 0, null: false
-      t.integer :video_particle_color
-      t.boolean :video_lightleaks, default: false, null: false
-      t.integer :video_spectrum_mode
-      t.integer :video_spectrum_color
+      t.float :video_particle_alpha, default: 0, null: false
+      t.integer :video_particle_color, default: 0, null: false
+      t.float :video_lightleaks_alpha, default: 0, null: false
+      t.integer :video_lightleaks_interval, default: 0, null: false
+      t.integer :video_spectrum_mode, default: 0, null: false
+      t.float :video_spectrum_alpha, default: 0, null: false
+      t.integer :video_spectrum_color, default: 0, null: false
+      t.float :video_text_alpha, default: 0, null: false
+      t.integer :video_text_color, default: 0, null: false
     end
 
     create_table :album_tracks, id: false do |t|

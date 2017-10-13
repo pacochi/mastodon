@@ -24,7 +24,7 @@ function convertURL(file) {
 class Musicvideo extends ImmutablePureComponent {
 
   static propTypes = {
-    track:  ImmutablePropTypes.map.isRequired,
+    track: ImmutablePropTypes.map.isRequired,
     autoPlay: PropTypes.bool,
     label: PropTypes.string,
   };
