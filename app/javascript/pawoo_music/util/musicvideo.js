@@ -1,60 +1,49 @@
-export function convertToRgbObject (color) {
-  return { r: (0xff & (color >> 16)), g: (0xff & (color >> 8)), b: (0xff & color) };
+export function constructRgbObject (color, a) {
+  return {
+    r: (0xff & (color >> 16)),
+    g: (0xff & (color >> 8)),
+    b: (0xff & color),
+    a,
+  };
 };
 
-export function convertToRgbCode (color) {
-  return `rgb(${0xff & (color >> 16)},${0xff & (color >> 8)},${0xff & color})`;
+export function constructRgbCode (color, a) {
+  return `rgba(${0xff & (color >> 16)},${0xff & (color >> 8)},${0xff & color},${a})`;
 };
+
+export function extractRgbFromRgbObject ({ r, g, b }) {
+  return (r << 16) | (g << 8) | b;
+}
 
 export function constructGeneratorOptions(track, image) {
   const video = track.get('video');
-  const lightleaks = video.get('lightleaks');
-  const blur = video.get('blur');
-  const particle = video.get('particle');
-  const spectrum = video.get('spectrum');
 
-  const options = {
-    image,
-    text: { title: track.get('title'), sub: track.get('artist') },
-  };
+  const options = { image };
 
-  // フォームの場合はvisibleキーとparamsキーが存在する
-  if (blur) {
-    if (blur.has('visible')) {
-      if (blur.get('visible')) {
-        options.blur = blur.get('params').toJS();
+  for (const [trackKey, optionKey] of [
+    ['blur', 'blur'],
+    ['particle', 'particle'],
+    ['lightleaks', 'lightLeaks'],
+    ['spectrum', 'spectrum'],
+    ['text', 'text'],
+  ]) {
+    const trackProperty = video.get(trackKey);
+
+    // フォームの場合はvisibleキーとparamsキーが存在する
+    if (trackProperty) {
+      if (trackProperty.has('visible')) {
+        if (trackProperty.get('visible')) {
+          options[optionKey] = trackProperty.get('params').toJS();
+        }
+      } else {
+        options[optionKey] = trackProperty.toJS();
       }
-    } else {
-      options.blur = blur.toJS();
     }
   }
 
-  if (particle) {
-    if (particle.has('visible')) {
-      if (particle.get('visible')) {
-        options.particle = particle.get('params').toJS();
-      }
-    } else {
-      options.particle = particle.toJS();
-    }
-  }
-
-  if (lightleaks) {
-    if (lightleaks.has && lightleaks.has('visible')) {
-      options.lightLeaks = lightleaks.get('visible');
-    } else {
-      options.lightLeaks = lightleaks;
-    }
-  }
-
-  if (spectrum) {
-    if (spectrum.has('visible')) {
-      if (spectrum.get('visible')) {
-        options.spectrum = spectrum.get('params').toJS();
-      }
-    } else {
-      options.spectrum = spectrum.toJS();
-    }
+  if (options.text) {
+    options.text.title = track.get('title');
+    options.text.sub = track.get('artist');
   }
 
   return options;

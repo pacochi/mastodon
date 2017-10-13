@@ -3,6 +3,7 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 import PropTypes from 'prop-types';
 import React from 'react';
 import { SketchPicker } from 'react-color';
+import { AlphaPicker, ChromePicker } from 'react-color';
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import {
@@ -15,19 +16,26 @@ import {
   changeTrackComposeTrackVideoBlurParamMovementThreshold,
   changeTrackComposeTrackVideoBlurParamBlinkThreshold,
   changeTrackComposeTrackVideoParticleVisibility,
+  changeTrackComposeTrackVideoParticleParamAlpha,
   changeTrackComposeTrackVideoParticleParamColor,
   changeTrackComposeTrackVideoParticleParamLimitThreshold,
   changeTrackComposeTrackVideoLightLeaksVisibility,
+  changeTrackComposeTrackVideoLightLeaksParamAlpha,
+  changeTrackComposeTrackVideoLightLeaksParamInterval,
   changeTrackComposeTrackVideoSpectrumVisiblity,
   changeTrackComposeTrackVideoSpectrumParamMode,
+  changeTrackComposeTrackVideoSpectrumParamAlpha,
   changeTrackComposeTrackVideoSpectrumParamColor,
+  changeTrackComposeTrackVideoTextVisibility,
+  changeTrackComposeTrackVideoTextParamAlpha,
+  changeTrackComposeTrackVideoTextParamColor,
   submitTrackCompose,
 } from '../../actions/track_compose';
 import IconButton from '../../components/icon_button';
 import Musicvideo from '../../components/musicvideo';
 import Delay from '../../components/delay';
 import Slider from '../../components/slider';
-import { convertToRgbObject, convertToRgbCode } from '../../util/musicvideo';
+import { constructRgbObject, constructRgbCode, extractRgbFromRgbObject } from '../../util/musicvideo';
 
 const messages = defineMessages({
   preview: { id: 'track_compose.preview', defaultMessage: 'Video preview' },
@@ -77,6 +85,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(changeTrackComposeTrackVideoParticleVisibility(value));
   },
 
+  onChangeTrackVideoParticleParamAlpha (value) {
+    dispatch(changeTrackComposeTrackVideoParticleParamAlpha(value));
+  },
+
   onChangeTrackVideoParticleParamColor (value) {
     dispatch(changeTrackComposeTrackVideoParticleParamColor(value));
   },
@@ -89,6 +101,14 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(changeTrackComposeTrackVideoLightLeaksVisibility(value));
   },
 
+  onChangeTrackVideoLightLeaksParamAlpha (value) {
+    dispatch(changeTrackComposeTrackVideoLightLeaksParamAlpha(value));
+  },
+
+  onChangeTrackVideoLightLeaksParamInterval (value) {
+    dispatch(changeTrackComposeTrackVideoLightLeaksParamInterval(value));
+  },
+
   onChangeTrackVideoSpectrumVisibility (value) {
     dispatch(changeTrackComposeTrackVideoSpectrumVisiblity(value));
   },
@@ -97,8 +117,24 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(changeTrackComposeTrackVideoSpectrumParamMode(value));
   },
 
+  onChangeTrackVideoSpectrumParamAlpha (value) {
+    dispatch(changeTrackComposeTrackVideoSpectrumParamAlpha(value));
+  },
+
   onChangeTrackVideoSpectrumParamColor (value) {
     dispatch(changeTrackComposeTrackVideoSpectrumParamColor(value));
+  },
+
+  onChangeTrackComposeTrackVideoTextVisibility (value) {
+    dispatch(changeTrackComposeTrackVideoTextVisibility(value));
+  },
+
+  onChangeTrackComposeTrackVideoTextParamAlpha (value) {
+    dispatch(changeTrackComposeTrackVideoTextParamAlpha(value));
+  },
+
+  onChangeTrackComposeTrackVideoTextParamColor (value) {
+    dispatch(changeTrackComposeTrackVideoTextParamColor(value));
   },
 
   onSubmit () {
@@ -120,12 +156,19 @@ export default class TrackCompose extends ImmutablePureComponent {
     onChangeTrackVideoBlurParamMovementThreshold: PropTypes.func.isRequired,
     onChangeTrackVideoBlurParamBlinkThreshold: PropTypes.func.isRequired,
     onChangeTrackVideoParticleVisibility: PropTypes.func.isRequired,
+    onChangeTrackVideoParticleParamAlpha: PropTypes.func.isRequired,
     onChangeTrackVideoParticleParamColor: PropTypes.func.isRequired,
     onChangeTrackVideoParticleParamLimitThreshold: PropTypes.func.isRequired,
     onChangeTrackVideoLightLeaksVisibility: PropTypes.func.isRequired,
+    onChangeTrackVideoLightLeaksParamAlpha: PropTypes.func.isRequired,
+    onChangeTrackVideoLightLeaksParamInterval: PropTypes.func.isRequired,
     onChangeTrackVideoSpectrumVisibility: PropTypes.func.isRequired,
     onChangeTrackVideoSpectrumParamMode: PropTypes.func.isRequired,
+    onChangeTrackVideoSpectrumParamAlpha: PropTypes.func.isRequired,
     onChangeTrackVideoSpectrumParamColor: PropTypes.func.isRequired,
+    onChangeTrackComposeTrackVideoTextVisibility: PropTypes.func.isRequired,
+    onChangeTrackComposeTrackVideoTextAlpha: PropTypes.func.isRequired,
+    onChangeTrackComposeTrackVideoTextColor: PropTypes.func.isRequired,
     onSubmit: PropTypes.func.isRequired,
     tab: PropTypes.string.isRequired,
     track: ImmutablePropTypes.map.isRequired,
@@ -209,11 +252,25 @@ export default class TrackCompose extends ImmutablePureComponent {
   }
 
   handleChangeTrackVideoParticleParamColor = ({ rgb }) => {
-    this.props.onChangeTrackVideoParticleParamColor((rgb.r << 16) | (rgb.g << 8) | rgb.b);
+    console.log(rgb)
+    this.props.onChangeTrackVideoParticleParamColor(extractRgbFromRgbObject(rgb));
+    this.props.onChangeTrackVideoParticleParamAlpha(rgb.a);
   }
 
   handleChangeTrackVideoLightLeaksVisibility = ({ target }) => {
     this.props.onChangeTrackVideoLightLeaksVisibility(target.checked);
+  }
+
+  handleChangeTrackVideoLightLeaksParamAlpha = ({ rgb }) => {
+    this.props.onChangeTrackVideoLightLeaksParamAlpha(rgb.a);
+  }
+
+  handleChangeTrackVideoLightLeaksParamInterval = ({ target }) => {
+    this.props.onChangeTrackVideoLightLeaksParamInterval(target.value);
+  }
+
+  handleChangeTrackVideoLightLeaksParamColor = ({ rgb }) => {
+    this.props.onChangeTrackVideoLightLeaksParamAlpha(rgb.a);
   }
 
   handleChangeTrackVideoSpectrumVisibility = ({ target }) => {
@@ -227,7 +284,17 @@ export default class TrackCompose extends ImmutablePureComponent {
   }
 
   handleChangeTrackVideoSpectrumParamColor = ({ rgb }) => {
-    this.props.onChangeTrackVideoSpectrumParamColor((rgb.r << 16) | (rgb.g << 8) | rgb.b);
+    this.props.onChangeTrackVideoSpectrumParamAlpha(rgb.a);
+    this.props.onChangeTrackVideoSpectrumParamColor(extractRgbFromRgbObject(rgb));
+  }
+
+  handleChangeTrackComposeTrackVideoTextVisibility = ({ target }) => {
+    this.props.onChangeTrackComposeTrackVideoTextVisibility(target.checked);
+  }
+
+  handleChangeTrackComposeTrackVideoTextParamColor = ({ rgb }) => {
+    this.props.onChangeTrackVideoTextParamAlpha(rgb.a);
+    this.props.onChangeTrackVideoTextParamColor(extractRgbFromRgbObject(rgb));
   }
 
   handleToggleParticleColorPickerVisible = () => {
@@ -477,7 +544,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                       <div className='track-compose-effect-color'>
                         <div
                           className='track-compose-effect-color-trigger'
-                          style={{ backgroundColor: convertToRgbCode(this.props.track.getIn(['video', 'spectrum', 'params', 'color'])) }}
+                          style={{ backgroundColor: constructRgbCode(this.props.track.getIn(['video', 'spectrum', 'params', 'color']), 1) }}
                           onClick={this.handleToggleSpectrumColorPickerVisible}
                           role='button'
                           tabIndex='-1'
@@ -486,7 +553,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                           {this.state.spectrumColorPickerVisible && (
                             <div className='track-compose-effect-color-content'>
                               <SketchPicker
-                                color={convertToRgbObject(this.props.track.getIn(['video', 'spectrum', 'params', 'color']))}
+                                color={constructRgbObject(this.props.track.getIn(['video', 'spectrum', 'params', 'color']), 1)}
                                 disableAlpha
                                 onChange={this.handleChangeTrackVideoSpectrumParamColor}
                               />
@@ -576,8 +643,9 @@ export default class TrackCompose extends ImmutablePureComponent {
                       onChange={this.handleChangeTrackVideoParticleParamLimitThreshold}
                     />
                   </label>
-
                   <div className='track-compose-effect'>
+
+
                     <label className='horizontal'>
                       <span className='text'>
                         <FormattedMessage
@@ -588,7 +656,10 @@ export default class TrackCompose extends ImmutablePureComponent {
                       <div className='track-compose-effect-color'>
                         <div
                           className='track-compose-effect-color-trigger'
-                          style={{ backgroundColor: convertToRgbCode(this.props.track.getIn(['video', 'particle', 'params', 'color'])) }}
+                          style={{ backgroundColor: constructRgbCode(
+                            this.props.track.getIn(['video', 'particle', 'params', 'color']),
+                            this.props.track.getIn(['video', 'particle', 'params', 'alpha'])
+                          ) }}
                           onClick={this.handleToggleParticleColorPickerVisible}
                           role='button'
                           tabIndex='-1'
@@ -596,9 +667,9 @@ export default class TrackCompose extends ImmutablePureComponent {
                         <Delay>
                           {this.state.particleColorPickerVisible && (
                             <div className='track-compose-effect-color-content'>
+                              {console.log(this.props.track.getIn(['video', 'particle', 'params']).toJS())}
                               <SketchPicker
-                                color={convertToRgbObject(this.props.track.getIn(['video', 'particle', 'params', 'color']))}
-                                disableAlpha
+                                color={constructRgbObject(this.props.track.getIn(['video', 'particle', 'params', 'color']), this.props.track.getIn(['video', 'particle', 'params', 'alpha']))}
                                 onChange={this.handleChangeTrackVideoParticleParamColor}
                               />
                             </div>
@@ -608,20 +679,68 @@ export default class TrackCompose extends ImmutablePureComponent {
                     </label>
                   </div>
                 </div>
+
+                <fieldset>
+                  <legend>
+                    <label className='horizontal'>
+                      <input
+                        checked={this.props.track.getIn(['video', 'text', 'visible'])}
+                        onChange={this.handleChangeTrackVideoTextVisibility}
+                        type='checkbox'
+                      />
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.video.text'
+                        defaultMessage='Text'
+                      />
+                    </label>
+                  </legend>
+                  <ChromePicker
+                    color={
+                      constructRgbObject(
+                        this.props.track.getIn(['video', 'text', 'params', 'color']),
+                        this.props.track.getIn(['video', 'text', 'params', 'alpha'])
+                      )
+                    }
+                    onChange={this.handleChangeTrackVideoTextParamColor}
+                  />
+                </fieldset>
+
+                <label className='horizontal'>
+                  <input
+                    checked={this.props.track.getIn(['video', 'lightleaks', 'visible'])}
+                    onChange={this.handleChangeTrackVideoLightLeaksVisibility}
+                    type='checkbox'
+                  />
+                  <FormattedMessage
+                    id='pawoo_music.track_compose.video.lightleaks'
+                    defaultMessage='Light leaks'
+                  />
+                </label>
+                <AlphaPicker
+                  color={
+                    constructRgbObject(
+                      0,
+                      this.props.track.getIn(['video', 'lightleaks', 'params', 'alpha'])
+                    )
+                  }
+                  onChange={this.handleChangeTrackVideoLightLeaksParamAlpha}
+                />
+                <label className='horizontal'>
+                  <span className='text'>
+                    <FormattedMessage
+                      id='pawoo_music.track_compose.video.interval'
+                      defaultMessage='Interval'
+                    />
+                  </span>
+                  <input
+                    min='0'
+                    max='16'
+                    onChange={this.handleChangeTrackVideoLightLeaksParamInterval}
+                    type='range'
+                    value={this.props.track.getIn(['video', 'lightleaks', 'params', 'interval'])}
+                  />
+                </label>
               </fieldset>
-
-              <label className='horizontal'>
-                <input
-                  checked={this.props.track.getIn(['video', 'lightleaks', 'visible'])}
-                  onChange={this.handleChangeTrackVideoLightLeaksVisibility}
-                  type='checkbox'
-                />
-                <FormattedMessage
-                  id='pawoo_music.track_compose.video.lightleaks'
-                  defaultMessage='Light leaks'
-                />
-              </label>
-
             </form>
           </div>
         </div>

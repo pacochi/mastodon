@@ -13,12 +13,19 @@ export const TRACK_COMPOSE_TRACK_VIDEO_BLUR_VISIBLITY_CHANGE = 'TRACK_COMPOSE_TR
 export const TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_MOVEMENT_THRESHOLD_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_MOVEMENT_THRESHOLD_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_BLINK_THRESHOLD_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_BLINK_THRESHOLD_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_VISIBLITY_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_VISIBLITY_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_ALPHA_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_COLOR_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_COLOR_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_COLOR_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_LIMIT_THRESHOLD_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_LIMIT_THRESHOLD_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_VISIBILITY_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_VISIBILITY_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_ALPHA_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_ALPHA_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_INTERVAL_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_INTERVAL_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_VISIBLITY_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_VISIBLITY_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_MODE_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_MODE_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_ALPHA_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_ALPHA_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_COLOR_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_COLOR_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_TEXT_VISIBILITY_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_TEXT_VISIBILITY_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_ALPHA_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_ALPHA_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_COLOR_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_COLOR_CHANGE';
 export const TRACK_COMPOSE_SUBMIT_REQUEST = 'TRACK_COMPOSE_SUBMIT_REQUEST';
 export const TRACK_COMPOSE_SUBMIT_SUCCESS = 'TRACK_COMPOSE_SUBMIT_SUCCESS';
 export const TRACK_COMPOSE_SUBMIT_FAIL = 'TRACK_COMPOSE_SUBMIT_FAIL';
@@ -44,7 +51,9 @@ export function submitTrackCompose() {
     const image = video.get('image');
     const blur = video.get('blur');
     const particle = video.get('particle');
+    const lightLeaks = video.get('lightleaks');
     const spectrum = video.get('spectrum');
+    const text = video.get('text');
 
     formData.append('music', track.get('music'));
     formData.append('title', track.get('title'));
@@ -64,8 +73,16 @@ export function submitTrackCompose() {
       appendMapToFormData(formData, 'video[particle]', particle.get('params'));
     }
 
+    if (lightLeaks.get('visible')) {
+      appendMapToFormData(formData, 'video[lightleaks]', lightLeaks.get('params'));
+    }
+
     if (spectrum.get('visible')) {
       appendMapToFormData(formData, 'video[spectrum]', spectrum.get('params'));
+    }
+
+    if (text.get('visible')) {
+      appendMapToFormData(formData, 'video[text]', text.get('params'));
     }
 
     dispatch(submitTrackComposeRequest());
@@ -152,6 +169,13 @@ export function changeTrackComposeTrackVideoParticleVisibility(value) {
   };
 };
 
+export function changeTrackComposeTrackVideoParticleParamAlpha(value) {
+  return {
+    type: TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_ALPHA_CHANGE,
+    value,
+  };
+};
+
 export function changeTrackComposeTrackVideoParticleParamColor(value) {
   return {
     type: TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_COLOR_CHANGE,
@@ -173,6 +197,20 @@ export function changeTrackComposeTrackVideoLightLeaksVisibility(value) {
   };
 }
 
+export function changeTrackComposeTrackVideoLightLeaksParamAlpha(value) {
+  return {
+    type: TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_ALPHA_CHANGE,
+    value,
+  };
+}
+
+export function changeTrackComposeTrackVideoLightLeaksParamInterval(value) {
+  return {
+    type: TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_INTERVAL_CHANGE,
+    value,
+  };
+}
+
 export function changeTrackComposeTrackVideoSpectrumVisiblity(value) {
   return {
     type: TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_VISIBLITY_CHANGE,
@@ -187,12 +225,40 @@ export function changeTrackComposeTrackVideoSpectrumParamMode(value) {
   };
 };
 
+export function changeTrackComposeTrackVideoSpectrumParamAlpha(value) {
+  return {
+    type: TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_ALPHA_CHANGE,
+    value,
+  };
+};
+
 export function changeTrackComposeTrackVideoSpectrumParamColor(value) {
   return {
     type: TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_COLOR_CHANGE,
     value,
   };
 };
+
+export function changeTrackComposeTrackVideoTextVisibility(value) {
+  return {
+    type: TRACK_COMPOSE_TRACK_VIDEO_TEXT_VISIBILITY_CHANGE,
+    value,
+  };
+}
+
+export function changeTrackComposeTrackVideoTextParamAlpha(value) {
+  return {
+    type: TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_ALPHA_CHANGE,
+    value,
+  };
+}
+
+export function changeTrackComposeTrackVideoTextParamColor(value) {
+  return {
+    type: TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_COLOR_CHANGE,
+    value,
+  };
+}
 
 export function submitTrackComposeRequest() {
   return {
