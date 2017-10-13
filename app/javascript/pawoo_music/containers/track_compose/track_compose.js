@@ -35,7 +35,13 @@ import IconButton from '../../components/icon_button';
 import Musicvideo from '../../components/musicvideo';
 import Delay from '../../components/delay';
 import Slider from '../../components/slider';
-import { constructRgbObject, constructRgbCode, extractRgbFromRgbObject, validateIsFileMp3 } from '../../util/musicvideo';
+import {
+  constructRgbObject,
+  constructRgbCode,
+  extractRgbFromRgbObject,
+  validateIsFileMp3,
+  validateIsFileImage,
+} from '../../util/musicvideo';
 
 const messages = defineMessages({
   preview: { id: 'track_compose.preview', defaultMessage: 'Video preview' },
@@ -184,6 +190,7 @@ export default class TrackCompose extends ImmutablePureComponent {
 
   state = {
     trackMusicTitle: '',
+    trackVideoImageTitle: '',
     visibleColorPicker: null,
   };
 
@@ -234,7 +241,16 @@ export default class TrackCompose extends ImmutablePureComponent {
   }
 
   handleChangeTrackVideoImage = ({ target }) => {
-    this.props.onChangeTrackVideoImage(target.files[0]);
+    const file = target.files[0];
+    if (file) {
+      validateIsFileImage(file).then((isImage) => {
+        if (isImage) {
+          this.setState({ trackVideoImageTitle: file.name }, () => {
+            this.props.onChangeTrackVideoImage(file);
+          });
+        }
+      });
+    }
   }
 
   handleChangeTrackVideoBlurVisibility = ({ target }) => {
@@ -337,8 +353,7 @@ export default class TrackCompose extends ImmutablePureComponent {
 
   render () {
     const { track } = this.props;
-    const { trackMusicTitle } = this.state;
-    console.log(track.get('music'));
+    const { trackMusicTitle, trackVideoImageTitle } = this.state;
 
     return (
       <div className='track-compose'>
@@ -441,15 +456,17 @@ export default class TrackCompose extends ImmutablePureComponent {
                 </legend>
 
                 <legend>
-                  <div className='track-compose-file-upload'>
+                  <div className={classNames('track-compose-file-upload', { settled: track.getIn(['video', 'image']) instanceof File })}>
                     <div className='track-compose-file-upload-body'>
                       <label className='horizontal'>
                         <IconButton src='image' />
                         <span className='text'>
-                          <FormattedMessage
-                            id='pawoo_music.track_compose.video.image'
-                            defaultMessage='Image'
-                          />
+                          {trackVideoImageTitle ? trackVideoImageTitle : (
+                            <FormattedMessage
+                              id='pawoo_music.track_compose.video.image'
+                              defaultMessage='Image'
+                            />
+                          )}
                         </span>
                         <input
                           accept='image/jpeg,image/png'
