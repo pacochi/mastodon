@@ -34,6 +34,11 @@
         }
       }
     }
+
+    .canvas-container {
+      width: var(--width-gallery);
+      height: var(--width-gallery);
+    }
   }
 
 

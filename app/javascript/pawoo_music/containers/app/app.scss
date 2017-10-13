@@ -56,6 +56,7 @@ body {
   --padding20:        calc(var(--grid) * 4);
   --padding30:        calc(var(--grid) * 6);
   --padding40:        calc(var(--grid) * 8);
+  --padding50:        calc(var(--grid) * 16);
   --padding-dropdown-option:  calc(var(--grid) * 2) calc(var(--grid) * 4);
 
 
@@ -64,10 +65,10 @@ body {
   --text10-line:      calc(var(--grid) * 4);
 
   --text20-font:      14px;
-  --text20-line:      calc(var(--text20-font) * 1.3);
+  --text20-line:      calc(var(--grid) * 5);
 
   --text30-font:      16px;
-  --text30-line:      calc(var(--grid) * 4);
+  --text30-line:      calc(var(--grid) * 5);
 
   --text40-font:      18px;
   --text40-line:      calc(var(--grid) * 6);
@@ -91,6 +92,7 @@ body {
 
   // dropshadow
   --shadow:           0 2px 64px 0 rgba(0, 0, 0, .1);
+  --shadow-strong:    0 2px 64px 0 rgba(0, 0, 0, .5);
 
   --shadow2:          0 2px 16px 0 rgba(0, 0, 0, .15);
 

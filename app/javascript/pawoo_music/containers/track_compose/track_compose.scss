@@ -1,9 +1,13 @@
-
-
 .track-compose {
   --video-width: 600px;
   --form-width: 400px;
   --controls-height: 30px;
+  padding: var(--padding40);
+  color: #C3C3C3;
+  background-color: #1F1F1F;
+  border-radius: var(--radius-big);
+  text-align: left;
+  box-shadow: var(--shadow-strong);
 
   button {
     width: 100%;
@@ -27,16 +31,19 @@
   }
 
   .content {
+    // display: flex;
+    align-items: top;
     width: 100%;
-    overflow-y: scroll;
+    // overflow-y: scroll;
 
     > div {
-      max-width: var(----video-width);
+      max-width: var(--video-width);
     }
 
     > .musicvideo {
       display: flex;
       flex-direction: column;
+      max-width: 480px;
 
       audio {
         width: 100%;
@@ -60,17 +67,18 @@
     @media screen and (max-width: 1000px) {
       .form-content {
         width: calc(100% - var(--padding10) * 2);
+        margin: var(--padding10);
       }
     }
 
     @media screen and (min-width: 1001px) {
       .form-content {
         width: var(--form-width);
+        margin: 0 0 0 var(--padding40);
       }
     }
 
     .form-content {
-      margin: var(--padding10);
 
       .tablist {
         display: flex;
@@ -84,25 +92,29 @@
       }
 
       fieldset {
-        margin: var(--verticalspace30);
         font-size: var(--text20-font);
         line-height: var(--text20-line);
 
+        & + fieldset {
+          margin-top: 10px;
+        }
 
         legend {
           font-size: var(--text30-font);
           line-height: var(--text30-line);
-          padding: var(--verticalspace20-both);
           font-weight: bold;
-          border-top: 1px solid var(--color3);
           width: 100%;
+
+          & + legend {
+            margin-top: var(--padding15);
+          }
         }
 
         label {
           display: block;
         }
 
-        label.horizontal {
+        .horizontal {
           display: flex;
           align-items: center;
 
@@ -121,10 +133,8 @@
 
           input[type="text"] {
             display: block;
-            width: calc(100% - var(--padding10) * 2);
-            padding: var(--padding5);
-            border-radius: var(--radius);
-            border: 1px solid var(--color3);
+            padding: var(--padding10);
+            border-radius: var(--grid);
 
             font-size: var(--text30-font);
             line-height: var(--text30-line);
@@ -132,11 +142,9 @@
 
           textarea {
             display: block;
-            width: calc(100% - var(--padding10) * 2);
-            height: calc(--grid * 10);
+            height: calc(var(--grid) * 10);
             padding: var(--padding10);
-            border-radius: var(--radius);
-            border: 1px solid var(--color3);
+            border-radius: var(--grid);
             resize: none;
 
             font-size: var(--text30-font);
@@ -151,15 +159,163 @@
     }
   }
 
-  .actions {
-    button {
-      display: block;
-      margin: var(--verticalspace30);
-      max-width: 600px;
+  .track-compose-effect {
+    .text {
+      padding-right: 10px;
+      text-align: right;
+    }
 
+    .track-compose-effect-color {
+      position: relative;
+      z-index: var(--mordal-z-index);
+
+      .track-compose-effect-color-wrap {
+        position: relative;
+      }
+
+      .track-compose-effect-color-trigger {
+        box-sizing: border-box;
+        width: 48px;
+        height: 20px;
+        border-radius: 12px;
+        border: 2px solid black;
+        cursor: pointer;
+        transition: transform 0.8s var(--hover-timing);
+        background-image: url(data:image/gif;base64,R0lGODlhEAAQAPEBAAAAAL+/v////wAAACH5BAAAAAAALAAAAAAQABAAAAIfjG+iq4jM3IFLJipswNly/XkcBpIiVaInlLJr9FZWAQA7);
+        overflow: hidden;
+
+        .track-compose-effect-color-trigger-body {
+          width: 100%;
+          height: 100%;
+        }
+
+        &:hover {
+          transform: scale(1.2);
+        }
+      }
+
+      .track-compose-effect-color-content {
+        position: absolute;
+        top: -120px;
+        left: 60px;
+      }
+    }
+  }
+
+  .track-compose-file-upload {
+    display: inline-block;
+    position: relative;
+    padding: 0 20px;
+    height: 40px;
+    border-radius: 20px;
+    color: var(--tootcolor);
+    background-color: white;
+    overflow: hidden;
+
+    &.settled {
+      color: white;
+      background-color: var(--tootcolor);
+
+      svg {
+        stroke: white;
+      }
+    }
+
+    .track-compose-file-upload-body {
+      display: flex;
+      align-items: center;
+      height: 40px;
+    }
+
+    .text {
+      margin-left: 5px;
+      white-space: pre;
+    }
+
+    input {
+      display: block;
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      opacity: 0.01;
+      cursor: pointer;
+    }
+
+    svg {
+      stroke-width: 2px;
+      stroke: var(--tootcolor);
+    }
+  }
+
+  .track-compose-text-input, .track-compose-text-textarea {
+    position: relative;
+
+    .text {
+      position: absolute;
+      top: 0;
+      left: 10px;
+      right: 10px;
+      bottom: 0;
+      color: #494949;
+      line-height: 32px;
+      font-weight: bold;
+      pointer-events: none;
+    }
+
+    input {
+      display: block;
+      box-sizing: border-box;
+      padding: 0 10px;
+      width: 100%;
+      height: 32px;
+      color: white;
+      background-color: #161616;
+      border: 0;
       border-radius: var(--radius);
+      font-size: 16px;
+    }
+
+    textarea {
+      display: block;
+      box-sizing: border-box;
+      padding: 10px;
+      width: 100%;
+      min-height: 96px;
+      color: white;
+      background-color: #161616;
+      border: 0;
+      border-radius: var(--radius);
+      font-size: 16px;
+    }
+  }
+
+  .actions {
+    display: flex;
+    align-items: flex-end;
+
+    button {
+      display: inline-block;
+      margin: var(--verticalspace30);
+      width: 120px;
+      height: 40px;
+
+      border-radius: 20px;
       background-color: var(--tootcolor);
       color: var(--color1);
+
+      &.cancel {
+        background-color: #585858;
+      }
+
+      & + button {
+        margin-left: 10px;
+      }
+
+      &:first-child {
+        margin-left: auto;
+      }
     }
   }
 }

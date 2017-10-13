@@ -13,7 +13,7 @@ export const TRACK_COMPOSE_TRACK_VIDEO_BLUR_VISIBLITY_CHANGE = 'TRACK_COMPOSE_TR
 export const TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_MOVEMENT_THRESHOLD_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_MOVEMENT_THRESHOLD_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_BLINK_THRESHOLD_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_BLINK_THRESHOLD_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_VISIBLITY_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_VISIBLITY_CHANGE';
-export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_ALPHA_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_COLOR_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_ALPHA_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_ALPHA_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_COLOR_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_COLOR_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_LIMIT_THRESHOLD_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_LIMIT_THRESHOLD_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_VISIBILITY_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_VISIBILITY_CHANGE';
@@ -86,8 +86,8 @@ export function submitTrackCompose() {
     }
 
     dispatch(submitTrackComposeRequest());
-    api(getState).post('/api/v1/tracks', formData).then(function () {
-      dispatch(submitTrackComposeSuccess());
+    api(getState).post('/api/v1/tracks', formData).then(function ({ data: { id } }) {
+      dispatch(submitTrackComposeSuccess(id));
     }).catch(function (error) {
       dispatch(submitTrackComposeFail(error));
     });
@@ -195,21 +195,21 @@ export function changeTrackComposeTrackVideoLightLeaksVisibility(value) {
     type: TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_VISIBILITY_CHANGE,
     value,
   };
-}
+};
 
 export function changeTrackComposeTrackVideoLightLeaksParamAlpha(value) {
   return {
     type: TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_ALPHA_CHANGE,
     value,
   };
-}
+};
 
 export function changeTrackComposeTrackVideoLightLeaksParamInterval(value) {
   return {
     type: TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_INTERVAL_CHANGE,
     value,
   };
-}
+};
 
 export function changeTrackComposeTrackVideoSpectrumVisiblity(value) {
   return {
@@ -244,21 +244,21 @@ export function changeTrackComposeTrackVideoTextVisibility(value) {
     type: TRACK_COMPOSE_TRACK_VIDEO_TEXT_VISIBILITY_CHANGE,
     value,
   };
-}
+};
 
 export function changeTrackComposeTrackVideoTextParamAlpha(value) {
   return {
     type: TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_ALPHA_CHANGE,
     value,
   };
-}
+};
 
 export function changeTrackComposeTrackVideoTextParamColor(value) {
   return {
     type: TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_COLOR_CHANGE,
     value,
   };
-}
+};
 
 export function submitTrackComposeRequest() {
   return {
@@ -266,9 +266,10 @@ export function submitTrackComposeRequest() {
   };
 };
 
-export function submitTrackComposeSuccess() {
+export function submitTrackComposeSuccess(value) {
   return {
     type: TRACK_COMPOSE_SUBMIT_SUCCESS,
+    value,
   };
 };
 

@@ -31,6 +31,7 @@ import {
 import Immutable from 'immutable';
 
 const initialState = Immutable.fromJS({
+  error: null,
   is_submitting: false,
   tab: 'basic',
   track: {
@@ -123,11 +124,11 @@ export default function track_compose(state = initialState, action) {
   case TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_COLOR_CHANGE:
     return state.setIn(['track', 'video', 'text', 'params', 'color'], action.value);
   case TRACK_COMPOSE_SUBMIT_REQUEST:
-    return state.set('is_submitting', true);
+    return state.set('is_submitting', true).set('error', initialState.get('error'));
   case TRACK_COMPOSE_SUBMIT_SUCCESS:
     return initialState;
   case TRACK_COMPOSE_SUBMIT_FAIL:
-    return state.set('is_submitting', false);
+    return state.set('is_submitting', false).set('error', action.error);
   default:
     return state;
   }
