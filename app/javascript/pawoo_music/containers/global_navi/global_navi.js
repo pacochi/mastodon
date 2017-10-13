@@ -84,6 +84,8 @@ export default class GlobalNavi extends PureComponent {
           <div className='global-navi-links'>
             {this.renderNavLinks()}
           </div>
+          
+          <h2>タグタイムライン</h2>
           <EventCalendar />
           {isLogin && <TagHistoryContainer />}
           <TrendTagsContainer />
@@ -105,7 +107,7 @@ export default class GlobalNavi extends PureComponent {
     return mobile ? (
       globalNavi
     ) : (
-      <Scrollbars>{globalNavi}</Scrollbars>
+      <Scrollbars className='scrollable'>{globalNavi}</Scrollbars>
     );
   }
 
