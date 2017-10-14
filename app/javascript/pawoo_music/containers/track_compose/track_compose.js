@@ -765,7 +765,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                     </span>
                     <Slider
                       min={0}
-                      max={100}
+                      max={1}
                       step={0.01}
                       value={this.props.track.getIn(['video', 'lightleaks', 'params', 'alpha'])}
                       onChange={this.handleChangeTrackVideoLightLeaksParamAlpha}

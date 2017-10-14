@@ -57,7 +57,7 @@ const initialState = Immutable.fromJS({
           limit: { threshold: 150, band: { bottom: 300, top: 2000 } },
         },
       },
-      lightleaks: { visible: false, params: { alpha: 1 } },
+      lightleaks: { visible: false, params: { alpha: 1, interval: 0 } },
       spectrum: {
         visible: true,
         params: {
