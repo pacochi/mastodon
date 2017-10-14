@@ -52,7 +52,7 @@ const initialState = Immutable.fromJS({
       particle: {
         visible: false,
         params: {
-          alpha: 1,
+          alpha: 0.9,
           color: 0xffffff,
           limit: { threshold: 150, band: { bottom: 300, top: 2000 } },
         },
