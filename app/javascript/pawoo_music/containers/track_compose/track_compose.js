@@ -564,8 +564,8 @@ export default class TrackCompose extends ImmutablePureComponent {
                     <label className='horizontal'>
                       <span className='text'>
                         <FormattedMessage
-                          id='pawoo_music.track_compose.video.limit_color'
-                          defaultMessage='Threshold triggering change'
+                          id='pawoo_music.track_compose.video.color'
+                          defaultMessage='Color'
                         />
                       </span>
                       <div className='track-compose-effect-color-wrap'>
@@ -671,8 +671,8 @@ export default class TrackCompose extends ImmutablePureComponent {
                     <div className='horizontal'>
                       <span className='text'>
                         <FormattedMessage
-                          id='pawoo_music.track_compose.video.limit_color'
-                          defaultMessage='Threshold triggering change'
+                          id='pawoo_music.track_compose.video.color'
+                          defaultMessage='Color'
                         />
                       </span>
                       <div className='track-compose-effect-color-wrap'>
@@ -715,8 +715,8 @@ export default class TrackCompose extends ImmutablePureComponent {
                     <div className='horizontal'>
                       <span className='text'>
                         <FormattedMessage
-                          id='pawoo_music.track_compose.video.limit_color'
-                          defaultMessage='Threshold triggering change'
+                          id='pawoo_music.track_compose.video.color'
+                          defaultMessage='Color'
                         />
                       </span>
                       <div className='track-compose-effect-color-wrap'>
