@@ -500,8 +500,8 @@ export default class TrackCompose extends ImmutablePureComponent {
                   <div className='horizontal'>
                     <span className='text'>
                       <FormattedMessage
-                        id='pawoo_music.track_compose.video.spectrum_mode'
-                        defaultMessage='Threshold triggering change'
+                        id='pawoo_music.track_compose.video.spectrum_form'
+                        defaultMessage='Form'
                       />
                     </span>
                     <div className='horizontal'>
@@ -609,7 +609,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                     <span className='text'>
                       <FormattedMessage
                         id='pawoo_music.track_compose.video.movement_threshold'
-                        defaultMessage='Threshold triggering movement'
+                        defaultMessage='Movement'
                       />
                     </span>
                     <Slider
@@ -623,7 +623,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                     <span className='text'>
                       <FormattedMessage
                         id='pawoo_music.track_compose.video.blink_threshold'
-                        defaultMessage='Threshold triggering blink'
+                        defaultMessage='Blink'
                       />
                     </span>
                     <Slider
@@ -657,7 +657,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                     <span className='text'>
                       <FormattedMessage
                         id='pawoo_music.track_compose.video.limit_threshold'
-                        defaultMessage='Threshold triggering change'
+                        defaultMessage='Limit'
                       />
                     </span>
                     <Slider
