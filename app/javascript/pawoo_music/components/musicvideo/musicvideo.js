@@ -49,7 +49,7 @@ class Musicvideo extends ImmutablePureComponent {
 
     // コンテキスト作成
     const audioContext = new AudioContext;
-    this.generator = new Canvas(audioContext, constructGeneratorOptions(track, this.image));
+    this.generator = new Canvas(audioContext, constructGeneratorOptions(track, this.image), () => this.audioElement.currentTime);
 
     // オーディオ接続
     const { audioAnalyserNode } = this.generator;
@@ -64,10 +64,9 @@ class Musicvideo extends ImmutablePureComponent {
     if (parent) parent.removeChild(view);
 
     this.canvasContainer.appendChild(view);
-    this.generator.start();
 
     this.timer = setInterval(this.updateCurrentTime, 500);
-    this.audioElement.addEventListener('ended', this.props.onEnded);
+    this.audioElement.addEventListener('ended', this.handleEnded);
   }
 
   componentWillReceiveProps ({ track }) {
@@ -104,7 +103,7 @@ class Musicvideo extends ImmutablePureComponent {
     }
 
     if (this.audioElement) {
-      this.audioElement.removeEventListener('ended', this.props.onEnded);
+      this.audioElement.removeEventListener('ended', this.handleEnded);
     }
 
     if (this.generator) {
@@ -125,14 +124,21 @@ class Musicvideo extends ImmutablePureComponent {
     }
   }
 
+  handleEnded = () => {
+    this.generator.stop();
+    this.props.onEnded();
+  }
+
   handleTogglePaused = () => {
     const paused = this.audioElement.paused;
     this.setState({ paused: !paused });
 
     if (paused) {
       this.audioElement.play();
+      this.generator.start();
     } else {
       this.audioElement.pause();
+      this.generator.stop();
     }
   }
 
@@ -140,6 +146,8 @@ class Musicvideo extends ImmutablePureComponent {
     const time = this.audioElement.duration * value / 100;
     this.audioElement.currentTime = 0; // TODO: 過去にシークできなかった。今は消してもいいかも？
     this.audioElement.currentTime = time;
+    this.generator.notifySeeked();
+    this.generator.start(); // in case it is being seeked after the audio ended
     this.setState({ time: value });
   };
 

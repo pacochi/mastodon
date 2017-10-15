@@ -10,28 +10,48 @@ export const TRACK_COMPOSE_TRACK_VISIBILITY_CHANGE = 'TRACK_COMPOSE_TRACK_VISIBI
 export const TRACK_COMPOSE_TRACK_MUSIC_CHANGE = 'TRACK_COMPOSE_TRACK_MUSIC_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_IMAGE_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_IMAGE_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_BLUR_VISIBLITY_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_BLUR_VISIBLITY_CHANGE';
-export const TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_MOVEMENT_THRESHOLD_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_MOVEMENT_THRESHOLD_CHANGE';
-export const TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_BLINK_THRESHOLD_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_BLINK_THRESHOLD_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_BLUR_MOVEMENT_THRESHOLD_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_BLUR_MOVEMENT_THRESHOLD_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_BLUR_BLINK_THRESHOLD_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_BLUR_BLINK_THRESHOLD_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_VISIBLITY_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_VISIBLITY_CHANGE';
-export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_ALPHA_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_ALPHA_CHANGE';
-export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_COLOR_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_COLOR_CHANGE';
-export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_LIMIT_THRESHOLD_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_LIMIT_THRESHOLD_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_ALPHA_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_ALPHA_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_COLOR_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_COLOR_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_LIMIT_THRESHOLD_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_LIMIT_THRESHOLD_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_VISIBILITY_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_VISIBILITY_CHANGE';
-export const TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_ALPHA_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_ALPHA_CHANGE';
-export const TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_INTERVAL_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_INTERVAL_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_ALPHA_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_ALPHA_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_INTERVAL_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_INTERVAL_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_VISIBLITY_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_VISIBLITY_CHANGE';
-export const TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_MODE_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_MODE_CHANGE';
-export const TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_ALPHA_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_ALPHA_CHANGE';
-export const TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_COLOR_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_COLOR_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_MODE_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_MODE_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_ALPHA_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_ALPHA_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_COLOR_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_COLOR_CHANGE';
 export const TRACK_COMPOSE_TRACK_VIDEO_TEXT_VISIBILITY_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_TEXT_VISIBILITY_CHANGE';
-export const TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_ALPHA_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_ALPHA_CHANGE';
-export const TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_COLOR_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_COLOR_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_TEXT_ALPHA_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_TEXT_ALPHA_CHANGE';
+export const TRACK_COMPOSE_TRACK_VIDEO_TEXT_COLOR_CHANGE = 'TRACK_COMPOSE_TRACK_VIDEO_TEXT_COLOR_CHANGE';
 export const TRACK_COMPOSE_SUBMIT_REQUEST = 'TRACK_COMPOSE_SUBMIT_REQUEST';
 export const TRACK_COMPOSE_SUBMIT_SUCCESS = 'TRACK_COMPOSE_SUBMIT_SUCCESS';
 export const TRACK_COMPOSE_SUBMIT_FAIL = 'TRACK_COMPOSE_SUBMIT_FAIL';
 
 function appendMapToFormData(formData, prefix, value) {
   for (const [childKey, childValue] of value) {
+    const childPrefix = `${prefix}[${childKey}]`;
+
+    if (Immutable.Map.isMap(childValue)) {
+      appendMapToFormData(formData, childPrefix, childValue);
+    } else {
+      formData.append(childPrefix, childValue);
+    }
+  }
+}
+
+function appendParamToFormData(formData, prefix, value) {
+  if (!value.get('visible')) {
+    return;
+  }
+
+  for (const [childKey, childValue] of value) {
+    if (childKey === 'visible') {
+      continue;
+    }
+
     const childPrefix = `${prefix}[${childKey}]`;
 
     if (Immutable.Map.isMap(childValue)) {
@@ -65,25 +85,11 @@ export function submitTrackCompose() {
       formData.append('video[image]', image);
     }
 
-    if (blur.get('visible')) {
-      appendMapToFormData(formData, 'video[blur]', blur.get('params'));
-    }
-
-    if (particle.get('visible')) {
-      appendMapToFormData(formData, 'video[particle]', particle.get('params'));
-    }
-
-    if (lightLeaks.get('visible')) {
-      appendMapToFormData(formData, 'video[lightleaks]', lightLeaks.get('params'));
-    }
-
-    if (spectrum.get('visible')) {
-      appendMapToFormData(formData, 'video[spectrum]', spectrum.get('params'));
-    }
-
-    if (text.get('visible')) {
-      appendMapToFormData(formData, 'video[text]', text.get('params'));
-    }
+    appendParamToFormData(formData, 'video[blur]', blur);
+    appendParamToFormData(formData, 'video[particle]', particle);
+    appendParamToFormData(formData, 'video[lightleaks]', lightLeaks);
+    appendParamToFormData(formData, 'video[spectrum]', spectrum);
+    appendParamToFormData(formData, 'video[text]', text);
 
     dispatch(submitTrackComposeRequest());
     api(getState).post('/api/v1/tracks', formData).then(function ({ data: { id } }) {
@@ -148,16 +154,16 @@ export function changeTrackComposeTrackVideoBlurVisibility(value) {
   };
 };
 
-export function changeTrackComposeTrackVideoBlurParamMovementThreshold(value) {
+export function changeTrackComposeTrackVideoBlurMovementThreshold(value) {
   return {
-    type: TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_MOVEMENT_THRESHOLD_CHANGE,
+    type: TRACK_COMPOSE_TRACK_VIDEO_BLUR_MOVEMENT_THRESHOLD_CHANGE,
     value,
   };
 };
 
-export function changeTrackComposeTrackVideoBlurParamBlinkThreshold(value) {
+export function changeTrackComposeTrackVideoBlurBlinkThreshold(value) {
   return {
-    type: TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_BLINK_THRESHOLD_CHANGE,
+    type: TRACK_COMPOSE_TRACK_VIDEO_BLUR_BLINK_THRESHOLD_CHANGE,
     value,
   };
 };
@@ -169,23 +175,23 @@ export function changeTrackComposeTrackVideoParticleVisibility(value) {
   };
 };
 
-export function changeTrackComposeTrackVideoParticleParamAlpha(value) {
+export function changeTrackComposeTrackVideoParticleAlpha(value) {
   return {
-    type: TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_ALPHA_CHANGE,
+    type: TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_ALPHA_CHANGE,
     value,
   };
 };
 
-export function changeTrackComposeTrackVideoParticleParamColor(value) {
+export function changeTrackComposeTrackVideoParticleColor(value) {
   return {
-    type: TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_COLOR_CHANGE,
+    type: TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_COLOR_CHANGE,
     value,
   };
 };
 
-export function changeTrackComposeTrackVideoParticleParamLimitThreshold(value) {
+export function changeTrackComposeTrackVideoParticleLimitThreshold(value) {
   return {
-    type: TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_LIMIT_THRESHOLD_CHANGE,
+    type: TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_LIMIT_THRESHOLD_CHANGE,
     value,
   };
 };
@@ -197,16 +203,16 @@ export function changeTrackComposeTrackVideoLightLeaksVisibility(value) {
   };
 };
 
-export function changeTrackComposeTrackVideoLightLeaksParamAlpha(value) {
+export function changeTrackComposeTrackVideoLightLeaksAlpha(value) {
   return {
-    type: TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_ALPHA_CHANGE,
+    type: TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_ALPHA_CHANGE,
     value,
   };
 };
 
-export function changeTrackComposeTrackVideoLightLeaksParamInterval(value) {
+export function changeTrackComposeTrackVideoLightLeaksInterval(value) {
   return {
-    type: TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_INTERVAL_CHANGE,
+    type: TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_INTERVAL_CHANGE,
     value,
   };
 };
@@ -218,23 +224,23 @@ export function changeTrackComposeTrackVideoSpectrumVisiblity(value) {
   };
 };
 
-export function changeTrackComposeTrackVideoSpectrumParamMode(value) {
+export function changeTrackComposeTrackVideoSpectrumMode(value) {
   return {
-    type: TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_MODE_CHANGE,
+    type: TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_MODE_CHANGE,
     value,
   };
 };
 
-export function changeTrackComposeTrackVideoSpectrumParamAlpha(value) {
+export function changeTrackComposeTrackVideoSpectrumAlpha(value) {
   return {
-    type: TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_ALPHA_CHANGE,
+    type: TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_ALPHA_CHANGE,
     value,
   };
 };
 
-export function changeTrackComposeTrackVideoSpectrumParamColor(value) {
+export function changeTrackComposeTrackVideoSpectrumColor(value) {
   return {
-    type: TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_COLOR_CHANGE,
+    type: TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_COLOR_CHANGE,
     value,
   };
 };
@@ -246,16 +252,16 @@ export function changeTrackComposeTrackVideoTextVisibility(value) {
   };
 };
 
-export function changeTrackComposeTrackVideoTextParamAlpha(value) {
+export function changeTrackComposeTrackVideoTextAlpha(value) {
   return {
-    type: TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_ALPHA_CHANGE,
+    type: TRACK_COMPOSE_TRACK_VIDEO_TEXT_ALPHA_CHANGE,
     value,
   };
 };
 
-export function changeTrackComposeTrackVideoTextParamColor(value) {
+export function changeTrackComposeTrackVideoTextColor(value) {
   return {
-    type: TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_COLOR_CHANGE,
+    type: TRACK_COMPOSE_TRACK_VIDEO_TEXT_COLOR_CHANGE,
     value,
   };
 };
