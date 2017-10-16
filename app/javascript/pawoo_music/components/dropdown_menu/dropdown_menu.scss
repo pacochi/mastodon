@@ -1,7 +1,16 @@
+.lobby-column {
+  .dropdown-menu {
+    &.dropdown--active .dropdown-content {
+      left: var(--padding30);
+    }
+  }
+}
+
 .dropdown-menu {
   &.dropdown--active .dropdown-content {
     display:    block;
     position:   absolute;
+
     z-index:    var(--mordal-z-index);
 
     padding:    var(--padding10);

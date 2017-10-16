@@ -48,13 +48,15 @@ export default class BlockedUsers extends ImmutablePureComponent {
     const emptyMessage = 'ブロックしたユーザーはいません'; // TODO: ローカライズ
 
     return (
-      <ScrollableList
-        scrollKey='muted_users'
-        emptyMessage={emptyMessage}
-        onScrollToBottom={this.handleScrollToBottom}
-      >
-        {scrollableContent}
-      </ScrollableList>
+      <div className='blocked_users'>
+        <ScrollableList
+          scrollKey='muted_users'
+          emptyMessage={emptyMessage}
+          onScrollToBottom={this.handleScrollToBottom}
+        >
+          {scrollableContent}
+        </ScrollableList>
+      </div>
     );
   }
 
