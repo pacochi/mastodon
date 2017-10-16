@@ -141,6 +141,7 @@ class Musicvideo extends ImmutablePureComponent {
 
   handleEnded = () => {
     this.generator.stop();
+    this.setState({ paused: true });
     this.props.onEnded();
   }
 
@@ -150,6 +151,10 @@ class Musicvideo extends ImmutablePureComponent {
       this.setState({ paused: !paused });
 
       if (paused) {
+        if (this.audioElement.ended) {
+          this.audioElement.currentTime = 0;
+        }
+
         this.audioElement.play();
         this.generator.start();
       } else {
@@ -163,9 +168,7 @@ class Musicvideo extends ImmutablePureComponent {
     const time = this.audioElement.duration * value / 100;
     this.audioElement.currentTime = 0; // TODO: 過去にシークできなかった。今は消してもいいかも？
     this.audioElement.currentTime = time;
-    this.generator.stop();
     this.generator.initialize();
-    this.generator.start(); // in case it is being seeked after the audio ended
     this.setState({ time: value });
   };
 
