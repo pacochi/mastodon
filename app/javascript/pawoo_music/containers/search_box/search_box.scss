@@ -1,6 +1,17 @@
 .search-box {
+  position: relative;
   display: block;
   margin:  var(--verticalspace30);
+
+  .icon-button {
+    position: absolute;
+    top: 6px;
+    left: 5px;
+
+    svg {
+      stroke: var(--color3);
+    }
+  }
 
   input {
     box-sizing:     border-box;
@@ -9,16 +20,24 @@
     color:          var(--textcolor);
     height:         calc(var(--grid) * 8);
 
-    border:         2px solid var(--color2);
+    border: none;
+    box-shadow: 0 0 0 2px var(--color2);
     border-radius:  calc(var(--radius) * 4);
 
     padding-left:   calc(var(--grid) * 6);
     width:          100%;
+    outline:        none;
 
     background-image:       url();
     background-position:    left center;
     background-attachment:  fixed;
     background-repeat:      no-repeat;
+
+    transition: box-shadow 0.2s ease-in-out;
+
+    &:focus {
+      box-shadow: 0 0 0 2px var(--strong1);
+    }
   }
 
   input::placeholder {

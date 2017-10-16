@@ -6,6 +6,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import { Scrollbars } from 'react-custom-scrollbars';
 import SearchBox from '../search_box';
 import LoginBox from '../../components/login_box';
+import IconButton from '../../components/icon_button';
 import EventCalendar from '../../components/event_calendar';
 import PinnedTagsContainer from '../pinned_tags';
 import TrendTagsContainer from '../trend_tags';
@@ -15,6 +16,15 @@ import Announcements from '../../components/announcements';
 
 import logo from '../../../images/pawoo_music/pawoo_music.svg';
 import settingsIcon from '../../../images/pawoo_music/settings.png';
+
+const icons = {
+  home: 'home',
+  notifications: 'bell',
+  local_timeline: 'users',
+  federated_timeline: 'globe',
+  favourites: 'star',
+  preferences: 'settings',
+};
 
 const messages = defineMessages({
   home: { id: 'tabs_bar.home', defaultMessage: 'Home' },
@@ -50,24 +60,34 @@ export default class GlobalNavi extends PureComponent {
     isLogin: PropTypes.bool,
   }
 
+  static contextTypes = {
+    router: PropTypes.object,
+  };
+
   handleClick = () => {
     const { dispatch } = this.props;
     dispatch(changeTargetColumn('lobby'));
   }
 
-  renderNavLinks () {
-    const { intl, isLogin } = this.props;
-    const params = isLogin ? navLinkParams : filteredNavLinkParams;
-
+  renderNavLink = (param) => {
+    const { intl } = this.props;
+    const { requireLogin, messageKey, ...other } = param;
     return (
-      <ul>
-        {params.map((param) => {
-          const { requireLogin, messageKey, ...other } = param;
-
-          return <li key={other.to}><NavLink {...other} onClick={this.handleClick}>{intl.formatMessage(messages[messageKey])}</NavLink></li>;
-        })}
-      </ul>
+      <li key={other.to}>
+        <NavLink {...other} onClick={this.handleClick}>
+          <div className='menu'>
+            <IconButton src={icons[messageKey]} strokeWidth={2} />
+            <span>{intl.formatMessage(messages[messageKey])}</span>
+          </div>
+        </NavLink>
+      </li>
     );
+  };
+
+  renderNavLinks () {
+    const { isLogin } = this.props;
+    const params = isLogin ? navLinkParams : filteredNavLinkParams;
+    return <ul>{params.map(this.renderNavLink)}</ul>;
   }
 
   render () {

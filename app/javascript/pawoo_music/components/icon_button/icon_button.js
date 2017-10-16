@@ -8,17 +8,19 @@ export default class IconButton extends PureComponent {
 
   static propTypes = {
     src: PropTypes.string.isRequired,
+    className: PropTypes.string,
     active: PropTypes.bool,
     onClick: PropTypes.func,
     title: PropTypes.string,
     tabindex: PropTypes.number,
+    strokeWidth: PropTypes.number,
     disabled: PropTypes.bool,
-    className: PropTypes.string,
   }
 
   static defaultProps = {
     title: 'icon',
     tabindex: -1,
+    strokeWidth: 1,
   };
 
   isClickable = () => {
@@ -28,7 +30,7 @@ export default class IconButton extends PureComponent {
 
   render () {
     const { src, title, active, tabindex, className, onClick, ...other } = this.props;
-    const svg = feather.toSvg(src, { 'stroke-width': 1 });
+    const svg = feather.toSvg(src, { 'stroke-width': this.props.strokeWidth });
     const clickable = this.isClickable();
 
     return (
