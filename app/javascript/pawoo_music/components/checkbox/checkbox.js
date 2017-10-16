@@ -1,4 +1,3 @@
-import noop from 'lodash/noop';
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import uuid from 'uuid';
@@ -6,16 +5,15 @@ import uuid from 'uuid';
 export default class checkbox extends PureComponent {
 
   static propTypes = {
-    checked: PropTypes.bool.isRequired,
     children: PropTypes.node,
     disabled: PropTypes.bool,
-    onChange: PropTypes.func, // クリックした時のfunction
+    checked: PropTypes.bool.isRequired,
+    onChange: PropTypes.func.isRequired, // クリックした時のfunction
   };
 
   static defaultProps = {
     children: undefined,
     disabled: false,
-    onChange: noop,
   };
 
   constructor(props, context) {
