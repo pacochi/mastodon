@@ -53,6 +53,9 @@ class Track < ApplicationRecord
   has_attached_file :video
   has_attached_file :video_image
 
+  validates :title, presence: true
+  validates :artist, presence: true
+
   validates_attachment :music,
                        presence: true,
                        content_type: { content_type: ['audio/mpeg'] },

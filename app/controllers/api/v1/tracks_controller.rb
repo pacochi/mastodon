@@ -7,8 +7,6 @@ class Api::V1::TracksController < Api::BaseController
   respond_to :json
 
   def create
-    params.require [:title, :artist, :music]
-
     track = Track.create!(track_attributes)
 
     begin
@@ -37,14 +35,14 @@ class Api::V1::TracksController < Api::BaseController
   end
 
   def update
-    @status = Status.find_by!(id: params.require(:id), account: current_account, music_type: 'Track')
+    @status = Status.find_by!(id: params[:id], account: current_account, music_type: 'Track')
     @status.music.update! track_attributes
 
     render 'api/v1/statuses/show'
   end
 
   def prepare_video
-    @status = Status.find_by!(id: params.require(:id), account: current_account, music_type: 'Track')
+    @status = Status.find_by!(id: params[:id], account: current_account, music_type: 'Track')
     VideoPreparingWorker.perform_async @status.id
 
     render_empty
@@ -61,17 +59,13 @@ class Api::V1::TracksController < Api::BaseController
       attributes.merge! duration: music_duration.ceil
     end
 
-    case params.dig('video', 'image')
-    when nil
-    when ''
+    if params.dig('video', 'image').blank?
       attributes.merge!(video_image: nil)
     else
       attributes.merge!(video_image: params.dig('video', 'image'))
     end
 
-    case params.dig('video', 'blur')
-    when nil
-    when ''
+    if params.dig('video', 'blur').blank?
       attributes.merge!(
         video_blur_movement_band_bottom: 0,
         video_blur_movement_band_top: 0,
@@ -91,9 +85,7 @@ class Api::V1::TracksController < Api::BaseController
       )
     end
 
-    case params.dig('video', 'particle')
-    when nil
-    when ''
+    if params.dig('video', 'particle').blank?
       attributes.merge!(
         video_particle_limit_band_bottom: 0,
         video_particle_limit_band_top: 0,
@@ -111,9 +103,7 @@ class Api::V1::TracksController < Api::BaseController
       )
     end
 
-    case params.dig('video', 'lightleaks')
-    when nil
-    when ''
+    if params.dig('video', 'lightleaks').blank?
       attributes.merge!(
         video_lightleaks_alpha: 0,
         video_lightleaks_interval: 0
@@ -125,9 +115,7 @@ class Api::V1::TracksController < Api::BaseController
       )
     end
 
-    case params.dig('video', 'spectrum')
-    when nil
-    when ''
+    if params.dig('video', 'spectrum').blank?
       attributes.merge!(
         video_spectrum_mode: 0,
         video_spectrum_alpha: 0,
@@ -141,9 +129,7 @@ class Api::V1::TracksController < Api::BaseController
       )
     end
 
-    case params.dig('video', 'text')
-    when nil
-    when ''
+    if params.dig('video', 'text').blank?
       attributes.merge!(
         video_text_alpha: 0,
         video_text_color: 0
@@ -175,7 +161,7 @@ class Api::V1::TracksController < Api::BaseController
   def music_duration
     return @music_duration if @music_duration
 
-    Mp3Info.open track_params.require(:music).path do |m|
+    Mp3Info.open track_params[:music].path do |m|
       @music_duration = m.length
     end
   rescue Mp3InfoError

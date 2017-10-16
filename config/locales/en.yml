@@ -295,6 +295,9 @@ en:
     '429': Throttled
     '500': Error occurred
     '503': Sorry, we're down for maincenance
+    messages:
+      in_between: "must be in between %{min} and %{max}"
+      spoofed_media_type: "has contents that are not what they are reported to be"
     noscript: To use Pawoo, please enable JavaScript.
   exports:
     blocks: You block
