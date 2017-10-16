@@ -165,7 +165,9 @@ class Musicvideo extends ImmutablePureComponent {
   }
 
   updateCanvas = () => {
-    this.generator.changeParams(constructGeneratorOptions(this.props.track, this.image));
+    if (this.generator) {
+      this.generator.changeParams(constructGeneratorOptions(this.props.track, this.image));
+    }
   }
 
   updateCurrentTime = () => {

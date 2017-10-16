@@ -29,10 +29,6 @@ const makeMapStateToProps = () => {
 @connect(makeMapStateToProps)
 export default class TrackStatus extends ImmutablePureComponent {
 
-  static contextTypes = {
-    router: PropTypes.object,
-  };
-
   static propTypes = {
     status: ImmutablePropTypes.map,
     muted: PropTypes.bool,
@@ -41,26 +37,8 @@ export default class TrackStatus extends ImmutablePureComponent {
     dispatch: PropTypes.func.isRequired,
   };
 
-  state = {
-    isExpanded: false,
-  }
-
-  handleExpandedToggle = () => {
-    this.setState({ isExpanded: !this.state.isExpanded });
-  };
-
-  handleClick = () => {
-    let { status } = this.props;
-    if (status.get('reblog')) {
-      status = status.get('reblog');
-    }
-
-    this.context.router.history.push(`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`);
-  }
-
   render () {
     const { muted, hidden, prepend, status: originalStatus } = this.props;
-    const { isExpanded } = this.state;
 
     if (!originalStatus) {
       return null;
@@ -79,7 +57,7 @@ export default class TrackStatus extends ImmutablePureComponent {
       return (
         <div>
           {status.getIn(['account', 'display_name']) || status.getIn(['account', 'username'])}
-          {status.get('content')}
+          {status.getIn(['track', 'text'])}
           {status.getIn(['track', 'artist'])}
           {status.getIn(['track', 'title'])}
         </div>
@@ -95,7 +73,7 @@ export default class TrackStatus extends ImmutablePureComponent {
 
         <Track track={status.get('track')} />
 
-        <StatusContent status={status} onClick={this.handleClick} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} />
+        <StatusContent status={status.set('content', status.getIn(['track', 'text']))} />
 
         <StatusActionBar status={status} />
 

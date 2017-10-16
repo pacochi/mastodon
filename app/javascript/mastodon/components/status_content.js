@@ -55,7 +55,7 @@ export default class StatusContent extends React.PureComponent {
   onMentionClick = (mention, e) => {
     if (e.button === 0) {
       e.preventDefault();
-      this.context.router.history.push(`/accounts/${mention.get('id')}`);
+      this.context.router.history.push(`/@${mention.get('acct')}`);
     }
   }
 

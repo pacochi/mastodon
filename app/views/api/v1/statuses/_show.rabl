@@ -44,8 +44,9 @@ end
 
 root_status = root_object
 child({ music: :track }, if: ->(status) { !status.reblog? && status.music.is_a?(Track) }) do
-  attribute :title, :artist, :text
+  attribute :title, :artist
 
+  node(:text) { |track| Formatter.instance.format_for_track(root_status) }
   node(:music) { |track| full_asset_url(track.music.url(:original)) }
 
   node :video do |track|
