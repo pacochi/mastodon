@@ -44,14 +44,14 @@ const initialState = Immutable.fromJS({
       image: null,
       blur: {
         visible: false,
-        movement: { threshold: 150, band: { bottom: 50, top: 300 } },
+        movement: { threshold: 190, band: { bottom: 50, top: 300 } },
         blink: { threshold: 150, band: { bottom: 2000, top: 15000 } },
       },
       particle: {
         visible: false,
         alpha: 0.9,
         color: 0xffffff,
-        limit: { threshold: 150, band: { bottom: 300, top: 2000 } },
+        limit: { threshold: 190, band: { bottom: 300, top: 2000 } },
       },
       lightleaks: { visible: false, alpha: 1, interval: 0 },
       spectrum: {
