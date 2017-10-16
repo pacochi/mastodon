@@ -1,6 +1,10 @@
 .musicvideo {
-  .canvas-container canvas {
-    width: 100%;
+  .canvas-container {
+    cursor: pointer;
+
+    canvas {
+      width: 100%;
+    }
   }
 
   audio {

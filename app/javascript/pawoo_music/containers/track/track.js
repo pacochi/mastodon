@@ -78,8 +78,8 @@ class Track extends ImmutablePureComponent {
       <div className='track'>
         <div className='musicvideo-wrapper' style={thumbnailStyle}>
           {thumbnailView ? (
-            <div className='thumbnail'>
-              <img className='playbutton' src={playIcon} alt='playbutton' role='button' tabIndex='0' aria-pressed='false' onClick={this.handlePlayClick} />
+            <div className='thumbnail' role='button' tabIndex='0' aria-pressed='false' onClick={this.handlePlayClick}>
+              <img className='playbutton' src={playIcon} alt='playbutton' />
             </div>
           ) : (
             <Musicvideo track={track} onEnded={this.handleEndTrack} />

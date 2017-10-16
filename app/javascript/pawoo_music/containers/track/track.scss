@@ -14,19 +14,17 @@
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
 
       .playbutton {
         display: block;
-        cursor: pointer;
-
         height:     var(--iconsize40);
         width:      var(--iconsize40);
+      }
 
-
-        &:hover {
-          opacity:    var(--hover-opacity);
-          transition: var(--hover-transition);
-        }
+      &:hover .playbutton {
+        opacity:    var(--hover-opacity);
+        transition: var(--hover-transition);
       }
     }
 

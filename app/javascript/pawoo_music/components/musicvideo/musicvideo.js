@@ -137,15 +137,17 @@ class Musicvideo extends ImmutablePureComponent {
   }
 
   handleTogglePaused = () => {
-    const paused = this.audioElement.paused;
-    this.setState({ paused: !paused });
+    if (this.state.music) {
+      const paused = this.audioElement.paused;
+      this.setState({ paused: !paused });
 
-    if (paused) {
-      this.audioElement.play();
-      this.generator.start();
-    } else {
-      this.audioElement.pause();
-      this.generator.stop();
+      if (paused) {
+        this.audioElement.play();
+        this.generator.start();
+      } else {
+        this.audioElement.pause();
+        this.generator.stop();
+      }
     }
   }
 
@@ -187,11 +189,18 @@ class Musicvideo extends ImmutablePureComponent {
 
     return (
       <div className='musicvideo'>
-        <div className='canvas-container' ref={this.setCanvasContainerRef} aria-label={label} />
+        <div
+          className='canvas-container'
+          ref={this.setCanvasContainerRef}
+          onClick={this.handleTogglePaused}
+          role='button'
+          tabIndex='0'
+          aria-label={label}
+        />
         <audio autoPlay={autoPlay} ref={this.setAudioRef} src={music} />
         <div className={classNames('controls-container', { visible: controls })}>
           <div className='controls'>
-            <div className={classNames('toggle', { disabled: !music })} onClick={music ? this.handleTogglePaused : noop} role='button' tabIndex='0' aria-pressed='false'>
+            <div className={classNames('toggle', { disabled: !music })} onClick={this.handleTogglePaused} role='button' tabIndex='0' aria-pressed='false'>
               {paused ? <IconButton src='play' /> : <IconButton src='pause' />}
             </div>
             <Slider
