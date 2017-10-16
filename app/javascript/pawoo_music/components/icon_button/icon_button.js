@@ -30,6 +30,7 @@ export default class IconButton extends PureComponent {
 
   render () {
     const { src, title, active, tabindex, className, onClick, ...other } = this.props;
+    console.log(this.props.strokeWidth);
     const svg = feather.toSvg(src, { 'stroke-width': this.props.strokeWidth });
     const clickable = this.isClickable();
 
