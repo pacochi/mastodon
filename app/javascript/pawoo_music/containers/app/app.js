@@ -8,7 +8,7 @@ import { changeTargetColumn } from '../../actions/column';
 import { refreshHomeTimeline } from '../../../mastodon/actions/timelines';
 import { refreshNotifications } from '../../../mastodon/actions/notifications';
 import HomeTimelineContainer from '../home_timeline';
-import NotificationListContainer from '../notification_list';
+import NotificationTimelineContainer from '../notification_timeline';
 import CommunityTimelineContainer from '../community_timeline';
 import PublicTimelineContainer from '../public_timeline';
 import HashtagTimelineContainer from '../hashtag_timeline';
@@ -110,7 +110,7 @@ export default class App extends PureComponent {
       <Switch>
         <Route path='/' exact component={HomeTimelineContainer} />
         <Route path='/intent/statuses/new' exact component={Intent} />
-        <Route path='/notifications' component={NotificationListContainer} />
+        <Route path='/notifications' component={NotificationTimelineContainer} />
         <Route path='/timelines/public/local' component={CommunityTimelineContainer} />
         <Route path='/timelines/public' exact component={PublicTimelineContainer} />
         <Route path='/tags/:id' exact component={HashtagTimelineContainer} />
