@@ -4,14 +4,13 @@
   .musicvideo-wrapper {
     display: block;
     position: relative;
-
     box-shadow: var(--shadow);
+    background-size: cover;
+    background-position: center center;
 
     .thumbnail {
       width:  var(--width-gallery);
       height: var(--width-gallery); // aspect ratio 1:1
-      background-size: cover;
-      background-position: center center;
       display: flex;
       justify-content: center;
       align-items: center;

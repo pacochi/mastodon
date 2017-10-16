@@ -34,6 +34,7 @@ class Musicvideo extends ImmutablePureComponent {
     time: 0,
     music: convertToURL(this.props.track.get('music')),
     paused: true,
+    controls: false,
   };
 
   image = null;
@@ -71,6 +72,8 @@ class Musicvideo extends ImmutablePureComponent {
     if (autoPlay) {
       this.generator.start();
     }
+
+    setTimeout(() => this.setState({ controls: true }), 240);
   }
 
   componentWillReceiveProps ({ track }) {
@@ -180,25 +183,27 @@ class Musicvideo extends ImmutablePureComponent {
 
   render() {
     const { autoPlay, label } = this.props;
-    const { music, paused, time } = this.state;
+    const { music, paused, controls, time } = this.state;
 
     return (
       <div className='musicvideo'>
         <div className='canvas-container' ref={this.setCanvasContainerRef} aria-label={label} />
         <audio autoPlay={autoPlay} ref={this.setAudioRef} src={music} />
-        <div className='controls'>
-          <div className={classNames('toggle', { disabled: !music })} onClick={music ? this.handleTogglePaused : noop} role='button' tabIndex='0' aria-pressed='false'>
-            {paused ? <IconButton src='play' /> : <IconButton src='pause' />}
+        <div className={classNames('controls-container', { visible: controls })}>
+          <div className='controls'>
+            <div className={classNames('toggle', { disabled: !music })} onClick={music ? this.handleTogglePaused : noop} role='button' tabIndex='0' aria-pressed='false'>
+              {paused ? <IconButton src='play' /> : <IconButton src='pause' />}
+            </div>
+            <Slider
+              min={0}
+              max={100}
+              step={0.1}
+              value={time}
+              onChange={this.handleChangeCurrentTime}
+              disabled={!music}
+              ref={this.setSeekbarRef}
+            />
           </div>
-          <Slider
-            min={0}
-            max={100}
-            step={0.1}
-            value={time}
-            onChange={this.handleChangeCurrentTime}
-            disabled={!music}
-            ref={this.setSeekbarRef}
-          />
         </div>
       </div>
     );

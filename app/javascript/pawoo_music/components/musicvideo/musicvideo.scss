@@ -7,13 +7,23 @@
     display: block;
   }
 
+  .controls-container {
+    overflow: hidden;
+    height: 0;
+    transition: height 240ms ease-in-out;
+
+    &.visible {
+      height: 40px;
+    }
+  }
+
   .controls {
     display: flex;
     justify-content: center;
     align-items: center;
     padding: var(--padding15);
     background-color: #000000;
-    border-radius: 0 0 var(--grid) var(--grid);
+    // border-radius: 0 0 var(--grid) var(--grid);
 
     .toggle {
       display:      block;
