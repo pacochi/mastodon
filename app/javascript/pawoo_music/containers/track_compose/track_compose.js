@@ -31,6 +31,9 @@ import {
   changeTrackComposeTrackVideoTextParamColor,
   submitTrackCompose,
 } from '../../actions/track_compose';
+import {
+  stopTrack,
+} from '../../actions/tracks';
 import IconButton from '../../components/icon_button';
 import Musicvideo from '../../components/musicvideo';
 import Delay from '../../components/delay';
@@ -56,6 +59,10 @@ const mapStateToProps = (state) => ({
 });
 
 const mapDispatchToProps = (dispatch) => ({
+  onStopTrack (value) {
+    dispatch(stopTrack(value));
+  },
+
   onChangeTrackTitle (value) {
     dispatch(changeTrackComposeTrackTitle(value));
   },
@@ -154,6 +161,7 @@ const mapDispatchToProps = (dispatch) => ({
 export default class TrackCompose extends ImmutablePureComponent {
 
   static propTypes = {
+    onStopTrack: PropTypes.func.isRequired,
     onChangeTrackTitle: PropTypes.func.isRequired,
     onChangeTrackArtist: PropTypes.func.isRequired,
     onChangeTrackText: PropTypes.func.isRequired,
@@ -197,6 +205,10 @@ export default class TrackCompose extends ImmutablePureComponent {
 
   trackMusicRef = null;
   trackVideoImageRef = null;
+
+  componentDidMount = () => {
+    this.props.onStopTrack();
+  };
 
   componentWillReceiveProps ({ error, isSubmitting, track }) {
     if (track.get('music') === null && this.props.track.get('music') !== null &&

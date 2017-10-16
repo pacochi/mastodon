@@ -7,7 +7,7 @@ import { Scrollbars } from 'react-custom-scrollbars';
 import SearchBox from '../search_box';
 import LoginBox from '../../components/login_box';
 import EventCalendar from '../../components/event_calendar';
-import TagHistoryContainer from '../tag_history';
+import PinnedTagsContainer from '../pinned_tags';
 import TrendTagsContainer from '../trend_tags';
 import { isMobile } from '../../util/is_mobile';
 import { changeTargetColumn } from '../../actions/column';
@@ -84,8 +84,10 @@ export default class GlobalNavi extends PureComponent {
           <div className='global-navi-links'>
             {this.renderNavLinks()}
           </div>
+
+          <h2>タグタイムライン</h2>
           <EventCalendar />
-          {isLogin && <TagHistoryContainer />}
+          <PinnedTagsContainer />
           <TrendTagsContainer />
           <Announcements />
         </div>
@@ -105,7 +107,7 @@ export default class GlobalNavi extends PureComponent {
     return mobile ? (
       globalNavi
     ) : (
-      <Scrollbars>{globalNavi}</Scrollbars>
+      <Scrollbars className='scrollable'>{globalNavi}</Scrollbars>
     );
   }
 

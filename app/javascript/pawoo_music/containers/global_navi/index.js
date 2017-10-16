@@ -1,4 +1,4 @@
-import GlovalNaviContainer from './global_navi';
+import GlobalNaviContainer from './global_navi';
 import './global_navi.scss';
 
-export default GlovalNaviContainer;
+export default GlobalNaviContainer;

@@ -10,6 +10,12 @@
     .scrollable .item-list {
       box-sizing: content-box;
     }
+
+
+    .navigation-column {
+      overflow: scroll;
+      -webkit-overflow-scrolling: touch;
+    }
   }
 
   .timeline.global_navi {
@@ -49,23 +55,25 @@
   .gallery-column {
     position: relative;
 
-    .scrollarea {
-      position: absolute !important;
-      width: 100% !important;
+    .scrollable {
+      flex: 1;
     }
   }
 
   .navigation-column {
-    overflow-y: auto;
-    -webkit-overflow-scrolling: touch;
-    flex-shrink:    0;
-    flex-grow:      0;
+    .scrollable {
+      position: static !important;
+    }
+
+    display: flex;
+    flex-shrink: 0;
+    flex-grow: 0;
     width: var(--width-globalnavi);
   }
 
   .lobby-column {
-    flex-shrink:    0;
-    flex-grow:      0;
+    flex-shrink: 0;
+    flex-grow: 0;
     width: var(--width-lobby);
 
     display: flex;
@@ -111,9 +119,24 @@
       text-align: center;
 
       .item-list {
-        display: inline-block;
-        width: var(--width-gallery);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
         margin-bottom: var(--padding50);
+
+        .prepend {
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+        }
+
+        .media-post {
+          width: var(--width-gallery);
+        }
+
+        .track-status {
+          width: var(--width-gallery);
+        }
 
         h3 {
           margin:         var(--verticalspace30);

@@ -1,7 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
-import GlovalNaviContainer from '../../containers/global_navi';
+import GlobalNaviContainer from '../../containers/global_navi';
 import classNames from 'classnames';
 import { isMobile } from '../../util/is_mobile';
 const mapStateToProps = state => ({
@@ -24,7 +24,7 @@ export default class Timeline extends PureComponent {
     return (
       <div className={classNames('timeline', { [target] : mobile })}>
         <div className='navigation-column'>
-          <GlovalNaviContainer />
+          <GlobalNaviContainer />
         </div>
         <div className='lobby-column'>
           {children}

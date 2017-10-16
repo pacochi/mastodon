@@ -84,6 +84,7 @@ export default class StatusTimeline extends ImmutablePureComponent {
     emptyMessage: PropTypes.node,
     galleryPrepend: PropTypes.node,
     withComposeForm: PropTypes.bool,
+    scrollKeyBase: PropTypes.string,
     me: PropTypes.number,
     dispatch: PropTypes.func.isRequired,
   }
@@ -142,11 +143,11 @@ export default class StatusTimeline extends ImmutablePureComponent {
   }, 100)
 
   render () {
-    const { timelineId, galleryStatusIds, withComposeForm, me, galleryPrepend, galleryIsLoading, galleryHasMore, ...other } = this.props;
+    const { timelineId, scrollKeyBase, galleryStatusIds, withComposeForm, me, galleryPrepend, galleryIsLoading, galleryHasMore, ...other } = this.props;
 
     const gallery = (
       <StatusList
-        scrollKey={`${timelineId}_gallery`}
+        scrollKey={`${scrollKeyBase || timelineId}_gallery`}
         statusIds={galleryStatusIds}
         hasMore={galleryHasMore}
         isLoading={galleryIsLoading}
@@ -166,7 +167,7 @@ export default class StatusTimeline extends ImmutablePureComponent {
     return (
       <Timeline gallery={gallery}>
         <StatusList
-          scrollKey={`${timelineId}_timeline`}
+          scrollKey={`${scrollKeyBase || timelineId}_timeline`}
           prepend={prepend}
           onScrollToBottom={this.handleScrollToBottom}
           onScrollToTop={this.handleScrollToTop}

@@ -16,9 +16,9 @@ export default class TagBox extends ImmutablePureComponent {
 
     return (
       <div className={classNames('tag-box', className)}>
-        <h2>
+        <h3>
           {heading}
-        </h2>
+        </h3>
         {children}
       </div>
     );
