@@ -1,10 +1,24 @@
 .musicvideo {
-  .canvas-container canvas {
-    width: 100%;
+  .canvas-container {
+    cursor: pointer;
+
+    canvas {
+      width: 100%;
+    }
   }
 
   audio {
     display: block;
+  }
+
+  .controls-container {
+    overflow: hidden;
+    height: 0;
+    transition: height 240ms ease-in-out;
+
+    &.visible {
+      height: 40px;
+    }
   }
 
   .controls {

@@ -4,30 +4,27 @@
   .musicvideo-wrapper {
     display: block;
     position: relative;
-
     box-shadow: var(--shadow);
+    background-size: cover;
+    background-position: center center;
 
     .thumbnail {
       width:  var(--width-gallery);
       height: var(--width-gallery); // aspect ratio 1:1
-      background-size: cover;
-      background-position: center center;
       display: flex;
       justify-content: center;
       align-items: center;
+      cursor: pointer;
 
       .playbutton {
         display: block;
-        cursor: pointer;
-
         height:     var(--iconsize40);
         width:      var(--iconsize40);
+      }
 
-
-        &:hover {
-          opacity:    var(--hover-opacity);
-          transition: var(--hover-transition);
-        }
+      &:hover .playbutton {
+        opacity:    var(--hover-opacity);
+        transition: var(--hover-transition);
       }
     }
 
