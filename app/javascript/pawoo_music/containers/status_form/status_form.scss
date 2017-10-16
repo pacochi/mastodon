@@ -228,7 +228,7 @@
     display:      block;
     width:        100%;
     color:        var(--textcolor);
-    padding:      var(--padding10);
+    padding:      var(--padding15);
     font-family:  inherit;
     font-size:    var(--text20-font);
     line-height:  var(--text20-line);
@@ -297,7 +297,7 @@
 
   .compose-form__pickers {
     position: absolute;
-    right:    var(--padding10);
+    right:    var(--padding15);
     top:      0;
     width:    var(--iconsize15);
 

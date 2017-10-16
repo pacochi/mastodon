@@ -91,14 +91,16 @@ class PlaylistController extends React.PureComponent {
   state = {
     timeOffset: Math.floor(new Date() / 1000 - this.props.offsetStartTime),
   };
+
   interval = null;
 
   componentDidMount () {
     this.interval = setInterval(() => {
       const { offsetStartTime } = this.props;
-      this.setState({
-        timeOffset: Math.floor(new Date() / 1000 - offsetStartTime),
-      });
+      const timeOffset = Math.floor(Date.now() / 1000 - offsetStartTime);
+      if (timeOffset !== this.state.timeOffset) {
+        this.setState({ timeOffset });
+      }
     }, 300);
   }
 
@@ -130,7 +132,7 @@ class PlaylistController extends React.PureComponent {
 
   render () {
     const { isTop, isActive, duration, muted, volume } = this.props;
-    const { timeOffset } = this.state;
+    const { timeOffset, isSeekbarActive } = this.state;
 
     return (
       <div className='control-bar__controller'>
@@ -146,15 +148,21 @@ class PlaylistController extends React.PureComponent {
           音楽を再生！
         </TipsBalloonContainer>}
 
-        {isActive && !isTop && <div className='control-bar__controller-skip'>
-          <span className={this.isSkipEnable() ? '' : 'disabled'} onClick={this.handleClickSkip}>SKIP</span>
-        </div>}
+        {isActive && !isTop && (
+          <div className='control-bar__controller-skip'>
+            <span className={this.isSkipEnable() ? '' : 'disabled'} onClick={this.handleClickSkip}>SKIP</span>
+          </div>
+        )}
 
-        {isActive && <div className='control-bar__controller-info'>
-          <span className='control-bar__controller-now'>{this.convertTimeFormat(Math.min(timeOffset, duration))}</span>
-          <span className='control-bar__controller-separater'>/</span>
-          <span className='control-bar__controller-time'>{this.convertTimeFormat(duration)}</span>
-        </div>}
+        {isActive && (
+          <div className='control-bar__controller-info'>
+            <span className='control-bar__controller-now'>{this.convertTimeFormat(Math.min(timeOffset, duration))}</span>
+            <span className='control-bar__controller-separater'>/</span>
+            <span className='control-bar__controller-time'>{this.convertTimeFormat(duration)}</span>
+          </div>
+        )}
+
+        <div className={classNames('control-bar__controller-seek', { active: isSeekbarActive })} style={{ width: `${(timeOffset / duration) * 100}%` }} />
       </div>
     );
   }
@@ -164,6 +172,7 @@ class PlaylistController extends React.PureComponent {
 class PlayControl extends React.PureComponent {
 
   static propTypes = {
+    trackId: PropTypes.string,
     accessToken: PropTypes.string,
     streamingAPIBaseURL: PropTypes.string.isRequired,
     isAdmin: PropTypes.bool,
@@ -202,6 +211,12 @@ class PlayControl extends React.PureComponent {
       this.initDecks();
     }
   }
+
+  componentWillReceiveProps = ({ trackId }) => {
+    if (!this.state.muted && trackId !== this.props.trackId) {
+      this.setState({ muted: true });
+    }
+  };
 
   componentDidUpdate (prevProps, prevState) {
     const { targetDeck } = this.state;
@@ -513,7 +528,7 @@ class PlayControl extends React.PureComponent {
 
   render () {
     const { isTop, isAdmin } = this.props;
-    const { isSp, playlist, targetDeck, deckList, deckSettings, offsetStartTime, muted, volume, isSeekbarActive, isOpen, timeOffset } = this.state;
+    const { isSp, playlist, targetDeck, deckList, deckSettings, offsetStartTime, muted, volume, isSeekbarActive, isOpen } = this.state;
     if (isSp || !targetDeck) {
       return null;
     }
@@ -532,20 +547,6 @@ class PlayControl extends React.PureComponent {
       'is-apollo': isApollo,
     });
 
-    let playerSeekBarStyle = {};
-    if (deckQueue) {
-      if (isSeekbarActive) {
-        playerSeekBarStyle = {
-          transition: `width ${isSeekbarActive ? (deckQueue.duration - timeOffset) : '0'}s linear`,
-        };
-      } else {
-        playerSeekBarStyle = {
-          transition: 'width 0s linear',
-          width: `${deckQueue.duration ? (timeOffset / deckQueue.duration) * 100 : 0}%`,
-        };
-      }
-    }
-
     return (
       <div className={playerClass}>
         <div className='player-control__control-bar'>
@@ -554,6 +555,7 @@ class PlayControl extends React.PureComponent {
             isTop={isTop}
             isAdmin={isAdmin}
             isActive={this.isDeckActive()}
+            isSeekbarActive={isSeekbarActive}
             muted={muted}
             duration={duration}
             volume={volume}
@@ -624,7 +626,6 @@ class PlayControl extends React.PureComponent {
             チャンネルの切り替え
           </TipsBalloonContainer>}
         </div>
-        <div className={classNames('player-seekbar', { active: isSeekbarActive })} style={playerSeekBarStyle} />
         <div className='player-control__overlay' onClick={this.handleClickOverlay} />
       </div>
     );
