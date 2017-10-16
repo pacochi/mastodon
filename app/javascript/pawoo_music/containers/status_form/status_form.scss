@@ -6,6 +6,8 @@
   word-break:     break-all;
   text-align:     justify;
 
+  max-width: var(--width-gallery);
+
   textarea {
     margin:             var(--verticalspace10);
     border:             0;

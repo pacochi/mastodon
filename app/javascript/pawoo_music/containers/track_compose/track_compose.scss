@@ -209,8 +209,9 @@
     height: 40px;
     border-radius: 20px;
     color: var(--tootcolor);
-    background-color: white;
+    background-color: var(--color1);
     overflow: hidden;
+    max-width: calc(var(--form-width) - var(--padding40) - var(--grid) * 2);
 
     &.settled {
       color: white;
@@ -227,9 +228,17 @@
       height: 40px;
     }
 
+    .icon-button {
+      display: block;
+    }
+
     .text {
       margin-left: 5px;
       white-space: pre;
+
+      display: block;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     input {

@@ -380,24 +380,22 @@ export default class TrackCompose extends ImmutablePureComponent {
                 <legend>
                   <div className={classNames('track-compose-file-upload', { settled: track.get('music') instanceof File })}>
                     <div className='track-compose-file-upload-body'>
-                      <label className='horizontal'>
-                        <IconButton src='music' />
-                        <span className='text'>
-                          {trackMusicTitle ? trackMusicTitle : (
-                            <FormattedMessage
-                              id='pawoo_music.track_compose.basic.music'
-                              defaultMessage='Select audio'
-                            />
-                          )}
-                        </span>
-                        <input
-                          accept='audio/mpeg'
-                          onChange={this.handleChangeTrackMusic}
-                          ref={this.setTrackMusicRef}
-                          required
-                          type='file'
-                        />
-                      </label>
+                      <IconButton src='music' />
+                      <span className='text'>
+                        {trackMusicTitle ? trackMusicTitle : (
+                          <FormattedMessage
+                            id='pawoo_music.track_compose.basic.music'
+                            defaultMessage='Select audio'
+                          />
+                        )}
+                      </span>
+                      <input
+                        accept='audio/mpeg'
+                        onChange={this.handleChangeTrackMusic}
+                        ref={this.setTrackMusicRef}
+                        required
+                        type='file'
+                      />
                     </div>
                   </div>
                 </legend>
@@ -471,23 +469,21 @@ export default class TrackCompose extends ImmutablePureComponent {
                 <legend>
                   <div className={classNames('track-compose-file-upload', { settled: track.getIn(['video', 'image']) instanceof File })}>
                     <div className='track-compose-file-upload-body'>
-                      <label className='horizontal'>
-                        <IconButton src='image' />
-                        <span className='text'>
-                          {trackVideoImageTitle ? trackVideoImageTitle : (
-                            <FormattedMessage
-                              id='pawoo_music.track_compose.video.image'
-                              defaultMessage='Image'
-                            />
-                          )}
-                        </span>
-                        <input
-                          accept='image/jpeg,image/png'
-                          onChange={this.handleChangeTrackVideoImage}
-                          ref={this.setTrackVideoImageRef}
-                          type='file'
-                        />
-                      </label>
+                      <IconButton src='image' />
+                      <span className='text'>
+                        {trackVideoImageTitle ? trackVideoImageTitle : (
+                          <FormattedMessage
+                            id='pawoo_music.track_compose.video.image'
+                            defaultMessage='Image'
+                          />
+                        )}
+                      </span>
+                      <input
+                        accept='image/jpeg,image/png'
+                        onChange={this.handleChangeTrackVideoImage}
+                        ref={this.setTrackVideoImageRef}
+                        type='file'
+                      />
                     </div>
                   </div>
                 </legend>
