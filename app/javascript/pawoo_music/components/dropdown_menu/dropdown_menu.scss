@@ -2,6 +2,8 @@
   &.dropdown--active .dropdown-content {
     display:    block;
     position:   absolute;
+    left:       var(--padding30);
+    
     z-index:    var(--mordal-z-index);
 
     padding:    var(--padding10);

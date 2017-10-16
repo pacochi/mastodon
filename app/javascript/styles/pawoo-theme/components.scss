@@ -2,6 +2,7 @@ $button-icon-scale-ration-on-pc: 0.85;
 
 .modal_root {
   position: fixed;
+  overflow-y: auto;
   top: 0;
   left: 0;
   width: 100vw;
@@ -92,23 +93,19 @@ $button-icon-scale-ration-on-pc: 0.85;
   vertical-align: middle;
 }
 
-// original components
-.notification-list{
-  transform: translate(0, 15px);
-  z-index: 200;
-}
 
 .boost-modal,
 .confirmation-modal,
 .report-modal {
-  background: var(--color2);
+  background: var(--color1);
   color: var(--textcolor);
   border-radius: 8px;
   overflow: hidden;
   max-width: 90vw;
-  width: 480px;
+  width: var(--width-gallery);
   position: relative;
   flex-direction: column;
+
 
   .status__display-name {
     display: block;
@@ -122,6 +119,23 @@ $button-icon-scale-ration-on-pc: 0.85;
     position: absolute;
     top: 10px;
     width: 48px;
+  }
+
+  .status-check-box {
+    margin: var(--verticalspace20);
+    display: flex;
+    justify-content: space-between;
+    word-break: break-all;
+
+    .status__content {
+      padding: 0 var(--padding5);
+      font-size: var(--text20-font);
+      line-height: var(--text20-line);
+    }
+
+    .status-check-box-toggle {
+      margin: var(--verticalspace10);
+    }
   }
 }
 
@@ -800,7 +814,7 @@ button.icon-button {
   height: 24px;
   padding: 0;
   border-radius: 30px;
-  background-color: $ui-base-color;
+  background-color: var(--color3);
   transition: all 0.2s ease;
 }
 
@@ -860,7 +874,6 @@ button.icon-button {
   left: 1px;
   width: 22px;
   height: 22px;
-  border: 1px solid $ui-base-color;
   border-radius: 50%;
   background-color: darken($simple-background-color, 2%);
   box-sizing: border-box;
@@ -904,14 +917,10 @@ button.icon-button {
   }
 
   &.light {
-    color: $ui-base-color;
-    border-bottom: 2px solid lighten($ui-base-color, 27%);
-
-    &:focus,
-    &:active {
-      color: $ui-base-color;
-      border-bottom-color: $ui-highlight-color;
-    }
+    color: var(--textcolor);
+    border: 1px solid var(--color3);
+    border-radius: var(--radius);
+    padding: var(--padding10)
   }
 }
 
