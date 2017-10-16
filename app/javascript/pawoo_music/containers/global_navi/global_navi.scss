@@ -37,16 +37,39 @@
             display: block;
             padding: var(--grid) 0 var(--grid) calc(var(--grid) * 6);
 
+            .menu {
+              display: flex;
+              align-items: center;
+            }
+
+            .icon-button {
+              margin-right: 5px;
+            }
+
+            svg {
+              stroke-width: 2px;
+              stroke: var(--textcolor);
+            }
+
             &.active {
               padding:     var(--grid) 0 var(--grid) calc(var(--grid) * 6 - 4px);
               border-left: 4px var(--strong1) solid;
               font-weight:    bold;
               color:          var(--strong2);
+
+              svg {
+                stroke-width: 3px;
+              }
             }
           }
 
           a:hover {
             color:          var(--strong1);
+            transition: color 0.2s var(--hover-timing);
+
+            svg {
+              stroke:          var(--strong1);
+            }
           }
         }
       }
