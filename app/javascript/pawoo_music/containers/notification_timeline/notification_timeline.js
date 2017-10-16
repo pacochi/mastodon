@@ -27,7 +27,7 @@ const mapStateToProps = state => ({
 });
 
 @connect(mapStateToProps)
-export default class NotificationList extends ImmutablePureComponent {
+export default class NotificationTimeline extends ImmutablePureComponent {
 
   static propTypes = {
     notifications: ImmutablePropTypes.list.isRequired,
@@ -78,7 +78,7 @@ export default class NotificationList extends ImmutablePureComponent {
 
     const gallery = (
       <StatusList
-        scrollKey='account_gallery'
+        scrollKey='notifications_gallery'
         statusIds={uniqueStatusIds}
         isGallery
         onScrollToBottom={this.handleLoadMore}
