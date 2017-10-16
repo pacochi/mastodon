@@ -1,6 +1,7 @@
 import noop from 'lodash/noop';
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import uuid from 'uuid';
 
 export default class checkbox extends PureComponent {
 
@@ -17,14 +18,19 @@ export default class checkbox extends PureComponent {
     onChange: noop,
   };
 
+  constructor(props, context) {
+    super(props, context);
+    this.uuid = uuid();
+  }
+
   handleAssignNode = (node: Element) => {
     this.node = node;
   };
 
   render = () => (
     <div className='checkbox' ref={this.handleAssignNode}>
-      <input className='checkbox-input' id={this.props.htmlFor} type='checkbox' onChange={this.props.onChange} checked={this.props.checked} disabled={this.props.disabled} />
-      <label className='checkbox-label' htmlFor={this.props.htmlFor}>
+      <input className='checkbox-input' id={this.uuid} type='checkbox' onChange={this.props.onChange} checked={this.props.checked} disabled={this.props.disabled} />
+      <label className='checkbox-label' htmlFor={this.uuid}>
         <div className='checkbox-label-head'>
           <div className='checkbox-label-head-check' />
         </div>

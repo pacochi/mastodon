@@ -497,15 +497,12 @@ export default class TrackCompose extends ImmutablePureComponent {
               <fieldset>
                 <legend>
                   <label className='horizontal'>
-                    <input
-                      checked={this.props.track.getIn(['video', 'spectrum', 'visible'])}
-                      onChange={this.handleChangeTrackVideoSpectrumVisibility}
-                      type='checkbox'
-                    />
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.spectrum'
-                      defaultMessage='Spectrum'
-                    />
+                    <Checkbox checked={this.props.track.getIn(['video', 'spectrum', 'visible'])} onChange={this.handleChangeTrackVideoSpectrumVisibility}>
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.video.spectrum'
+                        defaultMessage='Spectrum'
+                      />
+                    </Checkbox>
                   </label>
                 </legend>
 
@@ -605,15 +602,12 @@ export default class TrackCompose extends ImmutablePureComponent {
               <fieldset>
                 <legend>
                   <label className='horizontal'>
-                    <input
-                      checked={this.props.track.getIn(['video', 'blur', 'visible'])}
-                      onChange={this.handleChangeTrackVideoBlurVisibility}
-                      type='checkbox'
-                    />
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.blur'
-                      defaultMessage='Blur'
-                    />
+                    <Checkbox checked={this.props.track.getIn(['video', 'blur', 'visible'])} onChange={this.handleChangeTrackVideoBlurVisibility}>
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.video.blur'
+                        defaultMessage='Blur'
+                      />
+                    </Checkbox>
                   </label>
                 </legend>
 
@@ -653,15 +647,12 @@ export default class TrackCompose extends ImmutablePureComponent {
               <fieldset>
                 <legend>
                   <label className='horizontal'>
-                    <input
-                      checked={this.props.track.getIn(['video', 'particle', 'visible'])}
-                      onChange={this.handleChangeTrackVideoParticleVisibility}
-                      type='checkbox'
-                    />
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.particle'
-                      defaultMessage='Particle'
-                    />
+                    <Checkbox checked={this.props.track.getIn(['video', 'particle', 'visible'])} onChange={this.handleChangeTrackVideoParticleVisibility}>
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.video.particle'
+                        defaultMessage='Particle'
+                      />
+                    </Checkbox>
                   </label>
                 </legend>
 
@@ -712,15 +703,12 @@ export default class TrackCompose extends ImmutablePureComponent {
               <fieldset>
                 <legend>
                   <label className='horizontal'>
-                    <input
-                      checked={this.props.track.getIn(['video', 'text', 'visible'])}
-                      onChange={this.handleChangeTrackComposeTrackVideoTextVisibility}
-                      type='checkbox'
-                    />
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.text'
-                      defaultMessage='Text'
-                    />
+                    <Checkbox checked={this.props.track.getIn(['video', 'text', 'visible'])} onChange={this.handleChangeTrackComposeTrackVideoTextVisibility}>
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.video.text'
+                        defaultMessage='Text'
+                      />
+                    </Checkbox>
                   </label>
                 </legend>
                 <legend className='track-compose-effect'>
@@ -756,14 +744,12 @@ export default class TrackCompose extends ImmutablePureComponent {
               <fieldset>
                 <legend>
                   <label className='horizontal'>
-                    <Checkbox
-                      checked={this.props.track.getIn(['video', 'lightleaks', 'visible'])}
-                      onChange={this.handleChangeTrackVideoLightLeaksVisibility}
-                    />
-                    <FormattedMessage
-                      id='pawoo_music.track_compose.video.lightleaks'
-                      defaultMessage='Light leaks'
-                    />
+                    <Checkbox checked={this.props.track.getIn(['video', 'lightleaks', 'visible'])} onChange={this.handleChangeTrackVideoLightLeaksVisibility}>
+                      <FormattedMessage
+                        id='pawoo_music.track_compose.video.lightleaks'
+                        defaultMessage='Light leaks'
+                      />
+                    </Checkbox>
                   </label>
                 </legend>
 
