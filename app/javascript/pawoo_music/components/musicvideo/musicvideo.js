@@ -58,6 +58,9 @@ class Musicvideo extends ImmutablePureComponent {
     this.audioAnalyser = audioAnalyserNode.context.createMediaElementSource(this.audioElement);
     this.audioAnalyser.connect(audioAnalyserNode);
 
+    // 初期化
+    this.generator.initialize();
+
     // キャンバス接続
     const { view } = this.generator.getRenderer();
     const { parent } = view;
@@ -93,9 +96,14 @@ class Musicvideo extends ImmutablePureComponent {
   }
 
   componentDidUpdate ({ track }, { music }) {
-    if ((track.get('music') instanceof File) && music !== this.state.music) {
-      URL.revokeObjectURL(music);
+    if (music !== this.state.music) {
+      if (track.get('music') instanceof File) {
+        URL.revokeObjectURL(music);
+      }
+
+      this.generator.initialize();
     }
+
     this.updateCanvas();
   }
 
@@ -155,8 +163,8 @@ class Musicvideo extends ImmutablePureComponent {
     const time = this.audioElement.duration * value / 100;
     this.audioElement.currentTime = 0; // TODO: 過去にシークできなかった。今は消してもいいかも？
     this.audioElement.currentTime = time;
-    this.generator.notifySeeked();
     this.generator.stop();
+    this.generator.initialize();
     this.generator.start(); // in case it is being seeked after the audio ended
     this.setState({ time: value });
   };
