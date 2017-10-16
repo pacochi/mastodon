@@ -957,3 +957,16 @@ button.icon-button {
     width: auto;
   }
 }
+
+
+.account-authorize__wrapper {
+  padding: var(--padding20);
+
+  .account--panel {
+    display: flex;
+
+    button.icon-button {
+      color: var(--strong2);
+    }
+  }
+}
