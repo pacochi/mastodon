@@ -61,7 +61,7 @@ const spectrum =
     { mode: argv.spectrumMode, alpha: argv.spectrumAlpha, color: argv.spectrumColor };
 
 const text =
-  argv.textAlpha === undefined && argv.textColor === undefined ?
+  argv.textAlpha === undefined && argv.textColor === undefined &&
   argv.textTitle === undefined && argv.textSub === undefined ?
     undefined :
     { alpha: argv.textAlpha, color: argv.textColor, title: argv.textTitle, sub: argv.textSub };
