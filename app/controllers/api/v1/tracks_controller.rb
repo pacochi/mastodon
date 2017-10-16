@@ -13,10 +13,11 @@ class Api::V1::TracksController < Api::BaseController
 
     begin
       status_id = Status.next_id
-      status_text = short_account_status_url(current_account.username, status_id)
-      unless status_params[:text].blank?
-        status_text = [status_params[:text], status_text].join(' ')
-      end
+      status_text = [
+        "#{status_params[:artist]} - #{status_params[:title]}",
+        status_params[:text].presence,
+        short_account_status_url(current_account.username, status_id)
+      ].compact.join("\n")
 
       @status = PostStatusService.new.call(
         current_account,
