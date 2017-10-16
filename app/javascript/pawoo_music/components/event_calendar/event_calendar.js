@@ -14,13 +14,18 @@ const messages = defineMessages({
 
 const events = Immutable.fromJS([
   {
-    start_date: new Date('2017/9/18'),
-    end_date: new Date('2017/9/20'),
-    hashtag: 'mcomi',
-  },
-  {
     start_date: new Date('2017/10/29'),
     hashtag: '2017M3秋',
+  },
+  {
+    start_date: new Date('2017/11/18'),
+    end_date: new Date('2017/11/19'),
+    hashtag: 'APOLLO07',
+  },
+  {
+    start_date: new Date('2017/12/29'),
+    end_date: new Date('2017/12/31'),
+    hashtag: 'C93',
   },
 ]);
 
