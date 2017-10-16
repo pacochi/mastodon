@@ -239,7 +239,7 @@ export default class StatusActionBar extends ImmutablePureComponent {
 
     let menu = [];
     // TODO: アイコンの設定
-    // let reblogIcon = 'retweet';
+    let reblogIcon = 'repeat';
     // let replyIcon;
     let replyTitle;
 
@@ -283,9 +283,9 @@ export default class StatusActionBar extends ImmutablePureComponent {
     }
 
     if (status.get('visibility') === 'direct') {
-      // reblogIcon = 'envelope';
+      reblogIcon = 'mail';
     } else if (status.get('visibility') === 'private') {
-      // reblogIcon = 'lock';
+      reblogIcon = 'lock';
     }
 
     if (status.get('in_reply_to_id', null) === null) {
@@ -302,7 +302,7 @@ export default class StatusActionBar extends ImmutablePureComponent {
     return (
       <ul className='status-action-bar'>
         <li><IconButton title={replyTitle} src='message-square' onClick={this.handleReplyClick} /></li>
-        <li><IconButton title={reblogTitle} src='repeat' onClick={this.handleReblogClick} disabled={reblogDisabled} active={status.get('reblogged')} /></li>
+        <li><IconButton title={reblogTitle} src={reblogIcon} onClick={this.handleReblogClick} disabled={reblogDisabled} active={status.get('reblogged')} /></li>
         <li><IconButton title={favouriteTitle} src='heart' onClick={this.handleFavouriteClick} disabled={favouriteDisabled} active={status.get('favourited')} /></li>
         <li><DropdownMenu items={menu} src='more-horizontal' /></li>
       </ul>
