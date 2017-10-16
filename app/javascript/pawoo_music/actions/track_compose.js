@@ -75,7 +75,9 @@ export function submitTrackCompose() {
     const spectrum = video.get('spectrum');
     const text = video.get('text');
 
-    formData.append('music', track.get('music'));
+    if (track.get('music')) {
+      formData.append('music', track.get('music'));
+    }
     formData.append('title', track.get('title'));
     formData.append('artist', track.get('artist'));
     formData.append('text', track.get('text'));

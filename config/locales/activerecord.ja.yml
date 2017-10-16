@@ -17,6 +17,10 @@ ja:
         file: ファイル
         file_content_type: Content-Type
         file_file_size: ファイルサイズ
+      track:
+        artist: アーティスト
+        music: 楽曲ファイル
+        title: タイトル
       user:
         email: メールアドレス
     errors:

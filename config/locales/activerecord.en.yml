@@ -17,6 +17,10 @@ en:
         file: File
         file_content_type: Content-Type
         file_file_size: File size
+      track:
+        artist: Artist
+        music: Audio file
+        title: Title
     errors:
       models:
         account:

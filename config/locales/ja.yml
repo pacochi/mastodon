@@ -295,6 +295,9 @@ ja:
     '429': リクエストの制限に達しました。
     '500': エラーが発生しました。
     '503': ただいまメンテナンスを行なっております。
+    messages:
+      in_between: "の容量は%{min}以上%{max}以下にしてください。"
+      spoofed_media_type: "の拡張子と内容が一致していません。"
     noscript: Pawooを利用する場合はJavaScriptを有効にしてください。
   exports:
     blocks: ブロック
