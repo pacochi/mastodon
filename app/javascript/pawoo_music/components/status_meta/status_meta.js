@@ -1,7 +1,10 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
-import { FormattedDate, FormattedNumber } from 'react-intl';
+import { FormattedNumber } from 'react-intl';
+import Timestamp from '../../../mastodon/components/timestamp';
+import IconButton from '../icon_button';
 import Link from '../link_wrapper';
 
 export default class StatusMeta extends ImmutablePureComponent {
@@ -10,8 +13,13 @@ export default class StatusMeta extends ImmutablePureComponent {
     status: ImmutablePropTypes.map.isRequired,
   };
 
+  static contextTypes = {
+    schedule: PropTypes.bool,
+  };
+
   render () {
     const { status } = this.props;
+    const { schedule } = this.context;
     let applicationLink = null;
 
     if (status.get('application')) {
@@ -33,20 +41,20 @@ export default class StatusMeta extends ImmutablePureComponent {
     }
 
     return (
-      <div className='meta'>
+      <div className='status-meta'>
 
         <Link className='absolute-time' to={`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`}>
-          <FormattedDate value={new Date(status.get('created_at'))} hour12={false} year='numeric' month='short' day='2-digit' hour='2-digit' minute='2-digit' />
+          <Timestamp schedule={schedule} timestamp={status.get('created_at')} />
         </Link>
         {applicationLink}
         {' \u00A0 '}
         <span>
-          <i className='fa fa-retweet' />
+          <IconButton src='repeat' strokeWidth={2} />
           <FormattedNumber value={status.get('reblogs_count')} />
         </span>
         {' \u00A0 '}
         <span>
-          <i className='fa fa-star' />
+          <IconButton src='heart' strokeWidth={2} />
           <FormattedNumber value={status.get('favourites_count')} />
         </span>
       </div>

@@ -116,6 +116,11 @@ class Musicvideo extends ImmutablePureComponent {
     if (this.generator) {
       this.generator.stop();
       this.generator.audioAnalyserNode.context.close();
+      this.generator._albumArt._root._children.forEach((child) => {
+        child.component.displayObject.destroy();
+      });
+      this.generator._albumArt._root.displayObject.destroy();
+      this.generator._albumArt.renderer.destroy();
     }
 
     if (this.audioAnalyser) {

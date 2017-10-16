@@ -1,8 +1,21 @@
 .status-meta {
+  margin-top: 20px;
   font-size:    var(--text10-font);
   line-height:  var(--text10-line);
+  color: var(--linkcolor);
 
-  .fa {
-    letter-spacing: var(--grid);
+  .icon-button {
+    padding-top: 2px;
+    display: inline-block;
+    vertical-align: top;
+    margin-right: var(--grid);
+    width: var(--text10-font);
+    height: var(--text10-font);
+
+    svg {
+      stroke: var(--linkcolor);
+      width: var(--text10-font);
+      height: var(--text10-font);
+    }
   }
 }
