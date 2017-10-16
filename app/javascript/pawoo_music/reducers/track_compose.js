@@ -8,22 +8,22 @@ import {
   TRACK_COMPOSE_TRACK_MUSIC_CHANGE,
   TRACK_COMPOSE_TRACK_VIDEO_IMAGE_CHANGE,
   TRACK_COMPOSE_TRACK_VIDEO_BLUR_VISIBLITY_CHANGE,
-  TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_MOVEMENT_THRESHOLD_CHANGE,
-  TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_BLINK_THRESHOLD_CHANGE,
+  TRACK_COMPOSE_TRACK_VIDEO_BLUR_MOVEMENT_THRESHOLD_CHANGE,
+  TRACK_COMPOSE_TRACK_VIDEO_BLUR_BLINK_THRESHOLD_CHANGE,
   TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_VISIBLITY_CHANGE,
-  TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_ALPHA_CHANGE,
-  TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_COLOR_CHANGE,
-  TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_LIMIT_THRESHOLD_CHANGE,
+  TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_ALPHA_CHANGE,
+  TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_COLOR_CHANGE,
+  TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_LIMIT_THRESHOLD_CHANGE,
   TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_VISIBILITY_CHANGE,
-  TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_ALPHA_CHANGE,
-  TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_INTERVAL_CHANGE,
+  TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_ALPHA_CHANGE,
+  TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_INTERVAL_CHANGE,
   TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_VISIBLITY_CHANGE,
-  TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_MODE_CHANGE,
-  TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_ALPHA_CHANGE,
-  TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_COLOR_CHANGE,
+  TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_MODE_CHANGE,
+  TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_ALPHA_CHANGE,
+  TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_COLOR_CHANGE,
   TRACK_COMPOSE_TRACK_VIDEO_TEXT_VISIBILITY_CHANGE,
-  TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_ALPHA_CHANGE,
-  TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_COLOR_CHANGE,
+  TRACK_COMPOSE_TRACK_VIDEO_TEXT_ALPHA_CHANGE,
+  TRACK_COMPOSE_TRACK_VIDEO_TEXT_COLOR_CHANGE,
   TRACK_COMPOSE_SUBMIT_REQUEST,
   TRACK_COMPOSE_SUBMIT_SUCCESS,
   TRACK_COMPOSE_SUBMIT_FAIL,
@@ -44,29 +44,23 @@ const initialState = Immutable.fromJS({
       image: null,
       blur: {
         visible: false,
-        params: {
-          movement: { threshold: 150, band: { bottom: 50, top: 300 } },
-          blink: { threshold: 150, band: { bottom: 2000, top: 15000 } },
-        },
+        movement: { threshold: 150, band: { bottom: 50, top: 300 } },
+        blink: { threshold: 150, band: { bottom: 2000, top: 15000 } },
       },
       particle: {
         visible: false,
-        params: {
-          alpha: 1,
-          color: 0xffffff,
-          limit: { threshold: 150, band: { bottom: 300, top: 2000 } },
-        },
+        alpha: 0.9,
+        color: 0xffffff,
+        limit: { threshold: 150, band: { bottom: 300, top: 2000 } },
       },
-      lightleaks: { visible: false, params: { alpha: 1 } },
+      lightleaks: { visible: false, alpha: 1, interval: 0 },
       spectrum: {
         visible: true,
-        params: {
-          mode: 2,
-          alpha: 1,
-          color: 0xffffff,
-        },
+        mode: 2,
+        alpha: 1,
+        color: 0xffffff,
       },
-      text: { visible: true, params: { alpha: 0.9, color: 0xffffff } },
+      text: { visible: true, alpha: 0.9, color: 0xffffff },
     },
   },
 });
@@ -91,38 +85,38 @@ export default function track_compose(state = initialState, action) {
     return state.setIn(['track', 'video', 'image'], action.value);
   case TRACK_COMPOSE_TRACK_VIDEO_BLUR_VISIBLITY_CHANGE:
     return state.setIn(['track', 'video', 'blur', 'visible'], action.value);
-  case TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_MOVEMENT_THRESHOLD_CHANGE:
-    return state.setIn(['track', 'video', 'blur', 'params', 'movement', 'threshold'], action.value);
-  case TRACK_COMPOSE_TRACK_VIDEO_BLUR_PARAM_BLINK_THRESHOLD_CHANGE:
-    return state.setIn(['track', 'video', 'blur', 'params', 'blink', 'threshold'], action.value);
+  case TRACK_COMPOSE_TRACK_VIDEO_BLUR_MOVEMENT_THRESHOLD_CHANGE:
+    return state.setIn(['track', 'video', 'blur', 'movement', 'threshold'], action.value);
+  case TRACK_COMPOSE_TRACK_VIDEO_BLUR_BLINK_THRESHOLD_CHANGE:
+    return state.setIn(['track', 'video', 'blur', 'blink', 'threshold'], action.value);
   case TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_VISIBLITY_CHANGE:
     return state.setIn(['track', 'video', 'particle', 'visible'], action.value);
-  case TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_ALPHA_CHANGE:
-    return state.setIn(['track', 'video', 'particle', 'params', 'alpha'], action.value);
-  case TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_COLOR_CHANGE:
-    return state.setIn(['track', 'video', 'particle', 'params', 'color'], action.value);
-  case TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_PARAM_LIMIT_THRESHOLD_CHANGE:
-    return state.setIn(['track', 'video', 'particle', 'params', 'limit', 'threshold'], action.value);
+  case TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_ALPHA_CHANGE:
+    return state.setIn(['track', 'video', 'particle', 'alpha'], action.value);
+  case TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_COLOR_CHANGE:
+    return state.setIn(['track', 'video', 'particle', 'color'], action.value);
+  case TRACK_COMPOSE_TRACK_VIDEO_PARTICLE_LIMIT_THRESHOLD_CHANGE:
+    return state.setIn(['track', 'video', 'particle', 'limit', 'threshold'], action.value);
   case TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_VISIBILITY_CHANGE:
     return state.setIn(['track', 'video', 'lightleaks', 'visible'], action.value);
-  case TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_ALPHA_CHANGE:
-    return state.setIn(['track', 'video', 'lightleaks', 'params', 'alpha'], action.value);
-  case TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_PARAM_INTERVAL_CHANGE:
-    return state.setIn(['track', 'video', 'lightleaks', 'params', 'interval'], action.value);
+  case TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_ALPHA_CHANGE:
+    return state.setIn(['track', 'video', 'lightleaks', 'alpha'], action.value);
+  case TRACK_COMPOSE_TRACK_VIDEO_LIGHTLEAKS_INTERVAL_CHANGE:
+    return state.setIn(['track', 'video', 'lightleaks', 'interval'], action.value);
   case TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_VISIBLITY_CHANGE:
     return state.setIn(['track', 'video', 'spectrum', 'visible'], action.value);
-  case TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_MODE_CHANGE:
-    return state.setIn(['track', 'video', 'spectrum', 'params', 'mode'], action.value);
-  case TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_ALPHA_CHANGE:
-    return state.setIn(['track', 'video', 'spectrum', 'params', 'alpha'], action.value);
-  case TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_PARAM_COLOR_CHANGE:
-    return state.setIn(['track', 'video', 'spectrum', 'params', 'color'], action.value);
+  case TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_MODE_CHANGE:
+    return state.setIn(['track', 'video', 'spectrum', 'mode'], action.value);
+  case TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_ALPHA_CHANGE:
+    return state.setIn(['track', 'video', 'spectrum', 'alpha'], action.value);
+  case TRACK_COMPOSE_TRACK_VIDEO_SPECTRUM_COLOR_CHANGE:
+    return state.setIn(['track', 'video', 'spectrum', 'color'], action.value);
   case TRACK_COMPOSE_TRACK_VIDEO_TEXT_VISIBILITY_CHANGE:
     return state.setIn(['track', 'video', 'text', 'visible'], action.value);
-  case TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_ALPHA_CHANGE:
-    return state.setIn(['track', 'video', 'text', 'params', 'alpha'], action.value);
-  case TRACK_COMPOSE_TRACK_VIDEO_TEXT_PARAM_COLOR_CHANGE:
-    return state.setIn(['track', 'video', 'text', 'params', 'color'], action.value);
+  case TRACK_COMPOSE_TRACK_VIDEO_TEXT_ALPHA_CHANGE:
+    return state.setIn(['track', 'video', 'text', 'alpha'], action.value);
+  case TRACK_COMPOSE_TRACK_VIDEO_TEXT_COLOR_CHANGE:
+    return state.setIn(['track', 'video', 'text', 'color'], action.value);
   case TRACK_COMPOSE_SUBMIT_REQUEST:
     return state.set('is_submitting', true).set('error', initialState.get('error'));
   case TRACK_COMPOSE_SUBMIT_SUCCESS:
