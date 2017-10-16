@@ -1,21 +1,24 @@
 .status-meta {
-  margin-top: 20px;
-  font-size:    var(--text10-font);
-  line-height:  var(--text10-line);
+  margin: var(--verticalspace10);
+  font-size: var(--text10-font);
+  line-height: var(--text10-line);
   color: var(--linkcolor);
 
-  .icon-button {
-    padding-top: 2px;
-    display: inline-block;
-    vertical-align: top;
-    margin-right: var(--grid);
-    width: var(--text10-font);
-    height: var(--text10-font);
+  .engagement {
+    display: inline-flex;
+    align-items: center;
 
-    svg {
-      stroke: var(--linkcolor);
+    .icon-button {
+      display: block;
+      margin-right: var(--grid);
       width: var(--text10-font);
       height: var(--text10-font);
+
+      svg {
+        stroke: var(--linkcolor);
+        width: var(--text10-font);
+        height: var(--text10-font);
+      }
     }
   }
 }

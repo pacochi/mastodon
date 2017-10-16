@@ -42,12 +42,12 @@ export default class StatusMeta extends ImmutablePureComponent {
         </Link>
         {applicationLink}
         {' \u00A0 '}
-        <span>
+        <span className='engagement'>
           <IconButton src='repeat' strokeWidth={2} />
           <FormattedNumber value={status.get('reblogs_count')} />
         </span>
         {' \u00A0 '}
-        <span>
+        <span className='engagement'>
           <IconButton src='heart' strokeWidth={2} />
           <FormattedNumber value={status.get('favourites_count')} />
         </span>
