@@ -1,5 +1,4 @@
 import React from 'react';
-import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { FormattedNumber } from 'react-intl';
@@ -13,13 +12,8 @@ export default class StatusMeta extends ImmutablePureComponent {
     status: ImmutablePropTypes.map.isRequired,
   };
 
-  static contextTypes = {
-    schedule: PropTypes.bool,
-  };
-
   render () {
     const { status } = this.props;
-    const { schedule } = this.context;
     let applicationLink = null;
 
     if (status.get('application')) {
@@ -44,7 +38,7 @@ export default class StatusMeta extends ImmutablePureComponent {
       <div className='status-meta'>
 
         <Link className='absolute-time' to={`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`}>
-          <Timestamp schedule={schedule} timestamp={status.get('created_at')} />
+          <Timestamp absolute timestamp={status.get('created_at')} />
         </Link>
         {applicationLink}
         {' \u00A0 '}

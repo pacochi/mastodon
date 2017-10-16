@@ -91,7 +91,7 @@ export default class Status extends ImmutablePureComponent {
           <AccountContainer account={status.get('account')} />
           {!detail && (
             <Link className='status-time' to={`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`}>
-              <Timestamp schedule={schedule} timestamp={status.get('created_at')} />
+              <Timestamp absolute={schedule} timestamp={status.get('created_at')} />
             </Link>
           )}
         </div>

@@ -205,7 +205,7 @@ export default class Status extends ImmutablePureComponent {
     return (
       <div className={`status ${this.props.muted ? 'muted' : ''} status-${status.get('visibility')}`} data-id={status.get('id')}>
         <div className='status__info'>
-          <a href={status.get('url')} className='status__time' target='_blank' rel='noopener'><Timestamp schedule={schedule} timestamp={status.get('created_at')} /></a>
+          <a href={status.get('url')} className='status__time' target='_blank' rel='noopener'><Timestamp absolute={schedule} timestamp={status.get('created_at')} /></a>
 
           <a onClick={this.handleAccountClick} data-acct={status.getIn(['account', 'acct'])} href={status.getIn(['account', 'url'])} className='status__display-name'>
             <div className='status__avatar'>
