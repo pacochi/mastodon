@@ -1,6 +1,6 @@
 import api from '../api';
 
-import { openModal, closeModal } from './modal';
+import { openModal } from './modal';
 import { addScheduledStatuses } from '../../pawoo_music/actions/schedules';
 import { updateTimeline } from './timelines';
 
@@ -110,7 +110,6 @@ export function submitCompose() {
         'Idempotency-Key': getState().getIn(['compose', 'idempotencyKey']),
       },
     }).then(function (response) {
-      dispatch(closeModal());
       dispatch(submitComposeSuccess({ ...response.data }));
 
       // To make the app more responsive, immediately get the status into the columns
