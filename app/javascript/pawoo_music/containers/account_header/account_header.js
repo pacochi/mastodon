@@ -40,6 +40,10 @@ const messages = defineMessages({
   disclaimer: { id: 'account.disclaimer', defaultMessage: 'This user is from another instance. This number may be larger.' },
   blockDomain: { id: 'account.block_domain', defaultMessage: 'Hide everything from {domain}' },
   unblockDomain: { id: 'account.unblock_domain', defaultMessage: 'Unhide {domain}' },
+
+  blockConfirm: { id: 'confirmations.block.confirm', defaultMessage: 'Block' },
+  muteConfirm: { id: 'confirmations.mute.confirm', defaultMessage: 'Mute' },
+  blockDomainConfirm: { id: 'confirmations.domain_block.confirm', defaultMessage: 'Hide entire domain' },
 });
 
 
