@@ -147,6 +147,7 @@ class Musicvideo extends ImmutablePureComponent {
     this.audioElement.currentTime = 0; // TODO: 過去にシークできなかった。今は消してもいいかも？
     this.audioElement.currentTime = time;
     this.generator.notifySeeked();
+    this.generator.stop();
     this.generator.start(); // in case it is being seeked after the audio ended
     this.setState({ time: value });
   };
