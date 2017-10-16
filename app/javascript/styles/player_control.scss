@@ -12,22 +12,6 @@ $player-apollo-color:#38b6c5;
     display: none;
   }
 
-  .player-seekbar {
-    position: absolute;
-    z-index: 10;
-    width: 0;
-    height: 2px;
-    background: $player-main-color;
-    left: 0;
-    top: -2px;
-    box-shadow: 0 0 10px rgba(239,36,99, 0.6);
-    transition: width 0s linear;
-
-    &.active {
-      width: 100%;
-    }
-  }
-
   .player-control__overlay {
     position: absolute;
     left: 0;
@@ -92,18 +76,6 @@ $player-apollo-color:#38b6c5;
 
     &.is-pause {
       background: #666;
-      animation: plpopup 1.2s $easeOutQuint 0.0s infinite;
-
-      &:after {
-        content: "";
-        position: absolute;
-        left: 50%;
-        top: 50%;
-        transform: translateX(-50%) translateY(-50%);
-        border-radius: 50%;
-        animation: plpalse 1.2s $easeOutQuint 0.0s infinite;
-        border: 2px solid #AAA;
-      }
 
       &:hover {
         background: $player-main-color;
@@ -116,6 +88,9 @@ $player-apollo-color:#38b6c5;
   }
 
   .control-bar__controller-toggle-wrapper {
+    z-index: 10;
+    position: relative;
+
     .control-bar__volume-slider {
       position: absolute;
       font-weight: bold;
@@ -219,8 +194,24 @@ $player-apollo-color:#38b6c5;
     font-size: 15px;
   }
 
+  .control-bar__controller-seek {
+    position: absolute;
+    z-index: 1;
+    width: 0;
+    height: 2px;
+    background: $player-main-color;
+    left: 0;
+    top: -2px;
+    box-shadow: 0 0 10px rgba(239,36,99, 0.6);
+
+    &.active {
+      width: 100%;
+    }
+  }
+
   .control-bar__deck {
     flex: 1;
+    z-index: 5;
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -836,33 +827,5 @@ $player-apollo-color:#38b6c5;
 
   100% {
     transform: rotate(360deg);
-  }
-}
-@keyframes plpopup {
-  0% {
-    transform: scale(1);
-  }
-
-  1% {
-    transform: scale(1.05);
-  }
-
-  30% {
-    transform: scale(1);
-  }
-}
-@keyframes plpalse {
-  1% {
-    opacity: 0;
-    padding: 18px;
-  }
-
-  20% {
-    opacity: 1;
-  }
-
-  100% {
-    opacity: 0;
-    padding: 26px;
   }
 }
