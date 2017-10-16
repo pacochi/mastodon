@@ -31,14 +31,11 @@ export function constructGeneratorOptions(track, image) {
   ]) {
     const trackProperty = video.get(trackKey);
 
-    // フォームの場合はvisibleキーとparamsキーが存在する
     if (trackProperty) {
-      if (trackProperty.has('visible')) {
-        if (trackProperty.get('visible')) {
-          options[optionKey] = trackProperty.get('params').toJS();
-        }
-      } else {
-        options[optionKey] = trackProperty.toJS();
+      options[optionKey] = trackProperty.toJS();
+      if (!trackProperty.has('visible')) {
+        // 投稿後のパラメータはvisibleキーを持たない
+        options[optionKey].visible = true;
       }
     }
   }
