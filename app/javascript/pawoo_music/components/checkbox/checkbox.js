@@ -21,7 +21,7 @@ export default class checkbox extends PureComponent {
     this.uuid = uuid();
   }
 
-  handleAssignNode = (node: Element) => {
+  handleAssignNode = (node) => {
     this.node = node;
   };
 
