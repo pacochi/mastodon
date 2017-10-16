@@ -104,7 +104,9 @@ class Musicvideo extends ImmutablePureComponent {
       this.generator.initialize();
     }
 
-    this.updateCanvas();
+    if (track !== this.props.track) {
+      this.updateCanvas();
+    }
   }
 
   componentWillUnmount () {
