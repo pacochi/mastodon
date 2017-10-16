@@ -38,8 +38,7 @@ class Track extends ImmutablePureComponent {
   }
 
   componentWillReceiveProps = ({ trackId }) => {
-    if (!this.state.thumbnailView && trackId && (trackId !== this.props.track.get('music'))) {
-      this.props.onStopTrack(this.props.track.get('music'));
+    if (!this.state.thumbnailView && trackId !== this.props.track.get('music')) {
       this.setState({ thumbnailView: true });
     }
   };
