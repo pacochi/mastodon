@@ -39,7 +39,7 @@ class Musicvideo extends ImmutablePureComponent {
   image = null;
 
   componentDidMount () {
-    const { track } = this.props;
+    const { track, autoPlay } = this.props;
 
     // ジャケット画像
     this.image = new Image();
@@ -67,6 +67,10 @@ class Musicvideo extends ImmutablePureComponent {
 
     this.timer = setInterval(this.updateCurrentTime, 500);
     this.audioElement.addEventListener('ended', this.handleEnded);
+
+    if (autoPlay) {
+      this.generator.start();
+    }
   }
 
   componentWillReceiveProps ({ track }) {
