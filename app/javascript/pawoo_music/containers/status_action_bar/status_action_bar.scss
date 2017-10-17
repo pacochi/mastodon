@@ -1,8 +1,8 @@
-.status-action-bar {
+ul.status-action-bar {
   display: flex;
   margin:  var(--verticalspace20);
 
-  li {
+  > li {
     height: var(--iconsize13);
     margin:  var(--rightspace15);
   }

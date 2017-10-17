@@ -4,7 +4,7 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
 import IconButton from '../../components/icon_button';
-import DropdownMenu from '../../components/dropdown_menu';
+import DropdownMenuContainer from '../dropdown_menu';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { makeGetStatus } from '../../../mastodon/selectors';
 import {
@@ -307,7 +307,7 @@ export default class StatusActionBar extends ImmutablePureComponent {
         <li><IconButton title={replyTitle} src='message-square' onClick={this.handleReplyClick} /></li>
         <li><IconButton title={reblogTitle} src={reblogIcon} onClick={this.handleReblogClick} disabled={reblogDisabled} active={reblogged} strokeWidth={reblogged ? 2 : 1} /></li>
         <li><IconButton title={favouriteTitle} src='heart' onClick={this.handleFavouriteClick} disabled={favouriteDisabled} active={favourited} strokeWidth={favourited ? 2 : 1} /></li>
-        <li><DropdownMenu items={menu} src='more-horizontal' /></li>
+        <li><DropdownMenuContainer items={menu} src='more-horizontal' /></li>
       </ul>
     );
   }

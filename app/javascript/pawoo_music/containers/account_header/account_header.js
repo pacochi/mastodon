@@ -10,7 +10,7 @@ import emojify from '../../../mastodon/emoji';
 import Avatar from '../../components/avatar';
 import DisplayName from '../../components/display_name';
 import FollowButton from '../follow_button';
-import DropdownMenu from '../../components/dropdown_menu';
+import DropdownMenuContainer from '../dropdown_menu';
 import {
   followAccount,
   unfollowAccount,
@@ -244,7 +244,7 @@ export default class AccountHeader extends ImmutablePureComponent {
             <strong><FormattedNumber value={account.get('following_count')} />{extraInfo} </strong>
             <span><FormattedMessage id='account.follows' defaultMessage='Follows' /></span>
           </NavLink>
-          {menu.length > 0 && <DropdownMenu items={menu} src='more-horizontal' />}
+          {menu.length > 0 && <DropdownMenuContainer items={menu} src='more-horizontal' />}
         </div>
 
       </div>
