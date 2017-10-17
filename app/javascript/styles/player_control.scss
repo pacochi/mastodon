@@ -7,7 +7,7 @@ $player-apollo-color:#38b6c5;
   bottom: 0;
   width: 100%;
   height: 56px;
-  z-index: 199;
+  z-index: var(--z-index-navigation);
   @media screen and (max-width: 1024px) {
     display: none;
   }
@@ -29,7 +29,6 @@ $player-apollo-color:#38b6c5;
     height: 56px;
     background: #fff;
     display: flex;
-    z-index: 1000;
     position: relative;
   }
 
@@ -88,7 +87,6 @@ $player-apollo-color:#38b6c5;
   }
 
   .control-bar__controller-toggle-wrapper {
-    z-index: 10;
     position: relative;
 
     .control-bar__volume-slider {
@@ -196,7 +194,7 @@ $player-apollo-color:#38b6c5;
 
   .control-bar__controller-seek {
     position: absolute;
-    z-index: 1;
+    z-index: var(--z-index-playlist);
     width: 0;
     height: 2px;
     background: $player-main-color;
@@ -211,7 +209,7 @@ $player-apollo-color:#38b6c5;
 
   .control-bar__deck {
     flex: 1;
-    z-index: 5;
+    z-index: var(--z-index-playlist-component);
     display: flex;
     align-items: flex-start;
     justify-content: space-between;
@@ -314,7 +312,7 @@ $player-apollo-color:#38b6c5;
       left: 0;
       width: 100%;
       height: 100%;
-      z-index: 1000;
+      // z-index: var(--z-index-playlist-component);
       content: "";
     }
 
