@@ -247,6 +247,32 @@ export default class StatusActionBar extends ImmutablePureComponent {
     // let replyIcon;
     let replyTitle;
 
+    let editButton     = null;
+    let downloadButton = null;
+    let downloadFilename = null;
+
+    if (status.getIn(['account', 'id']) === me  &&  status.get('track')) {
+      // TODO
+      // editButton = <li><IconButton className='clickable strong' src='edit' /></li>;
+      const url = status.getIn(['track', 'video', 'url']);
+      if (url) {
+        downloadFilename = `${status.getIn(['track', 'artist'])} - ${status.getIn(['track', 'title'])}.mp4`;
+      }
+
+      downloadButton = (
+        <li>
+          {(url) ? (
+            <a href={url} download={downloadFilename}>
+              <IconButton className='clickable strong' src='download' />
+            </a>
+          ) : (
+            <IconButton className='strong' src='download' onClick={this.handleGenerateMvClick} />
+          )}
+        </li>
+      );
+    }
+
+
     menu.push({ text: intl.formatMessage(messages.open), to: `/@${status.getIn(['account', 'acct'])}/${status.get('id')}` });
     menu.push(null);
 
@@ -272,7 +298,7 @@ export default class StatusActionBar extends ImmutablePureComponent {
         menu.push(null);
 
         if (url) {
-          menu.push({ text: intl.formatMessage(messages.download_mv), action: this.handleDownloadMvClick });
+          menu.push({ text: intl.formatMessage(messages.download_mv), href: url, download: downloadFilename });
           menu.push({ text: intl.formatMessage(messages.regenerate_mv), action: this.handleGenerateMvClick });
         } else {
           menu.push({ text: intl.formatMessage(messages.generate_mv), action: this.handleGenerateMvClick });
@@ -305,16 +331,6 @@ export default class StatusActionBar extends ImmutablePureComponent {
 
     const reblogged = status.get('reblogged');
     const favourited = status.get('favourited');
-
-    let editButton     = null;
-    let downloadButton = null;
-
-    if (status.getIn(['account', 'id']) === me  &&  status.get('track')) {
-      // TODO
-      // editButton = <li><IconButton className='clickable strong' src='edit' /></li>;
-      const action = status.getIn(['track', 'video', 'url']) ? this.handleDownloadMvClick : this.handleGenerateMvClick;
-      downloadButton = <li><IconButton className='clickable strong' src='download' onClick={action} /></li>;
-    }
 
     return (
       <ul className='status-action-bar'>
