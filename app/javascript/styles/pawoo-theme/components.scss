@@ -131,6 +131,19 @@ $button-icon-scale-ration-on-pc: 0.85;
       padding: 0 var(--padding5);
       font-size: var(--text20-font);
       line-height: var(--text20-line);
+
+      .status__content__spoiler-link {
+        background-color: var(--color3);
+        border-radius: var(--radius);
+      }
+
+      .status__content__text {
+        display: none;
+
+        &.status__content__text--visible {
+          display: block;
+        }
+      }
     }
 
     .status-check-box-toggle {

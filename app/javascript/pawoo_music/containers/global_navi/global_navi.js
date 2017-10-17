@@ -117,13 +117,13 @@ export default class GlobalNavi extends PureComponent {
         </div>
         {isLogin && (
           <div className='global-navi-bottom'>
-            <a href='/settings/preferences'>
+            <a target='_blank' href='/settings/preferences'>
               <IconButton src='settings' className='clickable' strokeWidth={2} /> &nbsp;
               <div className='link-text'>
                 {intl.formatMessage(messages.preferences)}
               </div>
             </a>
-            <a href='https://pawoo.zendesk.com/hc/ja/'>
+            <a target='_blank' href='https://pawoo.zendesk.com/hc/ja/'>
               <IconButton src='help-circle' className='clickable' strokeWidth={2} /> &nbsp;
               <div className='link-text'>
                 {intl.formatMessage(messages.help)}

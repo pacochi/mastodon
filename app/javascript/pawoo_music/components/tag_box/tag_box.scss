@@ -32,11 +32,11 @@
 
       .hashtag {
         flex: 1;
+      }
 
-        a {
-          display: block;
-          width: 100%;
-        }
+      .hashtag-link {
+        display: block;
+        width: 100%;
       }
 
       .right-box {
@@ -46,6 +46,12 @@
       .icon-button svg {
         height: var(--text20-font);
       }
+    }
+
+    li.event a {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
     }
   }
 }
