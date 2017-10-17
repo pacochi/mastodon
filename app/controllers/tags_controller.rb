@@ -8,6 +8,7 @@ class TagsController < ApplicationController
   layout 'timeline'
 
   def show
-    @tag = Tag.find_by!(name: params[:id].downcase)
+    @tag_name = params[:id].downcase
+    @tag = Tag.find_by(name: @tag_name)
   end
 end
