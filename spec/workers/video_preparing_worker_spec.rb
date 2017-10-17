@@ -8,8 +8,6 @@ describe VideoPreparingWorker do
     let(:status) { Fabricate(:status, music: track) }
 
     it 'prepares video' do
-      skip 'skipped for environments without supported FFmpeg'
-
       VideoPreparingWorker.new.perform status.id
 
       status.reload
@@ -17,8 +15,6 @@ describe VideoPreparingWorker do
     end
 
     it 'notifies finish of preparation' do
-      skip 'skipped for environments without supported FFmpeg'
-
       VideoPreparingWorker.new.perform status.id
 
       expect do

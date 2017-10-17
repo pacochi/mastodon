@@ -4,8 +4,6 @@ require 'rails_helper'
 
 describe MusicConvertService do
   it 'converts into a video file with specified options' do
-    skip 'skipped for environments without supported FFmpeg'
-
     extend ActionDispatch::TestProcess
 
     track = Fabricate(
