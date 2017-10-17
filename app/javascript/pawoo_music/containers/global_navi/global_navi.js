@@ -32,6 +32,7 @@ const messages = defineMessages({
   federated_timeline: { id: 'tabs_bar.federated_timeline', defaultMessage: 'Federated' },
   favourites: { id: 'navigation_bar.favourites', defaultMessage: 'Favourites' },
   preferences: { id: 'navigation_bar.preferences', defaultMessage: 'Preferences' },
+  help: { id: 'navigation_bar.help', defaultMessage: 'Help' },
 });
 
 const navLinkParams = [
@@ -110,16 +111,22 @@ export default class GlobalNavi extends PureComponent {
           <TrendTagsContainer />
           <Announcements />
         </div>
-        <div className='global-navi-bottom'>
-          {isLogin && (
-            <a className='settings-link' href='/settings/preferences'>
+        {isLogin && (
+          <div className='global-navi-bottom'>
+            <a href='/settings/preferences'>
               <IconButton src='settings' className='clickable' strokeWidth={2} /> &nbsp;
-              <div className='settings-link-text'>
+              <div className='link-text'>
                 {intl.formatMessage(messages.preferences)}
               </div>
             </a>
-          )}
-        </div>
+            <a href='https://pawoo.zendesk.com/hc/ja/'>
+              <IconButton src='help-circle' className='clickable' strokeWidth={2} /> &nbsp;
+              <div className='link-text'>
+                {intl.formatMessage(messages.help)}
+              </div>
+            </a>
+          </div>
+        )}
       </div>
     );
 

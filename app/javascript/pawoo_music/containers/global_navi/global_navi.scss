@@ -78,21 +78,15 @@
 
   .global-navi-bottom {
     padding: 0 0 var(--padding30) 0;
+    margin:  var(--verticalspace30);
 
-    a.settings-link {
+    a {
       display: flex;
       align-items: center;
       text-align: left;
-      margin:  var(--verticalspace30);
+      margin:  var(--verticalspace10);
 
-      .settings-link-icon {
-        display:    block;
-        width:      var(--iconsize10);
-        height:     var(--iconsize10);
-        margin:     var(--rightspace10);
-      }
-
-      .settings-link-text {
+      .link-text {
         display:    block;
         font-size:  var(--text20-font);
       }
