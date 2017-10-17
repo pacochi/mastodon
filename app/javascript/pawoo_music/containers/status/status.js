@@ -12,7 +12,6 @@ import AccountContainer from '../account';
 import StatusMedia from '../status_media';
 import StatusMeta from '../../components/status_meta';
 import StatusPrepend from '../../components/status_prepend';
-import Link from '../../components/link_wrapper';
 
 const makeMapStateToProps = () => {
   const getStatus = makeGetStatus();
@@ -59,6 +58,16 @@ export default class Status extends ImmutablePureComponent {
     this.setState({ isExpanded: !this.state.isExpanded });
   };
 
+  handleClick = () => {
+    const { status: originalStatus } = this.props;
+    let status = originalStatus;
+    if (originalStatus.get('reblog', null) !== null && typeof originalStatus.get('reblog') === 'object') {
+      status = originalStatus.get('reblog');
+    }
+
+    this.context.router.history.push(`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`);
+  }
+
   render () {
     const { muted, detail, hidden, prepend, status: originalStatus } = this.props;
     const { isExpanded } = this.state;
@@ -85,24 +94,22 @@ export default class Status extends ImmutablePureComponent {
     const highlight = detail || status.get('visibility') === 'direct';
 
     return (
-      <Link to={`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`}>
-        <div className={classNames('status', { muted, highlight })} data-id={status.get('id')}>
-          {prepend || <StatusPrepend className='prepend-inline' status={originalStatus} />}
-          <div className='status-head'>
-            <AccountContainer account={status.get('account')} />
-            {!detail && (
-              <Timestamp absolute={schedule} timestamp={status.get('created_at')} />
-            )}
-          </div>
-
-          <StatusContent status={status} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} />
-          <StatusMedia   status={status} detail={detail} />
-
-          {detail && <StatusMeta status={status} />}
-
-          <StatusActionBar status={status} />
+      <div className={classNames('status', { muted, highlight })} data-id={status.get('id')} onClick={this.handleClick}>
+        {prepend || <StatusPrepend className='prepend-inline' status={originalStatus} />}
+        <div className='status-head'>
+          <AccountContainer account={status.get('account')} />
+          {!detail && (
+            <Timestamp absolute={schedule} timestamp={status.get('created_at')} />
+          )}
         </div>
-      </Link>
+
+        <StatusContent status={status} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} />
+        <StatusMedia   status={status} detail={detail} />
+
+        {detail && <StatusMeta status={status} />}
+
+        <StatusActionBar status={status} />
+      </div>
     );
   }
 
