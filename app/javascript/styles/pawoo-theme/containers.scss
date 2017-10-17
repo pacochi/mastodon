@@ -13,18 +13,13 @@
   margin: 100px auto;
   margin-bottom: 0;
 
-  @media screen and (max-width: 400px) {
-    margin: 30px auto;
-    margin-bottom: 0;
-  }
-
   h1 {
     display: flex;
     justify-content: center;
     align-items: center;
 
     img {
-      width: 80%;
+      width: 400px;
     }
 
     a {
@@ -39,6 +34,17 @@
       font-family: 'mastodon-font-display', sans-serif;
       font-weight: 500;
       font-size: 14px;
+    }
+  }
+
+  @media screen and (max-width: 400px) {
+    margin: 30px auto;
+    margin-bottom: 0;
+
+    h1 {
+      img {
+        width: 80%;
+      }
     }
   }
 }
