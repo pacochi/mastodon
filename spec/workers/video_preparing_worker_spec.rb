@@ -4,8 +4,9 @@ require 'rails_helper'
 
 describe VideoPreparingWorker do
   describe 'perform' do
+    let(:user) { Fabricate(:user) }
     let(:track) { Fabricate(:track) }
-    let(:status) { Fabricate(:status, music: track) }
+    let(:status) { Fabricate(:status, account: user.account, music: track) }
 
     it 'prepares video' do
       VideoPreparingWorker.new.perform status.id
@@ -18,7 +19,7 @@ describe VideoPreparingWorker do
       VideoPreparingWorker.new.perform status.id
 
       expect do
-        Notification.find_by!(account: status.account, activity: track)
+        Notification.find_by!(account: user.account, activity: track)
       end.not_to raise_error
     end
 
