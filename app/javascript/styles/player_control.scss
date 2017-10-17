@@ -31,6 +31,7 @@ $player-apollo-color:#38b6c5;
     display: flex;
     z-index: 1000;
     position: relative;
+    border-top: 1px solid var(--color2);
   }
 
   .control-bar__controller {
@@ -88,8 +89,9 @@ $player-apollo-color:#38b6c5;
   }
 
   .control-bar__controller-toggle-wrapper {
-    z-index: 10;
     position: relative;
+    z-index: 10;
+    background: #fff;
 
     .control-bar__volume-slider {
       position: absolute;
@@ -144,12 +146,15 @@ $player-apollo-color:#38b6c5;
   }
 
   .control-bar__controller-skip {
+    position: relative;
+    z-index: 10;
     flex: 1;
     height: 100%;
     align-items: center;
     justify-content: center;
     text-align: center;
     display: flex;
+    background: #fff;
 
     span {
       padding: 4px 12px;
@@ -161,52 +166,50 @@ $player-apollo-color:#38b6c5;
       letter-spacing: 1.0px;
       transition: background-color 0.2s ease-out;
 
-      &:not(.disabled):hover {
+      &:hover {
         background-color: #666;
-      }
-
-      &.disabled {
-        cursor: default;
       }
     }
   }
 
   .control-bar__controller-info {
-    color: #333;
-    font-size: 15px;
-    margin: 0 8px 0 4px;
+    position: relative;
+    z-index: 10;
+    display: flex;
+    align-items: center;
+    padding: 0 8px 0 4px;
+    height: 100%;
     text-align: right;
-  }
-
-  .control-bar__controller-now {
+    background: #fff;
     color: #333;
     font-size: 15px;
-    font-weight: bold;
-  }
 
-  .control-bar__controller-separater {
-    display: inline-block;
-    margin: 0 2px;
-  }
+    .control-bar__controller-now {
+      color: #333;
+      font-size: 15px;
+      font-weight: bold;
+    }
 
-  .control-bar__controller-time {
-    color: #aaa;
-    font-size: 15px;
+    .control-bar__controller-separater {
+      display: inline-block;
+      margin: 0 2px;
+    }
+
+    .control-bar__controller-time {
+      color: #aaa;
+      font-size: 15px;
+    }
   }
 
   .control-bar__controller-seek {
     position: absolute;
-    z-index: 1;
+    z-index: 0;
     width: 0;
     height: 2px;
-    background: $player-main-color;
+    background-color: var(--strong1);
     left: 0;
     top: -2px;
-    box-shadow: 0 0 10px rgba(239,36,99, 0.6);
-
-    &.active {
-      width: 100%;
-    }
+    box-shadow: 0 0 5px rgba(239, 36, 99, 0.6);
   }
 
   .control-bar__deck {
