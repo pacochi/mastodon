@@ -26,3 +26,13 @@
 .modal-container__nav--right {
   float: right;
 }
+
+.modal-container__nav--right,
+.modal-container__nav--left {
+  margin: var(--verticalspace20);
+
+  svg {
+    stroke: var(--color1);
+    stroke-width: 2;
+  }
+}

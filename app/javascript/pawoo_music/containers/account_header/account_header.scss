@@ -43,8 +43,22 @@
       }
 
       .acct {
+        display: flex;
+        align-items: center;
+
         font-size:      var(--text20-font);
         line-height:    var(--text20-line);
+
+        .acct-text {
+          margin: var(--rightspace5);
+        }
+
+        .icon-button {
+          svg {
+            height: var(--text20-font);
+            width: var(--text20-font);
+          }
+        }
       }
 
       .note {

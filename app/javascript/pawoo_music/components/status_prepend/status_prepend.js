@@ -4,8 +4,9 @@ import ImmutablePureComponent from 'react-immutable-pure-component';
 import PropTypes from 'prop-types';
 import { FormattedMessage } from 'react-intl';
 import classNames from 'classnames';
-import DisplayName from '../../components/display_name';
-import Link from '../../components/link_wrapper';
+import DisplayName from '../display_name';
+import Link from '../link_wrapper';
+import IconButton from '../icon_button';
 
 export default class StatusPrepend extends ImmutablePureComponent {
 
@@ -31,14 +32,14 @@ export default class StatusPrepend extends ImmutablePureComponent {
 
       return (
         <div className={classNames('status-prepend', className)}>
-          <i className='fa fa-fw fa-retweet' />
+          <IconButton src='repeat' />
           <FormattedMessage id='status.reblogged_by' defaultMessage='{name} boosted' values={{ name }} />
         </div>
       );
     } else if (displayPinned && status.get('pinned')) {
       return (
         <div className={classNames('status-prepend', className)}>
-          <i className='fa fa-fw fa-thumb-tack' />
+          <IconButton src='feather' />
           <FormattedMessage id='status.pinned' defaultMessage='Pinned Toot' />
         </div>
       );
