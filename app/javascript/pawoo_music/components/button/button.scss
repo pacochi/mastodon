@@ -12,6 +12,8 @@
   color:              var(--color1);
   border:             1px solid var(--tootcolor);
 
+  transition: all 0.2s var(--hover-timing);
+
   &.fit-width {
     width: calc(100% - (11px * 2));
   }
@@ -35,7 +37,7 @@
   &:hover {
     background-color:   var(--tootcolor);
     color:              var(--color1);
-    transition:         var(--hover-transition);
+    transform:          scale(1.1);
   }
 
   &.follow {

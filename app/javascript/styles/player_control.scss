@@ -13,12 +13,12 @@ $player-apollo-color:#38b6c5;
   }
 
   .player-control__overlay {
+    z-index: 10;
     position: absolute;
     left: 0;
     bottom: 0;
     width: 100vw;
     height: 100vh;
-    z-index: 1;
     pointer-events: none;
     background: rgba(0,0,0,0.0);
     transition: background 0.3s ease-out;
