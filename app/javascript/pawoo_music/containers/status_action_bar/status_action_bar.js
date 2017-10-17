@@ -302,12 +302,24 @@ export default class StatusActionBar extends ImmutablePureComponent {
     const reblogged = status.get('reblogged');
     const favourited = status.get('favourited');
 
+
+    // abcang ここのアクションたのんだ！！
+    let editButton     = null;
+    let downloadButton = null;
+
+    if (status.getIn(['account', 'id']) === me  &&  status.get('track')) {
+      editButton     = <li><IconButton className='clickable strong' src='edit' /></li>;
+      downloadButton = <li><IconButton className='clickable strong' src='download' onClick={this.handleDownloadMvClick} /></li>;
+    }
+
     return (
       <ul className='status-action-bar'>
         <li><IconButton title={replyTitle} src='message-square' onClick={this.handleReplyClick} /></li>
         <li><IconButton title={reblogTitle} src={reblogIcon} onClick={this.handleReblogClick} disabled={reblogDisabled} active={reblogged} strokeWidth={reblogged ? 2 : 1} /></li>
         <li><IconButton title={favouriteTitle} src='heart' onClick={this.handleFavouriteClick} disabled={favouriteDisabled} active={favourited} strokeWidth={favourited ? 2 : 1} /></li>
         <li><DropdownMenuContainer items={menu} src='more-horizontal' /></li>
+        {editButton}
+        {downloadButton}
       </ul>
     );
   }
