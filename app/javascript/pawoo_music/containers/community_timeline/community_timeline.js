@@ -7,7 +7,7 @@ import StatusTimelineContainer from '../../containers/status_timeline';
 import { connectCommunityStream } from '../../actions/streaming';
 import { updateTimelineTitle } from '../../actions/timeline';
 import { changeFooterType } from '../../actions/footer';
-import MediaPost from '../../components/media_post';
+import MediaPostContainer from '../media_post';
 
 @connect()
 export default class CommunityTimelineContainer extends PureComponent {
@@ -42,7 +42,7 @@ export default class CommunityTimelineContainer extends PureComponent {
         timelineId='community'
         loadMore={this.handleLoadMore}
         emptyMessage={<FormattedMessage id='empty_column.community' defaultMessage='The local timeline is empty. Write something publicly to get the ball rolling!' />}
-        galleryPrepend={<MediaPost />}
+        galleryPrepend={<MediaPostContainer />}
         withComposeForm
       />
     );

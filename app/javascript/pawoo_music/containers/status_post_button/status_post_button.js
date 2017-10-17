@@ -5,11 +5,16 @@ import classNames from 'classnames';
 import { openModalFormCompose } from '../../../mastodon/actions/compose';
 import IconButton from '../../components/icon_button';
 
-@connect()
+const mapStateToProps = (state) => ({
+  isLogin: !!state.getIn(['meta', 'me']),
+});
+
+@connect(mapStateToProps)
 export default class StatusPostButton extends React.PureComponent {
 
   static propTypes = {
     fixed: PropTypes.bool,
+    isLogin: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
   };
 
@@ -18,11 +23,22 @@ export default class StatusPostButton extends React.PureComponent {
     dispatch(openModalFormCompose());
   }
 
+  handleRedirectLoginPage = () => {
+    location.href = '/auth/sign_in';
+  }
+
   render () {
-    const { fixed } = this.props;
+    const { fixed, isLogin } = this.props;
 
     return (
-      <IconButton src='plus' className={classNames('status-post-button', { fixed })} role='button' tabIndex='0' aria-pressed='false' onClick={this.handleClick} />
+      <IconButton
+        src='plus'
+        className={classNames('status-post-button', { fixed })}
+        role='button'
+        tabIndex='0'
+        aria-pressed='false'
+        onClick={isLogin ? this.handleClick : this.handleRedirectLoginPage}
+      />
     );
   }
 

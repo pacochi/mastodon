@@ -1,10 +1,21 @@
 import React, { PureComponent } from 'react';
-import TrackComposeContainer from '../../containers/track_compose';
-import Delay from '../delay';
-import IconButton from '../icon_button';
+import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
+import TrackComposeContainer from '../track_compose';
+import Delay from '../../components/delay';
+import IconButton from '../../components/icon_button';
 import { isMobile } from '../../util/is_mobile';
 
+const mapStateToProps = (state) => ({
+  isLogin: state.getIn(['meta', 'me']),
+});
+
+@connect(mapStateToProps)
 export default class MediaPost extends PureComponent {
+
+  static propTypes = {
+    isLogin: PropTypes.bool.isRequired,
+  };
 
   constructor(props, context) {
     super(props, context);
@@ -13,6 +24,12 @@ export default class MediaPost extends PureComponent {
   }
 
   handleMediaPost = () => {
+    const { isLogin } = this.props;
+    if (!isLogin) {
+      location.href = '/auth/sign_in';
+      return;
+    }
+
     if (this.mobile) {
       location.href = '/tracks/new';
     } else {
