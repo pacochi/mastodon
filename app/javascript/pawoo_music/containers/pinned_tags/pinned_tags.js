@@ -39,10 +39,9 @@ export default class PinnedTags extends ImmutablePureComponent {
   }
 
   handlePinClick = () => {
-    const { dispatch } = this.props;
-    const id = this.getCurrentTag();
+    const { dispatch, currentTag } = this.props;
 
-    dispatch(addColumn('HASHTAG', { id }));
+    dispatch(addColumn('HASHTAG', { id: currentTag }));
   }
 
   handleCloseClick = (e) => {
