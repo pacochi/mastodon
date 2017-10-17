@@ -15,7 +15,6 @@ import { changeTargetColumn } from '../../actions/column';
 import Announcements from '../../components/announcements';
 
 import logo from '../../../images/pawoo_music/pawoo_music.svg';
-import settingsIcon from '../../../images/pawoo_music/settings.png';
 
 const icons = {
   home: 'home',
@@ -114,7 +113,7 @@ export default class GlobalNavi extends PureComponent {
         <div className='global-navi-bottom'>
           {isLogin && (
             <a className='settings-link' href='/settings/preferences'>
-              <img className='settings-link-icon' src={settingsIcon} alt='settings' />
+              <IconButton src='settings' className='clickable' strokeWidth={2} /> &nbsp;
               <div className='settings-link-text'>
                 {intl.formatMessage(messages.preferences)}
               </div>

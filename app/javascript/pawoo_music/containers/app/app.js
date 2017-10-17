@@ -26,6 +26,7 @@ import StatusPostButtonContainer from '../status_post_button';
 import PlayControlContainer from '../../../mastodon/features/ui/containers/play_control_container';
 import { openModalFormCompose } from '../../../mastodon/actions/compose';
 import Link from '../../components/link_wrapper';
+import IconButton from '../../components/icon_button';
 
 import logo from '../../../images/pawoo_music/pawoo_music.svg';
 
@@ -156,13 +157,13 @@ export default class App extends PureComponent {
           <div className='app-center'>{routes}</div>
 
           <div className='app-top'>
-            <div className={classNames('to_global_navi', { 'selected': target === 'global_navi' })} role='button' tabIndex='0' onClick={this.handleClickGlobalNaviButton}>≡</div>
+            <div className={classNames('to_global_navi', { 'selected': target === 'global_navi' })} role='button' tabIndex='0' onClick={this.handleClickGlobalNaviButton}><IconButton src='menu' className='clickable' strokeWidth={2} /></div>
             <div className='logo'>
               <img alt='logo' src={logo} />
               <div className='timeline_title'>{title}</div>
             </div>
-            <div className='post_status' role='button' tabIndex='0' onClick={this.handleClickStatusPostButton}>+</div>
-            <a className='post_track' href='/tracks/new'>💿</a>
+            <div className='post_status' role='button' tabIndex='0' onClick={this.handleClickStatusPostButton}><IconButton src='edit-2' className='clickable' strokeWidth={2} /></div>
+            <a className='post_track' href='/tracks/new'><IconButton src='music' className='clickable' strokeWidth={2} /></a>
           </div>
 
           <div className='app-bottom'>{buttons}</div>

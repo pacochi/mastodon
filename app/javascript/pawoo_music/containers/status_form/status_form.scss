@@ -358,6 +358,11 @@
 
       .icon-button {
         font-size:    var(--iconsize15);
+
+        svg {
+          width: var(--iconsize15);
+          height: var(--iconsize15);
+        }
       }
 
       .time-limit-dropdown__dropdown {
