@@ -7,7 +7,7 @@ import IconButton from '../../components/icon_button';
 import { isMobile } from '../../util/is_mobile';
 
 const mapStateToProps = (state) => ({
-  isLogin: state.getIn(['meta', 'me']),
+  isLogin: !!state.getIn(['meta', 'me']),
 });
 
 @connect(mapStateToProps)
