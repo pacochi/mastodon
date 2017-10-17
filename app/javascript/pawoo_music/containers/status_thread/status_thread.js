@@ -91,7 +91,7 @@ export default class StatusThread extends ImmutablePureComponent {
     const Component = status.get('track') ? TrackStatusContainer : StatusContainer;
 
     const content = ancestors.push(
-      <Component detail key={status.get('id')} status={status} />
+      <Component detail key={status.get('id')} id={status.get('id')} />
     ).concat(descendants);
 
     const gallery = (

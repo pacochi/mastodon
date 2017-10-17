@@ -8,7 +8,7 @@ import { isMobile } from '../../util/is_mobile';
 import TipsBalloonContainer from '../../../mastodon/containers/tips_balloon_container';
 
 const mapStateToProps = (state) => ({
-  isLogin: state.getIn(['meta', 'me']),
+  isLogin: !!state.getIn(['meta', 'me']),
 });
 
 @connect(mapStateToProps)
