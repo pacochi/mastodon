@@ -29,7 +29,7 @@ class Announcements extends React.PureComponent {
       {
         id: 10,
         icon: '/announcements/icon_2x_360.png',
-        body: 'Pawoo Musicをリニューアル！ MVの自動生成機能などをはじめ、新しいPawoo Musicお楽しみください！',
+        body: 'Pawoo Musicをリニューアル！ MVの自動生成機能などをはじめ、新しいPawoo Musicをお楽しみください！',
         link: [],
       },
       // NOTE: id: 10 まで使用した

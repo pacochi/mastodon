@@ -45,6 +45,21 @@
     font-size:    var(--text20-font);
     line-height:  var(--text20-line);
     word-break: break-all;
+
+    .status__content__text {
+      display: none;
+
+      &.status__content__text--visible {
+        display: block;
+      }
+    }
+
+    .status__content__spoiler-link {
+      border: 0;
+      color: var(--color1);
+      background-color: var(--linkcolor);
+      border-radius: var(--radius);
+    }
   }
 
   .prepend-inline {

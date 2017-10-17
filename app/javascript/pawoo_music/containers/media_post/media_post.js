@@ -5,6 +5,7 @@ import TrackComposeContainer from '../track_compose';
 import Delay from '../../components/delay';
 import IconButton from '../../components/icon_button';
 import { isMobile } from '../../util/is_mobile';
+import TipsBalloonContainer from '../../../mastodon/containers/tips_balloon_container';
 
 const mapStateToProps = (state) => ({
   isLogin: !!state.getIn(['meta', 'me']),
@@ -45,7 +46,7 @@ export default class MediaPost extends PureComponent {
     return (
       <div className='media-post'>
         <div className='media-post-body' role='button' tabIndex='-1' onClick={this.handleMediaPost}>
-          <IconButton src='plus' />
+          <IconButton src='music' title='Post Your Music!' />
         </div>
         <Delay className='media-post-track-compose-modal'>
           {this.state.compose && (
@@ -54,6 +55,9 @@ export default class MediaPost extends PureComponent {
             </div>
           )}
         </Delay>
+        <TipsBalloonContainer id={4} style={{ left: '35px', top: '5px' }}>
+          楽曲投稿ボタン
+        </TipsBalloonContainer>
       </div>
     );
   }

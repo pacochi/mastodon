@@ -4,7 +4,7 @@ import { connect }   from 'react-redux';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 import { FormattedDate } from 'react-intl';
-import HashtagLink from '../hashtag_link';
+import Link from '../../components/link_wrapper';
 import TagBox from '../tag_box';
 import { changeTargetColumn } from '../../actions/column';
 
@@ -61,16 +61,16 @@ export default class EventCalendar extends PureComponent {
         <ul>
           {events.map(event => (
             <li key={event.get('hashtag')} className='event'>
-              <div className='hashtag'>
-                <HashtagLink hashtag={event.get('hashtag')} onClick={this.handleClick} />
-              </div>
-              <div className='right-box date'>
-                <FormattedDate key='start_date' value={event.get('start_date')} month='2-digit' day='2-digit' />
-                {event.get('end_date') && ([
-                  '-',
-                  <FormattedDate key='end_date' value={event.get('end_date')} month='2-digit' day='2-digit' />,
-                ])}
-              </div>
+              <Link to={'/tags/' + event.get('hashtag')} onClick={this.handleClick}>
+                <div className='hashtag'>#{event.get('hashtag')}</div>
+                <div className='right-box date'>
+                  <FormattedDate key='start_date' value={event.get('start_date')} month='2-digit' day='2-digit' />
+                  {event.get('end_date') && ([
+                    '-',
+                    <FormattedDate key='end_date' value={event.get('end_date')} month='2-digit' day='2-digit' />,
+                  ])}
+                </div>
+              </Link>
             </li>
           ))}
         </ul>
