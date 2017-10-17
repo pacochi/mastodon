@@ -12,7 +12,7 @@ describe MusicConvertService do
       :track,
       title: 'title',
       artist: 'artist',
-      music: fixture_file_upload('files/aint_we_got_fun_billy_jones1921.mp3'),
+      music: fixture_file_upload('files/high.mp3'),
       video_image: fixture_file_upload('files/attachment.jpg'),
     )
 
