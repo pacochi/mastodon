@@ -159,9 +159,12 @@ class PlaylistController extends React.PureComponent {
             <input className='vertical-slider' type='range' value={volume} min='0' max='100' step='1' onChange={this.handleChangeVolume} />
           </div>
         </div>
-        {!isTop && <TipsBalloonContainer id={1}>
-          音楽を再生！
-        </TipsBalloonContainer>}
+
+        {!isTop && (
+          <TipsBalloonContainer id={1}>
+            音楽を再生！
+          </TipsBalloonContainer>
+        )}
 
         {isActive && !isTop && (
           <div className='control-bar__controller-skip'>
@@ -332,9 +335,9 @@ class PlayControl extends React.PureComponent {
     });
 
     // Animation用の遅延ローディング
-    setTimeout(()=>{
+    setTimeout(() => {
       this.setState({
-        isSeekbarActive:true,
+        isSeekbarActive: true,
         isLoadingArtwork: false,
         isPlaying: this.isDeckActive(),
       });
