@@ -116,22 +116,22 @@ export default class GlobalNavi extends PureComponent {
           <TrendTagsContainer />
           <Announcements />
         </div>
-        {isLogin && (
-          <div className='global-navi-bottom'>
+        <div className='global-navi-bottom'>
+          {isLogin && (
             <a target='_blank' href='/settings/preferences'>
               <IconButton src='settings' className='clickable' strokeWidth={2} /> &nbsp;
               <div className='link-text'>
                 {intl.formatMessage(messages.preferences)}
               </div>
             </a>
-            <a target='_blank' href='https://pawoo.zendesk.com/hc/ja/'>
-              <IconButton src='help-circle' className='clickable' strokeWidth={2} /> &nbsp;
-              <div className='link-text'>
-                {intl.formatMessage(messages.help)}
-              </div>
-            </a>
-          </div>
-        )}
+          )}
+          <a target='_blank' href='https://pawoo.zendesk.com/hc/ja/'>
+            <IconButton src='help-circle' className='clickable' strokeWidth={2} /> &nbsp;
+            <div className='link-text'>
+              {intl.formatMessage(messages.help)}
+            </div>
+          </a>
+        </div>
       </div>
     );
 
