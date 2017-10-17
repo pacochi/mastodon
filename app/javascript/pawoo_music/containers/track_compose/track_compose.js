@@ -331,16 +331,39 @@ export default class TrackCompose extends ImmutablePureComponent {
     this.props.onChangeTrackComposeTrackVideoTextColor(extractRgbFromRgbObject(rgb));
   }
 
+  handleBindColorPickerHide = () => {
+    document.addEventListener('click', this.handleColorPickerHide, false);
+  };
+
+  handleUnbindColorPickerHide = () => {
+    document.removeEventListener('click', this.handleColorPickerHide, false);
+  };
+
+  handleColorPickerHide = (event) => {
+    let node = event.target;
+    let inside = false;
+    while (node.tagName !== 'BODY') {
+      if (/track-compose-effect-color/.test(node.className)) {
+        inside = true;
+        break;
+      }
+      node = node.parentNode;
+    }
+    if (!inside) {
+      this.setState({ visibleColorPicker: null }, this.handleUnbindColorPickerHide);
+    }
+  };
+
   handleToggleParticleColorPickerVisible = () => {
-    this.setState({ visibleColorPicker: this.state.visibleColorPicker === 'particle' ? null : 'particle' });
+    this.setState({ visibleColorPicker: 'particle' }, this.handleBindColorPickerHide);
   };
 
   handleToggleSpectrumColorPickerVisible = () => {
-    this.setState({ visibleColorPicker: this.state.visibleColorPicker === 'spectrum' ? null : 'spectrum' });
+    this.setState({ visibleColorPicker: 'spectrum' }, this.handleBindColorPickerHide);
   };
 
   handleToggleTextColorPickerVisible = () => {
-    this.setState({ visibleColorPicker: this.state.visibleColorPicker === 'text' ? null : 'text' });
+    this.setState({ visibleColorPicker: 'text' }, this.handleBindColorPickerHide);
   };
 
   handleSubmit = (e) => {
