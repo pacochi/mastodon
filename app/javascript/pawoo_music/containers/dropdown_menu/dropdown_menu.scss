@@ -11,7 +11,7 @@
     display:    block;
     position:   absolute;
 
-    z-index:    var(--modal-z-index);
+    z-index:    var(--z-index-small-overlay);
 
     padding:    var(--padding10);
     width:      var(--width-contextmenu);
