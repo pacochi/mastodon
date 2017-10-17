@@ -183,6 +183,16 @@
     }
   }
 
+  .delay.legend {
+    overflow: hidden;
+    max-height: 0;
+    padding: 0 10px;
+
+    &.visible {
+      max-height: 100px;
+    }
+  }
+
   .track-compose-effect {
     .text {
       padding-right: 10px;

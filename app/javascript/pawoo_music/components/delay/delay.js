@@ -13,7 +13,7 @@ export default class Delay extends PureComponent {
   };
 
   static defaultProps = {
-    duration: 240,
+    duration: 480,
     easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
   };
 
@@ -42,7 +42,7 @@ export default class Delay extends PureComponent {
   render = () => {
     const { duration, easing, className } = this.props;
     return (
-      <div className={classnames('delay', { visible: this.state.visible }, className)} style={{ transition: `opacity ${duration}ms ${easing}, visibility ${duration}ms ${easing}` }}>
+      <div className={classnames('delay', { visible: this.state.visible }, className)} style={{ transition: `all ${duration}ms ${easing}` }}>
         {this.state.children}
       </div>
     );
