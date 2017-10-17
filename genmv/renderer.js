@@ -13,11 +13,11 @@ onunhandledrejection = event => {
 };
 
 const { RgbaEmitter } = require('musicvideo-generator');
-const { webFrame } = require('electron');
+const { remote, webFrame } = require('electron');
 const path = require('path');
 const url = require('url');
 const yargs = require('yargs');
-const { argv } = yargs(location.hash.slice(1).split('&').map(decodeURIComponent));
+const { argv } = yargs(remote.process.argv.slice(remote.process.argv.indexOf('--') + 1));
 
 function parseLimit(bottom, top, threshold) {
   const band = argv[bottom] === undefined && argv[top] === undefined ?
