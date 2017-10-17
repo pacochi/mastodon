@@ -102,10 +102,17 @@ export default class App extends PureComponent {
     dispatch(openModalFormCompose());
   }
 
+  handleRedirectLoginPage = (e) => {
+    const { isLogin } = this.props;
+    if (!isLogin) {
+      location.href = '/auth/sign_in';
+      e.preventDefault();
+    }
+  }
 
   render () {
     const mobile = isMobile();
-    const { title, target, footerType, backTo } = this.props;
+    const { title, target, footerType, isLogin, backTo } = this.props;
 
     const routes = (
       <Switch>
@@ -157,13 +164,13 @@ export default class App extends PureComponent {
           <div className='app-center'>{routes}</div>
 
           <div className='app-top'>
-            <div className={classNames('to_global_navi', { 'selected': target === 'global_navi' })} role='button' tabIndex='0' onClick={this.handleClickGlobalNaviButton}><IconButton src='menu' className='clickable' strokeWidth={2} /></div>
+            <IconButton src='menu' className={classNames('to_global_navi', { 'selected': target === 'global_navi' })} strokeWidth={2} onClick={this.handleClickGlobalNaviButton} />
             <div className='logo'>
               <img alt='logo' src={logo} />
               <div className='timeline_title'>{title}</div>
             </div>
-            <div className='post_status' role='button' tabIndex='0' onClick={this.handleClickStatusPostButton}><IconButton src='edit-2' className='clickable' strokeWidth={2} /></div>
-            <a className='post_track' href='/tracks/new'><IconButton src='music' className='clickable' strokeWidth={2} /></a>
+            <IconButton src='edit-2' className='post_status' strokeWidth={2} onClick={isLogin ? this.handleClickStatusPostButton : this.handleRedirectLoginPage} />
+            <a className='post_track' href='/tracks/new' onClick={this.handleRedirectLoginPage}><IconButton src='music' className='clickable' strokeWidth={2} /></a>
           </div>
 
           <div className='app-bottom'>{buttons}</div>

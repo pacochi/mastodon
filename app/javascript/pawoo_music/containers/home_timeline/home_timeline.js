@@ -5,7 +5,7 @@ import { FormattedMessage } from 'react-intl';
 import Link from '../../components/link_wrapper';
 import { expandHomeTimeline } from '../../../mastodon/actions/timelines';
 import StatusTimelineContainer from '../../containers/status_timeline';
-import MediaPost from '../../components/media_post';
+import MediaPostContainer from '../media_post';
 import { updateTimelineTitle } from '../../actions/timeline';
 import { changeFooterType } from '../../actions/footer';
 
@@ -49,7 +49,7 @@ export default class HomeTimeline extends PureComponent {
         timelineId='home'
         loadMore={this.handleLoadMore}
         emptyMessage={emptyMessage}
-        galleryPrepend={<MediaPost />}
+        galleryPrepend={<MediaPostContainer />}
         withComposeForm
       />
     );
