@@ -3,6 +3,8 @@
   font-size: var(--text10-font);
   line-height: var(--text10-line);
   color: var(--linkcolor);
+  display: flex;
+  align-items: center;
 
   .engagement {
     display: inline-flex;

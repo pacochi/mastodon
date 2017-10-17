@@ -7,17 +7,22 @@
 }
 
 .status {
-  display:    block;
+  display: block;
   text-align: left;
 
-  padding:    var(--padding15);
+  padding: var(--padding15);
+  background-color: var(--color1);
+  color: var(--textcolor);
 
-  background-color:   var(--color1);
-
-  color:        var(--textcolor);
+  &:hover {
+    box-shadow: var(--shadow2);
+    background-color: var(--color2);
+    cursor: pointer;
+  }
 
   &.highlight {
-    box-shadow: var(--shadow);
+    box-shadow: var(--shadow2);
+    border: 1px solid var(--color3);
   }
 
   .status-head {
@@ -27,15 +32,20 @@
     .account {
       flex: 1;
     }
+  }
 
-    .status-time {
-      justify-content: flex-end;
-      white-space: nowrap;
+  time {
+    justify-content: flex-end;
+    white-space: nowrap;
 
-      display:    block;
-      font-size:  var(--text10-font);
-      text-align: right;
-    }
+    display:    block;
+    font-size:  var(--text10-font);
+    text-align: right;
+  }
+
+  .absolute-time time {
+    text-align: left;
+    float: left;
   }
 
   .status__content {

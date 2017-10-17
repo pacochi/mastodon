@@ -78,8 +78,13 @@ export default class App extends PureComponent {
   }
 
   handleClickGlobalNaviButton = () => {
-    const { dispatch } = this.props;
-    dispatch(changeTargetColumn('global_navi'));
+    const { dispatch, target } = this.props;
+    if(target === 'lobby') {
+      dispatch(changeTargetColumn('global_navi'));
+
+    } else {
+      dispatch(changeTargetColumn('lobby'));
+    }
   }
 
   handleClickLobbyButton = () => {
@@ -93,8 +98,10 @@ export default class App extends PureComponent {
   }
 
   handleClickHistoryBackButton = () => {
+    const { dispatch } = this.props;
     if (window.history && window.history.length === 1) this.context.router.history.push('/');
     else this.context.router.history.goBack();
+    dispatch(changeTargetColumn('lobby'));
   }
 
   handleClickStatusPostButton = () => {
@@ -165,6 +172,7 @@ export default class App extends PureComponent {
 
           <div className='app-top'>
             <IconButton src='menu' className={classNames('to_global_navi', { 'selected': target === 'global_navi' })} strokeWidth={2} onClick={this.handleClickGlobalNaviButton} />
+            <div className='blank' />
             <div className='logo'>
               <img alt='logo' src={logo} />
               <div className='timeline_title'>{title}</div>

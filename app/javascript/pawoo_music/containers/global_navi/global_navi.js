@@ -13,6 +13,7 @@ import PinnedTagsContainer from '../pinned_tags';
 import TrendTagsContainer from '../trend_tags';
 import { isMobile } from '../../util/is_mobile';
 import { changeTargetColumn } from '../../actions/column';
+import Link from '../../components/link_wrapper';
 import Announcements from '../../components/announcements';
 
 import logo from '../../../images/pawoo_music/pawoo_music.svg';
@@ -101,7 +102,7 @@ export default class GlobalNavi extends PureComponent {
       <div className='global-navi'>
         <div className='global-navi-center'>
           {!mobile && (
-            <img className='logo' src={logo} alt='logo' />
+            <Link to='/'><img className='logo' src={logo} alt='logo' /></Link>
           )}
           <SearchBox />
           {!isLogin && <LoginBox />}
