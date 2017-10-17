@@ -65,8 +65,8 @@ export default class PrivacyDropdown extends React.PureComponent {
     const { open } = this.state;
 
     const options = [
-      { icon: 'globe', value: 'public', shortText: intl.formatMessage(messages.public_short), longText: intl.formatMessage(messages.public_long) },
-      { icon: 'unlock', value: 'unlisted', shortText: intl.formatMessage(messages.unlisted_short), longText: intl.formatMessage(messages.unlisted_long) },
+      { icon: 'users', value: 'public', shortText: intl.formatMessage(messages.public_short), longText: intl.formatMessage(messages.public_long) },
+      { icon: 'home', value: 'unlisted', shortText: intl.formatMessage(messages.unlisted_short), longText: intl.formatMessage(messages.unlisted_long) },
       { icon: 'lock', value: 'private', shortText: intl.formatMessage(messages.private_short), longText: intl.formatMessage(messages.private_long) },
       { icon: 'mail', value: 'direct', shortText: intl.formatMessage(messages.direct_short), longText: intl.formatMessage(messages.direct_long) },
     ];
@@ -79,7 +79,7 @@ export default class PrivacyDropdown extends React.PureComponent {
         <div className='privacy-dropdown__dropdown'>
           {open && options.map(item =>
             <div role='button' tabIndex='0' key={item.value} data-index={item.value} onClick={this.handleClick} className={`privacy-dropdown__option ${item.value === value ? 'active' : ''}`}>
-              <div className='privacy-dropdown__option__icon'><i className={`fa fa-fw fa-${item.icon}`} /></div>
+              <div className='privacy-dropdown__option__icon'><IconButton src={item.icon} /></div>
               <div className='privacy-dropdown__option__content'>
                 <strong>{item.shortText}</strong>
                 {item.longText}

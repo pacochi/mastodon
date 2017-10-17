@@ -8,6 +8,7 @@ import { defineMessages, injectIntl } from 'react-intl';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import { length } from 'stringz';
+import IconButton from '../../components/icon_button';
 import CharacterCounter from '../../../mastodon/features/compose/components/character_counter';
 import Button from '../../../mastodon/components/button';
 import ReplyIndicatorContainer from '../../../mastodon/features/compose/containers/reply_indicator_container';
@@ -300,11 +301,19 @@ export default class StatusForm extends ImmutablePureComponent {
 
     let publishText    = '';
 
-    if (this.props.privacy === 'private' || this.props.privacy === 'direct') {
-      publishText = <span className='compose-form__publish-private'><i className='fa fa-lock' /> {intl.formatMessage(messages.publish)}</span>;
+    if (this.props.privacy === 'direct') {
+      publishText = <span className='compose-form__toot-button'><IconButton src='mail' /> <div>{intl.formatMessage(messages.publish)}</div></span>;
+
+    } else if (this.props.privacy === 'private') {
+      publishText = <span className='compose-form__toot-button'><IconButton src='lock' /> <div>{intl.formatMessage(messages.publish)}</div></span>;
+
+    } else if (this.props.privacy === 'unlisted') {
+      publishText = <span className='compose-form__toot-button'><IconButton src='home' /> <div>{intl.formatMessage(messages.publish)}</div></span>;
+
     } else {
-      publishText = this.props.privacy !== 'unlisted' ? intl.formatMessage(messages.publishLoud, { publish: intl.formatMessage(messages.publish) }) : intl.formatMessage(messages.publish);
+      publishText = <span className='compose-form__toot-button'>{intl.formatMessage(messages.publishLoud, { publish: intl.formatMessage(messages.publish) })}</span>;
     }
+
 
     return (
       <div className='status-form'>

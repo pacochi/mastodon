@@ -79,7 +79,7 @@
   .global-navi-bottom {
     padding: 0 0 var(--padding30) 0;
 
-    .settings-link {
+    a.settings-link {
       display: flex;
       align-items: center;
       text-align: left;
@@ -95,6 +95,10 @@
       .settings-link-text {
         display:    block;
         font-size:  var(--text20-font);
+      }
+
+      &:visited:hover, &:link:hover {
+        color: var(--strong1);
       }
     }
   }
