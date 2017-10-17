@@ -112,10 +112,6 @@
           & + legend {
             margin-top: var(--padding10);
           }
-
-          & > div, & > label {
-            margin-bottom: var(--padding10);
-          }
         }
 
         label {
@@ -184,12 +180,17 @@
   }
 
   .delay.legend {
-    overflow: hidden;
     max-height: 0;
     padding: 0 10px;
 
     &.visible {
       max-height: 100px;
+    }
+
+    legend {
+      & > div, & > label {
+        margin-bottom: var(--padding10);
+      }
     }
   }
 
