@@ -105,13 +105,18 @@ body {
 
   // lightbox
   --lightbox-opacity: 0.5;
-  --lightbox-z-index: 1000000;
   --lightbox-width:   100vw;
   --lightbox-height:  100vh;
 
 
-  // mordal-z-index
-  --modal-z-index:  1000;
+  // z-indexes
+  --z-index-spoiler: 10;
+  --z-index-small-overlay: 10;
+  --z-index-navigation: 100;
+  --z-index-lightbox_and-icon: 1000;
+  --z-index-playlist: 5000;
+  --z-index-playlist-component: 5001;
+  --z-index-snackbar: 10000;
 }
 
 
@@ -148,7 +153,6 @@ a:hover {
   display:    block;
   width:      100%;
   height:     100vh;
-  z-index:    1;
 
   // huge icon size
   --iconsize50:           calc(var(--grid) * 36);
@@ -164,14 +168,13 @@ a:hover {
   --height-deck:          56px;
 
   .app-center {
-    z-index:        1;
-
     overflow: hidden;
     height:         calc(100% - var(--height-deck));
   }
 
   .app-bottom {
-    height:     var(--height-deck);
+    z-index: var(--z-index-navigation);
+    height: var(--height-deck);
 
     // デッキフィールドだよとわかりやすくするための、pawoo-team 内部での指示用の色。
     // TODO: 本番でこの色つかわないでね〜〜。
@@ -215,7 +218,7 @@ a:hover {
     top: 0;
     left: 0;
 
-    z-index: 10000;
+    z-index: var(--z-index-navigation);
 
     .to_global_navi,
     .post_status,
@@ -279,7 +282,7 @@ a:hover {
     bottom: 0;
     left: 0;
 
-    z-index: 10000;
+    z-index: var(--z-index-navigation);
 
     .buttons {
       display: flex;

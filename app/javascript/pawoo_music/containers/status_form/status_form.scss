@@ -168,7 +168,7 @@
 
       word-break:     break-all;
 
-      z-index:        200;
+      z-index:        var(--z-index-small-overlay);
     }
 
     .privacy-dropdown__option {
@@ -261,7 +261,7 @@
     position: absolute;
     top: 100%;
     width: 100%;
-    z-index: 200;
+    z-index: var(--z-index-small-overlay);
     background: $ui-secondary-color;
     color: $ui-base-color;
     font-size: 14px;
@@ -328,7 +328,7 @@
         max-width:    311px;
         right:        0;
         text-align:   left;
-        z-index:      200;
+        z-index:      var(--z-index-small-overlay);
 
         & > ul {
           list-style:     none;
@@ -390,7 +390,7 @@
         overflow:       hidden;
         box-shadow:     var(--shadow2);
         word-break:     break-all;
-        z-index:        200;
+        z-index:        var(--z-index-small-overlay);
 
         left:           calc(var(--width-contextmenu) * -1 + var(--iconsize10));
         top:            0;
