@@ -42,7 +42,7 @@ export default class Delay extends PureComponent {
   render = () => {
     const { duration, easing, className } = this.props;
     return (
-      <div className={classnames('delay', { visible: this.state.visible }, className)} style={{ transition: `opacity ${duration}ms ${easing}, visibility ${duration}ms ${easing}` }}>
+      <div className={classnames('delay', { visible: this.state.visible }, className)} style={{ transition: `all ${duration}ms ${easing}` }}>
         {this.state.children}
       </div>
     );
