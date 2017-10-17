@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import { NavLink } from 'react-router-dom';
 import { defineMessages, injectIntl } from 'react-intl';
 import { Scrollbars } from 'react-custom-scrollbars';
+import { withRouter } from 'react-router';
 import SearchBox from '../search_box';
 import LoginBox from '../../components/login_box';
 import IconButton from '../../components/icon_button';
@@ -47,15 +48,16 @@ const filteredNavLinkParams = navLinkParams.filter(({ requireLogin }) => !requir
 
 const mapStateToProps = state => ({
   isLogin: !!state.getIn(['meta', 'me']),
-  target: state.getIn(['pawoo_music', 'column', 'target']),
 });
 
 @injectIntl
+@withRouter
 @connect(mapStateToProps)
 export default class GlobalNavi extends PureComponent {
 
   static propTypes = {
     intl: PropTypes.object.isRequired,
+    match: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
     isLogin: PropTypes.bool,
   }
@@ -91,8 +93,10 @@ export default class GlobalNavi extends PureComponent {
   }
 
   render () {
-    const { intl, isLogin } = this.props;
+    const { intl, isLogin, match } = this.props;
     const mobile = isMobile();
+    const currentTag = (match && match.path === '/tags/:id') ? match.params.id : null;
+
     const globalNavi = (
       <div className='global-navi'>
         <div className='global-navi-center'>
@@ -107,7 +111,7 @@ export default class GlobalNavi extends PureComponent {
 
           <h2>タグタイムライン</h2>
           <EventCalendar />
-          <PinnedTagsContainer />
+          <PinnedTagsContainer currentTag={currentTag} />
           <TrendTagsContainer />
           <Announcements />
         </div>

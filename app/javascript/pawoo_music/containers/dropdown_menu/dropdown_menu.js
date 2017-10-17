@@ -48,12 +48,17 @@ class DropdownContent extends React.PureComponent {
 
 }
 
-@connect()
+const mapStateToProps = (state) => ({
+  isLogin: !!state.getIn(['meta', 'me']),
+});
+
+@connect(mapStateToProps)
 export default class DropdownMenu extends React.PureComponent {
 
   static propTypes = {
     src: PropTypes.string.isRequired,
     items: PropTypes.array.isRequired,
+    isLogin: PropTypes.bool,
     dispatch: PropTypes.func.isRequired,
   };
 
@@ -104,6 +109,10 @@ export default class DropdownMenu extends React.PureComponent {
     }
   }
 
+  handleRedirectLoginPage = () => {
+    location.href = '/auth/sign_in';
+  }
+
   renderItem = (item, i) => {
     if (item === null) {
       return <li key={`sep-${i}`} className='dropdown-sep' />;
@@ -133,12 +142,12 @@ export default class DropdownMenu extends React.PureComponent {
   }
 
   render () {
-    const { src } = this.props;
+    const { src, isLogin } = this.props;
     const { expanded } = this.state;
 
     return (
       <div className={classNames('dropdown-menu', { active: expanded })}>
-        <IconButton className='dropdown-trigger' src={src} onClick={this.handleClick} />
+        <IconButton className='dropdown-trigger' src={src} onClick={isLogin ? this.handleClick : this.handleRedirectLoginPage} />
         {!mobile && expanded && (
           <DropdownContent onClose={this.handleClose}>
             {expanded && this.renderMenuItems()}
