@@ -25,6 +25,16 @@
     box-shadow:     var(--shadow2);
     font-weight:    normal;
     text-align:     left;
+
+    li.menu-item > a {
+      display: block;
+    }
+
+    li.dropdown-sep {
+      height: 1px;
+      background-color: var(--color3);
+      margin: var(--verticalspace20-both);
+    }
   }
 }
 
@@ -45,6 +55,10 @@
 
   li.menu-item {
     padding: var(--padding20);
+
+    a {
+      display: block;
+    }
   }
 
   li.dropdown-sep {
