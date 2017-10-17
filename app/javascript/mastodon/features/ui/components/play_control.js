@@ -74,6 +74,7 @@ class PlaylistController extends React.PureComponent {
     isTop: PropTypes.bool.isRequired,
     isAdmin: PropTypes.bool,
     isActive: PropTypes.bool.isRequired,
+    isSeekbarActive: PropTypes.bool.isRequired,
     muted: PropTypes.bool.isRequired,
     volume: PropTypes.number.isRequired,
     duration: PropTypes.number,
@@ -96,8 +97,8 @@ class PlaylistController extends React.PureComponent {
 
   componentDidMount () {
     this.interval = setInterval(() => {
-      const { offsetStartTime } = this.props;
-      const timeOffset = Math.floor(Date.now() / 1000 - offsetStartTime);
+      const { offsetStartTime, duration } = this.props;
+      const timeOffset = Math.min(Math.floor(Date.now() / 1000 - offsetStartTime), duration);
       if (timeOffset !== this.state.timeOffset) {
         this.setState({ timeOffset });
       }
@@ -131,8 +132,9 @@ class PlaylistController extends React.PureComponent {
   }
 
   render () {
-    const { isTop, isActive, duration, muted, volume } = this.props;
-    const { timeOffset, isSeekbarActive } = this.state;
+    const { isTop, isActive, isSeekbarActive, duration, muted, volume } = this.props;
+    const { timeOffset } = this.state;
+    const seekbarStyle = isSeekbarActive ? { width: `${(timeOffset / duration) * 100}%` } : null;
 
     return (
       <div className='control-bar__controller'>
@@ -156,13 +158,13 @@ class PlaylistController extends React.PureComponent {
 
         {isActive && (
           <div className='control-bar__controller-info'>
-            <span className='control-bar__controller-now'>{this.convertTimeFormat(Math.min(timeOffset, duration))}</span>
+            <span className='control-bar__controller-now'>{this.convertTimeFormat(timeOffset)}</span>
             <span className='control-bar__controller-separater'>/</span>
             <span className='control-bar__controller-time'>{this.convertTimeFormat(duration)}</span>
           </div>
         )}
 
-        <div className={classNames('control-bar__controller-seek', { active: isSeekbarActive })} style={{ width: `${(timeOffset / duration) * 100}%` }} />
+        <div className={classNames('control-bar__controller-seek', { active: isSeekbarActive })} style={seekbarStyle} />
       </div>
     );
   }
