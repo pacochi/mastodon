@@ -1,19 +1,36 @@
 .notification {
-  display:    block;
+  display: block;
   text-align: left;
 
-  padding:    var(--padding20);
-  margin:     var(--verticalspace10);
+  padding: var(--padding20);
+  margin: var(--verticalspace10);
 
-  border-radius:      var(--radius);
-  background-color:   var(--color1);
+  border-radius: var(--radius);
+  background-color: var(--color1);
 
-  color:          var(--textcolor);
-  font-size:      var(--text30-font);
-  line-height:    var(--text30-line);
+  color: var(--textcolor);
+  font-size: var(--text30-font);
+  line-height: var(--text30-line);
 
   &.notification-follow {
     border-radius: 0;
     margin: var(--verticalspace5);
+
+    .message {
+      display: flex;
+      align-items: center;
+      font-size: var(--text10-font);
+      line-height: var(--text10-line);
+    }
+
+    .icon-button {
+      margin: var(--rightspace5);
+      height: var(--text10-font);
+
+      svg {
+        width: var(--text10-font);
+        height: var(--text10-font);
+      }
+    }
   }
 }

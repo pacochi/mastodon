@@ -8,6 +8,7 @@ import { FormattedMessage } from 'react-intl';
 import Link from '../../components/link_wrapper';
 import DisplayName from '../../components/display_name';
 import { makeGetNotification } from '../../../mastodon/selectors';
+import IconButton from '../../components/icon_button';
 
 const makeMapStateToProps = () => {
   const getNotification = makeGetNotification();
@@ -30,7 +31,7 @@ export default class Notification extends ImmutablePureComponent {
     return (
       <div className='notification notification-follow'>
         <div className='message'>
-          <i className='fa fa-fw fa-user-plus' />
+          <IconButton src='user-plus' />
           <FormattedMessage id='notification.follow' defaultMessage='{name} followed you' values={{ name: link }} />
         </div>
 
@@ -46,7 +47,7 @@ export default class Notification extends ImmutablePureComponent {
   renderFavourite (notification, link) {
     const prepend = (
       <div className='prepend-inline'>
-        <i className='fa fa-fw fa-star star-icon' />
+        <IconButton src='heart' />
         <FormattedMessage id='notification.favourite' defaultMessage='{name} favourited your status' values={{ name: link }} />
       </div>
     );
@@ -59,7 +60,7 @@ export default class Notification extends ImmutablePureComponent {
   renderReblog (notification, link) {
     const prepend = (
       <div className='prepend-inline'>
-        <i className='fa fa-fw fa-retweet' />
+        <IconButton src='repeat' />
         <FormattedMessage id='notification.reblog' defaultMessage='{name} boosted your status' values={{ name: link }} />
       </div>
     );
