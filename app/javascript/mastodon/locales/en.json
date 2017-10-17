@@ -11,6 +11,7 @@
   "account.mention": "Mention @{name}",
   "account.mute": "Mute @{name}",
   "account.posts": "Posts",
+  "account.remote_follow": "Remote follow",
   "account.report": "Report @{name}",
   "account.requested": "Awaiting approval",
   "account.unblock": "Unblock @{name}",

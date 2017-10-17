@@ -230,6 +230,10 @@ export default class StatusActionBar extends ImmutablePureComponent {
     a.click();
   }
 
+  handleRedirectLoginPage = () => {
+    location.href = '/auth/sign_in';
+  }
+
   render () {
     const { status, me, intl, withDismiss } = this.props;
     const { schedule } = this.context;
@@ -314,9 +318,9 @@ export default class StatusActionBar extends ImmutablePureComponent {
 
     return (
       <ul className='status-action-bar'>
-        <li><IconButton title={replyTitle} src='message-square' onClick={this.handleReplyClick} /></li>
-        <li><IconButton title={reblogTitle} src={reblogIcon} onClick={this.handleReblogClick} disabled={reblogDisabled} active={reblogged} strokeWidth={reblogged ? 2 : 1} /></li>
-        <li><IconButton title={favouriteTitle} src='heart' onClick={this.handleFavouriteClick} disabled={favouriteDisabled} active={favourited} strokeWidth={favourited ? 2 : 1} /></li>
+        <li><IconButton title={replyTitle} src='message-square' onClick={me ? this.handleReplyClick : this.handleRedirectLoginPage} /></li>
+        <li><IconButton title={reblogTitle} src={reblogIcon} onClick={me ? this.handleReblogClick : this.handleRedirectLoginPage} disabled={reblogDisabled} active={reblogged} strokeWidth={reblogged ? 2 : 1} /></li>
+        <li><IconButton title={favouriteTitle} src='heart' onClick={me ? this.handleFavouriteClick : this.handleRedirectLoginPage} disabled={favouriteDisabled} active={favourited} strokeWidth={favourited ? 2 : 1} /></li>
         <li><DropdownMenuContainer items={menu} src='more-horizontal' /></li>
         {editButton}
         {downloadButton}
