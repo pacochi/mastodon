@@ -4,7 +4,8 @@ require 'rails_helper'
 
 describe VideoPreparingWorker do
   describe 'perform' do
-    let(:status) { Fabricate(:status, music: Fabricate(:track)) }
+    let(:track) { Fabricate(:track) }
+    let(:status) { Fabricate(:status, music: track) }
 
     it 'prepares video' do
       skip 'skipped for environments without supported FFmpeg'
@@ -12,7 +13,7 @@ describe VideoPreparingWorker do
       VideoPreparingWorker.new.perform status.id
 
       status.reload
-      expect(status.video).not_to eq nil
+      expect(track.video).not_to eq nil
     end
 
     it 'notifies finish of preparation' do
