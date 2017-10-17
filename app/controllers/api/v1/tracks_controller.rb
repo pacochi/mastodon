@@ -59,13 +59,17 @@ class Api::V1::TracksController < Api::BaseController
       attributes.merge! duration: music_duration.ceil
     end
 
-    if params.dig('video', 'image').blank?
+    case params.dig('video', 'image')
+    when nil
+    when ''
       attributes.merge!(video_image: nil)
     else
       attributes.merge!(video_image: params.dig('video', 'image'))
     end
 
-    if params.dig('video', 'blur').blank?
+    case params.dig('video', 'blur')
+    when nil
+    when ''
       attributes.merge!(
         video_blur_movement_band_bottom: 0,
         video_blur_movement_band_top: 0,
@@ -85,7 +89,9 @@ class Api::V1::TracksController < Api::BaseController
       )
     end
 
-    if params.dig('video', 'particle').blank?
+    case params.dig('video', 'particle')
+    when nil
+    when ''
       attributes.merge!(
         video_particle_limit_band_bottom: 0,
         video_particle_limit_band_top: 0,
@@ -103,7 +109,9 @@ class Api::V1::TracksController < Api::BaseController
       )
     end
 
-    if params.dig('video', 'lightleaks').blank?
+    case params.dig('video', 'lightleaks')
+    when nil
+    when ''
       attributes.merge!(
         video_lightleaks_alpha: 0,
         video_lightleaks_interval: 0
@@ -115,7 +123,9 @@ class Api::V1::TracksController < Api::BaseController
       )
     end
 
-    if params.dig('video', 'spectrum').blank?
+    case params.dig('video', 'spectrum')
+    when nil
+    when ''
       attributes.merge!(
         video_spectrum_mode: 0,
         video_spectrum_alpha: 0,
@@ -129,7 +139,9 @@ class Api::V1::TracksController < Api::BaseController
       )
     end
 
-    if params.dig('video', 'text').blank?
+    case params.dig('video', 'text')
+    when nil
+    when ''
       attributes.merge!(
         video_text_alpha: 0,
         video_text_color: 0
