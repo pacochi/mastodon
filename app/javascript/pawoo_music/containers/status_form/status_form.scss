@@ -21,7 +21,7 @@
 
     min-height:     100px;
     padding:        var(--padding10);
-    padding-right:  calc(var(--grid) * 2 + var(--iconsize15)) !important; // --padding10 + --iconsize15
+    padding-right:  calc(var(--grid) * 2 + var(--iconsize30)) !important; // --padding10 + --iconsize15
     resize:         none;
 
     @media screen and (max-width: 600px) {
