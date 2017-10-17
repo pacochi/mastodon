@@ -1,13 +1,13 @@
 .detailed-account {
-  display:        block;
-  margin:         var(--verticalspace40);
+  width: var(--width-gallery);
+  margin: var(--verticalspace20);
 
   .head {
     display: flex;
     padding: var(--padding10);
 
     text-align:         left;
-    background-color:   var(--color3);
+    background-color:   var(--color2);
     border-radius:      var(--radius);
 
     &.with-media {
@@ -48,6 +48,14 @@
       &:last-child, &:last-child img {
         border-radius:  0 0 var(--radius) 0;
       }
+    }
+  }
+}
+
+.timeline .gallery-column .scrollable .item-list {
+  article:first-of-type {
+    .detailed-account {
+      margin: var(--verticalspace40);
     }
   }
 }
