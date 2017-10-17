@@ -31,36 +31,24 @@
 .modal-menu {
   display:    block;
   padding:    var(--padding10);
-  width:      var(--width-contextmenu);
+  width:      var(--width-gallery);
 
   border-radius:      var(--radius);
   background-color:   var(--color1);
 
-  font-size:      var(--text20-font);
-  line-height:    var(--text20-line);
+  font-size:      var(--text40-font);
+  line-height:    var(--text40-line);
 
   box-shadow:     var(--shadow2);
   font-weight:    normal;
   text-align:     left;
-}
 
-.dropdown-menu, .modal-menu {
-  ul.menu-items {
-    display: block;
+  li.menu-item {
+    padding: var(--padding20);
+  }
 
-    ul.menu-item {
-      display: block;
-      margin:  var(--padding5);
-
-      &.dropdown-sep {
-        border-bottom: 1px solid var(--color2);
-        margin: 5px 7px 6px;
-        height: 0;
-      }
-
-      &.menu-item > a {
-        display: block;
-      }
-    }
+  li.dropdown-sep {
+    height: 1px;
+    background-color: var(--color3);
   }
 }
