@@ -32,6 +32,12 @@
       color: var(--tootcolor);
     }
 
+    .account--follows-info {
+      font-size: var(--text10-font);
+      line-height: 1;
+      color: var(--color2);
+    }
+
   }
 
   .content {
@@ -47,6 +53,7 @@
       .action-buttons {
         display:        flex;
         margin-top: -16px;
+        height: 24px;
 
         ul {
           display:    flex;
@@ -64,7 +71,7 @@
 
   .tabs {
     display: flex;
-    margin: var(--verticalspace20);
+    margin: var(--verticalspace25);
     font-weight: bold;
     justify-content: center;
 
