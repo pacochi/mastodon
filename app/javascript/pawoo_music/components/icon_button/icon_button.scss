@@ -1,8 +1,6 @@
 .icon-button {
-  display: inline-block;
-  width: var(--iconsize13);
-  height: var(--iconsize13);
-  line-height: 0;
+  display: inline-flex;
+  align-items: center;
 
   svg {
     width: var(--iconsize13);
