@@ -93,8 +93,10 @@ export default class App extends PureComponent {
   }
 
   handleClickHistoryBackButton = () => {
+    const { dispatch } = this.props;
     if (window.history && window.history.length === 1) this.context.router.history.push('/');
     else this.context.router.history.goBack();
+    dispatch(changeTargetColumn('lobby'));
   }
 
   handleClickStatusPostButton = () => {

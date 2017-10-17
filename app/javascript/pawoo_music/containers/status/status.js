@@ -85,24 +85,24 @@ export default class Status extends ImmutablePureComponent {
     const highlight = detail || status.get('visibility') === 'direct';
 
     return (
-      <div className={classNames('status', { muted, highlight })} data-id={status.get('id')}>
-        {prepend || <StatusPrepend className='prepend-inline' status={originalStatus} />}
-        <div className='status-head'>
-          <AccountContainer account={status.get('account')} />
-          {!detail && (
-            <Link className='status-time' to={`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`}>
+      <Link to={`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`}>
+        <div className={classNames('status', { muted, highlight })} data-id={status.get('id')}>
+          {prepend || <StatusPrepend className='prepend-inline' status={originalStatus} />}
+          <div className='status-head'>
+            <AccountContainer account={status.get('account')} />
+            {!detail && (
               <Timestamp absolute={schedule} timestamp={status.get('created_at')} />
-            </Link>
-          )}
+            )}
+          </div>
+
+          <StatusContent status={status} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} />
+          <StatusMedia   status={status} detail={detail} />
+
+          {detail && <StatusMeta status={status} />}
+
+          <StatusActionBar status={status} />
         </div>
-
-        <StatusContent status={status} expanded={isExpanded} onExpandedToggle={this.handleExpandedToggle} />
-        <StatusMedia   status={status} detail={detail} />
-
-        {detail && <StatusMeta status={status} />}
-
-        <StatusActionBar status={status} />
-      </div>
+      </Link>
     );
   }
 
