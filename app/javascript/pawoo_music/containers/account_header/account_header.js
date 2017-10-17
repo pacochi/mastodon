@@ -218,7 +218,7 @@ export default class AccountHeader extends ImmutablePureComponent {
 
     return (
       <div className='account-header-pm'>
-        <div className='cover'>
+        <div className='cover' style={{ backgroundImage: `url(${account.get('header')})` }}>
           <Avatar className='size50' account={account} autoPlayGif={autoPlayGif} />
           <DisplayName account={account} />
           <span className='acct'>@{account.get('acct')} {lockedIcon}</span>
