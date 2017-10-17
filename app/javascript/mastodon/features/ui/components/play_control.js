@@ -74,6 +74,7 @@ class PlaylistController extends React.PureComponent {
     isTop: PropTypes.bool.isRequired,
     isAdmin: PropTypes.bool,
     isActive: PropTypes.bool.isRequired,
+    isSeekbarActive: PropTypes.bool.isRequired,
     muted: PropTypes.bool.isRequired,
     volume: PropTypes.number.isRequired,
     duration: PropTypes.number,
@@ -88,20 +89,28 @@ class PlaylistController extends React.PureComponent {
     skipLimitTime: 0,
   };
 
-  state = {
-    timeOffset: Math.floor(new Date() / 1000 - this.props.offsetStartTime),
-  };
-
   interval = null;
+
+  timeOffset = 0;
+
+  timeOffsetNode = null;
+
+  playSeekbarNode = null;
 
   componentDidMount () {
     this.interval = setInterval(() => {
-      const { offsetStartTime } = this.props;
+      const { offsetStartTime, duration } = this.props;
       const timeOffset = Math.floor(Date.now() / 1000 - offsetStartTime);
-      if (timeOffset !== this.state.timeOffset) {
-        this.setState({ timeOffset });
+      if (timeOffset !== this.timeOffset) {
+        this.timeOffset = timeOffset;
+        if (this.timeOffsetNode) {
+          this.timeOffsetNode.textContent = this.convertTimeFormat(Math.min(timeOffset, duration));
+        }
+        if (this.playSeekbarNode) {
+          this.playSeekbarNode.style.width = `${(timeOffset / duration) * 100}%`;
+        }
       }
-    }, 300);
+    }, 900);
   }
 
   componentWillUnmount () {
@@ -112,12 +121,11 @@ class PlaylistController extends React.PureComponent {
 
   isSkipEnable () {
     const { isActive, skipLimitTime, isAdmin } = this.props;
-    const { timeOffset } = this.state;
-    return isAdmin || (isActive && skipLimitTime && timeOffset > skipLimitTime);
+    return isAdmin || (isActive && skipLimitTime && this.timeOffset > skipLimitTime);
   }
 
   handleClickSkip = () => {
-    if(this.isSkipEnable()) {
+    if (this.isSkipEnable()) {
       this.props.onSkip();
     }
   }
@@ -130,9 +138,16 @@ class PlaylistController extends React.PureComponent {
     return `${Math.floor(time / 60)}:${('0' + (time % 60)).slice(-2)}`;
   }
 
+  setPlaySeekbarNode = (playSeekbarNode) => {
+    this.playSeekbarNode = playSeekbarNode;
+  };
+
+  setTimeOffsetNode = (timeOffsetNode) => {
+    this.timeOffsetNode = timeOffsetNode;
+  };
+
   render () {
-    const { isTop, isActive, duration, muted, volume } = this.props;
-    const { timeOffset, isSeekbarActive } = this.state;
+    const { isTop, isActive, isSeekbarActive, duration, muted, volume } = this.props;
 
     return (
       <div className='control-bar__controller'>
@@ -150,19 +165,19 @@ class PlaylistController extends React.PureComponent {
 
         {isActive && !isTop && (
           <div className='control-bar__controller-skip'>
-            <span className={this.isSkipEnable() ? '' : 'disabled'} onClick={this.handleClickSkip}>SKIP</span>
+            <span onClick={this.handleClickSkip}>SKIP</span>
           </div>
         )}
 
         {isActive && (
           <div className='control-bar__controller-info'>
-            <span className='control-bar__controller-now'>{this.convertTimeFormat(Math.min(timeOffset, duration))}</span>
+            <span className='control-bar__controller-now' ref={this.setTimeOffsetNode}>--</span>
             <span className='control-bar__controller-separater'>/</span>
             <span className='control-bar__controller-time'>{this.convertTimeFormat(duration)}</span>
           </div>
         )}
 
-        <div className={classNames('control-bar__controller-seek', { active: isSeekbarActive })} style={{ width: `${(timeOffset / duration) * 100}%` }} />
+        <div className={classNames('control-bar__controller-seek', { active: isSeekbarActive })} ref={this.setPlaySeekbarNode} />
       </div>
     );
   }

@@ -161,12 +161,8 @@ $player-apollo-color:#38b6c5;
       letter-spacing: 1.0px;
       transition: background-color 0.2s ease-out;
 
-      &:not(.disabled):hover {
+      &:hover {
         background-color: #666;
-      }
-
-      &.disabled {
-        cursor: default;
       }
     }
   }
