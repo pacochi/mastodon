@@ -524,7 +524,8 @@ export default class TrackCompose extends ImmutablePureComponent {
                     </Checkbox>
                   </label>
                 </legend>
-                <Delay className='legend'>
+
+                <Delay duration={480} className='legend'>
                   {this.props.track.getIn(['video', 'spectrum', 'visible']) && (
                     <legend className='track-compose-effect'>
                       <div className='horizontal'>
@@ -605,7 +606,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                   </label>
                 </legend>
 
-                <Delay className='legend'>
+                <Delay duration={480} className='legend'>
                   {this.props.track.getIn(['video', 'blur', 'visible']) && (
                     <legend className='track-compose-effect'>
                       <label className='horizontal'>
@@ -654,7 +655,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                   </label>
                 </legend>
 
-                <Delay className='legend'>
+                <Delay duration={480} className='legend'>
                   {this.props.track.getIn(['video', 'particle', 'visible']) && (
                     <legend className='track-compose-effect'>
                       <label className='horizontal'>
@@ -714,7 +715,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                   </label>
                 </legend>
 
-                <Delay className='legend'>
+                <Delay duration={480} className='legend'>
                   {this.props.track.getIn(['video', 'text', 'visible']) && (
                     <legend className='track-compose-effect'>
                       <div className='track-compose-effect-color'>
@@ -760,7 +761,7 @@ export default class TrackCompose extends ImmutablePureComponent {
                   </label>
                 </legend>
 
-                <Delay className='legend'>
+                <Delay duration={480} className='legend'>
                   {this.props.track.getIn(['video', 'lightleaks', 'visible']) && (
                     <legend className='track-compose-effect'>
                       <label className='horizontal'>

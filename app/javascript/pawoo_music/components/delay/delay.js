@@ -13,7 +13,7 @@ export default class Delay extends PureComponent {
   };
 
   static defaultProps = {
-    duration: 480,
+    duration: 240,
     easing: 'cubic-bezier(0.215, 0.61, 0.355, 1)',
   };
 
