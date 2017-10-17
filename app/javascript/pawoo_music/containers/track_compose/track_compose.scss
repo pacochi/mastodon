@@ -110,7 +110,11 @@
           width: 100%;
 
           & + legend {
-            margin-top: var(--padding15);
+            margin-top: var(--padding10);
+          }
+
+          & > div, & > label {
+            margin-bottom: var(--padding10);
           }
         }
 
@@ -125,6 +129,8 @@
           .text {
             display: block;
             width: 100%;
+            font-weight: normal;
+            font-size: 12px;
 
             flex-grow: 0;
             flex-shrink: 0;
@@ -142,6 +148,13 @@
 
             font-size: var(--text30-font);
             line-height: var(--text30-line);
+
+            outline: none;
+            transition: box-shadow 0.8s var(--hover-timing);
+
+            &:focus {
+              box-shadow: 0 0 0 2px var(--tootcolor);
+            }
           }
 
           textarea {
@@ -153,6 +166,13 @@
 
             font-size: var(--text30-font);
             line-height: var(--text30-line);
+
+            outline: none;
+            transition: box-shadow 0.8s var(--hover-timing);
+
+            &:focus {
+              box-shadow: 0 0 0 2px var(--tootcolor);
+            }
           }
         }
 
@@ -203,6 +223,12 @@
         top: -120px;
         left: 60px;
       }
+    }
+  }
+
+  .track-compose-radio {
+    .checkbox + .checkbox {
+      margin-left: 10px;
     }
   }
 
