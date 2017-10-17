@@ -202,7 +202,7 @@ export default class MediaGallery extends React.PureComponent {
     return (
       <div className='media-gallery' style={{ height: (expandMedia && this.state.visible) ? 'auto' : `${this.props.height}px` }}>
         <div className={`spoiler-button ${this.state.visible ? 'spoiler-button--visible' : ''}`}>
-          <IconButton src={this.state.visible ? 'eye' : 'eye-slash'} onClick={this.handleOpen} />
+          <IconButton src={this.state.visible ? 'eye' : 'eye-off'} onClick={this.handleOpen} />
         </div>
 
         {children}

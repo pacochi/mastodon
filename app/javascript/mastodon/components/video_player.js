@@ -118,7 +118,7 @@ export default class VideoPlayer extends React.PureComponent {
 
     let spoilerButton = (
       <div className={`status__video-player-spoiler ${this.state.visible ? 'status__video-player-spoiler--visible' : ''}`}>
-        <IconButton src={this.state.visible ? 'eye' : 'eye-slash'} onClick={this.handleVisibility} />
+        <IconButton src={this.state.visible ? 'eye' : 'eye-off'} onClick={this.handleVisibility} />
       </div>
     );
 
