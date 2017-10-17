@@ -110,7 +110,7 @@ class PlaylistController extends React.PureComponent {
           this.playSeekbarNode.style.width = `${(timeOffset / duration) * 100}%`;
         }
       }
-    }, 900);
+    }, 1000);
   }
 
   componentWillUnmount () {
