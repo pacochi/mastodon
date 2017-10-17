@@ -3,7 +3,7 @@
 class VideoPreparingWorker
   include Sidekiq::Worker
 
-  sidekiq_options queue: :video_preparer, unique_for: 16.minutes
+  sidekiq_options queue: :video_preparer, unique_for: 16.minutes, retry: false
 
   def perform(id)
     status = Status.where(music_type: 'Track').find(id)
