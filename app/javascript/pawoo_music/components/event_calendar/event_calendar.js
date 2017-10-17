@@ -9,7 +9,7 @@ import TagBox from '../tag_box';
 import { changeTargetColumn } from '../../actions/column';
 
 const messages = defineMessages({
-  title: { id: 'event_calendar.title', defaultMessage: 'Event Tag Timeline' },
+  title: { id: 'event_calendar.title', defaultMessage: 'Event Tag' },
 });
 
 const events = Immutable.fromJS([

@@ -77,7 +77,7 @@
   "empty_column.notifications": "You don't have any notifications yet. Interact with others to start the conversation.",
   "empty_column.public": "There is nothing here! Write something publicly, or manually follow users from other instances to fill it up",
   "empty_column.search_toots": "No toots found.",
-  "event_calendar.title": "Event Tag Timelines",
+  "event_calendar.title": "Event Tag",
   "follow_request.authorize": "Authorize",
   "follow_request.reject": "Reject",
   "getting_started.appsshort": "Apps",
@@ -235,5 +235,5 @@
   "pawoo_music.track_compose.video.spectrum": "Spectrum",
   "pawoo_music.track_compose.video.spectrum_form": "Form",
   "pawoo_music.track_compose.video.text": "Text",
-  "pinned_tags.title": "Pinned Tag Timelines"
+  "pinned_tags.title": "Pinned Tag"
 }
