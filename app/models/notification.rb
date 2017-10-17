@@ -93,7 +93,7 @@ class Notification < ApplicationRecord
   private
 
   def destroy_activity
-    self.activity.destroy!
+    self.activity&.destroy!
   end
 
   def set_from_account
