@@ -218,19 +218,21 @@ export default class AccountHeader extends ImmutablePureComponent {
 
     return (
       <div className='account-header-pm'>
-        <div className='content'>
+        <div className='cover'>
           <Avatar className='size50' account={account} autoPlayGif={autoPlayGif} />
+          <DisplayName account={account} />
+          <span className='acct'>@{account.get('acct')} {lockedIcon}</span>
+          {followed}
+        </div>
+        <div className='content'>
           <div className='info'>
-            <DisplayName account={account} />
-            <span className='acct'><div className='acct-text'>@{account.get('acct')}</div> {lockedIcon}</span>
-            {followed}
-            <div className='note' dangerouslySetInnerHTML={note} />
             <div className='action-buttons'>
               <FollowButton account={account} />
               <ul className='oauth-authentications'>
                 {this.renderProviderIcons()}
               </ul>
             </div>
+            <div className='note' dangerouslySetInnerHTML={note} />
           </div>
         </div>
         <div className='tabs'>

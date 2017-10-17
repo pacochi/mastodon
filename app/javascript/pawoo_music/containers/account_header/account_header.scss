@@ -1,79 +1,52 @@
 .account-header-pm {
   display:            flex;
   flex-direction:     column;
-  padding:            var(--verticalspace30-both);
-  background-color:   var(--color2);
+  background-color:   var(--color1);
 
-  width:      var(--width-gallery-view);
   align-items: center;
 
-  .content {
-    display:    flex;
-    width:      var(--width-gallery);
-    text-align: left;
+  .cover {
+    width: var(--width-gallery);
+    height: calc(var(--grid) * 49);
+    background-color: var(--textcolor);
 
     .avatar {
-      display:        block;
-      flex-shrink:    0;
-      flex-grow:      0;
-      flex-basis:     var(--iconsize50);
-      height:         var(--iconsize50);
-      margin:         var(--rightspace10);
-
-      img {
-        width: 100%;
-        border-radius: var(--iconsize50);
-      }
+      margin: calc(var(--grid) * 12) auto var(--padding20);
     }
 
+    .display-name {
+      display: block;
+      font-size: var(--text40-font);
+      line-height: 1;
+      font-weight: bold;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--color1);
+    }
+
+    .acct {
+      font-size: var(--text10-font);
+      line-height: 1;
+      color: var(--tootcolor);
+    }
+
+  }
+
+  .content {
+
     .info {
-      display:    block;
-      overflow:   hidden;
-      width:      100%;
-
-      .display-name {
-        display:        block;
-        font-size:      var(--text30-font);
-        line-height:    var(--text30-line);
-        font-weight:    bold;
-
-        white-space:    nowrap;
-        overflow:       hidden;
-        text-overflow:  ellipsis;
-      }
-
-      .acct {
-        display: flex;
-        align-items: center;
-
-        font-size:      var(--text20-font);
-        line-height:    var(--text20-line);
-
-        .acct-text {
-          margin: var(--rightspace5);
-        }
-
-        .icon-button {
-          svg {
-            height: var(--text20-font);
-            width: var(--text20-font);
-          }
-        }
-      }
 
       .note {
-        display:        block;
         margin:         var(--verticalspace20);
         font-size:      var(--text20-font);
         line-height:    var(--text20-line);
-        height:         calc(var(--text20-line) * 6);
-
-        overflow:       hidden;
       }
 
       .action-buttons {
         display:        flex;
-        margin:         var(--verticalspace20);
+        margin-top: -16px;
 
         ul {
           display:    flex;
@@ -90,14 +63,10 @@
   }
 
   .tabs {
-    display:        flex;
-    width:          var(--width-gallery);
-    margin:         var(--verticalspace20);
-    height:         var(--text30-line);
-
-    font-weight:    bold;
-
-    justify-content:    center;
+    display: flex;
+    margin: var(--verticalspace20);
+    font-weight: bold;
+    justify-content: center;
 
     @media screen and(max-width: 980px) {
       font-size:      var(--text10-font);
@@ -111,6 +80,7 @@
 
     a {
       margin: var(--rightspace10);
+      padding: 0 calc(var(--grid) * 2) var(--grid);
 
       &.active {
         display:        block;
