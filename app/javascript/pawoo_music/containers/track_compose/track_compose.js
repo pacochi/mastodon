@@ -807,7 +807,7 @@ export default class TrackCompose extends ImmutablePureComponent {
           <button className='cancel' onClick={this.handleCancel}>
             <FormattedMessage id='column_back_button.label' defaultMessage='Back' />
           </button>
-          <button className='submit' disabled={this.props.isSubmitting} onClick={this.handleSubmit}>
+          <button className={classNames('submit', { disabled: this.props.isSubmitting })} disabled={this.props.isSubmitting} onClick={this.handleSubmit}>
             <FormattedMessage id='pawoo_music.track_compose.save' defaultMessage='Save' />
           </button>
         </div>
