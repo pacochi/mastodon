@@ -1,15 +1,9 @@
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import IconButton from './icon_button';
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import IconButton from '../../pawoo_music/components/icon_button';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { isIOS } from '../is_mobile';
-
-const messages = defineMessages({
-  toggle_sound: { id: 'video_player.toggle_sound', defaultMessage: 'Toggle sound' },
-  toggle_visible: { id: 'video_player.toggle_visible', defaultMessage: 'Toggle visibility' },
-  expand_video: { id: 'video_player.expand', defaultMessage: 'Expand video' },
-});
 
 @injectIntl
 export default class VideoPlayer extends React.PureComponent {
@@ -120,17 +114,17 @@ export default class VideoPlayer extends React.PureComponent {
   }
 
   render () {
-    const { media, intl, width, height, sensitive, autoplay } = this.props;
+    const { media, width, height, sensitive, autoplay } = this.props;
 
     let spoilerButton = (
       <div className={`status__video-player-spoiler ${this.state.visible ? 'status__video-player-spoiler--visible' : ''}`}>
-        <IconButton overlay title={intl.formatMessage(messages.toggle_visible)} icon={this.state.visible ? 'eye' : 'eye-slash'} onClick={this.handleVisibility} />
+        <IconButton src={this.state.visible ? 'eye' : 'eye-slash'} onClick={this.handleVisibility} />
       </div>
     );
 
     let expandButton = (
       <div className='status__video-player-expand'>
-        <IconButton overlay title={intl.formatMessage(messages.expand_video)} icon='expand' onClick={this.handleExpand} />
+        <IconButton src='maximize-2' onClick={this.handleExpand} />
       </div>
     );
 

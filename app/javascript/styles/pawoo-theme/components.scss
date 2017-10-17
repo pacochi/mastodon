@@ -566,21 +566,27 @@ $button-icon-scale-ration-on-pc: 0.85;
 
 .status__video-player-expand,
 .status__video-player-mute {
-  color: $primary-text-color;
-  opacity: 0.8;
   position: absolute;
   right: 4px;
-  text-shadow: 0 1px 1px $base-shadow-color, 1px 0 1px $base-shadow-color;
+
+  svg {
+    stroke: var(--color1);
+    stroke-width: 2;
+  }
 }
 
 .status__video-player-spoiler {
   display: none;
-  color: $primary-text-color;
-  left: 4px;
   position: absolute;
-  text-shadow: 0 1px 1px $base-shadow-color, 1px 0 1px $base-shadow-color;
+  left: 4px;
   top: 4px;
+
   z-index: var(--z-index-spoiler);
+
+  svg {
+    stroke: var(--color1);
+    stroke-width: 2;
+  }
 
   &.status__video-player-spoiler--visible {
     display: block;
@@ -625,7 +631,7 @@ $button-icon-scale-ration-on-pc: 0.85;
   position: absolute;
   top: 50%;
   transform: translate(-50%, -50%);
-  z-index: var(--z-index-navigation);
+  z-index: var(--z-index-small-overlay);
 
   padding: 19px 18px 19px 23px;
   display: flex;
@@ -672,8 +678,10 @@ $button-icon-scale-ration-on-pc: 0.85;
   top:        var(--grid);
   z-index:    var(--z-index-navigation);
 
-  text-shadow:    0 1px 1px $base-shadow-color, 1px 0 1px $base-shadow-color;
-  border-radius:  var(--radius);
+  svg {
+    stroke: var(--color1);
+    stroke-width: 2;
+  }
 
   &.spoiler-button--visible {
     display: block;

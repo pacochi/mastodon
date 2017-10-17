@@ -6,6 +6,7 @@ import ExtendedVideoPlayer from '../../../mastodon/components/extended_video_pla
 import { injectIntl } from 'react-intl';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import ImageLoader from '../../../mastodon/features/ui/components/image_loader';
+import IconButton from '../icon_button';
 
 @injectIntl
 export default class MediaModal extends ImmutablePureComponent {
@@ -66,8 +67,8 @@ export default class MediaModal extends ImmutablePureComponent {
     leftNav = rightNav = content = '';
 
     if (media.size > 1) {
-      leftNav  = <div role='button' tabIndex='0' className='modal-container__nav modal-container__nav--left' onClick={this.handlePrevClick}><i className='fa fa-fw fa-chevron-left' /></div>;
-      rightNav = <div role='button' tabIndex='0' className='modal-container__nav modal-container__nav--right' onClick={this.handleNextClick}><i className='fa fa-fw fa-chevron-right' /></div>;
+      leftNav  = <div role='button' tabIndex='0' className='modal-container__nav modal-container__nav--left' onClick={this.handlePrevClick}><IconButton src='chevron-left' /></div>;
+      rightNav = <div role='button' tabIndex='0' className='modal-container__nav modal-container__nav--right' onClick={this.handleNextClick}><IconButton src='chevron-right' /></div>;
     }
 
     if (attachment.get('type') === 'image') {

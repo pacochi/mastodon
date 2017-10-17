@@ -525,68 +525,72 @@ export default class TrackCompose extends ImmutablePureComponent {
                   </label>
                 </legend>
 
-                <legend className='track-compose-effect'>
-                  <div className='horizontal'>
-                    <span className='text'>
-                      <FormattedMessage
-                        id='pawoo_music.track_compose.video.spectrum_form'
-                        defaultMessage='Form'
-                      />
-                    </span>
-                    <div className='horizontal track-compose-radio'>
-                      <Checkbox circled value='1' checked={this.props.track.getIn(['video', 'spectrum', 'mode']) === 1} onChange={this.handleChangeTrackVideoSpectrumMode}>
-                        <FormattedMessage
-                          id='pawoo_music.track_compose.video.circle_columns'
-                          defaultMessage='Columns around circle'
-                        />
-                      </Checkbox>
-                      <Checkbox circled value='2' checked={this.props.track.getIn(['video', 'spectrum', 'mode']) === 2} onChange={this.handleChangeTrackVideoSpectrumMode}>
-                        <FormattedMessage
-                          id='pawoo_music.track_compose.video.circle'
-                          defaultMessage='Circle'
-                        />
-                      </Checkbox>
-                      <Checkbox circled value='0' checked={this.props.track.getIn(['video', 'spectrum', 'mode']) === 0} onChange={this.handleChangeTrackVideoSpectrumMode}>
-                        <FormattedMessage
-                          id='pawoo_music.track_compose.video.bottom_columns'
-                          defaultMessage='Columns at the bottom'
-                        />
-                      </Checkbox>
-                      <Checkbox circled value='3' checked={this.props.track.getIn(['video', 'spectrum', 'mode']) === 3} onChange={this.handleChangeTrackVideoSpectrumMode}>
-                        <FormattedMessage
-                          id='pawoo_music.track_compose.video.bottom_fill'
-                          defaultMessage='Filled graph at the bottom'
-                        />
-                      </Checkbox>
-                    </div>
-                  </div>
-
-                  <div className='track-compose-effect-color'>
-                    <label className='horizontal'>
-                      <span className='text'>
-                        <FormattedMessage
-                          id='pawoo_music.track_compose.video.color'
-                          defaultMessage='Color'
-                        />
-                      </span>
-                      <div className='track-compose-effect-color-wrap'>
-                        <div className='track-compose-effect-color-trigger' onClick={this.handleToggleSpectrumColorPickerVisible} role='button' tabIndex='-1'>
-                          <div className='track-compose-effect-color-trigger-body' style={{ backgroundColor: constructRgbCode(this.props.track.getIn(['video', 'spectrum', 'color']), this.props.track.getIn(['video', 'spectrum', 'alpha'])) }} />
+                <Delay duration={480} className='legend'>
+                  {this.props.track.getIn(['video', 'spectrum', 'visible']) && (
+                    <legend className='track-compose-effect'>
+                      <div className='horizontal'>
+                        <span className='text'>
+                          <FormattedMessage
+                            id='pawoo_music.track_compose.video.spectrum_form'
+                            defaultMessage='Form'
+                          />
+                        </span>
+                        <div className='horizontal track-compose-radio'>
+                          <Checkbox circled value='1' checked={this.props.track.getIn(['video', 'spectrum', 'mode']) === 1} onChange={this.handleChangeTrackVideoSpectrumMode}>
+                            <FormattedMessage
+                              id='pawoo_music.track_compose.video.circle_columns'
+                              defaultMessage='Columns around circle'
+                            />
+                          </Checkbox>
+                          <Checkbox circled value='2' checked={this.props.track.getIn(['video', 'spectrum', 'mode']) === 2} onChange={this.handleChangeTrackVideoSpectrumMode}>
+                            <FormattedMessage
+                              id='pawoo_music.track_compose.video.circle'
+                              defaultMessage='Circle'
+                            />
+                          </Checkbox>
+                          <Checkbox circled value='0' checked={this.props.track.getIn(['video', 'spectrum', 'mode']) === 0} onChange={this.handleChangeTrackVideoSpectrumMode}>
+                            <FormattedMessage
+                              id='pawoo_music.track_compose.video.bottom_columns'
+                              defaultMessage='Columns at the bottom'
+                            />
+                          </Checkbox>
+                          <Checkbox circled value='3' checked={this.props.track.getIn(['video', 'spectrum', 'mode']) === 3} onChange={this.handleChangeTrackVideoSpectrumMode}>
+                            <FormattedMessage
+                              id='pawoo_music.track_compose.video.bottom_fill'
+                              defaultMessage='Filled graph at the bottom'
+                            />
+                          </Checkbox>
                         </div>
-                        <Delay>
-                          {this.state.visibleColorPicker === 'spectrum' && (
-                            <div className='track-compose-effect-color-content'>
-                              <SketchPicker
-                                color={constructRgbObject(this.props.track.getIn(['video', 'spectrum', 'color']), this.props.track.getIn(['video', 'spectrum', 'alpha']))}
-                                onChange={this.handleChangeTrackVideoSpectrumColor}
-                              />
-                            </div>
-                          )}
-                        </Delay>
                       </div>
-                    </label>
-                  </div>
-                </legend>
+
+                      <div className='track-compose-effect-color'>
+                        <label className='horizontal'>
+                          <span className='text'>
+                            <FormattedMessage
+                              id='pawoo_music.track_compose.video.color'
+                              defaultMessage='Color'
+                            />
+                          </span>
+                          <div className='track-compose-effect-color-wrap'>
+                            <div className='track-compose-effect-color-trigger' onClick={this.handleToggleSpectrumColorPickerVisible} role='button' tabIndex='-1'>
+                              <div className='track-compose-effect-color-trigger-body' style={{ backgroundColor: constructRgbCode(this.props.track.getIn(['video', 'spectrum', 'color']), this.props.track.getIn(['video', 'spectrum', 'alpha'])) }} />
+                            </div>
+                            <Delay>
+                              {this.state.visibleColorPicker === 'spectrum' && (
+                                <div className='track-compose-effect-color-content'>
+                                  <SketchPicker
+                                    color={constructRgbObject(this.props.track.getIn(['video', 'spectrum', 'color']), this.props.track.getIn(['video', 'spectrum', 'alpha']))}
+                                    onChange={this.handleChangeTrackVideoSpectrumColor}
+                                  />
+                                </div>
+                              )}
+                            </Delay>
+                          </div>
+                        </label>
+                      </div>
+                    </legend>
+                  )}
+                </Delay>
               </fieldset>
 
               {/* Blur */}
@@ -602,36 +606,40 @@ export default class TrackCompose extends ImmutablePureComponent {
                   </label>
                 </legend>
 
-                <legend className='track-compose-effect'>
-                  <label className='horizontal'>
-                    <span className='text'>
-                      <FormattedMessage
-                        id='pawoo_music.track_compose.video.movement_threshold'
-                        defaultMessage='Movement'
-                      />
-                    </span>
-                    <Slider
-                      min={128}
-                      max={256}
-                      value={this.props.track.getIn(['video', 'blur', 'movement', 'threshold'])}
-                      onChange={this.handleChangeTrackBlurMovementThreshold}
-                    />
-                  </label>
-                  <label className='horizontal'>
-                    <span className='text'>
-                      <FormattedMessage
-                        id='pawoo_music.track_compose.video.blink_threshold'
-                        defaultMessage='Blink'
-                      />
-                    </span>
-                    <Slider
-                      min={128}
-                      max={256}
-                      value={this.props.track.getIn(['video', 'blur', 'blink', 'threshold'])}
-                      onChange={this.handleChangeTrackVideoBlurBlinkThreshold}
-                    />
-                  </label>
-                </legend>
+                <Delay duration={480} className='legend'>
+                  {this.props.track.getIn(['video', 'blur', 'visible']) && (
+                    <legend className='track-compose-effect'>
+                      <label className='horizontal'>
+                        <span className='text'>
+                          <FormattedMessage
+                            id='pawoo_music.track_compose.video.movement_threshold'
+                            defaultMessage='Movement'
+                          />
+                        </span>
+                        <Slider
+                          min={128}
+                          max={256}
+                          value={this.props.track.getIn(['video', 'blur', 'movement', 'threshold'])}
+                          onChange={this.handleChangeTrackBlurMovementThreshold}
+                        />
+                      </label>
+                      <label className='horizontal'>
+                        <span className='text'>
+                          <FormattedMessage
+                            id='pawoo_music.track_compose.video.blink_threshold'
+                            defaultMessage='Blink'
+                          />
+                        </span>
+                        <Slider
+                          min={128}
+                          max={256}
+                          value={this.props.track.getIn(['video', 'blur', 'blink', 'threshold'])}
+                          onChange={this.handleChangeTrackVideoBlurBlinkThreshold}
+                        />
+                      </label>
+                    </legend>
+                  )}
+                </Delay>
               </fieldset>
 
               {/* Particle */}
@@ -647,47 +655,51 @@ export default class TrackCompose extends ImmutablePureComponent {
                   </label>
                 </legend>
 
-                <legend className='track-compose-effect'>
-                  <label className='horizontal'>
-                    <span className='text'>
-                      <FormattedMessage
-                        id='pawoo_music.track_compose.video.limit_threshold'
-                        defaultMessage='Limit'
-                      />
-                    </span>
-                    <Slider
-                      min={128}
-                      max={256}
-                      value={this.props.track.getIn(['video', 'particle', 'limit', 'threshold'])}
-                      onChange={this.handleChangeTrackVideoParticleLimitThreshold}
-                    />
-                  </label>
-                  <label className='track-compose-effect-color'>
-                    <div className='horizontal'>
-                      <span className='text'>
-                        <FormattedMessage
-                          id='pawoo_music.track_compose.video.color'
-                          defaultMessage='Color'
+                <Delay duration={480} className='legend'>
+                  {this.props.track.getIn(['video', 'particle', 'visible']) && (
+                    <legend className='track-compose-effect'>
+                      <label className='horizontal'>
+                        <span className='text'>
+                          <FormattedMessage
+                            id='pawoo_music.track_compose.video.limit_threshold'
+                            defaultMessage='Limit'
+                          />
+                        </span>
+                        <Slider
+                          min={128}
+                          max={256}
+                          value={this.props.track.getIn(['video', 'particle', 'limit', 'threshold'])}
+                          onChange={this.handleChangeTrackVideoParticleLimitThreshold}
                         />
-                      </span>
-                      <div className='track-compose-effect-color-wrap'>
-                        <div className='track-compose-effect-color-trigger' onClick={this.handleToggleParticleColorPickerVisible} role='button' tabIndex='-1'>
-                          <div className='track-compose-effect-color-trigger-body' style={{ backgroundColor: constructRgbCode(this.props.track.getIn(['video', 'particle', 'color']), this.props.track.getIn(['video', 'particle', 'alpha'])) }} />
-                        </div>
-                        <Delay>
-                          {this.state.visibleColorPicker === 'particle' && (
-                            <div className='track-compose-effect-color-content'>
-                              <SketchPicker
-                                color={constructRgbObject(this.props.track.getIn(['video', 'particle', 'color']), this.props.track.getIn(['video', 'particle', 'alpha']))}
-                                onChange={this.handleChangeTrackVideoParticleColor}
-                              />
+                      </label>
+                      <label className='track-compose-effect-color'>
+                        <div className='horizontal'>
+                          <span className='text'>
+                            <FormattedMessage
+                              id='pawoo_music.track_compose.video.color'
+                              defaultMessage='Color'
+                            />
+                          </span>
+                          <div className='track-compose-effect-color-wrap'>
+                            <div className='track-compose-effect-color-trigger' onClick={this.handleToggleParticleColorPickerVisible} role='button' tabIndex='-1'>
+                              <div className='track-compose-effect-color-trigger-body' style={{ backgroundColor: constructRgbCode(this.props.track.getIn(['video', 'particle', 'color']), this.props.track.getIn(['video', 'particle', 'alpha'])) }} />
                             </div>
-                          )}
-                        </Delay>
-                      </div>
-                    </div>
-                  </label>
-                </legend>
+                            <Delay>
+                              {this.state.visibleColorPicker === 'particle' && (
+                                <div className='track-compose-effect-color-content'>
+                                  <SketchPicker
+                                    color={constructRgbObject(this.props.track.getIn(['video', 'particle', 'color']), this.props.track.getIn(['video', 'particle', 'alpha']))}
+                                    onChange={this.handleChangeTrackVideoParticleColor}
+                                  />
+                                </div>
+                              )}
+                            </Delay>
+                          </div>
+                        </div>
+                      </label>
+                    </legend>
+                  )}
+                </Delay>
               </fieldset>
 
               {/* Text */}
@@ -702,33 +714,38 @@ export default class TrackCompose extends ImmutablePureComponent {
                     </Checkbox>
                   </label>
                 </legend>
-                <legend className='track-compose-effect'>
-                  <div className='track-compose-effect-color'>
-                    <div className='horizontal'>
-                      <span className='text'>
-                        <FormattedMessage
-                          id='pawoo_music.track_compose.video.color'
-                          defaultMessage='Color'
-                        />
-                      </span>
-                      <div className='track-compose-effect-color-wrap'>
-                        <div className='track-compose-effect-color-trigger' onClick={this.handleToggleTextColorPickerVisible} role='button' tabIndex='-1'>
-                          <div className='track-compose-effect-color-trigger-body' style={{ backgroundColor: constructRgbCode(this.props.track.getIn(['video', 'text', 'color']), this.props.track.getIn(['video', 'text', 'alpha'])) }} />
-                        </div>
-                        <Delay>
-                          {this.state.visibleColorPicker === 'text' && (
-                            <div className='track-compose-effect-color-content'>
-                              <SketchPicker
-                                color={constructRgbObject(this.props.track.getIn(['video', 'text', 'color']), this.props.track.getIn(['video', 'text', 'alpha']))}
-                                onChange={this.handleChangeTrackComposeTrackVideoTextColor}
-                              />
+
+                <Delay duration={480} className='legend'>
+                  {this.props.track.getIn(['video', 'text', 'visible']) && (
+                    <legend className='track-compose-effect'>
+                      <div className='track-compose-effect-color'>
+                        <div className='horizontal'>
+                          <span className='text'>
+                            <FormattedMessage
+                              id='pawoo_music.track_compose.video.color'
+                              defaultMessage='Color'
+                            />
+                          </span>
+                          <div className='track-compose-effect-color-wrap'>
+                            <div className='track-compose-effect-color-trigger' onClick={this.handleToggleTextColorPickerVisible} role='button' tabIndex='-1'>
+                              <div className='track-compose-effect-color-trigger-body' style={{ backgroundColor: constructRgbCode(this.props.track.getIn(['video', 'text', 'color']), this.props.track.getIn(['video', 'text', 'alpha'])) }} />
                             </div>
-                          )}
-                        </Delay>
+                            <Delay>
+                              {this.state.visibleColorPicker === 'text' && (
+                                <div className='track-compose-effect-color-content'>
+                                  <SketchPicker
+                                    color={constructRgbObject(this.props.track.getIn(['video', 'text', 'color']), this.props.track.getIn(['video', 'text', 'alpha']))}
+                                    onChange={this.handleChangeTrackComposeTrackVideoTextColor}
+                                  />
+                                </div>
+                              )}
+                            </Delay>
+                          </div>
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                </legend>
+                    </legend>
+                  )}
+                </Delay>
               </fieldset>
 
               {/* LightLeak */}
@@ -744,41 +761,43 @@ export default class TrackCompose extends ImmutablePureComponent {
                   </label>
                 </legend>
 
-                <legend className='track-compose-effect'>
-                  <label className='horizontal'>
-                    <span className='text'>
-                      <FormattedMessage
-                        id='pawoo_music.track_compose.video.lightleaks_alpha'
-                        defaultMessage='Light leaks alpha'
-                      />
-                    </span>
-                    <Slider
-                      min={0}
-                      max={1}
-                      step={0.01}
-                      value={this.props.track.getIn(['video', 'lightleaks', 'alpha'])}
-                      onChange={this.handleChangeTrackVideoLightLeaksAlpha}
-                    />
-                  </label>
-                </legend>
+                <Delay duration={480} className='legend'>
+                  {this.props.track.getIn(['video', 'lightleaks', 'visible']) && (
+                    <legend className='track-compose-effect'>
+                      <label className='horizontal'>
+                        <span className='text'>
+                          <FormattedMessage
+                            id='pawoo_music.track_compose.video.lightleaks_alpha'
+                            defaultMessage='Light leaks alpha'
+                          />
+                        </span>
+                        <Slider
+                          min={0}
+                          max={1}
+                          step={0.01}
+                          value={this.props.track.getIn(['video', 'lightleaks', 'alpha'])}
+                          onChange={this.handleChangeTrackVideoLightLeaksAlpha}
+                        />
+                      </label>
 
-                <legend className='track-compose-effect'>
-                  <label className='horizontal'>
-                    <span className='text'>
-                      <FormattedMessage
-                        id='pawoo_music.track_compose.video.interval'
-                        defaultMessage='Interval'
-                      />
-                    </span>
-                    <Slider
-                      min={0}
-                      max={60}
-                      step={0.1}
-                      value={this.props.track.getIn(['video', 'lightleaks', 'interval'])}
-                      onChange={this.handleChangeTrackVideoLightLeaksInterval}
-                    />
-                  </label>
-                </legend>
+                      <label className='horizontal'>
+                        <span className='text'>
+                          <FormattedMessage
+                            id='pawoo_music.track_compose.video.interval'
+                            defaultMessage='Interval'
+                          />
+                        </span>
+                        <Slider
+                          min={0}
+                          max={60}
+                          step={0.1}
+                          value={this.props.track.getIn(['video', 'lightleaks', 'interval'])}
+                          onChange={this.handleChangeTrackVideoLightLeaksInterval}
+                        />
+                      </label>
+                    </legend>
+                  )}
+                </Delay>
               </fieldset>
             </form>
           </div>

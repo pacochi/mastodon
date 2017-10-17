@@ -1,22 +1,41 @@
 .tag-box {
   display: block;
 
+  margin: var(--verticalspace30);
+  margin-left: calc(var(--minus-grid) * 6);
+
+  h3 {
+    margin: var(--verticalspace30);
+    color: var(--strong2);
+    font-weight: bold;
+    font-size: var(--text10-font);
+    line-height: var(--text10-line);
+    padding: 0 0 0 calc(var(--grid) * 6);
+  }
+
   ul {
-    margin:         var(--verticalspace20);
+    margin: var(--verticalspace20);
+
+    li.active {
+      border-left: 4px solid var(--strong1);
+      padding: 0 0 0 calc(var(--grid) * 6 - 4px);
+
+    }
 
     li {
-      margin:         var(--verticalspace10);
-      display:        flex;
+      margin: var(--verticalspace10);
+      display: flex;
+      padding: 0 0 0 calc(var(--grid) * 6);
 
-      font-size:      var(--text10-font);
-      line-height:    var(--text10-line);
+      font-size: var(--text10-font);
+      line-height: var(--text10-line);
 
       .hashtag {
         flex: 1;
 
         a {
-          display:    block;
-          width:      100%;
+          display: block;
+          width: 100%;
         }
       }
 

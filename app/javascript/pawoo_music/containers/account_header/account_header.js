@@ -23,6 +23,7 @@ import { mentionCompose } from '../../../mastodon/actions/compose';
 import { initReport } from '../../../mastodon/actions/reports';
 import { openModal } from '../../../mastodon/actions/modal';
 import { blockDomain, unblockDomain } from '../../../mastodon/actions/domain_blocks';
+import IconButton from '../../components/icon_button';
 
 
 
@@ -202,7 +203,7 @@ export default class AccountHeader extends ImmutablePureComponent {
     }
 
     const menu = this.createMenu();
-    const lockedIcon = account.get('locked') && <i className='fa fa-lock' />;
+    const lockedIcon = account.get('locked') && <IconButton src='lock' />;
     const extraInfo = (account.get('acct') !== account.get('username')) && <abbr title={intl.formatMessage(messages.disclaimer)}>*</abbr>;
     const note = { __html: emojify(account.get('note')) };
     let followed = null;

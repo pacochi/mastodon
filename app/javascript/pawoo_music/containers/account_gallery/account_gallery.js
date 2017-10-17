@@ -9,7 +9,7 @@ import AccountHeaderContainer from '../account_header';
 import AccountTimelineContainer from '../account_timeline';
 import StatusList from '../../components/status_list';
 import { makeGetAccount } from '../../../mastodon/selectors';
-import MediaPost from '../../components/media_post';
+import MediaPostContainer from '../media_post';
 import { updateTimelineTitle } from '../../actions/timeline';
 import { changeFooterType } from '../../actions/footer';
 import { displayNameEllipsis } from '../../util/displayname_ellipsis';
@@ -95,7 +95,7 @@ export default class AccountGallery extends PureComponent {
     const prepend = (
       <div className='prepend'>
         <AccountHeaderContainer account={account} />
-        {me === accountId && <MediaPost />}
+        {me === accountId && <MediaPostContainer />}
       </div>
     );
 
