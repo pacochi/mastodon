@@ -66,6 +66,14 @@
     font-size:  var(--text20-font);
   }
 
+  .compose-form__toot-button {
+    display: flex;
+
+    svg {
+      stroke: var(--color1);
+    }
+  }
+
   .action-bar {
     display: flex;
     margin:  var(--verticalspace10);
@@ -146,21 +154,21 @@
     position: relative;
 
     .privacy-dropdown__dropdown {
-        display:        none;
-        position:       absolute;
-        left:           0;
+      display:        none;
+      position:       absolute;
+      left:           0;
 
-        width:          var(--width-contextmenu);
-        background:     var(--color1);
-        border-radius:  var(--radius);
-        color:          var(--textcolor);
+      width:          var(--width-contextmenu);
+      background:     var(--color1);
+      border-radius:  var(--radius);
+      color:          var(--textcolor);
 
-        overflow:       hidden;
-        box-shadow:     var(--shadow2);
+      overflow:       hidden;
+      box-shadow:     var(--shadow2);
 
-        word-break:     break-all;
+      word-break:     break-all;
 
-        z-index:        200;
+      z-index:        200;
     }
 
     .privacy-dropdown__option {
@@ -175,6 +183,10 @@
         justify-content:  center;
         margin-right:     var(--iconsize15);
         font-size:        var(--iconsize15);
+
+        svg {
+          stroke: var(--textcolor);
+        }
       }
 
       .privacy-dropdown__option__content {
@@ -358,6 +370,11 @@
 
       .icon-button {
         font-size:    var(--iconsize15);
+
+        svg {
+          width: var(--iconsize15);
+          height: var(--iconsize15);
+        }
       }
 
       .time-limit-dropdown__dropdown {
@@ -646,7 +663,7 @@
   .emoji-dialog {
     width:          245px;
     height:         270px;
-    background:     $simple-background-color;
+    background:     var(--color1);
     box-sizing:     border-box;
     border-radius:  var(--radius);
     overflow:       hidden;
