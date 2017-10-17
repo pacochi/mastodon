@@ -212,6 +212,12 @@
     }
   }
 
+  .track-compose-radio {
+    .checkbox + .checkbox {
+      margin-left: 10px;
+    }
+  }
+
   .track-compose-file-upload {
     display: inline-block;
     position: relative;
