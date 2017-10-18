@@ -96,10 +96,10 @@ export default class StatusMedia extends ImmutablePureComponent {
         media = <BoothWidget url={boothItemUrl} itemId={boothItemId} boothItem={this.props.boothItem} />;
       } else if (status.get('content').match(youtube_pattern)) {
         const videoId = status.get('content').match(youtube_pattern)[1];
-        media = <YTWidget videoId={videoId} />;
+        media = <YTWidget videoId={videoId} detail={detail} />;
       } else if (status.get('content').match(soundcloud_pattern)) {
         const url = 'https://' + status.get('content').match(soundcloud_pattern)[0];
-        media = <SCWidget url={url} />;
+        media = <SCWidget url={url} detail={detail} />;
       }
     }
 
