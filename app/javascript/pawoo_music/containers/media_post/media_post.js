@@ -55,9 +55,11 @@ export default class MediaPost extends PureComponent {
             </div>
           )}
         </Delay>
-        <TipsBalloonContainer id={4} style={{ left: '35px', top: '5px' }}>
-          楽曲投稿ボタン
-        </TipsBalloonContainer>
+        <div className='media-post-tips-baloon'>
+          <TipsBalloonContainer id={4} style={{ left: '35px', top: '5px' }} direction='top'>
+            楽曲投稿ボタン
+          </TipsBalloonContainer>
+        </div>
       </div>
     );
   }

@@ -1,3 +1,4 @@
+import classNames from 'classnames';
 import React from 'react';
 import PropTypes from 'prop-types';
 import IconButton from './icon_button';
@@ -12,10 +13,12 @@ class TipsBalloon extends React.PureComponent {
     onDismiss: PropTypes.func.isRequired,
     style: PropTypes.object,
     children: PropTypes.node.isRequired,
+    direction: PropTypes.oneOf(['bottom', 'top']),
   };
 
   static defaultProps = {
     style: {},
+    direction: 'bottom',
   };
 
   handleDismiss = () => {
@@ -23,10 +26,12 @@ class TipsBalloon extends React.PureComponent {
   }
 
   render () {
-    return (!this.props.dismiss &&
-      <div className='tips-balloon' style={this.props.style}>
+    const { dismiss, style, children, direction } = this.props;
+
+    return !dismiss && (
+      <div className={classNames('tips-balloon', `direction-${direction}`)} style={style}>
         <div className='tips-balloon__content'>
-          {this.props.children}
+          {children}
         </div>
         <div className='tips-balloon__dismiss'>
           <IconButton icon='close' title='閉じる' onClick={this.handleDismiss} />

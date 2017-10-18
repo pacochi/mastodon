@@ -9,21 +9,32 @@
   font-weight: bold;
   font-size: 15px;
   color: white;
-}
 
-.tips-balloon:after {
-  border-top: 20px solid #ca426c;
-  border-right: 12px solid transparent;
-  border-left: 12px solid transparent;
-  content: '';
-  position: absolute;
-  bottom: -18px;
-  left: 10px;
-}
+  &:after {
+    content: '';
+    position: absolute;
+  }
 
-.tips-balloon__dismiss {
-  margin: -8px -8px 0 2px;
-  .icon-button {
-    color: #98425d;
+  &.direction-bottom:after {
+    left: 10px;
+    bottom: -18px;
+    border-top: 18px solid #ca426c;
+    border-right: 12px solid transparent;
+    border-left: 12px solid transparent;
+  }
+
+  &.direction-top:after {
+    left: 10px;
+    top: -18px;
+    border-bottom: 18px solid #ca426c;
+    border-right: 12px solid transparent;
+    border-left: 12px solid transparent;
+  }
+
+  .tips-balloon__dismiss {
+    margin: -8px -8px 0 2px;
+    .icon-button {
+      color: #98425d;
+    }
   }
 }

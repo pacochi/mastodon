@@ -1,5 +1,6 @@
 .media-post {
   position: relative;
+
   .media-post-body {
     display: flex;
     justify-content: center;
@@ -61,5 +62,13 @@
       box-sizing: border-box;
       max-height: 100%;
     }
+  }
+
+  .media-post-tips-baloon {
+    position: absolute;
+    top: 72px;
+    right: 0;
+    left: 50%;
+    margin-left: -58px;
   }
 }

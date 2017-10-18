@@ -640,9 +640,11 @@ class PlayControl extends React.PureComponent {
               </div>
             </div>
           </div>
-          {!isTop && <TipsBalloonContainer id={2} style={{ left: '250px' }}>
-            チャンネルの切り替え
-          </TipsBalloonContainer>}
+          {!isTop && (
+            <TipsBalloonContainer id={2} style={{ left: '250px' }}>
+              チャンネルの切り替え
+            </TipsBalloonContainer>
+          )}
         </div>
         <div className='player-control__overlay' onClick={this.handleClickOverlay} />
       </div>
