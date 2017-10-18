@@ -1,12 +1,12 @@
 .search-box {
   position: relative;
   display: block;
-  margin:  var(--verticalspace30);
+  margin:  var(--padding30) -8px;
 
   .icon-button {
     position: absolute;
     top: 6px;
-    left: 5px;
+    left: 7px;
 
     svg {
       stroke: var(--color3);
@@ -24,7 +24,7 @@
     box-shadow: 0 0 0 2px var(--color2);
     border-radius:  calc(var(--radius) * 4);
 
-    padding-left:   calc(var(--grid) * 6);
+    padding-left:   var(--padding40);
     width:          100%;
     outline:        none;
 
