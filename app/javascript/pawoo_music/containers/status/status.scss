@@ -1,6 +1,6 @@
 .gallery-column {
   .status {
-    width: var(--width-gallery);
+    width: calc(var(--width-gallery) - var(--grid) * 6);
     border: 1px solid var(--color2);
     border-radius: var(--radius);
   }
