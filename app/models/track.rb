@@ -51,7 +51,13 @@ class Track < ApplicationRecord
 
   has_attached_file :music
   has_attached_file :video
-  has_attached_file :video_image
+  has_attached_file :video_image,
+    styles: { original: '', small: '' },
+    convert_options: {
+      all: '-strip',
+      original: ->(instance) { "-gravity center -crop \"#{instance.min_size}x#{instance.min_size}+0+0\" +repage -resize \"1280x1280>\"" },
+      small: ->(instance) { "-gravity center -crop \"#{instance.min_size}x#{instance.min_size}+0+0\" +repage -resize \"600x600>\"" },
+    }
 
   validates :title, presence: true
   validates :artist, presence: true
@@ -69,6 +75,15 @@ class Track < ApplicationRecord
     "#{title} - #{artist}"
   end
 
+  def min_size
+    @min_size ||= begin
+      geometry = Paperclip::Geometry.from_file(video_image.queued_for_write[:original])
+      [geometry.height, geometry.width].min.to_i
+    end
+    Rails.logger.debug @min_size
+    @min_size
+  end
+
   private
 
   def truncate_title
@@ -78,5 +93,4 @@ class Track < ApplicationRecord
   def truncate_artist
     self.artist = self.artist.slice(0, 128)
   end
-
 end

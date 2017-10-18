@@ -9,7 +9,7 @@ module StatusPawooMusicConcern
     scope :musics_only, -> { where.not(music_type: nil) }
     scope :tracks_only, -> { where(music_type: 'Track') }
     scope :albums_only, -> { where(music_type: 'Album') }
-    counter_culture :account, column_name: -> (model) { (model.in_reply_to_id.nil? && !model.music_type.nil?) ? "#{model.music_type.downcase.pluralize}_count" : nil }
+    counter_culture :account, column_name: -> (model) { (!model.reblog? && !model.music_type.nil?) ? "#{model.music_type.downcase.pluralize}_count" : nil }
   end
 
   class_methods do
