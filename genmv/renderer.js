@@ -78,6 +78,7 @@ fetch(url.format({ pathname: path.resolve(argv._[0]), protocol: 'file:' }))
   .then(audio => (new AudioContext).decodeAudioData(audio))
   .then(audio => {
     const emitter = new RgbaEmitter(audio, {
+      fps: 30,
       image,
       blur,
       particle,
