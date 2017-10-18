@@ -2,10 +2,10 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
+import { FormattedMessage } from 'react-intl';
 
 import api from '../../../api';
 import createStream from '../../../../mastodon/stream';
-import TipsBalloonContainer from '../../../containers/tips_balloon_container';
 import TweetButton from '../../../components/tweet_button';
 import YouTubeArtwork from './youtube_artwork';
 import SoundCloudArtwork from './soundcloud_artwork';
@@ -160,12 +160,6 @@ class PlaylistController extends React.PureComponent {
           </div>
         </div>
 
-        {!isTop && (
-          <TipsBalloonContainer id={1}>
-            音楽を再生！
-          </TipsBalloonContainer>
-        )}
-
         {isActive && !isTop && (
           <div className='control-bar__controller-skip'>
             <span onClick={this.handleClickSkip}>SKIP</span>
@@ -188,6 +182,10 @@ class PlaylistController extends React.PureComponent {
 }
 
 class PlayControl extends React.PureComponent {
+
+  static contextTypes = {
+    intl: PropTypes.object.isRequired,
+  };
 
   static propTypes = {
     trackId: PropTypes.string,
@@ -481,10 +479,20 @@ class PlayControl extends React.PureComponent {
 
   renderDeckQueueCaption(text) {
     const queueItem = this.getDeckFirstQueue();
-    const shareText = `いまみんなで一緒に${queueItem ? `「${queueItem.info}」` : '音楽'}を聞きながらトーク中♪ ${queueItem ? queueItem.link : ''}`;
+    const shareText = this.context.intl.formatMessage({
+      id: 'pawoo_music.play_control.share_text',
+      defaultMessage: 'Talking while listening to {info} with everyone♪ {link}',
+    }, {
+      info: queueItem ? (
+        this.context.intl.formatMessage({ id: 'pawoo_music.play_control.share_text.info', defaultMessage: '"{info}"' }, { info: queueItem.info })
+      ) : (
+        this.context.intl.formatMessage({ id: 'pawoo_music.play_control.share_text.info_default', defaultMessage: 'music' })
+      ),
+      link: queueItem ? queueItem.link : '',
+    });
     return (
       <div className='deck__queue-caption'>
-        <span>{text}</span>
+        <span>- {text} -</span>
         <div onClick={this.handleCancelOpenDeck} style={{ display: 'inline-block', marginLeft: '3px', verticalAlign: 'bottom' }}>
           <TweetButton text={shareText} url='https://music.pawoo.net/' hashtags='PawooMusic' />
         </div>
@@ -497,10 +505,16 @@ class PlayControl extends React.PureComponent {
       <li key={queue_item ? queue_item.id : `empty-queue-item_${i}`} className='deck__queue-item'>
         <div className='queue-item__main'>
           <div>
-            {!this.state.isOpen && i === 0 && this.renderDeckQueueCaption('- いまみんなで一緒に聞いている曲 -')}
+            {!this.state.isOpen && i === 0 && this.renderDeckQueueCaption(<FormattedMessage
+              id='pawoo_music.play_control.deck_queue_track'
+              defaultMessage='Songs that people are listening now'
+            />)}
             <div className='queue-item__metadata'>
               {this.queues.length === 0 && i === 0 ? (
-                <span>プレイリストに好きな曲を入れてね！</span>
+                <FormattedMessage
+                  id='pawoo_music.play_control.deck_queue_item-meta'
+                  defaultMessage='Put your favorite songs in the playlist!'
+                />
               ) : (queue_item && (
                 <span className='queue-item__metadata-title'>{queue_item.info.length > 40 ? `${queue_item.info.slice(0, 40)}……` : queue_item.info}</span>
               ))}
@@ -619,7 +633,10 @@ class PlayControl extends React.PureComponent {
                 )}
               </div>
               <div className='deck_queue-column deck__queue-column-list'>
-                {this.state.isOpen && this.renderDeckQueueCaption('- いまみんなで一緒に聞いているプレイリスト -')}
+                {this.state.isOpen && this.renderDeckQueueCaption(<FormattedMessage
+                  id='pawoo_music.play_control.deck_queue_playlist'
+                  defaultMessage='Playlist that people are listening now'
+                />)}
                 <ul className='deck__queue'>
                   {playlist.map(this.renderQueueItem)}
                   {!isTop && (
@@ -640,9 +657,6 @@ class PlayControl extends React.PureComponent {
               </div>
             </div>
           </div>
-          {!isTop && <TipsBalloonContainer id={2} style={{ left: '250px' }}>
-            チャンネルの切り替え
-          </TipsBalloonContainer>}
         </div>
         <div className='player-control__overlay' onClick={this.handleClickOverlay} />
       </div>
