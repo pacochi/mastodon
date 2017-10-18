@@ -10,10 +10,10 @@ if Rails.env.development?
   account = User.find_by!(email: "admin@#{domain}").account
 
   track = Track.create!(
-    music: File.open(Rails.root.join('spec', 'fixtures', 'files', 'aint_we_got_fun_billy_jones1921.mp3')),
+    music: File.open(Rails.root.join('spec', 'fixtures', 'files', 'high.mp3')),
     duration: 1.minute,
-    title: "Ain't We Got Fun",
-    artist: 'Billy Jones'
+    title: 'High',
+    artist: 'A Great Cat'
   )
 
   track_status_id = Status.next_id
@@ -28,7 +28,7 @@ if Rails.env.development?
 
   album = Album.create!(
     image: File.open(Rails.root.join('spec', 'fixtures', 'files', 'attachment.jpg')),
-    title: 'Digital History'
+    title: 'Sine Waves'
   )
 
   album_status_id = Status.next_id

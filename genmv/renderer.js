@@ -13,11 +13,11 @@ onunhandledrejection = event => {
 };
 
 const { RgbaEmitter } = require('musicvideo-generator');
-const { webFrame } = require('electron');
+const { remote, webFrame } = require('electron');
 const path = require('path');
 const url = require('url');
 const yargs = require('yargs');
-const { argv } = yargs(location.hash.slice(1).split('&').map(decodeURIComponent));
+const { argv } = yargs(remote.process.argv.slice(remote.process.argv.indexOf('--') + 1));
 
 function parseLimit(bottom, top, threshold) {
   const band = argv[bottom] === undefined && argv[top] === undefined ?
@@ -66,43 +66,31 @@ const text =
     undefined :
     { alpha: argv.textAlpha, color: argv.textColor, title: argv.textTitle, sub: argv.textSub };
 
-const imageSrc = argv.image === undefined ? undefined : url.format({
+const image = argv.image === undefined ? undefined : url.format({
   pathname: path.resolve(argv.image),
   protocol: 'file:',
 });
 
 webFrame.registerURLSchemeAsPrivileged('file');
 
-Promise.all([
-  fetch(url.format({ pathname: path.resolve(argv._[0]), protocol: 'file:' }))
-    .then(response => response.arrayBuffer())
-    .then(audio => (new AudioContext).decodeAudioData(audio)),
-  new Promise((resolve, reject) => {
-    if (imageSrc) {
-      const image = new Image;
+fetch(url.format({ pathname: path.resolve(argv._[0]), protocol: 'file:' }))
+  .then(response => response.arrayBuffer())
+  .then(audio => (new AudioContext).decodeAudioData(audio))
+  .then(audio => {
+    const emitter = new RgbaEmitter(audio, {
+      image,
+      blur,
+      particle,
+      lightLeaks,
+      spectrum,
+      text,
+    });
 
-      image.onerror = reject;
-      image.onload = () => resolve(image);
-      image.src = imageSrc;
-    } else {
-      resolve();
-    }
-  }),
-]).then(([audio, image]) => {
-  const emitter = new RgbaEmitter(audio, {
-    image,
-    blur,
-    particle,
-    lightLeaks,
-    spectrum,
-    text,
+    // XXX: The documentation says the default value of end is true, but somehow
+    // it does not trigger finish event nor flush the stream. Ignore it.
+    emitter.pipe(process.stdout, { end: false });
+
+    emitter.on('end', () => process.stdout.end(close));
+    emitter.on('error', console.error);
+    process.stdout.on('error', console.error);
   });
-
-  // XXX: The documentation says the default value of end is true, but somehow
-  // it does not trigger finish event nor flush the stream. Ignore it.
-  emitter.pipe(process.stdout, { end: false });
-
-  emitter.on('end', () => process.stdout.end(close));
-  emitter.on('error', console.error);
-  process.stdout.on('error', console.error);
-});

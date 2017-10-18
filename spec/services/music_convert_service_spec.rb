@@ -4,15 +4,13 @@ require 'rails_helper'
 
 describe MusicConvertService do
   it 'converts into a video file with specified options' do
-    skip 'skipped for environments without supported FFmpeg'
-
     extend ActionDispatch::TestProcess
 
     track = Fabricate(
       :track,
       title: 'title',
       artist: 'artist',
-      music: fixture_file_upload('files/aint_we_got_fun_billy_jones1921.mp3'),
+      music: fixture_file_upload('files/high.mp3'),
       video_image: fixture_file_upload('files/attachment.jpg'),
     )
 
