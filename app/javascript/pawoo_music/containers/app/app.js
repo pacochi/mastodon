@@ -28,6 +28,7 @@ import PlayControlContainer from '../../../mastodon/features/ui/containers/play_
 import { openModalFormCompose } from '../../../mastodon/actions/compose';
 import Link from '../../components/link_wrapper';
 import IconButton from '../../components/icon_button';
+// import Joyride from 'react-joyride';
 
 import logo from '../../../images/pawoo_music/pawoo_music.svg';
 

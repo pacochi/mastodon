@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import GlobalNaviContainer from '../../containers/global_navi';
 import classNames from 'classnames';
 import { isMobile } from '../../util/is_mobile';
+
 const mapStateToProps = state => ({
   target: state.getIn(['pawoo_music', 'column', 'target']),
 });
