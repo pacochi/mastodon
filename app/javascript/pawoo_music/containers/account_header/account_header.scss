@@ -1,3 +1,7 @@
+.sp .account-header-pm .cover {
+  height: calc(var(--grid) * 52);
+}
+
 .account-header-pm {
   display:            flex;
   flex-direction:     column;
@@ -41,6 +45,8 @@
   }
 
   .content {
+    word-break: break-all;
+    width: calc(var(--width-gallery) - var(--grid) * 6);
 
     .info {
 
@@ -51,13 +57,13 @@
       }
 
       .action-buttons {
-        display:        flex;
+        display: flex;
         margin-top: -16px;
         height: 24px;
+        justify-content: center;
 
         ul {
           display:    flex;
-          flex:       1;
           justify-content: flex-end;
 
           li {
