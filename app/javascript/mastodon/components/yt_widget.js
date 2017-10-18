@@ -14,8 +14,8 @@ class YTWidget extends React.PureComponent {
       <div className='status-yt-widget-wrapper'>
         <iframe
           className='status-yt-widget'
-          width={detail ? '287' : '234'}
-          height={detail ? '160' : '131'}
+          width={detail ? '480' : '248'}
+          height={detail ? '270' : '140'}
           src={`https://www.youtube.com/embed/${this.props.videoId}`}
           frameBorder='0'
         />
