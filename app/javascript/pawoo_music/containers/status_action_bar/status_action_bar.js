@@ -54,6 +54,7 @@ const messages = defineMessages({
   muteConfirm: { id: 'confirmations.mute.confirm', defaultMessage: 'Mute' },
   unpinConfirm: { id: 'confirmations.unpin.confirm', defaultMessage: 'Unpin' },
   pinConfirm: { id: 'confirmations.pin.confirm', defaultMessage: 'Pin' },
+  generateMvConfirm: { id: 'confirmations.generate_mv.confirm', defaultMessage: 'Generate' },
 });
 
 const makeMapStateToProps = () => {
@@ -208,10 +209,10 @@ export default class StatusActionBar extends ImmutablePureComponent {
   }
 
   handleGenerateMvClick = () => {
-    const { dispatch, status } = this.props;
+    const { dispatch, status, intl } = this.props;
     dispatch(openModal('CONFIRM', {
       message: <FormattedMessage id='confirmations.generate_mv.message' defaultMessage='Generating animation takes time. When generation is completed, a notification is sent by e-mail.' />,
-      confirm: <FormattedMessage id='confirmations.generate_mv.confirm' defaultMessage='Generate' />,
+      confirm: intl.formatMessage(messages.generateMvConfirm),
       onConfirm: () => dispatch(generateTrackMv(status.get('id'))),
     }));
   }
