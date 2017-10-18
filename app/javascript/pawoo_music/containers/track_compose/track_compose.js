@@ -343,7 +343,7 @@ export default class TrackCompose extends ImmutablePureComponent {
     let node = event.target;
     let inside = false;
     while (node.tagName !== 'BODY') {
-      if (/track-compose-effect-color/.test(node.className)) {
+      if (/track-compose-effect-color-wrap/.test(node.className)) {
         inside = true;
         break;
       }
