@@ -8,9 +8,14 @@ import { openModal } from '../../../mastodon/actions/modal';
 import MediaGallery from '../../../mastodon/components/media_gallery';
 import VideoPlayer from '../../../mastodon/components/video_player';
 import CardContainer from '../../../mastodon/features/status/containers/card_container';
+import BoothWidget from '../../../mastodon/components/booth_widget';
+import SCWidget from '../../../mastodon/components/sc_widget';
+import YTWidget from '../../../mastodon/components/yt_widget';
+import { fetchBoothItem } from '../../../mastodon/actions/booth_items';
 
-const mapStateToProps = (state) => ({
+const mapStateToProps = (state, { status }) => ({
   autoPlayGif: state.getIn(['meta', 'auto_play_gif']) || false,
+  boothItem: state.getIn(['booth_items', status.get('booth_item_id')]),
 });
 
 @connect(mapStateToProps)
@@ -20,13 +25,21 @@ export default class StatusMedia extends ImmutablePureComponent {
     status: ImmutablePropTypes.map,
     autoPlayGif: PropTypes.bool,
     detail: PropTypes.bool,
-    // fetchBoothItem: PropTypes.func,
-    // boothItem: ImmutablePropTypes.map,
+    boothItem: ImmutablePropTypes.map,
     dispatch: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
     detail: false,
+  }
+
+  componentDidMount () {
+    const { status, boothItem, dispatch } = this.props;
+    const boothItemId = status.get('booth_item_id');
+
+    if (!boothItem && boothItemId) {
+      dispatch(fetchBoothItem(boothItemId));
+    }
   }
 
   handleOpenMedia = (media, index) => {
@@ -70,6 +83,23 @@ export default class StatusMedia extends ImmutablePureComponent {
       } else {
         const height = detail ? 300 : 132;
         media = <MediaGallery media={attachments} sensitive={status.get('sensitive')} height={height} onOpenMedia={this.handleOpenMedia} autoPlayGif={this.props.autoPlayGif} expandMedia={detail} />;
+      }
+    }
+
+    const youtube_pattern = /(?:youtube\.com\/\S*(?:(?:\/e(?:mbed))?\/|watch\/?\?(?:\S*?&?v\=))|youtu\.be\/)([a-zA-Z0-9_-]{6,11})/;
+    const soundcloud_pattern = /soundcloud\.com\/([a-zA-Z0-9\-\_\.]+)\/([a-zA-Z0-9\-\_\.]+)(|\/)/;
+    if (!media) {
+      if (this.props.boothItem) {
+        const boothItemUrl = status.get('booth_item_url');
+        const boothItemId = status.get('booth_item_id');
+
+        media = <BoothWidget url={boothItemUrl} itemId={boothItemId} boothItem={this.props.boothItem} />;
+      } else if (status.get('content').match(youtube_pattern)) {
+        const videoId = status.get('content').match(youtube_pattern)[1];
+        media = <YTWidget videoId={videoId} />;
+      } else if (status.get('content').match(soundcloud_pattern)) {
+        const url = 'https://' + status.get('content').match(soundcloud_pattern)[0];
+        media = <SCWidget url={url} />;
       }
     }
 
