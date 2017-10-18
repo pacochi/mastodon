@@ -1,6 +1,7 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
+import { FormattedMessage } from 'react-intl';
 import TrackComposeContainer from '../track_compose';
 import Delay from '../../components/delay';
 import IconButton from '../../components/icon_button';
@@ -46,7 +47,7 @@ export default class MediaPost extends PureComponent {
     return (
       <div className='media-post'>
         <div className='media-post-body' role='button' tabIndex='-1' onClick={this.handleMediaPost}>
-          <IconButton src='music' title='Post Your Music!' />
+          <IconButton src='plus' title='Post Your Music!' />
         </div>
         <Delay className='media-post-track-compose-modal'>
           {this.state.compose && (
@@ -57,7 +58,10 @@ export default class MediaPost extends PureComponent {
         </Delay>
         <div className='media-post-tips-baloon'>
           <TipsBalloonContainer id={4} style={{ left: '35px', top: '5px' }} direction='top'>
-            楽曲投稿ボタン
+            <FormattedMessage
+              id='pawoo_music.media_post.tips_balloon'
+              defaultMessage="Let's submit your track!"
+            />
           </TipsBalloonContainer>
         </div>
       </div>

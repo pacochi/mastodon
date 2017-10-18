@@ -5,7 +5,6 @@ import { debounce } from 'lodash';
 
 import api from '../../../api';
 import createStream from '../../../../mastodon/stream';
-import TipsBalloonContainer from '../../../containers/tips_balloon_container';
 import TweetButton from '../../../components/tweet_button';
 import YouTubeArtwork from './youtube_artwork';
 import SoundCloudArtwork from './soundcloud_artwork';
@@ -159,12 +158,6 @@ class PlaylistController extends React.PureComponent {
             <input className='vertical-slider' type='range' value={volume} min='0' max='100' step='1' onChange={this.handleChangeVolume} />
           </div>
         </div>
-
-        {!isTop && (
-          <TipsBalloonContainer id={1}>
-            音楽を再生！
-          </TipsBalloonContainer>
-        )}
 
         {isActive && !isTop && (
           <div className='control-bar__controller-skip'>
@@ -640,11 +633,6 @@ class PlayControl extends React.PureComponent {
               </div>
             </div>
           </div>
-          {!isTop && (
-            <TipsBalloonContainer id={2} style={{ left: '250px' }}>
-              チャンネルの切り替え
-            </TipsBalloonContainer>
-          )}
         </div>
         <div className='player-control__overlay' onClick={this.handleClickOverlay} />
       </div>
