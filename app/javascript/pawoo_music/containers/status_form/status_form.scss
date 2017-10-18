@@ -476,6 +476,10 @@
     background-repeat: no-repeat;
     height: 100px;
     width: 100%;
+
+    .icon-button {
+      background-color: rgba(0, 0, 0, 0.15);
+    }
   }
 
   .compose-form__upload-cancel {
