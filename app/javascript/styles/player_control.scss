@@ -237,6 +237,10 @@ $player-apollo-color:#38b6c5;
     }
   }
 
+  .tips-balloon {
+    z-index: var(--z-index-playlist-tooltip);
+  }
+
   .control-bar__deck-selector {
     width: 150px;
     height: 550px;
