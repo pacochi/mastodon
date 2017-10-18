@@ -41,12 +41,20 @@
   }
 
   .prepend-inline {
+    display: flex;
     margin:       0 0 calc(var(--grid) * 2) 0;
     font-size:    var(--text10-font);
     line-height:  var(--text10-line);
+    align-items: center;
 
-    .fa {
-      letter-spacing: var(--grid);
+    .icon-button {
+      margin:  var(--rightspace5);
+      height: var(--text10-font);
+
+      svg {
+        width: var(--text10-font);
+        height: var(--text10-font);
+      }
     }
   }
 
