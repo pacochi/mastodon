@@ -4,14 +4,27 @@ import PropTypes from 'prop-types';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import { FormattedMessage } from 'react-intl';
 import { connect } from 'react-redux';
+import { makeGetAccount } from '../../../mastodon/selectors';
 import Button from '../../components/button';
 import { followAccount, unfollowAccount } from '../../../mastodon/actions/accounts';
 
-const mapStateToProps = (state) => ({
-  me: state.getIn(['meta', 'me']),
-});
+const makeMapStateToProps = () => {
+  const getAccount = makeGetAccount();
 
-@connect(mapStateToProps)
+  const mapStateToProps = (state, props) => {
+    const { id, account } = props;
+
+    // propsにidを渡すとフォロー関係も取ってこれる
+    return {
+      account: account || getAccount(state, id),
+      me: state.getIn(['meta', 'me']),
+    };
+  };
+
+  return mapStateToProps;
+};
+
+@connect(makeMapStateToProps)
 export default class FollowButton extends ImmutablePureComponent {
 
   static propTypes = {
