@@ -1,5 +1,6 @@
 import Immutable from 'immutable';
 import api from '../../mastodon/api';
+import { updateTimeline } from '../../mastodon/actions/timelines';
 
 export const TRACK_COMPOSE_BASIC_TAB_FOCUS = 'TRACK_COMPOSE_BASIC_TAB_FOCUS';
 export const TRACK_COMPOSE_VIDEO_TAB_FOCUS = 'TRACK_COMPOSE_VIDEO_TAB_FOCUS';
@@ -29,6 +30,9 @@ export const TRACK_COMPOSE_TRACK_VIDEO_TEXT_COLOR_CHANGE = 'TRACK_COMPOSE_TRACK_
 export const TRACK_COMPOSE_SUBMIT_REQUEST = 'TRACK_COMPOSE_SUBMIT_REQUEST';
 export const TRACK_COMPOSE_SUBMIT_SUCCESS = 'TRACK_COMPOSE_SUBMIT_SUCCESS';
 export const TRACK_COMPOSE_SUBMIT_FAIL = 'TRACK_COMPOSE_SUBMIT_FAIL';
+export const TRACK_COMPOSE_SHOW_MODAL = 'TRACK_COMPOSE_SHOW_MODAL';
+export const TRACK_COMPOSE_HIDE_MODAL = 'TRACK_COMPOSE_HIDE_MODAL';
+export const TRACK_COMPOSE_SET_DATA = 'TRACK_COMPOSE_SET_DATA';
 
 function appendMapToFormData(formData, prefix, value) {
   for (const [childKey, childValue] of value) {
@@ -67,6 +71,7 @@ export function submitTrackCompose() {
     const state = getState();
     const formData = new FormData;
     const track = state.getIn(['pawoo_music', 'track_compose', 'track']);
+    const music = track.get('music');
     const video = track.get('video');
     const image = video.get('image');
     const blur = video.get('blur');
@@ -74,16 +79,17 @@ export function submitTrackCompose() {
     const lightLeaks = video.get('lightleaks');
     const spectrum = video.get('spectrum');
     const text = video.get('text');
+    const id = track.get('id');
 
-    if (track.get('music')) {
-      formData.append('music', track.get('music'));
+    if (music instanceof File) {
+      formData.append('music', music);
     }
     formData.append('title', track.get('title'));
     formData.append('artist', track.get('artist'));
     formData.append('text', track.get('text'));
     formData.append('visibility', track.get('visibility'));
 
-    if (image) {
+    if (image instanceof File) {
       formData.append('video[image]', image);
     }
 
@@ -94,8 +100,32 @@ export function submitTrackCompose() {
     appendParamToFormData(formData, 'video[text]', text);
 
     dispatch(submitTrackComposeRequest());
-    api(getState).post('/api/v1/tracks', formData).then(function ({ data: { id } }) {
-      dispatch(submitTrackComposeSuccess(id));
+
+    const request = id ? (
+      api(getState).put(`/api/v1/tracks/${id}`, formData)
+    ) : (
+      api(getState).post('/api/v1/tracks', formData)
+    );
+
+    request.then(function ({ data }) {
+      dispatch(submitTrackComposeSuccess());
+      const status = data;
+
+      // To make the app more responsive, immediately get the status into the columns
+      dispatch(updateTimeline('home', status));
+      dispatch(updateTimeline('home:music', status));
+
+      if (status.in_reply_to_id === null && status.visibility === 'public') {
+        if (getState().getIn(['timelines', 'community', 'loaded'])) {
+          dispatch(updateTimeline('community', status));
+          dispatch(updateTimeline('community:music', status));
+        }
+
+        if (getState().getIn(['timelines', 'public', 'loaded'])) {
+          dispatch(updateTimeline('public', status));
+          dispatch(updateTimeline('public:music', status));
+        }
+      }
     }).catch(function (error) {
       dispatch(submitTrackComposeFail(error));
     });
@@ -274,10 +304,9 @@ export function submitTrackComposeRequest() {
   };
 };
 
-export function submitTrackComposeSuccess(value) {
+export function submitTrackComposeSuccess() {
   return {
     type: TRACK_COMPOSE_SUBMIT_SUCCESS,
-    value,
   };
 };
 
@@ -287,3 +316,24 @@ export function submitTrackComposeFail(error) {
     error,
   };
 };
+
+
+export function showTrackComposeModal() {
+  return {
+    type: TRACK_COMPOSE_SHOW_MODAL,
+  };
+};
+
+export function hideTrackComposeModal() {
+  return {
+    type: TRACK_COMPOSE_HIDE_MODAL,
+  };
+};
+
+export function setTrackComposeData(id, track) {
+  return {
+    type: TRACK_COMPOSE_SET_DATA,
+    id,
+    track,
+  };
+}

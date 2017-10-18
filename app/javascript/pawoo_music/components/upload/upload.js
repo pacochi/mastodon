@@ -16,6 +16,7 @@ export default class Upload extends PureComponent {
       <div className={classNames('app upload', { sp: mobile })}>
         <Switch>
           <Route path='/tracks/new' exact component={TrackComposeContainer} />
+          <Route path='/tracks/:id/edit' exact component={TrackComposeContainer} />
           {false && <Route path='/albums/new' exact component={AlbumComposeContainer} />}
         </Switch>
         <NotificationsContainer />

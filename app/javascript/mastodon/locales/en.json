@@ -171,6 +171,7 @@
   "status.cannot_reblog": "This post cannot be boosted",
   "status.delete": "Delete",
   "status.download_mv": "Download generated video",
+  "status.edit_track": "Edit track",
   "status.favourite": "Favourite",
   "status.generate_mv": "Generate the video",
   "status.load_more": "Load more",

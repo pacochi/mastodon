@@ -27,12 +27,16 @@ import {
   TRACK_COMPOSE_SUBMIT_REQUEST,
   TRACK_COMPOSE_SUBMIT_SUCCESS,
   TRACK_COMPOSE_SUBMIT_FAIL,
+  TRACK_COMPOSE_SHOW_MODAL,
+  TRACK_COMPOSE_HIDE_MODAL,
+  TRACK_COMPOSE_SET_DATA,
 } from '../actions/track_compose';
 import Immutable from 'immutable';
 
 const initialState = Immutable.fromJS({
   error: null,
   is_submitting: false,
+  modal: false,
   tab: 'basic',
   track: {
     music: null,
@@ -64,6 +68,14 @@ const initialState = Immutable.fromJS({
     },
   },
 });
+
+function convertTrackData(track) {
+  return initialState.get('track').withMutations((map) => {
+    return ['blur', 'particle', 'lightleaks', 'spectrum', 'text'].reduce((base, trackKey) => {
+      return base.setIn(['video', trackKey, 'visible'], track.hasIn(['video', trackKey]));
+    }, map.mergeDeep(track));
+  });
+}
 
 export default function track_compose(state = initialState, action) {
   switch(action.type) {
@@ -123,6 +135,12 @@ export default function track_compose(state = initialState, action) {
     return initialState;
   case TRACK_COMPOSE_SUBMIT_FAIL:
     return state.set('is_submitting', false).set('error', action.error);
+  case TRACK_COMPOSE_SHOW_MODAL:
+    return state.set('modal', true);
+  case TRACK_COMPOSE_HIDE_MODAL:
+    return state.set('modal', false);
+  case TRACK_COMPOSE_SET_DATA:
+    return state.set('track', convertTrackData(action.track)).setIn(['track', 'id'], action.id);
   default:
     return state;
   }

@@ -275,7 +275,7 @@ Rails.application.routes.draw do
   get '/favourites',    to: 'home#index'
 
   resources :albums, only: :new
-  resources :tracks, only: :new
+  resources :tracks, only: [:new, :edit]
 
   match '*unmatched_route',
     via: :all,

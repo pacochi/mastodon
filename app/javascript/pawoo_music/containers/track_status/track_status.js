@@ -73,7 +73,7 @@ export default class TrackStatus extends ImmutablePureComponent {
 
         <Track track={status.get('track')} />
 
-        <StatusContent status={status.set('content', status.getIn(['track', 'text']))} />
+        <StatusContent status={status.set('content', status.getIn(['track', 'content']))} />
 
         <StatusActionBar status={status} />
 
