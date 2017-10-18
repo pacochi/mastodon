@@ -1,5 +1,6 @@
 import api from '../api';
 
+import { openModal } from './modal';
 import { deleteFromTimelines } from './timelines';
 import { fetchStatusCard } from './cards';
 
@@ -30,6 +31,13 @@ export const STATUS_PIN_FAIL    = 'STATUS_PIN_FAIL';
 export const STATUS_UNPIN_REQUEST = 'STATUS_UNPIN_REQUEST';
 export const STATUS_UNPIN_SUCCESS = 'STATUS_UNPIN_SUCCESS';
 export const STATUS_UNPIN_FAIL    = 'STATUS_UNPIN_FAIL';
+
+export function openStatusModal(status) {
+  return (dispatch) => {
+    console.log(status.toJS());
+    dispatch(openModal('STATUS_MODAL', status.toJS()));
+  };
+};
 
 export function fetchStatusRequest(id, skipLoading) {
   return {

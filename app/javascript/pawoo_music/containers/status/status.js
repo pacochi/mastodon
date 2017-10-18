@@ -1,9 +1,11 @@
+import { isMobile } from '../../util/is_mobile';
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import ImmutablePureComponent from 'react-immutable-pure-component';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import classNames from 'classnames';
+import { openStatusModal } from '../../../mastodon/actions/statuses';
 import { makeGetStatus } from '../../../mastodon/selectors';
 import Timestamp from '../../../mastodon/components/timestamp';
 import StatusContent from '../../../mastodon/components/status_content';
@@ -27,7 +29,13 @@ const makeMapStateToProps = () => {
   return mapStateToProps;
 };
 
-@connect(makeMapStateToProps)
+const mapDispatchToProps = (dispatch) => ({
+  onOpenStatus ({ status }) {
+    dispatch(openStatusModal(status));
+  },
+});
+
+@connect(makeMapStateToProps, mapDispatchToProps)
 export default class Status extends ImmutablePureComponent {
 
   static contextTypes = {
@@ -41,9 +49,10 @@ export default class Status extends ImmutablePureComponent {
     detail: PropTypes.bool,
     hidden: PropTypes.bool,
     prepend: PropTypes.node,
+    onOpenStatus: PropTypes.func.isRequired,
     // fetchBoothItem: PropTypes.func,
     // boothItem: ImmutablePropTypes.map,
-    dispatch: PropTypes.func.isRequired,
+    // dispatch: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -52,6 +61,11 @@ export default class Status extends ImmutablePureComponent {
 
   state = {
     isExpanded: false,
+  }
+
+  constructor(props, context) {
+    super(props, context);
+    this.mobile = isMobile();
   }
 
   handleExpandedToggle = () => {
@@ -73,7 +87,14 @@ export default class Status extends ImmutablePureComponent {
       status = originalStatus.get('reblog');
     }
 
-    this.context.router.history.push(`/@${status.getIn(['account', 'acct'])}/${status.get('id')}`);
+    const nextLocation = `/@${status.getIn(['account', 'acct'])}/${status.get('id')}`;
+    if (location.pathname !== nextLocation) {
+      if (this.mobile) {
+        this.context.router.history.push(nextLocation);
+      } else {
+        this.props.onOpenStatus({ status });
+      }
+    }
   }
 
   render () {

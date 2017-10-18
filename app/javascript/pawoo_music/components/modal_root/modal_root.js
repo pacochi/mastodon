@@ -1,5 +1,6 @@
 import React from 'react';
 import PropTypes from 'prop-types';
+import spring from 'react-motion/lib/spring';
 import MediaModal from '../media_modal';
 import OnboardingModal from '../../../mastodon/features/ui/components/onboarding_modal';
 import VideoModal from '../../../mastodon/features/ui/components/video_modal';
@@ -8,7 +9,7 @@ import MusicModal from '../../../mastodon/features/ui/components/music_modal';
 import ConfirmationModal from '../../../mastodon/features/ui/components/confirmation_modal';
 import UniversalModal from '../universal_modal';
 import ReportModal from '../../../mastodon/features/ui/components/report_modal';
-import spring from 'react-motion/lib/spring';
+import Status from '../../containers/account_timeline';
 import StatusFromModalContainer from '../../containers/status_form_modal';
 
 const MODAL_COMPONENTS = {
@@ -20,6 +21,7 @@ const MODAL_COMPONENTS = {
   'CONFIRM': ConfirmationModal,
   'REPORT': ReportModal,
   'STATUS_FORM': StatusFromModalContainer,
+  'STATUS_MODAL': Status,
   'UNIVERSAL': UniversalModal,
 };
 
