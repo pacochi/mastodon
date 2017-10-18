@@ -10,6 +10,7 @@
   &.active .dropdown-content {
     display:    block;
     position:   absolute;
+    cursor:     auto;
 
     z-index:    var(--z-index-dropdown);
 

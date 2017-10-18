@@ -61,7 +61,7 @@ export default class Status extends ImmutablePureComponent {
   handleClick = (e) => {
     let node = e.target;
     while (node !== e.currentTarget) {
-      if (['A', 'BUTTON'].includes(node.tagName) || node.getAttribute('role') === 'button') {
+      if (['A', 'BUTTON'].includes(node.tagName) || node.getAttribute('role') === 'button' || node.classList.contains('dropdown-menu')) {
         return;
       }
       node = node.parentNode;
