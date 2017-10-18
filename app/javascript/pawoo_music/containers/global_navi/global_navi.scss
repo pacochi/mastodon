@@ -43,6 +43,25 @@
             }
 
             .icon-button {
+              height: 20px;
+            }
+
+            .unread {
+              box-sizing: border-box;
+              margin-left: 5px;
+              padding: 0 4px;
+              min-width: 16px;
+              height: 16px;
+              line-height: 16px;
+              font-size: 10px;
+              font-weight: bold;
+              color: white;
+              border-radius: 10px;
+              text-align: center;
+              background-color: var(--strong1);
+            }
+
+            .icon-button {
               margin-right: 5px;
             }
 

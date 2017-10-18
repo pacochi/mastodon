@@ -48,6 +48,7 @@ const navLinkParams = [
 const filteredNavLinkParams = navLinkParams.filter(({ requireLogin }) => !requireLogin);
 
 const mapStateToProps = state => ({
+  unread: state.getIn(['notifications', 'unread']) || 0,
   isLogin: !!state.getIn(['meta', 'me']),
 });
 
@@ -60,6 +61,7 @@ export default class GlobalNavi extends PureComponent {
     intl: PropTypes.object.isRequired,
     match: PropTypes.object.isRequired,
     dispatch: PropTypes.func.isRequired,
+    unread: PropTypes.number,
     isLogin: PropTypes.bool,
   }
 
@@ -73,7 +75,7 @@ export default class GlobalNavi extends PureComponent {
   }
 
   renderNavLink = (param) => {
-    const { intl } = this.props;
+    const { intl, unread } = this.props;
     const { requireLogin, messageKey, ...other } = param;
     return (
       <li key={other.to}>
@@ -81,6 +83,9 @@ export default class GlobalNavi extends PureComponent {
           <div className='menu'>
             <IconButton src={icons[messageKey]} strokeWidth={2} />
             <span>{intl.formatMessage(messages[messageKey])}</span>
+            {(messageKey === 'notifications') && (unread > 0) && (
+              <span className='unread'>{unread}</span>
+            )}
           </div>
         </NavLink>
       </li>
