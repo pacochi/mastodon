@@ -16,7 +16,7 @@ import Immutable from 'immutable';
 const initialState = Immutable.Map({
   items: Immutable.List(),
   next: null,
-  top: true,
+  top: false,
   unread: 0,
   loaded: false,
   isLoading: true,

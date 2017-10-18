@@ -81,16 +81,14 @@ class MusicConvertService < BaseService
   end
 
   def create_mp4(track, music_file, musicvideo, video_file)
-    args = [
-      '-v', '-8', '-y',  '-i', music_file.path, '-f', 'rawvideo',
+    Process.waitpid spawn(
+      'ffmpeg', '-y', '-i', music_file.path, '-f', 'rawvideo',
       '-framerate', '30', '-pixel_format', 'bgr32', '-video_size', '720x720',
-      '-i', 'pipe:', '-vf', 'format=yuv420p,vflip', '-c:v', 'libx264', '-ar',
-      '44100', '-c:a', 'libfdk_aac', '-metadata', "title=#{track.title}",
-      '-metadata', "artist=#{track.artist}",
-      video_file.path,
-    ]
+      '-i', 'pipe:', '-vf', 'format=yuv420p,vflip', '-ar', '44100', '-metadata',
+      "title=#{track.title}", '-metadata', "artist=#{track.artist}",
+      *Rails.configuration.x.ffmpeg_options, video_file.path, in: musicvideo
+    )
 
-    Process.waitpid spawn('ffmpeg', *args, in: musicvideo)
     raise Mastodon::FFmpegError, $?.inspect unless $?.success?
   end
 end

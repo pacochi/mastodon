@@ -54,6 +54,7 @@ const messages = defineMessages({
   muteConfirm: { id: 'confirmations.mute.confirm', defaultMessage: 'Mute' },
   unpinConfirm: { id: 'confirmations.unpin.confirm', defaultMessage: 'Unpin' },
   pinConfirm: { id: 'confirmations.pin.confirm', defaultMessage: 'Pin' },
+  generateMvConfirm: { id: 'confirmations.generate_mv.confirm', defaultMessage: 'Generate' },
 });
 
 const makeMapStateToProps = () => {
@@ -208,10 +209,10 @@ export default class StatusActionBar extends ImmutablePureComponent {
   }
 
   handleGenerateMvClick = () => {
-    const { dispatch, status } = this.props;
+    const { dispatch, status, intl } = this.props;
     dispatch(openModal('CONFIRM', {
       message: <FormattedMessage id='confirmations.generate_mv.message' defaultMessage='Generating animation takes time. When generation is completed, a notification is sent by e-mail.' />,
-      confirm: <FormattedMessage id='confirmations.generate_mv.confirm' defaultMessage='Generate' />,
+      confirm: intl.formatMessage(messages.generateMvConfirm),
       onConfirm: () => dispatch(generateTrackMv(status.get('id'))),
     }));
   }
@@ -247,6 +248,32 @@ export default class StatusActionBar extends ImmutablePureComponent {
     // let replyIcon;
     let replyTitle;
 
+    let editButton     = null;
+    let downloadButton = null;
+    let downloadFilename = null;
+
+    if (status.getIn(['account', 'id']) === me  &&  status.get('track')) {
+      // TODO
+      // editButton = <li><IconButton className='clickable strong' src='edit' /></li>;
+      const url = status.getIn(['track', 'video', 'url']);
+      if (url) {
+        downloadFilename = `${status.getIn(['track', 'artist'])} - ${status.getIn(['track', 'title'])}.mp4`;
+      }
+
+      downloadButton = (
+        <li>
+          {(url) ? (
+            <a href={url} download={downloadFilename}>
+              <IconButton className='clickable strong' src='download' />
+            </a>
+          ) : (
+            <IconButton className='strong' src='download' onClick={this.handleGenerateMvClick} />
+          )}
+        </li>
+      );
+    }
+
+
     menu.push({ text: intl.formatMessage(messages.open), to: `/@${status.getIn(['account', 'acct'])}/${status.get('id')}` });
     menu.push(null);
 
@@ -272,7 +299,7 @@ export default class StatusActionBar extends ImmutablePureComponent {
         menu.push(null);
 
         if (url) {
-          menu.push({ text: intl.formatMessage(messages.download_mv), action: this.handleDownloadMvClick });
+          menu.push({ text: intl.formatMessage(messages.download_mv), href: url, download: downloadFilename });
           menu.push({ text: intl.formatMessage(messages.regenerate_mv), action: this.handleGenerateMvClick });
         } else {
           menu.push({ text: intl.formatMessage(messages.generate_mv), action: this.handleGenerateMvClick });
@@ -305,16 +332,6 @@ export default class StatusActionBar extends ImmutablePureComponent {
 
     const reblogged = status.get('reblogged');
     const favourited = status.get('favourited');
-
-    let editButton     = null;
-    let downloadButton = null;
-
-    if (status.getIn(['account', 'id']) === me  &&  status.get('track')) {
-      // TODO
-      // editButton = <li><IconButton className='clickable strong' src='edit' /></li>;
-      const action = status.getIn(['track', 'video', 'url']) ? this.handleDownloadMvClick : this.handleGenerateMvClick;
-      downloadButton = <li><IconButton className='clickable strong' src='download' onClick={action} /></li>;
-    }
 
     return (
       <ul className='status-action-bar'>

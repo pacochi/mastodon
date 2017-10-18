@@ -131,10 +131,9 @@
           align-items: center;
           border-radius: 0 0 var(--radius-big) var(--radius-big);
           box-shadow: var(--shadow);
-
-          div:last-child {
-            border-radius: 0 0 var(--radius) var(--radius);
-          }
+        }
+        .prepend > div:last-child {
+          border-radius: 0 0 var(--radius) var(--radius);
         }
 
         .media-post {

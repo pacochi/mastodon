@@ -82,7 +82,7 @@ export default class AccountFollowing extends ImmutablePureComponent {
         scrollKey='account_followers'
         accountIds={accountIds}
         hasMore={hasMore}
-        prepend={<AccountHeaderContainer account={account} />}
+        prepend={<div className='prepend'><AccountHeaderContainer account={account} /></div>}
         onScrollToBottom={this.handleScrollToBottom}
       />
     );

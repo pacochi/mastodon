@@ -5,8 +5,8 @@ require 'rails_helper'
 describe Api::V1::TracksController, type: :controller do
   render_views
 
-  let(:music) { fixture_file_upload('files/aint_we_got_fun_billy_jones1921.mp3') }
-  let(:another_music) { fixture_file_upload('files/aprilshowers.mp3') }
+  let(:music) { fixture_file_upload('files/high.mp3') }
+  let(:another_music) { fixture_file_upload('files/low.mp3') }
   let(:image) { fixture_file_upload('files/attachment.jpg') }
   let(:video) { fixture_file_upload('files/aint_we_got_fun_billy_jones1921.mp4') }
   let(:unknown) { fixture_file_upload('files/imports.txt') }
