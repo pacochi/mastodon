@@ -13,9 +13,17 @@
     width: var(--width-gallery);
     height: calc(var(--grid) * 49);
     background-color: var(--textcolor);
+    background-size: cover;
+
+    .cover-mask {
+      box-sizing: border-box;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      padding-top: calc(var(--grid) * 12);
+    }
 
     .avatar {
-      margin: calc(var(--grid) * 12) auto var(--padding20);
+      margin: 0 auto var(--padding20);
     }
 
     .display-name {
@@ -33,7 +41,7 @@
     .acct {
       font-size: var(--text10-font);
       line-height: 1;
-      color: var(--tootcolor);
+      color: var(--color1);
     }
 
     .account--follows-info {
