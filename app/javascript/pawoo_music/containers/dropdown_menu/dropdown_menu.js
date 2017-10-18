@@ -118,14 +118,14 @@ export default class DropdownMenu extends React.PureComponent {
       return <li key={`sep-${i}`} className='dropdown-sep' />;
     }
 
-    const { text, to, href } = item;
+    const { text, to, href, ...other } = item;
 
     return (
       <li className='menu-item' key={`${text}-${i}`}>
         {to ? (
-          <Link to={to} onClick={this.handleItemClick} data-index={i}>{text}</Link>
+          <Link to={to} onClick={this.handleItemClick} data-index={i} {...other}>{text}</Link>
         ) : (
-          <a href={href} target='_blank' rel='noopener' onClick={this.handleItemClick} data-index={i}>{text}</a>
+          <a href={href} target='_blank' rel='noopener' onClick={this.handleItemClick} data-index={i} {...other}>{text}</a>
         )}
       </li>
     );
