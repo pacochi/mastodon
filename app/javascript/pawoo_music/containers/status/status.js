@@ -58,7 +58,15 @@ export default class Status extends ImmutablePureComponent {
     this.setState({ isExpanded: !this.state.isExpanded });
   };
 
-  handleClick = () => {
+  handleClick = (e) => {
+    let node = e.target;
+    while (node !== e.currentTarget) {
+      if (['A', 'BUTTON'].includes(node.tagName) || node.getAttribute('role') === 'button') {
+        return;
+      }
+      node = node.parentNode;
+    }
+
     const { status: originalStatus } = this.props;
     let status = originalStatus;
     if (originalStatus.get('reblog', null) !== null && typeof originalStatus.get('reblog') === 'object') {
