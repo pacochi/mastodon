@@ -41,6 +41,10 @@ export default class NotificationTimeline extends ImmutablePureComponent {
     dispatch(updateTimelineTitle('通知')); /* TODO: intl */
   }
 
+  componentWillUnmount () {
+    this.props.dispatch(scrollTopNotifications(false));
+  }
+
   handleLoadMore = debounce(() => {
     this.props.dispatch(expandNotifications());
   }, 300, { leading: true });
