@@ -25,6 +25,8 @@ import { muteStatus, unmuteStatus, deleteStatus, pinStatus, unpinStatus } from '
 import { initReport } from '../../../mastodon/actions/reports';
 import { openModal } from '../../../mastodon/actions/modal';
 import { generateTrackMv } from '../../actions/tracks';
+import { showTrackComposeModal, setTrackComposeData } from '../../actions/track_compose';
+import { isMobile } from '../../util/is_mobile';
 
 const messages = defineMessages({
   delete: { id: 'status.delete', defaultMessage: 'Delete' },
@@ -47,6 +49,7 @@ const messages = defineMessages({
   generate_mv: { id: 'status.generate_mv', defaultMessage: 'Generate the video' },
   regenerate_mv: { id: 'status.regenerate_mv', defaultMessage: 'Regenerate the video' },
   download_mv: { id: 'status.download_mv', defaultMessage: 'Download generated video' },
+  editTrack: { id: 'status.edit_track', defaultMessage: 'Edit track' },
 
   deleteConfirm: { id: 'confirmations.delete.confirm', defaultMessage: 'Delete' },
   deleteMessage: { id: 'confirmations.delete.message', defaultMessage: 'Are you sure you want to delete this status?' },
@@ -56,6 +59,8 @@ const messages = defineMessages({
   pinConfirm: { id: 'confirmations.pin.confirm', defaultMessage: 'Pin' },
   generateMvConfirm: { id: 'confirmations.generate_mv.confirm', defaultMessage: 'Generate' },
 });
+
+const mobile = isMobile();
 
 const makeMapStateToProps = () => {
   const getStatus = makeGetStatus();
@@ -217,18 +222,15 @@ export default class StatusActionBar extends ImmutablePureComponent {
     }));
   }
 
-  handleDownloadMvClick = () => {
-    const { status } = this.props;
-    const url = status.getIn(['track', 'video', 'url']);
+  handleEditTrack = () => {
+    const { dispatch, status } = this.props;
 
-    if (!url) {
-      return;
+    if (mobile) {
+      location.href = `/tracks/${status.get('id')}/edit`;
+    } else {
+      dispatch(setTrackComposeData(status.get('id'), status.get('track')));
+      dispatch(showTrackComposeModal());
     }
-
-    const a = document.createElement('a');
-    a.download = `${status.getIn(['track', 'artist'])} - ${status.getIn(['track', 'title'])}.mp4`;
-    a.href = url;
-    a.click();
   }
 
   handleRedirectLoginPage = () => {
@@ -253,8 +255,6 @@ export default class StatusActionBar extends ImmutablePureComponent {
     let downloadFilename = null;
 
     if (status.getIn(['account', 'id']) === me  &&  status.get('track')) {
-      // TODO
-      // editButton = <li><IconButton className='clickable strong' src='edit' /></li>;
       const url = status.getIn(['track', 'video', 'url']);
       if (url) {
         downloadFilename = `${status.getIn(['track', 'artist'])} - ${status.getIn(['track', 'title'])}.mp4`;
@@ -271,6 +271,7 @@ export default class StatusActionBar extends ImmutablePureComponent {
           )}
         </li>
       );
+      editButton = <li><IconButton className='strong' src='edit' onClick={this.handleEditTrack} /></li>;
     }
 
 
@@ -297,6 +298,7 @@ export default class StatusActionBar extends ImmutablePureComponent {
         const url = status.getIn(['track', 'video', 'url']);
 
         menu.push(null);
+        menu.push({ text: intl.formatMessage(messages.editTrack), action: this.handleEditTrack });
 
         if (url) {
           menu.push({ text: intl.formatMessage(messages.download_mv), href: url, download: downloadFilename });

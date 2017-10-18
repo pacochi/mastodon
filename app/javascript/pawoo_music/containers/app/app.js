@@ -23,6 +23,7 @@ import AccountFollowingContainer from '../account_following';
 import StatusThreadContainer from '../status_thread';
 import { isMobile } from '../../util/is_mobile';
 import StatusPostButtonContainer from '../status_post_button';
+import TrackComposeModalContainer from '../track_compose_modal';
 import PlayControlContainer from '../../../mastodon/features/ui/containers/play_control_container';
 import { openModalFormCompose } from '../../../mastodon/actions/compose';
 import Link from '../../components/link_wrapper';
@@ -199,6 +200,7 @@ export default class App extends PureComponent {
           <LoadingBarContainer className='loading-bar' />
           <StatusPostButtonContainer fixed />
           <ModalContainer />
+          <TrackComposeModalContainer />
         </div>
       )
     );

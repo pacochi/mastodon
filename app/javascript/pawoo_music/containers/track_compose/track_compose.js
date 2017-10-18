@@ -34,6 +34,7 @@ import {
 import {
   stopTrack,
 } from '../../actions/tracks';
+import { makeGetAccount } from '../../../mastodon/selectors';
 import IconButton from '../../components/icon_button';
 import Musicvideo from '../../components/musicvideo';
 import Delay from '../../components/delay';
@@ -51,12 +52,20 @@ const messages = defineMessages({
   preview: { id: 'pawoo_music.track_compose.preview', defaultMessage: 'Video preview' },
 });
 
-const mapStateToProps = (state) => ({
-  tab: state.getIn(['pawoo_music', 'track_compose', 'tab']),
-  track: state.getIn(['pawoo_music', 'track_compose', 'track']),
-  error: state.getIn(['pawoo_music', 'track_compose', 'error']),
-  isSubmitting: state.getIn(['pawoo_music', 'track_compose', 'is_submitting']),
-});
+const makeMapStateToProps = () => {
+  const getAccount = makeGetAccount();
+
+  const mapStateToProps = (state) => ({
+    tab: state.getIn(['pawoo_music', 'track_compose', 'tab']),
+    track: state.getIn(['pawoo_music', 'track_compose', 'track']),
+    error: state.getIn(['pawoo_music', 'track_compose', 'error']),
+    isSubmitting: state.getIn(['pawoo_music', 'track_compose', 'is_submitting']),
+    account: getAccount(state, state.getIn(['meta', 'me'])),
+  });
+
+  return mapStateToProps;
+};
+
 
 const mapDispatchToProps = (dispatch) => ({
   onStopTrack (value) {
@@ -156,8 +165,8 @@ const mapDispatchToProps = (dispatch) => ({
   },
 });
 
-@connect(mapStateToProps, mapDispatchToProps)
 @injectIntl
+@connect(makeMapStateToProps, mapDispatchToProps)
 export default class TrackCompose extends ImmutablePureComponent {
 
   static propTypes = {
@@ -372,10 +381,18 @@ export default class TrackCompose extends ImmutablePureComponent {
   }
 
   handleCancel = () => {
-    if (typeof this.props.onClose === 'function') {
-      this.props.onClose();
+    const { account, track, onClose } = this.props;
+
+    if (typeof onClose === 'function') {
+      onClose();
     } else {
-      location.href = '/';
+      const id = track.get('id');
+
+      if (id) {
+        location.href = `/@${account.get('acct')}/${id}`;
+      } else {
+        location.href = '/';
+      }
     }
   }
 
