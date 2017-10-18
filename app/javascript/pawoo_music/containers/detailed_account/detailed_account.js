@@ -7,7 +7,6 @@ import classNames from 'classnames';
 import { connect } from 'react-redux';
 import { makeGetAccount } from '../../../mastodon/selectors';
 import { openModal } from '../../../mastodon/actions/modal';
-import { followAccount, unfollowAccount } from '../../../mastodon/actions/accounts';
 import AccountContainer from '../account';
 import FollowButton from '../follow_button';
 
@@ -32,16 +31,6 @@ export default class DetailedAccount extends ImmutablePureComponent {
     account: ImmutablePropTypes.map,
     dispatch: PropTypes.func.isRequired,
   };
-
-  handleFollow = (account) => {
-    const { dispatch } = this.props;
-
-    if (account.getIn(['relationship', 'following'])) {
-      dispatch(unfollowAccount(account.get('id')));
-    } else {
-      dispatch(followAccount(account.get('id')));
-    }
-  }
 
   handleCliclMedia = (e) => {
     const { dispatch, account } = this.props;

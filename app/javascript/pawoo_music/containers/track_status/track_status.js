@@ -11,6 +11,7 @@ import AccountContainer from '../account';
 import StatusMeta from '../../components/status_meta';
 import StatusPrepend from '../../components/status_prepend';
 import Track from '../track';
+import FollowButton from '../follow_button';
 
 const makeMapStateToProps = () => {
   const getStatus = makeGetStatus();
@@ -69,6 +70,7 @@ export default class TrackStatus extends ImmutablePureComponent {
         {prepend || <StatusPrepend className='prepend-inline' status={originalStatus} />}
         <div className='status-head'>
           <AccountContainer account={status.get('account')} />
+          <FollowButton id={status.getIn(['account', 'id'])} />
         </div>
 
         <Track track={status.get('track')} />
