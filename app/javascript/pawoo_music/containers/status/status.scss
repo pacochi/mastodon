@@ -3,6 +3,11 @@
     width: calc(var(--width-gallery) - var(--grid) * 6);
     border: 1px solid var(--color2);
     border-radius: var(--radius);
+
+    &:hover {
+      box-shadow: var(--shadow);
+      background-color: var(--color1);
+    }
   }
 }
 
@@ -21,8 +26,7 @@
   }
 
   &.highlight {
-    box-shadow: var(--shadow2);
-    border: 1px solid var(--color3);
+    box-shadow: var(--shadow);
   }
 
   .status-head {
