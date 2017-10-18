@@ -23,7 +23,7 @@ const icons = {
   notifications: 'bell',
   local_timeline: 'users',
   federated_timeline: 'globe',
-  favourites: 'star',
+  favourites: 'heart',
   preferences: 'settings',
 };
 
@@ -39,9 +39,9 @@ const messages = defineMessages({
 
 const navLinkParams = [
   { to: '/', messageKey: 'home', requireLogin: true, exact: true },
-  { to: '/notifications', messageKey: 'notifications', requireLogin: true },
   { to: '/timelines/public/local', messageKey: 'local_timeline', exact: true },
   { to: '/timelines/public', messageKey: 'federated_timeline', exact: true },
+  { to: '/notifications', messageKey: 'notifications', requireLogin: true },
   { to: '/favourites', messageKey: 'favourites', requireLogin: true },
 ];
 
