@@ -95,7 +95,7 @@ export default class StatusThread extends ImmutablePureComponent {
     ).concat(descendants);
 
     const gallery = (
-      <ScrollableList scrollKey='thread' prepend={<AccountHeaderContainer account={account} />} >
+      <ScrollableList scrollKey='thread' prepend={<div className='prepend'><AccountHeaderContainer account={account} /></div>} >
         {content}
       </ScrollableList>
     );
