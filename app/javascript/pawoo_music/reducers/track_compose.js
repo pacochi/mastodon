@@ -45,7 +45,7 @@ const initialState = Immutable.fromJS({
       blur: {
         visible: false,
         movement: { threshold: 190, band: { bottom: 50, top: 300 } },
-        blink: { threshold: 150, band: { bottom: 2000, top: 15000 } },
+        blink: { threshold: 150, band: { bottom: 2000, top: 11025 } },
       },
       particle: {
         visible: false,
