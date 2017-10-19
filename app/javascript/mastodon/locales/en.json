@@ -212,6 +212,8 @@
   "video_player.toggle_sound": "Toggle sound",
   "video_player.toggle_visible": "Toggle visibility",
   "video_player.video_error": "Video could not be played",
+  "pinned_tags.title": "Pinned Tag",
+  "pawoo_music.announcements.10": "Pawoo Music has been renewed! Enjoy new features such as MV auto generation!",
   "pawoo_music.gallery.tips_balloon": "Enjoy tracks on this timeline!",
   "pawoo_music.play_control.share_text": "Talking while listening to {info} with everyone♪ {link}",
   "pawoo_music.play_control.share_text.info": "\"{info}\"",
@@ -244,6 +246,5 @@
   "pawoo_music.track_compose.video.particle": "Particle",
   "pawoo_music.track_compose.video.spectrum": "Spectrum",
   "pawoo_music.track_compose.video.spectrum_form": "Form",
-  "pawoo_music.track_compose.video.text": "Text",
-  "pinned_tags.title": "Pinned Tag"
+  "pawoo_music.track_compose.video.text": "Text"
 }
