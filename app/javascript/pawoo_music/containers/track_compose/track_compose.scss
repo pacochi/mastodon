@@ -108,6 +108,8 @@
         }
 
         legend {
+          font-weight: bold;
+          width: 100%;
 
           & + legend {
             margin-top: var(--padding10);
