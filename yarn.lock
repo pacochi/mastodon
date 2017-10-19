@@ -5893,11 +5893,11 @@ multipipe@^0.1.2:
   dependencies:
     duplexer2 "0.0.2"
 
-"musicvideo-generator@github:pixiv/musicvideo-generator":
+"musicvideo-generator@github:pixiv/musicvideo-generator#v1.0.0":
   version "1.0.0"
-  resolved "git+ssh://git@github.com/pixiv/musicvideo-generator.git#4738a3324a10a1cd94aebe04152a2d7e2d1996fa"
+  resolved "git+ssh://git@github.com/pixiv/musicvideo-generator.git#7b9a4b914a81d0db40ddd58f3035de16c71351e4"
   dependencies:
-    pixi.js "^4.5.4"
+    pixi.js "^4.5.6"
 
 mute-stream@0.0.5:
   version "0.0.5"
@@ -6592,7 +6592,7 @@ pixi-gl-core@^1.0.3:
   version "1.1.0"
   resolved "https://registry.yarnpkg.com/pixi-gl-core/-/pixi-gl-core-1.1.0.tgz#a52cb4dd3254f9c7857a0e9c2356b00e6ec0c761"
 
-pixi.js@^4.5.4:
+pixi.js@^4.5.6:
   version "4.5.6"
   resolved "https://registry.yarnpkg.com/pixi.js/-/pixi.js-4.5.6.tgz#54914e7935f9a9e346923b9f424e52fa417593cd"
   dependencies:
