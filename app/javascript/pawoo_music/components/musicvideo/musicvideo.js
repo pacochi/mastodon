@@ -217,7 +217,7 @@ class Musicvideo extends ImmutablePureComponent {
           tabIndex='0'
           aria-label={label}
         />
-        <audio autoPlay={autoPlay} ref={this.setAudioRef} src={music} />
+        <audio autoPlay={autoPlay} crossOrigin='anonymous' ref={this.setAudioRef} src={music} />
         <div className={classNames('controls-container', { visible: controls })}>
           <div className='controls'>
             <div className={classNames('toggle', { disabled: !music })} onClick={this.handleTogglePaused} role='button' tabIndex='0' aria-pressed='false'>
