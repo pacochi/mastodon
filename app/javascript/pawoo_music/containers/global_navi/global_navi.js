@@ -5,6 +5,7 @@ import { NavLink } from 'react-router-dom';
 import { defineMessages, injectIntl } from 'react-intl';
 import { Scrollbars } from 'react-custom-scrollbars';
 import { withRouter } from 'react-router';
+import { FormattedMessage } from 'react-intl';
 import SearchBox from '../search_box';
 import LoginBox from '../../components/login_box';
 import IconButton from '../../components/icon_button';
@@ -115,7 +116,13 @@ export default class GlobalNavi extends PureComponent {
             {this.renderNavLinks()}
           </div>
 
-          <h2>タグタイムライン</h2>
+          <h2>
+            <FormattedMessage
+              id='pawoo_music.global_navi.tag_timeline'
+              defaultMessage='Tag timeline'
+            />
+          </h2>
+
           <EventCalendar />
           <PinnedTagsContainer currentTag={currentTag} />
           <TrendTagsContainer />

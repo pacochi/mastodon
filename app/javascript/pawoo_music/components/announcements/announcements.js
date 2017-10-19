@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import Immutable from 'immutable';
 import Link from 'react-router-dom/Link';
 import IconButton from '../icon_button';
@@ -6,6 +7,10 @@ import IconButton from '../icon_button';
 const storageKey = 'announcements_dismissed';
 
 class Announcements extends React.PureComponent {
+
+  static contextTypes = {
+    intl: PropTypes.object.isRequired,
+  };
 
   componentDidUpdate (prevProps, prevState) {
     if (prevState.dismissed !== this.state.dismissed) {
@@ -29,7 +34,10 @@ class Announcements extends React.PureComponent {
       {
         id: 10,
         icon: '/announcements/icon_2x_360.png',
-        body: 'Pawoo Musicをリニューアル！ MVの自動生成機能などをはじめ、新しいPawoo Musicをお楽しみください！',
+        body: this.context.intl.formatMessage({
+          id: 'pawoo_music.announcements.10',
+          defaultMessage: 'Pawoo Musicをリニューアル！ MVの自動生成機能などをはじめ、新しいPawoo Musicをお楽しみください！',
+        }),
         link: [],
       },
       // NOTE: id: 10 まで使用した

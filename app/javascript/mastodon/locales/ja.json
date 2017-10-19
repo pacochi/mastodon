@@ -214,6 +214,9 @@
   "video_player.toggle_sound": "音の切り替え",
   "video_player.toggle_visible": "表示切り替え",
   "video_player.video_error": "動画の再生に失敗しました",
+  "pinned_tags.title": "ピン留めしたタグ",
+  "pawoo_music.announcements.10": "Pawoo Musicをリニューアル！ MVの自動生成機能などをはじめ、新しいPawoo Musicをお楽しみください！",
+  "pawoo_music.global_navi.tag_timeline": "タグタイムライン",
   "pawoo_music.gallery.tips_balloon": "作品専用のタイムラインでたくさんの音楽を楽しもう！",
   "pawoo_music.play_control.share_text": "今みんなで一緒に{info}を聞きながらトーク中♪ {link}",
   "pawoo_music.play_control.share_text.info": "「{info}」",
@@ -246,6 +249,5 @@
   "pawoo_music.track_compose.video.particle": "パーティクル",
   "pawoo_music.track_compose.video.spectrum": "スペクトラム",
   "pawoo_music.track_compose.video.spectrum_form": "形状",
-  "pawoo_music.track_compose.video.text": "テキスト",
-  "pinned_tags.title": "ピン留めしたタグ"
+  "pawoo_music.track_compose.video.text": "テキスト"
 }
