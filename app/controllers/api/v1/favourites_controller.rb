@@ -29,7 +29,7 @@ class Api::V1::FavouritesController < Api::BaseController
   end
 
   def only_musics_scope
-    Status.where.not(music_type: nil)
+    Status.musics_only
   end
 
   def results
