@@ -43,7 +43,8 @@ class StatusesController < ApplicationController
   end
 
   def set_status
-    @status = @account.statuses.find(params[:id])
+    @status       = @account.statuses.find(params[:id])
+    @stream_entry = @status.stream_entry
 
     authorize @status, :show?
   rescue Mastodon::NotPermittedError
