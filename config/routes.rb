@@ -35,7 +35,7 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/@:username', to: 'accounts#show', as: :short_account, constraints: { username: /[^\/]+/ }
+  get '/@:username', to: 'accounts#show', as: :short_account, constraints: { username: /((?!(\.atom|\.activitystreams2)$)[^\/])+/ }
   get '/@:account_username/:id', to: 'statuses#show', as: :short_account_status, constraints: { account_username: /[^\/]+/ }
 
   get '/users/:username', to: redirect('/@%{username}'), constraints: { username: /[^\/]+/ }
