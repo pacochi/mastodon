@@ -20,7 +20,6 @@ const makeMapStateToProps = () => {
 
   const mapStateToProps = (state, props) => {
     const { id, status } = props;
-
     return {
       status: status || getStatus(state, id),
     };
@@ -30,8 +29,8 @@ const makeMapStateToProps = () => {
 };
 
 const mapDispatchToProps = (dispatch) => ({
-  onOpenStatus ({ status }) {
-    dispatch(openStatusModal(status));
+  onOpenStatus (props) {
+    dispatch(openStatusModal(props));
   },
 });
 
@@ -50,9 +49,6 @@ export default class Status extends ImmutablePureComponent {
     hidden: PropTypes.bool,
     prepend: PropTypes.node,
     onOpenStatus: PropTypes.func.isRequired,
-    // fetchBoothItem: PropTypes.func,
-    // boothItem: ImmutablePropTypes.map,
-    // dispatch: PropTypes.func.isRequired,
   };
 
   static defaultProps = {
@@ -94,7 +90,7 @@ export default class Status extends ImmutablePureComponent {
       if (this.mobile) {
         this.context.router.history.push(nextLocation);
       } else {
-        this.props.onOpenStatus({ status });
+        this.props.onOpenStatus({ id: status.get('id'), status });
       }
     }
   }

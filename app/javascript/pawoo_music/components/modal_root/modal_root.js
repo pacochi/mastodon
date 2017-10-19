@@ -9,7 +9,7 @@ import MusicModal from '../../../mastodon/features/ui/components/music_modal';
 import ConfirmationModal from '../../../mastodon/features/ui/components/confirmation_modal';
 import UniversalModal from '../universal_modal';
 import ReportModal from '../../../mastodon/features/ui/components/report_modal';
-import Status from '../../containers/account_timeline';
+import StatusModal from '../../containers/status_modal';
 import StatusFromModalContainer from '../../containers/status_form_modal';
 
 const MODAL_COMPONENTS = {
@@ -21,7 +21,7 @@ const MODAL_COMPONENTS = {
   'CONFIRM': ConfirmationModal,
   'REPORT': ReportModal,
   'STATUS_FORM': StatusFromModalContainer,
-  'STATUS_MODAL': Status,
+  'STATUS_MODAL': StatusModal,
   'UNIVERSAL': UniversalModal,
 };
 

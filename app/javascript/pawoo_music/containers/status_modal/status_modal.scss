@@ -1,0 +1,9 @@
+.status-modal {
+  .gallery-column {
+    align-items: center;
+
+    .status:not(.highlight) {
+      opacity: 0.6;
+    }
+  }
+}

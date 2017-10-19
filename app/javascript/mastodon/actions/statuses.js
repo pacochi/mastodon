@@ -32,10 +32,9 @@ export const STATUS_UNPIN_REQUEST = 'STATUS_UNPIN_REQUEST';
 export const STATUS_UNPIN_SUCCESS = 'STATUS_UNPIN_SUCCESS';
 export const STATUS_UNPIN_FAIL    = 'STATUS_UNPIN_FAIL';
 
-export function openStatusModal(status) {
+export function openStatusModal(props) {
   return (dispatch) => {
-    console.log(status.toJS());
-    dispatch(openModal('STATUS_MODAL', status.toJS()));
+    dispatch(openModal('STATUS_MODAL', props));
   };
 };
 
