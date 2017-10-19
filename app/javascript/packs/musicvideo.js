@@ -13,9 +13,10 @@ function loaded() {
   const React = require('react');
   const ReactDOM = require('react-dom');
   const mountNode = document.getElementById('pawoo-music-musicvideo');
-  const props = JSON.parse(mountNode.getAttribute('data-props'));
+  const locale = JSON.parse(document.getElementById('pawoo-music-default-props').getAttribute('data-props')).locale;
+  const track = JSON.parse(mountNode.getAttribute('data-props')).track;
 
-  ReactDOM.render(<MusicvideoEntry {...props} />, mountNode);
+  ReactDOM.render(<MusicvideoEntry {...{ locale, track }} />, mountNode);
 }
 
 function main() {
