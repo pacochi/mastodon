@@ -212,6 +212,7 @@
   "video_player.toggle_sound": "Toggle sound",
   "video_player.toggle_visible": "Toggle visibility",
   "video_player.video_error": "Video could not be played",
+  "pawoo_music.gallery.tips_balloon": "Enjoy tracks on this timeline!",
   "pawoo_music.play_control.share_text": "Talking while listening to {info} with everyone♪ {link}",
   "pawoo_music.play_control.share_text.info": "\"{info}\"",
   "pawoo_music.play_control.share_text.info_default": "music",
