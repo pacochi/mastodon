@@ -442,7 +442,7 @@ export default class TrackCompose extends ImmutablePureComponent {
 
                 <legend>
                   <div className='track-compose-text-input'>
-                    <label className='horizontal'>
+                    <label className=''>
                       {this.props.track.get('title').length === 0 && (
                         <span className='text'>
                           <FormattedMessage
@@ -465,7 +465,7 @@ export default class TrackCompose extends ImmutablePureComponent {
 
                 <legend>
                   <div className='track-compose-text-input'>
-                    <label className='horizontal'>
+                    <label className=''>
                       {this.props.track.get('artist').length === 0 && (
                         <span className='text'>
                           <FormattedMessage
@@ -488,7 +488,7 @@ export default class TrackCompose extends ImmutablePureComponent {
 
                 <legend>
                   <div className='track-compose-text-textarea'>
-                    <label className='horizontal'>
+                    <label className=''>
                       {this.props.track.get('text').length === 0 && (
                         <span className='text'>
                           <FormattedMessage
