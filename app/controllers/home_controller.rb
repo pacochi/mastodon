@@ -7,9 +7,9 @@ class HomeController < ApplicationController
 
   before_action :set_initial_state_data, only: :index
   before_action :authenticate_user!, only: :index
+  before_action :set_instance_presenter, only: :index
 
-  def index
-  end
+  def index; end
 
   def web
     redirect_to find_redirect_path_from_request
@@ -31,5 +31,9 @@ class HomeController < ApplicationController
       return tag_path(URI.decode(Regexp.last_match[:tag]))
     end
     root_path
+  end
+
+  def set_instance_presenter
+    @instance_presenter = InstancePresenter.new
   end
 end

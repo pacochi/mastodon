@@ -2,8 +2,11 @@
   = "#{display_name(@account)} - #{@account.acct}"
 
 - content_for :header_tags do
-  %link{ rel: 'salmon', href: api_salmon_url(@account.id) }/
-  %link{ rel: 'alternate', type: 'application/atom+xml', href: account_url(@account, format: 'atom') }/
+  - if @account.local?
+    %link{ rel: 'salmon', href: api_salmon_url(@account.id) }/
+    %link{ rel: 'alternate', type: 'application/atom+xml', href: account_url(@account, format: 'atom') }/
 
-  %meta{ property: 'og:type', content: 'profile' }/
-  = render 'og', account: @account, url: short_account_url(@account, only_path: false)
+    %meta{ property: 'og:type', content: 'profile' }/
+    = render 'og', account: @account, url: short_account_url(@account, only_path: false)
+  - else
+    %meta{ name: 'robots', content: 'noindex,follow' }/
