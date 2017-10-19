@@ -135,7 +135,7 @@ class FeedManager
 
   def merge_into_music_timeline(from_account, into_account)
     timeline_key = music_key(:home, into_account.id)
-    query        = from_account.statuses.where.not(music_type: nil).limit(FeedManager::MAX_ITEMS / 4)
+    query        = from_account.statuses.musics_only.limit(FeedManager::MAX_ITEMS / 4)
 
     if redis.zcard(timeline_key) >= FeedManager::MAX_ITEMS / 4
       oldest_home_score = redis.zrange(timeline_key, 0, 0, with_scores: true)&.first&.last&.to_i || 0
@@ -156,7 +156,7 @@ class FeedManager
     timeline_key = music_key(:home, into_account.id)
     oldest_home_score = redis.zrange(timeline_key, 0, 0, with_scores: true)&.first&.last&.to_i || 0
 
-    from_account.statuses.select('id').where('id > ?', oldest_home_score).where.not(music_type: nil).reorder(nil).find_in_batches do |statuses|
+    from_account.statuses.select('id').where('id > ?', oldest_home_score).musics_only.reorder(nil).find_in_batches do |statuses|
       redis.pipelined do
         statuses.each do |status|
           redis.zrem(timeline_key, status.id)

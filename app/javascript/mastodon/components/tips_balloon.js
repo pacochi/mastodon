@@ -13,11 +13,13 @@ class TipsBalloon extends React.PureComponent {
     onDismiss: PropTypes.func.isRequired,
     style: PropTypes.object,
     children: PropTypes.node.isRequired,
+    position: PropTypes.oneOf(['left', 'center']),
     direction: PropTypes.oneOf(['bottom', 'top']),
   };
 
   static defaultProps = {
     style: {},
+    position: 'left',
     direction: 'bottom',
   };
 
@@ -26,10 +28,10 @@ class TipsBalloon extends React.PureComponent {
   }
 
   render () {
-    const { dismiss, style, children, direction } = this.props;
+    const { dismiss, style, children, position, direction } = this.props;
 
     return !dismiss && (
-      <div className={classNames('tips-balloon', `direction-${direction}`)} style={style}>
+      <div className={classNames('tips-balloon', `position-${position}`, `direction-${direction}`)} style={style}>
         <div className='tips-balloon__content'>
           {children}
         </div>
