@@ -34,14 +34,28 @@ const mapDispatchToProps = (dispatch) => ({
 @connect(makeMapStateToProps, mapDispatchToProps)
 export default class StatusModal extends ImmutablePureComponent {
 
+  static contextTypes = {
+    router: PropTypes.object,
+  };
+
   static propTypes = {
     status: ImmutablePropTypes.map.isRequired,
     statusId: PropTypes.number.isRequired,
     fetchStatus: PropTypes.func.isRequired,
+    onClose: PropTypes.func.isRequired,
   };
 
   componentDidMount = () => {
     this.props.fetchStatus(this.props.statusId);
+    this.unlisten = this.context.router.history.listen(() => {
+      this.props.onClose();
+    });
+  };
+
+  componentWillUnmount = () => {
+    if (this.unlisten) {
+      this.unlisten();
+    }
   };
 
   getChildren = (list) => (
@@ -55,7 +69,7 @@ export default class StatusModal extends ImmutablePureComponent {
     const descendants = this.getChildren(this.props.descendantsIds);
     const Component = status.get('track') ? TrackStatusContainer : StatusContainer;
     return (
-      <div className='status-modal timeline'>
+      <div className='status-modal'>
         <div className='gallery-column'>
           {ancestors.push(<Component detail key={status.get('id')} id={status.get('id')} />).concat(descendants)}
         </div>

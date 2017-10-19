@@ -86,12 +86,10 @@ export default class Status extends ImmutablePureComponent {
     }
 
     const nextLocation = `/@${status.getIn(['account', 'acct'])}/${status.get('id')}`;
-    if (location.pathname !== nextLocation) {
-      if (this.mobile) {
-        this.context.router.history.push(nextLocation);
-      } else {
-        this.props.onOpenStatus({ id: status.get('id'), status });
-      }
+    if (this.mobile) {
+      this.context.router.history.push(nextLocation);
+    } else {
+      this.props.onOpenStatus({ id: status.get('id'), status });
     }
   }
 
