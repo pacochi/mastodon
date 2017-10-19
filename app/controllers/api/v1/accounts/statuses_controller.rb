@@ -53,15 +53,15 @@ class Api::V1::Accounts::StatusesController < Api::BaseController
   end
 
   def only_musics_scope
-    Status.where.not(music_type: nil).without_reblogs
+    Status.musics_only.without_reblogs
   end
 
   def only_tracks_scope
-    Status.where(music_type: 'Track').without_reblogs
+    Status.tracks_only.without_reblogs
   end
 
   def only_albums_scope
-    Status.where(music_type: 'Album').without_reblogs
+    Status.albums_only.without_reblogs
   end
 
   def account_media_status_ids

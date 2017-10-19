@@ -6,7 +6,7 @@ class VideoPreparingWorker
   sidekiq_options queue: :video_preparer, unique_for: 16.minutes, retry: false
 
   def perform(id)
-    status = Status.where(music_type: 'Track').find(id)
+    status = Status.tracks_only.find(id)
 
     video = MusicConvertService.new.call(status.music)
     begin
