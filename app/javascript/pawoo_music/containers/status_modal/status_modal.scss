@@ -5,5 +5,9 @@
     .status:not(.highlight) {
       opacity: 0.6;
     }
+
+    .track-status {
+      padding: var(--padding15);
+    }
   }
 }
