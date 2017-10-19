@@ -40,7 +40,6 @@ describe AuthorizeFollowsController do
       end
 
       it 'sets account from url' do
-        account = Account.new
         service = double
         allow(FetchRemoteAccountService).to receive(:new).and_return(service)
         allow(service).to receive(:call).with('http://example.com').and_return(account)
@@ -52,7 +51,6 @@ describe AuthorizeFollowsController do
       end
 
       it 'sets account from acct uri' do
-        account = Account.new
         service = double
         allow(ResolveRemoteAccountService).to receive(:new).and_return(service)
         allow(service).to receive(:call).with('found@hostname').and_return(account)

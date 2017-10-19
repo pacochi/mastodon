@@ -1,0 +1,16 @@
+ul.status-action-bar {
+  display: flex;
+  margin:  var(--verticalspace20);
+
+  > li {
+    height: var(--iconsize13);
+    margin:  var(--rightspace15);
+  }
+
+  .strong {
+    svg {
+      stroke-width: 2px;
+      stroke: var(--strong2);
+    }
+  }
+}

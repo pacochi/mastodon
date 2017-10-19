@@ -1,22 +1,16 @@
 import React from 'react';
 import ImmutablePropTypes from 'react-immutable-proptypes';
 import PropTypes from 'prop-types';
-import IconButton from './icon_button';
-import { defineMessages, injectIntl, FormattedMessage } from 'react-intl';
+import IconButton from '../../pawoo_music/components/icon_button';
+import { injectIntl, FormattedMessage } from 'react-intl';
 import { isIOS } from '../is_mobile';
-
-const messages = defineMessages({
-  toggle_sound: { id: 'video_player.toggle_sound', defaultMessage: 'Toggle sound' },
-  toggle_visible: { id: 'video_player.toggle_visible', defaultMessage: 'Toggle visibility' },
-  expand_video: { id: 'video_player.expand', defaultMessage: 'Expand video' },
-});
 
 @injectIntl
 export default class VideoPlayer extends React.PureComponent {
 
   static propTypes = {
     media: ImmutablePropTypes.map.isRequired,
-    width: PropTypes.number,
+    width: PropTypes.oneOfType([PropTypes.number, PropTypes.string]),
     height: PropTypes.number,
     sensitive: PropTypes.bool,
     intl: PropTypes.object.isRequired,
@@ -25,7 +19,7 @@ export default class VideoPlayer extends React.PureComponent {
   };
 
   static defaultProps = {
-    width: 239,
+    width: 'auto',
     height: 239,
   };
 
@@ -69,8 +63,13 @@ export default class VideoPlayer extends React.PureComponent {
 
   handleExpand = (e) => {
     e.stopPropagation();
-    this.video.pause();
-    this.props.onOpenVideo(this.props.media, this.video.currentTime);
+    let time = 0;
+    if (this.video) {
+      this.video.pause();
+      time = this.video.currentTime;
+    }
+
+    this.props.onOpenVideo(this.props.media, time);
   }
 
   setRef = (c) => {
@@ -115,17 +114,17 @@ export default class VideoPlayer extends React.PureComponent {
   }
 
   render () {
-    const { media, intl, width, height, sensitive, autoplay } = this.props;
+    const { media, width, height, sensitive, autoplay } = this.props;
 
     let spoilerButton = (
       <div className={`status__video-player-spoiler ${this.state.visible ? 'status__video-player-spoiler--visible' : ''}`}>
-        <IconButton overlay title={intl.formatMessage(messages.toggle_visible)} icon={this.state.visible ? 'eye' : 'eye-slash'} onClick={this.handleVisibility} />
+        <IconButton src={this.state.visible ? 'eye' : 'eye-off'} onClick={this.handleVisibility} />
       </div>
     );
 
     let expandButton = (
       <div className='status__video-player-expand'>
-        <IconButton overlay title={intl.formatMessage(messages.expand_video)} icon='expand' onClick={this.handleExpand} />
+        <IconButton src='maximize-2' onClick={this.handleExpand} />
       </div>
     );
 
@@ -154,6 +153,7 @@ export default class VideoPlayer extends React.PureComponent {
         <div role='button' tabIndex='0' className='media-spoiler-video' style={{ width: `${width}px`, height: `${height}px`, backgroundImage: `url(${media.get('preview_url')})` }} onClick={this.handleOpen}>
           {spoilerButton}
           <div className='media-spoiler-video-play-icon'><i className='fa fa-play' /></div>
+          {expandButton}
         </div>
       );
     }
@@ -177,8 +177,8 @@ export default class VideoPlayer extends React.PureComponent {
     return (
       <div className={`status__video-player ${this.video && this.state.paused ? ' is-paused' : ''}`} style={{ width: `${width}px`, height: `${height}px` }} onClick={this.handleVideoClick}>
         {spoilerButton}
-        {expandButton}
         {videoOverlayElement}
+        {expandButton}
         <video
           className='status__video-player-video'
           role='button'

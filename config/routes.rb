@@ -35,12 +35,12 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/@:username', to: 'accounts#show', as: :short_account
-  get '/@:account_username/:id', to: 'statuses#show', as: :short_account_status
+  get '/@:username', to: 'accounts#show', as: :short_account, constraints: { username: /((?!(\.atom|\.activitystreams2)$)[^\/])+/ }
+  get '/@:account_username/:id', to: 'statuses#show', as: :short_account_status, constraints: { account_username: /[^\/]+/ }
 
-  get '/users/:username', to: redirect('/@%{username}'), constraints: { format: :html }
+  get '/users/:username', to: redirect('/@%{username}'), constraints: { username: /[^\/]+/ }
 
-  resources :accounts, path: 'users', only: [:show], param: :username do
+  resources :accounts, path: 'users', only: [:show], param: :username, constraints: { username: /[^\/]+/ } do
     resources :stream_entries, path: 'updates', only: [:show] do
       member do
         get :embed
@@ -78,6 +78,10 @@ Rails.application.routes.draw do
 
     resource :follower_domains, only: [:show, :update]
     resource :delete, only: [:show, :destroy]
+    resource :timeline, only: [:show]
+    resource :follow_requests, only: [:show]
+    resource :mutes, only: [:show]
+    resource :blocks, only: [:show]
   end
 
   resources :media, only: [:show]
@@ -187,7 +191,6 @@ Rails.application.routes.draw do
       resources :trend_tags, only: [:index]
       resources :follows,    only: [:create]
       resources :media,      only: [:create]
-      resources :music,      only: [:create]
       resources :apps,       only: [:create]
       resources :blocks,     only: [:index]
       resources :mutes,      only: [:index]
@@ -240,6 +243,15 @@ Rails.application.routes.draw do
           post :unmute
         end
       end
+
+      # Pawoo Music
+      resources :albums, only: [:create, :update] do
+        resources :tracks, only: [:index, :update, :destroy], controller: 'albums/tracks'
+      end
+
+      resources :tracks, only: [:create, :update] do
+        post :prepare_video, on: :member
+      end
     end
 
     namespace :web do
@@ -247,7 +259,10 @@ Rails.application.routes.draw do
     end
   end
 
-  get '/web/(*any)', to: 'home#index', as: :web
+  get '/timelines/public', to: 'timelines#index', as: :public_timeline
+  get '/timelines/public/local', to: 'timelines#index', as: :local_timeline
+
+  get '/web/(*any)', to: 'home#web', as: :web
 
   get '/about',      to: 'about#show'
   get '/about/more', to: 'about#more'
@@ -256,6 +271,11 @@ Rails.application.routes.draw do
   get '/app_eula',   to: 'about#app_eula'
 
   root 'home#index'
+  get '/notifications', to: 'home#index'
+  get '/favourites',    to: 'home#index'
+
+  resources :albums, only: :new
+  resources :tracks, only: [:new, :edit]
 
   match '*unmatched_route',
     via: :all,

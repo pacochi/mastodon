@@ -1,0 +1,48 @@
+.track {
+  margin:     var(--verticalspace20);
+
+  .musicvideo-wrapper {
+    display: block;
+    position: relative;
+    box-shadow: var(--shadow);
+    background-size: cover;
+    background-position: center center;
+    background-color: black;
+
+    .thumbnail {
+      width:  var(--width-gallery);
+      height: var(--width-gallery); // aspect ratio 1:1
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+
+      .playbutton {
+        display: block;
+        height:     var(--iconsize40);
+        width:      var(--iconsize40);
+      }
+
+      &:hover .playbutton {
+        opacity:    var(--hover-opacity);
+        transition: var(--hover-transition);
+      }
+    }
+
+    .canvas-container {
+      width: var(--width-gallery);
+      height: var(--width-gallery);
+    }
+  }
+
+
+  .credit {
+    display:        block;
+    font-size:      var(--text30-font);
+    line-height:    var(--text30-line);
+
+    font-weight:    bold;
+    color:          var(--strong2);
+    margin:         var(--verticalspace25);
+  }
+}

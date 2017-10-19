@@ -36,7 +36,7 @@ class SCWidget extends React.PureComponent {
   getContentSize () {
     const { detail } = this.props;
 
-    return detail ? '287' : '234';
+    return detail ? '456' : '248';
   }
 
   getEmbed = () => {

@@ -17,12 +17,29 @@ en:
         file: File
         file_content_type: Content-Type
         file_file_size: File size
+      track:
+        artist: Artist
+        music: Audio file
+        title: Title
     errors:
       models:
         account:
           attributes:
             username:
               invalid: only letters, numbers and underscores
+        album:
+          attributes:
+            image:
+              in_between: Your cover image must be less than :max
+              invalid: The cover image file is invalid
+        track:
+          attributes:
+            music:
+              in_between: Your music file must be less than :max
+              invalid: The music file is invalid
+            image:
+              in_between: Your cover image file must be less than :max
+              invalid: The cover image file is invalid
         status:
           attributes:
             reblog:

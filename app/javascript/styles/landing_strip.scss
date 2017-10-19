@@ -4,7 +4,9 @@
   font-weight: 400;
   padding: 14px;
   border-radius: 4px;
-  margin-bottom: 10px;
+  margin-bottom: 20px;
+  display: flex;
+  align-items: center;
 
   strong,
   a {
@@ -15,18 +17,15 @@
     color: inherit;
     text-decoration: underline;
   }
-}
 
-.landing-form {
-  text-align: center;
-  margin-bottom: 20px;
-
-  .button {
-    margin: 0 4px;
-    padding: 0 40px;
+  .logo {
+    width: 30px;
+    height: 30px;
+    flex: 0 0 auto;
+    margin-right: 15px;
   }
 
-  .signin {
-    background-color: lighten($ui-base-color, 26%);
+  @media screen and (max-width: 740px) {
+    margin-bottom: 0;
   }
 }

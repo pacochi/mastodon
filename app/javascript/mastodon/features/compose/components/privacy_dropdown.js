@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages } from 'react-intl';
-import IconButton from '../../../components/icon_button';
+import IconButton from '../../../../pawoo_music/components/icon_button';
 
 const messages = defineMessages({
   public_short: { id: 'privacy.public.short', defaultMessage: 'Public' },
@@ -15,10 +15,6 @@ const messages = defineMessages({
   change_privacy: { id: 'privacy.change', defaultMessage: 'Adjust status privacy' },
 });
 
-const iconStyle = {
-  height: null,
-  lineHeight: '27px',
-};
 
 @injectIntl
 export default class PrivacyDropdown extends React.PureComponent {
@@ -69,21 +65,21 @@ export default class PrivacyDropdown extends React.PureComponent {
     const { open } = this.state;
 
     const options = [
-      { icon: 'globe', value: 'public', shortText: intl.formatMessage(messages.public_short), longText: intl.formatMessage(messages.public_long) },
-      { icon: 'unlock-alt', value: 'unlisted', shortText: intl.formatMessage(messages.unlisted_short), longText: intl.formatMessage(messages.unlisted_long) },
+      { icon: 'users', value: 'public', shortText: intl.formatMessage(messages.public_short), longText: intl.formatMessage(messages.public_long) },
+      { icon: 'home', value: 'unlisted', shortText: intl.formatMessage(messages.unlisted_short), longText: intl.formatMessage(messages.unlisted_long) },
       { icon: 'lock', value: 'private', shortText: intl.formatMessage(messages.private_short), longText: intl.formatMessage(messages.private_long) },
-      { icon: 'envelope', value: 'direct', shortText: intl.formatMessage(messages.direct_short), longText: intl.formatMessage(messages.direct_long) },
+      { icon: 'mail', value: 'direct', shortText: intl.formatMessage(messages.direct_short), longText: intl.formatMessage(messages.direct_long) },
     ];
 
     const valueOption = options.find(item => item.value === value);
 
     return (
       <div ref={this.setRef} className={`privacy-dropdown ${open ? 'active' : ''}`}>
-        <div className='privacy-dropdown__value'><IconButton className='privacy-dropdown__value-icon' icon={valueOption.icon} title={intl.formatMessage(messages.change_privacy)} size={18} active={open} inverted onClick={this.handleToggle} style={iconStyle} /></div>
+        <div className='privacy-dropdown__value'><IconButton className='privacy-dropdown__value-icon' src={valueOption.icon} title={intl.formatMessage(messages.change_privacy)} active={open} onClick={this.handleToggle} /></div>
         <div className='privacy-dropdown__dropdown'>
           {open && options.map(item =>
             <div role='button' tabIndex='0' key={item.value} data-index={item.value} onClick={this.handleClick} className={`privacy-dropdown__option ${item.value === value ? 'active' : ''}`}>
-              <div className='privacy-dropdown__option__icon'><i className={`fa fa-fw fa-${item.icon}`} /></div>
+              <div className='privacy-dropdown__option__icon'><IconButton src={item.icon} /></div>
               <div className='privacy-dropdown__option__content'>
                 <strong>{item.shortText}</strong>
                 {item.longText}

@@ -1,0 +1,36 @@
+.account {
+  max-width: 100%;
+  overflow: hidden;
+  display: flex;
+
+  .account-link {
+    display: flex;
+    align-items: center;
+
+    text-overflow:  ellipsis;
+    white-space:    nowrap;
+    overflow:       hidden;
+
+    .display-name {
+      display:        block;
+      font-size:      var(--text20-font);
+      font-weight:    bold;
+
+      text-overflow:  ellipsis;
+      white-space:    nowrap;
+      overflow:       hidden;
+
+      color: var(--strong2);
+    }
+
+    .acct {
+      display:        none;
+    }
+
+    &:hover {
+      .display-name, .acct {
+        color: var(--strong1);
+      }
+    }
+  }
+}

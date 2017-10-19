@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170710015311) do
+ActiveRecord::Schema.define(version: 20170830000000) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -56,11 +56,32 @@ ActiveRecord::Schema.define(version: 20170710015311) do
     t.integer "followers_count", default: 0, null: false
     t.integer "following_count", default: 0, null: false
     t.datetime "last_webfingered_at"
+    t.bigint "tracks_count", default: 0, null: false
+    t.bigint "albums_count", default: 0, null: false
     t.index "(((setweight(to_tsvector('simple'::regconfig, (display_name)::text), 'A'::\"char\") || setweight(to_tsvector('simple'::regconfig, (username)::text), 'B'::\"char\")) || setweight(to_tsvector('simple'::regconfig, (COALESCE(domain, ''::character varying))::text), 'C'::\"char\")))", name: "search_index", using: :gin
     t.index "lower((username)::text), lower((domain)::text)", name: "index_accounts_on_username_and_domain_lower"
     t.index ["uri"], name: "index_accounts_on_uri"
     t.index ["url"], name: "index_accounts_on_url"
     t.index ["username", "domain"], name: "index_accounts_on_username_and_domain", unique: true
+  end
+
+  create_table "album_tracks", id: false, force: :cascade do |t|
+    t.bigint "album_id", null: false
+    t.bigint "track_id", null: false
+    t.decimal "position", null: false
+    t.index ["album_id", "position"], name: "index_album_tracks_on_album_id_and_position", unique: true
+    t.index ["album_id", "track_id"], name: "index_album_tracks_on_album_id_and_track_id", unique: true
+    t.index ["album_id"], name: "index_album_tracks_on_album_id"
+    t.index ["track_id"], name: "index_album_tracks_on_track_id"
+  end
+
+  create_table "albums", force: :cascade do |t|
+    t.string "title", null: false
+    t.text "text", default: "", null: false
+    t.string "image_file_name"
+    t.string "image_content_type"
+    t.integer "image_file_size"
+    t.datetime "image_updated_at"
   end
 
   create_table "blocks", id: :serial, force: :cascade do |t|
@@ -355,10 +376,13 @@ ActiveRecord::Schema.define(version: 20170710015311) do
     t.integer "reblogs_count", default: 0, null: false
     t.string "language"
     t.bigint "conversation_id"
+    t.string "music_type"
+    t.bigint "music_id"
     t.index ["account_id", "id"], name: "index_statuses_on_account_id_id"
     t.index ["conversation_id"], name: "index_statuses_on_conversation_id"
     t.index ["in_reply_to_id"], name: "index_statuses_on_in_reply_to_id"
-    t.index ["reblog_of_id"], name: "index_statuses_on_reblog_of_id"
+    t.index ["music_type", "account_id"], name: "index_statuses_on_music_type_and_account_id"
+    t.index ["reblog_of_id", "music_type", "music_id"], name: "index_statuses_on_reblog_of_id_and_music_type_and_music_id"
     t.index ["uri"], name: "index_statuses_on_uri", unique: true
   end
 
@@ -410,6 +434,43 @@ ActiveRecord::Schema.define(version: 20170710015311) do
     t.index ["name"], name: "index_tags_on_name", unique: true
   end
 
+  create_table "tracks", force: :cascade do |t|
+    t.integer "duration", null: false
+    t.string "title", null: false
+    t.string "artist", null: false
+    t.string "text", default: "", null: false
+    t.string "music_file_name"
+    t.string "music_content_type"
+    t.integer "music_file_size"
+    t.datetime "music_updated_at"
+    t.string "video_file_name"
+    t.string "video_content_type"
+    t.integer "video_file_size"
+    t.datetime "video_updated_at"
+    t.string "video_image_file_name"
+    t.string "video_image_content_type"
+    t.integer "video_image_file_size"
+    t.datetime "video_image_updated_at"
+    t.integer "video_blur_movement_band_bottom", default: 0, null: false
+    t.integer "video_blur_movement_band_top", default: 0, null: false
+    t.integer "video_blur_movement_threshold", default: 0, null: false
+    t.integer "video_blur_blink_band_bottom", default: 0, null: false
+    t.integer "video_blur_blink_band_top", default: 0, null: false
+    t.integer "video_blur_blink_threshold", default: 0, null: false
+    t.integer "video_particle_limit_band_bottom", default: 0, null: false
+    t.integer "video_particle_limit_band_top", default: 0, null: false
+    t.integer "video_particle_limit_threshold", default: 0, null: false
+    t.float "video_particle_alpha", default: 0.0, null: false
+    t.integer "video_particle_color", default: 0, null: false
+    t.float "video_lightleaks_alpha", default: 0.0, null: false
+    t.integer "video_lightleaks_interval", default: 0, null: false
+    t.integer "video_spectrum_mode", default: 0, null: false
+    t.float "video_spectrum_alpha", default: 0.0, null: false
+    t.integer "video_spectrum_color", default: 0, null: false
+    t.float "video_text_alpha", default: 0.0, null: false
+    t.integer "video_text_color", default: 0, null: false
+  end
+
   create_table "trend_ng_words", id: :serial, force: :cascade do |t|
     t.string "word", default: "", null: false
     t.string "memo", default: "", null: false
@@ -453,6 +514,11 @@ ActiveRecord::Schema.define(version: 20170710015311) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "video_preparation_errors", force: :cascade do |t|
+    t.bigint "track_id", null: false
+    t.index ["track_id"], name: "index_video_preparation_errors_on_track_id"
+  end
+
   create_table "web_settings", id: :serial, force: :cascade do |t|
     t.integer "user_id"
     t.json "data"
@@ -462,6 +528,8 @@ ActiveRecord::Schema.define(version: 20170710015311) do
   end
 
   add_foreign_key "account_domain_blocks", "accounts", on_delete: :cascade
+  add_foreign_key "album_tracks", "albums", on_update: :cascade, on_delete: :cascade
+  add_foreign_key "album_tracks", "tracks", on_update: :cascade, on_delete: :cascade
   add_foreign_key "blocks", "accounts", column: "target_account_id", on_delete: :cascade
   add_foreign_key "blocks", "accounts", on_delete: :cascade
   add_foreign_key "conversation_mutes", "accounts", on_delete: :cascade
@@ -502,5 +570,6 @@ ActiveRecord::Schema.define(version: 20170710015311) do
   add_foreign_key "stream_entries", "accounts", on_delete: :cascade
   add_foreign_key "subscriptions", "accounts", on_delete: :cascade
   add_foreign_key "users", "accounts", on_delete: :cascade
+  add_foreign_key "video_preparation_errors", "tracks", on_update: :cascade, on_delete: :cascade
   add_foreign_key "web_settings", "users", on_delete: :cascade
 end

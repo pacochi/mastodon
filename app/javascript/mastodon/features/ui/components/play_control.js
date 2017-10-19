@@ -2,14 +2,13 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import classNames from 'classnames';
 import { debounce } from 'lodash';
+import { FormattedMessage } from 'react-intl';
 
 import api from '../../../api';
 import createStream from '../../../../mastodon/stream';
-import TipsBalloonContainer from '../../../containers/tips_balloon_container';
 import TweetButton from '../../../components/tweet_button';
 import YouTubeArtwork from './youtube_artwork';
 import SoundCloudArtwork from './soundcloud_artwork';
-import VideoArtwork from './video_artwork';
 import AudioArtwork from './audio_artwork';
 
 const PlatformHelp = () => {
@@ -17,7 +16,7 @@ const PlatformHelp = () => {
     {
       icon: '/player/logos/pawoo-music.svg',
       title: 'Pawoo Music',
-      url: 'https://music.pawoo.net/web/statuses/[XXXXX…]',
+      url: 'https://music.pawoo.net/@[username]/[XXXXX…]',
     },
     {
       icon: '/player/logos/youtube.svg',
@@ -73,8 +72,9 @@ class PlaylistController extends React.PureComponent {
   static propTypes = {
     offsetStartTime: PropTypes.number.isRequired,
     isTop: PropTypes.bool.isRequired,
-    isAdmin: PropTypes.bool.isRequired,
+    isAdmin: PropTypes.bool,
     isActive: PropTypes.bool.isRequired,
+    isSeekbarActive: PropTypes.bool.isRequired,
     muted: PropTypes.bool.isRequired,
     volume: PropTypes.number.isRequired,
     duration: PropTypes.number,
@@ -89,18 +89,28 @@ class PlaylistController extends React.PureComponent {
     skipLimitTime: 0,
   };
 
-  state = {
-    timeOffset: Math.floor(new Date() / 1000 - this.props.offsetStartTime),
-  };
   interval = null;
+
+  timeOffset = 0;
+
+  timeOffsetNode = null;
+
+  playSeekbarNode = null;
 
   componentDidMount () {
     this.interval = setInterval(() => {
-      const { offsetStartTime } = this.props;
-      this.setState({
-        timeOffset: Math.floor(new Date() / 1000 - offsetStartTime),
-      });
-    }, 300);
+      const { offsetStartTime, duration } = this.props;
+      const timeOffset = Math.floor(Date.now() / 1000 - offsetStartTime);
+      if (timeOffset !== this.timeOffset) {
+        this.timeOffset = timeOffset;
+        if (this.timeOffsetNode) {
+          this.timeOffsetNode.textContent = this.convertTimeFormat(Math.min(timeOffset, duration));
+        }
+        if (this.playSeekbarNode) {
+          this.playSeekbarNode.style.width = `${(timeOffset / duration) * 100}%`;
+        }
+      }
+    }, 1000);
   }
 
   componentWillUnmount () {
@@ -111,12 +121,11 @@ class PlaylistController extends React.PureComponent {
 
   isSkipEnable () {
     const { isActive, skipLimitTime, isAdmin } = this.props;
-    const { timeOffset } = this.state;
-    return isAdmin || (isActive && skipLimitTime && timeOffset > skipLimitTime);
+    return isAdmin || (isActive && skipLimitTime && this.timeOffset > skipLimitTime);
   }
 
   handleClickSkip = () => {
-    if(this.isSkipEnable()) {
+    if (this.isSkipEnable()) {
       this.props.onSkip();
     }
   }
@@ -129,9 +138,16 @@ class PlaylistController extends React.PureComponent {
     return `${Math.floor(time / 60)}:${('0' + (time % 60)).slice(-2)}`;
   }
 
+  setPlaySeekbarNode = (playSeekbarNode) => {
+    this.playSeekbarNode = playSeekbarNode;
+  };
+
+  setTimeOffsetNode = (timeOffsetNode) => {
+    this.timeOffsetNode = timeOffsetNode;
+  };
+
   render () {
-    const { isTop, isActive, duration, muted, volume } = this.props;
-    const { timeOffset } = this.state;
+    const { isTop, isActive, isSeekbarActive, duration, muted, volume } = this.props;
 
     return (
       <div className='control-bar__controller'>
@@ -143,19 +159,22 @@ class PlaylistController extends React.PureComponent {
             <input className='vertical-slider' type='range' value={volume} min='0' max='100' step='1' onChange={this.handleChangeVolume} />
           </div>
         </div>
-        {!isTop && <TipsBalloonContainer id={1}>
-          音楽を再生！
-        </TipsBalloonContainer>}
 
-        {isActive && !isTop && <div className='control-bar__controller-skip'>
-          <span className={this.isSkipEnable() ? '' : 'disabled'} onClick={this.handleClickSkip}>SKIP</span>
-        </div>}
+        {isActive && !isTop && (
+          <div className='control-bar__controller-skip'>
+            <span onClick={this.handleClickSkip}>SKIP</span>
+          </div>
+        )}
 
-        {isActive && <div className='control-bar__controller-info'>
-          <span className='control-bar__controller-now'>{this.convertTimeFormat(Math.min(timeOffset, duration))}</span>
-          <span className='control-bar__controller-separater'>/</span>
-          <span className='control-bar__controller-time'>{this.convertTimeFormat(duration)}</span>
-        </div>}
+        {isActive && (
+          <div className='control-bar__controller-info'>
+            <span className='control-bar__controller-now' ref={this.setTimeOffsetNode}>--</span>
+            <span className='control-bar__controller-separater'>/</span>
+            <span className='control-bar__controller-time'>{this.convertTimeFormat(duration)}</span>
+          </div>
+        )}
+
+        <div className={classNames('control-bar__controller-seek', { active: isSeekbarActive })} ref={this.setPlaySeekbarNode} />
       </div>
     );
   }
@@ -164,8 +183,13 @@ class PlaylistController extends React.PureComponent {
 
 class PlayControl extends React.PureComponent {
 
+  static contextTypes = {
+    intl: PropTypes.object.isRequired,
+  };
+
   static propTypes = {
-    accessToken: PropTypes.string.isRequired,
+    trackId: PropTypes.string,
+    accessToken: PropTypes.string,
     streamingAPIBaseURL: PropTypes.string.isRequired,
     isAdmin: PropTypes.bool,
     isTop: PropTypes.bool.isRequired,
@@ -203,6 +227,12 @@ class PlayControl extends React.PureComponent {
       this.initDecks();
     }
   }
+
+  componentWillReceiveProps = ({ trackId }) => {
+    if (!this.state.muted && trackId !== this.props.trackId) {
+      this.setState({ muted: true });
+    }
+  };
 
   componentDidUpdate (prevProps, prevState) {
     const { targetDeck } = this.state;
@@ -303,9 +333,9 @@ class PlayControl extends React.PureComponent {
     });
 
     // Animation用の遅延ローディング
-    setTimeout(()=>{
+    setTimeout(() => {
       this.setState({
-        isSeekbarActive:true,
+        isSeekbarActive: true,
         isLoadingArtwork: false,
         isPlaying: this.isDeckActive(),
       });
@@ -449,10 +479,20 @@ class PlayControl extends React.PureComponent {
 
   renderDeckQueueCaption(text) {
     const queueItem = this.getDeckFirstQueue();
-    const shareText = `いまみんなで一緒に${queueItem ? `「${queueItem.info}」` : '音楽'}を聞きながらトーク中♪ ${queueItem ? queueItem.link : ''}`;
+    const shareText = this.context.intl.formatMessage({
+      id: 'pawoo_music.play_control.share_text',
+      defaultMessage: 'Talking while listening to {info} with everyone♪ {link}',
+    }, {
+      info: queueItem ? (
+        this.context.intl.formatMessage({ id: 'pawoo_music.play_control.share_text.info', defaultMessage: '"{info}"' }, { info: queueItem.info })
+      ) : (
+        this.context.intl.formatMessage({ id: 'pawoo_music.play_control.share_text.info_default', defaultMessage: 'music' })
+      ),
+      link: queueItem ? queueItem.link : '',
+    });
     return (
       <div className='deck__queue-caption'>
-        <span>{text}</span>
+        <span>- {text} -</span>
         <div onClick={this.handleCancelOpenDeck} style={{ display: 'inline-block', marginLeft: '3px', verticalAlign: 'bottom' }}>
           <TweetButton text={shareText} url='https://music.pawoo.net/' hashtags='PawooMusic' />
         </div>
@@ -465,10 +505,16 @@ class PlayControl extends React.PureComponent {
       <li key={queue_item ? queue_item.id : `empty-queue-item_${i}`} className='deck__queue-item'>
         <div className='queue-item__main'>
           <div>
-            {!this.state.isOpen && i === 0 && this.renderDeckQueueCaption('- いまみんなで一緒に聞いている曲 -')}
+            {!this.state.isOpen && i === 0 && this.renderDeckQueueCaption(<FormattedMessage
+              id='pawoo_music.play_control.deck_queue_track'
+              defaultMessage='Songs that people are listening now'
+            />)}
             <div className='queue-item__metadata'>
               {this.queues.length === 0 && i === 0 ? (
-                <span>プレイリストに好きな曲を入れてね！</span>
+                <FormattedMessage
+                  id='pawoo_music.play_control.deck_queue_item-meta'
+                  defaultMessage='Put your favorite songs in the playlist!'
+                />
               ) : (queue_item && (
                 <span className='queue-item__metadata-title'>{queue_item.info.length > 40 ? `${queue_item.info.slice(0, 40)}……` : queue_item.info}</span>
               ))}
@@ -504,7 +550,6 @@ class PlayControl extends React.PureComponent {
     case 'soundcloud':
       return <SoundCloudArtwork muted={muted} volume={volume} timeOffset={timeOffset} sourceId={deckQueue.source_id} />;
     case 'pawoo-music':
-      return <VideoArtwork muted={muted} volume={volume} timeOffset={timeOffset} videoUrl={deckQueue.video_url} />;
     case 'booth':
     case 'apollo':
       return <AudioArtwork muted={muted} volume={volume} timeOffset={timeOffset} musicUrl={deckQueue.music_url} thumbnailUrl={deckQueue.thumbnail_url} />;
@@ -515,7 +560,7 @@ class PlayControl extends React.PureComponent {
 
   render () {
     const { isTop, isAdmin } = this.props;
-    const { isSp, playlist, targetDeck, deckList, deckSettings, offsetStartTime, muted, volume, isSeekbarActive, isOpen, timeOffset } = this.state;
+    const { isSp, playlist, targetDeck, deckList, deckSettings, offsetStartTime, muted, volume, isSeekbarActive, isOpen } = this.state;
     if (isSp || !targetDeck) {
       return null;
     }
@@ -534,20 +579,6 @@ class PlayControl extends React.PureComponent {
       'is-apollo': isApollo,
     });
 
-    let playerSeekBarStyle = {};
-    if (deckQueue) {
-      if (isSeekbarActive) {
-        playerSeekBarStyle = {
-          transition: `width ${isSeekbarActive ? (deckQueue.duration - timeOffset) : '0'}s linear`,
-        };
-      } else {
-        playerSeekBarStyle = {
-          transition: 'width 0s linear',
-          width: `${deckQueue.duration ? (timeOffset / deckQueue.duration) * 100 : 0}%`,
-        };
-      }
-    }
-
     return (
       <div className={playerClass}>
         <div className='player-control__control-bar'>
@@ -556,6 +587,7 @@ class PlayControl extends React.PureComponent {
             isTop={isTop}
             isAdmin={isAdmin}
             isActive={this.isDeckActive()}
+            isSeekbarActive={isSeekbarActive}
             muted={muted}
             duration={duration}
             volume={volume}
@@ -601,7 +633,10 @@ class PlayControl extends React.PureComponent {
                 )}
               </div>
               <div className='deck_queue-column deck__queue-column-list'>
-                {this.state.isOpen && this.renderDeckQueueCaption('- いまみんなで一緒に聞いているプレイリスト -')}
+                {this.state.isOpen && this.renderDeckQueueCaption(<FormattedMessage
+                  id='pawoo_music.play_control.deck_queue_playlist'
+                  defaultMessage='Playlist that people are listening now'
+                />)}
                 <ul className='deck__queue'>
                   {playlist.map(this.renderQueueItem)}
                   {!isTop && (
@@ -622,11 +657,7 @@ class PlayControl extends React.PureComponent {
               </div>
             </div>
           </div>
-          {!isTop && <TipsBalloonContainer id={2} style={{ left: '250px' }}>
-            チャンネルの切り替え
-          </TipsBalloonContainer>}
         </div>
-        <div className={classNames('player-seekbar', { active: isSeekbarActive })} style={playerSeekBarStyle} />
         <div className='player-control__overlay' onClick={this.handleClickOverlay} />
       </div>
     );

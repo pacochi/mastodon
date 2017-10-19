@@ -23,9 +23,13 @@ class Api::V1::FavouritesController < Api::BaseController
     cache_collection(
       Status.where(
         id: results.map(&:status_id)
-      ),
+      ).tap { |statuses| statuses.merge!(only_musics_scope) if params[:only_musics] },
       Status
     )
+  end
+
+  def only_musics_scope
+    Status.musics_only
   end
 
   def results
@@ -69,6 +73,6 @@ class Api::V1::FavouritesController < Api::BaseController
   end
 
   def pagination_params(core_params)
-    params.permit(:limit).merge(core_params)
+    params.permit(:limit, :only_musics).merge(core_params)
   end
 end

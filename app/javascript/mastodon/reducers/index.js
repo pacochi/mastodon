@@ -13,6 +13,7 @@ import media_attachments from './media_attachments';
 import relationships from './relationships';
 import search from './search';
 import notifications from './notifications';
+import height_cache from './height_cache';
 import settings from './settings';
 import status_lists from './status_lists';
 import cards from './cards';
@@ -21,6 +22,7 @@ import trend_tags from './trend_tags';
 import booth_items from './booth_items';
 import tips_balloon from './tips_balloon';
 import contexts from './contexts';
+import pawoo_music from '../../pawoo_music/reducers';
 
 export default combineReducers({
   timelines,
@@ -38,6 +40,7 @@ export default combineReducers({
   relationships,
   search,
   notifications,
+  height_cache,
   settings,
   cards,
   reports,
@@ -45,4 +48,5 @@ export default combineReducers({
   trend_tags,
   booth_items,
   tips_balloon,
+  pawoo_music,
 });

@@ -1,12 +1,13 @@
 # frozen_string_literal: true
 
 class Intent::StatusesController < ApplicationController
-  include HomeConcern
+  include TimelineConcern
+
+  before_action :authenticate_user!
+  before_action :set_initial_state_data, only: :new
+
+  layout 'timeline'
 
   def new
-    index
-    @appmode = 'intent'
   end
-
-  private :index
 end

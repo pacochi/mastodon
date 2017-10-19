@@ -17,7 +17,7 @@ RSpec.describe AboutController, type: :controller do
     end
 
     it 'returns http success' do
-      expect(response).to have_http_status(:success)
+      expect(response).to redirect_to root_url
     end
   end
 

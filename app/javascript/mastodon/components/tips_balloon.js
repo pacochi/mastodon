@@ -1,4 +1,6 @@
+import classNames from 'classnames';
 import React from 'react';
+import PropTypes from 'prop-types';
 import IconButton from './icon_button';
 
 // メモ: id 3まで使用
@@ -6,15 +8,19 @@ import IconButton from './icon_button';
 class TipsBalloon extends React.PureComponent {
 
   static propTypes = {
-    id: React.PropTypes.number.isRequired,
-    dismiss: React.PropTypes.bool.isRequired,
-    onDismiss: React.PropTypes.func.isRequired,
-    style: React.PropTypes.object,
-    children: React.PropTypes.node.isRequired,
+    id: PropTypes.number.isRequired,
+    dismiss: PropTypes.bool.isRequired,
+    onDismiss: PropTypes.func.isRequired,
+    style: PropTypes.object,
+    children: PropTypes.node.isRequired,
+    position: PropTypes.oneOf(['left', 'center']),
+    direction: PropTypes.oneOf(['bottom', 'top']),
   };
 
   static defaultProps = {
     style: {},
+    position: 'left',
+    direction: 'bottom',
   };
 
   handleDismiss = () => {
@@ -22,10 +28,12 @@ class TipsBalloon extends React.PureComponent {
   }
 
   render () {
-    return (!this.props.dismiss &&
-      <div className='tips-balloon' style={this.props.style}>
+    const { dismiss, style, children, position, direction } = this.props;
+
+    return !dismiss && (
+      <div className={classNames('tips-balloon', `position-${position}`, `direction-${direction}`)} style={style}>
         <div className='tips-balloon__content'>
-          {this.props.children}
+          {children}
         </div>
         <div className='tips-balloon__dismiss'>
           <IconButton icon='close' title='閉じる' onClick={this.handleDismiss} />

@@ -2,11 +2,11 @@
 
 module Admin
   class ScheduledStatusesController < BaseController
-    include HomeConcern
+    include TimelineConcern
+
+    before_action :set_initial_state_data, only: :index
 
     def index
-      @appmode = 'scheduledStatuses'
-      super
     end
   end
 end

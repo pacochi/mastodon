@@ -1,5 +1,5 @@
 import React from 'react';
-import IconButton from '../../../components/icon_button';
+import IconButton from '../../../../pawoo_music/components/icon_button';
 import PropTypes from 'prop-types';
 import { defineMessages, injectIntl } from 'react-intl';
 import { connect } from 'react-redux';
@@ -18,11 +18,6 @@ const makeMapStateToProps = () => {
   return mapStateToProps;
 };
 
-const iconStyle = {
-  height: null,
-  lineHeight: '27px',
-};
-
 @connect(makeMapStateToProps)
 @injectIntl
 export default class UploadButton extends ImmutablePureComponent {
@@ -30,7 +25,6 @@ export default class UploadButton extends ImmutablePureComponent {
   static propTypes = {
     disabled: PropTypes.bool,
     onSelectFile: PropTypes.func.isRequired,
-    style: PropTypes.object,
     resetFileKey: PropTypes.number,
     acceptContentTypes: ImmutablePropTypes.listOf(PropTypes.string).isRequired,
     intl: PropTypes.object.isRequired,
@@ -56,7 +50,7 @@ export default class UploadButton extends ImmutablePureComponent {
 
     return (
       <div className='compose-form__upload-button'>
-        <IconButton icon='camera' title={intl.formatMessage(messages.upload)} disabled={disabled} onClick={this.handleClick} className='compose-form__upload-button-icon' size={18} inverted style={iconStyle} />
+        <IconButton src='camera' title={intl.formatMessage(messages.upload)} disabled={disabled} onClick={this.handleClick} className='compose-form__upload-button-icon' />
         <input
           key={resetFileKey}
           ref={this.setRef}

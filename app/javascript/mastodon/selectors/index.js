@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import Immutable from 'immutable';
+import { initialState as composeInitialState } from '../reducers/compose';
 
 const getAccountBase         = (state, id) => state.getIn(['accounts', id], null);
 const getAccountCounters     = (state, id) => state.getIn(['accounts_counters', id], null);
@@ -84,4 +85,16 @@ export const getAccountGallery = createSelector([
   });
 
   return medias;
+});
+
+export const switchCompose = createSelector([
+  (_, props) => props.useModal,
+  state => state,
+  state => state.getIn(['compose', 'backup']),
+], (useModal, base, backup) => {
+  if (useModal) {
+    return backup ? base : base.set('compose', composeInitialState.set('privacy', base.getIn(['compose', 'default_privacy']))); // モーダルでバックアップがない場合は初期値を見せる
+  } else {
+    return backup ? base.set('compose', backup) : base;
+  }
 });

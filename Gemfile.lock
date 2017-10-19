@@ -59,6 +59,9 @@ GEM
       rails (>= 4.1.0, < 6.0.0)
       sass-rails (>= 3.2, < 7.0.0)
       type_attributes (>= 0.1.0, < 1.0.0)
+    after_commit_action (1.1.0)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
     airbrussh (1.3.0)
       sshkit (>= 1.6.1, != 1.7.0)
     annotate (2.7.2)
@@ -134,6 +137,10 @@ GEM
     colorize (0.8.1)
     concurrent-ruby (1.0.5)
     connection_pool (2.2.1)
+    counter_culture (1.8.2)
+      activerecord (>= 3.0.0)
+      activesupport (>= 3.0.0)
+      after_commit_action (~> 1.0)
     crack (0.4.3)
       safe_yaml (~> 1.0.0)
     crass (1.0.2)
@@ -551,8 +558,6 @@ GEM
       net-scp (>= 1.1.2)
       net-ssh (>= 2.8.0)
     statsd-instrument (2.1.2)
-    streamio-ffmpeg (3.0.2)
-      multi_json (~> 1.8)
     temple (0.8.0)
     terminal-table (1.8.0)
       unicode-display_width (~> 1.1, >= 1.1.1)
@@ -616,6 +621,7 @@ DEPENDENCIES
   capybara (~> 2.14)
   cld3 (~> 3.1)
   climate_control (~> 0.2)
+  counter_culture (~> 1.8)
   devise (~> 4.2)
   devise-two-factor (~> 3.0)
   doorkeeper (~> 4.2)
@@ -689,7 +695,6 @@ DEPENDENCIES
   spring-commands-rspec
   sprockets-rails (~> 3.2)
   statsd-instrument (~> 2.1)
-  streamio-ffmpeg
   twitter-text (~> 1.14)
   tzinfo-data (~> 1.2017)
   uglifier (~> 3.2)
@@ -700,4 +705,4 @@ RUBY VERSION
    ruby 2.4.1p111
 
 BUNDLED WITH
-   1.15.3
+   1.15.4

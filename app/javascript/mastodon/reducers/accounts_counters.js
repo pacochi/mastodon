@@ -48,11 +48,19 @@ import {
 import { STORE_HYDRATE } from '../actions/store';
 import Immutable from 'immutable';
 
-const normalizeAccount = (state, account) => state.set(account.id, Immutable.fromJS({
-  followers_count: account.followers_count,
-  following_count: account.following_count,
-  statuses_count: account.statuses_count,
-}));
+const normalizeAccount = (state, account) => {
+  if (!account) {
+    return state;
+  }
+
+  return state.set(account.id, Immutable.fromJS({
+    followers_count: account.followers_count,
+    following_count: account.following_count,
+    statuses_count: account.statuses_count,
+    tracks_count: account.tracks_count,
+    albums_count: account.albums_count,
+  }));
+};
 
 const normalizeAccounts = (state, accounts) => {
   accounts.forEach(account => {
@@ -89,6 +97,8 @@ export default function accountsCounters(state = initialState, action) {
       followers_count: item.get('followers_count'),
       following_count: item.get('following_count'),
       statuses_count: item.get('statuses_count'),
+      tracks_count: item.get('tracks_count'),
+      albums_count: item.get('albums_count'),
     })));
   case ACCOUNT_FETCH_SUCCESS:
   case NOTIFICATIONS_UPDATE:

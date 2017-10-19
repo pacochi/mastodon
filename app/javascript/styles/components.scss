@@ -18,7 +18,6 @@
   color: $primary-text-color;
   cursor: pointer;
   display: inline-block;
-  font-family: inherit;
   font-size: 14px;
   font-weight: 500;
   height: 36px;
@@ -264,76 +263,110 @@
 
 .compose-form__modifiers {
   color: $ui-base-color;
-  font-family: inherit;
   font-size: 14px;
   background: $simple-background-color;
   border-radius: 0 0 4px;
 }
 
 .compose-form__buttons-wrapper {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-}
+  display:          flex;
+  justify-content:  space-between;
+  position:         relative;
+  margin:           var(--verticalspace20);
 
-.compose-form__buttons {
-  padding: 10px;
-  background: darken($simple-background-color, 8%);
-  box-shadow: inset 0 5px 5px rgba($base-shadow-color, 0.05);
-  border-radius: 0 0 4px 4px;
-  display: flex;
+  .compose-form__buttons {
+    display: flex;
+    justify-content: center;
+    align-items: center;
 
-  .icon-button {
-    box-sizing: content-box;
-    padding: 0 3px;
+    .compose-form__buttons > div, .compose-form__buttons > button {
+      width:  var(--iconsize20);
+      height: var(--iconsize20);
+
+      .privacy-dropdown__value,
+      .compose-form__upload-button-icon {
+        font-size:  var(--iconsize10);
+        display:    block;
+        width:      100%;
+        height:     100%;
+
+      }
+
+      i {
+        display:  flex;
+        width:    100%;
+        height:   100%;
+        justify-content:  center;
+        align-items:      center;
+        text-align:       center;
+      }
+    }
+
+    .compose-form__sensitive-button {
+      display: none;
+
+      &.compose-form__sensitive-button--visible {
+        display: block;
+      }
+
+      .compose-form__sensitive-button__icon {
+        line-height: 27px;
+      }
+    }
+
+    .compose-form__upload-wrapper {
+      overflow: hidden;
+    }
+
+    .compose-form__uploads-wrapper {
+      display: flex;
+      padding: 5px;
+    }
+
+    .compose-form__upload {
+      flex: 1 1 0;
+      margin: 5px;
+    }
+
+    .compose-form__upload-thumbnail {
+      border-radius: 4px;
+      background-position: center;
+      background-size: cover;
+      background-repeat: no-repeat;
+      height: 100px;
+      width: 100%;
+    }
+
+    .compose-form__upload-cancel {
+      background-size: cover;
+      border-radius: 4px;
+      height: 100px;
+      width: 100px;
+    }
+  }
+
+  .compose-form__publish {
+    display: flex;
+    min-width: 0;
+
+    .character-counter__wrapper {
+      display:      flex;
+      align-items:  center;
+      font-size:    var(--text10-font);
+      width:        calc(var(--grid) * 5);
+    }
+
+    .compose-form__publish-button-wrapper {
+      button {
+        padding:  var(--padding5);
+        display:  block;
+        width:    calc(var(--grid) * 12);
+      }
+    }
   }
 }
 
-.compose-form__upload-button-icon {
-  line-height: 27px;
-}
 
-.compose-form__sensitive-button {
-  display: none;
-
-  &.compose-form__sensitive-button--visible {
-    display: block;
-  }
-
-  .compose-form__sensitive-button__icon {
-    line-height: 27px;
-  }
-}
-
-.compose-form__upload-wrapper {
-  overflow: hidden;
-}
-
-.compose-form__uploads-wrapper {
-  display: flex;
-  padding: 5px;
-}
-
-.compose-form__upload {
-  flex: 1 1 0;
-  margin: 5px;
-}
-
-.compose-form__upload-thumbnail {
-  border-radius: 4px;
-  background-position: center;
-  background-size: cover;
-  background-repeat: no-repeat;
-  height: 100px;
-  width: 100%;
-}
-
-.compose-form__upload-cancel {
-  background-size: cover;
-  border-radius: 4px;
-  height: 100px;
-  width: 100px;
-}
 
 .compose-form__label {
   display: block;
@@ -377,16 +410,6 @@
       right: 8px;
     }
   }
-}
-
-.compose-form__publish {
-  display: flex;
-  min-width: 0;
-}
-
-.compose-form__publish-button-wrapper {
-  overflow: hidden;
-  padding-top: 10px;
 }
 
 .emojione {
@@ -673,9 +696,19 @@
   flex-direction: column;
   height: 100%;
 
-  > #mastodon, > .scrollable {
+  > #pawoo-music-scheduled-statuses, > .scrollable {
     flex: 1;
     min-height: 0;
+  }
+}
+
+.settigs-wrapper {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+
+  > #pawoo-music-settings {
+    flex: 1;
   }
 }
 
@@ -1552,7 +1585,6 @@
 .column-header__back-button {
   background: lighten($ui-base-color, 4%);
   border: 0;
-  font-family: inherit;
   color: $ui-highlight-color;
   cursor: pointer;
   flex: 0 0 auto;
@@ -1738,7 +1770,6 @@
   margin: 0;
   color: $ui-base-color;
   padding: 10px;
-  font-family: inherit;
   font-size: 14px;
   resize: vertical;
   border: 0;
@@ -1820,21 +1851,6 @@
   }
 }
 
-.character-counter__wrapper {
-  line-height: 36px;
-  margin: 0 8px;
-  padding-top: 10px;
-}
-
-.character-counter {
-  cursor: default;
-  font-size: 16px;
-}
-
-.character-counter--over {
-  color: $warning-red;
-}
-
 .getting-started__wrapper {
   position: relative;
   flex: 0 0 auto;
@@ -1867,7 +1883,6 @@
   border-bottom: 2px solid $ui-primary-color;
   box-sizing: border-box;
   display: block;
-  font-family: inherit;
   margin-bottom: 10px;
   padding: 7px 0;
   width: 100%;
@@ -2180,7 +2195,6 @@ button.icon-button.active i.fa-retweet {
 .text-btn {
   display: inline-block;
   padding: 0;
-  font-family: inherit;
   font-size: inherit;
   color: inherit;
   border: 0;
@@ -2289,28 +2303,6 @@ button.icon-button.active i.fa-retweet {
   .text-btn {
     margin-bottom: 15px;
   }
-}
-
-.modal-container__nav {
-  align-items: center;
-  background: rgba($base-overlay-background, 0.5);
-  box-sizing: border-box;
-  color: $primary-text-color;
-  cursor: pointer;
-  display: flex;
-  font-size: 24px;
-  height: 100%;
-  padding: 30px 15px;
-  position: absolute;
-  top: 0;
-}
-
-.modal-container__nav--left {
-  left: -61px;
-}
-
-.modal-container__nav--right {
-  right: -61px;
 }
 
 .account--follows-info {
@@ -2536,7 +2528,6 @@ button.icon-button.active i.fa-retweet {
     font-size: 14px;
     font-weight: 400;
     padding: 7px 9px;
-    font-family: inherit;
     display: block;
     width: 100%;
     background: rgba($ui-secondary-color, 0.3);
@@ -2844,7 +2835,6 @@ button.icon-button.active i.fa-retweet {
   border: none;
   padding: 10px;
   padding-right: 30px;
-  font-family: inherit;
   background: $ui-base-color;
   color: $ui-primary-color;
   font-size: 14px;
@@ -2961,160 +2951,6 @@ button.icon-button.active i.fa-retweet {
   }
 }
 
-.announcements {
-  margin-bottom: 10px;
-  @media screen and (max-width: 1024px) {
-    padding: 0 10px;
-  }
-
-  li {
-    display: flex;
-    padding: 10px;
-    color: $ui-base-color;
-    background: darken($primary-text-color, 8%);
-    border-radius: 4px;
-
-    & + li {
-      margin-top: 10px;
-    }
-  }
-}
-
-.announcements__icon {
-  flex: 0 0 auto;
-  border-radius: 50%;
-  display: inline-block;
-  overflow: hidden;
-  width: 30px;
-  height: 30px;
-  border: solid 1px #929292;
-
-  img {
-    width: 100%;
-    height: 100%;
-  }
-}
-
-.announcements__body {
-  width: 100%;
-
-  p {
-    padding-left: 5px;
-    font-size: 12px;
-  }
-}
-
-.announcements__link {
-  display: inline-block;
-  color: $ui-base-color;
-  text-decoration: none;
-  padding: 1px 10px 0;
-  border: solid 1px $ui-base-color;
-  font-size: 10px;
-  font-weight: 600;
-  border-radius: 4px;
-  margin-top: 5px;
-  margin-right: 3px;
-}
-
-.announcements__body__dismiss {
-  float: right;
-}
-
-.trend-tags {
-  background: $ui-base-color;
-  .suggestion-tags__name {
-    font-size: 14px;
-  }
-  .suggestion-tags__description {
-    font-size: 12px;
-  }
-}
-
-.trend-tags__header {
-  display: flex;
-  align-items: center;
-  padding: 15px;
-  background: lighten($ui-base-color, 4%);
-  font-size: 16px;
-}
-
-.trend-tags__header__icon {
-  width: 20px;
-  margin-right: 7px;
-}
-
-.trend-tags__header__name{
-  flex: 1;
-}
-
-.trend-tags__header__description{
-  color: rgba(#FFF, 0.6);
-  font-size: 12px;
-}
-
-.suggestion-tags__body li {
-  padding: 10px;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid lighten($ui-base-color, 8%);
-}
-
-.suggestion-tags__content {
-  flex: 1;
-}
-
-.suggestion-tags__name {
-  font-size: 15px;
-  color: #FFF;
-  text-decoration: none;
-  &:hover{
-    color: rgba(#FFF, 0.9);
-    text-decoration: underline;
-  }
-}
-
-.suggestion-tags__description {
-  position: relative;
-  font-size: 14px;
-  color: rgba(#FFF, 0.5);
-  &.suggestion {
-    padding-left: 18px;
-    &:before{
-      content: '';
-      position: absolute;
-      display: block;
-      left: 0px;
-      top: 2px;
-      width: 14px;
-      height: 14px;
-      background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAYAAABXAvmHAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAmdJREFUeNrsWo1xgjAUBq4DMAIbFCeoG0g3wAlqJxAnYAR0grJB7QTSCWADcYI0r/e8YnwJJHKYXH13MR4n8H35ee97LwYeGmMs5u2D2W+AMfa6xi+kzD1LAbuPbA6emzYL+Mfac9fWMAPMYQJe4DluDwL3tqcRntHyVmE7Yd8Kv5lj/9L5PoqZbmIAueNt7/t+pXszfyWQWPAGvjycikCDoLccdEOAihHMnCDbyIhiQAJXHhkxGBDx6nPUE+4LMYJDaD8OeA78priSAX/PykzCsWcAPEIgt9gnPIdaWgMHo5dADqNCvCAfUcsA0EQyQAdTAjU1xRrLzViUESSOugQKatQnIMDQK105BR0CKSGvVxMSOEqWbDaEwFxyUzYhgd99J5n1WklAsUmnJsAks6BMtgIhoKzuLG1S4lpJSJNLMYc+ubBAmy2upILvA/h9nxp9s0RcyoTel5QAjv7JFnksiUOVSk7nlkn8UJdAYnvSAvtAJpofKeVE+yJ0iUBDXItdIdBQ2Z4qj7aNwH5ogLOVwI7KDVxZQlDhoGZg7YIXAr2zlETl1AUC7+LmRdfZKzBtILDk4LfE9Vy19m0g0MrAQ37et3RMCWxVyYWmu5yJ4LHANRh8X5qYKe5JsIpx0EzcC1nZBotatW4OqlWdhhECZchbialet1h7DvmhZm00QleZGs2lzgx0jjlXVGlQ873JGMe6JucDCTaoYDQ4wt/Yt1QwEirXz9iHY3iCWw84ImxJB+wjH/h3BEqH8ZdAYOMwgU2A/nkphPgNRl3RXhVJxz00VHXh6tAvF1S9Xgj31vzd5keAAQDQejKAf+qEPAAAAABJRU5ErkJggg==');
-      background-repeat: no-repeat;
-      background-position: center center;
-      background-size: cover;
-      opacity: 0.5;
-    }
-  }
-}
-
-.suggestion-tags__button {
-  color: lighten($ui-base-color, 13%);
-  background: lighten($ui-base-color, 33%);
-  border: 0;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  padding: 0 10px;
-  height: 35px;
-  margin-left: 6px;
-
-  &:hover,
-  &:focus {
-    color: lighten($ui-base-color, 8%);
-    background: lighten($ui-base-color, 26%);
-  }
-}
-
 .modal-root__overlay {
   position: absolute;
   top: 0;
@@ -3150,32 +2986,18 @@ button.icon-button.active i.fa-retweet {
   z-index: 9999;
 }
 
-.media-modal {
-  max-width: 80vw;
-  max-height: 80vh;
-  position: relative;
-
-  img,
-  canvas,
-  video {
-    max-width: 80vw;
-    max-height: 80vh;
-    width: auto;
-    height: auto;
-  }
-
-  img,
-  canvas {
-    display: block;
-    background: url('../images/void.png') repeat;
-  }
-}
-
-.media-modal__close {
+.modal-container__nav {
+  align-items: center;
+  background: rgba($base-overlay-background, 0.5);
+  box-sizing: border-box;
+  color: $primary-text-color;
+  cursor: pointer;
+  display: flex;
+  font-size: 24px;
+  height: 100%;
+  padding: 30px 15px;
   position: absolute;
-  right: 4px;
-  top: 4px;
-  z-index: 100;
+  top: 0;
 }
 
 .onboarding-modal {

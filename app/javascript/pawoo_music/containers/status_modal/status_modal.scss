@@ -1,0 +1,24 @@
+.status-modal {
+  display: inline-block;
+
+  .gallery-column {
+    align-items: center;
+
+    .status:not(.highlight) {
+      opacity: 0.6;
+    }
+
+    .track-status, .status {
+      & + .status {
+        margin-top: 30px;
+      }
+    }
+
+    .track-status {
+      box-sizing: border-box;
+      margin-top: 0;
+      padding: var(--padding15);
+      width: var(--width-gallery);
+    }
+  }
+}

@@ -22,12 +22,15 @@
 #  reblogs_count          :integer          default(0), not null
 #  language               :string
 #  conversation_id        :integer
+#  music_type             :string
+#  music_id               :integer
 #
 
 class Status < ApplicationRecord
   include Paginable
   include Streamable
   include Cacheable
+  include StatusPawooMusicConcern
   include StatusThreadingConcern
   include StatusSearchable
 
@@ -78,7 +81,8 @@ class Status < ApplicationRecord
   scope :not_excluded_by_account, ->(account) { where.not(account_id: account.excluded_from_timeline_account_ids) }
   scope :not_domain_blocked_by_account, ->(account) { account.excluded_from_timeline_domains.blank? ? left_outer_joins(:account) : left_outer_joins(:account).where('accounts.domain IS NULL OR accounts.domain NOT IN (?)', account.excluded_from_timeline_domains) }
 
-  cache_associated :application, :media_attachments, :tags, :stream_entry, :pixiv_cards, :pinned_status, mentions: { account: :oauth_authentications }, reblog: [{ account: :oauth_authentications }, :application, :stream_entry, :tags, :media_attachments, :pixiv_cards, :pinned_status, mentions: { account: :oauth_authentications }], thread: { account: :oauth_authentications }, account: :oauth_authentications
+  cache_associated :application, :stream_entry, :tags, :media_attachments, :pixiv_cards, :pinned_status, :music, account: :oauth_authentications, mentions: { account: :oauth_authentications }, thread: { account: :oauth_authentications },
+    reblog: [:application, :stream_entry, :tags, :media_attachments, :pixiv_cards, :pinned_status, :music, account: :oauth_authentications, mentions: { account: :oauth_authentications }]
 
   def postable_to_es?
     public_visibility? && local?
@@ -145,14 +149,14 @@ class Status < ApplicationRecord
                                                    .published
     end
 
-    def as_public_timeline(account = nil, local_only = false)
-      query = timeline_scope(local_only).without_replies
+    def as_public_timeline(account = nil, local_only = false, musics_only = false)
+      query = timeline_scope(local_only, musics_only).without_replies
 
       apply_timeline_filters(query, account, local_only)
     end
 
-    def as_tag_timeline(tag, account = nil, local_only = false)
-      query = timeline_scope(local_only).tagged_with(tag)
+    def as_tag_timeline(tag, account = nil, local_only = false, musics_only = false)
+      query = timeline_scope(local_only, musics_only).tagged_with(tag)
 
       apply_timeline_filters(query, account, local_only)
     end
@@ -212,8 +216,9 @@ class Status < ApplicationRecord
 
     private
 
-    def timeline_scope(local_only = false)
+    def timeline_scope(local_only = false, musics_only = false)
       starting_scope = local_only ? Status.local_only : Status
+      starting_scope = starting_scope.musics_only if musics_only
       starting_scope
         .with_public_visibility
         .without_reblogs

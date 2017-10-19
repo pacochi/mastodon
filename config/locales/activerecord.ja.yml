@@ -17,6 +17,10 @@ ja:
         file: ファイル
         file_content_type: Content-Type
         file_file_size: ファイルサイズ
+      track:
+        artist: アーティスト
+        music: 楽曲ファイル
+        title: タイトル
       user:
         email: メールアドレス
     errors:
@@ -25,6 +29,19 @@ ja:
           attributes:
             username:
               invalid: アルファベット・数値・アンダーバー(_)で入力してください
+        albums:
+          attributes:
+            image:
+              in_between: 画像ファイルのサイズは:max未満である必要があります
+              invalid: 画像ファイルの形式が無効です
+        track:
+          attributes:
+            music:
+              in_between: 音楽ファイルのサイズは:max未満である必要があります
+              invalid: 音楽ファイルの形式が無効です
+            image:
+              in_between: 画像ファイルのサイズは:max未満である必要があります
+              invalid: 画像ファイルの形式が無効です
         status:
           attributes:
             reblog:

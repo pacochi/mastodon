@@ -37,7 +37,7 @@ class Settings::PreferencesController < ApplicationController
       :setting_boost_modal,
       :setting_delete_modal,
       :setting_auto_play_gif,
-      notification_emails: %i(follow follow_request reblog favourite mention digest),
+      notification_emails: %i(follow follow_request reblog favourite mention digest video_preparation_error video_preparation_success),
       interactions: %i(must_be_follower must_be_following)
     )
   end

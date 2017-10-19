@@ -47,11 +47,23 @@ import { STORE_HYDRATE } from '../actions/store';
 import Immutable from 'immutable';
 
 const normalizeAccount = (state, account) => {
+  if (!account) {
+    return state;
+  }
+
   account = { ...account };
 
   delete account.followers_count;
   delete account.following_count;
   delete account.statuses_count;
+  delete account.tracks_count;
+  delete account.albums_count;
+
+  // media_attachmentsが設定されていない場合は保持する
+  const mediaAttachments = state.getIn([account.id, 'media_attachments']);
+  if (!account.media_attachments && mediaAttachments) {
+    account.media_attachments = mediaAttachments.toJS();
+  }
 
   return state.set(account.id, Immutable.fromJS(account));
 };

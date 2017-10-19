@@ -21,6 +21,7 @@ class StreamEntriesController < ApplicationController
           # TODO: Status以外のactivityが増えたら対応の必要あり
           redirect_to short_account_status_url(@stream_entry.account, @stream_entry.status)
         end
+        @status = @stream_entry.status
       end
 
       format.atom do
@@ -34,7 +35,12 @@ class StreamEntriesController < ApplicationController
     response.headers['X-Frame-Options'] = 'ALLOWALL'
     return gone if @stream_entry.activity.nil?
 
-    render layout: 'embedded'
+    if @stream_entry.status.music.is_a?(Track)
+      @status = @stream_entry.status
+      render 'musicvideo', layout: 'embedded'
+    else
+      render layout: 'embedded'
+    end
   end
 
   private

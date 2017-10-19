@@ -46,18 +46,16 @@ class QueueItem
       cache = find_cache('pawoo-music', status_id)
       return cache if cache
 
-      video = MediaAttachment.video.joins(:status).find_by(statuses: { id: status_id, visibility: [:public, :unlisted] })
-      raise Mastodon::MusicSourceFetchFailedError unless video&.music_info
-
-      video_url = full_asset_url(video.file.url(:original))
+      status = Status.find_by(id: status_id, music_type: 'Track', visibility: [:public, :unlisted])
+      raise Mastodon::MusicSourceFetchFailedError if status.nil?
 
       item = new(
-        info: "#{video.music_info['artist']} - #{video.music_info['title']}",
-        thumbnail_url: nil,
-        music_url: nil,
-        video_url: video_url,
+        info: status.music.display_title,
+        thumbnail_url: status.music.video_image.present? ? full_asset_url(status.music.video_image.url(:original)) : ApplicationController.helpers.asset_pack_path('pawoo_music/default_artwork.png', protocol: :request),
+        music_url: full_asset_url(status.music.music.url(:original)),
+        video_url: nil,
         link: link,
-        duration: video.music_info['duration'],
+        duration: status.music.duration,
         source_type: 'pawoo-music',
         source_id: status_id
       )

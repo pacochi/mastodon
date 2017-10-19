@@ -2,6 +2,7 @@ import React from 'react';
 import Dropdown, { DropdownTrigger, DropdownContent } from 'react-simple-dropdown';
 import PropTypes from 'prop-types';
 import { injectIntl, defineMessages } from 'react-intl';
+import IconButton from '../../../../pawoo_music/components/icon_button';
 
 const messages = defineMessages({
   days: { id: 'time_limit.days', defaultMessage: '{days, number} {days, plural, one {day} other {days}} later' },
@@ -10,12 +11,6 @@ const messages = defineMessages({
   select_time_limit: { id: 'time_limit.select_time_limit', defaultMessage: 'Specify the time of automatic disappearance (Beta)' },
   time_limit_note: { id: 'time_limit.time_limit_note', defaultMessage: 'Note: If specified, it will not be delivered to external instances.' },
 });
-
-const dropdownStyle = {
-  position: 'absolute',
-  right: '3px',
-  top: '35px',
-};
 
 @injectIntl
 export default class TimeLimitDropdown extends React.PureComponent {
@@ -48,9 +43,9 @@ export default class TimeLimitDropdown extends React.PureComponent {
     ];
 
     return (
-      <Dropdown className='time-limit-dropdown' ref={this.setRef} style={dropdownStyle}>
+      <Dropdown className='time-limit-dropdown' ref={this.setRef}>
         <DropdownTrigger className='icon-button inverted' title={intl.formatMessage(messages.select_time_limit)}>
-          <i className='fa fa-fw fa-clock-o' aria-hidden='true' />
+          <IconButton src='clock' className='clickable' strokeWidth={2} />
         </DropdownTrigger>
 
         <DropdownContent className='dropdown__left'>

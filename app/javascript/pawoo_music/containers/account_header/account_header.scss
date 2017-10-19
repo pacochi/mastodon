@@ -1,0 +1,114 @@
+.sp .account-header-pm .cover {
+  height: calc(var(--grid) * 52);
+}
+
+.account-header-pm {
+  display:            flex;
+  flex-direction:     column;
+  background-color:   var(--color1);
+
+  align-items: center;
+
+  .cover {
+    width: var(--width-gallery);
+    height: calc(var(--grid) * 49);
+    background-color: var(--textcolor);
+    background-size: cover;
+
+    .cover-mask {
+      box-sizing: border-box;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
+      padding-top: calc(var(--grid) * 12);
+    }
+
+    .avatar {
+      margin: 0 auto var(--padding20);
+    }
+
+    .display-name {
+      display: block;
+      font-size: var(--text40-font);
+      line-height: 1;
+      font-weight: bold;
+
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      color: var(--color1);
+    }
+
+    .acct {
+      font-size: var(--text10-font);
+      line-height: 1;
+      color: var(--color1);
+    }
+
+    .account--follows-info {
+      font-size: var(--text10-font);
+      line-height: 1;
+      color: var(--color2);
+    }
+
+  }
+
+  .content {
+    word-break: break-all;
+    width: calc(var(--width-gallery) - var(--grid) * 6);
+
+    .info {
+
+      .note {
+        margin:         var(--verticalspace20);
+        font-size:      var(--text20-font);
+        line-height:    var(--text20-line);
+      }
+
+      .action-buttons {
+        display: flex;
+        margin-top: -16px;
+        height: 24px;
+        justify-content: center;
+
+        ul {
+          display:    flex;
+          justify-content: flex-end;
+
+          li {
+            margin: var(--rightspace5);
+            width:  var(--iconsize20);
+          }
+        }
+      }
+    }
+  }
+
+  .tabs {
+    display: flex;
+    margin: var(--verticalspace25);
+    font-weight: bold;
+    justify-content: center;
+
+    @media screen and(max-width: 980px) {
+      font-size:      var(--text10-font);
+      line-height:    var(--text10-line);
+    }
+
+    @media screen and(min-width: 981px) {
+      font-size:      var(--text20-font);
+      line-height:    var(--text20-line);
+    }
+
+    a {
+      margin: var(--rightspace10);
+      padding: 0 calc(var(--grid) * 2) var(--grid);
+
+      &.active {
+        display:        block;
+
+        border-bottom:  3px solid var(--strong1);
+        color:          var(--strong1);
+      }
+    }
+  }
+}

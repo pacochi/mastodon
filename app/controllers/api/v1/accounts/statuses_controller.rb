@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 class Api::V1::Accounts::StatusesController < Api::BaseController
-  before_action -> { doorkeeper_authorize! :read }
   before_action :set_account
   after_action :insert_pagination_headers
 
@@ -30,6 +29,9 @@ class Api::V1::Accounts::StatusesController < Api::BaseController
   def account_statuses
     default_statuses.tap do |statuses|
       statuses.merge!(only_media_scope) if params[:only_media]
+      statuses.merge!(only_musics_scope) if params[:only_musics]
+      statuses.merge!(only_tracks_scope) if params[:only_tracks]
+      statuses.merge!(only_albums_scope) if params[:only_albums]
       statuses.merge!(no_replies_scope) if params[:exclude_replies]
     end
   end
@@ -50,6 +52,18 @@ class Api::V1::Accounts::StatusesController < Api::BaseController
     Status.where(id: account_media_status_ids)
   end
 
+  def only_musics_scope
+    Status.musics_only.without_reblogs
+  end
+
+  def only_tracks_scope
+    Status.tracks_only.without_reblogs
+  end
+
+  def only_albums_scope
+    Status.albums_only.without_reblogs
+  end
+
   def account_media_status_ids
     @account.media_attachments.attached.where(type: :video).reorder(nil).select(:status_id).distinct
   end
@@ -59,7 +73,7 @@ class Api::V1::Accounts::StatusesController < Api::BaseController
   end
 
   def pagination_params(core_params)
-    params.permit(:limit, :only_media, :exclude_replies).merge(core_params)
+    params.permit(:limit, :only_media, :only_musics, :only_tracks, :only_albums, :exclude_replies).merge(core_params)
   end
 
   def insert_pagination_headers

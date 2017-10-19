@@ -1,0 +1,38 @@
+.media-modal {
+  max-width: 80vw;
+  max-height: 80vh;
+  position: relative;
+
+  img,
+  canvas,
+  video {
+    max-width: 80vw;
+    max-height: 80vh;
+    width: auto;
+    height: auto;
+  }
+
+  img,
+  canvas {
+    display: block;
+    background: url('../../../images/void.png') repeat;
+  }
+}
+
+.modal-container__nav--left {
+  float: left;
+}
+
+.modal-container__nav--right {
+  float: right;
+}
+
+.modal-container__nav--right,
+.modal-container__nav--left {
+  margin: var(--verticalspace20);
+
+  svg {
+    stroke: var(--color1);
+    stroke-width: 2;
+  }
+}

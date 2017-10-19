@@ -1,7 +1,7 @@
 import api from '../api';
 
 import { openModal } from './modal';
-import { addScheduledStatuses } from './schedules';
+import { addScheduledStatuses } from '../../pawoo_music/actions/schedules';
 import { updateTimeline } from './timelines';
 
 import * as emojione from 'emojione';
@@ -42,6 +42,11 @@ export const COMPOSE_TAG_INSERT = 'COMPOSE_TAG_INSERT';
 
 export const COMPOSE_FILE_KEY_RESET = 'COMPOSE_FILE_KEY_RESET';
 
+export const COMPOSE_BACKUPDATA_SAVE = 'COMPOSE_BACKUPDATA_SAVE';
+export const COMPOSE_BACKUPDATA_SAVE_AND_CLEAR = 'COMPOSE_BACKUPDATA_SAVE_AND_CLEAR';
+export const COMPOSE_BACKUPDATA_RESTORE = 'COMPOSE_BACKUPDATA_RESTORE';
+export const COMPOSE_BACKUPDATA_RESET = 'COMPOSE_BACKUPDATA_RESET';
+
 export const SELECT_MUSIC_FILE_FAIL = 'SELECT_MUSIC_FILE_FAIL';
 
 export function changeCompose(text) {
@@ -51,16 +56,13 @@ export function changeCompose(text) {
   };
 };
 
-export function replyCompose(status, router) {
-  return (dispatch, getState) => {
+export function replyCompose(status) {
+  return (dispatch) => {
     dispatch({
       type: COMPOSE_REPLY,
       status: status,
     });
-
-    if (!getState().getIn(['compose', 'mounted'])) {
-      router.push('/statuses/new');
-    }
+    dispatch(openModal('STATUS_FORM', {}));
   };
 };
 
@@ -70,16 +72,20 @@ export function cancelReplyCompose() {
   };
 };
 
-export function mentionCompose(account, router) {
-  return (dispatch, getState) => {
+export function mentionCompose(account) {
+  return (dispatch) => {
     dispatch({
       type: COMPOSE_MENTION,
       account: account,
     });
+    dispatch(openModal('STATUS_FORM', {}));
+  };
+};
 
-    if (!getState().getIn(['compose', 'mounted'])) {
-      router.push('/statuses/new');
-    }
+export function openModalFormCompose() {
+  return (dispatch) => {
+    dispatch(saveAndClearBackupData());
+    dispatch(openModal('STATUS_FORM', {}));
   };
 };
 
@@ -423,5 +429,29 @@ export function selectMusicFileFail(error) {
   return {
     type: SELECT_MUSIC_FILE_FAIL,
     error: error,
+  };
+};
+
+export function saveBackupData() {
+  return {
+    type: COMPOSE_BACKUPDATA_SAVE,
+  };
+};
+
+export function saveAndClearBackupData() {
+  return {
+    type: COMPOSE_BACKUPDATA_SAVE_AND_CLEAR,
+  };
+};
+
+export function restoreBackupData() {
+  return {
+    type: COMPOSE_BACKUPDATA_RESTORE,
+  };
+};
+
+export function resetBackupData() {
+  return {
+    type: COMPOSE_BACKUPDATA_RESET,
   };
 };

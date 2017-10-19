@@ -1,0 +1,315 @@
+@font-face {
+  font-family:    'Noto-Emoji';
+  src:    url('../../../fonts/noto-emoji/Noto-Emoji.ttf.woff'          )  format('woff'),
+  url('../../../fonts/noto-emoji/Noto-Emoji.ttf.svg#Noto-Emoji')  format('svg'),
+  url('../../../fonts/noto-emoji/Noto-Emoji.ttf.eot'           ),
+  url('../../../fonts/noto-emoji/Noto-Emoji.ttf.eot?#iefix'    )  format('embedded-opentype');
+  font-weight:    normal;
+  font-style:     normal;
+}
+
+
+
+// ------------------------------------------------------
+//  CSS Vars
+body {
+  // Color Scheme
+  --textcolor:        #313131;
+  --linkcolor:        #9B9B9B;
+
+  --strong1:          #D0021B;
+  --strong2:          #000000;
+
+  --color1:           #ffffff;
+  --color2:           #F3F3F3;
+  --color3:           #d0d0d0;
+
+  --tootcolor:        #2495DB;
+
+
+  // Basic Grid
+  --grid:             4px;
+  --minus-grid:       -4px;
+
+
+  // Vertical Spaces for 'margin' and 'padding'
+  --verticalspace10:  calc(var(--grid) * 1)  0 0 0;
+  --verticalspace20:  calc(var(--grid) * 2)  0 0 0;
+  --verticalspace25:  calc(var(--grid) * 3)  0 0 0;
+  --verticalspace30:  calc(var(--grid) * 6)  0 0 0;
+  --verticalspace40:  calc(var(--grid) * 16) 0 0 0;
+
+  --verticalspace20-both: calc(var(--grid) * 2) 0;
+  --verticalspace30-both: calc(var(--grid) * 4) 0;
+
+
+  // Horizontal Spaces for 'margin' and 'padding'
+  --rightspace5:      0 calc(var(--grid) * 1) 0 0;
+  --rightspace10:     0 calc(var(--grid) * 2) 0 0;
+  --rightspace15:     0 calc(var(--grid) * 3) 0 0;
+
+
+  // 'padding'
+  --padding5:         calc(var(--grid) * 1);
+  --padding10:        calc(var(--grid) * 2);
+  --padding15:        calc(var(--grid) * 3);
+  --padding20:        calc(var(--grid) * 4);
+  --padding30:        calc(var(--grid) * 6);
+  --padding40:        calc(var(--grid) * 8);
+  --padding50:        calc(var(--grid) * 16);
+  --padding-dropdown-option:  calc(var(--grid) * 2) calc(var(--grid) * 4);
+
+
+  // 'font-size' and 'line-height'
+  --text10-font:      12px;
+  --text10-line:      calc(var(--grid) * 4);
+
+  --text20-font:      14px;
+  --text20-line:      calc(var(--grid) * 5);
+
+  --text30-font:      16px;
+  --text30-line:      calc(var(--grid) * 5);
+
+  --text40-font:      18px;
+  --text40-line:      calc(var(--grid) * 6);
+
+  --text50-font:      25px;
+  --text50-line:      calc(var(--grid) * 8);
+
+  --iconsize10:       calc(var(--grid) * 4);
+  --iconsize13:       calc(var(--grid) * 4.5);
+  --iconsize15:       calc(var(--grid) * 5);
+  --iconsize20:       calc(var(--grid) * 6);
+  --iconsize30:       calc(var(--grid) * 8);
+  --iconsize35:       calc(var(--grid) * 10);
+  --iconsize40:       calc(var(--grid) * 12);
+
+
+  // 'radius'
+  --radius:           8px;
+  --radius-big:       16px;
+
+
+  // dropshadow
+  --shadow:           0 2px 64px 0 rgba(0, 0, 0, .1);
+  --shadow-strong:    0 2px 64px 0 rgba(0, 0, 0, .5);
+
+  --shadow2:          0 2px 16px 0 rgba(0, 0, 0, .15);
+
+
+  // hover action
+  --hover-opacity:    0.2;
+  --hover-transition: 0.25s;
+  --hover-timing: cubic-bezier(0, 0.97, 0.46, 1.33);
+
+
+  // lightbox
+  --lightbox-opacity: 0.5;
+  --lightbox-width:   100vw;
+  --lightbox-height:  100vh;
+
+
+  // z-indexes
+  --z-index-spoiler: 10;
+  --z-index-small-overlay: 10;
+  --z-index-dropdown: 50;
+  --z-index-navigation: 100;
+  --z-index-lightbox_and-icon: 1000;
+  --z-index-playlist: 5000;
+  --z-index-playlist-component: 5001;
+  --z-index-playlist-tooltip: 5002;
+  --z-index-snackbar: 10000;
+}
+
+
+
+// ------------------------------------------------
+
+body.app-body {
+  display:    block;
+  width:      100%;
+  height:     100vh;
+
+  color:            var(--textcolor);
+  background-color: var(--color1);
+  font-size:        var(--text30-font);
+  line-height:      var(--text30-line);
+
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+a, a:link, a:visited {
+  color:              var(--linkcolor);
+  text-decoration:    none;
+  cursor:             pointer;
+}
+
+a:hover {
+  color:          var(--tootcolor);
+}
+
+.app {
+  display:    block;
+  width:      100%;
+  height:     100vh;
+
+  // huge icon size
+  --iconsize50:           calc(var(--grid) * 15);
+
+  // block width and height
+  --width-globalnavi:     calc(var(--grid) * 50);
+  --width-lobby:          calc(var(--grid) * 80);
+  --width-gallery-view:   calc(100vw - var(--grid) * 130);
+  --width-gallery:        calc(var(--grid) * 120);
+
+  --width-ago:            calc(var(--grid) * 6);
+  --width-contextmenu:    calc(var(--grid) * 46);
+  --height-deck:          56px;
+
+  .app-center {
+    overflow: hidden;
+    height: calc(100% - var(--height-deck));
+  }
+
+  .app-bottom {
+    z-index: var(--z-index-navigation);
+    height: var(--height-deck);
+
+    // デッキフィールドだよとわかりやすくするための、pawoo-team 内部での指示用の色。
+    // TODO: 本番でこの色つかわないでね〜〜。
+    background-color:   var(--strong1);
+    color:              var(--color1);
+  }
+
+  .scrollarea .scrollbar-container {
+    opacity: 0;
+  }
+}
+
+
+// ----------------------------------------------------------------------------------------
+//  SP
+.app.sp {
+  display: block;
+
+  // huge icon size
+  --iconsize50:           calc(var(--grid) * 20);
+
+  // block width and height
+  --width-globalnavi:     100vw;
+  --width-lobby:          100vw;
+  --width-gallery-slide:  100vw;
+  --width-gallery-view:   100vw;
+  --width-gallery:        calc(100vw - var(--grid) * 8);
+
+  --width-ago:            calc(var(--grid) * 6);
+
+  .app-top {
+    display: flex;
+    position: fixed;
+    height: var(--height-deck);
+    width: 100vw;
+
+
+    background-color: var(--color1);
+    border-bottom: 1px var(--color3) solid;
+
+    top: 0;
+    left: 0;
+
+    z-index: var(--z-index-navigation);
+
+    .to_global_navi,
+    .post_status,
+    .post_track {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+
+      width: var(--iconsize40);
+    }
+
+    .blank {
+      width: var(--iconsize40);
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+
+      text-align: center;
+      width: 100%;
+
+      flex-direction: column;
+
+      img {
+        display: block;
+      }
+
+      .timeline_title {
+        display: flex;
+        font-size: var(--text10-font);
+        line-height: var(--text10-line);
+        height: calc(var(--grid) * 5);
+        align-items: center;
+      }
+    }
+
+    .to_global_navi.selected {
+      border-bottom: 3px solid var(--strong1);
+      box-sizing: border-box;
+    }
+
+  }
+
+  .app-center {
+    display: block;
+    position: absolute;
+    top: var(--height-deck);
+    left: 0;
+    height: calc(100% - var(--height-deck) * 2);
+    width: 100vw;
+  }
+
+  .app-bottom {
+    position: fixed;
+    height: var(--height-deck);
+    width: 100vw;
+
+    background-color: var(--color1);
+    border-top: 1px var(--color3) solid;
+
+    bottom: 0;
+    left: 0;
+
+    z-index: var(--z-index-navigation);
+
+    .buttons {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+
+      .app-bottom_button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        background-color: transparent;
+        border: 0;
+        color: var(--strong2);
+        height: 100%;
+
+        &.selected {
+          border-top: 3px var(--strong1) solid;
+        }
+      }
+    }
+  }
+}

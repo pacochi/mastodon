@@ -1,0 +1,119 @@
+.gallery-column {
+  .status {
+    width: calc(var(--width-gallery) - var(--grid) * 6);
+    border: 1px solid var(--color2);
+    border-radius: var(--radius);
+
+    &:hover {
+      box-shadow: var(--shadow);
+      background-color: var(--color1);
+    }
+  }
+}
+
+.status {
+  display: block;
+  text-align: left;
+
+  padding: var(--padding15);
+  background-color: var(--color1);
+  color: var(--textcolor);
+
+  &:hover {
+    box-shadow: var(--shadow2);
+    background-color: var(--color2);
+    cursor: pointer;
+  }
+
+  &.highlight {
+    box-shadow: var(--shadow);
+  }
+
+  .status-head {
+    display: flex;
+    align-items: center;
+
+    .account {
+      flex: 1;
+    }
+  }
+
+  time {
+    justify-content: flex-end;
+    white-space: nowrap;
+
+    display:    block;
+    font-size:  var(--text10-font);
+    text-align: right;
+  }
+
+  .absolute-time time {
+    text-align: left;
+    float: left;
+  }
+
+  .status__content {
+    display:    block;
+    margin:     var(--verticalspace10);
+
+    font-size:    var(--text20-font);
+    line-height:  var(--text20-line);
+    word-break: break-all;
+
+    .status__content__text {
+      display: none;
+
+      &.status__content__text--visible {
+        display: block;
+      }
+    }
+
+    .status__content__spoiler-link {
+      border: 0;
+      color: var(--color1);
+      background-color: var(--linkcolor);
+      border-radius: var(--radius);
+    }
+  }
+
+  .prepend-inline {
+    display: flex;
+    margin:       0 0 calc(var(--grid) * 2) 0;
+    font-size:    var(--text10-font);
+    line-height:  var(--text10-line);
+    align-items: center;
+
+    .icon-button {
+      margin:  var(--rightspace5);
+      height: var(--text10-font);
+
+      svg {
+        width: var(--text10-font);
+        height: var(--text10-font);
+      }
+    }
+  }
+
+  .status-media {
+    .status-card-video {
+      position:       relative;
+
+      iframe {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+      }
+    }
+  }
+
+  .meta {
+    margin: var(--verticalspace20);
+    font-size:      var(--text10-font);
+    line-height:    var(--text10-line);
+
+    i {
+      margin:       var(--rightspace5);
+    }
+  }
+}

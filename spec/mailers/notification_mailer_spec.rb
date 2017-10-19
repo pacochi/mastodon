@@ -102,6 +102,41 @@ RSpec.describe NotificationMailer, type: :mailer do
     end
   end
 
+  describe 'video_preparation_error' do
+    let(:track) { Fabricate(:track, title: 'title') }
+    let!(:status) { Fabricate(:status, music: track) }
+    let(:video_preparation_error) { Fabricate(:video_preparation_error, track: track) }
+    let(:mail) { NotificationMailer.video_preparation_error(receiver.account, Notification.create!(account: receiver.account, activity: video_preparation_error)) }
+
+    include_examples 'localized subject', 'notification_mailer.video_preparation_error.subject', title: 'title'
+
+    it 'renders the headers' do
+      expect(mail.subject).to eq 'The video generation for your track, title, was failed'
+      expect(mail.to).to eq [receiver.email]
+    end
+
+    it 'renders the body' do
+      expect(mail.body.encoded).to include 'Unfortuntely, the video genration for your track, title, was failed:'
+    end
+  end
+
+  describe 'video_preparation_success' do
+    let(:track) { Fabricate(:track, title: 'title') }
+    let!(:status) { Fabricate(:status, music: track) }
+    let(:mail) { NotificationMailer.video_preparation_success(receiver.account, Notification.create!(account: receiver.account, activity: track)) }
+
+    include_examples 'localized subject', 'notification_mailer.video_preparation_success.subject', title: 'title'
+
+    it 'renders the headers' do
+      expect(mail.subject).to eq 'The video for your track, title, was generated'
+      expect(mail.to).to eq [receiver.email]
+    end
+
+    it 'renders the body' do
+      expect(mail.body.encoded).to include 'The video for your track, title, was generated:'
+    end
+  end
+
   describe 'digest' do
     before do
       mention = Fabricate(:mention, account: receiver.account, status: foreign_status)

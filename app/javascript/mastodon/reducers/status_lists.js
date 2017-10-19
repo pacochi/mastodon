@@ -6,11 +6,16 @@ import {
   SCHEDULED_STATUSES_FETCH_SUCCESS,
   SCHEDULED_STATUSES_EXPAND_SUCCESS,
   SCHEDULED_STATUSES_ADDITION,
-} from '../actions/schedules';
+} from '../../pawoo_music/actions/schedules';
 import Immutable from 'immutable';
 
 const initialState = Immutable.Map({
   favourites: Immutable.Map({
+    next: null,
+    loaded: false,
+    items: Immutable.List(),
+  }),
+  'favourites:music': Immutable.Map({
     next: null,
     loaded: false,
     items: Immutable.List(),
@@ -60,9 +65,9 @@ const appendToList = (state, listType, statuses, next) => {
 export default function statusLists(state = initialState, action) {
   switch(action.type) {
   case FAVOURITED_STATUSES_FETCH_SUCCESS:
-    return normalizeList(state, 'favourites', action.statuses, action.next);
+    return normalizeList(state, (action.onlyMusics ? 'favourites:music' : 'favourites'), action.statuses, action.next);
   case FAVOURITED_STATUSES_EXPAND_SUCCESS:
-    return appendToList(state, 'favourites', action.statuses, action.next);
+    return appendToList(state, (action.onlyMusics ? 'favourites:music' : 'favourites'), action.statuses, action.next);
   case SCHEDULED_STATUSES_FETCH_SUCCESS:
     return normalizeList(state, 'schedules', action.statuses, action.next);
   case SCHEDULED_STATUSES_EXPAND_SUCCESS:

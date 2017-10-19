@@ -1,0 +1,84 @@
+.track-status {
+  display:    block;
+  text-align: left;
+
+  border-radius:      var(--radius);
+  background-color:   var(--color1);
+
+  color:        var(--textcolor);
+  font-size:    var(--text20-font);
+  line-height:  var(--text20-line);
+
+  margin:     var(--verticalspace40);
+
+  &.highlight {
+    border:     1px dashed var(--strong1);
+    background: var(--color2);
+  }
+
+  .status-head {
+    display: flex;
+
+    .account {
+      flex: 1;
+    }
+
+    .status-time {
+      justify-content: flex-end;
+      white-space: nowrap;
+
+      display:    block;
+      font-size:  9px;
+      text-align: right;
+    }
+  }
+
+  .status__content {
+    display:    block;
+    margin:     var(--verticalspace10);
+
+    word-break: break-all;
+  }
+
+  .prepend-inline {
+    display: flex;
+    margin:       0 0 calc(var(--grid) * 2) 0;
+    font-size:    var(--text10-font);
+    line-height:  var(--text10-line);
+    align-items: center;
+
+    .icon-button {
+      margin:  var(--rightspace5);
+      height: var(--text10-font);
+
+      svg {
+        width: var(--text10-font);
+        height: var(--text10-font);
+      }
+    }
+  }
+
+  .status-media {
+    .status-card-video {
+      position:       relative;
+
+      iframe {
+        position: absolute;
+        width: 100%;
+        top: 0;
+        left: 0;
+      }
+    }
+  }
+
+  .meta {
+    margin: var(--verticalspace20);
+    font-size:      var(--text10-font);
+    line-height:    var(--text10-line);
+
+    i {
+      margin:       var(--rightspace5);
+    }
+  }
+
+}

@@ -16,7 +16,7 @@ import Immutable from 'immutable';
 const initialState = Immutable.Map({
   items: Immutable.List(),
   next: null,
-  top: true,
+  top: false,
   unread: 0,
   loaded: false,
   isLoading: true,
@@ -25,7 +25,7 @@ const initialState = Immutable.Map({
 const notificationToMap = notification => Immutable.Map({
   id: notification.id,
   type: notification.type,
-  account: notification.account.id,
+  account: notification.account && notification.account.id,
   status: notification.status ? notification.status.id : null,
 });
 

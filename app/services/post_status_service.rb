@@ -26,19 +26,26 @@ class PostStatusService < BaseService
 
     status = nil
     ApplicationRecord.transaction do
-      status = account.statuses.create!(text: text,
-                                        thread: in_reply_to,
-                                        created_at: published,
-                                        sensitive: options[:sensitive],
-                                        spoiler_text: options[:spoiler_text] || '',
-                                        visibility: options[:visibility],
-                                        language: detect_language_for(text, account),
-                                        application: options[:application])
+      attributes = {
+        text: text,
+        thread: in_reply_to,
+        created_at: published,
+        sensitive: options[:sensitive],
+        spoiler_text: options[:spoiler_text] || '',
+        visibility: options[:visibility],
+        language: detect_language_for(text, account),
+        application: options[:application],
+        music: options[:music],
+      }
+
+      attributes[:id] = options[:id] if options.key?(:id)
+
+      status = account.statuses.create!(attributes)
       attach_media(status, media)
       attach_pixiv_cards(status)
     end
 
-    if status&.media_attachments&.any? { |m| m.music_info.present? } && status&.public_visibility?
+    if status&.music_type == 'Track' && status&.public_visibility?
       begin
         Playlist.find_by!(deck: Playlist::MEDIA_TL_DECK_ID).add(short_account_status_url(account, status), account, true)
       rescue

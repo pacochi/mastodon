@@ -5,23 +5,24 @@
 @import 'fonts/montserrat';
 
 @import 'reset';
-@import 'basics';
-@import 'containers';
-@import 'lists';
-@import 'footer';
-@import 'compact_header';
-@import 'landing_strip';
-@import 'forms';
+// @import 'components';
+
+@import 'about';
+@import 'admin';
 @import 'accounts';
+// @import 'basics';
+@import 'compact_header';
+// @import 'containers';
+@import 'footer';
+// @import 'forms';
+@import 'landing_strip';
+@import 'lists';
 @import 'stream_entries';
-@import 'components';
+@import 'tables';
+@import 'rtl';
+
 @import 'player_control';
 @import 'booth_widget';
 @import 'sc_widget';
 @import 'yt_widget';
-@import 'event_calendar';
 @import 'tips_balloon';
-@import 'about';
-@import 'tables';
-@import 'admin';
-@import 'rtl';

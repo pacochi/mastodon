@@ -25,6 +25,8 @@ defaults: &defaults
     mention: false
     follow_request: true
     digest: true
+    video_preparation_error: true
+    video_preparation_success: true
   notification_firebase_cloud_messagings:
     follow: true
     reblog: true

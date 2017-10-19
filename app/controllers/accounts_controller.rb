@@ -3,19 +3,20 @@
 class AccountsController < ApplicationController
   include AccountControllerConcern
   include SignatureVerification
+  include TimelineConcern
 
-  STATUSES_PER_PAGE = 20
+  before_action :set_initial_state_data, only: :show
+
+  layout 'timeline'
 
   def show
     respond_to do |format|
       format.html do
-        # 固定されたトゥートは全件表示する。固定数が多いユーザーが現れたら考え直す。
-        @statuses_from_pinned_status = cache_collection(statuses_from_pinned_status, Status)
-        @statuses = permitted_statuses.where.not(id: @statuses_from_pinned_status.map(&:id)).page(params[:page]).per(STATUSES_PER_PAGE).without_count
-        @statuses_collection = cache_collection(@statuses, Status)
       end
 
       format.atom do
+        raise ActiveRecord::RecordNotFound unless @account.local?
+
         @entries = @account.stream_entries.where(hidden: false).with_includes.paginate_by_max_id(20, params[:max_id], params[:since_id])
         render xml: AtomSerializer.render(AtomSerializer.new.feed(@account, @entries.to_a))
       end
@@ -37,6 +38,7 @@ class AccountsController < ApplicationController
   end
 
   def set_account
-    @account = Account.find_local!(params[:username])
+    username, domain = (params[:username] || '').split('@')
+    @account = Account.find_by!(username: username, domain: domain)
   end
 end

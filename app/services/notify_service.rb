@@ -10,7 +10,10 @@ class NotifyService < BaseService
 
     create_notification
     send_email if email_enabled?
-    send_firebase_cloud_messaging if firebase_cloud_messaging_enabled?
+    if [:video_preparation_error, :video_preparation_success].exclude?(@notification.type) &&
+       firebase_cloud_messaging_enabled?
+      send_firebase_cloud_messaging
+    end
   rescue ActiveRecord::RecordInvalid
     return
   end
@@ -38,15 +41,19 @@ class NotifyService < BaseService
   end
 
   def blocked?
-    blocked   = @recipient.suspended?                                                                                                # Skip if the recipient account is suspended anyway
-    blocked ||= @recipient.id == @notification.from_account.id                                                                       # Skip for interactions with self
-    blocked ||= @recipient.domain_blocking?(@notification.from_account.domain) && !@recipient.following?(@notification.from_account) # Skip for domain blocked accounts
-    blocked ||= @recipient.blocking?(@notification.from_account)                                                                     # Skip for blocked accounts
-    blocked ||= (@notification.from_account.silenced? && !@recipient.following?(@notification.from_account))                         # Hellban
-    blocked ||= (@recipient.user.settings.interactions['must_be_follower']  && !@notification.from_account.following?(@recipient))   # Options
-    blocked ||= (@recipient.user.settings.interactions['must_be_following'] && !@recipient.following?(@notification.from_account))   # Options
-    blocked ||= conversation_muted?
-    blocked ||= send("blocked_#{@notification.type}?")                                                                               # Type-dependent filters
+    blocked   = @recipient.suspended?                                                                                                  # Skip if the recipient account is suspended anyway
+
+    if @notification.from_account.present?
+      blocked ||= @recipient.id == @notification.from_account.id                                                                       # Skip for interactions with self
+      blocked ||= @recipient.domain_blocking?(@notification.from_account.domain) && !@recipient.following?(@notification.from_account) # Skip for domain blocked accounts
+      blocked ||= @recipient.blocking?(@notification.from_account)                                                                     # Skip for blocked accounts
+      blocked ||= (@notification.from_account.silenced? && !@recipient.following?(@notification.from_account))                         # Hellban
+      blocked ||= (@recipient.user.settings.interactions['must_be_follower']  && !@notification.from_account.following?(@recipient))   # Options
+      blocked ||= (@recipient.user.settings.interactions['must_be_following'] && !@recipient.following?(@notification.from_account))   # Options
+      blocked ||= conversation_muted?
+      blocked ||= send("blocked_#{@notification.type}?")                                                                               # Type-dependent filters
+    end
+
     blocked
   end
 

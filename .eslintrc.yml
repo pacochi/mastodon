@@ -11,6 +11,7 @@ parser: babel-eslint
 plugins:
 - react
 - jsx-a11y
+- import
 
 parserOptions:
   sourceType: module
@@ -112,7 +113,13 @@ rules:
   jsx-a11y/iframe-has-title: warn
   jsx-a11y/img-has-alt: warn
   jsx-a11y/img-redundant-alt: warn
-  jsx-a11y/label-has-for: warn
+# Enable when updating jsx-a11y
+#  jsx-a11y/label-has-for:
+#  - warn
+#  - required:
+#      some:
+#      - nesting
+#      - id
   jsx-a11y/mouse-events-have-key-events: warn
   jsx-a11y/no-access-key: warn
   jsx-a11y/no-distracting-elements: warn
@@ -124,3 +131,12 @@ rules:
   jsx-a11y/role-supports-aria-props: warn
   jsx-a11y/scope: warn
   jsx-a11y/tabindex-no-positive: warn
+
+  import/no-unresolved:
+  - 2
+  - commonjs: true
+
+settings:
+  import/resolver:
+    webpack:
+      config: webpack.eslint.config.js

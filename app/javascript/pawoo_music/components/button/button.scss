@@ -1,0 +1,64 @@
+.button, a.button:visited, a.button:link  {
+  display: block;
+
+  border-radius:   calc(var(--radius) * 3);
+  font-size:       var(--text30-font);
+  height:          28px;
+  line-height:     28px;
+  text-decoration: none;
+  padding: 0 10px;
+
+  background-color:   var(--tootcolor);
+  color:              var(--color1);
+  border:             1px solid var(--tootcolor);
+
+  transition: all 0.2s var(--hover-timing);
+
+  &.fit-width {
+    width: calc(100% - (11px * 2));
+  }
+
+  &.disabled {
+    cursor: default;
+    pointer-events: none;
+  }
+
+  &.red, &.confirmation-modal__cancel-button {
+    background-color: var(--color1);
+    color:            var(--strong1);
+    border: 1px solid var(--strong1);
+
+    &:hover {
+      color:              var(--color1 );
+      background-color:   var(--strong1);
+    }
+  }
+
+  &:hover {
+    background-color:   var(--tootcolor);
+    color:              var(--color1);
+    transform:          scale(1.1);
+  }
+
+  &.follow {
+    background-color:   var(--color1);
+    color:              var(--tootcolor);
+    border:             1px solid var(--tootcolor);
+
+    &:hover {
+      background-color:   var(--tootcolor);
+      color:              var(--color1);
+    }
+  }
+
+  &.unfollow {
+    background-color:   var(--tootcolor);
+    color:              var(--color1);
+    border:             1px solid var(--tootcolor);
+
+    &:hover{
+      background-color:   var(--strong1);
+      border:             1px solid var(--strong1);
+    }
+  }
+}
