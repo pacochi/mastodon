@@ -1,5 +1,6 @@
 .rc-slider {
-  width: calc(100% - var(--padding10) * 2);
+  box-sizing: border-box;
+  width: 100%;
 
   &.rc-slider-disabled {
     background-color: transparent;

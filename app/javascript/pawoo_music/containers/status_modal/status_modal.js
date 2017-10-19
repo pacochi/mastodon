@@ -68,10 +68,13 @@ export default class StatusModal extends ImmutablePureComponent {
     const ancestors = this.getChildren(this.props.ancestorsIds);
     const descendants = this.getChildren(this.props.descendantsIds);
     const Component = status.get('track') ? TrackStatusContainer : StatusContainer;
+    const content = ancestors.push(
+      <Component detail key={status.get('id')} id={status.get('id')} />
+    ).concat(descendants);
     return (
       <div className='status-modal'>
         <div className='gallery-column'>
-          {ancestors.push(<Component detail key={status.get('id')} id={status.get('id')} />).concat(descendants)}
+          {content}
         </div>
       </div>
     );

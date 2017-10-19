@@ -5,7 +5,7 @@
     align-items: center;
 
     .status:not(.highlight) {
-      opacity: 0.6;
+      opacity: 0.72;
     }
 
     .track-status, .status {
@@ -15,8 +15,8 @@
     }
 
     .track-status {
-      box-sizing: border-box;
       margin-top: 0;
+      margin-left: -12px;
       padding: var(--padding15);
       width: var(--width-gallery);
     }
