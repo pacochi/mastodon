@@ -1,6 +1,6 @@
 -# NOTE: 現在はStreamEntry#activity_typeはStatusしかないが、今後増えるかもしれないので注意
 - content_for :page_title do
-  = "#{@stream_entry.status.text.truncate(33, omission: "")} - #{@stream_entry.account.acct}"
+  = "#{@status.text.truncate(33, omission: "")} - #{@status.account.acct}"
 
 - content_for :header_tags do
   - if @status_pagination&.next
@@ -26,5 +26,5 @@
   -# - 100文字未満かつ、画像がついていない
   -# - サイレンスされている
   -# - リモートアカウント
-  - if (@stream_entry.status.present? && @stream_entry.status.text.length < 100 && @stream_entry.status.media_attachments.empty? && @stream_entry.status.pixiv_cards.empty?) || @account.silenced || !@account.local?
+  - if (@stream_entry && @stream_entry.status.present? && @stream_entry.status.text.length < 100 && @stream_entry.status.media_attachments.empty? && @stream_entry.status.pixiv_cards.empty?) || @account.silenced || !@account.local?
     %meta{ name: 'robots', content: 'noindex,follow' }/
