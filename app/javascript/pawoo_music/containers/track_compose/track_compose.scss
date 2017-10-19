@@ -41,10 +41,8 @@
   }
 
   .content {
-    // display: flex;
     align-items: top;
     width: 100%;
-    // overflow-y: scroll;
 
     > div {
       max-width: var(--video-width);
@@ -106,14 +104,10 @@
         line-height: var(--text20-line);
 
         & + fieldset {
-          margin-top: 10px;
+          margin-top: 8px;
         }
 
         legend {
-          font-size: var(--text30-font);
-          line-height: var(--text30-line);
-          font-weight: bold;
-          width: 100%;
 
           & + legend {
             margin-top: var(--padding10);
@@ -122,6 +116,22 @@
 
         label {
           display: block;
+        }
+
+        .checkbox {
+          width: auto;
+
+          label {
+            font-size: 14px;
+          }
+
+          .checkbox-label-head {
+            margin-right: 4px;
+          }
+        }
+
+        .checkbox-label {
+          font-size: 12px;
         }
 
         .horizontal {
@@ -136,45 +146,11 @@
 
             flex-grow: 0;
             flex-shrink: 0;
-            flex-basis: calc(var(--grid) * 30);
+            flex-basis: calc(var(--grid) * 20);
           }
 
           input[type="range"] {
             width: calc(100% - var(--padding10) * 2);
-          }
-
-          input[type="text"] {
-            display: block;
-            padding: var(--padding10);
-            border-radius: var(--grid);
-
-            font-size: var(--text30-font);
-            line-height: var(--text30-line);
-
-            outline: none;
-            transition: box-shadow 0.8s var(--hover-timing);
-
-            &:focus {
-              box-shadow: 0 0 0 2px var(--tootcolor);
-            }
-          }
-
-          textarea {
-            display: block;
-            height: calc(var(--grid) * 10);
-            padding: var(--padding10);
-            border-radius: var(--grid);
-            resize: none;
-
-            font-size: var(--text30-font);
-            line-height: var(--text30-line);
-
-            outline: none;
-            transition: box-shadow 0.8s var(--hover-timing);
-
-            &:focus {
-              box-shadow: 0 0 0 2px var(--tootcolor);
-            }
           }
         }
 
@@ -187,7 +163,7 @@
 
   .delay.legend {
     max-height: 0;
-    padding: 0 10px;
+    padding: 0 0 0 10px;
 
     &.visible {
       max-height: 100px;
@@ -201,6 +177,8 @@
   }
 
   .track-compose-effect {
+    padding-top: 4px;
+
     .text {
       padding-right: 10px;
       text-align: right;
@@ -245,13 +223,14 @@
 
   .track-compose-radio {
     .checkbox + .checkbox {
-      margin-left: 10px;
+      margin-left: 12px;
     }
   }
 
   .track-compose-file-upload {
     display: inline-block;
     position: relative;
+    margin-top: 4px;
     padding: 0 20px;
     height: 40px;
     border-radius: 20px;
@@ -282,10 +261,11 @@
 
     .icon-button {
       display: block;
+      padding-top: 4px;
     }
 
     .text {
-      margin-left: 5px;
+      margin-left: 4px;
       white-space: pre;
 
       display: block;
@@ -349,6 +329,40 @@
       border: 0;
       border-radius: var(--radius);
       font-size: 16px;
+    }
+
+    input[type="text"] {
+      display: block;
+      padding: var(--padding10);
+      border-radius: var(--grid);
+
+      font-size: var(--text30-font);
+      line-height: var(--text30-line);
+
+      outline: none;
+      transition: box-shadow 0.8s var(--hover-timing);
+
+      &:focus {
+        box-shadow: 0 0 0 2px var(--tootcolor);
+      }
+    }
+
+    textarea {
+      display: block;
+      height: calc(var(--grid) * 10);
+      padding: var(--padding10);
+      border-radius: var(--grid);
+      resize: none;
+
+      font-size: var(--text30-font);
+      line-height: var(--text30-line);
+
+      outline: none;
+      transition: box-shadow 0.8s var(--hover-timing);
+
+      &:focus {
+        box-shadow: 0 0 0 2px var(--tootcolor);
+      }
     }
   }
 

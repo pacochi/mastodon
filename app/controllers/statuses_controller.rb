@@ -28,12 +28,13 @@ class StatusesController < ApplicationController
   private
 
   def set_account
-    @account = Account.find_local!(params[:account_username])
+    username, domain = (params[:account_username] || '').split('@')
+    @account = Account.find_by!(username: username, domain: domain)
   end
 
   def set_link_headers(prev_status, next_status)
     links = []
-    links.push([account_stream_entry_url(@account, @status.stream_entry, format: 'atom'), [%w(rel alternate), %w(type application/atom+xml)]])
+    links.push([account_stream_entry_url(@account, @status.stream_entry, format: 'atom'), [%w(rel alternate), %w(type application/atom+xml)]]) unless @account.local?
 
     links.push([short_account_status_path(@account, prev_status), [%w(rel prev)]]) if prev_status
     links.push([short_account_status_path(@account, next_status), [%w(rel next)]]) if next_status
