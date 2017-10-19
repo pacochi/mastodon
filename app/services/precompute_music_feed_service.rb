@@ -34,7 +34,7 @@ class PrecomputeMusicFeedService < BaseService
   end
 
   def statuses
-    Status.as_home_timeline(account).where.not(music_type: nil).order(account_id: :desc).limit(LIMIT)
+    Status.as_home_timeline(account).musics_only.order(account_id: :desc).limit(LIMIT)
   end
 
   def redis

@@ -52,6 +52,14 @@ export default class MediaPost extends PureComponent {
             />
           </TipsBalloonContainer>
         </div>
+        <div className='media-post-tips-baloon'>
+          <TipsBalloonContainer id={5} style={{ left: '-140px', top: '95px' }} direction='bottom'>
+            <FormattedMessage
+              id='pawoo_music.gallery.tips_balloon'
+              defaultMessage='Enjoy tracks on the media gallery timeline!'
+            />
+          </TipsBalloonContainer>
+        </div>
       </div>
     );
   }

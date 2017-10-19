@@ -9,6 +9,7 @@
   font-weight: bold;
   font-size: 15px;
   color: white;
+  z-index: var(--z-index-lightbox_and-icon);
 
   &:after {
     content: '';

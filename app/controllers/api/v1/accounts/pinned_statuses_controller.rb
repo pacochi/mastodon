@@ -40,15 +40,15 @@ class Api::V1::Accounts::PinnedStatusesController < Api::BaseController
   end
 
   def only_musics_scope
-    Status.where.not(music_type: nil)
+    Status.musics_only
   end
 
   def only_tracks_scope
-    Status.where(music_type: 'Track')
+    Status.tracks_only
   end
 
   def only_albums_scope
-    Status.where(music_type: 'Album')
+    Status.albums_only
   end
 
   def pagination_params(core_params)
