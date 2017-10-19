@@ -2,12 +2,11 @@
   position: absolute;
   display: flex;
   top: -50px;
-  left: 5px;
   background: #ca426c;
   border-radius: 5px;
   padding: 10px;
   font-weight: bold;
-  font-size: 15px;
+  font-size: 14px;
   color: white;
   z-index: var(--z-index-lightbox_and-icon);
 
@@ -16,8 +15,25 @@
     position: absolute;
   }
 
+  &.position-left {
+    left: 5px;
+
+    &:after {
+      left: 10px;
+    }
+  }
+
+  &.position-center {
+    left: 50%;
+    transform: translateX(-50%);
+
+    &:after {
+      left: 50%;
+      margin-left: -9px;
+    }
+  }
+
   &.direction-bottom:after {
-    left: 10px;
     bottom: -18px;
     border-top: 18px solid #ca426c;
     border-right: 12px solid transparent;
@@ -25,7 +41,6 @@
   }
 
   &.direction-top:after {
-    left: 10px;
     top: -18px;
     border-bottom: 18px solid #ca426c;
     border-right: 12px solid transparent;
